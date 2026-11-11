@@ -222,6 +222,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .xl tr.tt td:not(.rn){font-weight:700;font-size:14px}
 .xl td.mg{text-align:center;font-weight:700;background:#fff2cc}
 .tag.by{background:var(--surface);border:1px solid var(--line);color:var(--ink);font-weight:500}
+.tabs button{min-width:0}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -251,6 +252,7 @@ a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius
   <nav class="tabs" id="tabs" aria-label="Bölmələr" hidden>
     <button data-act="tab" data-tab="day"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Qəbullar</button>
     <button data-act="tab" data-tab="cash"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.5-1.4-2.8-1.4-1.7 0-2.9.8-2.9 2.1 0 3 5.9 1.3 5.9 4.3 0 1.3-1.3 2.1-3 2.1-1.4 0-2.5-.6-3-1.6M12 6v12"/></svg>Kassa</button>
+    <button data-act="tab" data-tab="products"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.5a1.5 1.5 0 0 1-1.5 1.5H7.7a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>Məhsul</button>
     <button data-act="tab" data-tab="patients"><svg viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V20.5H6z"/><path d="M9.5 12h6M9.5 16h6M9.5 8h3"/></svg>Pasiyentlər</button>
     <button data-act="tab" data-tab="readers"><svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5M16 5.3a3.5 3.5 0 0 1 0 6.400M18.5 14.6c1.7.8 2.7 2.5 3 4.900"/></svg>Ayarlar</button>
   </nav>
@@ -267,7 +269,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111102931";
+var APP_VERSION="20261111103213";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -458,6 +460,7 @@ function render(){
   main.classList.toggle("gridmode",grid);
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
+  else if(ui.tab==="products"){top.innerHTML=cashTop();main.innerHTML=banner+productsMain()}
   else{top.innerHTML="<h1>Ayarlar</h1>";main.innerHTML=banner+readersMain()}
   if(grid){
     cal=byId("cal");
@@ -626,7 +629,8 @@ function periodTitle(){
 }
 function cashTop(){
   var title=ui.period==="day"?fmtDay(ui.date,"w"):periodTitle();
-  var small=ui.period==="day"?(ui.date===today?"Bu gün":"Günlük kassa"):ui.period==="week"?"Həftəlik kassa":"Aylıq kassa";
+  var W=ui.tab==="products"?"satış":"kassa";
+  var small=ui.period==="day"?(ui.date===today?"Bu gün":"Günlük "+W):ui.period==="week"?"Həftəlik "+W:"Aylıq "+W;
   var seg='<div class="seg">';
   [["day","Gün"],["week","Həftə"],["month","Ay"]].forEach(function(p){seg+='<button data-act="period" data-p="'+p[0]+'" aria-pressed="'+(ui.period===p[0])+'">'+p[1]+'</button>'});
   return seg+'</div>'+navHtml(title,small);
@@ -672,12 +676,6 @@ function cashMain(){
   if(!shown)return h+(auth.loaded?'<div class="empty">Hələ mütəxəssis yoxdur. «Mütəxəssislər» bölməsində əlavə edin.</div>':"");
   var fin=T.n+T.cancel+T.noshow,more="";
   if(state.v2){
-    if(state.hasProducts){
-      h+='<div class="pay"><div class="head"><b>Məhsul satışı</b><span class="num">'+money(prSum)+'</span></div>';
-      if(pr.length){h+='<div>';pr.forEach(function(x){
-        h+='<div class="visit"><span>Məhsul'+(ui.period==="day"?'':' · '+fmtDay(x.date))+' · Satdı: '+esc(state.staff[x.by]||"Adsız istifadəçi")+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">Sil</button></div>'});h+='</div>'}
-      h+='<button class="ghost" data-act="new-prod">Məhsul satışı əlavə et</button></div>';
-    }
     var ex=expensesIn(d.r),exSum=ex.reduce(function(t,x){return t+x.amount},0);
     h+='<div class="pay"><div class="head"><b>Xərclər</b><span class="num">'+money(exSum)+'</span></div>';
     if(ex.length){h+='<div>';ex.forEach(function(x){
@@ -957,6 +955,40 @@ function serviceForm(){
 function productsIn(r){
   return state.products.filter(function(x){return x.date>=r.s&&x.date<=r.e}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0});
 }
+function productsMain(){
+  if(!auth.loaded)return "";
+  if(!state.hasProducts)return '<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>';
+  var r=range(),pr=productsIn(r),sum=pr.reduce(function(t,x){return t+x.amount},0),days={},by={};
+  pr.forEach(function(x){
+    var k=state.staff[x.by]||"Adsız istifadəçi";(by[k]=by[k]||{n:0,sum:0});by[k].n++;by[k].sum+=x.amount;
+    (days[x.date]=days[x.date]||{n:0,sum:0});days[x.date].n++;days[x.date].sum+=x.amount;
+  });
+  var nd=Object.keys(days).length;
+  var h='<div class="strip">'+
+    '<div class="tile main"><b class="num">'+money(sum)+'</b><span>cəmi satış</span></div>'+
+    '<div class="tile"><b class="num">'+pr.length+'</b><span>məhsul satılıb</span></div>'+
+    '<div class="tile"><b class="num">'+money(pr.length?sum/pr.length:0)+'</b><span>orta qiymət</span></div></div>';
+  h+='<button class="primary" data-act="new-prod">+ Məhsul satışı</button>';
+  var names=Object.keys(by).sort(function(a,b){return by[b].sum-by[a].sum});
+  h+='<div class="pay"><div class="head"><b>Kim nə qədər satıb</b><span class="num">'+names.length+' nəfər</span></div>';
+  if(names.length){h+='<div>';names.forEach(function(k){
+    h+='<div class="visit"><span>'+esc(k)+'</span><span class="num" style="color:var(--muted)">'+by[k].n+' ədəd</span><b class="num">'+money(by[k].sum)+'</b></div>'});h+='</div>'}
+  else h+='<div class="foot">Bu müddətdə məhsul satılmayıb.</div>';
+  h+='</div>';
+  if(ui.period!=="day"&&nd){
+    h+='<div class="pay"><div class="head"><b>Günlər üzrə</b><span class="num">gündə orta '+money(sum/nd)+'</span></div><div>';
+    Object.keys(days).sort().forEach(function(d){
+      h+='<div class="visit"><span>'+fmtDay(d,"w")+'</span><span class="num" style="color:var(--muted)">'+days[d].n+' ədəd</span><b class="num">'+money(days[d].sum)+'</b></div>'});
+    h+='</div></div>';
+  }
+  if(pr.length){
+    h+='<div class="pay"><div class="head"><b>Satışlar</b><span class="num">'+pr.length+'</span></div><div>';
+    pr.slice().reverse().forEach(function(x){
+      h+='<div class="visit"><span>Məhsul'+(ui.period==="day"?'':' · '+fmtDay(x.date))+' · Satdı: '+esc(state.staff[x.by]||"Adsız istifadəçi")+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">Sil</button></div>'});
+    h+='</div></div>';
+  }
+  return h;
+}
 function productForm(){
   var r=range(),dd=today>=r.s&&today<=r.e?today:ui.date;
   return '<h2>Məhsul satışı'+CLOSE+'</h2>'+
@@ -1104,8 +1136,8 @@ document.addEventListener("click",function(e){
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="shift"){
     var n=+b.dataset.n;
-    if(ui.tab==="cash"&&ui.period==="week")ui.date=addDays(ui.date,7*n);
-    else if(ui.tab==="cash"&&ui.period==="month"){var d=parse(ui.date);ui.date=iso(new Date(d.getFullYear(),d.getMonth()+n,1))}
+    if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="week")ui.date=addDays(ui.date,7*n);
+    else if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="month"){var d=parse(ui.date);ui.date=iso(new Date(d.getFullYear(),d.getMonth()+n,1))}
     else ui.date=addDays(ui.date,n);
   }
   else if(act==="today"){ui.date=today}
