@@ -332,7 +332,7 @@ function refresh(){
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     state.readers=res[0].map(function(x){return{id:x.id,name:x.name,price:+x.price,share:+x.share,archived:!!x.archived}});
-    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:String(x.created_at||"").slice(0,10)}});
+    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?iso(new Date(x.created_at)):""}});
     state.breaks=(res[5]||[]).map(function(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}});
     state.hasBreaks=!!res[5];state.hasDur=!!res[6];
     state.v2=!!(res[2]&&res[3]&&res[4]);
@@ -641,6 +641,12 @@ function cashMain(){
       h+='<div class="visit"><span>'+fmtDay(x.date)+' · '+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+'">Dəyiş</button></div>'});h+='</div>'}
     h+='<button class="ghost" data-act="new-expense">Xərc əlavə et</button>'+
       '</div>';
+    var bb=bookedBy(d.r.s,d.r.e),bt=bb.reduce(function(t,x){return t+x.n},0);
+    h+='<div class="pay"><div class="head"><b>'+(ui.period==="day"?(ui.date===today?"Bu gün yazılan qəbullar":fmtDay(ui.date)+" yazılan qəbullar"):"Bu dövrdə yazılan qəbullar")+'</b><span class="num">'+bt+'</span></div>';
+    if(bb.length){h+='<div>';bb.forEach(function(x){
+      h+='<div class="visit"><span>'+esc(x.name)+(x.cancel?' <small style="color:var(--muted)">(ləğv: '+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b></div>'});h+='</div>'}
+    else h+='<div class="foot">Bu müddətdə heç kim qəbul yazmayıb.</div>';
+    h+='<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.</div></div>';
     var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
     h+='<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı ('+PN+')</button>';
     h+='<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>';
@@ -695,6 +701,16 @@ function loadXlsx(){
     sc.onload=function(){window.XLSX?ok(window.XLSX):no()};sc.onerror=no;
     document.head.appendChild(sc);
   });
+}
+function bookedBy(s0,e0){
+  /* Bookings counted by the day they were made, whatever date they are for. Deleted ones are gone from the data. */
+  var m={};
+  state.appts.forEach(function(a){
+    if(!a.created||a.created<s0||a.created>e0)return;
+    var k=a.by||"",x=m[k]||(m[k]={name:state.staff[k]||"Adsız istifadəçi",n:0,cancel:0,days:{}});
+    if(a.status==="cancel")x.cancel++;else{x.n++;x.days[a.created]=(x.days[a.created]||0)+1}
+  });
+  return Object.keys(m).map(function(k){m[k].id=k;return m[k]}).sort(function(a,b){return b.n-a.n||a.name.localeCompare(b.name)});
 }
 function weeklySheet(r){
   /* Weeks run Friday to Thursday, as in the centre's own table. */
@@ -777,7 +793,11 @@ function salesBook(){
   state.appts.filter(function(a){return a.status==="paid"&&a.date>=s0&&a.date<=e0})
     .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||"Adsız istifadəçi",a.name,a.phone,a.service,rd?rd.name:""])});
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16]]]};
+  var bb=bookedBy(s0,e0),dl=[["Tarix"].concat(bb.map(function(x){return x.name})).concat(["Cəmi"])];
+  for(var dd=s0;dd<=e0;dd=addDays(dd,1)){var tt=0;dl.push([dd].concat(bb.map(function(x){var v=x.days[dd]||0;tt+=v;return v})).concat([tt]))}
+  dl.push(["Cəmi"].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
+  dl.push([],["Qəbulun yazıldığı günə görə, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."]);
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8])],["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16]]]};
 }
 function downloadXlsx(kind){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
