@@ -178,18 +178,18 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal{flex:1;min-height:0;overflow:auto;border-top:1px solid var(--line);background:var(--surface);overscroll-behavior:contain}
 .cal-in{position:relative;min-width:100%}
 .cal-head{position:sticky;top:0;z-index:4;display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
-.cal-head .corner{position:sticky;left:0;z-index:5;width:46px;flex:none;background:var(--surface)}
-.cal-head .ch{flex:1 0 116px;padding:7px 6px;font-size:13px;font-weight:600;text-align:center;border-left:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-head .ch i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
+.cal-head .corner{position:sticky;left:0;z-index:5;width:40px;flex:none;background:var(--surface)}
+.cal-head .ch{flex:1 0 68px;width:68px;padding:6px 3px;font-size:12px;font-weight:600;text-align:center;border-left:1px solid var(--line);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.cal-head .ch i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
 .cal-body{display:flex;position:relative}
-.axis{position:sticky;left:0;z-index:3;width:46px;flex:none;background:var(--surface)}
-.axis span{position:absolute;right:6px;font-size:11px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
-.col{flex:1 0 116px;position:relative;border-left:1px solid var(--line);cursor:pointer;
-  background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 64px),
-  repeating-linear-gradient(to bottom,transparent 0,transparent 32px,color-mix(in srgb,var(--line) 45%,transparent) 32px,color-mix(in srgb,var(--line) 45%,transparent) 33px,transparent 33px,transparent 64px)}
-.ev{position:absolute;left:3px;right:3px;border-radius:8px;padding:4px 6px;overflow:hidden;font-size:12px;line-height:1.25;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
-.ev b{font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92}
+.axis{position:sticky;left:0;z-index:3;width:40px;flex:none;background:var(--surface)}
+.axis span{position:absolute;right:5px;font-size:10.5px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
+.col{flex:1 0 68px;width:68px;position:relative;border-left:1px solid var(--line);cursor:pointer;
+  background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 92px),
+  repeating-linear-gradient(to bottom,transparent 0,transparent 46px,color-mix(in srgb,var(--line) 45%,transparent) 46px,color-mix(in srgb,var(--line) 45%,transparent) 47px,transparent 47px,transparent 92px)}
+.ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
+.ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev.paid{background:#2e8b57!important}
 .ev.noshow{background:#c77700!important}
 .ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
@@ -281,7 +281,7 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 var today=iso(new Date());
 var ui={tab:"day",date:today,filter:"all",period:"day",q:"",view:"grid"};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
-var DAY0=8*60,DAY1=22*60,PXM=64/60;
+var DAY0=8*60,DAY1=22*60,HOUR=92,PXM=HOUR/60,COLW=68,AXW=40;
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 function mins(t){var p=String(t).split(":");return (+p[0])*60+(+p[1]||0)}
 function hhmm(m){m=Math.max(0,Math.min(24*60-1,m));return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
@@ -478,7 +478,7 @@ function gridMain(){
   if(late.length){var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
     h+='<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: '+late.length+'.</p>'+(first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Göstər</button>':'')+'</div>'}
   h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+'</b> qəbul</span><span><b class="num">'+paid.length+'</b> gəldi</span><span><b class="num">'+money(sum)+'</b> kassada</span></div>';
-  var H=(DAY1-DAY0)*PXM,colW=116,W=46+rs.length*colW;
+  var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
   h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch"><i style="background:'+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
   h+='<div class="cal-body" style="height:'+H+'px"><div class="axis">';
@@ -496,10 +496,11 @@ function gridMain(){
     evs.forEach(function(a){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=100/nl;
-      h+='<button class="ev '+a.status+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(a._lane*w)+'% + 3px);right:auto;width:calc('+w+'% - 6px)">'+
+      h+='<button class="ev '+a.status+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(a._lane*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)">'+
         '<b>'+(a.status==="paid"?"✓ ":a.status==="noshow"?"✗ ":"")+esc(a.name)+'</b>'+
-        (ht>34?'<span class="num">'+esc(a.time)+'–'+endOf(a)+(a.phone?' · '+esc(a.phone):'')+'</span>':'')+
-        (ht>52&&state.v2?'<span>'+esc(a.service)+(a.price>0?' · '+money(a.price):'')+'</span>':'')+'</button>';
+        (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
+        (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
+        (ht>84&&state.v2?'<span>'+esc(a.service)+'</span>':'')+'</button>';
     });
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
     h+='</div>';
