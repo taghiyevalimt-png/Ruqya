@@ -267,7 +267,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111102316";
+var APP_VERSION="20261111102353";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -546,7 +546,8 @@ function viewSheet(){
     (a.phone?'<div class="row2"><span>Telefon</span><b class="num">'+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+'">Zəng</a>':'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
     '<div class="row2"><span>Qiymət</span><b class="num">'+(a.price>0?money(a.price):"yazılmayıb")+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
-    '<div class="stbtns">'+["paid","noshow","cancel","wait"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+k+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
+    '<div class="stbtns" style="grid-template-columns:1fr 1fr 1fr">'+["paid","noshow","cancel"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+(a.status===k?"wait":k)+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
+    (a.status!=="wait"?'<p class="hint" style="margin:-4px 0 0">Səhv seçilibsə, seçilmiş düyməyə yenidən basın.</p>':'')+
     '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="ghost" data-act="dup-appt" data-id="'+esc(a.id)+'">Təkrar yaz</button></div>'+
     '<button class="danger" data-act="del-appt">Qəbulu sil</button>'+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?'Yazdı: '+esc(who)+(c?', '+c:''):(c?'Yazılıb: '+c:'')})()+'</p></div>';
@@ -1008,7 +1009,7 @@ function apptForm(){
     '<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     '<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" autocomplete="off" placeholder="050 000 00 00" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
     '<div class="field"><label for="f-price">Qiymət, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
-    (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+ST[k]+'</option>'}).join("")+'</select></div>':'')+
+    (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+(k==="wait"?"Seçilməyib":ST[k])+'</option>'}).join("")+'</select></div>':'')+
     '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-appt">'+(a?"Yadda saxla":"Yaz")+'</button></div>';
