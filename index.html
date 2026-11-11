@@ -315,7 +315,7 @@ function activeReaders(){return state.readers.filter(function(r){return !r.archi
 function range(){
   var d=parse(ui.date),s,e;
   if(ui.period==="day"){s=e=ui.date}
-  else if(ui.period==="week"){s=addDays(ui.date,-((d.getDay()+6)%7));e=addDays(s,6)}
+  else if(ui.period==="week"){s=addDays(ui.date,-((d.getDay()-5+7)%7));e=addDays(s,6)}
   else{s=iso(new Date(d.getFullYear(),d.getMonth(),1));e=iso(new Date(d.getFullYear(),d.getMonth()+1,0))}
   return{s:s,e:e};
 }
@@ -507,7 +507,6 @@ function cashMain(){
       '</div>';
     var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
     h+='<button class="primary" data-act="xlsx">Excel hesabatı ('+PN+')</button>';
-    h+='<button class="ghost" data-act="stats">Statistika: kimin yazdığı neçə pasiyent gəlib</button>';
   }
   if(ui.period!=="day"){
     var pm=patients(),nw=0,rp=0,days={};
@@ -633,7 +632,7 @@ function reportBook(){
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]],weeklySheet(r)]};
+  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]]].concat(ui.period==="week"?[weeklySheet(r)]:[])};
 }
 function downloadXlsx(){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
