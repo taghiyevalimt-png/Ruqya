@@ -166,6 +166,45 @@ details.more summary{padding:12px 14px;font-weight:500;font-size:14px;color:var(
 .sheet details.more{background:var(--bg)}
 h3.sec{font-family:var(--font-display);font-size:15px;margin:8px 0 0;color:var(--muted);font-weight:600}
 .visit b{flex:none}
+main.gridmode{padding:0;gap:0;overflow:hidden}
+main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 8px}
+.sumline{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.sumline b{color:var(--ink)}
+.toolrow{display:flex;gap:8px;align-items:center;min-width:0}
+.toolrow .chips{flex:1;min-width:0}
+.viewsw{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:2px;gap:2px;flex:none}
+.viewsw button{border:0;background:none;border-radius:8px;padding:6px 10px;font-size:13px;color:var(--muted);font-weight:500}
+.viewsw button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.cal{flex:1;min-height:0;overflow:auto;border-top:1px solid var(--line);background:var(--surface);overscroll-behavior:contain}
+.cal-in{position:relative;min-width:100%}
+.cal-head{position:sticky;top:0;z-index:4;display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
+.cal-head .corner{position:sticky;left:0;z-index:5;width:46px;flex:none;background:var(--surface)}
+.cal-head .ch{flex:1 0 116px;padding:7px 6px;font-size:13px;font-weight:600;text-align:center;border-left:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-head .ch i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
+.cal-body{display:flex;position:relative}
+.axis{position:sticky;left:0;z-index:3;width:46px;flex:none;background:var(--surface)}
+.axis span{position:absolute;right:6px;font-size:11px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
+.col{flex:1 0 116px;position:relative;border-left:1px solid var(--line);cursor:pointer;
+  background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 64px),
+  repeating-linear-gradient(to bottom,transparent 0,transparent 32px,color-mix(in srgb,var(--line) 45%,transparent) 32px,color-mix(in srgb,var(--line) 45%,transparent) 33px,transparent 33px,transparent 64px)}
+.ev{position:absolute;left:3px;right:3px;border-radius:8px;padding:4px 6px;overflow:hidden;font-size:12px;line-height:1.25;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
+.ev b{font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.92}
+.ev.paid{background:#2e8b57!important}
+.ev.noshow{background:#c77700!important}
+.ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
+.brk{position:absolute;left:0;right:0;z-index:1;pointer-events:none;font-size:11px;color:var(--muted);padding:2px 6px;
+  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--line) 70%,transparent) 0 6px,transparent 6px 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nowline{position:absolute;left:0;right:0;height:2px;background:#d93025;z-index:2;pointer-events:none}
+.nowline::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#d93025}
+.detail .row2{display:flex;gap:10px;align-items:center;font-size:14px}
+.detail .row2 span{color:var(--muted)}
+.stbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stbtns button{border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:11px 8px;font-size:14px;font-weight:600}
+.stbtns button[aria-pressed="true"].paid{background:var(--ok);border-color:var(--ok);color:#fff}
+.stbtns button[aria-pressed="true"].cancel{background:var(--bad);border-color:var(--bad);color:#fff}
+.stbtns button[aria-pressed="true"].noshow{background:var(--warn);border-color:var(--warn);color:#fff}
+.stbtns button[aria-pressed="true"].wait{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -240,10 +279,26 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
 /* ---------- state ---------- */
 var today=iso(new Date());
-var ui={tab:"day",date:today,filter:"all",period:"day",q:""};
+var ui={tab:"day",date:today,filter:"all",period:"day",q:"",view:"grid"};
+try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
+var DAY0=8*60,DAY1=22*60,PXM=64/60;
+var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
+function mins(t){var p=String(t).split(":");return (+p[0])*60+(+p[1]||0)}
+function hhmm(m){m=Math.max(0,Math.min(24*60-1,m));return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
+function endOf(a){return hhmm(mins(a.time)+(a.dur||90))}
+function rcolor(id){var i=0;for(;i<state.readers.length;i++)if(state.readers[i].id===id)break;return COLORS[i%COLORS.length]}
+function overlap(rid,date,start,dur,skip){
+  var s1=mins(start),e1=s1+dur;
+  return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.id===skip)return false;
+    var s2=mins(x.time),e2=s2+(x.dur||90);return s1<e2&&s2<e1})[0];
+}
+function inBreak(start,dur){
+  var s1=mins(start),e1=s1+dur;
+  return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return s1<e2&&s2<e1})[0];
+}
 var sheet=null;
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;
-function blank(){return{readers:[],appts:[],services:[],expenses:[],staff:{},v2:false}}
+function blank(){return{readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],v2:false,hasDur:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -271,11 +326,15 @@ function refresh(){
     fetchAll(function(){return sb.from("appts").select("*").gte("date",since).order("date",{ascending:false}).order("id")}),
     soft(function(){return sb.from("services").select("*").order("created_at").order("id")}),
     soft(function(){return sb.from("expenses").select("*").gte("date",since).order("date",{ascending:false}).order("id")}),
-    soft(function(){return sb.from("staff").select("*").order("id")})
+    soft(function(){return sb.from("staff").select("*").order("id")}),
+    soft(function(){return sb.from("breaks").select("*").order("start_time")}),
+    soft(function(){return sb.from("appts").select("duration").limit(1)})
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     state.readers=res[0].map(function(x){return{id:x.id,name:x.name,price:+x.price,share:+x.share,archived:!!x.archived}});
-    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||""}});
+    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:String(x.created_at||"").slice(0,10)}});
+    state.breaks=(res[5]||[]).map(function(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}});
+    state.hasBreaks=!!res[5];state.hasDur=!!res[6];
     state.v2=!!(res[2]&&res[3]&&res[4]);
     state.services=(res[2]||[]).map(function(x){return{id:x.id,name:svcName(x.name)}});
     state.expenses=(res[3]||[]).map(function(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}});
@@ -364,9 +423,21 @@ function render(){
     main.innerHTML=banner+'<div id="plist">'+patientsList()+'</div>';
     return;
   }
-  if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+dayMain()}
+  var cal=byId("cal"),keep=cal?{t:cal.scrollTop,l:cal.scrollLeft,d:cal.dataset.d}:null;
+  var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0;
+  main.classList.toggle("gridmode",grid);
+  if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
   else{top.innerHTML="<h1>Ayarlar</h1>";main.innerHTML=banner+readersMain()}
+  if(grid){
+    cal=byId("cal");
+    if(cal){
+      if(keep&&keep.d===ui.date){cal.scrollTop=keep.t;cal.scrollLeft=keep.l}
+      else{var nowM=new Date().getHours()*60+new Date().getMinutes();
+        cal.scrollTop=Math.max(0,((ui.date===today?nowM-60:9*60)-DAY0)*PXM);
+        if(keep)cal.scrollLeft=keep.l}
+    }
+  }
 }
 
 function navHtml(title,small){
@@ -380,11 +451,13 @@ function navHtml(title,small){
 function dayTop(){
   var h=navHtml(fmtDay(ui.date,"w"),ui.date===today?"Bu gün":parse(ui.date).getFullYear()+"-ci il");
   var rs=activeReaders();
+  h+='<div class="toolrow"><div class="viewsw"><button data-act="view" data-id="grid" aria-pressed="'+(ui.view==="grid")+'">Təqvim</button><button data-act="view" data-id="list" aria-pressed="'+(ui.view==="list")+'">Siyahı</button></div>';
   if(rs.length>1){
     h+='<div class="chips"><button class="chip" data-act="filter" data-id="all" aria-pressed="'+(ui.filter==="all")+'">Hamısı</button>';
     rs.forEach(function(r){h+='<button class="chip" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+(ui.filter===r.id)+'">'+esc(r.name)+'</button>'});
     h+='</div>';
   }
+  h+='</div>';
   var mon=addDays(ui.date,-((parse(ui.date).getDay()+6)%7)),cnt={};
   state.appts.forEach(function(a){if(a.status!=="cancel"&&(ui.filter==="all"||a.readerId===ui.filter))cnt[a.date]=(cnt[a.date]||0)+1});
   h+='<div class="week">';
@@ -393,6 +466,69 @@ function dayTop(){
   return h+'</div>';
 }
 
+function gridMain(){
+  var rs=activeReaders().filter(function(r){return ui.filter==="all"||r.id===ui.filter});
+  if(!rs.length)rs=activeReaders();
+  var ids=rs.map(function(r){return r.id});
+  state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&(ui.filter==="all"||a.readerId===ui.filter)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
+  var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
+  var paid=day.filter(function(a){return a.status==="paid"}),sum=paid.reduce(function(t,a){return t+a.price},0);
+  var h="";
+  var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
+  if(late.length){var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
+    h+='<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: '+late.length+'.</p>'+(first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Göstər</button>':'')+'</div>'}
+  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+'</b> qəbul</span><span><b class="num">'+paid.length+'</b> gəldi</span><span><b class="num">'+money(sum)+'</b> kassada</span></div>';
+  var H=(DAY1-DAY0)*PXM,colW=116,W=46+rs.length*colW;
+  h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
+  h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch"><i style="background:'+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
+  h+='<div class="cal-body" style="height:'+H+'px"><div class="axis">';
+  for(var m=DAY0+60;m<DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+hhmm(m)+'</span>';
+  h+='</div>';
+  var nowM=new Date().getHours()*60+new Date().getMinutes();
+  rs.forEach(function(r){
+    h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'">';
+    state.breaks.forEach(function(b){var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
+      h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
+    var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return a.status==="cancel"?-1:b.status==="cancel"?1:mins(a.time)-mins(b.time)});
+    var lanes=[];evs.forEach(function(a){var s1=mins(a.time),e1=s1+(a.dur||90),L=0;
+      while(lanes[L]&&lanes[L].some(function(x){return s1<x[1]&&x[0]<e1}))L++;(lanes[L]=lanes[L]||[]).push([s1,e1]);a._lane=L});
+    var nl=Math.max(1,lanes.length);
+    evs.forEach(function(a){
+      var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
+      var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=100/nl;
+      h+='<button class="ev '+a.status+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(a._lane*w)+'% + 3px);right:auto;width:calc('+w+'% - 6px)">'+
+        '<b>'+(a.status==="paid"?"✓ ":a.status==="noshow"?"✗ ":"")+esc(a.name)+'</b>'+
+        (ht>34?'<span class="num">'+esc(a.time)+'–'+endOf(a)+(a.phone?' · '+esc(a.phone):'')+'</span>':'')+
+        (ht>52&&state.v2?'<span>'+esc(a.service)+(a.price>0?' · '+money(a.price):'')+'</span>':'')+'</button>';
+    });
+    if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
+    h+='</div>';
+  });
+  h+='</div></div></div>';
+  return h;
+}
+function viewSheet(){
+  var a=appt(sheet.id);if(!a)return '<h2>Qəbul'+CLOSE+'</h2><p class="hint">Bu qəbul silinib.</p>';
+  var r=reader(a.readerId),wa=waLink(a.phone,remindText(a)),tel=String(a.phone||"").replace(/[^\d+]/g,"");
+  var who=state.staff[a.by];
+  return '<div class="detail" style="display:flex;flex-direction:column;gap:12px"><h2>'+esc(a.name)+CLOSE+'</h2>'+
+    '<div class="row2"><span>Vaxt</span><b class="num">'+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
+    '<div class="row2"><span>Mütəxəssis</span><b>'+esc(r?r.name:"—")+'</b>'+(state.v2?'<span>·</span><b>'+esc(a.service)+'</b>':'')+'</div>'+
+    (a.phone?'<div class="row2"><span>Telefon</span><b class="num">'+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+'">Zəng</a>':'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
+    '<div class="row2"><span>Qiymət</span><b class="num">'+(a.price>0?money(a.price):"yazılmayıb")+'</b></div>'+
+    (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
+    '<div class="stbtns">'+["paid","noshow","cancel","wait"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+k+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
+    '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="ghost" data-act="dup-appt" data-id="'+esc(a.id)+'">Təkrar yaz</button></div>'+
+    '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?'Yazdı: '+esc(who)+(c?', '+c:''):(c?'Yazılıb: '+c:'')})()+'</p></div>';
+}
+function breakForm(){
+  return '<h2>Yeni fasilə'+CLOSE+'</h2>'+
+    '<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" autocomplete="off" placeholder="Məsələn: Namaz"></div>'+
+    '<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>'+
+    '<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>'+
+    '<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'+
+    '<p class="err" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>';
+}
 function dayMain(){
   var h="";
   if(!activeReaders().length){
@@ -423,7 +559,7 @@ function dayMain(){
     if(was>0)tags+='<span class="tag">'+was+' dəfə gəlib</span>';
     if(miss>0)tags+='<span class="tag warn">'+miss+' dəfə gəlməyib</span>';
     h+='<div class="card '+a.status+'"><div class="row">'+
-      '<div class="time num">'+esc(a.time)+'</div>'+
+      '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
       '<div class="who"><b>'+esc(a.name)+'</b><span>'+(state.v2?esc(a.service)+' · ':'')+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
     if(tags)h+='<div class="tags">'+tags+'</div>';
@@ -704,6 +840,14 @@ function readersMain(){
     });
     if(adm)h+='<button class="ghost" data-act="new-service">Xidmət əlavə et</button>';
   }
+  if(state.hasBreaks){
+    h+='<h3 class="sec">Fasilələr (hər gün)</h3>';
+    if(!state.breaks.length)h+='<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>';
+    state.breaks.forEach(function(b){
+      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+'">Sil</button>':'')+'</div>';
+    });
+    if(adm)h+='<button class="ghost" data-act="new-break">Fasilə əlavə et</button>';
+  }
   h+='<h3 class="sec">Hesab</h3>';
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
     (state.v2?'<button class="ghost" data-act="me">Profil</button>':'')+'</div>';
@@ -742,7 +886,7 @@ function expenseForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
+  var f={view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
   byId("sheet").innerHTML=f();byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   try{if(!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
@@ -754,37 +898,39 @@ function closeSheet(){
 }
 function slotGrid(){
   var el=byId("f-busy"),box=byId("f-slots");if(!el||!box||!sheet)return;
-  var rid=val("f-reader"),date=val("f-date"),cur=val("f-time");
-  var t=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.status!=="cancel"&&x.id!==sheet.id}).map(function(x){return x.time}).sort();
+  var rid=val("f-reader"),date=val("f-date"),cur=val("f-time"),dur=+(val("f-dur")||90);
+  var taken=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.status!=="cancel"&&x.id!==sheet.id})
+    .sort(function(a,b){return mins(a.time)-mins(b.time)}).map(function(x){return x.time+"–"+endOf(x)});
   var h="";
-  for(var m=9*60;m<=21*60;m+=30){
-    var tm=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"),busy=t.indexOf(tm)>=0;
+  for(var m=DAY0+60;m+dur<=DAY1;m+=30){
+    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur);
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
   box.innerHTML=h;
-  el.textContent=t.length?"Üstündən xətt çəkilmiş saatlar tutulub: "+t.join(", ")+".":"Bu gün bütün saatlar boşdur.";
+  el.textContent=(taken.length?"Tutulub: "+taken.join(", ")+". ":"Bu gün mütəxəssis boşdur. ")+(state.breaks.length?"Fasilələr: "+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
-  var rs=activeReaders(),def=a?a.readerId:(ui.filter!=="all"&&reader(ui.filter)?ui.filter:(rs[0]?rs[0].id:""));
+  var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:(ui.filter!=="all"&&reader(ui.filter)?ui.filter:(rs[0]?rs[0].id:"")));
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
   var pre=sheet.pre||{},pm=patients();
   var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   var svc="";
   if(state.v2&&state.services.length){
-    var cur=a?a.service:state.services[0].name,sn=state.services.map(function(x){return x.name});
+    var cur=a?a.service:(pre.service||state.services[0].name),sn=state.services.map(function(x){return x.name});
     if(sn.indexOf(cur)<0)sn.push(cur);
     svc='<div class="field"><label for="f-service">Xidmət</label><select id="f-service">'+sn.map(function(n){return '<option value="'+esc(n)+'"'+(n===cur?" selected":"")+'>'+esc(n)+'</option>'}).join("")+'</select></div>';
   }
   return '<h2>'+(a?"Qəbulu dəyiş":"Yeni qəbul")+CLOSE+'</h2>'+svc+
     '<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">'+opts+'</select></div>'+
-    '<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="'+(a?a.date:ui.date)+'"></div></div>'+
-    '<div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="'+esc(a?a.time:"")+'"></div>'+
+    '<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="'+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
+    '<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="'+esc(a?a.time:(pre.time||""))+'"></div>'+
+    (state.hasDur?'<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">'+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+" dəq":(Math.floor(d/60)+" saat"+(d%60?" "+d%60+" dəq":"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     '<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     '<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" autocomplete="off" placeholder="050 000 00 00" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    '<div class="field"><label for="f-price">Qiymət, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:"")+'"></div>'+
+    '<div class="field"><label for="f-price">Qiymət, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
     (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+ST[k]+'</option>'}).join("")+'</select></div>':'')+
     '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
@@ -812,19 +958,24 @@ function saveAppt(){
   if(status==="paid"&&!(price>0))return fail("f-err","«Gəldi və ödədi» üçün ödənilən məbləği yazın.");
   var a=sheet.id?appt(sheet.id):null;
   if(sheet.id&&!a){closeSheet();flash("Bu qəbul artıq silinib.");return}
-  var clash=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.time===time&&x.id!==sheet.id&&x.status!=="cancel"})[0];
-  if(clash&&status!=="cancel")return fail("f-err",r.name+" üçün saat "+time+" artıq tutulub ("+clash.name+"). Başqa saat seçin.");
+  var dur=+(val("f-dur")||(a?a.dur:90))||90;
+  var clash=status==="cancel"?null:overlap(rid,date,time,dur,sheet.id);
+  if(clash)return fail("f-err",r.name+" bu vaxt məşğuldur: "+clash.name+", "+clash.time+"–"+endOf(clash)+". Başqa vaxt seçin.");
+  var br=status==="cancel"?null:inBreak(time,dur);
+  if(br)return fail("f-err","Bu vaxt fasilədir: "+br.title+" "+br.start+"–"+br.end+".");
   if(a){
-    a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;
+    a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;a.dur=dur;
     var up={reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,note:note};
+    if(state.hasDur)up.duration=dur;
     if(ST[status]){a.status=status;up.status=status}
     if(service){a.service=service;up.service=service}
     db(sb.from("appts").update(up).eq("id",a.id));
   }else{
     var id=uuid();
-    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id});
+    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id,dur:dur,created:today});
     var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note};
     if(service)ins.service=service;
+    if(state.hasDur)ins.duration=dur;
     db(sb.from("appts").insert(ins));
   }
   ui.date=date;ui.tab="day";if(ui.filter!=="all"&&ui.filter!==rid)ui.filter="all";
@@ -878,6 +1029,7 @@ document.addEventListener("click",function(e){
   else if(act==="status"){
     var a=appt(id),st=b.dataset.st;
     if(a&&st==="paid"&&!(a.price>0)){openSheet({type:"pay",id:id});return}
+    if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
     if(a&&ST[st]&&a.status!==st){
       a.status=st;if(st!=="paid")a.settled=false;
       db(sb.from("appts").update({status:st,settled:a.settled}).eq("id",a.id));
@@ -946,6 +1098,28 @@ document.addEventListener("click",function(e){
     return;
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
+  else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
+  else if(act==="view-appt"){if(appt(id))openSheet({type:"view",id:id});return}
+  else if(act==="newat"){
+    var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
+    mm=Math.max(DAY0,Math.min(DAY1-30,mm));
+    var tt=hhmm(mm),bb=inBreak(tt,30);if(bb){flash("Bu vaxt fasilədir: "+bb.title+".");return}
+    openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
+  }
+  else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
+  else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
+  else if(act==="save-break"){
+    var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
+    if(!bt)return fail("b-err","Fasilənin adını yazın.");
+    if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err","Başlama və bitmə saatını seçin.");
+    if(mins(be)<=mins(bs))return fail("b-err","Bitmə saatı başlamadan sonra olmalıdır.");
+    var bid=uuid();state.breaks.push({id:bid,title:bt,start:bs,end:be});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
+    db(sb.from("breaks").insert({id:bid,title:bt,start_time:bs,end_time:be}));closeSheet();
+  }
+  else if(act==="del-break"){
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
+  }
   else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
   else if(act==="edit-appt"){if(appt(id))openSheet({type:"appt",id:id});return}
   else if(act==="new-reader"){if(!isAdmin())return;openSheet({type:"reader",id:null});return}
@@ -979,7 +1153,7 @@ document.addEventListener("input",function(e){
 });
 document.addEventListener("change",function(e){
   var t=e.target.id;
-  if(t==="f-reader"||t==="f-date"||t==="f-time")slotGrid();
+  if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
   if(t==="f-name"){
     var ph=byId("f-phone"),nm=e.target.value.trim().toLowerCase(),pm=patients();
     if(ph&&!ph.value)Object.keys(pm).some(function(k){if(pm[k].name.toLowerCase()===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
@@ -989,6 +1163,14 @@ document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
   if(e.key==="Escape"&&sheet)closeSheet();
 });
+var sw=null;
+document.addEventListener("touchstart",function(e){var c=e.target.closest&&e.target.closest("#cal");sw=c&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,c:c}:null},{passive:true});
+document.addEventListener("touchend",function(e){
+  if(!sw||!e.changedTouches.length)return;
+  var dx=e.changedTouches[0].clientX-sw.x,dy=e.changedTouches[0].clientY-sw.y,c=sw.c;sw=null;
+  if(Math.abs(dx)<70||Math.abs(dy)>45||c.scrollWidth>c.clientWidth+2)return;
+  ui.date=addDays(ui.date,dx<0?1:-1);render();
+},{passive:true});
 window.addEventListener("popstate",hideSheet);
 window.addEventListener("offline",function(){offline=true;render()});
 window.addEventListener("online",function(){offline=false;render();refresh()});
