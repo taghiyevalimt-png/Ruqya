@@ -15,7 +15,7 @@ git add -A
 git commit -q -F - <<MSG
 $1
 
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01B7V6YDzvxrHSJcNgF6PGgj
 MSG
 git push origin main 2>&1 | tail -1

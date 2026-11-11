@@ -263,7 +263,11 @@ a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius
 </div>
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onerror="window.__sbErr=1"></script>
+<script src="vendor/supabase-2.45.4.js"></script>
+<script>
+/* Own copy first; the public CDN only as a fallback (it can be blocked in some countries). */
+if(!window.supabase&&!window.__sbTried){window.__sbTried=1;document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onerror="window.__sbErr=1"><\/script>')}
+</script>
 <script>
 if(!String.prototype.padStart){String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.slice(-Math.max(n,String(this).length))}}
 if(window.Element&&!Element.prototype.matches){Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector}
@@ -282,7 +286,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111112254";
+var APP_VERSION="20261111115832";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
