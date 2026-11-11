@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e6b5b">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="icon" href="favicon.png?v=2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ruqyatz">
 <title>Ruqyatz</title>
@@ -269,7 +269,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111104006";
+var APP_VERSION="20261111104314";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -437,7 +437,7 @@ function render(){
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML='<div class="brand"><img src="icon-192.png" alt=""><h1>Ruqyatz</h1></div>';
+    top.innerHTML='<div class="brand"><img src="icon-192.png?v=2" alt=""><h1>Ruqyatz</h1></div>';
     main.innerHTML=!sb?'<div class="empty">Proqram yüklənmədi. İnterneti yoxlayın və səhifəni yenidən açın.</div>'
       :!auth.ready?'<div class="empty">Yüklənir…</div>'
       :'<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>'+
