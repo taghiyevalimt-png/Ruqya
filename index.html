@@ -17,7 +17,7 @@
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
    list between them, forms slide up as a bottom sheet. */
 :root{
-  --bg:#f2f5f4; --surface:#ffffff; --ink:#16211e; --muted:#5f6e69; --line:#dbe2df;
+  --bg:#f2f5f4; --surface:#ffffff; --ink:#16211e; --muted:#5f6e69; --line:#dbe2df; --line-soft:#ebf0ee; --hatch:#e3e9e6;
   --accent:#0e6b5b; --accent-ink:#ffffff; --accent-soft:#dff0ec;
   --ok:#1b7a48; --ok-soft:#def2e6; --warn:#a86200; --warn-soft:#fbecd2; --bad:#b0352d; --bad-soft:#f9e1de;
   --font-display:"Onest","Golos Text",system-ui,sans-serif;
@@ -27,14 +27,14 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633;
+    --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633; --line-soft:#1f2927; --hatch:#24302d;
     --accent:#4bbfa8; --accent-ink:#06211c; --accent-soft:#17332e;
     --ok:#5fcf8f; --ok-soft:#173224; --warn:#e7ad52; --warn-soft:#3a2c12; --bad:#f08b82; --bad-soft:#3d1e1b;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633;
+  --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633; --line-soft:#1f2927; --hatch:#24302d;
   --accent:#4bbfa8; --accent-ink:#06211c; --accent-soft:#17332e;
   --ok:#5fcf8f; --ok-soft:#173224; --warn:#e7ad52; --warn-soft:#3a2c12; --bad:#f08b82; --bad-soft:#3d1e1b;
   color-scheme:dark;
@@ -186,7 +186,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .axis span{position:absolute;right:5px;font-size:10.5px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
 .col{flex:1 0 68px;width:68px;position:relative;border-left:1px solid var(--line);cursor:pointer;
   background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 92px),
-  repeating-linear-gradient(to bottom,transparent 0,transparent 46px,color-mix(in srgb,var(--line) 45%,transparent) 46px,color-mix(in srgb,var(--line) 45%,transparent) 47px,transparent 47px,transparent 92px)}
+  repeating-linear-gradient(to bottom,transparent 0,transparent 46px,var(--line-soft) 46px,var(--line-soft) 47px,transparent 47px,transparent 92px)}
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
 .ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
@@ -195,7 +195,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev.noshow{background:#c77700!important}
 .ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
 .brk{position:absolute;left:0;right:0;z-index:1;pointer-events:none;font-size:11px;color:var(--muted);padding:2px 6px;
-  background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--line) 70%,transparent) 0 6px,transparent 6px 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  background:repeating-linear-gradient(135deg,var(--hatch) 0 6px,transparent 6px 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .nowline{position:absolute;left:0;right:0;height:2px;background:#d93025;z-index:2;pointer-events:none}
 .nowline::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#d93025}
 .detail .row2{display:flex;gap:10px;align-items:center;font-size:14px}
@@ -223,6 +223,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .xl td.mg{text-align:center;font-weight:700;background:#fff2cc}
 .tag.by{background:var(--surface);border:1px solid var(--line);color:var(--ink);font-weight:500}
 .tabs button{min-width:0}
+@media (max-width:360px){.tabs button{font-size:10.5px;padding:8px 1px 10px}.tabs svg{width:20px;height:20px}}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -269,13 +270,14 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111110740";
+var APP_VERSION="20261111111803";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
   fetch(location.pathname+"?check="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){
     var m=t.match(/APP_VERSION\s*=\s*"([^"]+)"/);
-    if(!m||m[1]===APP_VERSION||sheet)return;
+    var ae=document.activeElement;
+    if(!m||m[1]===APP_VERSION||sheet||(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))return;
     var n=0;try{n=+sessionStorage.getItem("ruqya.reload."+m[1])||0;sessionStorage.setItem("ruqya.reload."+m[1],n+1)}catch(e){}
     if(n<2)location.replace(location.pathname+"?v="+encodeURIComponent(m[1]));
   }).catch(function(){});
@@ -421,7 +423,17 @@ function db(q){
   /* The local copy is already updated; realtime confirms the change on every phone. */
   return q.then(function(r){
     if(r.error){flash(r.error.code==="23505"?"Bu saat artıq tutulub. Başqa saat seçin.":"Yadda saxlanmadı. Yenidən cəhd edin.");return refresh()}
-  },function(){flash("Serverlə əlaqə yoxdur. Dəyişiklik yadda saxlanmadı.");return refresh()});
+  },function(){unsaved();return refresh()});
+}
+var retryT=null;
+function unsaved(){
+  /* Keep a warning up and retry until the server copy is back on screen, so nothing looks saved when it is not. */
+  auth.msg="Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.";render();
+  clearTimeout(retryT);
+  retryT=setTimeout(function again(){
+    if(!auth.user)return;
+    refresh().then(function(){if(Date.now()-lastFull<5000){auth.msg="";render()}else retryT=setTimeout(again,10000)});
+  },10000);
 }
 function onChange(pl){
   var t=pl.table,del=pl.eventType==="DELETE",row=del?pl.old:pl.new;
@@ -926,7 +938,7 @@ function patientSheet(){
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||"Telefon yazılmayıb")+'</p><div>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId);
-    h+='<div class="visit"><span class="num">'+fmtDay(a.date,"y")+', '+esc(a.time)+' · '+esc(r?r.name:"—")+'</span>'+
+    h+='<div class="visit"><span class="num">'+fmtDay(a.date,"y")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</span>'+
       (a.status==="wait"?'<span class="tag">Gözlənilir</span>':'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>';
   });
   h+='</div><div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+'">Yenidən yaz</button>'+
@@ -1181,6 +1193,7 @@ document.addEventListener("click",function(e){
     return;
   }
   if(!auth.user)return;
+  if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$)/.test(act)&&act!=="save-me-x"){flash("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun.");return}
   if(act==="tab"){
     if(ui.tab!==b.dataset.tab){ui.tab=b.dataset.tab;byId("top").innerHTML="";byId("main").scrollTop=0}
   }
@@ -1350,7 +1363,7 @@ document.addEventListener("touchend",function(e){
 },{passive:true});
 window.addEventListener("popstate",hideSheet);
 window.addEventListener("offline",function(){offline=true;render()});
-window.addEventListener("online",function(){offline=false;render();refresh()});
+window.addEventListener("online",function(){offline=false;if(/^İnternet yoxdur/.test(auth.msg))auth.msg="";render();refresh()});
 function tick(){
   var t=iso(new Date());
   if(t!==today){if(ui.date===today)ui.date=t;today=t}
