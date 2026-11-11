@@ -473,9 +473,8 @@ function cashData(){
 function reportText(){
   var d=cashData(),T=d.T,t="Kassa: "+periodTitle()+"\nCəmi: "+money(T.sum)+" ("+T.n+" seans)\n";
   d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;
-    t+="\n"+x.name+": "+x.n+" seans, "+money(x.sum)+"\n  mütəxəssisə "+money(x.rd)+", rəhbərə "+money(x.mgr)+(x.due>0.005?" (verilməyib "+money(x.due)+")":" (verilib)")+"\n"});
-  t+="\nMütəxəssislərə: "+money(T.rd)+"\nRəhbərə: "+money(T.mgr);
-  if(T.due>0.005)t+="\nHələ verilməyib: "+money(T.due);
+    t+="\n"+x.name+": "+x.n+" seans, "+money(x.sum)+"\n  mütəxəssisə "+money(x.rd)+"\n"});
+  t+="\nMütəxəssislərə: "+money(T.rd);
   if(T.cancel||T.noshow)t+="\nLəğv etdi: "+T.cancel+", gəlmədi: "+T.noshow;
   return t;
 }
@@ -484,7 +483,7 @@ function cashMain(){
   var h='<div class="strip">'+
     '<div class="tile main"><b class="num">'+money(T.sum)+'</b><span>cəmi kassada</span></div>'+
     '<div class="tile"><b class="num">'+money(T.rd)+'</b><span>mütəxəssislərə</span></div>'+
-    '<div class="tile"><b class="num">'+money(T.mgr)+'</b><span>rəhbərə</span></div></div>';
+    '<div class="tile"><b class="num">'+T.n+'</b><span>seans</span></div></div>';
   d.order.forEach(function(id){
     var x=rows[id],rd=reader(id),any=x.n+x.cancel+x.noshow+x.wait;
     if(rd.archived&&!any)return;
@@ -494,12 +493,8 @@ function cashMain(){
     if(x.cancel)foot.push("ləğv etdi: "+x.cancel);
     if(x.noshow)foot.push("gəlmədi: "+x.noshow);
     h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+' seans · '+money(x.sum)+'</span></div>'+
-      '<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'+
-      '<div class="split"><div><span>Mütəxəssisə</span><b class="num">'+money(x.rd)+'</b></div><div><span>Rəhbərə</span><b class="num">'+money(x.mgr)+'</b></div></div>'+
+      '<div class="settle" style="border-top:0;padding-top:0"><span>Mütəxəssisə</span><b class="num">'+money(x.rd)+'</b></div>'+
       (foot.length?'<div class="foot">'+cap(foot.join(", "))+'</div>':'')+
-      (x.mgr>0?(x.due>0.005
-        ?'<div class="settle due"><span>Rəhbərə verilməyib: <b class="num">'+money(x.due)+'</b></span><button class="ghost" data-act="settle" data-id="'+esc(id)+'">Verdi</button></div>'
-        :'<div class="settle done"><span>Rəhbərə tam verilib</span><button class="link" data-act="unsettle" data-id="'+esc(id)+'">Ləğv et</button></div>'):'')+
       '</div>';
   });
   if(!shown)return h+(auth.loaded?'<div class="empty">Hələ mütəxəssis yoxdur. «Mütəxəssislər» bölməsində əlavə edin.</div>':"");
@@ -646,7 +641,7 @@ function readersMain(){
   if(!rs.length&&auth.loaded)h+='<div class="empty">Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.</div>';
   rs.forEach(function(r){
     var m=r.price*r.share/100;
-    h+='<div class="reader"><div><b>'+esc(r.name)+'</b><span class="num">Seans '+money(r.price)+' · mütəxəssisə '+money(r.price-m)+' · rəhbərə '+money(m)+'</span></div>'+
+    h+='<div class="reader"><div><b>'+esc(r.name)+'</b><span class="num">Seans '+money(r.price)+' · mütəxəssisə '+money(r.price-m)+'</span></div>'+
       '<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button></div>';
   });
   h+='<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>';
@@ -754,7 +749,7 @@ function readerHint(){
   var p=parseFloat(val("r-price")),s=parseFloat(val("r-share")),el=byId("r-hint");
   if(!el)return;
   if(isNaN(p)||isNaN(s)||s<0||s>100){el.textContent="";return}
-  var m=p*s/100;el.textContent="Bir seansdan: mütəxəssisə "+money(p-m)+", rəhbərə "+money(m)+".";
+  var m=p*s/100;el.textContent="Bir seansdan mütəxəssisə: "+money(p-m)+".";
 }
 
 function saveAppt(){
