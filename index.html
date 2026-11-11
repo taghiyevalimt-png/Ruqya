@@ -267,7 +267,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111102353";
+var APP_VERSION="20261111102649";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -423,7 +423,7 @@ function waLink(phone,text){
   if(d.length<11)return "";
   return "https://wa.me/"+d+(text?"?text="+encodeURIComponent(text):"");
 }
-function remindText(a){return "Salam! Qəbulunuzu xatırladırıq: "+fmtDay(a.date)+", saat "+a.time+(state.v2?" ("+a.service+")":"")+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
+function remindText(a){return "Salam! Qəbulunuzu xatırladırıq: "+fmtDay(a.date)+", saat "+a.time+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
 
 /* ---------- render ---------- */
 function render(){
@@ -528,7 +528,7 @@ function gridMain(){
         (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
         (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
         (ht>76&&(state.staff[a.by]||a.by)?'<span class="by">Yazdı: '+esc(state.staff[a.by]||"Adsız")+'</span>':'')+
-        (ht>110&&state.v2?'<span>'+esc(a.service)+'</span>':'')+'</button>';
+        '</button>';
     });
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
     h+='</div>';
@@ -542,7 +542,7 @@ function viewSheet(){
   var who=state.staff[a.by];
   return '<div class="detail" style="display:flex;flex-direction:column;gap:12px"><h2>'+esc(a.name)+CLOSE+'</h2>'+
     '<div class="row2"><span>Vaxt</span><b class="num">'+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
-    '<div class="row2"><span>Mütəxəssis</span><b>'+esc(r?r.name:"—")+'</b>'+(state.v2?'<span>·</span><b>'+esc(a.service)+'</b>':'')+'</div>'+
+    '<div class="row2"><span>Mütəxəssis</span><b>'+esc(r?r.name:"—")+'</b>'+'</div>'+
     (a.phone?'<div class="row2"><span>Telefon</span><b class="num">'+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+'">Zəng</a>':'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
     '<div class="row2"><span>Qiymət</span><b class="num">'+(a.price>0?money(a.price):"yazılmayıb")+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
@@ -591,7 +591,7 @@ function dayMain(){
     if(miss>0)tags+='<span class="tag warn">'+miss+' dəfə gəlməyib</span>';
     h+='<div class="card '+a.status+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
-      '<div class="who"><b>'+esc(a.name)+'</b><span>'+(state.v2?esc(a.service)+' · ':'')+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
+      '<div class="who"><b>'+esc(a.name)+'</b><span>'+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
     var byName=state.staff[a.by]||(a.by?"Adsız istifadəçi":"");
     if(byName)tags='<span class="tag by">Yazdı: '+esc(byName)+'</span>'+tags;
@@ -794,33 +794,28 @@ function reportBook(){
     ["Kassa cəmi",r2(T.sum)],["Seans",T.n],["Xərclər",r2(exSum)],[],
     ["Mütəxəssis","Seans","Kassa","Ləğv etdi","Gəlmədi"]];
   d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),x.cancel,x.noshow])});
-  var bs={},bo=[];
-  state.appts.forEach(function(a){if(a.status!=="paid"||a.date<r.s||a.date>r.e)return;
-    if(!bs[a.service]){bs[a.service]={n:0,sum:0};bo.push(a.service)}bs[a.service].n++;bs[a.service].sum+=a.price});
-  sum.push([],["Xidmət","Seans","Məbləğ"]);
-  bo.forEach(function(n){sum.push([n,bs[n].n,r2(bs[n].sum)])});
-  var ap=[["Tarix","Saat","Xidmət","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Yazan","Qeyd"]];
+  var ap=[["Tarix","Saat","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Yazan","Qeyd"]];
   state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId);
-      ap.push([a.date,a.time,a.service,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],state.staff[a.by]||"",a.note])});
+      ap.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],state.staff[a.by]||"",a.note])});
   var xp=[["Tarix","Xərc","Məbləğ","Yazan"]];
   ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]]]};
+  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]]]};
 }
 function salesBook(){
-  var r=range(),rows=[["Tarix","Saat","Agent","Pasiyent","Telefon","Xidmət","Mütəxəssis"]];
+  var r=range(),rows=[["Tarix","Saat","Agent","Pasiyent","Telefon","Mütəxəssis"]];
   var fri=function(d){return addDays(d,-((parse(d).getDay()-5+7)%7))},s0=fri(r.s),e0=addDays(fri(r.e),6);
   state.appts.filter(function(a){return a.status==="paid"&&a.date>=s0&&a.date<=e0})
     .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
-    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||"Adsız istifadəçi",a.name,a.phone,a.service,rd?rd.name:""])});
+    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||"Adsız istifadəçi",a.name,a.phone,rd?rd.name:""])});
   var bb=bookedBy(s0,e0),dl=[["Tarix"].concat(bb.map(function(x){return x.name})).concat(["Cəmi"])];
   for(var dd=s0;dd<=e0;dd=addDays(dd,1)){var tt=0;dl.push([dd].concat(bb.map(function(x){var v=x.days[dd]||0;tt+=v;return v})).concat([tt]))}
   dl.push(["Cəmi"].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,"Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."],["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16],null,"Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə."]]};
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,"Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."],["Gələn pasiyentlər",rows,[11,7,20,22,16,16],null,"Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə."]]};
 }
 function fmtCell(c){
   if(c==null||c==="")return["",""];
@@ -906,13 +901,6 @@ function readersMain(){
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button>':'')+'</div>';
   });
   if(adm)h+='<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>';
-  if(state.v2){
-    h+='<h3 class="sec">Xidmətlər</h3>';
-    state.services.forEach(function(x){
-      h+='<div class="reader"><div><b>'+esc(x.name)+'</b></div>'+(adm&&state.services.length>1?'<button class="ghost" data-act="del-service" data-id="'+esc(x.id)+'">Sil</button>':'')+'</div>';
-    });
-    if(adm)h+='<button class="ghost" data-act="new-service">Xidmət əlavə et</button>';
-  }
   if(state.hasBreaks){
     h+='<h3 class="sec">Fasilələr (hər gün)</h3>';
     if(!state.breaks.length)h+='<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>';
@@ -994,13 +982,7 @@ function apptForm(){
   var pre=sheet.pre||{},pm=patients();
   var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
-  var svc="";
-  if(state.v2&&state.services.length){
-    var cur=a?a.service:(pre.service||state.services[0].name),sn=state.services.map(function(x){return x.name});
-    if(sn.indexOf(cur)<0)sn.push(cur);
-    svc='<div class="field"><label for="f-service">Xidmət</label><select id="f-service">'+sn.map(function(n){return '<option value="'+esc(n)+'"'+(n===cur?" selected":"")+'>'+esc(n)+'</option>'}).join("")+'</select></div>';
-  }
-  return '<h2>'+(a?"Qəbulu dəyiş":"Yeni qəbul")+CLOSE+'</h2>'+svc+
+  return '<h2>'+(a?"Qəbulu dəyiş":"Yeni qəbul")+CLOSE+'</h2>'+
     '<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">'+opts+'</select></div>'+
     '<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="'+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
     '<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="'+esc(a?a.time:(pre.time||""))+'"></div>'+
@@ -1026,7 +1008,7 @@ function readerForm(){
 function saveAppt(){
   if(!sheet)return;
   var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=val("f-price"),price=pr===""?0:parseFloat(pr),note=val("f-note"),status=val("f-status");
-  var r=reader(rid),service=state.v2?val("f-service"):"";
+  var r=reader(rid),service="";
   if(!r)return fail("f-err","Mütəxəssisi seçin.");
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return fail("f-err","Tarixi seçin.");
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err","Saatı seçin.");
