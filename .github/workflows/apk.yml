@@ -39,3 +39,4 @@ jobs:
           tag_name: apk-${{ github.run_number }}
           name: APK ${{ github.run_number }}
           files: Ruqya.apk
+          make_latest: true

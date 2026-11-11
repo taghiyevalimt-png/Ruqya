@@ -20,8 +20,8 @@ public class MainActivity extends Activity {
     private static final String OFFLINE =
             "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head>"
                     + "<body style='font-family:sans-serif;padding:48px 24px;text-align:center'>"
-                    + "<h3>Нет интернета</h3><p>Проверьте подключение и попробуйте снова.</p>"
-                    + "<p><a href='" + HOME + "'>Обновить</a></p></body></html>";
+                    + "<h3>İnternet yoxdur</h3><p>Bağlantını yoxlayın və yenidən cəhd edin.</p>"
+                    + "<p><a href='" + HOME + "'>Yenilə</a></p></body></html>";
 
     private WebView web;
 
@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setUserAgentString(settings.getUserAgentString() + " RuqyaApp");
 
         web.setWebChromeClient(new WebChromeClient());
         web.setWebViewClient(new WebViewClient() {
