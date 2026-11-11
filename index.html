@@ -848,6 +848,11 @@ function readersMain(){
     });
     if(adm)h+='<button class="ghost" data-act="new-break">Fasilə əlavə et</button>';
   }
+  if(isAdmin()){
+    h+='<h3 class="sec">İşçi hesabları</h3>'+
+      '<div class="pay"><div class="foot" style="font-size:14px;color:var(--ink)">Mütəxəssislərə və satış agentlərinə login və şifrəni yalnız siz yaradırsınız. Supabase-də «Add user» → «Create new user» basın, e-poçt formatında login (məs. aysel@ruqya.az) və şifrə yazın, «Auto Confirm User» qalsın.</div>'+
+      '<a class="wa" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users" target="_blank" rel="noopener">Hesab yarat və ya sil</a></div>';
+  }
   h+='<h3 class="sec">Hesab</h3>';
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
     (state.v2?'<button class="ghost" data-act="me">Profil</button>':'')+'</div>';
