@@ -269,7 +269,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111103213";
+var APP_VERSION="20261111103803";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -428,7 +428,7 @@ function waLink(phone,text){
   if(d.length<11)return "";
   return "https://wa.me/"+d+(text?"?text="+encodeURIComponent(text):"");
 }
-function remindText(a){return "Salam! Qəbulunuzu xatırladırıq: "+fmtDay(a.date)+", saat "+a.time+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
+function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmtDay(a.date)+", saat "+a.time+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
 
 /* ---------- render ---------- */
 function render(){
