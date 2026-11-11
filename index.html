@@ -211,6 +211,8 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
+var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
+function isAdmin(){return !!(auth.user&&auth.user.id===ADMIN)}
 var IN_APP=/RuqyaApp/.test(navigator.userAgent);
 var CLOSE='<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>';
 
@@ -310,7 +312,6 @@ function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i
 function r2(n){return Math.round((+n||0)*100)/100}
 function svcName(n){n=n||"Ruqya";return n==="Ruqy\u0259"?"Ruqya":n==="Hicam\u0259"?"Hicama":n}
 function activeReaders(){return state.readers.filter(function(r){return !r.archived})}
-function split(a){var m=a.price*a.share/100;return{mgr:m,rd:a.price-m}}
 function range(){
   var d=parse(ui.date),s,e;
   if(ui.period==="day"){s=e=ui.date}
@@ -395,7 +396,8 @@ function dayTop(){
 function dayMain(){
   var h="";
   if(!activeReaders().length){
-    return auth.loaded?'<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin: ad, seansın qiyməti və rəhbərin payı.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>':"";
+    if(auth.loaded&&!isAdmin())return '<div class="empty">Rəhbər hələ mütəxəssis əlavə etməyib.</div>';
+    return auth.loaded?'<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>':"";
   }
   var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
   if(late.length){
@@ -423,7 +425,7 @@ function dayMain(){
     h+='<div class="card '+a.status+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+'</div>'+
       '<div class="who"><b>'+esc(a.name)+'</b><span>'+(state.v2?esc(a.service)+' · ':'')+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
-      '<div class="price num">'+money(a.price)+'</div></div>';
+      '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(a.status==="wait"){
@@ -459,41 +461,38 @@ function cashTop(){
 }
 function cashData(){
   var r=range(),rows={},order=[];
-  state.readers.forEach(function(x){rows[x.id]={name:x.name,n:0,sum:0,mgr:0,rd:0,due:0,cancel:0,noshow:0,wait:0};order.push(x.id)});
+  state.readers.forEach(function(x){rows[x.id]={name:x.name,n:0,sum:0,cancel:0,noshow:0,wait:0};order.push(x.id)});
   state.appts.forEach(function(a){
     if(a.date<r.s||a.date>r.e)return;
     var row=rows[a.readerId];if(!row)return;
-    if(a.status==="paid"){var s=split(a);row.n++;row.sum+=a.price;row.mgr+=s.mgr;row.rd+=s.rd;if(!a.settled)row.due+=s.mgr}
+    if(a.status==="paid"){row.n++;row.sum+=a.price}
     else row[a.status]++;
   });
-  var T={n:0,sum:0,mgr:0,rd:0,due:0,cancel:0,noshow:0};
+  var T={n:0,sum:0,cancel:0,noshow:0};
   order.forEach(function(id){var x=rows[id];for(var k in T)T[k]+=x[k]});
   return{r:r,rows:rows,order:order,T:T};
 }
 function reportText(){
   var d=cashData(),T=d.T,t="Kassa: "+periodTitle()+"\nCəmi: "+money(T.sum)+" ("+T.n+" seans)\n";
-  d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;
-    t+="\n"+x.name+": "+x.n+" seans, "+money(x.sum)+"\n  mütəxəssisə "+money(x.rd)+"\n"});
-  t+="\nMütəxəssislərə: "+money(T.rd);
-  if(T.cancel||T.noshow)t+="\nLəğv etdi: "+T.cancel+", gəlmədi: "+T.noshow;
+  d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;t+="\n"+x.name+": "+x.n+" seans, "+money(x.sum)});
+  if(T.cancel||T.noshow)t+="\n\nLəğv etdi: "+T.cancel+", gəlmədi: "+T.noshow;
   return t;
 }
 function cashMain(){
   var d=cashData(),rows=d.rows,T=d.T,shown=0;
   var h='<div class="strip">'+
     '<div class="tile main"><b class="num">'+money(T.sum)+'</b><span>cəmi kassada</span></div>'+
-    '<div class="tile"><b class="num">'+money(T.rd)+'</b><span>mütəxəssislərə</span></div>'+
-    '<div class="tile"><b class="num">'+T.n+'</b><span>seans</span></div></div>';
+    '<div class="tile"><b class="num">'+T.n+'</b><span>seans</span></div>'+
+    '<div class="tile"><b class="num">'+(T.cancel+T.noshow)+'</b><span>gəlmədi / ləğv</span></div></div>';
   d.order.forEach(function(id){
     var x=rows[id],rd=reader(id),any=x.n+x.cancel+x.noshow+x.wait;
     if(rd.archived&&!any)return;
     shown++;
-    var pct=x.sum?Math.round(x.rd/x.sum*100):0,foot=[];
+    var foot=[];
     if(x.wait)foot.push("gözlənilir: "+x.wait);
     if(x.cancel)foot.push("ləğv etdi: "+x.cancel);
     if(x.noshow)foot.push("gəlmədi: "+x.noshow);
     h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+' seans · '+money(x.sum)+'</span></div>'+
-      '<div class="settle" style="border-top:0;padding-top:0"><span>Mütəxəssisə</span><b class="num">'+money(x.rd)+'</b></div>'+
       (foot.length?'<div class="foot">'+cap(foot.join(", "))+'</div>':'')+
       '</div>';
   });
@@ -564,25 +563,25 @@ function loadXlsx(){
 function reportBook(){
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0),st=statsData();
   var sum=[["Hesabat",periodTitle()],["Dövr",r.s+" — "+r.e],[],
-    ["Kassa cəmi",r2(T.sum)],["Mütəxəssislərə",r2(T.rd)],["Xərclər",r2(exSum)],[],
-    ["Mütəxəssis","Seans","Kassa","Mütəxəssisə","Ləğv etdi","Gəlmədi"]];
-  d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),r2(x.rd),x.cancel,x.noshow])});
+    ["Kassa cəmi",r2(T.sum)],["Seans",T.n],["Xərclər",r2(exSum)],[],
+    ["Mütəxəssis","Seans","Kassa","Ləğv etdi","Gəlmədi"]];
+  d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),x.cancel,x.noshow])});
   var bs={},bo=[];
   state.appts.forEach(function(a){if(a.status!=="paid"||a.date<r.s||a.date>r.e)return;
     if(!bs[a.service]){bs[a.service]={n:0,sum:0};bo.push(a.service)}bs[a.service].n++;bs[a.service].sum+=a.price});
   sum.push([],["Xidmət","Seans","Məbləğ"]);
   bo.forEach(function(n){sum.push([n,bs[n].n,r2(bs[n].sum)])});
-  var ap=[["Tarix","Saat","Xidmət","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Mütəxəssisə","Yazan","Qeyd"]];
+  var ap=[["Tarix","Saat","Xidmət","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Yazan","Qeyd"]];
   state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
-    .forEach(function(a){var rd=reader(a.readerId),sp=a.status==="paid"?split(a):{rd:0,mgr:0};
-      ap.push([a.date,a.time,a.service,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],r2(sp.rd),state.staff[a.by]||"",a.note])});
+    .forEach(function(a){var rd=reader(a.readerId);
+      ap.push([a.date,a.time,a.service,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],state.staff[a.by]||"",a.note])});
   var xp=[["Tarix","Xərc","Məbləğ","Yazan"]];
   ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[24,14,12,14,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,12,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]]]};
+  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]]]};
 }
 function downloadXlsx(){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
@@ -636,35 +635,39 @@ function reportSheet(){
 }
 
 function readersMain(){
-  var rs=activeReaders(),h='<h3 class="sec">Mütəxəssislər</h3>';
-  if(!rs.length&&auth.loaded)h+='<div class="empty">Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.</div>';
+  var rs=activeReaders(),adm=isAdmin(),h='<h3 class="sec">Mütəxəssislər</h3>';
+  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?"Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Rəhbər hələ mütəxəssis əlavə etməyib.")+'</div>';
   rs.forEach(function(r){
-    var m=r.price*r.share/100;
-    h+='<div class="reader"><div><b>'+esc(r.name)+'</b><span class="num">Seans '+money(r.price)+' · mütəxəssisə '+money(r.price-m)+'</span></div>'+
-      '<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button></div>';
+    h+='<div class="reader"><div><b>'+esc(r.name)+'</b></div>'+
+      (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button>':'')+'</div>';
   });
-  h+='<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>';
-  h+='<p class="hint">Qiymət və pay hər mütəxəssis üçün ayrıca yazılır. Sonradan dəyişsəniz, köhnə qəbullar yenidən hesablanmır.</p>';
+  if(adm)h+='<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>';
   if(state.v2){
     h+='<h3 class="sec">Xidmətlər</h3>';
     state.services.forEach(function(x){
-      h+='<div class="reader"><div><b>'+esc(x.name)+'</b></div>'+(state.services.length>1?'<button class="ghost" data-act="del-service" data-id="'+esc(x.id)+'">Sil</button>':'')+'</div>';
+      h+='<div class="reader"><div><b>'+esc(x.name)+'</b></div>'+(adm&&state.services.length>1?'<button class="ghost" data-act="del-service" data-id="'+esc(x.id)+'">Sil</button>':'')+'</div>';
     });
-    h+='<button class="ghost" data-act="new-service">Xidmət əlavə et</button>';
-  }else if(auth.loaded){
-    h+='<div class="note"><p>Xidmətlər, xərclər və statistika üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>';
+    if(adm)h+='<button class="ghost" data-act="new-service">Xidmət əlavə et</button>';
   }
   h+='<h3 class="sec">Hesab</h3>';
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
-    (state.v2?'<button class="ghost" data-act="me">Adı dəyiş</button>':'')+'</div>';
+    (state.v2?'<button class="ghost" data-act="me">Profil</button>':'')+'</div>';
   h+='<button class="ghost" data-act="logout">Çıxış</button>';
   return h;
 }
 function meForm(){
-  return '<h2>Adınız'+CLOSE+'</h2>'+
-    '<div class="field"><label for="m-name">Ad</label><input id="m-name" type="text" autocomplete="off" value="'+esc(state.staff[auth.user.id]||"")+'"></div>'+
-    '<p class="hint">Statistikada və hesabatda bu adla görünəcəksiniz.</p><p class="err" id="m-err" hidden></p>'+
+  return '<h2>Profil'+CLOSE+'</h2>'+
+    '<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" autocomplete="off" value="'+esc(state.staff[auth.user.id]||"")+'"></div>'+
+    '<p class="hint">Statistikada və hesabatda bu adla görünəcəksiniz.</p>'+
+    '<div class="field"><label for="m-pass">Yeni şifrə (dəyişmək istəmirsinizsə, boş saxlayın)</label><input id="m-pass" type="password" autocomplete="new-password"></div>'+
+    '<p class="err" id="m-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>';
+}
+function paySheet(){
+  var a=appt(sheet.id);if(!a)return '<h2>Ödəniş'+CLOSE+'</h2>';
+  return '<h2>Ödəniş'+CLOSE+'</h2><p class="hint">'+esc(a.name)+', saat '+esc(a.time)+'</p>'+
+    '<div class="field"><label for="p-price">Ödənilən məbləğ, ₼</label><input id="p-price" type="number" inputmode="decimal" min="0" value="'+(a.price>0?a.price:"")+'"></div>'+
+    '<p class="err" id="p-err" hidden></p><div class="btns"><button class="primary" data-act="save-pay">Gəldi və ödədi</button></div>';
 }
 function serviceForm(){
   return '<h2>Yeni xidmət'+CLOSE+'</h2>'+
@@ -684,9 +687,8 @@ function expenseForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
+  var f={appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
   byId("sheet").innerHTML=f();byId("overlay").hidden=false;byId("sheet").scrollTop=0;
-  if(s.type==="reader")readerHint();
   if(s.type==="appt")slotGrid();
   try{if(!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
@@ -711,7 +713,7 @@ function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
   var rs=activeReaders(),def=a?a.readerId:(ui.filter!=="all"&&reader(ui.filter)?ui.filter:(rs[0]?rs[0].id:""));
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
-  var dr=reader(def),pre=sheet.pre||{},pm=patients();
+  var pre=sheet.pre||{},pm=patients();
   var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   var svc="";
@@ -727,9 +729,9 @@ function apptForm(){
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     '<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     '<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" autocomplete="off" placeholder="050 000 00 00" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    '<details class="more"'+(a&&a.note?" open":"")+'><summary>Qiymət və qeyd</summary><div class="morebody">'+
-    '<div class="field"><label for="f-price">Qiymət, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" value="'+(a?a.price:(dr?dr.price:""))+'"></div>'+
-    '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" autocomplete="off" value="'+esc(a?a.note:"")+'"></div></div></details>'+
+    '<div class="field"><label for="f-price">Qiymət, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:"")+'"></div>'+
+    (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+ST[k]+'</option>'}).join("")+'</select></div>':'')+
+    '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-appt">'+(a?"Yadda saxla":"Yaz")+'</button>'+
     (a?'<button class="danger" data-act="del-appt">Sil</button>':'')+'</div>';
@@ -738,42 +740,35 @@ function readerForm(){
   var r=sheet.id?reader(sheet.id):null;
   return '<h2>'+(r?"Mütəxəssisi dəyiş":"Yeni mütəxəssis")+CLOSE+'</h2>'+
     '<div class="field"><label for="r-name">Ad</label><input id="r-name" type="text" autocomplete="off" value="'+esc(r?r.name:"")+'"></div>'+
-    '<div class="two"><div class="field"><label for="r-price">Seansın qiyməti, ₼</label><input id="r-price" type="number" inputmode="decimal" min="0" value="'+(r?r.price:150)+'"></div>'+
-    '<div class="field"><label for="r-share">Rəhbərin payı, %</label><input id="r-share" type="number" inputmode="decimal" min="0" max="100" value="'+(r?r.share:50)+'"></div></div>'+
-    '<p class="hint" id="r-hint"></p><p class="err" id="r-err" hidden></p>'+
+    '<p class="err" id="r-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-reader">Yadda saxla</button>'+
     (r?'<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>':'')+'</div>';
-}
-function readerHint(){
-  var p=parseFloat(val("r-price")),s=parseFloat(val("r-share")),el=byId("r-hint");
-  if(!el)return;
-  if(isNaN(p)||isNaN(s)||s<0||s>100){el.textContent="";return}
-  var m=p*s/100;el.textContent="Bir seansdan mütəxəssisə: "+money(p-m)+".";
 }
 
 function saveAppt(){
   if(!sheet)return;
-  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),price=parseFloat(val("f-price")),note=val("f-note");
+  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=val("f-price"),price=pr===""?0:parseFloat(pr),note=val("f-note"),status=val("f-status");
   var r=reader(rid),service=state.v2?val("f-service"):"";
   if(!r)return fail("f-err","Mütəxəssisi seçin.");
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return fail("f-err","Tarixi seçin.");
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err","Saatı seçin.");
   if(!name)return fail("f-err","Pasiyentin adını yazın.");
-  if(isNaN(price)||price<0)return fail("f-err","Qiyməti yazın.");
+  if(isNaN(price)||price<0)return fail("f-err","Qiyməti düzgün yazın.");
+  if(status==="paid"&&!(price>0))return fail("f-err","«Gəldi və ödədi» üçün ödənilən məbləği yazın.");
   var a=sheet.id?appt(sheet.id):null;
   if(sheet.id&&!a){closeSheet();flash("Bu qəbul artıq silinib.");return}
   var clash=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.time===time&&x.id!==sheet.id&&x.status!=="cancel"})[0];
-  if(clash&&!(a&&a.status==="cancel"))return fail("f-err",r.name+" üçün saat "+time+" artıq tutulub ("+clash.name+"). Başqa saat seçin.");
+  if(clash&&status!=="cancel")return fail("f-err",r.name+" üçün saat "+time+" artıq tutulub ("+clash.name+"). Başqa saat seçin.");
   if(a){
-    if(a.readerId!==rid)a.share=r.share;
     a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;
-    var up={reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:a.share,note:note};
+    var up={reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,note:note};
+    if(ST[status]){a.status=status;up.status=status}
     if(service){a.service=service;up.service=service}
     db(sb.from("appts").update(up).eq("id",a.id));
   }else{
     var id=uuid();
-    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:r.share,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id});
-    var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:r.share,status:"wait",note:note};
+    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id});
+    var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note};
     if(service)ins.service=service;
     db(sb.from("appts").insert(ins));
   }
@@ -781,19 +776,17 @@ function saveAppt(){
   closeSheet();render();
 }
 function saveReader(){
-  if(!sheet)return;
-  var name=val("r-name"),price=parseFloat(val("r-price")),share=parseFloat(val("r-share"));
+  if(!sheet||!isAdmin())return;
+  var name=val("r-name");
   if(!name)return fail("r-err","Mütəxəssisin adını yazın.");
-  if(isNaN(price)||price<0)return fail("r-err","Seansın qiymətini yazın.");
-  if(isNaN(share)||share<0||share>100)return fail("r-err","Rəhbərin payı 0-dan 100%-ə qədər olmalıdır.");
   if(sheet.id){
     var r=reader(sheet.id);
-    if(r){r.name=name;r.price=price;r.share=share}
-    db(sb.from("readers").update({name:name,price:price,share:share}).eq("id",sheet.id));
+    if(r)r.name=name;
+    db(sb.from("readers").update({name:name}).eq("id",sheet.id));
   }else{
     var id=uuid();
-    state.readers.push({id:id,name:name,price:price,share:share,archived:false});
-    db(sb.from("readers").insert({id:id,name:name,price:price,share:share}));
+    state.readers.push({id:id,name:name,price:0,share:0,archived:false});
+    db(sb.from("readers").insert({id:id,name:name,price:0,share:0}));
   }
   closeSheet();render();
 }
@@ -829,6 +822,7 @@ document.addEventListener("click",function(e){
   else if(act==="period"){ui.period=b.dataset.p}
   else if(act==="status"){
     var a=appt(id),st=b.dataset.st;
+    if(a&&st==="paid"&&!(a.price>0)){openSheet({type:"pay",id:id});return}
     if(a&&ST[st]&&a.status!==st){
       a.status=st;if(st!=="paid")a.settled=false;
       db(sb.from("appts").update({status:st,settled:a.settled}).eq("id",a.id));
@@ -839,16 +833,25 @@ document.addEventListener("click",function(e){
     state.appts.forEach(function(x){if(x.readerId===id&&x.status==="paid"&&x.date>=rg.s&&x.date<=rg.e)x.settled=on});
     db(sb.from("appts").update({settled:on}).eq("reader_id",id).eq("status","paid").gte("date",rg.s).lte("date",rg.e));
   }
+  else if(act==="save-pay"){
+    var pa=sheet&&appt(sheet.id),pv=parseFloat(val("p-price"));
+    if(!pa){closeSheet();return}
+    if(!(pv>0))return fail("p-err","Məbləği yazın.");
+    pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
+  }
   else if(act==="report"){openSheet({type:"report"});return}
   else if(act==="xlsx"){downloadXlsx();return}
   else if(act==="stats"){openSheet({type:"stats"});return}
   else if(act==="me"){openSheet({type:"me"});return}
-  else if(act==="new-service"){openSheet({type:"service"});return}
+  else if(act==="new-service"){if(!isAdmin())return;openSheet({type:"service"});return}
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
   else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
   else if(act==="save-me"){
-    var mn=val("m-name");if(!mn)return fail("m-err","Adınızı yazın.");
-    state.staff[auth.user.id]=mn;db(sb.from("staff").upsert({id:auth.user.id,name:mn}));closeSheet();
+    var mn=val("m-name"),mp=byId("m-pass")?byId("m-pass").value:"";if(!mn)return fail("m-err","Adınızı yazın.");
+    if(mp&&mp.length<6)return fail("m-err","Şifrə ən azı 6 simvol olmalıdır.");
+    state.staff[auth.user.id]=mn;db(sb.from("staff").upsert({id:auth.user.id,name:mn}));
+    if(mp)sb.auth.updateUser({password:mp}).then(function(r){flash(r.error?"Şifrə dəyişmədi. Yenidən cəhd edin.":"Şifrə dəyişdirildi.")},function(){flash("Şifrə dəyişmədi. İnterneti yoxlayın.")});
+    closeSheet();
   }
   else if(act==="save-service"){
     var sv=val("s-name");if(!sv)return fail("s-err","Xidmətin adını yazın.");
@@ -890,8 +893,8 @@ document.addEventListener("click",function(e){
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
   else if(act==="edit-appt"){if(appt(id))openSheet({type:"appt",id:id});return}
-  else if(act==="new-reader"){openSheet({type:"reader",id:null});return}
-  else if(act==="edit-reader"){if(reader(id))openSheet({type:"reader",id:id});return}
+  else if(act==="new-reader"){if(!isAdmin())return;openSheet({type:"reader",id:null});return}
+  else if(act==="edit-reader"){if(isAdmin()&&reader(id))openSheet({type:"reader",id:id});return}
   else if(act==="close"){closeSheet();return}
   else if(act==="save-appt"){saveAppt();return}
   else if(act==="save-reader"){saveReader();return}
@@ -917,7 +920,6 @@ document.addEventListener("toggle",function(e){
   if(e.target.classList&&e.target.classList.contains("more")&&e.target.closest("#main"))ui.more=e.target.open;
 },true);
 document.addEventListener("input",function(e){
-  if(e.target.id==="r-price"||e.target.id==="r-share")readerHint();
   if(e.target.id==="q"){ui.q=e.target.value;var pl=byId("plist");if(pl)pl.innerHTML=patientsList()}
 });
 document.addEventListener("change",function(e){
@@ -927,7 +929,6 @@ document.addEventListener("change",function(e){
     var ph=byId("f-phone"),nm=e.target.value.trim().toLowerCase(),pm=patients();
     if(ph&&!ph.value)Object.keys(pm).some(function(k){if(pm[k].name.toLowerCase()===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
   }
-  if(t==="f-reader"&&sheet&&!sheet.id){var r=reader(e.target.value);if(r)byId("f-price").value=r.price}
 });
 document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
