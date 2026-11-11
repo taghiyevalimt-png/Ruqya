@@ -267,7 +267,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111102118";
+var APP_VERSION="20261111102316";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -548,6 +548,7 @@ function viewSheet(){
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
     '<div class="stbtns">'+["paid","noshow","cancel","wait"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+k+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
     '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="ghost" data-act="dup-appt" data-id="'+esc(a.id)+'">Təkrar yaz</button></div>'+
+    '<button class="danger" data-act="del-appt">Qəbulu sil</button>'+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?'Yazdı: '+esc(who)+(c?', '+c:''):(c?'Yazılıb: '+c:'')})()+'</p></div>';
 }
 function breakForm(){
@@ -601,12 +602,12 @@ function dayMain(){
         '<button class="go" data-act="status" data-id="'+esc(a.id)+'" data-st="paid">Gəldi və ödədi</button>'+
         '<button class="half" data-act="status" data-id="'+esc(a.id)+'" data-st="cancel">Ləğv etdi</button>'+
         '<button class="half" data-act="status" data-id="'+esc(a.id)+'" data-st="noshow">Gəlmədi</button></div>'+
-        '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button>'+
+        '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">Sil</button>'+
         (wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp-da xatırlat</a>':'')+'</div>';
     }else{
       h+='<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
         '<button class="link" data-act="status" data-id="'+esc(a.id)+'" data-st="wait">Geri qaytar</button>'+
-        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button></div>';
+        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">Sil</button></div>';
     }
     h+='</div>';
   });
@@ -1010,8 +1011,7 @@ function apptForm(){
     (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+ST[k]+'</option>'}).join("")+'</select></div>':'')+
     '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
-    '<div class="btns"><button class="primary" data-act="save-appt">'+(a?"Yadda saxla":"Yaz")+'</button>'+
-    (a?'<button class="danger" data-act="del-appt">Sil</button>':'')+'</div>';
+    '<div class="btns"><button class="primary" data-act="save-appt">'+(a?"Yadda saxla":"Yaz")+'</button></div>';
 }
 function readerForm(){
   var r=sheet.id?reader(sheet.id):null;
@@ -1180,6 +1180,10 @@ document.addEventListener("click",function(e){
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
     var tt=hhmm(mm),bb=inBreak(tt,30);if(bb){flash("Bu vaxt fasilədir: "+bb.title+".");return}
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
+  }
+  else if(act==="del-row"){
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
   }
   else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
   else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
