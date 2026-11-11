@@ -265,7 +265,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111100800";
+var APP_VERSION="20261111100843";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -779,7 +779,7 @@ function weeklySheet(r){
     else put(3,c,"SUM("+L+(first+1)+":"+L+(last+1)+")",tv,"0.00");
   }
   var widths=[11,11,7];for(var k=3;k<width;k++)widths.push((k-3)%4===3?7:9);
-  return["Həftəlik",rows,widths,{cells:cells,merges:merges}];
+  return["Həftəlik",rows,widths,{cells:cells,merges:merges},"Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur."];
 }
 function reportBook(){
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0),st=statsData();
@@ -813,8 +813,7 @@ function salesBook(){
   var bb=bookedBy(s0,e0),dl=[["Tarix"].concat(bb.map(function(x){return x.name})).concat(["Cəmi"])];
   for(var dd=s0;dd<=e0;dd=addDays(dd,1)){var tt=0;dl.push([dd].concat(bb.map(function(x){var v=x.days[dd]||0;tt+=v;return v})).concat([tt]))}
   dl.push(["Cəmi"].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
-  dl.push([],["Qəbulun yazıldığı günə görə, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."]);
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8])],["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16]]]};
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,"Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."],["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16],null,"Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə."]]};
 }
 function fmtCell(c){
   if(c==null||c==="")return["",""];
@@ -854,6 +853,7 @@ function bookSheet(){
   var title=sheet.kind==="sales"?"Satış hesabatı":"Pul hesabatı";
   return '<h2>'+title+CLOSE+'</h2>'+
     '<div class="seg" style="--n:'+rb.sheets.length+'">'+rb.sheets.map(function(x,i){return '<button data-act="book-tab" data-id="'+i+'" aria-pressed="'+(i===k)+'">'+esc(x[0])+'</button>'}).join("")+'</div>'+
+    (rb.sheets[k][4]?'<p class="hint">'+esc(rb.sheets[k][4])+'</p>':'')+
     '<div class="xl">'+sheetTable(rb.sheets[k])+'</div>';
 }
 
