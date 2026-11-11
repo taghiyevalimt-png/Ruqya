@@ -642,7 +642,8 @@ function cashMain(){
     h+='<button class="ghost" data-act="new-expense">Xərc əlavə et</button>'+
       '</div>';
     var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
-    h+='<button class="primary" data-act="xlsx">Excel hesabatı ('+PN+')</button>';
+    h+='<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı ('+PN+')</button>';
+    h+='<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>';
   }
   if(ui.period!=="day"){
     var pm=patients(),nw=0,rp=0,days={};
@@ -768,13 +769,21 @@ function reportBook(){
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]]].concat(ui.period==="week"?[weeklySheet(r)]:[])};
+  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]]]};
 }
-function downloadXlsx(){
+function salesBook(){
+  var r=range(),rows=[["Tarix","Saat","Agent","Pasiyent","Telefon","Xidmət","Mütəxəssis"]];
+  var fri=function(d){return addDays(d,-((parse(d).getDay()-5+7)%7))},s0=fri(r.s),e0=addDays(fri(r.e),6);
+  state.appts.filter(function(a){return a.status==="paid"&&a.date>=s0&&a.date<=e0})
+    .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
+    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||"Adsız istifadəçi",a.name,a.phone,a.service,rd?rd.name:""])});
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16]]]};
+}
+function downloadXlsx(kind){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
   flash("Excel hazırlanır…");
   loadXlsx().then(function(X){
-    var rb=reportBook(),wb=X.utils.book_new();
+    var rb=kind==="sales"?salesBook():reportBook(),wb=X.utils.book_new();
     rb.sheets.forEach(function(sh){
       var ws=X.utils.aoa_to_sheet(sh[1]);ws["!cols"]=sh[2].map(function(w){return{wch:w}});
       if(sh[3]){
@@ -1052,7 +1061,7 @@ document.addEventListener("click",function(e){
     pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
   }
   else if(act==="report"){openSheet({type:"report"});return}
-  else if(act==="xlsx"){downloadXlsx();return}
+  else if(act==="xlsx"){downloadXlsx(id);return}
   else if(act==="stats"){openSheet({type:"stats"});return}
   else if(act==="me"){openSheet({type:"me"});return}
   else if(act==="new-service"){if(!isAdmin())return;openSheet({type:"service"});return}
