@@ -560,6 +560,58 @@ function loadXlsx(){
     document.head.appendChild(sc);
   });
 }
+function weeklySheet(r){
+  /* Weeks run Friday to Thursday, as in the centre's own table. */
+  var wd=function(d){return parse(d).getDay()},fri=function(d){return addDays(d,-((wd(d)-5+7)%7))};
+  var weeks=[];for(var w=fri(r.s);w<=r.e;w=addDays(w,7))weeks.push(w);
+  var who={},ids=[];
+  state.appts.forEach(function(a){var k=a.by||"";if(!(k in who)){who[k]=state.staff[k]||"Adsız istifadəçi";ids.push(k)}});
+  ids.sort(function(a,b){return (a==="")-(b==="")||who[a].localeCompare(who[b])});
+  var cnt={};
+  state.appts.forEach(function(a){
+    if(a.status!=="paid")return;
+    var w=fri(a.date),k=(a.by||"")+"|"+w;cnt[k]=(cnt[k]||0)+1;
+  });
+  var serial=function(d){var x=parse(d);return Math.round((Date.UTC(x.getFullYear(),x.getMonth(),x.getDate())-Date.UTC(1899,11,30))/864e5)};
+  var col=function(c){var n="";c++;while(c>0){var m=(c-1)%26;n=String.fromCharCode(65+m)+n;c=Math.floor((c-1)/26)}return n};
+  var groups=ids.map(function(k){return{name:who[k],id:k}}),G=groups.length,TOT=3+G*4;
+  var width=TOT+4,rows=[],cells=[],merges=[],first=5,last=first+weeks.length-1;
+  for(var i=0;i<5+weeks.length;i++){var row=[];for(var j=0;j<width;j++)row.push(null);rows.push(row)}
+  rows[0][0]="Həftəlik statistika";rows[0][3]=periodTitle();
+  rows[1][2]="Kanal";rows[4][0]="Start";rows[4][1]="End";rows[4][2]="Həftə";
+  var put=function(r,c,f,v,z){cells.push({r:r,c:c,f:f,v:v,z:z})};
+  var block=function(c0,title,top){
+    rows[1][c0]=top;rows[2][c0]=title;
+    merges.push({s:{r:1,c:c0},e:{r:1,c:c0+3}},{s:{r:2,c:c0},e:{r:2,c:c0+3}});
+    ["Mür","Seans","M","%"].forEach(function(h,j){rows[4][c0+j]=h});
+  };
+  groups.forEach(function(g,i){block(3+i*4,g.name,"")});
+  block(TOT,"Cəmi","Toplam");
+  weeks.forEach(function(w,i){
+    var R=5+i,e=addDays(w,7),n=R+1,tot=0;
+    put(R,0,null,serial(w),"d-mmm-yy");put(R,1,null,serial(e),"d-mmm-yy");
+    var wk=parse(e),jan=new Date(wk.getFullYear(),0,1);
+    put(R,2,"WEEKNUM(B"+n+")",Math.floor((Math.round((wk-jan)/864e5)+jan.getDay())/7)+1,"0");
+    groups.forEach(function(g,gi){
+      var c=3+gi*4,v=cnt[g.id+"|"+w]||0;tot+=v;
+      rows[R][c+1]=v;
+      put(R,c+3,"IFERROR("+col(c+1)+n+"/"+col(c)+n+",0)",0,"0%");
+    });
+    var sumOf=function(off){return groups.map(function(g,gi){return col(3+gi*4+off)+n}).join(",")||"0"};
+    put(R,TOT,"SUM("+sumOf(0)+")",0,"0.00");
+    put(R,TOT+1,"SUM("+sumOf(1)+")",tot,"0.00");
+    put(R,TOT+2,"SUM("+sumOf(2)+")",0,"0.00");
+    put(R,TOT+3,"IFERROR("+col(TOT+1)+n+"/"+col(TOT)+n+",0)",0,"0%");
+  });
+  for(var c=3;c<width;c++){
+    var off=(c-3)%4,L=col(c),tv=0;
+    if(off===1)for(var i2=0;i2<weeks.length;i2++){var x=rows[5+i2][c];if(typeof x==="number")tv+=x;else{var cc=cells.filter(function(q){return q.r===5+i2&&q.c===c})[0];if(cc)tv+=cc.v||0}}
+    if(off===3)put(3,c,"IFERROR("+col(c-2)+"4/"+col(c-3)+"4,0)",0,"0%");
+    else put(3,c,"SUM("+L+(first+1)+":"+L+(last+1)+")",tv,"0.00");
+  }
+  var widths=[11,11,7];for(var k=3;k<width;k++)widths.push((k-3)%4===3?7:9);
+  return["Həftəlik",rows,widths,{cells:cells,merges:merges}];
+}
 function reportBook(){
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0),st=statsData();
   var sum=[["Hesabat",periodTitle()],["Dövr",r.s+" — "+r.e],[],
@@ -581,7 +633,7 @@ function reportBook(){
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]]]};
+  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]],weeklySheet(r)]};
 }
 function downloadXlsx(){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
@@ -590,6 +642,10 @@ function downloadXlsx(){
     var rb=reportBook(),wb=X.utils.book_new();
     rb.sheets.forEach(function(sh){
       var ws=X.utils.aoa_to_sheet(sh[1]);ws["!cols"]=sh[2].map(function(w){return{wch:w}});
+      if(sh[3]){
+        sh[3].cells.forEach(function(q){var c={t:"n",v:q.v||0};if(q.f)c.f=q.f;if(q.z)c.z=q.z;ws[X.utils.encode_cell({r:q.r,c:q.c})]=c});
+        ws["!merges"]=sh[3].merges;
+      }
       X.utils.book_append_sheet(wb,ws,sh[0]);
     });
     if(window.RuqyaNative&&window.RuqyaNative.saveFile){window.RuqyaNative.saveFile(rb.name,X.write(wb,{bookType:"xlsx",type:"base64"}));flash("");return}
