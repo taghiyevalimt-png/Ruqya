@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e6b5b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Рукъя">
 <title>Запись на рукъя</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,6 +145,19 @@ main{flex:1;overflow-y:auto;padding:4px 16px 96px;display:flex;flex-direction:co
 .hint{font-size:13px;color:var(--muted);margin:0}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
 .btns .primary{flex:1}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wd{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:5px 0 3px;display:flex;flex-direction:column;align-items:center;min-width:0}
+.wd span{font-size:11px;color:var(--muted)}
+.wd b{font-size:15px;font-weight:600}
+.wd i{font-style:normal;font-size:11px;min-height:15px;color:var(--accent);font-weight:600}
+.wd.today b{text-decoration:underline;text-underline-offset:3px}
+.wd[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b,.wd[aria-pressed="true"] i{color:var(--accent-ink)}
+.slots{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.slot{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:7px 0;font-size:13px;font-variant-numeric:tabular-nums}
+.slot:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.slot[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -241,8 +259,10 @@ function pkey(a){var d=(a.phone||"").replace(/\D/g,"");return d.length>=7?"p"+d:
 function patients(){
   var m={};
   state.appts.forEach(function(a){
-    var k=pkey(a),p=m[k]||(m[k]={key:k,name:a.name,phone:a.phone,paid:0,noshow:0,cancel:0,wait:0,last:"",list:[]});
+    var k=pkey(a),p=m[k]||(m[k]={key:k,name:a.name,phone:a.phone,paid:0,noshow:0,cancel:0,wait:0,last:"",lastPaid:"",first:"",next:false,list:[]});
     p[a.status]++;p.list.push(a);
+    if(a.status==="paid"){if(a.date>p.lastPaid)p.lastPaid=a.date;if(!p.first||a.date<p.first)p.first=a.date}
+    if(a.status==="wait"&&a.date>=today)p.next=true;
     if(a.date>=p.last){p.last=a.date;p.name=a.name;if(a.phone)p.phone=a.phone}
   });
   return m;
@@ -253,7 +273,13 @@ function waLink(phone,text){
   if(d.length<9)return "";
   return "https://wa.me/"+d+"?text="+encodeURIComponent(text);
 }
-function remindText(a){return "Здравствуйте! Напоминаем о записи на рукъя: "+fmtDay(a.date)+" в "+a.time+". Пожалуйста, подтвердите, что придёте."}
+var prefs={lang:"ru"};
+try{var pr=JSON.parse(localStorage.getItem("ruqya.prefs")||"null");if(pr&&pr.lang)prefs.lang=pr.lang}catch(e){}
+var AZ_M=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
+function remindText(a){
+  if(prefs.lang==="az"){var d=parse(a.date);return "Salam! Ruqyə üçün yazılışınızı xatırladırıq: "+d.getDate()+" "+AZ_M[d.getMonth()]+", saat "+a.time+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
+  return "Здравствуйте! Напоминаем о записи на рукъя: "+fmtDay(a.date)+" в "+a.time+". Пожалуйста, подтвердите, что придёте.";
+}
 function fmtDay(s,opt){return parse(s).toLocaleDateString("ru-RU",opt||{day:"numeric",month:"long"})}
 
 /* ---------- render ---------- */
@@ -281,7 +307,9 @@ function render(){
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=dayMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=cashMain()}
   else if(ui.tab==="patients"){
-    top.innerHTML='<h1>Пациенты</h1><input class="search" id="q" type="search" placeholder="Поиск по имени или телефону" value="'+esc(ui.q||"")+'">';
+    var sg=ui.seg||"all",SG=[["all","Все"],["regular","Постоянные"],["sleep","Давно не были"],["noshow","Не приходили"]];
+    top.innerHTML='<h1>Пациенты</h1><input class="search" id="q" type="search" placeholder="Поиск по имени или телефону" value="'+esc(ui.q||"")+'">'+
+      '<div class="chips">'+SG.map(function(x){return '<button class="chip" data-act="seg" data-id="'+x[0]+'" aria-pressed="'+(sg===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
     main.innerHTML='<div id="plist">'+patientsList()+'</div>';
   }
   else{top.innerHTML="<h1>Чтецы</h1>";main.innerHTML=readersMain()}
@@ -307,6 +335,12 @@ function dayTop(){
     rs.forEach(function(r){h+='<button class="chip" data-act="filter" data-id="'+r.id+'" aria-pressed="'+(ui.filter===r.id)+'">'+esc(r.name)+'</button>'});
     h+='</div>';
   }
+  var mon=addDays(ui.date,-((parse(ui.date).getDay()+6)%7)),cnt={},WD=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+  state.appts.forEach(function(a){if(a.status!=="cancel"&&(ui.filter==="all"||a.readerId===ui.filter))cnt[a.date]=(cnt[a.date]||0)+1});
+  h+='<div class="week">';
+  for(var i=0;i<7;i++){var d=addDays(mon,i);
+    h+='<button class="wd'+(d===today?" today":"")+'" data-act="goto" data-d="'+d+'" aria-pressed="'+(d===ui.date)+'" aria-label="'+fmtDay(d)+'"><span>'+WD[i]+'</span><b class="num">'+parse(d).getDate()+'</b><i class="num">'+(cnt[d]||"")+'</i></button>'}
+  h+='</div>';
   return h;
 }
 
@@ -321,12 +355,20 @@ function dayMain(){
     '<div class="tile"><b class="num">'+list.length+'</b><span>'+plural(list.length,"запись","записи","записей")+'</span></div>'+
     '<div class="tile"><b class="num">'+paid.length+'</b><span>'+plural(paid.length,"пришёл","пришли","пришли")+'</span></div>'+
     '<div class="tile main"><b class="num">'+money(sum)+'</b><span>в кассе</span></div></div>';
+  var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
+  if(late.length){
+    var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
+    h='<div class="note warnbox"><p>Не отмечено за прошлые дни: '+late.length+'. Пока статус не выбран, касса за эти дни неполная.</p>'+
+      (first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Показать</button>':'')+'</div>'+h;
+  }
+  var dup={};list.forEach(function(a){if(a.status!=="cancel"){var k=a.readerId+"|"+a.time;dup[k]=(dup[k]||0)+1}});
   if(!list.length)return h+'<div class="empty">На этот день записей нет. Нажмите «Записать», чтобы добавить пациента.</div>';
   var pm=patients();
   list.forEach(function(a){
     var r=reader(a.readerId),p=pm[pkey(a)];
     var was=p.paid-(a.status==="paid"?1:0),miss=p.noshow-(a.status==="noshow"?1:0),tags="";
     if(was>0)tags+='<span class="tag">Был '+was+' '+plural(was,"раз","раза","раз")+'</span>';
+    if(a.status!=="cancel"&&dup[a.readerId+"|"+a.time]>1)tags+='<span class="tag warn">Двойная запись на это время</span>';
     if(miss>0)tags+='<span class="tag warn">Не приходил '+miss+' '+plural(miss,"раз","раза","раз")+'</span>';
     h+='<div class="card '+a.status+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+'</div>'+
@@ -417,19 +459,50 @@ function cashMain(){
   if(!shown)h+='<div class="empty">Чтецов пока нет. Добавьте их в разделе «Чтецы».</div>';
   else{
     var fin=T.n+T.cancel+T.noshow;
+    if(ui.period!=="day"){
+      var pm=patients(),nw=0,rp=0,days={};
+      state.appts.forEach(function(a){
+        if(a.status!=="paid"||a.date<d.r.s||a.date>d.r.e)return;
+        days[a.date]=1;if(pm[pkey(a)].first===a.date)nw++;else rp++;
+      });
+      var nd=Object.keys(days).length;
+      h+='<div class="stats"><div class="tile"><b class="num">'+nw+'</b><span>новых пациентов</span></div>'+
+        '<div class="tile"><b class="num">'+rp+'</b><span>повторных визитов</span></div>'+
+        '<div class="tile"><b class="num">'+nd+'</b><span>рабочих дней</span></div>'+
+        '<div class="tile"><b class="num">'+money(nd?T.sum/nd:0)+'</b><span>в среднем за день</span></div></div>';
+    }
     h+='<button class="ghost" data-act="report">Отчёт текстом для WhatsApp</button>';
+    h+='<button class="ghost" data-act="csv">Скачать таблицу для Excel</button>';
     h+='<p class="hint">'+(fin?'Пришли '+T.n+' из '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+'В расчёт идут только сеансы со статусом «Пришёл и заплатил».</p>';
   }
   return h;
 }
 
+function downloadCsv(){
+  var r=range(),q=function(v){return '"'+String(v==null?"":v).replace(/"/g,'""')+'"'};
+  var rows=[["Дата","Время","Чтец","Пациент","Телефон","Цена","Статус","Чтецу","Руководителю","Сдано руководителю","Заметка"]];
+  state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
+    .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
+    .forEach(function(a){var rd=reader(a.readerId),sp=a.status==="paid"?split(a):{rd:0,mgr:0};
+      rows.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,a.price,ST[a.status],sp.rd,sp.mgr,a.status==="paid"?(a.settled?"да":"нет"):"",a.note])});
+  var csv="\ufeff"+rows.map(function(x){return x.map(q).join(";")}).join("\r\n");
+  try{
+    var url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");
+    a.href=url;a.download="kassa_"+r.s+"_"+r.e+".csv";document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},5000);
+  }catch(e){flash("Не получилось скачать файл. Откройте приложение в браузере и попробуйте снова.")}
+}
 function patientsList(){
   var m=patients(),q=(ui.q||"").trim().toLowerCase(),qd=q.replace(/\D/g,"");
+  var sg=ui.seg||"all",old=addDays(today,-30);
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
+    if(sg==="regular"&&p.paid<3)return false;
+    if(sg==="sleep"&&!(p.lastPaid&&p.lastPaid<old&&!p.next))return false;
+    if(sg==="noshow"&&!p.noshow)return false;
     if(!q)return true;
     return p.name.toLowerCase().indexOf(q)>=0||(qd&&(p.phone||"").replace(/\D/g,"").indexOf(qd)>=0);
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0});
-  if(!arr.length)return '<div class="empty">'+(q?"Никого не нашли. Проверьте имя или номер.":"Пациенты появятся здесь после первой записи.")+'</div>';
+  if(!arr.length)return '<div class="empty">'+(q?"Никого не нашли. Проверьте имя или номер.":sg==="regular"?"Постоянные пациенты: те, кто был 3 раза и больше. Пока таких нет.":sg==="sleep"?"Здесь появятся те, кто не был больше 30 дней и не записан снова.":sg==="noshow"?"Никто не пропускал запись.":"Пациенты появятся здесь после первой записи.")+'</div>';
   return arr.map(function(p){
     var bits=[p.paid+" "+plural(p.paid,"визит","визита","визитов")];
     if(p.noshow)bits.push("не пришёл: "+p.noshow);
@@ -441,7 +514,8 @@ function patientsList(){
 function patientSheet(){
   var p=patients()[sheet.id];if(!p)return '<h2>Пациент<button class="icon-btn" data-act="close" aria-label="Закрыть">×</button></h2>';
   var h='<h2>'+esc(p.name)+'<button class="icon-btn" data-act="close" aria-label="Закрыть">×</button></h2>'+
-    '<p class="hint num">'+esc(p.phone||"Телефон не указан")+'</p><div>';
+    '<p class="hint num">'+esc(p.phone||"Телефон не указан")+'</p>'+
+    (waLink(p.phone,"")?'<div class="btns"><a class="wa" href="'+esc(waLink(p.phone,"").replace(/\?text=$/,""))+'" target="_blank" rel="noopener">Написать в WhatsApp</a></div>':'')+'<div>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).forEach(function(a){
     var r=reader(a.readerId);
     h+='<div class="visit"><span class="num">'+fmtDay(a.date,{day:"numeric",month:"short",year:"numeric"})+', '+esc(a.time)+' · '+esc(r?r.name:"—")+'</span>'+
@@ -466,6 +540,10 @@ function readersMain(){
   });
   h+='<button class="primary" data-act="new-reader">Добавить чтеца</button>';
   h+='<p class="hint">Цена и доля задаются для каждого чтеца отдельно. Если их поменять, старые записи пересчитываться не будут.</p>';
+  h+='<div class="pay"><div class="head"><b>Язык напоминаний в WhatsApp</b></div><div class="seg" style="grid-template-columns:1fr 1fr">'+
+    '<button data-act="lang" data-id="ru" aria-pressed="'+(prefs.lang==="ru")+'">Русский</button>'+
+    '<button data-act="lang" data-id="az" aria-pressed="'+(prefs.lang==="az")+'">Azərbaycanca</button></div>'+
+    '<div class="foot">Настройка действует только на этом телефоне.</div></div>';
   h+='<div class="reader"><div><b>Вы вошли</b><span>'+esc(auth.user.email||"")+'</span></div><button class="ghost" data-act="logout">Выйти</button></div>';
   return h;
 }
@@ -479,10 +557,16 @@ function openSheet(s){
   if(s.type==="appt")busyHint();
 }
 function busyHint(){
-  var el=document.getElementById("f-busy");if(!el)return;
-  var rid=val("f-reader"),date=val("f-date");
+  var el=document.getElementById("f-busy"),box=document.getElementById("f-slots");if(!el||!box)return;
+  var rid=val("f-reader"),date=val("f-date"),cur=val("f-time");
   var t=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.status!=="cancel"&&x.id!==sheet.id}).map(function(x){return x.time}).sort();
-  el.textContent=t.length?"Уже занято у чтеца в этот день: "+t.join(", ")+".":"В этот день у чтеца пока всё свободно.";
+  var h="";
+  for(var m=9*60;m<=21*60;m+=30){
+    var tm=String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"),busy=t.indexOf(tm)>=0;
+    h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
+  }
+  box.innerHTML=h;
+  el.textContent=t.length?"Зачёркнутое время уже занято: "+t.join(", ")+". Другое время можно вписать вручную.":"В этот день у чтеца всё свободно. Время можно выбрать кнопкой или вписать вручную.";
 }
 function closeSheet(){sheet=null;document.getElementById("overlay").hidden=true}
 
@@ -497,7 +581,7 @@ function apptForm(){
     '<div class="field"><label for="f-reader">Чтец</label><select id="f-reader">'+opts+'</select></div>'+
     '<div class="two"><div class="field"><label for="f-date">Дата</label><input id="f-date" type="date" value="'+(a?a.date:ui.date)+'"></div>'+
     '<div class="field"><label for="f-time">Время</label><input id="f-time" type="time" step="300" value="'+(a?a.time:"")+'"></div></div>'+
-    '<p class="hint" id="f-busy"></p>'+
+    '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     '<div class="field"><label for="f-name">Имя пациента</label><input id="f-name" type="text" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     '<div class="two"><div class="field"><label for="f-phone">Телефон</label><input id="f-phone" type="tel" autocomplete="off" placeholder="+994" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
     '<div class="field"><label for="f-price">Цена, ₼</label><input id="f-price" type="number" inputmode="decimal" min="0" value="'+(a?a.price:(dr?dr.price:""))+'"></div></div>'+
@@ -566,6 +650,11 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("[data-act]");if(!b)return;
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="tab"){ui.tab=b.dataset.tab}
+  else if(act==="goto"){ui.date=b.dataset.d}
+  else if(act==="seg"){ui.seg=id;document.getElementById("top").innerHTML=""}
+  else if(act==="lang"){prefs.lang=id;try{localStorage.setItem("ruqya.prefs",JSON.stringify(prefs))}catch(err){}}
+  else if(act==="slot"){document.getElementById("f-time").value=b.dataset.t;busyHint();return}
+  else if(act==="csv"){downloadCsv();return}
   else if(act==="shift"){
     var n=+b.dataset.n;
     if(ui.tab==="cash"&&ui.period==="week")ui.date=addDays(ui.date,7*n);
@@ -632,7 +721,7 @@ document.addEventListener("input",function(e){
   if(e.target.id==="q"){ui.q=e.target.value;document.getElementById("plist").innerHTML=patientsList()}
 });
 document.addEventListener("change",function(e){
-  if(e.target.id==="f-reader"||e.target.id==="f-date")busyHint();
+  if(e.target.id==="f-reader"||e.target.id==="f-date"||e.target.id==="f-time")busyHint();
   if(e.target.id==="f-name"){
     var ph=document.getElementById("f-phone"),nm=e.target.value.trim().toLowerCase(),pm=patients();
     if(ph&&!ph.value)Object.keys(pm).some(function(k){if(pm[k].name.toLowerCase()===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
@@ -642,6 +731,8 @@ document.addEventListener("change",function(e){
 document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
 });
+window.addEventListener("offline",function(){auth.msg="Нет интернета. Изменения сейчас не сохранятся.";render()});
+window.addEventListener("online",function(){auth.msg="";refresh();render()});
 document.addEventListener("visibilitychange",function(){if(!document.hidden&&auth.user){today=iso(new Date());refresh()}});
 if(sb){
   sb.auth.onAuthStateChange(function(ev,sess){
