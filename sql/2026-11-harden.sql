@@ -116,14 +116,60 @@ begin
   end if;
 end $$;
 
--- 6. The owner can correct an employee's name or role.
+-- 6. Admins. The owner is always an admin and is the only one who can give
+--    the admin role to another account or take it back.
+do $$
+declare c record;
+begin
+  for c in select conname from pg_constraint
+           where conrelid = 'public.staff'::regclass and contype = 'c'
+             and conname <> 'ruqya_staff_role'
+             and pg_get_constraintdef(oid) ilike '%role%' loop
+    execute format('alter table public.staff drop constraint %I', c.conname);
+  end loop;
+  if not exists (select 1 from pg_constraint where conname = 'ruqya_staff_role') then
+    alter table public.staff add constraint ruqya_staff_role
+      check (role is null or role in ('agent', 'specialist', 'admin')) not valid;
+  end if;
+end $$;
+
+create or replace function public.ruqya_is_admin() returns boolean
+language sql stable security definer set search_path = public as $$
+  select coalesce(auth.uid() = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid
+    or exists (select 1 from public.staff where id = auth.uid() and role = 'admin'), false)
+$$;
+
+create or replace function public.ruqya_staff_guard() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null or auth.uid() = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid then
+    return new;
+  end if;
+  if tg_op = 'INSERT' then
+    if new.role = 'admin' then new.role := 'agent'; end if;
+  elsif new.role is distinct from old.role and (new.role = 'admin' or old.role = 'admin') then
+    new.role := old.role;
+  end if;
+  return new;
+end $$;
+drop trigger if exists ruqya_staff_guard on public.staff;
+create trigger ruqya_staff_guard before insert or update on public.staff
+  for each row execute function public.ruqya_staff_guard();
+
 drop policy if exists ruqya_staff_owner on public.staff;
-create policy ruqya_staff_owner on public.staff for all to authenticated
-  using (auth.uid() = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid)
-  with check (auth.uid() = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid);
+drop policy if exists ruqya_staff_admin on public.staff;
+create policy ruqya_staff_admin on public.staff for update to authenticated
+  using (public.ruqya_is_admin()) with check (public.ruqya_is_admin());
+drop policy if exists ruqya_readers_admin on public.readers;
+create policy ruqya_readers_admin on public.readers for all to authenticated
+  using (public.ruqya_is_admin()) with check (public.ruqya_is_admin());
+drop policy if exists ruqya_breaks_admin on public.breaks;
+create policy ruqya_breaks_admin on public.breaks for all to authenticated
+  using (public.ruqya_is_admin()) with check (public.ruqya_is_admin());
+update public.staff set role = 'admin' where id = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid and role is distinct from 'admin';
 
 -- 7. Journal of every change: who added, changed or deleted what, and when.
---    Only the owner can read it; nobody can edit or erase it from a phone.
+--    Only admins can read it; nobody can edit or erase it from a phone.
 create table if not exists public.audit_log (
   id bigint generated always as identity primary key,
   at timestamptz not null default now(),
@@ -139,7 +185,7 @@ revoke all on public.audit_log from anon, authenticated;
 grant select on public.audit_log to authenticated;
 drop policy if exists ruqya_audit_owner on public.audit_log;
 create policy ruqya_audit_owner on public.audit_log for select to authenticated
-  using (auth.uid() = 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid);
+  using (public.ruqya_is_admin());
 
 create or replace function public.ruqya_audit() returns trigger
 language plpgsql security definer set search_path = public as $$
@@ -170,5 +216,6 @@ end $$;
 revoke execute on function public.ruqya_audit() from public, anon, authenticated;
 revoke execute on function public.ruqya_no_overlap() from public, anon, authenticated;
 revoke execute on function public.ruqya_stamp() from public, anon, authenticated;
+revoke execute on function public.ruqya_staff_guard() from public, anon, authenticated;
 
 select 'Hazirdir' as netice;
