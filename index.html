@@ -564,26 +564,25 @@ function loadXlsx(){
 function reportBook(){
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0),st=statsData();
   var sum=[["Hesabat",periodTitle()],["Dövr",r.s+" — "+r.e],[],
-    ["Kassa cəmi",r2(T.sum)],["Mütəxəssislərə",r2(T.rd)],["Rəhbərin payı",r2(T.mgr)],["Xərclər",r2(exSum)],
-    ["Rəhbərə hələ verilməyib",r2(T.due)],[],
-    ["Mütəxəssis","Seans","Kassa","Mütəxəssisə","Rəhbərə","Verilməyib","Ləğv etdi","Gəlmədi"]];
-  d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),r2(x.rd),r2(x.mgr),r2(x.due),x.cancel,x.noshow])});
+    ["Kassa cəmi",r2(T.sum)],["Mütəxəssislərə",r2(T.rd)],["Xərclər",r2(exSum)],[],
+    ["Mütəxəssis","Seans","Kassa","Mütəxəssisə","Ləğv etdi","Gəlmədi"]];
+  d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),r2(x.rd),x.cancel,x.noshow])});
   var bs={},bo=[];
   state.appts.forEach(function(a){if(a.status!=="paid"||a.date<r.s||a.date>r.e)return;
     if(!bs[a.service]){bs[a.service]={n:0,sum:0};bo.push(a.service)}bs[a.service].n++;bs[a.service].sum+=a.price});
   sum.push([],["Xidmət","Seans","Məbləğ"]);
   bo.forEach(function(n){sum.push([n,bs[n].n,r2(bs[n].sum)])});
-  var ap=[["Tarix","Saat","Xidmət","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Mütəxəssisə","Rəhbərə","Rəhbərə verilib","Yazan","Qeyd"]];
+  var ap=[["Tarix","Saat","Xidmət","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Mütəxəssisə","Yazan","Qeyd"]];
   state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId),sp=a.status==="paid"?split(a):{rd:0,mgr:0};
-      ap.push([a.date,a.time,a.service,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],r2(sp.rd),r2(sp.mgr),a.status==="paid"?(a.settled?"bəli":"xeyr"):"",state.staff[a.by]||"",a.note])});
+      ap.push([a.date,a.time,a.service,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],r2(sp.rd),state.staff[a.by]||"",a.note])});
   var xp=[["Tarix","Xərc","Məbləğ","Yazan"]];
   ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
   xp.push([],["Cəmi","",r2(exSum)]);
   var sx=[["Yazan","Gələn pasiyent"].concat(st.svc)];
   st.rows.concat([st.tot]).forEach(function(x){sx.push([x.name,x.n].concat(st.svc.map(function(n){return x.s[n]||0})))});
-  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[34,14,12,14,12,12,10,10]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,12,10,14,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]]]};
+  return{name:"hesabat_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[24,14,12,14,12,12]],["Qəbullar",ap,[11,7,12,16,22,16,9,16,12,14,24]],["Xərclər",xp,[11,30,12,16]],["Statistika",sx,[22,14,12,12,12,12]]]};
 }
 function downloadXlsx(){
   if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
