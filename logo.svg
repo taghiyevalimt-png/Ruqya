@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6e3a1"/>
+      <stop offset=".35" stop-color="#d4a843"/>
+      <stop offset=".65" stop-color="#a87a1e"/>
+      <stop offset="1" stop-color="#e9c96b"/>
+    </linearGradient>
+    <linearGradient id="goldv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3dc8f"/>
+      <stop offset=".5" stop-color="#c8962f"/>
+      <stop offset="1" stop-color="#8f6416"/>
+    </linearGradient>
+    <linearGradient id="leafL" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#1d4a1c"/>
+      <stop offset=".55" stop-color="#2f6b2a"/>
+      <stop offset="1" stop-color="#4c8a3a"/>
+    </linearGradient>
+    <linearGradient id="leafR" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#1d4a1c"/>
+      <stop offset=".55" stop-color="#2f6b2a"/>
+      <stop offset="1" stop-color="#4c8a3a"/>
+    </linearGradient>
+    <radialGradient id="water" cx=".38" cy=".62" r=".75">
+      <stop offset="0" stop-color="#cfeaff"/>
+      <stop offset=".45" stop-color="#5aa7e6"/>
+      <stop offset="1" stop-color="#1c5fa8"/>
+    </radialGradient>
+    <radialGradient id="golddrop" cx=".38" cy=".55" r=".7">
+      <stop offset="0" stop-color="#fff2c4"/>
+      <stop offset=".45" stop-color="#d9ad48"/>
+      <stop offset="1" stop-color="#8a5f12"/>
+    </radialGradient>
+  </defs>
+  <g id="mark">
+    <!-- outer leaves -->
+    <path d="M256 352 C214 356 120 334 74 268 C52 236 44 204 40 176 C92 182 150 196 196 228 C236 256 254 304 256 352 Z" fill="url(#leafL)" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M256 352 C298 356 392 334 438 268 C460 236 468 204 472 176 C420 182 362 196 316 228 C276 256 258 304 256 352 Z" fill="url(#leafR)" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round"/>
+    <!-- leaf highlights -->
+    <path d="M226 318 C170 316 112 288 84 220 C130 232 176 254 226 318 Z" fill="#ffffff" opacity=".13"/>
+    <path d="M286 318 C342 316 400 288 428 220 C382 232 336 254 286 318 Z" fill="#ffffff" opacity=".13"/>
+    <!-- inner petals -->
+    <path d="M256 344 C224 318 182 262 170 196 C162 152 170 110 186 76 C214 108 240 150 252 200 C258 230 258 300 256 344 Z" fill="#ffffff" stroke="url(#goldv)" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M256 344 C288 318 330 262 342 196 C350 152 342 110 326 76 C298 108 272 150 260 200 C254 230 254 300 256 344 Z" fill="#ffffff" stroke="url(#goldv)" stroke-width="9" stroke-linejoin="round"/>
+    <!-- gold drop below -->
+    <path d="M256 340 C254 362 252 378 246 392 C238 410 244 432 256 434 C268 432 274 410 266 392 C260 378 258 362 256 340 Z" fill="url(#golddrop)"/>
+    <ellipse cx="251" cy="410" rx="3.5" ry="7" fill="#fff" opacity=".55"/>
+    <!-- water drop above -->
+    <path d="M256 38 C246 62 222 90 222 118 C222 138 237 152 256 152 C275 152 290 138 290 118 C290 90 266 62 256 38 Z" fill="url(#water)" stroke="#2a6fb5" stroke-width="2"/>
+    <path d="M240 112 C240 98 247 86 252 78" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+    <ellipse cx="270" cy="134" rx="5" ry="3" fill="#fff" opacity=".5"/>
+  </g>
+</svg>

@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e6b5b">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Ruqya">
-<title>Ruqya qəbulu</title>
+<meta name="apple-mobile-web-app-title" content="Ruqyatz">
+<title>Ruqyatz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet">
@@ -205,6 +205,21 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .stbtns button[aria-pressed="true"].cancel{background:var(--bad);border-color:var(--bad);color:#fff}
 .stbtns button[aria-pressed="true"].noshow{background:var(--warn);border-color:var(--warn);color:#fff}
 .stbtns button[aria-pressed="true"].wait{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:44px;height:44px;border-radius:12px;border:1px solid var(--line)}
+.sheet.wide{max-width:none;height:94%;max-height:94%;padding:14px 0 0;gap:10px;overflow:hidden}
+.sheet.wide>h2,.sheet.wide>.seg,.sheet.wide>.hint{margin:0 14px}
+.sheet.wide .seg{grid-template-columns:repeat(var(--n),1fr)}
+.xl{flex:1;min-height:0;overflow:auto;border-top:1px solid #c8c8c8;background:#fff;-webkit-overflow-scrolling:touch}
+.xl table{border-collapse:separate;border-spacing:0;font:12.5px/1.3 Calibri,"Segoe UI",Arial,sans-serif;color:#111;font-variant-numeric:tabular-nums}
+.xl td,.xl th{border-right:1px solid #d4d4d4;border-bottom:1px solid #d4d4d4;padding:4px 7px;white-space:nowrap;background:#fff;min-width:44px}
+.xl th{background:#f2f2f2;color:#555;font-weight:500;text-align:center;position:sticky;top:0;z-index:2;font-size:11px}
+.xl th.rn,.xl td.rn{position:sticky;left:0;z-index:1;background:#f2f2f2;color:#555;text-align:center;min-width:30px;font-size:11px}
+.xl th.rn{z-index:3}
+.xl td.n{text-align:right}
+.xl tr.hd td:not(.rn){background:#e2efda;font-weight:700}
+.xl tr.tt td:not(.rn){font-weight:700;font-size:14px}
+.xl td.mg{text-align:center;font-weight:700;background:#fff2cc}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -250,12 +265,12 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111100140";
+var APP_VERSION="20261111100800";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
   fetch(location.pathname+"?check="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){
-    var m=t.match(/var APP_VERSION="20261111100140"]+)"/);
+    var m=t.match(/APP_VERSION\s*=\s*"([^"]+)"/);
     if(!m||m[1]===APP_VERSION||sheet)return;
     var n=0;try{n=+sessionStorage.getItem("ruqya.reload."+m[1])||0;sessionStorage.setItem("ruqya.reload."+m[1],n+1)}catch(e){}
     if(n<2)location.replace(location.pathname+"?v="+encodeURIComponent(m[1]));
@@ -263,7 +278,6 @@ function checkUpdate(){
 }
 var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
 function isAdmin(){return !!(auth.user&&auth.user.id===ADMIN)}
-var IN_APP=/RuqyaApp/.test(navigator.userAgent);
 var CLOSE='<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>';
 
 /* ---------- helpers ---------- */
@@ -416,7 +430,7 @@ function render(){
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML="<h1>Ruqya qəbulu</h1>";
+    top.innerHTML='<div class="brand"><img src="icon-192.png" alt=""><h1>Ruqyatz</h1></div>';
     main.innerHTML=!sb?'<div class="empty">Proqram yüklənmədi. İnterneti yoxlayın və səhifəni yenidən açın.</div>'
       :!auth.ready?'<div class="empty">Yüklənir…</div>'
       :'<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>'+
@@ -705,15 +719,6 @@ function statsSheet(){
   });
   return h;
 }
-function loadXlsx(){
-  if(window.XLSX)return Promise.resolve(window.XLSX);
-  return new Promise(function(ok,no){
-    var sc=document.createElement("script");
-    sc.src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
-    sc.onload=function(){window.XLSX?ok(window.XLSX):no()};sc.onerror=no;
-    document.head.appendChild(sc);
-  });
-}
 function bookedBy(s0,e0){
   /* Bookings counted by the day they were made, whatever date they are for. Deleted ones are gone from the data. */
   var m={};
@@ -811,25 +816,45 @@ function salesBook(){
   dl.push([],["Qəbulun yazıldığı günə görə, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."]);
   return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8])],["Gələn pasiyentlər",rows,[11,7,20,22,16,12,16]]]};
 }
-function downloadXlsx(kind){
-  if(IN_APP&&!(window.RuqyaNative&&window.RuqyaNative.saveFile)){flash("Excel üçün proqramın yeni versiyasını quraşdırın.");return}
-  flash("Excel hazırlanır…");
-  loadXlsx().then(function(X){
-    var rb=kind==="sales"?salesBook():reportBook(),wb=X.utils.book_new();
-    rb.sheets.forEach(function(sh){
-      var ws=X.utils.aoa_to_sheet(sh[1]);ws["!cols"]=sh[2].map(function(w){return{wch:w}});
-      if(sh[3]){
-        sh[3].cells.forEach(function(q){var c={t:"n",v:q.v||0};if(q.f)c.f=q.f;if(q.z)c.z=q.z;ws[X.utils.encode_cell({r:q.r,c:q.c})]=c});
-        ws["!merges"]=sh[3].merges;
-      }
-      X.utils.book_append_sheet(wb,ws,sh[0]);
-    });
-    if(window.RuqyaNative&&window.RuqyaNative.saveFile){window.RuqyaNative.saveFile(rb.name,X.write(wb,{bookType:"xlsx",type:"base64"}));flash("");return}
-    var blob=new Blob([X.write(wb,{bookType:"xlsx",type:"array"})],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-    var url=URL.createObjectURL(blob),a=document.createElement("a");
-    a.href=url;a.download=rb.name;document.body.appendChild(a);a.click();a.remove();
-    setTimeout(function(){URL.revokeObjectURL(url)},5000);flash("");
-  }).catch(function(){flash("Excel hazırlanmadı. İnterneti yoxlayın və yenidən cəhd edin.")});
+function fmtCell(c){
+  if(c==null||c==="")return["",""];
+  if(typeof c==="object"){var v=c.v;
+    if(c.z==="0%")return[Math.round((+v||0)*100)+"%","n"];
+    if(c.z==="d-mmm-yy"){var d=new Date(Date.UTC(1899,11,30)+v*864e5);return[String(d.getUTCDate()).padStart(2,"0")+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."+d.getUTCFullYear(),""]}
+    if(c.z==="0.00")return[r2(v).toLocaleString("ru-RU",{maximumFractionDigits:2}),"n"];
+    return[String(v),"n"];}
+  if(typeof c==="number")return[c.toLocaleString("ru-RU",{maximumFractionDigits:2}),"n"];
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(c);if(m)return[m[3]+"."+m[2]+"."+m[1],""];
+  return[String(c),""];
+}
+function colName(c){var n="";c++;while(c>0){var m=(c-1)%26;n=String.fromCharCode(65+m)+n;c=Math.floor((c-1)/26)}return n}
+function sheetTable(sh){
+  var rows=sh[1].map(function(r){return r.slice()}),W=0;
+  rows.forEach(function(r){W=Math.max(W,r.length)});
+  if(sh[3])sh[3].cells.forEach(function(q){rows[q.r][q.c]={v:q.v,z:q.z}});
+  var span={},skip={};
+  if(sh[3])sh[3].merges.forEach(function(m){span[m.s.r+","+m.s.c]=m.e.c-m.s.c+1;for(var c=m.s.c+1;c<=m.e.c;c++)skip[m.s.r+","+c]=1});
+  var h='<table><thead><tr><th class="rn"></th>';
+  for(var c=0;c<W;c++)h+='<th>'+colName(c)+'</th>';
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(r,ri){
+    var ne=r.filter(function(x){return x!==null&&x!==""&&x!==undefined}),hd=ne.length>=3&&ne.every(function(x){return typeof x==="string"&&!/^\d{4}-\d{2}-\d{2}$/.test(x)});
+    h+='<tr class="'+(ri===0?"tt":hd?"hd":"")+'"><td class="rn">'+(ri+1)+'</td>';
+    for(var c=0;c<W;c++){
+      if(skip[ri+","+c])continue;
+      var f=fmtCell(r[c]),sp=span[ri+","+c];
+      h+='<td class="'+f[1]+(sp&&f[0]?" mg":"")+'"'+(sp?' colspan="'+sp+'"':'')+'>'+esc(f[0])+'</td>';
+    }
+    h+='</tr>';
+  });
+  return h+'</tbody></table>';
+}
+function bookSheet(){
+  var rb=sheet.kind==="sales"?salesBook():reportBook(),k=Math.min(sheet.tab||0,rb.sheets.length-1);
+  var title=sheet.kind==="sales"?"Satış hesabatı":"Pul hesabatı";
+  return '<h2>'+title+CLOSE+'</h2>'+
+    '<div class="seg" style="--n:'+rb.sheets.length+'">'+rb.sheets.map(function(x,i){return '<button data-act="book-tab" data-id="'+i+'" aria-pressed="'+(i===k)+'">'+esc(x[0])+'</button>'}).join("")+'</div>'+
+    '<div class="xl">'+sheetTable(rb.sheets[k])+'</div>';
 }
 
 function patientsList(){
@@ -932,8 +957,8 @@ function expenseForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
-  byId("sheet").innerHTML=f();byId("overlay").hidden=false;byId("sheet").scrollTop=0;
+  var f={book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,service:serviceForm,expense:expenseForm,stats:statsSheet}[s.type];
+  byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   try{if(!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
@@ -1093,7 +1118,8 @@ document.addEventListener("click",function(e){
     pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
   }
   else if(act==="report"){openSheet({type:"report"});return}
-  else if(act==="xlsx"){downloadXlsx(id);return}
+  else if(act==="xlsx"){openSheet({type:"book",kind:id,tab:0});return}
+  else if(act==="book-tab"){if(sheet&&sheet.type==="book"){sheet.tab=+id;byId("sheet").innerHTML=bookSheet()}return}
   else if(act==="stats"){openSheet({type:"stats"});return}
   else if(act==="me"){openSheet({type:"me"});return}
   else if(act==="new-service"){if(!isAdmin())return;openSheet({type:"service"});return}
