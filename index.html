@@ -250,6 +250,17 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
+var APP_VERSION="20261111100140";
+function checkUpdate(){
+  /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
+  if(location.protocol==="file:"||!window.fetch)return;
+  fetch(location.pathname+"?check="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){
+    var m=t.match(/var APP_VERSION="20261111100140"]+)"/);
+    if(!m||m[1]===APP_VERSION||sheet)return;
+    var n=0;try{n=+sessionStorage.getItem("ruqya.reload."+m[1])||0;sessionStorage.setItem("ruqya.reload."+m[1],n+1)}catch(e){}
+    if(n<2)location.replace(location.pathname+"?v="+encodeURIComponent(m[1]));
+  }).catch(function(){});
+}
 var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
 function isAdmin(){return !!(auth.user&&auth.user.id===ADMIN)}
 var IN_APP=/RuqyaApp/.test(navigator.userAgent);
@@ -1211,6 +1222,7 @@ function tick(){
   var t=iso(new Date());
   if(t!==today){if(ui.date===today)ui.date=t;today=t}
   if(auth.user&&!document.hidden&&!offline)refresh();
+  if(!document.hidden&&!offline)checkUpdate();
 }
 document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
 setInterval(tick,60000);
@@ -1225,6 +1237,7 @@ if(sb){
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);
 }else{auth.ready=true}
 render();
+checkUpdate();
 })();
 </script>
 </body>
