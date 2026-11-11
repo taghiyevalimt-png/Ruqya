@@ -220,6 +220,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .xl tr.hd td:not(.rn){background:#e2efda;font-weight:700}
 .xl tr.tt td:not(.rn){font-weight:700;font-size:14px}
 .xl td.mg{text-align:center;font-weight:700;background:#fff2cc}
+.tag.by{background:var(--surface);border:1px solid var(--line);color:var(--ink);font-weight:500}
 .note.warnbox{background:var(--warn-soft);color:var(--warn);font-weight:500}
 [hidden]{display:none!important}
 .field textarea{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:150px;font:inherit;color:inherit;resize:vertical}
@@ -265,7 +266,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111100843";
+var APP_VERSION="20261111101400";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -588,6 +589,8 @@ function dayMain(){
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
       '<div class="who"><b>'+esc(a.name)+'</b><span>'+(state.v2?esc(a.service)+' · ':'')+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
+    var byName=state.staff[a.by]||(a.by?"Adsız istifadəçi":"");
+    if(byName)tags='<span class="tag by">Yazdı: '+esc(byName)+'</span>'+tags;
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(a.status==="wait"){
