@@ -1,17 +1,12 @@
 package az.ruqya.zapis;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ContentValues;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -20,9 +15,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import java.io.OutputStream;
-
-/** Thin shell: shows the hosted web app full screen and hands other links to the phone. */
+/**
+ * Thin shell: shows the hosted web app full screen and hands every other link
+ * (WhatsApp, phone calls, other sites) to the phone. Written to work from Android 5.
+ */
 public class MainActivity extends Activity {
 
     private static final String HOST = "taghiyevalimt-png.github.io";
@@ -38,7 +34,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-        getWindow().setStatusBarColor(Color.parseColor("#0E6B5B"));
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#0E6B5B"));
+        }
 
         web = new WebView(this);
         setContentView(web);
@@ -47,31 +45,38 @@ public class MainActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setTextZoom(100);
         settings.setUserAgentString(settings.getUserAgentString() + " RuqyaApp");
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            web.addJavascriptInterface(new Bridge(), "RuqyaNative");
-        }
         web.setWebChromeClient(new WebChromeClient());
         web.setWebViewClient(new WebViewClient() {
+            // Android 7 and newer.
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Uri uri = request.getUrl();
-                if (HOST.equals(uri.getHost())) {
-                    return false;
-                }
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                } catch (Exception ignored) {
-                    // No app can open this link; stay on the current page.
-                }
-                return true;
+                return handle(request.getUrl());
             }
 
+            // Android 5 and 6 only call this older version.
+            @Override
+            @SuppressWarnings("deprecation")
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return handle(Uri.parse(url));
+            }
+
+            // Android 6 and newer.
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 if (request.isForMainFrame()) {
-                    view.loadDataWithBaseURL(null, OFFLINE, "text/html", "utf-8", null);
+                    showOffline(view);
+                }
+            }
+
+            // Android 5.
+            @Override
+            @SuppressWarnings("deprecation")
+            public void onReceivedError(WebView view, int code, String description, String failingUrl) {
+                if (Build.VERSION.SDK_INT < 23) {
+                    showOffline(view);
                 }
             }
         });
@@ -81,6 +86,33 @@ public class MainActivity extends Activity {
         } else {
             web.restoreState(state);
         }
+    }
+
+    /** Returns true when the link was handed to another app. */
+    private boolean handle(Uri uri) {
+        String scheme = uri.getScheme() == null ? "" : uri.getScheme();
+        if (("https".equals(scheme) || "http".equals(scheme)) && HOST.equals(uri.getHost())) {
+            return false;
+        }
+        try {
+            Intent intent;
+            if ("intent".equals(scheme)) {
+                intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+            } else {
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Bu linki açacaq proqram tapılmadı", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Linki açmaq olmadı", Toast.LENGTH_LONG).show();
+        }
+        return true;
+    }
+
+    private void showOffline(WebView view) {
+        view.loadDataWithBaseURL(HOME, OFFLINE, "text/html", "utf-8", null);
     }
 
     @Override
@@ -95,45 +127,6 @@ public class MainActivity extends Activity {
             web.goBack();
         } else {
             super.onBackPressed();
-        }
-    }
-
-    /** Lets the page hand over a generated Excel file: saved to Downloads, then offered for sharing. */
-    @TargetApi(29)
-    private class Bridge {
-        private static final String XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-        @JavascriptInterface
-        public void saveFile(String name, String base64) {
-            try {
-                byte[] data = Base64.decode(base64, Base64.DEFAULT);
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Downloads.DISPLAY_NAME, name);
-                values.put(MediaStore.Downloads.MIME_TYPE, XLSX);
-                values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
-                final Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-                if (uri == null) {
-                    throw new IllegalStateException("no uri");
-                }
-                try (OutputStream out = getContentResolver().openOutputStream(uri)) {
-                    out.write(data);
-                }
-                runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Fayl «Yükləmələr» qovluğunda saxlanıldı", Toast.LENGTH_LONG).show();
-                    try {
-                        Intent send = new Intent(Intent.ACTION_SEND);
-                        send.setType(XLSX);
-                        send.putExtra(Intent.EXTRA_STREAM, uri);
-                        send.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(Intent.createChooser(send, name));
-                    } catch (Exception ignored) {
-                        // The file is saved; sharing is optional.
-                    }
-                });
-            } catch (Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(MainActivity.this, "Faylı saxlamaq olmadı", Toast.LENGTH_LONG).show());
-            }
         }
     }
 }

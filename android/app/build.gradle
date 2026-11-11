@@ -8,10 +8,10 @@ android {
 
     defaultConfig {
         applicationId 'az.ruqya.zapis'
-        minSdk 23
+        minSdk 21
         targetSdk 34
         versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
-        versionName '1.0'
+        versionName '1.1'
     }
 
     compileOptions {
