@@ -4,6 +4,7 @@
 set -e
 cd "$(dirname "$0")"
 v=$(date -u +%Y%m%d%H%M%S)
+printf "%s\n" "$v" > version.txt
 sed -i "s/^var APP_VERSION=\"[^\"]*\";\$/var APP_VERSION=\"$v\";/" index.html
 grep -q "^var APP_VERSION=\"$v\";\$" index.html
 python3 -c "

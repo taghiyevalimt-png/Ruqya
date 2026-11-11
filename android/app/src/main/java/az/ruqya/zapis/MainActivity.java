@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -79,12 +82,34 @@ public class MainActivity extends Activity {
                     showOffline(view);
                 }
             }
+
+            // Android 6 and newer: the site itself answered with a server error.
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse response) {
+                if (request.isForMainFrame() && response.getStatusCode() >= 500) {
+                    showOffline(view);
+                }
+            }
+
+            // Android 8 and newer: the phone ran out of memory and stopped the page.
+            // Start the screen again instead of letting the whole app close.
+            @Override
+            public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+                if (web != null) {
+                    ViewGroup parent = (ViewGroup) web.getParent();
+                    if (parent != null) {
+                        parent.removeView(web);
+                    }
+                    web.destroy();
+                    web = null;
+                }
+                recreate();
+                return true;
+            }
         });
 
-        if (state == null) {
+        if (state == null || web.restoreState(state) == null) {
             web.loadUrl(HOME);
-        } else {
-            web.restoreState(state);
         }
     }
 
@@ -118,12 +143,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle out) {
         super.onSaveInstanceState(out);
-        web.saveState(out);
+        if (web != null) {
+            web.saveState(out);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) {
+        if (web != null && web.canGoBack()) {
             web.goBack();
         } else {
             super.onBackPressed();
