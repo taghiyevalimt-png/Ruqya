@@ -8,8 +8,8 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Ruqyə">
-<title>Ruqyə qəbulu</title>
+<meta name="apple-mobile-web-app-title" content="Ruqya">
+<title>Ruqya qəbulu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet">
@@ -273,9 +273,9 @@ function refresh(){
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     state.readers=res[0].map(function(x){return{id:x.id,name:x.name,price:+x.price,share:+x.share,archived:!!x.archived}});
-    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:x.service||"Ruqyə",by:x.created_by||""}});
+    state.appts=res[1].map(function(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price,share:+x.share,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||""}});
     state.v2=!!(res[2]&&res[3]&&res[4]);
-    state.services=(res[2]||[]).map(function(x){return{id:x.id,name:x.name}});
+    state.services=(res[2]||[]).map(function(x){return{id:x.id,name:svcName(x.name)}});
     state.expenses=(res[3]||[]).map(function(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}});
     state.staff={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name});
     auth.loaded=true;render();
@@ -308,6 +308,7 @@ function reader(id){for(var i=0;i<state.readers.length;i++)if(state.readers[i].i
 function appt(id){for(var i=0;i<state.appts.length;i++)if(state.appts[i].id===id)return state.appts[i];return null}
 function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
 function r2(n){return Math.round((+n||0)*100)/100}
+function svcName(n){n=n||"Ruqya";return n==="Ruqy\u0259"?"Ruqya":n==="Hicam\u0259"?"Hicama":n}
 function activeReaders(){return state.readers.filter(function(r){return !r.archived})}
 function split(a){var m=a.price*a.share/100;return{mgr:m,rd:a.price-m}}
 function range(){
@@ -344,7 +345,7 @@ function render(){
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML="<h1>Ruqyə qəbulu</h1>";
+    top.innerHTML="<h1>Ruqya qəbulu</h1>";
     main.innerHTML=!sb?'<div class="empty">Proqram yüklənmədi. İnterneti yoxlayın və səhifəni yenidən açın.</div>'
       :!auth.ready?'<div class="empty">Yüklənir…</div>'
       :'<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>'+
@@ -509,7 +510,7 @@ function cashMain(){
     if(ex.length){h+='<div>';ex.forEach(function(x){
       h+='<div class="visit"><span>'+fmtDay(x.date)+' · '+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+'">Dəyiş</button></div>'});h+='</div>'}
     h+='<button class="ghost" data-act="new-expense">Xərc əlavə et</button>'+
-      '<div class="settle"><span>Rəhbərdə qalır (pay − xərclər)</span><b class="num">'+money(T.mgr-exSum)+'</b></div></div>';
+      '</div>';
     var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
     h+='<button class="primary" data-act="xlsx">Excel hesabatı ('+PN+')</button>';
     h+='<button class="ghost" data-act="stats">Statistika: kimin yazdığı neçə pasiyent gəlib</button>';
@@ -569,7 +570,7 @@ function reportBook(){
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0),st=statsData();
   var sum=[["Hesabat",periodTitle()],["Dövr",r.s+" — "+r.e],[],
     ["Kassa cəmi",r2(T.sum)],["Mütəxəssislərə",r2(T.rd)],["Rəhbərin payı",r2(T.mgr)],["Xərclər",r2(exSum)],
-    ["Rəhbərdə qalır (pay − xərclər)",r2(T.mgr-exSum)],["Rəhbərə hələ verilməyib",r2(T.due)],[],
+    ["Rəhbərə hələ verilməyib",r2(T.due)],[],
     ["Mütəxəssis","Seans","Kassa","Mütəxəssisə","Rəhbərə","Verilməyib","Ləğv etdi","Gəlmədi"]];
   d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),r2(x.rd),r2(x.mgr),r2(x.due),x.cancel,x.noshow])});
   var bs={},bo=[];
@@ -673,7 +674,7 @@ function meForm(){
 }
 function serviceForm(){
   return '<h2>Yeni xidmət'+CLOSE+'</h2>'+
-    '<div class="field"><label for="s-name">Xidmətin adı</label><input id="s-name" type="text" autocomplete="off" placeholder="Məsələn: Hicamə"></div>'+
+    '<div class="field"><label for="s-name">Xidmətin adı</label><input id="s-name" type="text" autocomplete="off" placeholder="Məsələn: Hicama"></div>'+
     '<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-service">Əlavə et</button></div>';
 }
 function expenseForm(){
@@ -777,7 +778,7 @@ function saveAppt(){
     db(sb.from("appts").update(up).eq("id",a.id));
   }else{
     var id=uuid();
-    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:r.share,status:"wait",note:note,settled:false,service:service||"Ruqyə",by:auth.user.id});
+    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:r.share,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id});
     var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:r.share,status:"wait",note:note};
     if(service)ins.service=service;
     db(sb.from("appts").insert(ins));
