@@ -266,7 +266,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111101400";
+var APP_VERSION="20261111101922";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -307,11 +307,11 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 var today=iso(new Date());
 var ui={tab:"day",date:today,filter:"all",period:"day",q:"",view:"grid"};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
-var DAY0=8*60,DAY1=22*60,HOUR=92,PXM=HOUR/60,COLW=68,AXW=40;
+var DAY0=8*60,DAY1=24*60,HOUR=92,PXM=HOUR/60,COLW=68,AXW=40;
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 function mins(t){var p=String(t).split(":");return (+p[0])*60+(+p[1]||0)}
 function hhmm(m){m=Math.max(0,Math.min(24*60-1,m));return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
-function endOf(a){return hhmm(mins(a.time)+(a.dur||90))}
+function endOf(a){var m=mins(a.time)+(a.dur||90);return m>=24*60?"00:00":hhmm(m)}
 function rcolor(id){var i=0;for(;i<state.readers.length;i++)if(state.readers[i].id===id)break;return COLORS[i%COLORS.length]}
 function overlap(rid,date,start,dur,skip){
   var s1=mins(start),e1=s1+dur;
@@ -507,8 +507,8 @@ function gridMain(){
   var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
   h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch"><i style="background:'+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
-  h+='<div class="cal-body" style="height:'+H+'px"><div class="axis">';
-  for(var m=DAY0+60;m<DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+hhmm(m)+'</span>';
+  h+='<div class="cal-body" style="height:'+(H+20)+'px;padding:10px 0"><div class="axis">';
+  for(var m=DAY0;m<=DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+(m>=24*60?"00:00":hhmm(m))+'</span>';
   h+='</div>';
   var nowM=new Date().getHours()*60+new Date().getMinutes();
   rs.forEach(function(r){
@@ -976,7 +976,7 @@ function slotGrid(){
   var taken=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.status!=="cancel"&&x.id!==sheet.id})
     .sort(function(a,b){return mins(a.time)-mins(b.time)}).map(function(x){return x.time+"–"+endOf(x)});
   var h="";
-  for(var m=DAY0+60;m+dur<=DAY1;m+=30){
+  for(var m=DAY0;m+dur<=DAY1;m+=30){
     var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur);
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
