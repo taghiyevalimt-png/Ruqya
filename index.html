@@ -340,7 +340,7 @@ function refresh(){
     state.expenses=(res[3]||[]).map(function(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}});
     state.staff={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name});
     auth.loaded=true;render();
-    if(state.v2&&!state.staff[auth.user.id]&&!sheet&&!auth.asked){auth.asked=true;openSheet({type:"me"})}
+    if(state.v2&&!state.staff[auth.user.id]&&!sheet&&!auth.asked){auth.asked=true;openSheet({type:"me",first:true})}
   },function(){
     if(my===seq)flash(offline?"İnternet yoxdur.":"Qəbulları yükləmək olmadı. İnterneti yoxlayın.");
   });
@@ -532,7 +532,7 @@ function breakForm(){
 function dayMain(){
   var h="";
   if(!activeReaders().length){
-    if(auth.loaded&&!isAdmin())return '<div class="empty">Rəhbər hələ mütəxəssis əlavə etməyib.</div>';
+    if(auth.loaded&&!isAdmin())return '<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>';
     return auth.loaded?'<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>':"";
   }
   var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
@@ -827,7 +827,7 @@ function reportSheet(){
 
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h='<h3 class="sec">Mütəxəssislər</h3>';
-  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?"Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Rəhbər hələ mütəxəssis əlavə etməyib.")+'</div>';
+  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?"Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.")+'</div>';
   rs.forEach(function(r){
     h+='<div class="reader"><div><b>'+esc(r.name)+'</b></div>'+
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button>':'')+'</div>';
@@ -855,15 +855,15 @@ function readersMain(){
   }
   h+='<h3 class="sec">Hesab</h3>';
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
-    (state.v2?'<button class="ghost" data-act="me">Profil</button>':'')+'</div>';
+    (state.v2?'<button class="ghost" data-act="me">Adı dəyiş</button>':'')+'</div>';
   h+='<button class="ghost" data-act="logout">Çıxış</button>';
   return h;
 }
 function meForm(){
-  return '<h2>Profil'+CLOSE+'</h2>'+
+  var first=sheet&&sheet.first;
+  return (first?'<h2>Xoş gəlmisiniz!'+CLOSE+'</h2><p class="hint" style="font-size:15px;color:var(--ink)">Başlamaq üçün adınızı yazın və «Yadda saxla» basın.</p>':'<h2>Profil'+CLOSE+'</h2>')+
     '<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" autocomplete="off" value="'+esc(state.staff[auth.user.id]||"")+'"></div>'+
     '<p class="hint">Statistikada və hesabatda bu adla görünəcəksiniz.</p>'+
-    '<div class="field"><label for="m-pass">Yeni şifrə (dəyişmək istəmirsinizsə, boş saxlayın)</label><input id="m-pass" type="password" autocomplete="new-password"></div>'+
     '<p class="err" id="m-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>';
 }
@@ -1059,10 +1059,8 @@ document.addEventListener("click",function(e){
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
   else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
   else if(act==="save-me"){
-    var mn=val("m-name"),mp=byId("m-pass")?byId("m-pass").value:"";if(!mn)return fail("m-err","Adınızı yazın.");
-    if(mp&&mp.length<6)return fail("m-err","Şifrə ən azı 6 simvol olmalıdır.");
+    var mn=val("m-name");if(!mn)return fail("m-err","Adınızı yazın.");
     state.staff[auth.user.id]=mn;db(sb.from("staff").upsert({id:auth.user.id,name:mn}));
-    if(mp)sb.auth.updateUser({password:mp}).then(function(r){flash(r.error?"Şifrə dəyişmədi. Yenidən cəhd edin.":"Şifrə dəyişdirildi.")},function(){flash("Şifrə dəyişmədi. İnterneti yoxlayın.")});
     closeSheet();
   }
   else if(act==="save-service"){
