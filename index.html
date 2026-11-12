@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0e6b5b">
+<meta name="theme-color" content="#050505">
 <script>
 /* Interface language, chosen in Ayarlar (or on the sign-in screen) and kept on this phone: "az" (default) or "ru". */
 var LANG="az";try{if(localStorage.getItem("ruqya.lang")==="ru")LANG="ru"}catch(e){}
@@ -13,7 +13,7 @@ function applyTheme(t){
   var r=document.documentElement;
   if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
   var dark=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#0f1514":"#0e6b5b");
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#ffffff");
 }
 try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
 try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}if(t==="auto")applyTheme("auto")};
@@ -35,26 +35,37 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
    list between them, forms slide up as a bottom sheet. */
 :root{
-  --bg:#f2f5f4; --surface:#ffffff; --ink:#16211e; --muted:#5f6e69; --line:#dbe2df; --line-soft:#ebf0ee; --hatch:#e3e9e6;
-  --accent:#0e6b5b; --accent-ink:#ffffff; --accent-soft:#dff0ec;
-  --ok:#1b7a48; --ok-soft:#def2e6; --warn:#a86200; --warn-soft:#fbecd2; --bad:#b0352d; --bad-soft:#f9e1de;
-  --font-display:"Onest","Golos Text",system-ui,sans-serif;
+  /* Light: white and black. */
+  --bg:#f5f5f3; --surface:#ffffff; --surface2:#fafaf9; --ink:#0a0a0a; --muted:#6b6b6b; --line:#e5e5e2; --line-soft:#f0f0ee; --hatch:#ececea;
+  --accent:#0a0a0a; --accent-ink:#ffffff; --accent-soft:#efefec; --accent-line:#0a0a0a;
+  --btn:linear-gradient(180deg,#2b2b2b 0%,#0a0a0a 100%); --btn-ink:#ffffff; --glow:0 10px 24px -14px rgba(0,0,0,.55);
+  --sec:#0a0a0a; --now:#c62828;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 28px -18px rgba(0,0,0,.22);
+  --ok:#17703f; --ok-soft:#e3f2e8; --warn:#8f5b00; --warn-soft:#f7ecd6; --bad:#b3261e; --bad-soft:#f8e2df;
+  --font-display:"Onest","Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --font-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --r:14px;
+  --r:16px; --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633; --line-soft:#1f2927; --hatch:#24302d;
-    --accent:#4bbfa8; --accent-ink:#06211c; --accent-soft:#17332e;
-    --ok:#5fcf8f; --ok-soft:#173224; --warn:#e7ad52; --warn-soft:#3a2c12; --bad:#f08b82; --bad-soft:#3d1e1b;
+    /* Dark: deep black and gold. */
+    --bg:#050505; --surface:#0f0e0b; --surface2:#15130f; --ink:#f3ead5; --muted:#9a907b; --line:#2a2519; --line-soft:#1a1711; --hatch:#1c1912;
+    --accent:#d6b25e; --accent-ink:#0b0905; --accent-soft:#251f12; --accent-line:#8a7238;
+    --btn:linear-gradient(135deg,#f4dc9c 0%,#d6b25e 48%,#a9833a 100%); --btn-ink:#0b0905; --glow:0 10px 26px -12px rgba(214,178,94,.5);
+    --sec:#d6b25e; --now:#e2bd62;
+    --shadow:inset 0 1px 0 rgba(255,236,190,.045),0 12px 30px -20px rgba(0,0,0,.9);
+    --ok:#86d3a1; --ok-soft:#14261a; --warn:#e9bc62; --warn-soft:#2b210e; --bad:#f08a7e; --bad-soft:#2e1512;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1514; --surface:#18201e; --ink:#e6eeeb; --muted:#93a39e; --line:#2a3633; --line-soft:#1f2927; --hatch:#24302d;
-  --accent:#4bbfa8; --accent-ink:#06211c; --accent-soft:#17332e;
-  --ok:#5fcf8f; --ok-soft:#173224; --warn:#e7ad52; --warn-soft:#3a2c12; --bad:#f08b82; --bad-soft:#3d1e1b;
+  --bg:#050505; --surface:#0f0e0b; --surface2:#15130f; --ink:#f3ead5; --muted:#9a907b; --line:#2a2519; --line-soft:#1a1711; --hatch:#1c1912;
+  --accent:#d6b25e; --accent-ink:#0b0905; --accent-soft:#251f12; --accent-line:#8a7238;
+  --btn:linear-gradient(135deg,#f4dc9c 0%,#d6b25e 48%,#a9833a 100%); --btn-ink:#0b0905; --glow:0 10px 26px -12px rgba(214,178,94,.5);
+  --sec:#d6b25e; --now:#e2bd62;
+  --shadow:inset 0 1px 0 rgba(255,236,190,.045),0 12px 30px -20px rgba(0,0,0,.9);
+  --ok:#86d3a1; --ok-soft:#14261a; --warn:#e9bc62; --warn-soft:#2b210e; --bad:#f08a7e; --bad-soft:#2e1512;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -321,6 +332,141 @@ a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius
 .pv-btns{display:flex;gap:8px;margin-top:2px}.pv-btns>*{flex:1;padding:8px 10px}.danger-t{color:var(--bad)}
 .nogap .pvisits>*+*,.nogap .pvisit>*+*{margin-top:8px}.nogap .pv-btns>*+*{margin-left:8px}
 .visit span:first-child{flex:1;min-width:0}
+
+/* ============ Premium layer: black + gold (dark), white + black (light); smooth, quiet motion ============ */
+html{-webkit-tap-highlight-color:transparent}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-feature-settings:"ss01","cv11"}
+button,a.wa,.chip,.seg button,.wd,.slot,.mgrid button,.tabs button,.icon-btn,.ghost,.primary,.fab,.danger,.link,.agent,.ev,.viewsw button,.stbtns button,.swatches button,.sw{
+  transition:transform .18s var(--ease),background-color .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease),box-shadow .22s var(--ease),opacity .22s var(--ease);touch-action:manipulation}
+button:active:not(:disabled),a.wa:active{transform:scale(.97)}
+.ev:active{transform:scale(.985)}
+.tabs button:active{transform:scale(.92)}
+button:disabled{opacity:.42;cursor:default}
+.top h1,.daynav .label,.sheet h2,.pay .head b,.tile b,.mhead b,.card .time{letter-spacing:-.015em}
+.top h1{font-size:22px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+
+/* Main buttons: gold bar in the dark, black bar in the light. */
+.primary,.fab{background:var(--btn);color:var(--btn-ink);box-shadow:var(--glow);letter-spacing:.02em;font-weight:600;border:0}
+.fab{border-radius:16px;padding:15px 18px;font-size:16.5px}
+.primary{border-radius:14px}
+.tile.main{background:var(--btn);color:var(--btn-ink);border-color:transparent;box-shadow:var(--glow)}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"],.viewsw button[aria-pressed="true"],.wd[aria-pressed="true"],.slot[aria-pressed="true"],.mgrid button[aria-pressed="true"],.stbtns button[aria-pressed="true"].wait{
+  background:var(--btn);color:var(--btn-ink);border-color:transparent;box-shadow:var(--glow)}
+.wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b,.wd[aria-pressed="true"] i,.mgrid button[aria-pressed="true"] b,.mgrid button[aria-pressed="true"] i{color:var(--btn-ink)}
+.danger{border-radius:14px;border-color:var(--bad);background:transparent}
+.ghost,.icon-btn{background:var(--surface);border-color:var(--line);box-shadow:var(--shadow)}
+.ghost{border-radius:13px;padding:10px 14px}
+.icon-btn{border-radius:14px;width:42px;height:42px;color:var(--ink)}
+.link,a.link{color:var(--accent);text-decoration-color:var(--accent-line)}
+a.wa{color:var(--accent);border-radius:13px;box-shadow:var(--shadow)}
+
+/* Surfaces */
+.card,.pay,.reader,.tile,details.more,.pvisit,.empty,.search{border-radius:var(--r)}
+.card,.pay,.reader,.tile,details.more{box-shadow:var(--shadow);border-color:var(--line)}
+.sheet .pay,.sheet .pvisit{box-shadow:none;background:var(--surface2)}
+.card{border-left-width:3px}
+.card.wait{border-left-color:var(--accent-line)}
+.empty{border-color:var(--line);background:transparent}
+.note{border-radius:14px;border:1px solid var(--line);background:var(--accent-soft)}
+.note.warnbox{border-color:transparent}
+h3.sec{font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sec);margin-top:14px}
+.stt th{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.stt tfoot td{border-top:2px solid var(--sec)}
+.stt tbody tr:last-child td{border-bottom:0}
+.daynav .label small{margin-top:1px}
+
+/* Small selectors: day strip, chips, segments, time slots */
+.wd,.mgrid button,.slot,.chip,.seg,.viewsw{border-color:var(--line)}
+.wd{border-radius:13px;padding:6px 0 4px;background:var(--surface)}
+.wd b{font-size:16px}
+.wd.today b,.mgrid button.today b{color:var(--accent);text-decoration:none;position:relative}
+.wd.today:not([aria-pressed="true"]),.mgrid button.today:not([aria-pressed="true"]){border-color:var(--accent-line)}
+.wd i,.mgrid button i{color:var(--accent)}
+.wd.today[aria-pressed="true"] b,.mgrid button.today[aria-pressed="true"] b,.wd[aria-pressed="true"] i,.mgrid button[aria-pressed="true"] i{color:var(--btn-ink)}
+.chip{padding:8px 16px;background:var(--surface);color:var(--ink);opacity:.85}
+.chip[aria-pressed="true"]{opacity:1}
+.seg{border-radius:14px;padding:4px;background:var(--surface2)}
+.seg button{border-radius:10px;padding:9px 8px;color:var(--muted)}
+.viewsw{border-radius:12px;padding:3px;background:var(--surface2)}
+.viewsw button{border-radius:9px}
+.slot{border-radius:10px;background:var(--surface2);color:var(--ink)}
+#f-slots .slot{border-radius:9px;padding:6px 0}
+.slot:disabled{opacity:.28}
+
+/* Form fields */
+.field label{font-size:12.5px;letter-spacing:.02em}
+.field input,.field select,.field textarea,.search{background-color:var(--surface2);border-color:var(--line);transition:border-color .2s var(--ease),box-shadow .2s var(--ease),background-color .2s var(--ease)}
+.field input:focus,.field select:focus,.field textarea:focus,.search:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft);background-color:var(--surface)}
+.field select{background-image:linear-gradient(45deg,transparent 50%,var(--accent) 50%),linear-gradient(135deg,var(--accent) 50%,transparent 50%);font-weight:500}
+.field select:invalid,.field select option[value=""]{color:var(--muted)}
+.field select option{background:var(--surface);color:var(--ink)}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.65}
+
+/* Bottom tabs */
+.tabs{background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{position:relative;padding-top:10px;letter-spacing:.01em}
+.tabs button::before{content:"";position:absolute;top:0;left:50%;width:0;height:2px;border-radius:0 0 2px 2px;background:var(--accent);transition:width .28s var(--ease),left .28s var(--ease)}
+.tabs button[aria-current="page"]::before{width:28px;left:calc(50% - 14px)}
+.tabs button[aria-current="page"] svg{stroke-width:2}
+
+/* Bottom sheet: fades and glides in */
+.overlay{background:rgba(0,0,0,.55);animation:fadein .22s var(--ease)}
+.sheet{border-radius:26px 26px 0 0;animation:up .34s var(--ease);box-shadow:0 -18px 50px -20px rgba(0,0,0,.6);border-top:1px solid var(--line)}
+.sheet h2{font-size:20px}
+@keyframes up{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+main.enter{animation:fadein .2s var(--ease)}
+@media (prefers-reduced-motion: reduce){.overlay,.sheet,main.enter{animation:none}}
+
+/* Calendar */
+.cal{border-top-color:var(--line)}
+.cal-head{background:var(--surface)}
+.cal-head .ch{font-size:12px;letter-spacing:.01em;padding:8px 3px}
+.axis span{font-size:10px;letter-spacing:.02em}
+.ev{border-radius:7px;box-shadow:0 1px 2px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.08)}
+.ev::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%);pointer-events:none}
+.nowline,.nowline::before{background:var(--now)}
+.nowline{box-shadow:0 0 6px var(--now)}
+
+/* Sign-in screen */
+.gate .top{align-items:center;padding-top:max(40px,8vh)}
+.gate .brand{flex-direction:column;gap:14px}
+.gate .brand img{width:96px;height:96px;border:0;border-radius:0;filter:drop-shadow(0 10px 22px rgba(214,178,94,.25))}
+.gate .brand h1{font-size:30px;letter-spacing:.06em;font-weight:700;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gate main{width:100%;max-width:420px;margin:0 auto;padding-top:22px;gap:16px}
+
+/* Computers: wider page, centred dialogs, hover, quiet scrollbars */
+@media (hover:hover) and (pointer:fine){
+  .primary:hover,.fab:hover{filter:brightness(1.07)}
+  .ghost:hover,.icon-btn:hover,.chip:hover,.wd:hover,.slot:hover:not(:disabled),.mgrid button:hover,a.wa:hover,.seg button:hover,.viewsw button:hover{border-color:var(--accent-line)}
+  .agent:hover,.visit:hover{background:var(--line-soft)}
+  .ev:hover{filter:brightness(1.08)}
+  *{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;border:3px solid transparent;background-clip:content-box}::-webkit-scrollbar-track{background:transparent}
+}
+@media (min-width:700px){
+  .app{max-width:760px}
+  .overlay{align-items:center;padding:24px}
+  .sheet{border-radius:24px;max-height:90%;max-width:600px;border:1px solid var(--line)}
+  .sticky-save{border-radius:0 0 24px 24px}
+  .sheet.wide{max-width:1100px}
+}
+@media (min-width:1000px){
+  .app{max-width:1240px;padding:0 12px}
+  .top{padding:20px 24px 12px}
+  main{padding:6px 24px 22px}
+  main:not(.gridmode)>*{width:100%;max-width:820px;margin-left:auto;margin-right:auto}
+  .fab{align-self:flex-end;min-width:260px;margin:10px 24px 14px}
+  .tabs{justify-content:center;border-radius:20px 20px 0 0}
+  .tabs button{flex:0 1 170px;font-size:13px}
+  .cal-head .ch{font-size:13px}
+  .ev b,.ev span{font-size:11.5px}
+  .gate main{max-width:420px}
+}
+html.lite *,html.lite *::before{box-shadow:none!important;animation:none!important}
+html.lite .ev::before{display:none}
+.ev{contain:layout paint}
 </style>
 </head>
 <body>
@@ -625,7 +771,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "\">Satış agenti</button>":"\">Агент продаж</button>",
 "\">Mütəxəssis</button>":"\">Специалист</button>",
 "\">Admin</button>":"\">Админ</button>",
-"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız əsas admin verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа даёт и забирает только главный админ.",
+"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız adminlər verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа дают и забирают только админы.",
 "Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.":"Записи, сделанные специалистами, не попадают в статистику продаж.",
 "<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Yadda saxla</button></div>":"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Сохранить</button></div>",
 "əlavə etdi":"добавлено",
@@ -757,7 +903,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək.":"В открывшемся окне нажмите «Добавить» — виджет появится на главном экране.",
 "Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin.":"Нажмите и удерживайте пустое место на главном экране → «Виджеты» → выберите виджет «Ruqyatz» и перетащите на экран.",
 "Adı yazın.":"Введите имя.",
-"Admin rolunu yalnız əsas admin dəyişə bilər.":"Роль админа может менять только главный админ.",
+"Əsas adminin rolu dəyişmir.":"Роль главного админа не меняется.",
+"Admin rolunu dəyişmək üçün bazada 2026-11-admins.sql faylını bir dəfə işə salın.":"Чтобы менять роль админа, один раз запустите в базе файл 2026-11-admins.sql.",
 "Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir.":"Не удалось изменить. Для этого нужно обновить базу.",
 "Qiyməti düzgün yazın.":"Введите цену правильно.",
 "Bir də basın":"Нажмите ещё раз",
@@ -786,7 +933,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Pasiyentin adı *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Имя пациента *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
 "<div class=\"field\"><label for=\"f-phone\">Mobil nömrə *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Цена, ",
-" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"":" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"",
+" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"":" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"",
 "<p class=\"hint small\" style=\"margin:0\">* — vacib sahələr</p>":"<p class=\"hint small\" style=\"margin:0\">* — обязательные поля</p>",
 "</h2><p class=\"hint\">Bu pasiyentin qəbulu qalmayıb.</p>":"</h2><p class=\"hint\">У этого пациента не осталось записей.</p>",
 "<span>Mütəxəssis: ":"<span>Специалист: ",
@@ -856,7 +1003,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<p class=\"hint\">Hamısının qiyməti yazılıb ✓</p>":"<p class=\"hint\">У всех записей цена указана ✓</p>",
 "<p class=\"hint\">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>":"<p class=\"hint\">Нажмите на запись, впишите цену и сохраните.</p>",
 "<button class=\"ghost\" data-act=\"np-list\">Göstər</button>":"<button class=\"ghost\" data-act=\"np-list\">Показать</button>",
-" (vacibdir)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"":" (обязательно)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"",
+" (vacibdir)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"":" (обязательно)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"",
 "Qiyməti yazmaq vacibdir. Pul yazılmadan qəbul yadda saxlanmır.":"Цену указывать обязательно. Без суммы запись не сохраняется.",
 "Qiymət 0 ola bilməz. Seansın pulunu yazın.":"Цена не может быть 0. Укажите стоимость сеанса.",
 "Kim yazıb":"Кто записал",
@@ -956,7 +1103,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112221341";
+var APP_VERSION="20261112224841";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1041,9 +1188,12 @@ function uuid(){
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16)});
 }
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function money(n){return (Math.round((+n||0)*100)/100).toLocaleString("ru-RU",{maximumFractionDigits:2})+" "+CUR}
+var NF=null;try{if(window.Intl&&Intl.NumberFormat)NF=new Intl.NumberFormat("ru-RU",{maximumFractionDigits:2})}catch(e){}
+function money(n){var v=Math.round((+n||0)*100)/100;return (NF?NF.format(v):v.toLocaleString("ru-RU",{maximumFractionDigits:2}))+" "+CUR}
 /* Phones older than Android 7 have no manat sign in their fonts and would draw an empty box. */
 var OLDAND=(function(){var m=/Android (\d+)/.exec(navigator.userAgent||"");return !!(m&&+m[1]<7)})();
+/* Old or weak phones: the same look without soft shadows and glides, so everything stays quick. */
+(function(){try{var lm=OLDAND||(navigator.deviceMemory&&navigator.deviceMemory<=2);if(lm)document.documentElement.className+=" lite"}catch(e){}})();
 var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2705\u00a0",G_NO=OLDAND?"\u2013 ":"\u2717 ";
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function fmtDay(s,mode){
@@ -1347,6 +1497,7 @@ function onChange(pl){
   clearTimeout(rtRender);rtRender=setTimeout(function(){render();redrawCard()},120);
 }
 function startSync(){
+  if(!auth.loaded&&loadCache(auth.user.id))render();
   refresh();
   if(rt||!sb)return;
   try{
@@ -1355,6 +1506,28 @@ function startSync(){
       else if(st==="CHANNEL_ERROR"||st==="TIMED_OUT"||st==="CLOSED")rtDown=true;
     });
   }catch(e){rt=null}
+}
+/* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
+   while the fresh copy loads from the internet a moment later and replaces it. */
+var CK="ruqya.cache.v1",cacheT=null;
+var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","v2"];
+function saveCache(){
+  cacheT=null;if(!auth.user||!auth.loaded||auth.provisional)return;
+  var o={u:auth.user.id,t:Date.now(),s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
+  try{localStorage.setItem(CK,JSON.stringify(o))}catch(e){try{localStorage.removeItem(CK)}catch(e2){}}
+}
+function cacheSoon(){if(!cacheT&&auth.loaded&&!auth.provisional)cacheT=setTimeout(saveCache,2500)}
+function dropCache(){clearTimeout(cacheT);cacheT=null;try{localStorage.removeItem(CK)}catch(e){}}
+function loadCache(uid){
+  try{
+    var o=JSON.parse(localStorage.getItem(CK)||"null");
+    if(!o||!o.s||o.u!==uid||!(Date.now()-o.t<7*864e5)||!Array.isArray(o.s.appts)||!Array.isArray(o.s.readers))return false;
+    var from=winFrom();
+    CFIELDS.forEach(function(k){if(o.s[k]!=null)state[k]=o.s[k]});
+    state.appts=state.appts.filter(function(a){return a&&a.id&&a.date>=from});
+    ["expenses","products","breaks"].forEach(function(k){if(!Array.isArray(state[k]))state[k]=[]});
+    state.loadedFrom="";auth.loaded=true;return true;
+  }catch(e){return false}
 }
 function stopSync(){
   if(rt&&sb){try{sb.removeChannel(rt)}catch(e){}rt=null}
@@ -1407,14 +1580,15 @@ function render(){
   pcache=null;
   if(pz&&Date.now()-pz.t<15000)return;
   if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
-  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();
+  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
+  if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
   byId("tabs").hidden=gate;
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML='<div class="brand"><img src="icon-192.png?v=2" alt=""><h1>Ruqyatz</h1></div>';
+    top.innerHTML='<div class="brand"><img src="logo-192.png" width="96" height="96" alt=""><h1>Ruqyatz</h1></div>';
     main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>'))
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
@@ -1865,7 +2039,7 @@ function readersMain(){
       h+=L('<div class="pay"><div class="head"><b>İşçilər</b><span class="num">')+ids2.length+'</span></div><div>';
       ids2.forEach(function(k){
         var nm='<span>'+esc(state.staff[k]||L("Ad yazılmayıb"))+(k===auth.user.id?L(' (siz)'):'')+'</span>';
-        h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+L('">Dəyiş</button>'):'')+'</div>'});
+        h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+L('">Dəyiş</button>'):'')+'</div>'});
       h+='</div></div>';
     }
   }
@@ -1920,11 +2094,11 @@ function staffForm(){
   var k=sheet.id,role=sheet.role||state.roles[k]||"agent";
   return L('<h2>İşçi')+CLOSE+'</h2>'+
     L('<div class="field"><label for="s-name">Ad</label><input id="s-name" type="text" autocomplete="off" maxlength="60" value="')+esc(sheet.name!=null?sheet.name:(state.staff[k]||""))+'"></div>'+
-    L('<div class="field"><label>Rol</label><div class="seg" style="grid-template-columns:')+(isOwner()?"1fr 1fr 1fr":"1fr 1fr")+'">'+
+    L('<div class="field"><label>Rol</label><div class="seg" style="grid-template-columns:')+"1fr 1fr 1fr"+'">'+
     '<button data-act="st-role" data-id="agent" aria-pressed="'+(role==="agent")+L('">Satış agenti</button>')+
     '<button data-act="st-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button>')+
-    (isOwner()?'<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+L('">Admin</button>'):'')+'</div></div>'+
-    '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız əsas admin verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
+    '<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+L('">Admin</button>')+'</div></div>'+
+    '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız adminlər verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
     L('<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>');
 }
 function fd(v){v=String(v||"").slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(v)?fmtDay(v):""}
@@ -2043,7 +2217,7 @@ function apptForm(){
     '<div class="slots" id="f-slots"></div><p class="hint small" id="f-busy"></p>'+
     L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
-    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="130" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
+    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
     L('<p class="hint small" style="margin:0">* — vacib sahələr</p>')+
     '<p class="err" id="f-err" hidden></p>'+
@@ -2181,7 +2355,7 @@ document.addEventListener("click",function(e){
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
   if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$|pick-color$)/.test(act)&&act!=="save-me-x"){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
-    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";byId("main").scrollTop=0}
+    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";var mm=byId("main");mm.scrollTop=0;mm.classList.remove("enter");void mm.offsetWidth;mm.classList.add("enter")}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
@@ -2283,12 +2457,13 @@ document.addEventListener("click",function(e){
     if(!sheet||sheet.type!=="staff"||!isAdmin())return;
     var sk=sheet.id,sn=val("s-name"),sr=sheet.role||state.roles[sk]||"agent";
     if(!sn)return fail("s-err",L("Adı yazın."));
-    if((sr==="admin"||state.roles[sk]==="admin")&&!isOwner()){if(sr!==state.roles[sk])return fail("s-err",L("Admin rolunu yalnız əsas admin dəyişə bilər."))}
+    if(sk===ADMIN&&sr!=="admin")return fail("s-err",L("Əsas adminin rolu dəyişmir."));
     state.staff[sk]=sn;state.roles[sk]=sr;state.roleSet[sk]=1;
     pending++;writes++;
     sb.from("staff").update({name:sn,role:sr}).eq("id",sk).select().then(function(r){
       pending--;
       if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
+      else if((r.data[0].role||"agent")!==sr){flash(L("Admin rolunu dəyişmək üçün bazada 2026-11-admins.sql faylını bir dəfə işə salın."));refresh()}
     },function(){pending--;unsaved();refresh()});
     closeSheet();
   }
@@ -2467,12 +2642,20 @@ setInterval(tick,60000);
 if(sb){
   sb.auth.onAuthStateChange(function(ev,sess){
     var was=auth.user&&auth.user.id,now=sess&&sess.user&&sess.user.id;
+    var prov=auth.provisional;auth.provisional=false;
     auth.user=sess?sess.user:null;auth.ready=true;
-    if(now&&now!==was){auth.msg="";setTimeout(startSync,0)}
-    if(!now&&was){wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
+    if(now&&(now!==was||prov)){auth.msg="";if(now!==was&&was)stopSync();setTimeout(startSync,0)}
+    if(!now&&was){dropCache();wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
     render();
   });
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);
+  /* Draw the saved data before the sign-in check finishes (it may need the internet to renew the session). */
+  (function(){try{
+    var raw=localStorage.getItem("sb-"+SB_URL.replace(/^https:\/\/|\..*$/g,"")+"-auth-token");if(!raw)return;
+    var ss=JSON.parse(raw),u=ss&&(ss.user||(ss.currentSession&&ss.currentSession.user));
+    if(!u||!u.id||auth.user)return;
+    if(loadCache(u.id)){auth.user=u;auth.ready=true;auth.provisional=true}
+  }catch(e){}})();
 }else{auth.ready=true}
 /* Opened from the widget: "#d=2026-11-14" shows that day, "#new=..." starts a booking. */
 var wantNew=null;

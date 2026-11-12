@@ -52,8 +52,9 @@ public class MonthWidget extends AppWidgetProvider {
     static final float HEAD = 14f, WKROW = 8f, ROW = 13f, TOTAL = HEAD + WKROW + 6 * ROW;
     static final float[] HEAD_COLS = {52f, 15f, 15f, 18f};
 
-    static final int BG = 0xFF17201E, LINE = 0xFF2A3633, INK = 0xFFE6EEEB, MUTED = 0xFF93A39E,
-            ACCENT = 0xFF4BBFA8, ACCENT_INK = 0xFF06211C;
+    // Black and gold, like the app's dark look.
+    static final int BG = 0xFF0D0C0A, LINE = 0xFF2A251B, INK = 0xFFF4ECD8, MUTED = 0xFF9B917C,
+            ACCENT = 0xFFD4B062, ACCENT_INK = 0xFF0B0905;
 
     static TimeZone baku() {
         TimeZone tz = TimeZone.getTimeZone("Asia/Baku");
