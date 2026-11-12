@@ -301,8 +301,9 @@ public class MonthWidget extends AppWidgetProvider {
 
     static String fit(Paint p, String s, float width) {
         if (p.measureText(s) <= width) return s;
-        int n = p.breakText(s, true, Math.max(0, width), null);
-        return s.substring(0, Math.max(0, n));
+        int n = Math.max(0, p.breakText(s, true, Math.max(0, width), null));
+        if (n > 0 && n < s.length() && Character.isHighSurrogate(s.charAt(n - 1))) n--; // never split an emoji
+        return s.substring(0, n);
     }
 
     static Bitmap render(Context ctx, JSONObject data, int off, int wDp, int hDp, float density, long maxPixels) {

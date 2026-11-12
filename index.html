@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112121021";
+var APP_VERSION="20261112124415";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -604,7 +604,7 @@ function pushWidget(){
     var d={};
     Object.keys(by).forEach(function(k){
       var L=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=L.length;
-      d[k]=L.slice(0,4).map(function(a){return [String(a.name).slice(0,24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
+      d[k]=L.slice(0,4).map(function(a){return [cut(String(a.name),24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
     });
     json=JSON.stringify({u:0,f:from,d:d,n:n});
   }
@@ -612,6 +612,8 @@ function pushWidget(){
   if(json===wLast&&Date.now()-wLastT<600000)return;wLast=json;wLastT=Date.now();
   try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()))}catch(e){}
 }
+/* Shortens text without splitting an emoji in half (which would show as a broken box). */
+function cut(t,n){t=t.slice(0,n);var c=t.charCodeAt(t.length-1);return c>=0xD800&&c<=0xDBFF?t.slice(0,-1):t}
 function widgetHelp(){
   if(NATIVE)return "";
   return /RuqyaApp/.test(navigator.userAgent)?"old":/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":"web";
