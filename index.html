@@ -201,8 +201,11 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .axis{position:sticky;left:0;z-index:3;width:40px;flex:none;background:var(--surface)}
 .axis span{position:absolute;right:5px;font-size:10.5px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
 .col{flex:1 0 68px;width:68px;position:relative;border-left:1px solid var(--line);cursor:pointer;
-  background-image:repeating-linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 92px),
-  repeating-linear-gradient(to bottom,transparent 0,transparent 46px,var(--line-soft) 46px,var(--line-soft) 47px,transparent 47px,transparent 92px)}
+  background-image:linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 100%),
+  linear-gradient(to bottom,var(--line-soft) 0,var(--line-soft) 1px,transparent 1px,transparent 100%);background-repeat:repeat-y}
+/* Two fingers on the calendar stretch or shrink the hours, as in Google Calendar; the browser's own page zoom stays off there. */
+.cal{touch-action:pan-x pan-y}
+.cal-body.pinch{will-change:transform}
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
 .ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
@@ -314,7 +317,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112101259";
+var APP_VERSION="20261112102009";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -391,7 +394,9 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 var today=bk().d;
 var ui={tab:"day",date:today,filter:"all",period:"day",q:"",view:"grid"};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
-var DAY0=8*60,DAY1=24*60,HOUR=92,PXM=HOUR/60,COLW=68,AXW=40;
+var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
+try{var hz=+localStorage.getItem("ruqya.hour");if(hz>=HMIN&&hz<=HMAX)HOUR=hz}catch(e){}
+var PXM=HOUR/60;
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
 var PALETTE=["#7b4fd1","#8e24aa","#3949ab","#1a73e8","#0277bd","#00897b","#2e7d32","#5f6b1a","#9e6a00","#d9480f","#c62828","#c2185b","#6d4c41","#546e7a"];
@@ -641,6 +646,7 @@ function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmt
 
 /* ---------- render ---------- */
 function render(){
+  if(pz)return;   /* the calendar is being pinched; it is redrawn when the fingers lift */
   setTimeout(ensureLoaded,0);
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   byId("tabs").hidden=gate;
@@ -731,7 +737,7 @@ function gridMain(){
   h+='</div>';
   var nowM=bk().m;
   rs.forEach(function(r){
-    h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'">';
+    h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+HOUR+'px,100% '+HOUR+'px;background-position:0 0,0 '+(HOUR/2)+'px">';
     state.breaks.forEach(function(b){var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
       h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
@@ -1686,10 +1692,47 @@ document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
   if(e.key==="Escape"&&sheet)closeSheet();
 });
+/* ---------- pinch to zoom the hours ---------- */
+var pz=null;
+function tdist(e){return Math.abs(e.touches[0].clientY-e.touches[1].clientY)}
+document.addEventListener("touchstart",function(e){
+  var c=e.target.closest&&e.target.closest("#cal");
+  if(!c||e.touches.length!==2){return}
+  var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
+  var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+  var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
+  pz={c:c,body:body,d0:Math.max(tdist(e),30),h0:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
+  body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
+},{passive:true});
+document.addEventListener("touchmove",function(e){
+  if(!pz||e.touches.length!==2)return;
+  e.preventDefault();
+  var h=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));pz.k=h/pz.h0;
+  pz.body.style.transform="scaleY("+pz.k+")";
+},{passive:false});
+function endPinch(){
+  if(!pz)return;var p=pz;pz=null;
+  p.body.style.transform="";p.body.classList.remove("pinch");
+  var h=Math.round(p.h0*p.k);
+  if(Math.abs(h-HOUR)>=2){HOUR=h;PXM=HOUR/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
+  render();   /* also draws anything that arrived while the fingers were down */
+  var c=byId("cal");if(c)c.scrollTop=Math.max(0,(p.m-DAY0)*PXM+10+p.hh-p.fy);
+}
+document.addEventListener("touchend",function(e){if(pz&&e.touches.length<2)endPinch()},{passive:true});
+document.addEventListener("touchcancel",function(){if(pz)endPinch()},{passive:true});
+/* On a computer: Ctrl + mouse wheel over the calendar does the same. */
+document.addEventListener("wheel",function(e){
+  var c=e.ctrlKey&&e.target.closest&&e.target.closest("#cal");if(!c)return;
+  e.preventDefault();
+  var rc=c.getBoundingClientRect(),head=c.querySelector(".cal-head"),hh=head?head.offsetHeight:0,fy=e.clientY-rc.top;
+  var m=DAY0+(c.scrollTop+fy-hh-10)/PXM,h=Math.max(HMIN,Math.min(HMAX,Math.round(HOUR*(e.deltaY<0?1.12:1/1.12))));
+  if(h===HOUR)return;HOUR=h;PXM=HOUR/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
+  render();c=byId("cal");if(c)c.scrollTop=Math.max(0,(m-DAY0)*PXM+10+hh-fy);
+},{passive:false});
 var sw=null;
 document.addEventListener("touchstart",function(e){var c=e.target.closest&&e.target.closest("#cal");sw=c&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,c:c}:null},{passive:true});
 document.addEventListener("touchend",function(e){
-  if(!sw||!e.changedTouches.length)return;
+  if(!sw||!e.changedTouches.length||e.touches.length)return;
   var dx=e.changedTouches[0].clientX-sw.x,dy=e.changedTouches[0].clientY-sw.y,c=sw.c;sw=null;
   if(Math.abs(dx)<70||Math.abs(dy)>45||c.scrollWidth>c.clientWidth+2)return;
   ui.date=addDays(ui.date,dx<0?1:-1);render();
