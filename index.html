@@ -159,6 +159,9 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .stt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .stt tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
 .copyb{flex:none;padding:8px 12px;font-size:14px}
+.sugg{display:flex;flex-direction:column;gap:4px;margin-top:6px}.sugg:empty{display:none}
+.sugg button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:15px}
+.sugg small{color:var(--muted);margin-left:6px}.nogap .sugg>*+*{margin-top:4px}
 .sthead{display:flex;flex-direction:column;gap:8px;margin-top:14px}.sthead h3.sec{margin:0}
 .explain{font-size:14px;gap:6px}.explain p{margin:0}
 
@@ -690,7 +693,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Saat</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Время</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
 "<div class=\"field\"><label for=\"f-dur\">Müddət</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность</label><select id=\"f-dur\">",
 " saat":" ч",
-"<div class=\"field\"><label for=\"f-name\">Pasiyentin adı</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" list=\"f-names\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" list=\"f-names\" value=\"",
+"<div class=\"field\"><label for=\"f-name\">Pasiyentin adı</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
 "<div class=\"field\"><label for=\"f-phone\">Telefon</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Телефон</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
 "<div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"field\"><label for=\"f-price\">Цена, ",
 "</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Bilinmirsə, boş saxlayın\" value=\"":"</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Если неизвестно, оставьте пустым\" value=\"",
@@ -848,7 +851,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112164241";
+var APP_VERSION="20261112165331";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1841,7 +1844,6 @@ function apptForm(){
   var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:(ui.sel.length===1&&reader(ui.sel[0])?ui.sel[0]:(rs[0]?rs[0].id:"")));
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
   var pre=sheet.pre||{},pm=patients();
-  var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
     L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">')+opts+'</select></div>'+
@@ -1849,7 +1851,7 @@ function apptForm(){
     L('<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
     (state.hasDur?L('<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
-    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" list="f-names" value="')+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
+    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"><div class="sugg" id="f-sugg"></div></div>'+
     L('<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
     L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L('</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="')+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
@@ -2077,6 +2079,11 @@ document.addEventListener("click",function(e){
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
   }
+  else if(act==="sugg"){
+    var sx=suggList[+b.dataset.i];if(!sx)return;
+    var fn=byId("f-name"),fp=byId("f-phone");if(fn)fn.value=sx.name;if(fp&&sx.phone)fp.value=sx.phone;
+    suggList=[];var sb2=byId("f-sugg");if(sb2)sb2.innerHTML="";return;
+  }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
   else if(act==="view-appt"){if(appt(id))openSheet({type:"view",id:id});return}
@@ -2134,7 +2141,22 @@ document.addEventListener("click",function(e){
   else return;
   render();
 });
+/* Earlier patients as the name is typed: a few quiet buttons under the field, instead of the phone's big
+   dark suggestion list that covered the form. Tapping one fills the name and phone. */
+var suggList=[];
+function nameSugg(){
+  var box=byId("f-sugg"),inp=byId("f-name");if(!box||!inp)return;
+  var q=low(inp.value.trim()),qd=String(inp.value).replace(/\D/g,"");suggList=[];
+  if(q.length>=2){
+    var pm=patients(),first=[],rest=[];
+    Object.keys(pm).forEach(function(k){var x=pm[k],n=low(x.name);if(!x.name||n===q)return;
+      if(n.indexOf(q)===0||n.indexOf(" "+q)>=0)first.push(x);else if(n.indexOf(q)>0||(qd.length>=4&&digits(x.phone).indexOf(qd)>=0))rest.push(x)});
+    suggList=first.concat(rest).slice(0,4);
+  }
+  box.innerHTML=suggList.map(function(x,i){return '<button type="button" data-act="sugg" data-i="'+i+'">'+esc(x.name)+(x.phone?' <small class="num">'+esc(x.phone)+'</small>':'')+'</button>'}).join("");
+}
 document.addEventListener("input",function(e){
+  if(e.target.id==="f-name")nameSugg();
   if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=patientsList()},120)}
 });
 document.addEventListener("change",function(e){
