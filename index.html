@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112124415";
+var APP_VERSION="20261112125858";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -471,7 +471,7 @@ function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.na
 function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
 function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||""}}
-function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:"",created:"",lite:true}}
+function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
 function upsertBy(list,row){for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
 function removeBy(list,id){for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
 /* Checks for which database updates were run: asked again every 30 minutes, not on every load. */
@@ -493,7 +493,7 @@ function refresh(){
     soft(function(){return sb.from("product_sales").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
     probe("appts.duration",function(){return soft(function(){return sb.from("appts").select("duration").limit(1)})}),
     probe("staff.role",function(){return soft(function(){return sb.from("staff").select("role").limit(1)})}),
-    needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status").gte("date",addDays(today,-400)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
+    needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-400)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
     probe("appts.updated_at",function(){return soft(function(){return sb.from("appts").select("updated_at").limit(1)})}),
     probe("audit_log.id",function(){return soft(function(){return sb.from("audit_log").select("id").limit(1)})}),
     probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})})
@@ -584,7 +584,7 @@ function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom;
-  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status").gte("date",addDays(today,-400)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
+  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-400)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
     histLoading=false;if(my!==seq||!auth.user)return;
     state.hist=rows.map(mapLite);state.histLoaded=true;render();redrawCard();
   },function(){histLoading=false;histFail=Date.now()});
@@ -1182,7 +1182,9 @@ function patientSheet(){
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||"Telefon yazılmayıb")+'</p><div>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId);
-    h+='<div class="visit"><span class="num">'+fmtDay(a.date,"y")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</span>'+
+    var wb=a.by?(state.staff[a.by]||"Adsız istifadəçi"):"";
+    h+='<div class="visit"><span class="num">'+fmtDay(a.date,"y")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+
+      (wb?'<small style="display:block;color:var(--muted);font-size:13px">Yazdı: '+esc(wb)+'</small>':'')+'</span>'+
       (a.status==="wait"?'<span class="tag">Gözlənilir</span>':'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>';
   });
   h+='</div><div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+'">Yenidən yaz</button>'+
