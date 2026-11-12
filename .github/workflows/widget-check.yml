@@ -6,6 +6,9 @@ name: Widget check
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -65,3 +68,16 @@ jobs:
           path: |
             widget-*.png
             crash-*.txt
+      - name: Keep the pictures on the "checks" branch
+        if: always()
+        run: |
+          mkdir -p /tmp/out && cp widget-*.png crash-*.txt /tmp/out/ 2>/dev/null || true
+          git config user.name "widget-check" && git config user.email "widget-check@users.noreply.github.com"
+          for i in 1 2 3 4 5; do
+            git fetch origin checks 2>/dev/null && git checkout -B checks origin/checks || git checkout --orphan checks
+            git rm -rq --cached . 2>/dev/null || true
+            mkdir -p out-${{ matrix.api }} && cp /tmp/out/* out-${{ matrix.api }}/ 2>/dev/null || true
+            git add out-${{ matrix.api }} && git commit -qm "widget check ${{ matrix.api }}" || true
+            git push origin checks && break
+            sleep 5
+          done
