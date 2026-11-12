@@ -315,6 +315,17 @@ public class MonthWidget extends AppWidgetProvider {
         return dflt;
     }
 
+    /** A short message in a dark box in the middle of the grid, readable over the day numbers. */
+    static void note(Canvas cv, Paint p, String text, float cx, float cy, float d, float maxW) {
+        p.setTextAlign(Paint.Align.CENTER);
+        p.setTextSize(Math.min(13 * d, maxW / 22f));
+        float tw = Math.min(p.measureText(text), maxW - 24 * d), th = p.getTextSize();
+        p.setColor(BG);
+        cv.drawRoundRect(new RectF(cx - tw / 2 - 12 * d, cy - th * 1.3f, cx + tw / 2 + 12 * d, cy + th * 0.7f), 10 * d, 10 * d, p);
+        p.setColor(MUTED);
+        cv.drawText(fit(p, text, maxW - 24 * d), cx, cy, p);
+    }
+
     static String fit(Paint p, String s, float width) {
         if (p.measureText(s) <= width) return s;
         int n = p.breakText(s, true, Math.max(0, width), null);
@@ -393,9 +404,7 @@ public class MonthWidget extends AppWidgetProvider {
         for (int c = 1; c < 7; c++) cv.drawLine(colW * c, gy, colW * c, H - 10 * d, p);
 
         if (out) {
-            p.setColor(MUTED);
-            p.setTextSize(13 * d);
-            cv.drawText("Görmək üçün Ruqyatz-ı açıb daxil olun", W / 2f, gy + rowH * 3, p);
+            note(cv, p, "Görmək üçün Ruqyatz-ı açıb daxil olun", W / 2f, gy + rowH * 3, d, W);
             return bmp;
         }
 
@@ -471,10 +480,7 @@ public class MonthWidget extends AppWidgetProvider {
 
         // A month older than what the app keeps on the phone: say so instead of showing empty days.
         if (from.length() == 10 && grid[41].compareTo(from) < 0) {
-            p.setTextAlign(Paint.Align.CENTER);
-            p.setColor(MUTED);
-            p.setTextSize(Math.min(13 * d, W / 26f));
-            cv.drawText("Bu ayı görmək üçün tətbiqi açın", W / 2f, gy + rowH * 3, p);
+            note(cv, p, "Bu ayı görmək üçün tətbiqi açın", W / 2f, gy + rowH * 3, d, W);
         }
 
         // When the data was last handed over by the app.
