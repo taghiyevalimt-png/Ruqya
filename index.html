@@ -463,7 +463,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 " Ətraflı statistika üçün işçinin adına toxunun.":" Для подробной статистики нажмите на имя сотрудника.",
 "günlük":"за день",
 "həftəlik":"за неделю",
-"aylıq":"за месяц",
+"aylıq":"месячная",
 "<button class=\"primary\" data-act=\"xlsx\" data-id=\"money\">Pul hesabatı (":"<button class=\"primary\" data-act=\"xlsx\" data-id=\"money\">Денежный отчёт (",
 "<button class=\"primary\" data-act=\"xlsx\" data-id=\"sales\" style=\"background:var(--surface);color:var(--accent);border:1px solid var(--accent)\">Satış hesabatı (agentlər, həftəlik)</button>":"<button class=\"primary\" data-act=\"xlsx\" data-id=\"sales\" style=\"background:var(--surface);color:var(--accent);border:1px solid var(--accent)\">Отчёт продаж (агенты, по неделям)</button>",
 "</b><span>yeni pasiyent</span></div>":"</b><span>новых пациентов</span></div>",
@@ -752,6 +752,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Aylıq statistika":"Месячная статистика",
+"<p><b>Aylıq statistika</b> — həmin aya aid 4 həftə (28 gün). Ay növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir və o andan sonra ekranda yeni ay görünür.</p>":"<p><b>Месячная статистика</b> — 4 недели (28 дней) этого месяца. Месяц заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59), и после этого на экране появляется новый месяц.</p>",
+"Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}.":"Например: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}.",
+"İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək.":"Сейчас на экране {m1}; он остаётся до 23:59 ({b}), потом появится {m2}.",
 "Həftəlik statistika (7 gün)":"Недельная статистика (7 дней)",
 "cümə – cümə axşamı, həftə bitib":"пятница – четверг, неделя закончилась",
 "4 həftə (28 gün), cümə – cümə axşamı":"4 недели (28 дней), пятница – четверг",
@@ -877,7 +881,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112172910";
+var APP_VERSION="20261112174405";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1200,7 +1204,7 @@ function neededFrom(){
   if(!auth.loaded)return null;
   var d=ui.date;
   if(ui.tab==="day")d=addDays(ui.date,-((parse(ui.date).getDay()+6)%7));
-  if(ui.tab==="stats"){var mr=monthRange(),wr=weekRange();d=!mr.none&&mr.s<wr.s?mr.s:wr.s}
+  if(ui.tab==="stats"){var mr=monthRange(),wr=weekRange();d=mr.s<wr.s?mr.s:wr.s}
   if(ui.tab==="cash")d=ui.date;
   return d;
 }
@@ -1492,13 +1496,14 @@ function dayMain(){
 function isSpec(uid){return state.roles[uid]==="specialist"}
 
 /* ---------- Statistics: everything on one page, nothing to open ----------
-   1) bookings made today (live), 2) weekly and 3) "monthly" (4 weeks) sales, money and product tables.
+   1) bookings made today (live), 2) weekly and 3) monthly sales, money and product tables.
    A week is Friday–Thursday. The page shows the last FINISHED week: it changes on Thursday at 23:59, so from
-   Friday 13 November to Thursday 19 November it shows 6–12 November, and from 19 November 23:59 it shows
-   13–19 November. Months are blocks of 4 such weeks (16 Oct – 12 Nov, 13 Nov – 10 Dec, …) and change the same
-   way. Until the very first week / block is over, that one is shown with the days finished so far. */
-var ST_START="2026-11-06";   /* first week of the app */
-var ST_MONTH0="2026-10-16";  /* first 4-week block: 16 Oct – 12 Nov 2026 */
+   Friday 13 November to Thursday 19 November it shows 6–12 November, and from 19 November 23:59 it shows 13–19.
+   A month is the 4 weeks (28 days) that end on the Thursday before the first Friday of the next month:
+   October = 9 Oct – 5 Nov, November = 6 Nov – 3 Dec, December = 4 Dec – 31 Dec 2026. The last finished month
+   is shown, so October stays on screen until 3 December 23:59. */
+var ST_START="2026-11-06";       /* first week of the app */
+var ST_FIRSTM=[2026,9];          /* first month that can be shown: October 2026 */
 function dDiff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
 function friOf(d){return addDays(d,-((parse(d).getDay()-5+7)%7))}
 function thuOf(d){return addDays(d,-((parse(d).getDay()-4+7)%7))}
@@ -1509,11 +1514,21 @@ function weekRange(o){
   var e=addDays(s1,6);
   return{s:s1,e:e,end:e,full:true,canBack:s1>first,canFwd:s1<last,next:addDays(last,13)};
 }
+function firstFri(y,m){var d=ymd(y,m,1);return addDays(d,(5-parse(d).getDay()+7)%7)}
+function monthBlock(y,m){
+  if(m<0){y--;m+=12}if(m>11){y++;m-=12}
+  var nf=firstFri(m===11?y+1:y,(m+1)%12);
+  return{y:y,m:m,s:addDays(nf,-28),e:addDays(nf,-1),end:addDays(nf,-1),full:true,name:cap(MONN[m])+" "+y};
+}
 function monthRange(o){
-  var y=addDays(today,-1),kmax=Math.floor((dDiff(ST_MONTH0,y)-27)/28);
-  if(kmax<0){var e0=addDays(ST_MONTH0,27);return{s:ST_MONTH0,e:e0,end:y<e0?y:e0,full:false,canBack:false,canFwd:false,next:e0}}
-  var k=Math.max(0,kmax-Math.max(0,(o==null?ui.stMOff:o)|0)),s=addDays(ST_MONTH0,28*k);
-  return{s:s,e:addDays(s,27),end:addDays(s,27),full:true,canBack:k>0,canFwd:k<kmax,next:addDays(ST_MONTH0,28*(kmax+2)-1)};
+  var yd=addDays(today,-1),t=parse(today),b=monthBlock(t.getFullYear(),t.getMonth());
+  while(b.e>yd)b=monthBlock(b.y,b.m-1);
+  var latest=b,off=Math.max(0,(o==null?ui.stMOff:o)|0);
+  for(var i=0;i<off;i++){var pb=monthBlock(b.y,b.m-1);if(pb.y*12+pb.m<ST_FIRSTM[0]*12+ST_FIRSTM[1])break;b=pb}
+  var prev=monthBlock(b.y,b.m-1);
+  b.canBack=prev.y*12+prev.m>=ST_FIRSTM[0]*12+ST_FIRSTM[1];b.canFwd=b.s<latest.s;
+  b.nextB=monthBlock(latest.y,latest.m+1);
+  return b;
 }
 function isAgent(k){return state.roles[k]==="agent"}
 /* Rows for one table. kind: today | sales | money | prod. a, b, c are the table's number columns. */
@@ -1564,7 +1579,7 @@ function statsMain(){
   h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
   h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
   h+=statTable("sales",w,"week")+statTable("money",w,"week")+(state.hasProducts?statTable("prod",w,"week"):"");
-  h+=statNav("st-month",m,L("Aylıq statistika (4 həftə)"),m.full?L("4 həftə (28 gün), cümə – cümə axşamı"):L("4 həftə hələ bitməyib"));
+  h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,L("4 həftə (28 gün), cümə – cümə axşamı"));
   h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
   h+=statTable("sales",m,"month")+statTable("money",m,"month")+(state.hasProducts?statTable("prod",m,"month"):"");
   /* The rules, written out so anyone can read them; the examples use the dates on screen. */
@@ -1577,10 +1592,10 @@ function statsMain(){
     '<p>'+(wl.full
       ?tf(L("İndi ekranda {a} həftəsi görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} həftəsi görünəcək."),{a:rg(wl.s,wl.e),b:lw(addDays(wl.e,7)),c:rg(addDays(wl.s,7),addDays(wl.e,7))})
       :tf(L("İlk həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(wl.s,wl.e),b:lw(wl.e),c:lw(addDays(wl.e,7))}))+'</p>'+
-    L("<p><b>Aylıq statistika</b> — 4 həftə (28 gün), o da cümə başlayır, cümə axşamı bitir və eyni qayda ilə dəyişir.</p>")+
-    '<p>'+(ml.full
-      ?tf(L("İndi ekranda {a} görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} görünəcək."),{a:rg(ml.s,ml.e),b:lw(addDays(ml.e,28)),c:rg(addDays(ml.s,28),addDays(ml.e,28))})
-      :tf(L("İndiki 4 həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Bu 4 həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(ml.s,ml.e),b:lw(ml.e),c:lw(addDays(ml.e,28))}))+'</p>'+
+    L("<p><b>Aylıq statistika</b> — həmin aya aid 4 həftə (28 gün). Ay növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir və o andan sonra ekranda yeni ay görünür.</p>")+
+    '<p>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
+      return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
+        tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</p>'+
     L("<p><b>Bu gün yazılan qəbullar</b> — bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da). Hər yeni qəbulda dərhal yenilənir, gecə 00:00-da sıfırlanır.</p>")+
     L("<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>")+
     L("<p><b>Uğurlu</b> — həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</p>")+
@@ -1601,7 +1616,7 @@ function statText(kind,r,per){
   var pad=function(s,n,right){var k=n-clen(s),sp=k>0?new Array(k+1).join(" "):"";return right?sp+s:s+sp};
   var line=function(x){return x.map(function(c,i){return pad(c,w[i],i>0)}).join(" | ")};
   var sep=w.map(function(n){return new Array(n+1).join("-")}).join("-+-");
-  var head=per==="today"?K.t()+" — "+fmtDay(today,"y"):K.t()+" — "+(per==="month"?L("aylıq (4 həftə)"):L("həftəlik"))+"\n"+rangeLabel(r)+(r.full?"":L(" (həftə hələ bitməyib)"));
+  var head=per==="today"?K.t()+" — "+fmtDay(today,"y"):K.t()+" — "+(per==="month"?L("aylıq")+" ("+r.name+")":L("həftəlik"))+"\n"+rangeLabel(r)+(r.full?"":L(" (həftə hələ bitməyib)"));
   var out=[head,"```",line(rows[0]),sep];
   rows.slice(1,-1).forEach(function(x){out.push(line(x))});
   out.push(sep,line(rows[rows.length-1]),"```");
