@@ -42,16 +42,17 @@ jobs:
           disable-animations: true
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
-            J=$(cat android/test-widget.json)
-            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '$J' --ei w 360 --ei h 380 --ef density 3.0"
+            J=$(base64 -w0 android/test-widget.json)
+            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es b64 '$J' --ei w 360 --ei h 380 --ef density 3.0"
             sleep 3
             adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-${{ matrix.api }}.png
-            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '$J' --ei w 250 --ei h 250 --ef density 2.0"
+            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es b64 '$J' --ei w 250 --ei h 250 --ef density 2.0"
             sleep 3
             adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-small-${{ matrix.api }}.png
             adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '{\"out\":1}' --ei w 320 --ei h 340 --ef density 2.5"
             sleep 3
             adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-out-${{ matrix.api }}.png
+            adb exec-out run-as az.ruqya.zapis cat files/widget_test.txt > error-${{ matrix.api }}.txt || true
             adb logcat -c
             adb shell am start -W -a az.ruqya.zapis.OPEN -d ruqya://day/2026-11-14 --es what day --es date 2026-11-14 -n az.ruqya.zapis/.MainActivity
             sleep 6
@@ -71,13 +72,13 @@ jobs:
       - name: Keep the pictures on the "checks" branch
         if: always()
         run: |
-          mkdir -p /tmp/out && cp widget-*.png crash-*.txt /tmp/out/ 2>/dev/null || true
+          mkdir -p /tmp/out && cp widget-*.png crash-*.txt error-*.txt /tmp/out/ 2>/dev/null || true
           git config user.name "widget-check" && git config user.email "widget-check@users.noreply.github.com"
           for i in 1 2 3 4 5; do
-            git fetch origin checks 2>/dev/null && git checkout -B checks origin/checks || git checkout --orphan checks
+            git checkout --orphan checks-${{ matrix.api }}
             git rm -rq --cached . 2>/dev/null || true
             mkdir -p out-${{ matrix.api }} && cp /tmp/out/* out-${{ matrix.api }}/ 2>/dev/null || true
             git add out-${{ matrix.api }} && git commit -qm "widget check ${{ matrix.api }}" || true
-            git push origin checks && break
+            git push -f origin checks-${{ matrix.api }} && break
             sleep 5
           done
