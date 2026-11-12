@@ -236,6 +236,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev span.ph{white-space:normal;overflow-wrap:anywhere}
 .ev>*{flex-shrink:0}
+.ev.tight b{-webkit-line-clamp:1;white-space:nowrap;text-overflow:ellipsis;display:block}.ev.tight span,.ev.tight span.by{white-space:nowrap;text-overflow:ellipsis}
 .ev span.by{white-space:normal;letter-spacing:0;font-weight:600;opacity:1;line-height:1.15;margin-top:1px}
 .ev.noshow{opacity:.6;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 5px,transparent 5px,transparent 10px)}
 .ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
@@ -755,6 +756,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Seans ən az 45 dəqiqə olmalıdır. Müddəti dəyişin.":"Сеанс должен быть не короче 45 минут. Измените длительность.",
 "Emoji istifadəsi qadağandır. Zəhmət olmasa, emojisiz yazın.":"Эмодзи использовать запрещено. Пожалуйста, пишите без эмодзи.",
 "Qaydalar":"Правила",
 "<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>":"<li><b>Неделя</b> начинается в пятницу и заканчивается в четверг (7 дней).</li>",
@@ -917,7 +919,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112192219";
+var APP_VERSION="20261112203606";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1033,23 +1035,16 @@ function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}
 function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
 /* The hours are always drawn at the smallest size that still fits every block's text; pinching does not change it. */
-var ZOOM=false;HOUR=HMIN;
+var ZOOM=false;HOUR=74;
 var PXM=HOUR/60;
-/* However far the hours are pinched smaller, every block keeps room for the name, time, number and who wrote it:
-   the day's shortest session decides the smallest hour height, and after drawing, any block whose text still
-   does not fit (a long name, narrow columns) makes that day a little taller. */
-var MINH=56,fitMin={},fitPass=0,fitDate="",curMinHour=HMIN;
-function dayMinHour(day){
-  var md=0;day.forEach(function(a){if(a.status==="cancel")return;var d=a.dur||90;if(!md||d<md)md=d});if(!md)md=90;
-  return Math.min(480,Math.max(HMIN,Math.ceil(MINH*60/md),fitMin[ui.date]||0));
-}
+/* One fixed scale everywhere: a 45-minute session (the shortest allowed) is the standard block, about 53 px,
+   with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
+   so narrow that a block's text would not fit, that block alone is drawn tighter (one line each, cut with …). */
+var MIN_DUR=45,STD_HOUR=74,curMinHour=STD_HOUR;
+function dayMinHour(){return STD_HOUR}
 function fitBlocks(){
-  var evs=document.querySelectorAll("#cal .ev:not(.cancel)"),f=1;
-  for(var i=0;i<evs.length;i++){var el=evs[i],have=el.clientHeight,need=el.scrollHeight;if(have>0&&need>have+1)f=Math.max(f,(need+2)/have)}
-  if(fitDate!==ui.date){fitDate=ui.date;fitPass=0}
-  if(f<=1){fitPass=0;return}
-  if(fitPass>=3||PXM*60>=480)return;   /* never loop: at most three corrections for a day */
-  fitPass++;fitMin[ui.date]=Math.min(480,Math.ceil(PXM*60*f)+1);render();
+  var evs=document.querySelectorAll("#cal .ev:not(.cancel)");
+  for(var i=0;i<evs.length;i++){var el=evs[i];if(el.clientHeight>0&&el.scrollHeight>el.clientHeight+1)el.classList.add("tight")}
 }
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
@@ -1990,7 +1985,7 @@ function apptForm(){
     L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis (vacibdir)</label><select id="f-reader">')+opts+'</select></div>'+
     L('<div class="field"><label for="f-date">Tarix (vacibdir)</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
     L('<div class="two"><div class="field"><label for="f-time">Saat (vacibdir)</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
-    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət (vacibdir)</label><select id="f-dur">')+(a||pre.dur?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||0);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət (vacibdir)</label><select id="f-dur">')+(a||pre.dur?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+[45,60,90,120,150,180].concat(a&&[45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||0);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     L('<div class="field"><label for="f-name">Pasiyentin adı (vacibdir)</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Mobil nömrə (vacibdir)</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
@@ -2019,6 +2014,7 @@ function saveAppt(){
   if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçmək vacibdir. Saat olmadan qəbul yadda saxlanmır."));
   if(state.hasDur&&!(+val("f-dur")>0))return fail("f-err",L("Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır."));
+  if(state.hasDur&&+val("f-dur")<MIN_DUR)return fail("f-err",L("Seans ən az 45 dəqiqə olmalıdır. Müddəti dəyişin."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
   if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
   var pd=phone.replace(/\D/g,"");
