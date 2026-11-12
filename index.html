@@ -233,6 +233,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
 .ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
+.ev span.ph{white-space:normal;overflow-wrap:anywhere}
 .ev span.by{white-space:normal;letter-spacing:0;font-weight:600;opacity:1;line-height:1.15;margin-top:1px}
 .ev.noshow{opacity:.6;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 5px,transparent 5px,transparent 10px)}
 .ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
@@ -886,7 +887,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112181118";
+var APP_VERSION="20261112181349";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1297,6 +1298,15 @@ function patients(){
   });
   pcache=m;return m;
 }
+/* The whole number with its operator prefix, short enough for a calendar block: Azerbaijani numbers as
+   "055 995 77 76" (also when written as +994…), anything else exactly as typed. */
+function phoneShort(p){
+  var d=String(p||"").replace(/\D/g,"");
+  if(d.length===12&&d.indexOf("994")===0)d="0"+d.slice(3);
+  else if(d.length===9&&d.charAt(0)!=="0")d="0"+d;
+  if(d.length===10&&d.charAt(0)==="0")return d.slice(0,3)+" "+d.slice(3,6)+" "+d.slice(6,8)+" "+d.slice(8);
+  return String(p||"");
+}
 function waLink(phone,text){
   var d=String(phone||"").replace(/\D/g,"");
   if(d.slice(0,2)==="00")d=d.slice(2);
@@ -1416,7 +1426,7 @@ function gridMain(){
       h+='<button class="ev '+stOf(a)+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
         '<b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
-        (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
+        (ht>64&&a.phone?'<span class="num ph">'+esc(phoneShort(a.phone))+'</span>':'')+
         (ht>76&&(state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
         '</button>';
     });
