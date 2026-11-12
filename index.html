@@ -330,7 +330,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112132457";
+var APP_VERSION="20261112133154";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1179,7 +1179,7 @@ function patientsList(){
 }
 function patientSheet(){
   var p=patients()[sheet.id];if(!p)return '<h2>Pasiyent'+CLOSE+'</h2>';
-  var wa=waLink(p.phone,"");
+  var wa=waLink(p.phone,""),tel=String(p.phone||"").replace(/[^\d+]/g,"");
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||"Telefon yazılmayıb")+'</p><div>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId);
@@ -1193,6 +1193,7 @@ function patientSheet(){
   var next=p.list.filter(function(a){return !a.lite&&a.status==="wait"&&a.date>=today&&appt(a.id)})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})[0];
   h+='</div><div class="btns">'+(next?'<button class="primary" data-act="edit-appt" data-id="'+esc(next.id)+'">Dəyiş</button>':'<button class="primary" data-act="repeat" data-id="'+esc(p.key)+'">Yeni qəbul yaz</button>')+
+    (tel.replace(/\D/g,"").length>=5?'<a class="wa" href="tel:'+esc(tel)+'">Zəng et</a>':'')+
     (wa?'<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>'+
     (next?'<p class="hint">«Dəyiş» ən yaxın qəbulu ('+fmtDay(next.date)+', '+esc(next.time)+') dəyişir. Başqa qəbulu dəyişmək üçün siyahıda ona toxunun. <button class="link" style="padding:0" data-act="repeat" data-id="'+esc(p.key)+'">Yeni qəbul yaz</button></p>':'');
   return h;
