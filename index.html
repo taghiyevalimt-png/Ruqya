@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112114602";
+var APP_VERSION="20261112114637";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -584,7 +584,7 @@ function ensureHist(){
 }
 /* ---------- Android home-screen widget ---------- */
 var NATIVE=(function(){try{return window.RuqyaApp&&typeof window.RuqyaApp.setWidgetData==="function"?window.RuqyaApp:null}catch(e){return null}})();
-var wTimer=null,wLast="";
+var wTimer=null,wLast="",wLastT=0;
 function widgetSoon(){if(!NATIVE)return;clearTimeout(wTimer);wTimer=setTimeout(pushWidget,1500)}
 function pushWidget(){
   if(!NATIVE)return;
@@ -601,7 +601,8 @@ function pushWidget(){
     });
     json=JSON.stringify({u:0,f:from,d:d,n:n});
   }
-  if(json===wLast)return;wLast=json;
+  /* Unchanged data is handed over again every 10 minutes, so "Yeniləndi" on the widget stays honest. */
+  if(json===wLast&&Date.now()-wLastT<600000)return;wLast=json;wLastT=Date.now();
   try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()))}catch(e){}
 }
 function widgetHelp(){
