@@ -310,7 +310,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112083555";
+var APP_VERSION="20261112084742";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -326,7 +326,7 @@ function checkUpdate(){
     });
   };
   /* A 15-byte file first, to save mobile data; the page itself only if that file is missing. */
-  fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){
+  fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){try{setSkew(r.headers.get("date"))}catch(e){}return r.ok?r.text():""}).then(function(t){
     t=t.replace(/\s/g,"");
     if(/^\d{14}$/.test(t))apply(t);else return page();
   }).catch(function(){});
@@ -346,8 +346,15 @@ function ymd(y,m,d){return iso(new Date(y,m,d,12))}
 function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)}
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
    was made are taken from it, so a phone set to another time zone shows the same thing as everyone else. */
-var TZ=4*3600000;
-function bk(t){var d=new Date((t==null?Date.now():t)+TZ);
+var TZ=4*3600000,skew=0;
+/* Old phones often have a wrong clock. The difference from the server's clock is measured when the app
+   checks for updates, and "today" and the now-line are corrected by it. */
+function setSkew(h){
+  var t=h?Date.parse(h):NaN;if(isNaN(t))return;
+  var d=t-Date.now();d=Math.abs(d)>90000?d:0;
+  if(d!==skew){skew=d;if(rollDay())render()}
+}
+function bk(t){var d=new Date((t==null?Date.now()+skew:t)+TZ);
   return{d:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0"),m:d.getUTCHours()*60+d.getUTCMinutes()}}
 function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&d>="2020-01-01"&&d<="2099-12-31"&&iso(parse(d))===d}
 var MAXSUM=1000000;
@@ -400,7 +407,7 @@ var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;
 function blank(){return{hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
-var offline=false,seq=0,rt=null,rtTimer=null,msgTimer=null;
+var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
 
 function flash(m){
   auth.msg=m;render();clearTimeout(msgTimer);
@@ -1450,6 +1457,7 @@ document.addEventListener("click",function(e){
     return;
   }
   if(!auth.user)return;
+  if(offline&&navigator.onLine!==false){offline=false;refresh()}
   if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$)/.test(act)&&act!=="save-me-x"){flash("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun.");return}
   if(act==="tab"){
     if(ui.tab!==b.dataset.tab){ui.tab=b.dataset.tab;byId("top").innerHTML="";byId("main").scrollTop=0}
@@ -1675,6 +1683,7 @@ function rollDay(){
 }
 function tick(){
   var turned=rollDay();
+  if(offline&&navigator.onLine!==false){offline=false;turned=true;refresh()}
   if(document.hidden)return;
   if(turned||(ui.tab==="day"&&ui.view==="grid"&&ui.date===today&&!sheet))render();
   if(offline)return;
