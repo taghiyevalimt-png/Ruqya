@@ -752,8 +752,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"{w} həftə ({d} gün), cümə – cümə axşamı":"{w} нед. ({d} дн.), пятница – четверг",
 "Aylıq statistika":"Месячная статистика",
-"<p><b>Aylıq statistika</b> — həmin aya aid 4 həftə (28 gün). Ay növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir və o andan sonra ekranda yeni ay görünür.</p>":"<p><b>Месячная статистика</b> — 4 недели (28 дней) этого месяца. Месяц заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59), и после этого на экране появляется новый месяц.</p>",
+"<p><b>Aylıq statistika</b> — ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — beləcə heç bir gün itmir. Ay bitəndən sonra ekranda yeni ay görünür.</p>":"<p><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — это 4 недели, если 5 — 5 недель, так что ни один день не теряется. Когда месяц закончился, на экране появляется новый.</p>",
 "Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}.":"Например: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}.",
 "İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək.":"Сейчас на экране {m1}; он остаётся до 23:59 ({b}), потом появится {m2}.",
 "Həftəlik statistika (7 gün)":"Недельная статистика (7 дней)",
@@ -881,7 +882,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112174405";
+var APP_VERSION="20261112175649";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1499,9 +1500,10 @@ function isSpec(uid){return state.roles[uid]==="specialist"}
    1) bookings made today (live), 2) weekly and 3) monthly sales, money and product tables.
    A week is Friday–Thursday. The page shows the last FINISHED week: it changes on Thursday at 23:59, so from
    Friday 13 November to Thursday 19 November it shows 6–12 November, and from 19 November 23:59 it shows 13–19.
-   A month is the 4 weeks (28 days) that end on the Thursday before the first Friday of the next month:
-   October = 9 Oct – 5 Nov, November = 6 Nov – 3 Dec, December = 4 Dec – 31 Dec 2026. The last finished month
-   is shown, so October stays on screen until 3 December 23:59. */
+   A month runs from its first Friday to the Thursday before the next month's first Friday, so no day is ever
+   left out: 4 weeks, or 5 when the month has five Fridays. October = 2 Oct – 5 Nov, November = 6 Nov – 3 Dec,
+   December = 4 Dec – 31 Dec 2026, January = 1 Jan – 4 Feb 2027. The last finished month is shown, so October
+   stays on screen until 3 December 23:59. */
 var ST_START="2026-11-06";       /* first week of the app */
 var ST_FIRSTM=[2026,9];          /* first month that can be shown: October 2026 */
 function dDiff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
@@ -1514,11 +1516,12 @@ function weekRange(o){
   var e=addDays(s1,6);
   return{s:s1,e:e,end:e,full:true,canBack:s1>first,canFwd:s1<last,next:addDays(last,13)};
 }
+function tf(t,o){return t.replace(/\{(\w+)\}/g,function(_,k){return o[k]})}
 function firstFri(y,m){var d=ymd(y,m,1);return addDays(d,(5-parse(d).getDay()+7)%7)}
 function monthBlock(y,m){
   if(m<0){y--;m+=12}if(m>11){y++;m-=12}
-  var nf=firstFri(m===11?y+1:y,(m+1)%12);
-  return{y:y,m:m,s:addDays(nf,-28),e:addDays(nf,-1),end:addDays(nf,-1),full:true,name:cap(MONN[m])+" "+y};
+  var nf=firstFri(m===11?y+1:y,(m+1)%12),st=firstFri(y,m);
+  return{y:y,m:m,s:st,e:addDays(nf,-1),end:addDays(nf,-1),full:true,weeks:dDiff(st,nf)/7,name:cap(MONN[m])+" "+y};
 }
 function monthRange(o){
   var yd=addDays(today,-1),t=parse(today),b=monthBlock(t.getFullYear(),t.getMonth());
@@ -1579,11 +1582,10 @@ function statsMain(){
   h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
   h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
   h+=statTable("sales",w,"week")+statTable("money",w,"week")+(state.hasProducts?statTable("prod",w,"week"):"");
-  h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,L("4 həftə (28 gün), cümə – cümə axşamı"));
+  h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,tf(L("{w} həftə ({d} gün), cümə – cümə axşamı"),{w:m.weeks,d:m.weeks*7}));
   h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
   h+=statTable("sales",m,"month")+statTable("money",m,"month")+(state.hasProducts?statTable("prod",m,"month"):"");
   /* The rules, written out so anyone can read them; the examples use the dates on screen. */
-  var tf=function(t,o){return t.replace(/\{(\w+)\}/g,function(_,k){return o[k]})};
   var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
   var lw=function(d){var t=fmtDay(d,"w");return t.charAt(0).toLowerCase()+t.slice(1)};
   h+='<h3 class="sec">'+L("Qaydalar və terminlər")+'</h3><div class="pay explain">'+
@@ -1592,7 +1594,7 @@ function statsMain(){
     '<p>'+(wl.full
       ?tf(L("İndi ekranda {a} həftəsi görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} həftəsi görünəcək."),{a:rg(wl.s,wl.e),b:lw(addDays(wl.e,7)),c:rg(addDays(wl.s,7),addDays(wl.e,7))})
       :tf(L("İlk həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(wl.s,wl.e),b:lw(wl.e),c:lw(addDays(wl.e,7))}))+'</p>'+
-    L("<p><b>Aylıq statistika</b> — həmin aya aid 4 həftə (28 gün). Ay növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir və o andan sonra ekranda yeni ay görünür.</p>")+
+    L("<p><b>Aylıq statistika</b> — ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — beləcə heç bir gün itmir. Ay bitəndən sonra ekranda yeni ay görünür.</p>")+
     '<p>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
       return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
         tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</p>'+
