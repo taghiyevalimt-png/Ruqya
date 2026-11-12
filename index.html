@@ -234,6 +234,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev span.ph{white-space:normal;overflow-wrap:anywhere}
+.ev>*{flex-shrink:0}
 .ev span.by{white-space:normal;letter-spacing:0;font-weight:600;opacity:1;line-height:1.15;margin-top:1px}
 .ev.noshow{opacity:.6;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 5px,transparent 5px,transparent 10px)}
 .ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
@@ -891,7 +892,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112181804";
+var APP_VERSION="20261112182252";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1008,6 +1009,22 @@ function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
 try{var hz=+localStorage.getItem("ruqya.hour");if(hz>=HMIN&&hz<=HMAX)HOUR=hz}catch(e){}
 var PXM=HOUR/60;
+/* However far the hours are pinched smaller, every block keeps room for the name, time, number and who wrote it:
+   the day's shortest session decides the smallest hour height, and after drawing, any block whose text still
+   does not fit (a long name, narrow columns) makes that day a little taller. */
+var MINH=74,fitMin={},fitPass=0,fitDate="",curMinHour=HMIN;
+function dayMinHour(day){
+  var md=0;day.forEach(function(a){if(a.status==="cancel")return;var d=a.dur||90;if(!md||d<md)md=d});if(!md)md=90;
+  return Math.min(480,Math.max(HMIN,Math.ceil(MINH*60/md),fitMin[ui.date]||0));
+}
+function fitBlocks(){
+  var evs=document.querySelectorAll("#cal .ev:not(.cancel)"),f=1;
+  for(var i=0;i<evs.length;i++){var el=evs[i],have=el.clientHeight,need=el.scrollHeight;if(have>0&&need>have+1)f=Math.max(f,(need+2)/have)}
+  if(fitDate!==ui.date){fitDate=ui.date;fitPass=0}
+  if(f<=1){fitPass=0;return}
+  if(fitPass>=3||PXM*60>=480)return;   /* never loop: at most three corrections for a day */
+  fitPass++;fitMin[ui.date]=Math.min(480,Math.ceil(PXM*60*f)+1);render();
+}
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
 var PALETTE=["#7b4fd1","#8e24aa","#3949ab","#1a73e8","#0277bd","#00897b","#2e7d32","#5f6b1a","#9e6a00","#d9480f","#c62828","#c2185b","#6d4c41","#546e7a"];
@@ -1363,6 +1380,7 @@ function render(){
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
   else{top.innerHTML=L("<h1>Ayarlar</h1>");main.innerHTML=banner+readersMain()}
   if(grid){
+    setTimeout(fitBlocks,0);
     cal=byId("cal");
     if(cal){
       if(keep&&keep.d===ui.date){cal.scrollTop=keep.t;cal.scrollLeft=keep.l}
@@ -1406,6 +1424,7 @@ function gridMain(){
   state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&shown(a.readerId)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
   var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
   var h=noPriceBox();
+  curMinHour=dayMinHour(day);var hEff=Math.max(HOUR,curMinHour);PXM=hEff/60;
   var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
   h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch" role="button" data-act="color" data-id="'+esc(r.id)+L('" title="Rəngi dəyiş"><i style="background:')+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
@@ -1414,7 +1433,7 @@ function gridMain(){
   h+='</div>';
   var nowM=bk().m;
   rs.forEach(function(r){
-    h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+HOUR+'px,100% '+HOUR+'px;background-position:0 0,0 '+(HOUR/2)+'px">';
+    h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+hEff+'px,100% '+hEff+'px;background-position:0 0,0 '+(hEff/2)+'px">';
     state.breaks.forEach(function(b){var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
       h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
@@ -1429,9 +1448,9 @@ function gridMain(){
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+stOf(a)+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
         '<b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
-        (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
-        (ht>64&&a.phone?'<span class="num ph">'+esc(phoneShort(a.phone))+'</span>':'')+
-        (ht>76&&(state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
+        '<span class="num">'+esc(a.time)+'</span>'+
+        (a.phone?'<span class="num ph">'+esc(phoneShort(a.phone))+'</span>':'')+
+        ((state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
         '</button>';
     });
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
@@ -2253,14 +2272,15 @@ document.addEventListener("touchstart",function(e){
   var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
   var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
-  pz={t:Date.now(),c:c,body:body,d0:Math.max(tdist(e),30),h0:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
+  pz={t:Date.now(),c:c,body:body,d0:Math.max(tdist(e),30),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
   if(!pz||e.touches.length!==2)return;
   if(Date.now()-pz.t>15000){endPinch();return}
   e.preventDefault();
-  var h=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));pz.k=h/pz.h0;
+  pz.raw=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));
+  var h=Math.max(curMinHour,pz.raw);pz.k=h/pz.h0;
   pz.body.style.transform="scaleY("+pz.k+")";
 },{passive:false});
 /* Safari's own pinch gesture must not zoom the page while the calendar is being pinched. */
@@ -2268,8 +2288,8 @@ document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.targ
 function endPinch(){
   if(!pz)return;var p=pz;pz=null;
   p.body.style.transform="";p.body.classList.remove("pinch");
-  var h=Math.round(p.h0*p.k);
-  if(Math.abs(h-HOUR)>=2){HOUR=h;PXM=HOUR/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
+  var h=Math.round(p.raw);
+  if(Math.abs(h-HOUR)>=2){HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
   render();   /* also draws anything that arrived while the fingers were down */
   var c=byId("cal");if(c)c.scrollTop=Math.max(0,(p.m-DAY0)*PXM+10+p.hh-p.fy);
 }
@@ -2280,8 +2300,8 @@ document.addEventListener("wheel",function(e){
   var c=e.ctrlKey&&e.target.closest&&e.target.closest("#cal");if(!c)return;
   e.preventDefault();
   var rc=c.getBoundingClientRect(),head=c.querySelector(".cal-head"),hh=head?head.offsetHeight:0,fy=e.clientY-rc.top;
-  var m=DAY0+(c.scrollTop+fy-hh-10)/PXM,h=Math.max(HMIN,Math.min(HMAX,Math.round(HOUR*(e.deltaY<0?1.12:1/1.12))));
-  if(h===HOUR)return;HOUR=h;PXM=HOUR/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
+  var m=DAY0+(c.scrollTop+fy-hh-10)/PXM,base=Math.max(HOUR,curMinHour),h=Math.max(HMIN,Math.min(HMAX,Math.round(base*(e.deltaY<0?1.12:1/1.12))));
+  if(h===HOUR||(h<curMinHour&&HOUR<=curMinHour))return;HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
   render();c=byId("cal");if(c)c.scrollTop=Math.max(0,(m-DAY0)*PXM+10+hh-fy);
 },{passive:false});
 var sw=null,qTimer=null;
