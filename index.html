@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112120324";
+var APP_VERSION="20261112121021";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -536,6 +536,7 @@ function refresh(){
 }
 /* Cards that only show data are redrawn when data changes elsewhere; forms with typing in them are left alone. */
 function redrawCard(){
+  pcache=null;
   if(!sheet)return;
   if(sheet.type==="appt"){slotGrid();return}
   var f={view:viewSheet,agent:agentSheet,patient:patientSheet}[sheet.type];
@@ -698,7 +699,10 @@ function range(){
   return{s:s,e:e};
 }
 function pkey(a){var d=digits(a.phone);return d.length>=7?"p"+d:"n"+low(String(a.name).trim())}
+/* Grouping a year of visits by patient is the heaviest step; it is reused until the next redraw. */
+var pcache=null;
 function patients(){
+  if(pcache)return pcache;
   var m={},seen={};
   state.appts.forEach(function(a){seen[a.id]=1});
   state.appts.concat((state.hist||[]).filter(function(a){return !seen[a.id]})).forEach(function(a){
@@ -707,7 +711,7 @@ function patients(){
     if(a.status==="paid"&&(!p.first||a.date<p.first))p.first=a.date;
     if(a.date>=p.last){p.last=a.date;p.name=a.name;if(a.phone)p.phone=a.phone}
   });
-  return m;
+  pcache=m;return m;
 }
 function waLink(phone,text){
   var d=String(phone||"").replace(/\D/g,"");
@@ -723,6 +727,7 @@ function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmt
 
 /* ---------- render ---------- */
 function render(){
+  pcache=null;
   if(pz&&Date.now()-pz.t<15000)return;
   if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
   setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();
@@ -1799,7 +1804,7 @@ document.addEventListener("toggle",function(e){
   if(e.target.classList&&e.target.classList.contains("more")&&e.target.closest("#main"))ui.more=e.target.open;
 },true);
 document.addEventListener("input",function(e){
-  if(e.target.id==="q"){ui.q=e.target.value;var pl=byId("plist");if(pl)pl.innerHTML=patientsList()}
+  if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=patientsList()},120)}
 });
 document.addEventListener("change",function(e){
   var t=e.target.id;
@@ -1853,7 +1858,7 @@ document.addEventListener("wheel",function(e){
   if(h===HOUR)return;HOUR=h;PXM=HOUR/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
   render();c=byId("cal");if(c)c.scrollTop=Math.max(0,(m-DAY0)*PXM+10+hh-fy);
 },{passive:false});
-var sw=null;
+var sw=null,qTimer=null;
 document.addEventListener("touchstart",function(e){var c=e.target.closest&&e.target.closest("#cal");sw=c&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,c:c}:null},{passive:true});
 document.addEventListener("touchend",function(e){
   if(!sw||!e.changedTouches.length||e.touches.length)return;
