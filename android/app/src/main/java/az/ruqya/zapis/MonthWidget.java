@@ -1,6 +1,7 @@
 package az.ruqya.zapis;
 
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -38,6 +39,7 @@ public class MonthWidget extends AppWidgetProvider {
     static final String ACTION_PREV = "az.ruqya.zapis.WIDGET_PREV";
     static final String ACTION_NEXT = "az.ruqya.zapis.WIDGET_NEXT";
     static final String ACTION_TEST = "az.ruqya.zapis.WIDGET_TEST";
+    static final String ACTION_BIND_TEST = "az.ruqya.zapis.WIDGET_BIND_TEST";
 
     static final String[] MON = {"Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Avqust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"};
     static final String[] WD = {"B.e", "Ç.a", "Ç", "C.a", "C", "Ş", "B"};
@@ -89,6 +91,10 @@ public class MonthWidget extends AppWidgetProvider {
             }
             return;
         }
+        if (ACTION_BIND_TEST.equals(a)) {
+            bindTest(ctx, intent);
+            return;
+        }
         if (ACTION_TEST.equals(a)) {
             // Used by the automatic build check: draws the widget with sample data into a picture file.
             try {
@@ -97,7 +103,7 @@ public class MonthWidget extends AppWidgetProvider {
                 if (b64 != null) json = new String(android.util.Base64.decode(b64, android.util.Base64.DEFAULT), "UTF-8");
                 JSONObject d = json == null ? null : new JSONObject(json);
                 Bitmap bmp = render(ctx, d, intent.getIntExtra("off", 0),
-                        intent.getIntExtra("w", 360), intent.getIntExtra("h", 380), intent.getFloatExtra("density", 3f));
+                        intent.getIntExtra("w", 360), intent.getIntExtra("h", 380), intent.getFloatExtra("density", 3f), 2500000L);
                 File f = new File(ctx.getFilesDir(), "widget_test.png");
                 FileOutputStream out = new FileOutputStream(f);
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -113,6 +119,78 @@ public class MonthWidget extends AppWidgetProvider {
             return;
         }
         super.onReceive(ctx, intent);
+    }
+
+    /**
+     * Used by the automatic build check: places a real widget instance (like a home screen would),
+     * sends it real updates at several sizes and month shifts, and writes what happened to a file.
+     */
+    static void bindTest(Context ctx, Intent intent) {
+        StringBuilder log = new StringBuilder();
+        AppWidgetHost host = new AppWidgetHost(ctx, 4242);
+        int wid = -1;
+        try {
+            String b64 = intent.getStringExtra("b64");
+            if (b64 != null) {
+                String json = new String(android.util.Base64.decode(b64, android.util.Base64.DEFAULT), "UTF-8");
+                ctx.getSharedPreferences(PREFS, 0).edit().putString("data", json).commit();
+            }
+            AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+            wid = host.allocateAppWidgetId();
+            boolean bound = mgr.bindAppWidgetIdIfAllowed(wid, new ComponentName(ctx, MonthWidget.class));
+            log.append("bound=").append(bound).append('\n');
+            int[][] sizes = {{250, 250}, {360, 380}, {420, 520}, {600, 760}, {900, 1000}};
+            for (int[] sz : sizes) {
+                Bundle o = new Bundle();
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, sz[0]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, sz[0]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, sz[1]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, sz[1]);
+                mgr.updateAppWidgetOptions(wid, o);
+                try {
+                    drawOrThrow(ctx, mgr, wid);
+                    log.append("size ").append(sz[0]).append('x').append(sz[1]).append(": ok\n");
+                } catch (Throwable t) {
+                    log.append("size ").append(sz[0]).append('x').append(sz[1]).append(": FAIL ").append(t).append('\n');
+                }
+            }
+            for (int k = 0; k < 30; k++) {
+                Intent i = new Intent(k < 15 ? ACTION_NEXT : ACTION_PREV);
+                i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, wid);
+                new MonthWidget().onReceive(ctx, i);
+            }
+            log.append("shift off=").append(ctx.getSharedPreferences(PREFS, 0).getInt("off" + wid, 99)).append('\n');
+            try {
+                drawOrThrow(ctx, mgr, wid);
+                log.append("after shifts: ok\n");
+            } catch (Throwable t) {
+                log.append("after shifts: FAIL ").append(t).append('\n');
+            }
+            ctx.getSharedPreferences(PREFS, 0).edit().putString("data", "{\"out\":1}").commit();
+            drawOrThrow(ctx, mgr, wid);
+            log.append("logged out: ok\n");
+            ctx.getSharedPreferences(PREFS, 0).edit().putString("data", "not json").commit();
+            drawOrThrow(ctx, mgr, wid);
+            log.append("broken data: ok\n");
+            ctx.getSharedPreferences(PREFS, 0).edit().remove("data").commit();
+            drawOrThrow(ctx, mgr, wid);
+            log.append("no data: ok\n");
+        } catch (Throwable t) {
+            log.append("FAIL ").append(t).append('\n');
+        } finally {
+            if (wid != -1) {
+                try {
+                    host.deleteAppWidgetId(wid);
+                } catch (Throwable ignored) {
+                }
+            }
+            try {
+                java.io.FileWriter fw = new java.io.FileWriter(new File(ctx.getFilesDir(), "widget_bind.txt"));
+                fw.write(log.toString());
+                fw.close();
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     /** Redraws every widget on the home screen; called when the app hands over new data. */
@@ -159,6 +237,14 @@ public class MonthWidget extends AppWidgetProvider {
 
     static void draw(Context ctx, AppWidgetManager mgr, int id) {
         try {
+            drawOrThrow(ctx, mgr, id);
+        } catch (Throwable ignored) {
+            // A drawing problem must never crash the home screen.
+        }
+    }
+
+    static void drawOrThrow(Context ctx, AppWidgetManager mgr, int id) {
+        {
             Bundle o = mgr.getAppWidgetOptions(id);
             int w = o == null ? 0 : o.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
             int h = o == null ? 0 : o.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
@@ -166,7 +252,10 @@ public class MonthWidget extends AppWidgetProvider {
             if (h <= 0) h = 340;
             int off = ctx.getSharedPreferences(PREFS, 0).getInt("off" + id, 0);
             float density = ctx.getResources().getDisplayMetrics().density;
-            Bitmap bmp = render(ctx, data(ctx), off, w, h, density);
+            android.util.DisplayMetrics dm = ctx.getResources().getDisplayMetrics();
+            // A home screen refuses a widget picture bigger than 1.5 screens; stay at 60 % of that.
+            long screen = (long) dm.widthPixels * dm.heightPixels;
+            Bitmap bmp = render(ctx, data(ctx), off, w, h, density, screen > 0 ? (long) (screen * 1.5 * 0.6) : 1500000L);
 
             RemoteViews rv = new RemoteViews(ctx.getPackageName(), R.layout.widget_month);
             rv.setImageViewBitmap(R.id.img, bmp);
@@ -183,8 +272,6 @@ public class MonthWidget extends AppWidgetProvider {
                 }
             }
             mgr.updateAppWidget(id, rv);
-        } catch (Exception ignored) {
-            // A drawing problem must never crash the home screen.
         }
     }
 
@@ -234,12 +321,14 @@ public class MonthWidget extends AppWidgetProvider {
         return s.substring(0, Math.max(0, n));
     }
 
-    static Bitmap render(Context ctx, JSONObject data, int off, int wDp, int hDp, float density) {
+    static Bitmap render(Context ctx, JSONObject data, int off, int wDp, int hDp, float density, long maxPixels) {
         float d = density;
+        wDp = Math.max(120, Math.min(wDp, 2000));
+        hDp = Math.max(120, Math.min(hDp, 2000));
         int W = Math.round(wDp * d), H = Math.round(hDp * d);
         // Stay well inside the memory a home screen allows for one widget picture.
         float scale = 1f;
-        long max = 1600L * 1600L;
+        long max = Math.max(200000L, Math.min(maxPixels, 2500000L));
         if ((long) W * H > max) {
             scale = (float) Math.sqrt((double) max / ((long) W * H));
             W = Math.round(W * scale);
@@ -310,6 +399,7 @@ public class MonthWidget extends AppWidgetProvider {
             return bmp;
         }
 
+        String from = data.optString("f", "");
         JSONObject days = data.optJSONObject("d");
         JSONObject counts = data.optJSONObject("n");
         String[] grid = gridDays(off);
@@ -345,7 +435,7 @@ public class MonthWidget extends AppWidgetProvider {
             cv.drawText(String.valueOf(dn), nx, ny, p);
             p.setTypeface(Typeface.DEFAULT);
 
-            JSONArray items = days == null ? null : days.optJSONArray(day);
+            JSONArray items = days == null || (from.length() == 10 && day.compareTo(from) < 0) ? null : days.optJSONArray(day);
             int total = counts == null ? (items == null ? 0 : items.length()) : counts.optInt(day, items == null ? 0 : items.length());
             if (items == null || items.length() == 0) continue;
 
@@ -377,6 +467,14 @@ public class MonthWidget extends AppWidgetProvider {
                 cv.drawText("+" + (total - show), cx + colW - 4 * d, ny, p);
                 p.setTextAlign(Paint.Align.CENTER);
             }
+        }
+
+        // A month older than what the app keeps on the phone: say so instead of showing empty days.
+        if (from.length() == 10 && grid[41].compareTo(from) < 0) {
+            p.setTextAlign(Paint.Align.CENTER);
+            p.setColor(MUTED);
+            p.setTextSize(Math.min(13 * d, W / 26f));
+            cv.drawText("Bu ayı görmək üçün tətbiqi açın", W / 2f, gy + rowH * 3, p);
         }
 
         // When the data was last handed over by the app.

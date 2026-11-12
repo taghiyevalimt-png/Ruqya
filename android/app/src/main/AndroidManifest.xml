@@ -40,6 +40,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="az.ruqya.zapis.WIDGET_TEST" />
+                <action android:name="az.ruqya.zapis.WIDGET_BIND_TEST" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

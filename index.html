@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112113019";
+var APP_VERSION="20261112114112";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -599,7 +599,7 @@ function pushWidget(){
       var L=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=L.length;
       d[k]=L.slice(0,4).map(function(a){return [String(a.name).slice(0,24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
     });
-    json=JSON.stringify({u:0,d:d,n:n});
+    json=JSON.stringify({u:0,f:from,d:d,n:n});
   }
   if(json===wLast)return;wLast=json;
   try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()))}catch(e){}

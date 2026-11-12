@@ -139,7 +139,13 @@ public class MainActivity extends Activity {
         if (j == null || web == null) return;
         String[] kv = j.split("=", 2);
         String js = "window.ruqyaOpen&&window.ruqyaOpen('" + (kv.length > 1 ? kv[1] : "") + "'," + ("new".equals(kv[0]) ? "true" : "false") + ")";
-        web.evaluateJavascript(js, null);
+        final String url = HOME + "#" + j;
+        // If the page is not ready to take the jump (still loading, or the offline page), load it with the jump.
+        web.evaluateJavascript("(function(){if(window.ruqyaOpen){" + js + ";return 'ok'}return 'no'})()", v -> {
+            if (v == null || !v.contains("ok")) {
+                if (web != null) web.loadUrl(url);
+            }
+        });
     }
 
     /** What the web page may ask of the phone: only the widget, nothing else. */

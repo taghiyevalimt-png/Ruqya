@@ -26,6 +26,17 @@ shot widget-small 250 250 2.0 "$J"
 shot widget-big 420 520 2.75 "$J"
 shot widget-out 320 340 2.5 "$(printf '{"out":1}' | base64 -w0)"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
+# A real widget instance, as a home screen would hold it.
+adb shell appwidget grantbind --package $P --user 0 || true
+adb shell "am broadcast -f 32 -n $P/.MonthWidget -a $P.WIDGET_BIND_TEST --es b64 '$J'"
+sleep 15
+adb exec-out run-as $P cat files/widget_bind.txt > "bind-$API.txt" 2>/dev/null || true
+cat "bind-$API.txt"
+# An old month the app no longer keeps on the phone.
+shot widget-old 360 380 3.0 "$J" 
+adb shell "am broadcast -f 32 -n $P/.MonthWidget -a $P.WIDGET_TEST --es b64 '$J' --ei off -3 --ei w 360 --ei h 380 --ef density 3.0"
+sleep 3
+adb exec-out run-as $P cat files/widget_test.png > "widget-old-$API.png"
 adb shell pm path $P || echo "PACKAGE MISSING"
 adb logcat -c
 adb shell am start -W -a $P.OPEN -d ruqya://day/2026-11-14 --es what day --es date 2026-11-14 -n $P/.MainActivity
