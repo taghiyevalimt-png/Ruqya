@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e6b5b">
 <script>
+/* Interface language, chosen in Ayarlar (or on the sign-in screen) and kept on this phone: "az" (default) or "ru". */
+var LANG="az";try{if(localStorage.getItem("ruqya.lang")==="ru")LANG="ru"}catch(e){}
+if(LANG==="ru")document.documentElement.setAttribute("lang","ru");
 /* Light / dark / automatic, chosen in Ayarlar and kept on this phone. */
 function applyTheme(t){
   var r=document.documentElement;
@@ -324,13 +327,441 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 })();
 (function(){
 "use strict";
+/* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
+var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
+"Gəldi və ödədi":"Пришёл и оплатил",
+"Ləğv etdi":"Отменил",
+"Gəlmədi":"Не пришёл",
+"Rəhbər":"Руководитель",
+"Admin":"Админ",
+"seçilməyib":"не выбран",
+"Mütəxəssis":"Специалист",
+"Satış agenti":"Агент продаж",
+"<button class=\"icon-btn\" data-act=\"close\" aria-label=\"Bağla\">×</button>":"<button class=\"icon-btn\" data-act=\"close\" aria-label=\"Закрыть\">×</button>",
+"İnternet yoxdur.":"Нет интернета.",
+"Qəbulları yükləmək olmadı. İnterneti yoxlayın.":"Не удалось загрузить записи. Проверьте интернет.",
+"kənar adam özü hesab yarada bilir («Allow new users to sign up» açıqdır)":"посторонний может сам создать аккаунт (включено «Allow new users to sign up»)",
+"anonim giriş açıqdır («Allow anonymous sign-ins»)":"включён анонимный вход («Allow anonymous sign-ins»)",
+"Köhnə məlumatları yükləmək olmadı. İnterneti yoxlayın.":"Не удалось загрузить старые данные. Проверьте интернет.",
+"Bu saat artıq tutulub. Başqa saat seçin.":"Это время уже занято. Выберите другое.",
+"Yadda saxlanmadı: yazılan məlumat düzgün deyil.":"Не сохранено: данные введены неверно.",
+"Yadda saxlanmadı. Yenidən cəhd edin.":"Не сохранено. Попробуйте ещё раз.",
+"Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.":"Нет связи с сервером, последнее изменение не сохранено. Повторите, когда появится интернет.",
+"Ruqyə":"Рукья",
+"Hicamə":"Хиджама",
+"Salam aleykum! Qəbulunuzu xatırladırıq: ":"Ассаляму алейкум! Напоминаем о вашей записи: ",
+", saat ":", в ",
+". Zəhmət olmasa, gələcəyinizi təsdiqləyin.":". Пожалуйста, подтвердите, что придёте.",
+"<div class=\"empty\"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class=\"primary\" data-act=\"reload\">Yenidən yoxla</button></div>":"<div class=\"empty\"><p>Приложение не загрузилось. Проверьте интернет.</p><button class=\"primary\" data-act=\"reload\">Проверить снова</button></div>",
+"<div class=\"empty\">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>":"<div class=\"empty\">Браузер в телефоне устарел. Обновите в Play Market «Android System WebView» и «Chrome», затем откройте приложение снова.</div>",
+"<div class=\"empty\">Yüklənir…</div>":"<div class=\"empty\">Загрузка…</div>",
+"<div class=\"field\"><label for=\"l-mail\">E-poçt</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>":"<div class=\"field\"><label for=\"l-mail\">Эл. почта</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>",
+"<div class=\"field\"><label for=\"l-pass\">Şifrə</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>":"<div class=\"field\"><label for=\"l-pass\">Пароль</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>",
+"<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Daxil ol</button>":"<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Войти</button>",
+"<p class=\"hint\">E-poçt və şifrəni rəhbər verir.</p>":"<p class=\"hint\">Почту и пароль выдаёт руководитель.</p>",
+"İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq.":"Нет интернета. Изменения не сохранятся.",
+"Köhnə məlumatlar yüklənir…":"Загружаются старые данные…",
+"Köhnə pasiyentlər yüklənir…":"Загружаются старые пациенты…",
+"<div class=\"note\"><p>Qəbullar yüklənir…</p></div>":"<div class=\"note\"><p>Загружаются записи…</p></div>",
+"<h1>Pasiyentlər</h1><input class=\"search\" id=\"q\" type=\"search\" placeholder=\"Ad və ya telefon ilə axtar\" value=\"":"<h1>Пациенты</h1><input class=\"search\" id=\"q\" type=\"search\" placeholder=\"Поиск по имени или телефону\" value=\"",
+"<h1>Ayarlar</h1>":"<h1>Настройки</h1>",
+"<button class=\"label\" data-act=\"month\" aria-label=\"Ayı aç, tarix seç\">":"<button class=\"label\" data-act=\"month\" aria-label=\"Открыть месяц, выбрать дату\">",
+"<button class=\"ghost\" data-act=\"today\">Bu gün</button>":"<button class=\"ghost\" data-act=\"today\">Сегодня</button>",
+"<button class=\"icon-btn\" data-act=\"shift\" data-n=\"1\" aria-label=\"İrəli\">›</button></div>":"<button class=\"icon-btn\" data-act=\"shift\" data-n=\"1\" aria-label=\"Вперёд\">›</button></div>",
+"Bu gün":"Сегодня",
+"-ci il":" год",
+"\">Təqvim</button><button data-act=\"view\" data-id=\"list\" aria-pressed=\"":"\">Календарь</button><button data-act=\"view\" data-id=\"list\" aria-pressed=\"",
+"\">Siyahı</button></div>":"\">Список</button></div>",
+"\">Hamısı</button>":"\">Все</button>",
+"<div class=\"note warnbox\"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ":"<div class=\"note warnbox\"><p>Записей прошлых дней без статуса: ",
+"\">Göstər</button>":"\">Показать</button>",
+"</b> qəbul</span><span><b class=\"num\">":"</b> записей</span><span><b class=\"num\">",
+"</b> gəldi</span><span><b class=\"num\">":"</b> пришли</span><span><b class=\"num\">",
+"</b> kassada</span></div>":"</b> в кассе</span></div>",
+"\" title=\"Rəngi dəyiş\"><i style=\"background:":"\" title=\"Сменить цвет\"><i style=\"background:",
+"<span class=\"by\">Yazdı: ":"<span class=\"by\">Записал(а): ",
+"Adsız":"Без имени",
+"<h2>Qəbul":"<h2>Запись",
+"</h2><p class=\"hint\">Bu qəbul silinib.</p>":"</h2><p class=\"hint\">Эта запись удалена.</p>",
+"<div class=\"row2\"><span>Vaxt</span><b class=\"num\">":"<div class=\"row2\"><span>Время</span><b class=\"num\">",
+"<div class=\"row2\"><span>Mütəxəssis</span><b>":"<div class=\"row2\"><span>Специалист</span><b>",
+"<div class=\"row2\"><span>Telefon</span><b class=\"num\">":"<div class=\"row2\"><span>Телефон</span><b class=\"num\">",
+"\">Zəng</a>":"\">Позвонить</a>",
+"<div class=\"row2\"><span>Qiymət</span><b class=\"num\">":"<div class=\"row2\"><span>Цена</span><b class=\"num\">",
+"yazılmayıb":"не указано",
+"<p class=\"hint\" style=\"margin:-4px 0 0\">Səhv seçilibsə, seçilmiş düyməyə yenidən basın.</p>":"<p class=\"hint\" style=\"margin:-4px 0 0\">Если выбрали по ошибке, нажмите на выбранную кнопку ещё раз.</p>",
+"\">Dəyiş</button></div>":"\">Изменить</button></div>",
+"<button class=\"danger\" data-act=\"del-appt\">Qəbulu sil</button>":"<button class=\"danger\" data-act=\"del-appt\">Удалить запись</button>",
+"Yazdı: ":"Записал(а): ",
+"Yazılıb: ":"Записано: ",
+"<h2>Yeni fasilə":"<h2>Новый перерыв",
+"<div class=\"field\"><label for=\"b-title\">Adı</label><input id=\"b-title\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" placeholder=\"Məsələn: Namaz\"></div>":"<div class=\"field\"><label for=\"b-title\">Название</label><input id=\"b-title\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" placeholder=\"Например: Намаз\"></div>",
+"<div class=\"two\"><div class=\"field\"><label for=\"b-start\">Başlayır</label><input id=\"b-start\" type=\"time\" step=\"300\"></div>":"<div class=\"two\"><div class=\"field\"><label for=\"b-start\">Начало</label><input id=\"b-start\" type=\"time\" step=\"300\"></div>",
+"<div class=\"field\"><label for=\"b-end\">Bitir</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>":"<div class=\"field\"><label for=\"b-end\">Конец</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>",
+"<p class=\"hint\">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>":"<p class=\"hint\">Перерыв показывается в календаре каждый день у всех специалистов, и на это время нельзя записать.</p>",
+"<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Əlavə et</button></div>":"<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Добавить</button></div>",
+"<div class=\"empty\">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>":"<div class=\"empty\">В календаре пока нет специалистов. Они появятся здесь, когда руководитель добавит их в разделе «Настройки».</div>",
+"<div class=\"empty\"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button></div>":"<div class=\"empty\"><p>Сначала добавьте специалиста.</p><button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button></div>",
+". Seçilməyincə kassa natamam qalır.</p>":". Пока статус не выбран, касса неполная.</p>",
+"</b><span>qəbul</span></div>":"</b><span>записей</span></div>",
+"</b><span>gəldi</span></div>":"</b><span>пришли</span></div>",
+"</b><span>kassada</span></div></div>":"</b><span>в кассе</span></div></div>",
+"<div class=\"empty\">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>":"<div class=\"empty\">На этот день записей нет. Чтобы записать пациента, нажмите «Записать».</div>",
+"<span class=\"tag warn\">Vaxt başqa qəbulla üst-üstə düşür</span>":"<span class=\"tag warn\">Время пересекается с другой записью</span>",
+" dəfə gəlib</span>":" посещ.</span>",
+" dəfə gəlməyib</span>":" неявок</span>",
+"Adsız istifadəçi":"Пользователь без имени",
+"<span class=\"tag by\">Yazdı: ":"<span class=\"tag by\">Записал(а): ",
+"\" data-st=\"paid\">Gəldi və ödədi</button>":"\" data-st=\"paid\">Пришёл и оплатил</button>",
+"\" data-st=\"cancel\">Ləğv etdi</button>":"\" data-st=\"cancel\">Отменил</button>",
+"\" data-st=\"noshow\">Gəlmədi</button></div>":"\" data-st=\"noshow\">Не пришёл</button></div>",
+"\">Dəyiş</button><button class=\"link\" style=\"color:var(--bad)\" data-act=\"del-row\" data-id=\"":"\">Изменить</button><button class=\"link\" style=\"color:var(--bad)\" data-act=\"del-row\" data-id=\"",
+"\">Sil</button>":"\">Удалить</button>",
+"\" target=\"_blank\" rel=\"noopener\">WhatsApp-da xatırlat</a>":"\" target=\"_blank\" rel=\"noopener\">Напомнить в WhatsApp</a>",
+"\" data-st=\"wait\">Geri qaytar</button>":"\" data-st=\"wait\">Вернуть</button>",
+"\">Sil</button></div>":"\">Удалить</button></div>",
+"satış":"продажи",
+"Günlük ":"За день — ",
+"Həftəlik ":"За неделю — ",
+"Aylıq ":"За месяц — ",
+"Gün":"День",
+"Həftə":"Неделя",
+"Ay":"Месяц",
+"Kassa: ":"Касса: ",
+"\nCəmi: ":"\nИтого: ",
+"\nSeanslar: ":"\nСеансы: ",
+" seans)":" сеанс.)",
+"\nMəhsul satışı: ":"\nПродажа товаров: ",
+" seans, ":" сеанс., ",
+"\n\nLəğv etdi: ":"\n\nОтменили: ",
+", gəlmədi: ":", не пришли: ",
+"</b><span>cəmi kassada</span></div>":"</b><span>всего в кассе</span></div>",
+" seans</span></div>":" сеанс.</span></div>",
+" məhsul</span></div></div>":" товар.</span></div></div>",
+"statusu seçilməyib: ":"без статуса: ",
+"ləğv etdi: ":"отменили: ",
+"gəlmədi: ":"не пришли: ",
+" seans · ":" сеанс. · ",
+"<div class=\"empty\">Hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə edir.</div>":"<div class=\"empty\">Специалистов пока нет. Руководитель добавляет их в разделе «Настройки».</div>",
+"<div class=\"pay\"><div class=\"head\"><b>Xərclər</b><span class=\"num\">":"<div class=\"pay\"><div class=\"head\"><b>Расходы</b><span class=\"num\">",
+"<button class=\"ghost\" data-act=\"new-expense\">Xərc əlavə et</button>":"<button class=\"ghost\" data-act=\"new-expense\">Добавить расход</button>",
+"Bu gün yazılan qəbullar":"Записано сегодня",
+" yazılan qəbullar":" — записано в этот день",
+"Bu dövrdə yazılan qəbullar":"Записано за период",
+" <small style=\"color:var(--muted)\">(ləğv: ":" <small style=\"color:var(--muted)\">(отмена: ",
+"<div class=\"foot\">Bu müddətdə heç kim qəbul yazmayıb.</div>":"<div class=\"foot\">За это время никто не записывал.</div>",
+"<div class=\"foot\">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.":"<div class=\"foot\">Считается по дню, когда сделана запись, независимо от даты приёма. Удалённые и отменённые записи не считаются.",
+" Ətraflı statistika üçün işçinin adına toxunun.":" Для подробной статистики нажмите на имя сотрудника.",
+"günlük":"за день",
+"həftəlik":"за неделю",
+"aylıq":"за месяц",
+"<button class=\"primary\" data-act=\"xlsx\" data-id=\"money\">Pul hesabatı (":"<button class=\"primary\" data-act=\"xlsx\" data-id=\"money\">Денежный отчёт (",
+"<button class=\"primary\" data-act=\"xlsx\" data-id=\"sales\" style=\"background:var(--surface);color:var(--accent);border:1px solid var(--accent)\">Satış hesabatı (agentlər, həftəlik)</button>":"<button class=\"primary\" data-act=\"xlsx\" data-id=\"sales\" style=\"background:var(--surface);color:var(--accent);border:1px solid var(--accent)\">Отчёт продаж (агенты, по неделям)</button>",
+"</b><span>yeni pasiyent</span></div>":"</b><span>новых пациентов</span></div>",
+"</b><span>təkrar gəliş</span></div>":"</b><span>повторных визитов</span></div>",
+"</b><span>iş günü</span></div>":"</b><span>рабочих дней</span></div>",
+"</b><span>gündə orta</span></div></div>":"</b><span>в среднем за день</span></div></div>",
+"<button class=\"ghost\" data-act=\"report\">Hesabatı mətn kimi göndər</button>":"<button class=\"ghost\" data-act=\"report\">Отправить отчёт текстом</button>",
+"><summary>Əlavə</summary><div class=\"morebody\">":"><summary>Ещё</summary><div class=\"morebody\">",
+"Gələnlər: ":"Пришли: ",
+"Hesaba yalnız «Gəldi və ödədi» seçilmiş seanslar düşür.</p>":"В расчёт идут только сеансы со статусом «Пришёл и оплатил».</p>",
+"Həftəlik statistika":"Статистика по неделям",
+"Kanal":"Канал",
+"Mür":"Обр.",
+"Seans":"Сеанс",
+"Cəmi":"Итого",
+"Həftəlik":"За неделю —",
+"Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur.":"Сеанс: пациенты, которых записал агент и которые пришли и оплатили. Столбцы «Обр.» и «M» в приложении не заполняются.",
+"Hesabat":"Отчёт",
+"Dövr":"Период",
+"Kassa cəmi":"Итого касса",
+"Seanslardan":"С сеансов",
+"Seans sayı":"Кол-во сеансов",
+"Məhsul satışı":"Продажа товаров",
+"Xərclər":"Расходы",
+"Kassa":"Касса",
+"Tarix":"Дата",
+"Saat":"Время",
+"Pasiyent":"Пациент",
+"Telefon":"Телефон",
+"Qiymət":"Цена",
+"Status":"Статус",
+"Yazan":"Записал",
+"Qeyd":"Заметка",
+"Xərc":"Расход",
+"Məbləğ":"Сумма",
+"Yekun":"Итог",
+"Qəbullar":"Записи",
+"Məhsullar":"Товары",
+"Satdı":"Продал",
+"Agent":"Агент",
+"Say":"Кол-во",
+"Gündəlik yazılış":"Записи по дням",
+"Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.":"Считается по дню, когда сделана запись, независимо от даты приёма. Удалённые и отменённые записи не считаются.",
+"Gələn pasiyentlər":"Пришедшие пациенты",
+"Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə.":"Только записи со статусом «Пришёл и оплатил», по записавшему агенту.",
+"Satış hesabatı":"Отчёт продаж",
+"Pul hesabatı":"Денежный отчёт",
+"Heç kim tapılmadı. Adı və ya nömrəni yoxlayın.":"Никого не найдено. Проверьте имя или номер.",
+"Pasiyentlər ilk qəbuldan sonra burada görünəcək.":"Пациенты появятся здесь после первой записи.",
+" dəfə gəlib":" посещ.",
+"gəlməyib: ":"не пришёл: ",
+"ləğv edib: ":"отменил: ",
+"telefon yoxdur":"нет телефона",
+"\">Yaz</button></div>":"\">Записать</button></div>",
+"<p class=\"hint\">Son 200 pasiyent göstərilir (cəmi ":"<p class=\"hint\">Показаны последние 200 пациентов (всего ",
+"). Başqasını tapmaq üçün adı və ya nömrəni axtarın.</p>":"). Чтобы найти другого, ищите по имени или номеру.</p>",
+"<h2>Pasiyent":"<h2>Пациент",
+"Telefon yazılmayıb":"Телефон не указан",
+"<small style=\"display:block;color:var(--muted);font-size:13px\">Yazdı: ":"<small style=\"display:block;color:var(--muted);font-size:13px\">Записал(а): ",
+"<span class=\"tag\">Gözlənilir</span>":"<span class=\"tag\">Ожидается</span>",
+"\">Dəyiş</button>":"\">Изменить</button>",
+"\">Yeni qəbul yaz</button>":"\">Новая запись</button>",
+"\">Zəng et</a>":"\">Позвонить</a>",
+"<p class=\"hint\">«Dəyiş» ən yaxın qəbulu (":"<p class=\"hint\">«Изменить» меняет ближайшую запись (",
+") dəyişir. Başqa qəbulu dəyişmək üçün siyahıda ona toxunun. <button class=\"link\" style=\"padding:0\" data-act=\"repeat\" data-id=\"":"). Чтобы изменить другую запись, нажмите на неё в списке. <button class=\"link\" style=\"padding:0\" data-act=\"repeat\" data-id=\"",
+"\">Yeni qəbul yaz</button></p>":"\">Новая запись</button></p>",
+"<h2>Hesabat":"<h2>Отчёт",
+"<div class=\"field\"><label for=\"rep\">Bu mətni rəhbərə göndərmək olar</label><textarea id=\"rep\" readonly>":"<div class=\"field\"><label for=\"rep\">Этот текст можно отправить руководителю</label><textarea id=\"rep\" readonly>",
+"<p class=\"hint\" id=\"rep-msg\"></p><div class=\"btns\"><button class=\"primary\" data-act=\"copy\">Kopyala</button></div>":"<p class=\"hint\" id=\"rep-msg\"></p><div class=\"btns\"><button class=\"primary\" data-act=\"copy\">Копировать</button></div>",
+"<div class=\"note warnbox\"><p>Təhlükəsizlik: ":"<div class=\"note warnbox\"><p>Безопасность: ",
+". Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Aç</a></div>":". Отключите это в Supabase, иначе посторонний сможет увидеть данные пациентов.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Открыть</a></div>",
+"<h3 class=\"sec\">Mütəxəssislər</h3>":"<h3 class=\"sec\">Специалисты</h3>",
+"Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Чтобы начать запись, добавьте первого специалиста.",
+"Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.":"В календаре пока нет специалистов. Они появятся здесь, когда руководитель добавит их в разделе «Настройки».",
+"\" aria-label=\"Rəngi dəyiş\"></button><div style=\"flex:1\"><b>":"\" aria-label=\"Сменить цвет\"></button><div style=\"flex:1\"><b>",
+"<p class=\"hint\">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>":"<p class=\"hint\">Чтобы сменить цвет специалиста, нажмите на кружок рядом с именем или на его имя в календаре.</p>",
+"<button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button>":"<button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button>",
+"<h3 class=\"sec\">Fasilələr (hər gün)</h3>":"<h3 class=\"sec\">Перерывы (каждый день)</h3>",
+"<p class=\"hint\">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>":"<p class=\"hint\">Перерывов нет. Например, добавьте время намаза, чтобы на него не записывали.</p>",
+"<button class=\"ghost\" data-act=\"new-break\">Fasilə əlavə et</button>":"<button class=\"ghost\" data-act=\"new-break\">Добавить перерыв</button>",
+"<h3 class=\"sec\">İşçi hesabları</h3>":"<h3 class=\"sec\">Аккаунты сотрудников</h3>",
+"<div class=\"pay\"><div class=\"foot\" style=\"font-size:14px;color:var(--ink)\">Mütəxəssislərə və satış agentlərinə login və şifrəni yalnız siz yaradırsınız. Supabase-də «Add user» → «Create new user» basın, e-poçt formatında login (məs. aysel@ruqya.az) və şifrə yazın, «Auto Confirm User» qalsın.</div>":"<div class=\"pay\"><div class=\"foot\" style=\"font-size:14px;color:var(--ink)\">Логин и пароль специалистам и агентам продаж создаёте только вы. В Supabase нажмите «Add user» → «Create new user», введите логин в формате почты (напр. aysel@ruqya.az) и пароль, «Auto Confirm User» оставьте включённым.</div>",
+"<a class=\"wa\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users\" target=\"_blank\" rel=\"noopener\">Hesab yarat və ya sil</a></div>":"<a class=\"wa\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users\" target=\"_blank\" rel=\"noopener\">Создать или удалить аккаунт</a></div>",
+"<div class=\"pay\"><div class=\"head\"><b>İşçilər</b><span class=\"num\">":"<div class=\"pay\"><div class=\"head\"><b>Сотрудники</b><span class=\"num\">",
+"Ad yazılmayıb":"Имя не указано",
+" (siz)":" (вы)",
+"</div><div class=\"foot\">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>":"</div><div class=\"foot\">Чтобы увидеть статистику агента продаж, нажмите на его имя.</div></div>",
+"<button class=\"ghost\" data-act=\"audit\">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>":"<button class=\"ghost\" data-act=\"audit\">Журнал изменений (кто что изменил или удалил)</button>",
+"<h3 class=\"sec\">Vidcet</h3>":"<h3 class=\"sec\">Виджет</h3>",
+"<button class=\"ghost\" data-act=\"widget\">Ana ekrana ay təqvimi vidceti əlavə et</button><p class=\"hint\">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>":"<button class=\"ghost\" data-act=\"widget\">Добавить виджет календаря на главный экран</button><p class=\"hint\">Виджет показывает дни месяца и кто записан. Нажатие на день открывает приложение на этом дне, «+» создаёт новую запись. Данные обновляются, когда приложение открыто.</p>",
+"<p class=\"hint\">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class=\"ghost\" href=\"https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk\">Yeni versiyanı yüklə</a>":"<p class=\"hint\">Для виджета нужна новая версия приложения: удалите старую и установите новую по этой ссылке.</p><a class=\"ghost\" href=\"https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk\">Скачать новую версию</a>",
+"<p class=\"hint\">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>":"<p class=\"hint\">На iPhone виджеты на главном экране бывают только у приложений из App Store. Приложения, добавленные через Safari, не могут создавать виджеты, поэтому виджет пока только на Android.</p>",
+"<p class=\"hint\">Vidcet Android tətbiqində (APK) işləyir.</p>":"<p class=\"hint\">Виджет работает в Android-приложении (APK).</p>",
+"<h3 class=\"sec\">Görünüş</h3><div class=\"seg\">":"<h3 class=\"sec\">Оформление</h3><div class=\"seg\">",
+"Avtomatik":"Авто",
+"Açıq":"Светлая",
+"Tünd":"Тёмная",
+"<p class=\"hint\">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>":"<p class=\"hint\">«Авто» следует режиму телефона. Выбор сохраняется только на этом телефоне.</p>",
+"<h3 class=\"sec\">Hesab</h3>":"<h3 class=\"sec\">Аккаунт</h3>",
+"<button class=\"ghost\" data-act=\"me\">Dəyiş</button>":"<button class=\"ghost\" data-act=\"me\">Изменить</button>",
+"<p class=\"hint\">Rol: ":"<p class=\"hint\">Роль: ",
+"<button class=\"ghost\" data-act=\"logout\">Çıxış</button>":"<button class=\"ghost\" data-act=\"logout\">Выйти</button>",
+"Dünən":"Вчера",
+"<button class=\"icon-btn\" data-act=\"ag-day\" data-n=\"1\" aria-label=\"İrəli\"":"<button class=\"icon-btn\" data-act=\"ag-day\" data-n=\"1\" aria-label=\"Вперёд\"",
+"bu gün yazdı":"записал(а) сегодня",
+"həmin gün yazdı":"записал(а) в этот день",
+"</b><span>ləğv olunan</span></div></div>":"</b><span>отменено</span></div></div>",
+"<p class=\"hint\">Hansı tarixə yazılmasından asılı olmayaraq, ":"<p class=\"hint\">Считаются записи, сделанные ",
+"bu gün":"сегодня",
+"həmin gün":"в этот день",
+" yazdığı qəbullar sayılır. Silinənlər sayılmır.</p>":" на любую дату. Удалённые не считаются.</p>",
+"<div class=\"pay\" style=\"margin-top:12px\"><div class=\"head\"><b>Ümumi</b></div>":"<div class=\"pay\" style=\"margin-top:12px\"><div class=\"head\"><b>Итого</b></div>",
+"<div class=\"agsum\"><span></span><span class=\"h\">Həftə</span><span class=\"h\">Ay</span>":"<div class=\"agsum\"><span></span><span class=\"h\">Неделя</span><span class=\"h\">Месяц</span>",
+"Yazdığı qəbullar":"Записал(а)",
+"Gəlib ödəyənlər":"Пришли и оплатили",
+"Gəlməyənlər":"Не пришли",
+"Satdığı məhsul":"Продал(а) товаров",
+"</div><div class=\"foot\">Həftə: ":"</div><div class=\"foot\">Неделя: ",
+" (cümə–cümə axşamı). Ay: ":" (пятница–четверг). Месяц: ",
+". «Gəlib ödəyənlər» həmin dövrdəki seanslar üzrə sayılır.</div></div>":". «Пришли и оплатили» считается по сеансам этого периода.</div></div>",
+"<p class=\"hint\">Qeyd: telefon son ":"<p class=\"hint\">Примечание: телефон хранит данные за последние ",
+" günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>":" дней, поэтому начало месяца может быть показано не полностью.</p>",
+"<h2>Rəng":"<h2>Цвет",
+" — rəng":" — цвет",
+"<p class=\"hint\">Rəng seçmək üçün baza bir dəfə yenilənməlidir. ":"<p class=\"hint\">Чтобы выбирать цвет, базу нужно один раз обновить. ",
+"Bunun üçün SQL faylını işə salın.":"Для этого запустите SQL-файл.",
+"Bunu rəhbər edir.":"Это делает руководитель.",
+"<p class=\"hint\">Bu mütəxəssisin bütün seansları təqvimdə bu rəngdə görünəcək. Rəng bütün işçilərin telefonunda dəyişir.</p>":"<p class=\"hint\">Все сеансы этого специалиста будут этим цветом в календаре. Цвет меняется на телефонах всех сотрудников.</p>",
+"<h2>Tarix seçin":"<h2>Выберите дату",
+"</h2><div class=\"mhead\"><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"-1\" aria-label=\"Əvvəlki ay\">‹</button><b>":"</h2><div class=\"mhead\"><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"-1\" aria-label=\"Предыдущий месяц\">‹</button><b>",
+"</b><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"1\" aria-label=\"Növbəti ay\">›</button></div><div class=\"mgrid\">":"</b><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"1\" aria-label=\"Следующий месяц\">›</button></div><div class=\"mgrid\">",
+"\">Bu gün</button>":"\">Сегодня</button>",
+"<h2>İşçi":"<h2>Сотрудник",
+"<div class=\"field\"><label for=\"s-name\">Ad</label><input id=\"s-name\" type=\"text\" autocomplete=\"off\" maxlength=\"60\" value=\"":"<div class=\"field\"><label for=\"s-name\">Имя</label><input id=\"s-name\" type=\"text\" autocomplete=\"off\" maxlength=\"60\" value=\"",
+"<div class=\"field\"><label>Rol</label><div class=\"seg\" style=\"grid-template-columns:":"<div class=\"field\"><label>Роль</label><div class=\"seg\" style=\"grid-template-columns:",
+"\">Satış agenti</button>":"\">Агент продаж</button>",
+"\">Mütəxəssis</button>":"\">Специалист</button>",
+"\">Admin</button>":"\">Админ</button>",
+"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız rəhbər verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа даёт и забирает только руководитель.",
+"Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.":"Записи, сделанные специалистами, не попадают в статистику продаж.",
+"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Yadda saxla</button></div>":"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Сохранить</button></div>",
+"əlavə etdi":"добавлено",
+"SİLDİ":"УДАЛЕНО",
+"dəyişdi":"изменено",
+"Qəbul yazdı: ":"Записал(а): ",
+"Qəbulu SİLDİ: ":"УДАЛИЛ(А) запись: ",
+"status: ":"статус: ",
+"qiymət: ":"цена: ",
+"vaxt: ":"время: ",
+"mütəxəssis: ":"специалист: ",
+"ad: ":"имя: ",
+"telefon: ":"телефон: ",
+"müddət: ":"длительность: ",
+" dəq":" мин",
+"qeyd":"заметка",
+"Qəbul (":"Запись (",
+"Xərci ":"Расход — ",
+" (əvvəl ":" (было ",
+"Məhsul satışını ":"Продажа товара — ",
+"Mütəxəssisin rəngini dəyişdi: ":"Изменил(а) цвет специалиста: ",
+"Mütəxəssisi ":"Специалист — ",
+"siyahıdan çıxardı":"убран из списка",
+"Fasiləni ":"Перерыв — ",
+"İşçi profili (":"Профиль сотрудника (",
+"mütəxəssis":"специалист",
+"satış agenti":"агент продаж",
+"<h2>Dəyişikliklər jurnalı":"<h2>Журнал изменений",
+"<p class=\"hint\">Yüklənir…</p>":"<p class=\"hint\">Загрузка…</p>",
+"<p class=\"err\">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>":"<p class=\"err\">Не удалось загрузить журнал. Проверьте интернет.</p>",
+"\">Hamısı</button><button data-act=\"audit-f\" data-id=\"del\" aria-pressed=\"":"\">Все</button><button data-act=\"audit-f\" data-id=\"del\" aria-pressed=\"",
+"\">Yalnız silinənlər</button></div>":"\">Только удалённые</button></div>",
+"<p class=\"hint\">Hələ qeyd yoxdur.</p>":"<p class=\"hint\">Записей пока нет.</p>",
+"Baza paneli":"Панель базы",
+"</div><p class=\"hint\">Son ":"</div><p class=\"hint\">Показаны последние ",
+" dəyişiklik göstərilir. Bu jurnalı yalnız rəhbər görür.</p>":" изменений. Этот журнал видит только руководство.</p>",
+"<h2>Xoş gəlmisiniz!":"<h2>Добро пожаловать!",
+"Adınızı yazın və «Yadda saxla» basın.":"Введите имя и нажмите «Сохранить».",
+"Kim olduğunuzu seçin və «Yadda saxla» basın.":"Выберите, кто вы, и нажмите «Сохранить».",
+"<h2>Profil":"<h2>Профиль",
+"<div class=\"field\"><label>Siz kimsiniz?</label><div class=\"seg\" style=\"grid-template-columns:1fr 1fr\">":"<div class=\"field\"><label>Кто вы?</label><div class=\"seg\" style=\"grid-template-columns:1fr 1fr\">",
+"\">Mütəxəssis</button></div></div>":"\">Специалист</button></div></div>",
+"<div class=\"field\"><label for=\"m-reader\">Təqvimdə hansı mütəxəssissiniz?</label><select id=\"m-reader\">":"<div class=\"field\"><label for=\"m-reader\">Какой вы специалист в календаре?</label><select id=\"m-reader\">",
+"<p class=\"hint\">Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.</p>":"<p class=\"hint\">Записи, сделанные специалистами, не попадают в статистику продаж.</p>",
+"<div class=\"field\"><label for=\"m-name\">Adınız</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"m-name\">Ваше имя</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"",
+"Rəhbər hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. ":"Руководитель ещё не добавил специалистов в календарь, впишите имя сами. ",
+"Statistikada və hesabatda bu adla görünəcəksiniz.</p>":"Под этим именем вы будете в статистике и отчётах.</p>",
+"<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Yadda saxla</button></div>":"<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Сохранить</button></div>",
+"<h2>Ödəniş":"<h2>Оплата",
+"<div class=\"field\"><label for=\"p-price\">Ödənilən məbləğ, ":"<div class=\"field\"><label for=\"p-price\">Оплаченная сумма, ",
+"<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Gəldi və ödədi</button></div>":"<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Пришёл и оплатил</button></div>",
+"<div class=\"note\"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>":"<div class=\"note\"><p>Для продажи товаров нужно обновить базу. Руководитель делает это один раз.</p></div>",
+"</b><span>cəmi satış</span></div>":"</b><span>всего продаж</span></div>",
+"</b><span>məhsul satılıb</span></div>":"</b><span>товаров продано</span></div>",
+"</b><span>orta qiymət</span></div></div>":"</b><span>средняя цена</span></div></div>",
+"<button class=\"primary\" data-act=\"new-prod\">+ Məhsul satışı</button>":"<button class=\"primary\" data-act=\"new-prod\">+ Продажа товара</button>",
+"<div class=\"pay\"><div class=\"head\"><b>Kim nə qədər satıb</b><span class=\"num\">":"<div class=\"pay\"><div class=\"head\"><b>Кто сколько продал</b><span class=\"num\">",
+" nəfər</span></div>":" чел.</span></div>",
+" ədəd</span><b class=\"num\">":" шт.</span><b class=\"num\">",
+"<div class=\"foot\">Bu müddətdə məhsul satılmayıb.</div>":"<div class=\"foot\">За это время товары не продавались.</div>",
+"<div class=\"pay\"><div class=\"head\"><b>Günlər üzrə</b><span class=\"num\">gündə orta ":"<div class=\"pay\"><div class=\"head\"><b>По дням</b><span class=\"num\">в среднем за день ",
+"<div class=\"pay\"><div class=\"head\"><b>Satışlar</b><span class=\"num\">":"<div class=\"pay\"><div class=\"head\"><b>Продажи</b><span class=\"num\">",
+"<div class=\"visit\"><span>Məhsul":"<div class=\"visit\"><span>Товар",
+" · Satdı: ":" · Продал(а): ",
+"<h2>Məhsul satışı":"<h2>Продажа товаров",
+"<div class=\"two\"><div class=\"field\"><label for=\"pr-amount\">Qiymət, ":"<div class=\"two\"><div class=\"field\"><label for=\"pr-amount\">Цена, ",
+"<div class=\"field\"><label for=\"pr-date\">Tarix</label><input id=\"pr-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"pr-date\">Дата</label><input id=\"pr-date\" type=\"date\" value=\"",
+"<p class=\"hint\">Satan avtomatik qeyd olunur: ":"<p class=\"hint\">Продавец указывается автоматически: ",
+"siz":"вы",
+"<p class=\"err\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Yadda saxla</button></div>":"<p class=\"err\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Сохранить</button></div>",
+"Xərci dəyiş":"Изменить расход",
+"Yeni xərc":"Новый расход",
+"<div class=\"field\"><label for=\"x-title\">Xərc nəyə görədir</label><input id=\"x-title\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"Məsələn: icarə, su, təmizlik\" value=\"":"<div class=\"field\"><label for=\"x-title\">За что расход</label><input id=\"x-title\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"Например: аренда, вода, уборка\" value=\"",
+"<div class=\"two\"><div class=\"field\"><label for=\"x-amount\">Məbləğ, ":"<div class=\"two\"><div class=\"field\"><label for=\"x-amount\">Сумма, ",
+"<div class=\"field\"><label for=\"x-date\">Tarix</label><input id=\"x-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"x-date\">Дата</label><input id=\"x-date\" type=\"date\" value=\"",
+"<div class=\"btns\"><button class=\"primary\" data-act=\"save-expense\">Yadda saxla</button>":"<div class=\"btns\"><button class=\"primary\" data-act=\"save-expense\">Сохранить</button>",
+"<button class=\"danger\" data-act=\"del-expense\">Sil</button>":"<button class=\"danger\" data-act=\"del-expense\">Удалить</button>",
+"Tutulub: ":"Занято: ",
+"Bu tarixdə":"В этот день",
+" mütəxəssis boşdur. ":" специалист свободен. ",
+"Fasilələr: ":"Перерывы: ",
+"Qəbulu dəyiş":"Изменить запись",
+"Yeni qəbul":"Новая запись",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Mütəxəssis</label><select id=\"f-reader\">":"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Специалист</label><select id=\"f-reader\">",
+"<div class=\"field\"><label for=\"f-date\">Tarix</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"f-date\">Дата</label><input id=\"f-date\" type=\"date\" value=\"",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Saat</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Время</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
+"<div class=\"field\"><label for=\"f-dur\">Müddət</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность</label><select id=\"f-dur\">",
+" saat":" ч",
+"<div class=\"field\"><label for=\"f-name\">Pasiyentin adı</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" list=\"f-names\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" list=\"f-names\" value=\"",
+"<div class=\"field\"><label for=\"f-phone\">Telefon</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Телефон</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
+"<div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"field\"><label for=\"f-price\">Цена, ",
+"</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Bilinmirsə, boş saxlayın\" value=\"":"</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Если неизвестно, оставьте пустым\" value=\"",
+"<div class=\"field\"><label for=\"f-status\">Status</label><select id=\"f-status\">":"<div class=\"field\"><label for=\"f-status\">Статус</label><select id=\"f-status\">",
+"Seçilməyib":"Не выбран",
+"<div class=\"field\"><label for=\"f-note\">Qeyd</label><input id=\"f-note\" type=\"text\" maxlength=\"300\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"f-note\">Заметка</label><input id=\"f-note\" type=\"text\" maxlength=\"300\" autocomplete=\"off\" value=\"",
+"Yadda saxla":"Сохранить",
+"Yaz":"Записать",
+"Mütəxəssisi dəyiş":"Изменить специалиста",
+"Yeni mütəxəssis":"Новый специалист",
+"<div class=\"field\"><label for=\"r-name\">Ad</label><input id=\"r-name\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"r-name\">Имя</label><input id=\"r-name\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" value=\"",
+"<div class=\"btns\"><button class=\"primary\" data-act=\"save-reader\">Yadda saxla</button>":"<div class=\"btns\"><button class=\"primary\" data-act=\"save-reader\">Сохранить</button>",
+"<button class=\"danger\" data-act=\"del-reader\">Siyahıdan çıxar</button>":"<button class=\"danger\" data-act=\"del-reader\">Убрать из списка</button>",
+"<p class=\"hint\" style=\"color:var(--warn)\">Diqqət: bu mütəxəssisin qarşıda ":"<p class=\"hint\" style=\"color:var(--warn)\">Внимание: у этого специалиста впереди записей: ",
+" qəbulu var. Siyahıdan çıxarsanız da, onlar təqvimdə qalacaq — əvvəlcə başqa mütəxəssisə keçirin və ya ləğv edin.</p>":". Даже если убрать его из списка, они останутся в календаре — сначала перенесите их к другому специалисту или отмените.</p>",
+"Mütəxəssisi seçin.":"Выберите специалиста.",
+"Tarixi düzgün seçin.":"Выберите правильную дату.",
+"Saatı seçin.":"Выберите время.",
+"Pasiyentin adını yazın.":"Введите имя пациента.",
+"Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5.":"Введите цену правильно: только цифры, например 150 или 12,5.",
+"«Gəldi və ödədi» üçün ödənilən məbləği yazın.":"Для «Пришёл и оплатил» введите оплаченную сумму.",
+"Bu qəbul artıq silinib.":"Эта запись уже удалена.",
+"Seans 08:00 ilə 00:00 arasında olmalıdır. Başlama saatını və ya müddəti dəyişin.":"Сеанс должен быть между 08:00 и 00:00. Измените время начала или длительность.",
+" bu vaxt məşğuldur: ":" занят(а) в это время: ",
+". Başqa vaxt seçin.":". Выберите другое время.",
+"Bu vaxt fasilədir: ":"В это время перерыв: ",
+"Mütəxəssisin adını yazın.":"Введите имя специалиста.",
+"Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə).":"Специалист с таким именем уже есть. Введите другое имя (например, с фамилией).",
+"E-poçt və şifrəni yazın.":"Введите почту и пароль.",
+"Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin.":"Этот аккаунт ещё не подтверждён. Сообщите руководителю.",
+"Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın.":"Слишком много попыток. Подождите несколько минут и попробуйте снова.",
+"E-poçt və ya şifrə səhvdir.":"Неверная почта или пароль.",
+"Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.":"Не удалось войти. Попробуйте чуть позже.",
+"Serverlə əlaqə yoxdur. İnterneti yoxlayın.":"Нет связи с сервером. Проверьте интернет.",
+"İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun.":"Нет интернета. Чтобы вносить изменения, подключитесь к интернету.",
+"Geri qaytarmaq olmur: bu vaxta artıq başqa qəbul yazılıb (":"Нельзя вернуть: на это время уже есть другая запись (",
+"Məbləği düzgün yazın.":"Введите сумму правильно.",
+"Bu vaxta artıq başqa qəbul yazılıb (":"На это время уже есть другая запись (",
+"). Əvvəlcə vaxtı dəyişin.":"). Сначала измените время.",
+"Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək.":"В открывшемся окне нажмите «Добавить» — виджет появится на главном экране.",
+"Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin.":"Нажмите и удерживайте пустое место на главном экране → «Виджеты» → выберите виджет «Ruqyatz» и перетащите на экран.",
+"Adı yazın.":"Введите имя.",
+"Admin rolunu yalnız rəhbər dəyişə bilər.":"Роль админа может менять только руководитель.",
+"Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir.":"Не удалось изменить. Для этого нужно обновить базу.",
+"Qiyməti düzgün yazın.":"Введите цену правильно.",
+"Bir də basın":"Нажмите ещё раз",
+"Adınızı yazın.":"Введите ваше имя.",
+"Xərcin adını yazın.":"Напишите, за что расход.",
+"Avtomatik kopyalanmadı. Mətn seçilib, özünüz kopyalayın.":"Не удалось скопировать автоматически. Текст выделен, скопируйте сами.",
+"Kopyalandı. WhatsApp-a yapışdırın.":"Скопировано. Вставьте в WhatsApp.",
+"Fasilənin adını yazın.":"Введите название перерыва.",
+"Başlama və bitmə saatını seçin.":"Выберите время начала и конца.",
+"Bitmə saatı başlamadan sonra olmalıdır.":"Конец должен быть позже начала.",
+"Yenə də əlavə et":"Всё равно добавить",
+"Bu vaxta artıq ":"На это время уже есть записи: ",
+" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq.":". Они останутся, просто новые записи на это время будут невозможны.",
+"Çıxmaq alınmadı. İnterneti yoxlayın.":"Не удалось выйти. Проверьте интернет.",
+"kassa":"касса",
+"Geri":"Назад",
+"Toplam":"Итого"}:null;
+function L(s){return RUD&&RUD.hasOwnProperty(s)?RUD[s]:s}
+/* The fixed bottom bar and "+" button are written in the page itself; switch their words too. */
+if(RUD)(function(){
+  var tl={day:"Записи",cash:"Касса",products:"Товары",patients:"Пациенты",readers:"Настройки"};
+  var bs=document.querySelectorAll("#tabs button");
+  for(var i=0;i<bs.length;i++){var t=tl[bs[i].getAttribute("data-tab")],n=bs[i].lastChild;if(t&&n&&n.nodeType===3)n.nodeValue=t}
+  var f=document.getElementById("fab");if(f)f.textContent="+ Записать";
+  var nv=document.getElementById("tabs");if(nv)nv.setAttribute("aria-label","Разделы");
+})();
 var SB_URL="https://ldkhdeehrrajvgrtieal.supabase.co";
 var SB_KEY="sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7";
-var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",noshow:"Gəlmədi"};
-var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
-var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
-var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112133154";
+var ST={wait:L("Gözlənilir"),paid:L("Gəldi və ödədi"),cancel:L("Ləğv etdi"),noshow:L("Gəlmədi")};
+var RU=LANG==="ru";
+/* MON is used after a day number ("12 noyabr" / "12 ноября"), MONN on its own ("Noyabr 2026" / "Ноябрь 2026"). */
+var MON=RU?["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"]:["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
+var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
+var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
+var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
+var APP_VERSION="20261112135815";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -355,8 +786,8 @@ var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
 /* The owner is always an admin; the owner can also give the admin role to other accounts. */
 function isOwner(){return !!(auth.user&&auth.user.id===ADMIN)}
 function isAdmin(){return !!(auth.user&&(auth.user.id===ADMIN||state.roles[auth.user.id]==="admin"))}
-function roleLabel(k){return k===ADMIN?"Rəhbər":state.roles[k]==="admin"?"Admin":!state.roleSet[k]?"seçilməyib":isSpec(k)?"Mütəxəssis":"Satış agenti"}
-var CLOSE='<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>';
+function roleLabel(k){return k===ADMIN?L("Rəhbər"):state.roles[k]==="admin"?L("Admin"):!state.roleSet[k]?L("seçilməyib"):isSpec(k)?L("Mütəxəssis"):L("Satış agenti")}
+var CLOSE=L('<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>');
 
 /* ---------- helpers ---------- */
 function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -530,7 +961,7 @@ function refresh(){
     if(state.v2&&(!state.staff[auth.user.id]||(state.hasRole&&!state.roleSet[auth.user.id]&&!isAdmin()))&&!sheet&&!auth.asked){auth.asked=true;openSheet({type:"me",first:true})}
   },function(){
     if(my!==seq)return;
-    flash(offline?"İnternet yoxdur.":"Qəbulları yükləmək olmadı. İnterneti yoxlayın.");
+    flash(offline?L("İnternet yoxdur."):L("Qəbulları yükləmək olmadı. İnterneti yoxlayın."));
     /* Try again soon: on first start every few seconds, later once after a short pause (e.g. a phone just woke up). */
     clearTimeout(rtTimer);rtTimer=setTimeout(refresh,auth.loaded?15000:6000);
   });
@@ -574,8 +1005,8 @@ function checkSecurity(){
   if(!window.fetch||location.protocol==="file:")return;
   fetch(SB_URL+"/auth/v1/settings",{headers:{apikey:SB_KEY}}).then(function(r){return r.ok?r.json():null}).then(function(j){
     if(!j)return;var w=[];
-    if(j.disable_signup===false)w.push("kənar adam özü hesab yarada bilir («Allow new users to sign up» açıqdır)");
-    if(j.external&&j.external.anonymous_users===true)w.push("anonim giriş açıqdır («Allow anonymous sign-ins»)");
+    if(j.disable_signup===false)w.push(L("kənar adam özü hesab yarada bilir («Allow new users to sign up» açıqdır)"));
+    if(j.external&&j.external.anonymous_users===true)w.push(L("anonim giriş açıqdır («Allow anonymous sign-ins»)"));
     secWarn=w.join("; ");if(secWarn)render();
   }).catch(function(){});
 }
@@ -597,17 +1028,17 @@ function widgetSoon(){if(!NATIVE)return;clearTimeout(wTimer);wTimer=setTimeout(p
 function pushWidget(){
   if(!NATIVE)return;
   var json;
-  if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1}'}
+  if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1,"l":"'+LANG+'"}'}
   else{
     /* Per day: up to 4 names in time order with the specialist's colour, plus the day's total. */
     var from=state.loadedFrom||today,by={},n={};
     state.appts.forEach(function(a){if(a.date<from||a.status==="cancel")return;(by[a.date]=by[a.date]||[]).push(a)});
     var d={};
     Object.keys(by).forEach(function(k){
-      var L=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=L.length;
-      d[k]=L.slice(0,4).map(function(a){return [cut(String(a.name),24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
+      var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
+      d[k]=LN.slice(0,4).map(function(a){return [cut(String(a.name),24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
     });
-    json=JSON.stringify({u:0,f:from,d:d,n:n});
+    json=JSON.stringify({u:0,f:from,d:d,n:n,l:LANG});
   }
   /* Unchanged data is handed over again every 10 minutes, so "Yeniləndi" on the widget stays honest. */
   if(json===wLast&&Date.now()-wLastT<600000)return;wLast=json;wLastT=Date.now();
@@ -641,20 +1072,20 @@ function ensureLoaded(){
     (res[2]||[]).forEach(function(x){upsertBy(state.products,mapProd(x))});
     state.loadedFrom=need;render();
     if(sheet&&sheet.type==="book")byId("sheet").innerHTML=bookSheet();
-  },function(){loadingOlder=false;olderFail=Date.now();setTimeout(render,15500);flash("Köhnə məlumatları yükləmək olmadı. İnterneti yoxlayın.")});
+  },function(){loadingOlder=false;olderFail=Date.now();setTimeout(render,15500);flash(L("Köhnə məlumatları yükləmək olmadı. İnterneti yoxlayın."))});
 }
 function db(q){
   /* The local copy is already updated; realtime confirms the change on every phone. */
   pending++;writes++;
   return q.then(function(r){
     pending--;
-    if(r.error){flash(r.error.code==="23505"?"Bu saat artıq tutulub. Başqa saat seçin.":r.error.code==="23514"?"Yadda saxlanmadı: yazılan məlumat düzgün deyil.":"Yadda saxlanmadı. Yenidən cəhd edin.");return refresh()}
+    if(r.error){flash(r.error.code==="23505"?L("Bu saat artıq tutulub. Başqa saat seçin."):r.error.code==="23514"?L("Yadda saxlanmadı: yazılan məlumat düzgün deyil."):L("Yadda saxlanmadı. Yenidən cəhd edin."));return refresh()}
   },function(){pending--;unsaved();return refresh()});
 }
 var retryT=null;
 function unsaved(){
   /* Keep a warning up and retry until the server copy is back on screen, so nothing looks saved when it is not. */
-  auth.msg="Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.";render();
+  auth.msg=L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.");render();
   clearTimeout(retryT);
   retryT=setTimeout(function again(){
     if(!auth.user)return;
@@ -726,7 +1157,7 @@ function waLink(phone,text){
   if(d.length<11)return "";
   return "https://wa.me/"+d+(text?"?text="+encodeURIComponent(text):"");
 }
-function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmtDay(a.date)+", saat "+a.time+". Zəhmət olmasa, gələcəyinizi təsdiqləyin."}
+function remindText(a){return L("Salam aleykum! Qəbulunuzu xatırladırıq: ")+fmtDay(a.date)+L(", saat ")+a.time+L(". Zəhmət olmasa, gələcəyinizi təsdiqləyin.")}
 
 /* ---------- render ---------- */
 function render(){
@@ -741,22 +1172,22 @@ function render(){
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
     top.innerHTML='<div class="brand"><img src="icon-192.png?v=2" alt=""><h1>Ruqyatz</h1></div>';
-    main.innerHTML=!sb?(window.__sbErr?'<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>':'<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')
-      :!auth.ready?'<div class="empty">Yüklənir…</div>'
-      :'<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>'+
-       '<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>'+
-       '<p class="err" id="l-err" hidden></p><button class="primary" data-act="login">Daxil ol</button>'+
-       '<p class="hint">E-poçt və şifrəni rəhbər verir.</p>';
+    main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>'))
+      :!auth.ready?L('<div class="empty">Yüklənir…</div>')
+      :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
+       L('<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>')+
+       L('<p class="err" id="l-err" hidden></p><button class="primary" data-act="login">Daxil ol</button>')+
+       L('<p class="hint">E-poçt və şifrəni rəhbər verir.</p>')+langSeg();
     return;
   }
   var tabs=document.querySelectorAll("#tabs button");
   for(var i=0;i<tabs.length;i++){if(tabs[i].dataset.tab===ui.tab)tabs[i].setAttribute("aria-current","page");else tabs[i].removeAttribute("aria-current")}
-  var note=offline?"İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq.":auth.msg;
-  if(!note&&loadingOlder)note="Köhnə məlumatlar yüklənir…";
-  if(!note&&histLoading&&ui.tab==="patients")note="Köhnə pasiyentlər yüklənir…";
-  var banner=note?'<div class="note warnbox"><p>'+esc(note)+'</p></div>':(!auth.loaded?'<div class="note"><p>Qəbullar yüklənir…</p></div>':"");
+  var note=offline?L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."):auth.msg;
+  if(!note&&loadingOlder)note=L("Köhnə məlumatlar yüklənir…");
+  if(!note&&histLoading&&ui.tab==="patients")note=L("Köhnə pasiyentlər yüklənir…");
+  var banner=note?'<div class="note warnbox"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note"><p>Qəbullar yüklənir…</p></div>'):"");
   if(ui.tab==="patients"){
-    if(!byId("q"))top.innerHTML='<h1>Pasiyentlər</h1><input class="search" id="q" type="search" placeholder="Ad və ya telefon ilə axtar" value="'+esc(ui.q)+'">';
+    if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
     main.innerHTML=banner+'<div id="plist">'+patientsList()+'</div>';
     return;
   }
@@ -766,7 +1197,7 @@ function render(){
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
   else if(ui.tab==="products"){top.innerHTML=cashTop();main.innerHTML=banner+productsMain()}
-  else{top.innerHTML="<h1>Ayarlar</h1>";main.innerHTML=banner+readersMain()}
+  else{top.innerHTML=L("<h1>Ayarlar</h1>");main.innerHTML=banner+readersMain()}
   if(grid){
     cal=byId("cal");
     if(cal){
@@ -780,18 +1211,18 @@ function render(){
 
 function navHtml(title,small){
   return '<div class="daynav">'+
-    '<button class="icon-btn" data-act="shift" data-n="-1" aria-label="Geri">‹</button>'+
-    '<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">'+esc(title)+'<span class="cv">▼</span><small>'+esc(small)+'</small></button>'+
-    (ui.date===today?'':'<button class="ghost" data-act="today">Bu gün</button>')+
-    '<button class="icon-btn" data-act="shift" data-n="1" aria-label="İrəli">›</button></div>';
+    '<button class="icon-btn" data-act="shift" data-n="-1" aria-label="'+L("Geri")+'">‹</button>'+
+    L('<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">')+esc(title)+'<span class="cv">▼</span><small>'+esc(small)+'</small></button>'+
+    (ui.date===today?'':L('<button class="ghost" data-act="today">Bu gün</button>'))+
+    L('<button class="icon-btn" data-act="shift" data-n="1" aria-label="İrəli">›</button></div>');
 }
 
 function dayTop(){
-  var h=navHtml(fmtDay(ui.date,"w"),ui.date===today?"Bu gün":parse(ui.date).getFullYear()+"-ci il");
+  var h=navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):parse(ui.date).getFullYear()+L("-ci il"));
   var rs=activeReaders();
-  h+='<div class="toolrow"><div class="viewsw"><button data-act="view" data-id="grid" aria-pressed="'+(ui.view==="grid")+'">Təqvim</button><button data-act="view" data-id="list" aria-pressed="'+(ui.view==="list")+'">Siyahı</button></div>';
+  h+='<div class="toolrow"><div class="viewsw"><button data-act="view" data-id="grid" aria-pressed="'+(ui.view==="grid")+L('">Təqvim</button><button data-act="view" data-id="list" aria-pressed="')+(ui.view==="list")+L('">Siyahı</button></div>');
   if(rs.length>1){
-    h+='<div class="chips"><button class="chip" data-act="filter" data-id="all" aria-pressed="'+(!ui.sel.length)+'">Hamısı</button>';
+    h+='<div class="chips"><button class="chip" data-act="filter" data-id="all" aria-pressed="'+(!ui.sel.length)+L('">Hamısı</button>');
     rs.forEach(function(r){var on=ui.sel.indexOf(r.id)>=0;h+='<button class="chip" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'">'+(on&&ui.sel.length>1?'✓ ':'')+esc(r.name)+'</button>'});
     h+='</div>';
   }
@@ -814,11 +1245,11 @@ function gridMain(){
   var h="";
   var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
   if(late.length){var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
-    h+='<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: '+late.length+'.</p>'+(first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Göstər</button>':'')+'</div>'}
-  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+'</b> qəbul</span><span><b class="num">'+paid.length+'</b> gəldi</span><span><b class="num">'+money(sum)+'</b> kassada</span></div>';
+    h+=L('<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ')+late.length+'.</p>'+(first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+L('">Göstər</button>'):'')+'</div>'}
+  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+L('</b> qəbul</span><span><b class="num">')+paid.length+L('</b> gəldi</span><span><b class="num">')+money(sum)+L('</b> kassada</span></div>');
   var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
-  h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch" role="button" data-act="color" data-id="'+esc(r.id)+'" title="Rəngi dəyiş"><i style="background:'+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
+  h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch" role="button" data-act="color" data-id="'+esc(r.id)+L('" title="Rəngi dəyiş"><i style="background:')+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
   h+='<div class="cal-body" style="height:'+(H+20)+'px;padding:10px 0"><div class="axis">';
   for(var m=DAY0;m<=DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+(m>=24*60?"00:00":hhmm(m))+'</span>';
   h+='</div>';
@@ -830,8 +1261,8 @@ function gridMain(){
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
     var lanes=[];evs.forEach(function(a){
       if(a.status==="cancel"){a._lane=-1;return}
-      var s1=mins(a.time),e1=s1+(a.dur||90),L=0;
-      while(lanes[L]&&lanes[L].some(function(x){return s1<x[1]&&x[0]<e1}))L++;(lanes[L]=lanes[L]||[]).push([s1,e1]);a._lane=L});
+      var s1=mins(a.time),e1=s1+(a.dur||90),LN=0;
+      while(lanes[LN]&&lanes[LN].some(function(x){return s1<x[1]&&x[0]<e1}))LN++;(lanes[LN]=lanes[LN]||[]).push([s1,e1]);a._lane=LN});
     var nl=Math.max(1,lanes.length);
     evs.sort(function(a,b){return (b.status==="cancel")-(a.status==="cancel")});
     evs.forEach(function(a){
@@ -841,7 +1272,7 @@ function gridMain(){
         '<b>'+(a.status==="paid"?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
         (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
-        (ht>76&&(state.staff[a.by]||a.by)?'<span class="by">Yazdı: '+esc(state.staff[a.by]||"Adsız")+'</span>':'')+
+        (ht>76&&(state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
         '</button>';
     });
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
@@ -851,77 +1282,77 @@ function gridMain(){
   return h;
 }
 function viewSheet(){
-  var a=appt(sheet.id);if(!a)return '<h2>Qəbul'+CLOSE+'</h2><p class="hint">Bu qəbul silinib.</p>';
+  var a=appt(sheet.id);if(!a)return L('<h2>Qəbul')+CLOSE+L('</h2><p class="hint">Bu qəbul silinib.</p>');
   var r=reader(a.readerId),wa=waLink(a.phone,remindText(a)),tel=String(a.phone||"").replace(/[^\d+]/g,"");
   var who=state.staff[a.by];
   return '<div class="detail" style="display:flex;flex-direction:column;gap:12px"><h2>'+esc(a.name)+CLOSE+'</h2>'+
-    '<div class="row2"><span>Vaxt</span><b class="num">'+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
-    '<div class="row2"><span>Mütəxəssis</span><b>'+esc(r?r.name:"—")+'</b>'+'</div>'+
-    (a.phone?'<div class="row2"><span>Telefon</span><b class="num">'+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+'">Zəng</a>':'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
-    '<div class="row2"><span>Qiymət</span><b class="num">'+(a.price>0?money(a.price):"yazılmayıb")+'</b></div>'+
+    L('<div class="row2"><span>Vaxt</span><b class="num">')+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
+    L('<div class="row2"><span>Mütəxəssis</span><b>')+esc(r?r.name:"—")+'</b>'+'</div>'+
+    (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+L('">Zəng</a>'):'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
+    L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
     '<div class="stbtns" style="grid-template-columns:1fr 1fr 1fr">'+["paid","noshow","cancel"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+(a.status===k?"wait":k)+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
-    (a.status!=="wait"?'<p class="hint" style="margin:-4px 0 0">Səhv seçilibsə, seçilmiş düyməyə yenidən basın.</p>':'')+
-    '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button></div>'+
-    '<button class="danger" data-act="del-appt">Qəbulu sil</button>'+
-    '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?'Yazdı: '+esc(who)+(c?', '+c:''):(c?'Yazılıb: '+c:'')})()+'</p></div>';
+    (a.status!=="wait"?L('<p class="hint" style="margin:-4px 0 0">Səhv seçilibsə, seçilmiş düyməyə yenidən basın.</p>'):'')+
+    '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button></div>')+
+    L('<button class="danger" data-act="del-appt">Qəbulu sil</button>')+
+    '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
 function breakForm(){
-  return '<h2>Yeni fasilə'+CLOSE+'</h2>'+
-    '<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" maxlength="40" autocomplete="off" placeholder="Məsələn: Namaz"></div>'+
-    '<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>'+
-    '<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>'+
-    '<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'+
-    '<p class="err" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>';
+  return L('<h2>Yeni fasilə')+CLOSE+'</h2>'+
+    L('<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" maxlength="40" autocomplete="off" placeholder="Məsələn: Namaz"></div>')+
+    L('<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>')+
+    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+
+    L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>')+
+    L('<p class="err" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
 }
 function dayMain(){
   var h="";
   if(!activeReaders().length){
-    if(auth.loaded&&!isAdmin())return '<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>';
-    return auth.loaded?'<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>':"";
+    if(auth.loaded&&!isAdmin())return L('<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>');
+    return auth.loaded?L('<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>'):"";
   }
   var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
   if(late.length){
     var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
-    h+='<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: '+late.length+'. Seçilməyincə kassa natamam qalır.</p>'+
-      (first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Göstər</button>':'')+'</div>';
+    h+=L('<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ')+late.length+L('. Seçilməyincə kassa natamam qalır.</p>')+
+      (first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+L('">Göstər</button>'):'')+'</div>';
   }
   var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
   var paid=list.filter(function(a){return a.status==="paid"});
   var sum=paid.reduce(function(t,a){return t+a.price},0);
   h+='<div class="strip">'+
-    '<div class="tile"><b class="num">'+list.filter(function(a){return a.status!=="cancel"}).length+'</b><span>qəbul</span></div>'+
-    '<div class="tile"><b class="num">'+paid.length+'</b><span>gəldi</span></div>'+
-    '<div class="tile main"><b class="num">'+money(sum)+'</b><span>kassada</span></div></div>';
-  if(!list.length)return h+'<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>';
+    '<div class="tile"><b class="num">'+list.filter(function(a){return a.status!=="cancel"}).length+L('</b><span>qəbul</span></div>')+
+    '<div class="tile"><b class="num">'+paid.length+L('</b><span>gəldi</span></div>')+
+    '<div class="tile main"><b class="num">'+money(sum)+L('</b><span>kassada</span></div></div>');
+  if(!list.length)return h+L('<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>');
   var pm=patients();
   list.forEach(function(a){
     var r=reader(a.readerId),p=pm[pkey(a)];
     var was=p.paid-(a.status==="paid"?1:0),miss=p.noshow-(a.status==="noshow"?1:0),tags="";
-    if(a.status!=="cancel"&&overlap(a.readerId,a.date,a.time,a.dur||90,a.id))tags+='<span class="tag warn">Vaxt başqa qəbulla üst-üstə düşür</span>';
-    if(was>0)tags+='<span class="tag">'+was+' dəfə gəlib</span>';
-    if(miss>0)tags+='<span class="tag warn">'+miss+' dəfə gəlməyib</span>';
+    if(a.status!=="cancel"&&overlap(a.readerId,a.date,a.time,a.dur||90,a.id))tags+=L('<span class="tag warn">Vaxt başqa qəbulla üst-üstə düşür</span>');
+    if(was>0)tags+='<span class="tag">'+was+L(' dəfə gəlib</span>');
+    if(miss>0)tags+='<span class="tag warn">'+miss+L(' dəfə gəlməyib</span>');
     h+='<div class="card '+a.status+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
       '<div class="who"><b>'+esc(a.name)+'</b><span>'+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
-    var byName=state.staff[a.by]||(a.by?"Adsız istifadəçi":"");
-    if(byName)tags='<span class="tag by">Yazdı: '+esc(byName)+'</span>'+tags;
+    var byName=state.staff[a.by]||(a.by?L("Adsız istifadəçi"):"");
+    if(byName)tags=L('<span class="tag by">Yazdı: ')+esc(byName)+'</span>'+tags;
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(a.status==="wait"){
       var wa=waLink(a.phone,remindText(a));
       h+='<div class="actions">'+
-        '<button class="go" data-act="status" data-id="'+esc(a.id)+'" data-st="paid">Gəldi və ödədi</button>'+
-        '<button class="half" data-act="status" data-id="'+esc(a.id)+'" data-st="cancel">Ləğv etdi</button>'+
-        '<button class="half" data-act="status" data-id="'+esc(a.id)+'" data-st="noshow">Gəlmədi</button></div>'+
-        '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">Sil</button>'+
-        (wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp-da xatırlat</a>':'')+'</div>';
+        '<button class="go" data-act="status" data-id="'+esc(a.id)+L('" data-st="paid">Gəldi və ödədi</button>')+
+        '<button class="half" data-act="status" data-id="'+esc(a.id)+L('" data-st="cancel">Ləğv etdi</button>')+
+        '<button class="half" data-act="status" data-id="'+esc(a.id)+L('" data-st="noshow">Gəlmədi</button></div>')+
+        '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button>')+
+        (wa?'<a class="link" href="'+esc(wa)+L('" target="_blank" rel="noopener">WhatsApp-da xatırlat</a>'):'')+'</div>';
     }else{
       h+='<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
-        '<button class="link" data-act="status" data-id="'+esc(a.id)+'" data-st="wait">Geri qaytar</button>'+
-        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">Sil</button></div>';
+        '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
+        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button></div>');
     }
     h+='</div>';
   });
@@ -932,14 +1363,14 @@ function periodTitle(){
   var r=range(),d=parse(ui.date);
   if(ui.period==="day")return fmtDay(ui.date,"y");
   if(ui.period==="week")return fmtDay(r.s)+" – "+fmtDay(r.e);
-  return cap(MON[d.getMonth()])+" "+d.getFullYear();
+  return cap(MONN[d.getMonth()])+" "+d.getFullYear();
 }
 function cashTop(){
   var title=ui.period==="day"?fmtDay(ui.date,"w"):periodTitle();
-  var W=ui.tab==="products"?"satış":"kassa";
-  var small=ui.period==="day"?(ui.date===today?"Bu gün":"Günlük "+W):ui.period==="week"?"Həftəlik "+W:"Aylıq "+W;
+  var W=ui.tab==="products"?L("satış"):L("kassa");
+  var small=ui.period==="day"?(ui.date===today?L("Bu gün"):L("Günlük ")+W):ui.period==="week"?L("Həftəlik ")+W:L("Aylıq ")+W;
   var seg='<div class="seg">';
-  [["day","Gün"],["week","Həftə"],["month","Ay"]].forEach(function(p){seg+='<button data-act="period" data-p="'+p[0]+'" aria-pressed="'+(ui.period===p[0])+'">'+p[1]+'</button>'});
+  [["day",L("Gün")],["week",L("Həftə")],["month",L("Ay")]].forEach(function(p){seg+='<button data-act="period" data-p="'+p[0]+'" aria-pressed="'+(ui.period===p[0])+'">'+p[1]+'</button>'});
   return seg+'</div>'+navHtml(title,small);
 }
 function cashData(){
@@ -957,49 +1388,49 @@ function cashData(){
 }
 function reportText(){
   var d=cashData(),T=d.T,pr=productsIn(d.r),ps=pr.reduce(function(t,x){return t+x.amount},0);
-  var t="Kassa: "+periodTitle()+"\nCəmi: "+money(T.sum+ps)+"\nSeanslar: "+money(T.sum)+" ("+T.n+" seans)"+(pr.length?"\nMəhsul satışı: "+money(ps)+" ("+pr.length+")":"")+"\n";
-  d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;t+="\n"+x.name+": "+x.n+" seans, "+money(x.sum)});
-  if(T.cancel||T.noshow)t+="\n\nLəğv etdi: "+T.cancel+", gəlmədi: "+T.noshow;
+  var t=L("Kassa: ")+periodTitle()+L("\nCəmi: ")+money(T.sum+ps)+L("\nSeanslar: ")+money(T.sum)+" ("+T.n+L(" seans)")+(pr.length?L("\nMəhsul satışı: ")+money(ps)+" ("+pr.length+")":"")+"\n";
+  d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;t+="\n"+x.name+": "+x.n+L(" seans, ")+money(x.sum)});
+  if(T.cancel||T.noshow)t+=L("\n\nLəğv etdi: ")+T.cancel+L(", gəlmədi: ")+T.noshow;
   return t;
 }
 function cashMain(){
   var d=cashData(),rows=d.rows,T=d.T,shown=0,pr=productsIn(d.r),prSum=pr.reduce(function(t,x){return t+x.amount},0);
   var h='<div class="strip">'+
-    '<div class="tile main"><b class="num">'+money(T.sum+prSum)+'</b><span>cəmi kassada</span></div>'+
-    '<div class="tile"><b class="num">'+money(T.sum)+'</b><span>'+T.n+' seans</span></div>'+
-    '<div class="tile"><b class="num">'+money(prSum)+'</b><span>'+pr.length+' məhsul</span></div></div>';
+    '<div class="tile main"><b class="num">'+money(T.sum+prSum)+L('</b><span>cəmi kassada</span></div>')+
+    '<div class="tile"><b class="num">'+money(T.sum)+'</b><span>'+T.n+L(' seans</span></div>')+
+    '<div class="tile"><b class="num">'+money(prSum)+'</b><span>'+pr.length+L(' məhsul</span></div></div>');
   d.order.forEach(function(id){
     var x=rows[id],rd=reader(id),any=x.n+x.cancel+x.noshow+x.wait;
     if(rd.archived&&!any)return;
     shown++;
     var foot=[];
-    if(x.wait)foot.push("statusu seçilməyib: "+x.wait);
-    if(x.cancel)foot.push("ləğv etdi: "+x.cancel);
-    if(x.noshow)foot.push("gəlmədi: "+x.noshow);
-    h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+' seans · '+money(x.sum)+'</span></div>'+
+    if(x.wait)foot.push(L("statusu seçilməyib: ")+x.wait);
+    if(x.cancel)foot.push(L("ləğv etdi: ")+x.cancel);
+    if(x.noshow)foot.push(L("gəlmədi: ")+x.noshow);
+    h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+L(' seans · ')+money(x.sum)+'</span></div>'+
       (foot.length?'<div class="foot">'+cap(foot.join(", "))+'</div>':'')+
       '</div>';
   });
   if(!auth.loaded)return h;
-  if(!shown)h+='<div class="empty">Hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə edir.</div>';
+  if(!shown)h+=L('<div class="empty">Hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə edir.</div>');
   var fin=T.n+T.cancel+T.noshow,more="";
   if(state.v2){
     var ex=expensesIn(d.r),exSum=ex.reduce(function(t,x){return t+x.amount},0);
-    h+='<div class="pay"><div class="head"><b>Xərclər</b><span class="num">'+money(exSum)+'</span></div>';
+    h+=L('<div class="pay"><div class="head"><b>Xərclər</b><span class="num">')+money(exSum)+'</span></div>';
     if(ex.length){h+='<div>';ex.forEach(function(x){
-      h+='<div class="visit"><span>'+fmtDay(x.date)+' · '+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+'">Dəyiş</button></div>'});h+='</div>'}
-    h+='<button class="ghost" data-act="new-expense">Xərc əlavə et</button>'+
+      h+='<div class="visit"><span>'+fmtDay(x.date)+' · '+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+L('">Dəyiş</button></div>')});h+='</div>'}
+    h+=L('<button class="ghost" data-act="new-expense">Xərc əlavə et</button>')+
       '</div>';
     var bb=bookedBy(d.r.s,d.r.e),bt=bb.reduce(function(t,x){return t+x.n},0);
-    h+='<div class="pay"><div class="head"><b>'+(ui.period==="day"?(ui.date===today?"Bu gün yazılan qəbullar":fmtDay(ui.date)+" yazılan qəbullar"):"Bu dövrdə yazılan qəbullar")+'</b><span class="num">'+bt+'</span></div>';
+    h+='<div class="pay"><div class="head"><b>'+(ui.period==="day"?(ui.date===today?L("Bu gün yazılan qəbullar"):fmtDay(ui.date)+L(" yazılan qəbullar")):L("Bu dövrdə yazılan qəbullar"))+'</b><span class="num">'+bt+'</span></div>';
     if(bb.length){h+='<div>';bb.forEach(function(x){
-      var inner='<span>'+esc(x.name)+(x.cancel?' <small style="color:var(--muted)">(ləğv: '+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b>';
+      var inner='<span>'+esc(x.name)+(x.cancel?L(' <small style="color:var(--muted)">(ləğv: ')+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b>';
       h+=isAdmin()&&x.id?'<button class="agent" data-act="agent" data-id="'+esc(x.id)+'">'+inner+'<span class="chev">›</span></button>':'<div class="visit">'+inner+'</div>'});h+='</div>'}
-    else h+='<div class="foot">Bu müddətdə heç kim qəbul yazmayıb.</div>';
-    h+='<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.'+(isAdmin()&&bb.length?' Ətraflı statistika üçün işçinin adına toxunun.':'')+'</div></div>';
-    var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
-    h+='<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı ('+PN+')</button>';
-    h+='<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>';
+    else h+=L('<div class="foot">Bu müddətdə heç kim qəbul yazmayıb.</div>');
+    h+=L('<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.')+(isAdmin()&&bb.length?L(' Ətraflı statistika üçün işçinin adına toxunun.'):'')+'</div></div>';
+    var PN={day:L("günlük"),week:L("həftəlik"),month:L("aylıq")}[ui.period];
+    h+=L('<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı (')+PN+')</button>';
+    h+=L('<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>');
   }
   if(ui.period!=="day"){
     var pm=patients(),nw=0,rp=0,days={},cnt1={};
@@ -1009,14 +1440,14 @@ function cashMain(){
       days[a.date]=1;if(pm[k1]&&pm[k1].first===a.date&&!cnt1[k1]){cnt1[k1]=1;nw++}else rp++;
     });
     var nd=Object.keys(days).length;
-    more+='<div class="stats"><div class="tile"><b class="num">'+nw+'</b><span>yeni pasiyent</span></div>'+
-      '<div class="tile"><b class="num">'+rp+'</b><span>təkrar gəliş</span></div>'+
-      '<div class="tile"><b class="num">'+nd+'</b><span>iş günü</span></div>'+
-      '<div class="tile"><b class="num">'+money(nd?T.sum/nd:0)+'</b><span>gündə orta</span></div></div>';
+    more+='<div class="stats"><div class="tile"><b class="num">'+nw+L('</b><span>yeni pasiyent</span></div>')+
+      '<div class="tile"><b class="num">'+rp+L('</b><span>təkrar gəliş</span></div>')+
+      '<div class="tile"><b class="num">'+nd+L('</b><span>iş günü</span></div>')+
+      '<div class="tile"><b class="num">'+money(nd?T.sum/nd:0)+L('</b><span>gündə orta</span></div></div>');
   }
-  more+='<button class="ghost" data-act="report">Hesabatı mətn kimi göndər</button>';
-  h+='<details class="more"'+(ui.more?" open":"")+'><summary>Əlavə</summary><div class="morebody">'+more+'</div></details>';
-  h+='<p class="hint">'+(fin?'Gələnlər: '+T.n+' / '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+'Hesaba yalnız «Gəldi və ödədi» seçilmiş seanslar düşür.</p>';
+  more+=L('<button class="ghost" data-act="report">Hesabatı mətn kimi göndər</button>');
+  h+='<details class="more"'+(ui.more?" open":"")+L('><summary>Əlavə</summary><div class="morebody">')+more+'</div></details>';
+  h+='<p class="hint">'+(fin?L('Gələnlər: ')+T.n+' / '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+L('Hesaba yalnız «Gəldi və ödədi» seçilmiş seanslar düşür.</p>');
   return h;
 }
 function expensesIn(r){
@@ -1029,7 +1460,7 @@ function bookedBy(s0,e0){
   var m={};
   state.appts.forEach(function(a){
     if(!a.created||a.created<s0||a.created>e0||isSpec(a.by))return;
-    var k=a.by||"",x=m[k]||(m[k]={name:state.staff[k]||"Adsız istifadəçi",n:0,cancel:0,days:{}});
+    var k=a.by||"",x=m[k]||(m[k]={name:state.staff[k]||L("Adsız istifadəçi"),n:0,cancel:0,days:{}});
     if(a.status==="cancel")x.cancel++;else{x.n++;x.days[a.created]=(x.days[a.created]||0)+1}
   });
   return Object.keys(m).map(function(k){m[k].id=k;return m[k]}).sort(function(a,b){return b.n-a.n||a.name.localeCompare(b.name)});
@@ -1039,8 +1470,8 @@ function weeklySheet(r){
   var wd=function(d){return parse(d).getDay()},fri=function(d){return addDays(d,-((wd(d)-5+7)%7))};
   var weeks=[];for(var w=fri(r.s);w<=r.e;w=addDays(w,7))weeks.push(w);
   var who={},ids=[];
-  Object.keys(state.staff).forEach(function(k){if(!isSpec(k)&&state.roleSet[k]&&k!==ADMIN&&state.roles[k]!=="admin"){who[k]=state.staff[k]||"Adsız istifadəçi";ids.push(k)}});
-  state.appts.forEach(function(a){var k=a.by||"";if(isSpec(k))return;if(!(k in who)){who[k]=state.staff[k]||"Adsız istifadəçi";ids.push(k)}});
+  Object.keys(state.staff).forEach(function(k){if(!isSpec(k)&&state.roleSet[k]&&k!==ADMIN&&state.roles[k]!=="admin"){who[k]=state.staff[k]||L("Adsız istifadəçi");ids.push(k)}});
+  state.appts.forEach(function(a){var k=a.by||"";if(isSpec(k))return;if(!(k in who)){who[k]=state.staff[k]||L("Adsız istifadəçi");ids.push(k)}});
   ids.sort(function(a,b){return (a==="")-(b==="")||who[a].localeCompare(who[b])});
   var cnt={};
   state.appts.forEach(function(a){
@@ -1052,16 +1483,16 @@ function weeklySheet(r){
   var groups=ids.map(function(k){return{name:who[k],id:k}}),G=groups.length,TOT=3+G*4;
   var width=TOT+4,rows=[],cells=[],merges=[],first=5,last=first+weeks.length-1;
   for(var i=0;i<5+weeks.length;i++){var row=[];for(var j=0;j<width;j++)row.push(null);rows.push(row)}
-  rows[0][0]="Həftəlik statistika";rows[0][3]=periodTitle();
-  rows[1][2]="Kanal";rows[4][0]="Start";rows[4][1]="End";rows[4][2]="Həftə";
+  rows[0][0]=L("Həftəlik statistika");rows[0][3]=periodTitle();
+  rows[1][2]=L("Kanal");rows[4][0]="Start";rows[4][1]="End";rows[4][2]=L("Həftə");
   var put=function(r,c,f,v,z){cells.push({r:r,c:c,f:f,v:v,z:z})};
   var block=function(c0,title,top){
     rows[1][c0]=top;rows[2][c0]=title;
     merges.push({s:{r:1,c:c0},e:{r:1,c:c0+3}},{s:{r:2,c:c0},e:{r:2,c:c0+3}});
-    ["Mür","Seans","M","%"].forEach(function(h,j){rows[4][c0+j]=h});
+    [L("Mür"),L("Seans"),"M","%"].forEach(function(h,j){rows[4][c0+j]=h});
   };
   groups.forEach(function(g,i){block(3+i*4,g.name,"")});
-  block(TOT,"Cəmi","Toplam");
+  block(TOT,L("Cəmi"),L("Toplam"));
   weeks.forEach(function(w,i){
     var R=5+i,e=addDays(w,7),n=R+1,tot=0;
     put(R,0,null,serial(w),"d-mmm-yy");put(R,1,null,serial(e),"d-mmm-yy");
@@ -1079,45 +1510,45 @@ function weeklySheet(r){
     put(R,TOT+3,"IFERROR("+col(TOT+1)+n+"/"+col(TOT)+n+",0)",0,"0%");
   });
   for(var c=3;c<width;c++){
-    var off=(c-3)%4,L=col(c),tv=0;
+    var off=(c-3)%4,LN=col(c),tv=0;
     if(off===1)for(var i2=0;i2<weeks.length;i2++){var x=rows[5+i2][c];if(typeof x==="number")tv+=x;else{var cc=cells.filter(function(q){return q.r===5+i2&&q.c===c})[0];if(cc)tv+=cc.v||0}}
     if(off===3)put(3,c,"IFERROR("+col(c-2)+"4/"+col(c-3)+"4,0)",0,"0%");
-    else put(3,c,"SUM("+L+(first+1)+":"+L+(last+1)+")",tv,"0.00");
+    else put(3,c,"SUM("+LN+(first+1)+":"+LN+(last+1)+")",tv,"0.00");
   }
   var widths=[11,11,7];for(var k=3;k<width;k++)widths.push((k-3)%4===3?7:9);
-  return["Həftəlik",rows,widths,{cells:cells,merges:merges},"Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur."];
+  return[L("Həftəlik"),rows,widths,{cells:cells,merges:merges},L("Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur.")];
 }
 function reportBook(){
   var prL=productsIn(range()),prS=prL.reduce(function(t,x){return t+x.amount},0);
   var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0);
-  var sum=[["Hesabat",periodTitle()],["Dövr",r.s+" — "+r.e],[],
-    ["Kassa cəmi",r2(T.sum+prS)],["Seanslardan",r2(T.sum)],["Seans sayı",T.n],["Məhsul satışı",r2(prS)],["Xərclər",r2(exSum)],[],
-    ["Mütəxəssis","Seans","Kassa","Ləğv etdi","Gəlmədi"]];
+  var sum=[[L("Hesabat"),periodTitle()],[L("Dövr"),r.s+" — "+r.e],[],
+    [L("Kassa cəmi"),r2(T.sum+prS)],[L("Seanslardan"),r2(T.sum)],[L("Seans sayı"),T.n],[L("Məhsul satışı"),r2(prS)],[L("Xərclər"),r2(exSum)],[],
+    [L("Mütəxəssis"),L("Seans"),L("Kassa"),L("Ləğv etdi"),L("Gəlmədi")]];
   d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),x.cancel,x.noshow])});
-  var ap=[["Tarix","Saat","Mütəxəssis","Pasiyent","Telefon","Qiymət","Status","Yazan","Qeyd"]];
+  var ap=[[L("Tarix"),L("Saat"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Status"),L("Yazan"),L("Qeyd")]];
   state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId);
       ap.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],state.staff[a.by]||"",a.note])});
-  var xp=[["Tarix","Xərc","Məbləğ","Yazan"]];
+  var xp=[[L("Tarix"),L("Xərc"),L("Məbləğ"),L("Yazan")]];
   ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
-  xp.push([],["Cəmi","",r2(exSum)]);
-  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[["Yekun",sum,[22,14,12,12,12]],["Qəbullar",ap,[11,7,16,22,16,9,16,14,24]],["Xərclər",xp,[11,30,12,16]],["Məhsullar",[["Tarix","Məbləğ","Satdı"]].concat(prL.map(function(x){return[x.date,r2(x.amount),state.staff[x.by]||"Adsız istifadəçi"]})).concat([[],["Cəmi",r2(prS)]]),[11,12,20]]]};
+  xp.push([],[L("Cəmi"),"",r2(exSum)]);
+  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[[L("Yekun"),sum,[22,14,12,12,12]],[L("Qəbullar"),ap,[11,7,16,22,16,9,16,14,24]],[L("Xərclər"),xp,[11,30,12,16]],[L("Məhsullar"),[[L("Tarix"),L("Məbləğ"),L("Satdı")]].concat(prL.map(function(x){return[x.date,r2(x.amount),state.staff[x.by]||L("Adsız istifadəçi")]})).concat([[],[L("Cəmi"),r2(prS)]]),[11,12,20]]]};
 }
 function salesBook(){
-  var r=range(),rows=[["Tarix","Saat","Agent","Pasiyent","Telefon","Mütəxəssis"]];
+  var r=range(),rows=[[L("Tarix"),L("Saat"),L("Agent"),L("Pasiyent"),L("Telefon"),L("Mütəxəssis")]];
   var fri=function(d){return addDays(d,-((parse(d).getDay()-5+7)%7))},s0=fri(r.s),e0=addDays(fri(r.e),6);
   state.appts.filter(function(a){return a.status==="paid"&&a.date>=s0&&a.date<=e0&&!isSpec(a.by)})
     .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
-    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||"Adsız istifadəçi",a.name,a.phone,rd?rd.name:""])});
-  var bb=bookedBy(s0,e0),dl=[["Tarix"].concat(bb.map(function(x){return x.name})).concat(["Cəmi"])];
+    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||L("Adsız istifadəçi"),a.name,a.phone,rd?rd.name:""])});
+  var bb=bookedBy(s0,e0),dl=[[L("Tarix")].concat(bb.map(function(x){return x.name})).concat([L("Cəmi")])];
   for(var dd=s0;dd<=e0;dd=addDays(dd,1)){var tt=0;dl.push([dd].concat(bb.map(function(x){var v=x.days[dd]||0;tt+=v;return v})).concat([tt]))}
-  dl.push(["Cəmi"].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
+  dl.push([L("Cəmi")].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
   var pa={},pl=state.products.filter(function(x){return x.date>=s0&&x.date<=e0});
-  pl.forEach(function(x){var k=state.staff[x.by]||"Adsız istifadəçi";(pa[k]=pa[k]||{n:0,sum:0});pa[k].n++;pa[k].sum+=x.amount});
-  var ps=[["Satdı","Say","Məbləğ"]].concat(Object.keys(pa).sort().map(function(k){return[k,pa[k].n,r2(pa[k].sum)]}));
-  ps.push([],["Tarix","Məbləğ","Satdı"]);pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(x){ps.push([x.date,r2(x.amount),state.staff[x.by]||"Adsız istifadəçi"])});
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),["Gündəlik yazılış",dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,"Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır."],["Gələn pasiyentlər",rows,[11,7,20,22,16,16],null,"Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə."],["Məhsul satışı",ps,[20,10,12]]]};
+  pl.forEach(function(x){var k=state.staff[x.by]||L("Adsız istifadəçi");(pa[k]=pa[k]||{n:0,sum:0});pa[k].n++;pa[k].sum+=x.amount});
+  var ps=[[L("Satdı"),L("Say"),L("Məbləğ")]].concat(Object.keys(pa).sort().map(function(k){return[k,pa[k].n,r2(pa[k].sum)]}));
+  ps.push([],[L("Tarix"),L("Məbləğ"),L("Satdı")]);pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(x){ps.push([x.date,r2(x.amount),state.staff[x.by]||L("Adsız istifadəçi")])});
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),[L("Gündəlik yazılış"),dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,L("Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.")],[L("Gələn pasiyentlər"),rows,[11,7,20,22,16,16],null,L("Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə.")],[L("Məhsul satışı"),ps,[20,10,12]]]};
 }
 function fmtCell(c){
   if(c==null||c==="")return["",""];
@@ -1154,7 +1585,7 @@ function sheetTable(sh){
 }
 function bookSheet(){
   var rb=sheet.kind==="sales"?salesBook():reportBook(),k=Math.min(sheet.tab||0,rb.sheets.length-1);
-  var title=sheet.kind==="sales"?"Satış hesabatı":"Pul hesabatı";
+  var title=sheet.kind==="sales"?L("Satış hesabatı"):L("Pul hesabatı");
   return '<h2>'+title+CLOSE+'</h2>'+
     '<div class="seg" style="--n:'+rb.sheets.length+'">'+rb.sheets.map(function(x,i){return '<button data-act="book-tab" data-id="'+i+'" aria-pressed="'+(i===k)+'">'+esc(x[0])+'</button>'}).join("")+'</div>'+
     (rb.sheets[k][4]?'<p class="hint">'+esc(rb.sheets[k][4])+'</p>':'')+
@@ -1168,94 +1599,100 @@ function patientsList(){
     return low(p.name).indexOf(q)>=0||(qd&&String(p.phone||"").replace(/\D/g,"").indexOf(qd)>=0);
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
-  if(!arr.length)return auth.loaded?'<div class="empty">'+(q?"Heç kim tapılmadı. Adı və ya nömrəni yoxlayın.":"Pasiyentlər ilk qəbuldan sonra burada görünəcək.")+'</div>':"";
+  if(!arr.length)return auth.loaded?'<div class="empty">'+(q?L("Heç kim tapılmadı. Adı və ya nömrəni yoxlayın."):L("Pasiyentlər ilk qəbuldan sonra burada görünəcək."))+'</div>':"";
   return arr.map(function(p){
-    var bits=[p.paid+" dəfə gəlib"];
-    if(p.noshow)bits.push("gəlməyib: "+p.noshow);
-    if(p.cancel)bits.push("ləğv edib: "+p.cancel);
-    return '<div class="reader"><button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||"telefon yoxdur")+' · '+bits.join(", ")+'</span></button>'+
-      '<button class="ghost" data-act="repeat" data-id="'+esc(p.key)+'">Yaz</button></div>';
-  }).join("")+(total>200?'<p class="hint">Son 200 pasiyent göstərilir (cəmi '+total+'). Başqasını tapmaq üçün adı və ya nömrəni axtarın.</p>':'');
+    var bits=[p.paid+L(" dəfə gəlib")];
+    if(p.noshow)bits.push(L("gəlməyib: ")+p.noshow);
+    if(p.cancel)bits.push(L("ləğv edib: ")+p.cancel);
+    return '<div class="reader"><button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||L("telefon yoxdur"))+' · '+bits.join(", ")+'</span></button>'+
+      '<button class="ghost" data-act="repeat" data-id="'+esc(p.key)+L('">Yaz</button></div>');
+  }).join("")+(total>200?L('<p class="hint">Son 200 pasiyent göstərilir (cəmi ')+total+L('). Başqasını tapmaq üçün adı və ya nömrəni axtarın.</p>'):'');
 }
 function patientSheet(){
-  var p=patients()[sheet.id];if(!p)return '<h2>Pasiyent'+CLOSE+'</h2>';
+  var p=patients()[sheet.id];if(!p)return L('<h2>Pasiyent')+CLOSE+'</h2>';
   var wa=waLink(p.phone,""),tel=String(p.phone||"").replace(/[^\d+]/g,"");
-  var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||"Telefon yazılmayıb")+'</p><div>';
+  var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p><div>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId);
-    var wb=a.by?(state.staff[a.by]||"Adsız istifadəçi"):"",open=!a.lite&&appt(a.id);
+    var wb=a.by?(state.staff[a.by]||L("Adsız istifadəçi")):"",open=!a.lite&&appt(a.id);
     /* A visit still in the loaded weeks opens its own card (status, Dəyiş, Sil). */
     h+=(open?'<button class="visit vbtn" data-act="view-appt" data-id="'+esc(a.id)+'">':'<div class="visit">')+'<span class="num">'+fmtDay(a.date,"y")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+
-      (wb?'<small style="display:block;color:var(--muted);font-size:13px">Yazdı: '+esc(wb)+'</small>':'')+'</span>'+
-      (a.status==="wait"?'<span class="tag">Gözlənilir</span>':'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+(open?'</button>':'</div>');
+      (wb?L('<small style="display:block;color:var(--muted);font-size:13px">Yazdı: ')+esc(wb)+'</small>':'')+'</span>'+
+      (a.status==="wait"?L('<span class="tag">Gözlənilir</span>'):'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+(open?'</button>':'</div>');
   });
   /* "Dəyiş" changes the patient's next booking; with none ahead the button writes a new one. */
   var next=p.list.filter(function(a){return !a.lite&&a.status==="wait"&&a.date>=today&&appt(a.id)})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})[0];
-  h+='</div><div class="btns">'+(next?'<button class="primary" data-act="edit-appt" data-id="'+esc(next.id)+'">Dəyiş</button>':'<button class="primary" data-act="repeat" data-id="'+esc(p.key)+'">Yeni qəbul yaz</button>')+
-    (tel.replace(/\D/g,"").length>=5?'<a class="wa" href="tel:'+esc(tel)+'">Zəng et</a>':'')+
+  h+='</div><div class="btns">'+(next?'<button class="primary" data-act="edit-appt" data-id="'+esc(next.id)+L('">Dəyiş</button>'):'<button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>'))+
+    (tel.replace(/\D/g,"").length>=5?'<a class="wa" href="tel:'+esc(tel)+L('">Zəng et</a>'):'')+
     (wa?'<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>'+
-    (next?'<p class="hint">«Dəyiş» ən yaxın qəbulu ('+fmtDay(next.date)+', '+esc(next.time)+') dəyişir. Başqa qəbulu dəyişmək üçün siyahıda ona toxunun. <button class="link" style="padding:0" data-act="repeat" data-id="'+esc(p.key)+'">Yeni qəbul yaz</button></p>':'');
+    (next?L('<p class="hint">«Dəyiş» ən yaxın qəbulu (')+fmtDay(next.date)+', '+esc(next.time)+L(') dəyişir. Başqa qəbulu dəyişmək üçün siyahıda ona toxunun. <button class="link" style="padding:0" data-act="repeat" data-id="')+esc(p.key)+L('">Yeni qəbul yaz</button></p>'):'');
   return h;
 }
 function reportSheet(){
-  return '<h2>Hesabat'+CLOSE+'</h2>'+
-    '<div class="field"><label for="rep">Bu mətni rəhbərə göndərmək olar</label><textarea id="rep" readonly>'+esc(reportText())+'</textarea></div>'+
-    '<p class="hint" id="rep-msg"></p><div class="btns"><button class="primary" data-act="copy">Kopyala</button></div>';
+  return L('<h2>Hesabat')+CLOSE+'</h2>'+
+    L('<div class="field"><label for="rep">Bu mətni rəhbərə göndərmək olar</label><textarea id="rep" readonly>')+esc(reportText())+'</textarea></div>'+
+    L('<p class="hint" id="rep-msg"></p><div class="btns"><button class="primary" data-act="copy">Kopyala</button></div>');
 }
 
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="";
-  if(adm&&secWarn)h+='<div class="note warnbox"><p>Təhlükəsizlik: '+esc(secWarn)+'. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>';
-  h+='<h3 class="sec">Mütəxəssislər</h3>';
-  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?"Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.")+'</div>';
+  if(adm&&secWarn)h+=L('<div class="note warnbox"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
+  h+=L('<h3 class="sec">Mütəxəssislər</h3>');
+  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
-    h+='<div class="reader"><button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="Rəngi dəyiş"></button><div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
-      (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+'">Dəyiş</button>':'')+'</div>';
+    h+='<div class="reader"><button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+L('" aria-label="Rəngi dəyiş"></button><div style="flex:1"><b>')+esc(r.name)+'</b></div>'+
+      (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
   });
-  if(rs.length)h+='<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>';
-  if(adm)h+='<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>';
+  if(rs.length)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>');
+  if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
   if(state.hasBreaks){
-    h+='<h3 class="sec">Fasilələr (hər gün)</h3>';
-    if(!state.breaks.length)h+='<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>';
+    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>');
+    if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
     state.breaks.forEach(function(b){
-      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+'">Sil</button>':'')+'</div>';
+      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
     });
-    if(adm)h+='<button class="ghost" data-act="new-break">Fasilə əlavə et</button>';
+    if(adm)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
   if(isOwner()){
-    h+='<h3 class="sec">İşçi hesabları</h3>'+
-      '<div class="pay"><div class="foot" style="font-size:14px;color:var(--ink)">Mütəxəssislərə və satış agentlərinə login və şifrəni yalnız siz yaradırsınız. Supabase-də «Add user» → «Create new user» basın, e-poçt formatında login (məs. aysel@ruqya.az) və şifrə yazın, «Auto Confirm User» qalsın.</div>'+
-      '<a class="wa" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users" target="_blank" rel="noopener">Hesab yarat və ya sil</a></div>';
+    h+=L('<h3 class="sec">İşçi hesabları</h3>')+
+      L('<div class="pay"><div class="foot" style="font-size:14px;color:var(--ink)">Mütəxəssislərə və satış agentlərinə login və şifrəni yalnız siz yaradırsınız. Supabase-də «Add user» → «Create new user» basın, e-poçt formatında login (məs. aysel@ruqya.az) və şifrə yazın, «Auto Confirm User» qalsın.</div>')+
+      L('<a class="wa" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users" target="_blank" rel="noopener">Hesab yarat və ya sil</a></div>');
   }
   if(isAdmin()&&state.hasRole){
     var ids2=Object.keys(state.staff).sort(function(a,b){return state.staff[a].localeCompare(state.staff[b])});
     if(ids2.length){
-      h+='<div class="pay"><div class="head"><b>İşçilər</b><span class="num">'+ids2.length+'</span></div><div>';
+      h+=L('<div class="pay"><div class="head"><b>İşçilər</b><span class="num">')+ids2.length+'</span></div><div>';
       ids2.forEach(function(k){
-        var nm='<span>'+esc(state.staff[k]||"Ad yazılmayıb")+(k===auth.user.id?' (siz)':'')+'</span>';
-        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k]||"Ad yazılmayıb")+'</button>'+(k===auth.user.id?' (siz)':'')+'</span>';
-        h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+'">Dəyiş</button>':'')+'</div>'});
-      h+='</div><div class="foot">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>';
+        var nm='<span>'+esc(state.staff[k]||L("Ad yazılmayıb"))+(k===auth.user.id?L(' (siz)'):'')+'</span>';
+        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k]||L("Ad yazılmayıb"))+'</button>'+(k===auth.user.id?L(' (siz)'):'')+'</span>';
+        h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+L('">Dəyiş</button>'):'')+'</div>'});
+      h+=L('</div><div class="foot">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>');
     }
   }
-  if(adm&&state.hasAudit)h+='<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>';
-  h+='<h3 class="sec">Vidcet</h3>';
+  if(adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
+  h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
-  if(!wh)h+='<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>';
-  else if(wh==="old")h+='<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>';
-  else if(wh==="ios")h+='<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>';
-  else h+='<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>';
+  if(!wh)h+=L('<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
+  else if(wh==="old")h+=L('<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>');
+  else if(wh==="ios")h+=L('<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>');
+  else h+=L('<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>');
+  h+=langSeg();
   var th=curTheme();
-  h+='<h3 class="sec">Görünüş</h3><div class="seg">'+
-    [["auto","Avtomatik"],["light","Açıq"],["dark","Tünd"]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
-    '<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>';
-  h+='<h3 class="sec">Hesab</h3>';
-  h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
-    (state.v2?'<button class="ghost" data-act="me">Dəyiş</button>':'')+'</div>'+
-    (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?'<p class="hint">Rol: '+roleLabel(auth.user.id)+'</p>':'');
-  h+='<button class="ghost" data-act="logout">Çıxış</button>';
+  h+=L('<h3 class="sec">Görünüş</h3><div class="seg">')+
+    [["auto",L("Avtomatik")],["light",L("Açıq")],["dark",L("Tünd")]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
+    L('<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>');
+  h+=L('<h3 class="sec">Hesab</h3>');
+  h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||L("Ad yazılmayıb"))+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
+    (state.v2?L('<button class="ghost" data-act="me">Dəyiş</button>'):'')+'</div>'+
+    (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?L('<p class="hint">Rol: ')+roleLabel(auth.user.id)+'</p>':'');
+  h+=L('<button class="ghost" data-act="logout">Çıxış</button>');
   return h;
+}
+/* Language switch, written in both languages so anyone can find it. Changing it reloads the page. */
+function langSeg(){
+  return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
+    [["az","Azərbaycanca"],["ru","Русский"]].map(function(x){return '<button data-act="lang" data-id="'+x[0]+'" aria-pressed="'+(LANG===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
 }
 function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
 function agentStats(k,s0,e0){
@@ -1271,48 +1708,48 @@ function agentStats(k,s0,e0){
   return r;
 }
 function agentSheet(){
-  var k=sheet.id,d=sheet.date||today,name=state.staff[k]||"Adsız istifadəçi";
+  var k=sheet.id,d=sheet.date||today,name=state.staff[k]||L("Adsız istifadəçi");
   var dd=parse(d),fri=addDays(d,-((dd.getDay()-5+7)%7)),m0=ymd(dd.getFullYear(),dd.getMonth(),1),m1=ymd(dd.getFullYear(),dd.getMonth()+1,0);
   var D=agentStats(k,d,d),W=agentStats(k,fri,addDays(fri,6)),M=agentStats(k,m0,m1);
   var canBack=!state.loadedFrom||addDays(d,-1)>=state.loadedFrom;
   var h='<h2>'+esc(name)+CLOSE+'</h2>'+
-    '<div class="daynav"><button class="icon-btn" data-act="ag-day" data-n="-1" aria-label="Geri"'+(canBack?'':' disabled')+'>‹</button>'+
-    '<div class="label">'+(d===today?"Bu gün":fmtDay(d,"w"))+'<small>'+(d===today?fmtDay(d,"w"):(d===addDays(today,-1)?"Dünən":""))+'</small></div>'+
-    '<button class="icon-btn" data-act="ag-day" data-n="1" aria-label="İrəli"'+(d>=today?' disabled':'')+'>›</button></div>'+
-    '<div class="stats" style="margin-top:10px"><div class="tile"><b class="num">'+D.booked+'</b><span>'+(d===today?"bu gün yazdı":"həmin gün yazdı")+'</span></div>'+
-    '<div class="tile"><b class="num">'+D.cancel+'</b><span>ləğv olunan</span></div></div>'+
-    '<p class="hint">Hansı tarixə yazılmasından asılı olmayaraq, '+(d===today?"bu gün":"həmin gün")+' yazdığı qəbullar sayılır. Silinənlər sayılmır.</p>';
+    '<div class="daynav"><button class="icon-btn" data-act="ag-day" data-n="-1" aria-label="'+L("Geri")+'"'+(canBack?'':' disabled')+'>‹</button>'+
+    '<div class="label">'+(d===today?L("Bu gün"):fmtDay(d,"w"))+'<small>'+(d===today?fmtDay(d,"w"):(d===addDays(today,-1)?L("Dünən"):""))+'</small></div>'+
+    L('<button class="icon-btn" data-act="ag-day" data-n="1" aria-label="İrəli"')+(d>=today?' disabled':'')+'>›</button></div>'+
+    '<div class="stats" style="margin-top:10px"><div class="tile"><b class="num">'+D.booked+'</b><span>'+(d===today?L("bu gün yazdı"):L("həmin gün yazdı"))+'</span></div>'+
+    '<div class="tile"><b class="num">'+D.cancel+L('</b><span>ləğv olunan</span></div></div>')+
+    L('<p class="hint">Hansı tarixə yazılmasından asılı olmayaraq, ')+(d===today?L("bu gün"):L("həmin gün"))+L(' yazdığı qəbullar sayılır. Silinənlər sayılmır.</p>');
   var list=state.appts.filter(function(a){return a.by===k&&a.created===d}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
   if(list.length){
     h+='<div>';
     list.forEach(function(a){var r=reader(a.readerId);
       h+='<div class="agrow"><span>'+esc(a.name)+'<small class="num">'+fmtDay(a.date,"w")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</small></span>'+
-        (a.status==="wait"?'<span class="tag">Gözlənilir</span>':'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>'});
+        (a.status==="wait"?L('<span class="tag">Gözlənilir</span>'):'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>'});
     h+='</div>';
   }
   var row=function(lbl,v){return '<span>'+lbl+'</span><b class="num">'+v[0]+'</b><b class="num">'+v[1]+'</b>'};
-  h+='<div class="pay" style="margin-top:12px"><div class="head"><b>Ümumi</b></div>'+
-    '<div class="agsum"><span></span><span class="h">Həftə</span><span class="h">Ay</span>'+
-    row("Yazdığı qəbullar",[W.booked,M.booked])+
-    row("Gəlib ödəyənlər",[W.came,M.came])+
-    row("Gəlməyənlər",[W.noshow,M.noshow])+
-    row("Satdığı məhsul",[W.prod+(W.prod?" · "+money(W.prodSum):""),M.prod+(M.prod?" · "+money(M.prodSum):"")])+
-    '</div><div class="foot">Həftə: '+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+' (cümə–cümə axşamı). Ay: '+MON[dd.getMonth()]+'. «Gəlib ödəyənlər» həmin dövrdəki seanslar üzrə sayılır.</div></div>';
-  if(state.loadedFrom&&m0<state.loadedFrom)h+='<p class="hint">Qeyd: telefon son '+WINDOW+' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>';
+  h+=L('<div class="pay" style="margin-top:12px"><div class="head"><b>Ümumi</b></div>')+
+    L('<div class="agsum"><span></span><span class="h">Həftə</span><span class="h">Ay</span>')+
+    row(L("Yazdığı qəbullar"),[W.booked,M.booked])+
+    row(L("Gəlib ödəyənlər"),[W.came,M.came])+
+    row(L("Gəlməyənlər"),[W.noshow,M.noshow])+
+    row(L("Satdığı məhsul"),[W.prod+(W.prod?" · "+money(W.prodSum):""),M.prod+(M.prod?" · "+money(M.prodSum):"")])+
+    L('</div><div class="foot">Həftə: ')+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+L(' (cümə–cümə axşamı). Ay: ')+MONN[dd.getMonth()]+L('. «Gəlib ödəyənlər» həmin dövrdəki seanslar üzrə sayılır.</div></div>');
+  if(state.loadedFrom&&m0<state.loadedFrom)h+=L('<p class="hint">Qeyd: telefon son ')+WINDOW+L(' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>');
   return h;
 }
 function colorSheet(){
-  var r=reader(sheet.id);if(!r)return '<h2>Rəng'+CLOSE+'</h2>';
-  var cur=rcolor(r.id),h='<h2>'+esc(r.name)+' — rəng'+CLOSE+'</h2>';
-  if(!state.hasColor)return h+'<p class="hint">Rəng seçmək üçün baza bir dəfə yenilənməlidir. '+(isOwner()?'Bunun üçün SQL faylını işə salın.':'Bunu rəhbər edir.')+'</p>';
+  var r=reader(sheet.id);if(!r)return L('<h2>Rəng')+CLOSE+'</h2>';
+  var cur=rcolor(r.id),h='<h2>'+esc(r.name)+L(' — rəng')+CLOSE+'</h2>';
+  if(!state.hasColor)return h+L('<p class="hint">Rəng seçmək üçün baza bir dəfə yenilənməlidir. ')+(isOwner()?L('Bunun üçün SQL faylını işə salın.'):L('Bunu rəhbər edir.'))+'</p>';
   h+='<div class="swatches">'+PALETTE.map(function(c){return '<button data-act="pick-color" data-id="'+c+'" style="background:'+c+'" aria-pressed="'+(c.toLowerCase()===cur.toLowerCase())+'" aria-label="'+c+'"></button>'}).join("")+'</div>';
-  return h+'<p class="hint">Bu mütəxəssisin bütün seansları təqvimdə bu rəngdə görünəcək. Rəng bütün işçilərin telefonunda dəyişir.</p>';
+  return h+L('<p class="hint">Bu mütəxəssisin bütün seansları təqvimdə bu rəngdə görünəcək. Rəng bütün işçilərin telefonunda dəyişir.</p>');
 }
 function monthSheet(){
   var m0=sheet.m,d=parse(m0),y=d.getFullYear(),mo=d.getMonth(),days=new Date(y,mo+1,0,12).getDate();
   var start=addDays(m0,-((d.getDay()+6)%7)),cnt={},loaded=state.loadedFrom||today;
   if(ui.tab==="day")state.appts.forEach(function(a){if(a.status!=="cancel"&&shown(a.readerId))cnt[a.date]=(cnt[a.date]||0)+1});
-  var h='<h2>Tarix seçin'+CLOSE+'</h2><div class="mhead"><button class="icon-btn" data-act="m-shift" data-n="-1" aria-label="Əvvəlki ay">‹</button><b>'+cap(MON[mo])+' '+y+'</b><button class="icon-btn" data-act="m-shift" data-n="1" aria-label="Növbəti ay">›</button></div><div class="mgrid">';
+  var h=L('<h2>Tarix seçin')+CLOSE+L('</h2><div class="mhead"><button class="icon-btn" data-act="m-shift" data-n="-1" aria-label="Əvvəlki ay">‹</button><b>')+cap(MONN[mo])+' '+y+L('</b><button class="icon-btn" data-act="m-shift" data-n="1" aria-label="Növbəti ay">›</button></div><div class="mgrid">');
   WD.forEach(function(w){h+='<span class="h">'+w+'</span>'});
   var last=ymd(y,mo,days),end=addDays(last,(7-((parse(last).getDay()+6)%7)-1));
   for(var x=start;x<=end;x=addDays(x,1)){
@@ -1320,62 +1757,62 @@ function monthSheet(){
     h+='<button data-act="m-pick" data-d="'+x+'" class="'+(x.slice(0,7)!==m0.slice(0,7)?"out ":"")+(x===today?"today":"")+'" aria-pressed="'+(x===ui.date)+'" aria-label="'+fmtDay(x,"w")+'"><b class="num">'+parse(x).getDate()+'</b><i class="num">'+(c||"")+'</i></button>';
   }
   h+='</div>';
-  if(ui.date!==today||m0.slice(0,7)!==today.slice(0,7))h+='<button class="ghost" data-act="m-pick" data-d="'+today+'">Bu gün</button>';
+  if(ui.date!==today||m0.slice(0,7)!==today.slice(0,7))h+='<button class="ghost" data-act="m-pick" data-d="'+today+L('">Bu gün</button>');
   return h;
 }
 function staffForm(){
   var k=sheet.id,role=sheet.role||state.roles[k]||"agent";
-  return '<h2>İşçi'+CLOSE+'</h2>'+
-    '<div class="field"><label for="s-name">Ad</label><input id="s-name" type="text" autocomplete="off" maxlength="60" value="'+esc(sheet.name!=null?sheet.name:(state.staff[k]||""))+'"></div>'+
-    '<div class="field"><label>Rol</label><div class="seg" style="grid-template-columns:'+(isOwner()?"1fr 1fr 1fr":"1fr 1fr")+'">'+
-    '<button data-act="st-role" data-id="agent" aria-pressed="'+(role==="agent")+'">Satış agenti</button>'+
-    '<button data-act="st-role" data-id="specialist" aria-pressed="'+(role==="specialist")+'">Mütəxəssis</button>'+
-    (isOwner()?'<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+'">Admin</button>':'')+'</div></div>'+
-    '<p class="hint">'+(role==="admin"?"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız rəhbər verir və geri alır.":"Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.")+'</p>'+
-    '<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>';
+  return L('<h2>İşçi')+CLOSE+'</h2>'+
+    L('<div class="field"><label for="s-name">Ad</label><input id="s-name" type="text" autocomplete="off" maxlength="60" value="')+esc(sheet.name!=null?sheet.name:(state.staff[k]||""))+'"></div>'+
+    L('<div class="field"><label>Rol</label><div class="seg" style="grid-template-columns:')+(isOwner()?"1fr 1fr 1fr":"1fr 1fr")+'">'+
+    '<button data-act="st-role" data-id="agent" aria-pressed="'+(role==="agent")+L('">Satış agenti</button>')+
+    '<button data-act="st-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button>')+
+    (isOwner()?'<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+L('">Admin</button>'):'')+'</div></div>'+
+    '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız rəhbər verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
+    L('<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>');
 }
 function fd(v){v=String(v||"").slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(v)?fmtDay(v):""}
-function stName(k){return k==="wait"?"seçilməyib":(ST[k]||String(k||""))}
+function stName(k){return k==="wait"?L("seçilməyib"):(ST[k]||String(k||""))}
 function auditLine(x){
   var o=x.old||{},n=x.new||{},T=x.tbl,op=x.op,v=op==="DELETE"?o:n;
-  var verb=op==="INSERT"?"əlavə etdi":op==="DELETE"?"SİLDİ":"dəyişdi";
+  var verb=op==="INSERT"?L("əlavə etdi"):op==="DELETE"?L("SİLDİ"):L("dəyişdi");
   var rn=function(id){var r=reader(id);return r?r.name:""};
   var ap=function(a){return [a.name||"",(fd(a.date)+" "+String(a.time||"").slice(0,5)).trim(),rn(a.reader_id),+a.price>0?money(a.price):""].filter(function(z){return z}).join(", ")};
   if(T==="appts"){
-    if(op==="INSERT")return "Qəbul yazdı: "+ap(n);
-    if(op==="DELETE")return "Qəbulu SİLDİ: "+ap(o)+(o.status&&o.status!=="wait"?" ("+stName(o.status)+")":"");
+    if(op==="INSERT")return L("Qəbul yazdı: ")+ap(n);
+    if(op==="DELETE")return L("Qəbulu SİLDİ: ")+ap(o)+(o.status&&o.status!=="wait"?" ("+stName(o.status)+")":"");
     var ch=[];
-    if(o.status!==n.status)ch.push("status: "+stName(o.status)+" → "+stName(n.status));
-    if(+o.price!==+n.price)ch.push("qiymət: "+money(o.price)+" → "+money(n.price));
-    if(o.date!==n.date||String(o.time).slice(0,5)!==String(n.time).slice(0,5))ch.push("vaxt: "+fd(o.date)+" "+String(o.time||"").slice(0,5)+" → "+fd(n.date)+" "+String(n.time||"").slice(0,5));
-    if(o.reader_id!==n.reader_id)ch.push("mütəxəssis: "+rn(o.reader_id)+" → "+rn(n.reader_id));
-    if(o.name!==n.name)ch.push("ad: "+(o.name||"")+" → "+(n.name||""));
-    if((o.phone||"")!==(n.phone||""))ch.push("telefon: "+(o.phone||"—")+" → "+(n.phone||"—"));
-    if(+o.duration!==+n.duration)ch.push("müddət: "+(+o.duration||90)+" → "+(+n.duration||90)+" dəq");
-    if((o.note||"")!==(n.note||""))ch.push("qeyd");
-    return "Qəbul ("+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||"dəyişdi");
+    if(o.status!==n.status)ch.push(L("status: ")+stName(o.status)+" → "+stName(n.status));
+    if(+o.price!==+n.price)ch.push(L("qiymət: ")+money(o.price)+" → "+money(n.price));
+    if(o.date!==n.date||String(o.time).slice(0,5)!==String(n.time).slice(0,5))ch.push(L("vaxt: ")+fd(o.date)+" "+String(o.time||"").slice(0,5)+" → "+fd(n.date)+" "+String(n.time||"").slice(0,5));
+    if(o.reader_id!==n.reader_id)ch.push(L("mütəxəssis: ")+rn(o.reader_id)+" → "+rn(n.reader_id));
+    if(o.name!==n.name)ch.push(L("ad: ")+(o.name||"")+" → "+(n.name||""));
+    if((o.phone||"")!==(n.phone||""))ch.push(L("telefon: ")+(o.phone||"—")+" → "+(n.phone||"—"));
+    if(+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
+    if((o.note||"")!==(n.note||""))ch.push(L("qeyd"));
+    return L("Qəbul (")+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||L("dəyişdi"));
   }
-  if(T==="expenses")return "Xərci "+verb+": "+(v.title||"")+", "+money(v.amount)+(op==="UPDATE"&&+o.amount!==+n.amount?" (əvvəl "+money(o.amount)+")":"");
-  if(T==="product_sales")return "Məhsul satışını "+verb+": "+money(v.amount)+", "+fd(v.date);
-  if(T==="readers"&&op==="UPDATE"&&o.color!==n.color&&o.name===n.name&&!!o.archived===!!n.archived)return "Mütəxəssisin rəngini dəyişdi: "+(n.name||"");
-  if(T==="readers")return "Mütəxəssisi "+(op==="UPDATE"&&n.archived&&!o.archived?"siyahıdan çıxardı":verb)+": "+(v.name||"");
-  if(T==="breaks")return "Fasiləni "+verb+": "+(v.title||"");
-  if(T==="staff")return "İşçi profili ("+verb+"): "+(v.name||"")+(v.role?", "+(v.role==="admin"?"admin":v.role==="specialist"?"mütəxəssis":"satış agenti"):"");
+  if(T==="expenses")return L("Xərci ")+verb+": "+(v.title||"")+", "+money(v.amount)+(op==="UPDATE"&&+o.amount!==+n.amount?L(" (əvvəl ")+money(o.amount)+")":"");
+  if(T==="product_sales")return L("Məhsul satışını ")+verb+": "+money(v.amount)+", "+fd(v.date);
+  if(T==="readers"&&op==="UPDATE"&&o.color!==n.color&&o.name===n.name&&!!o.archived===!!n.archived)return L("Mütəxəssisin rəngini dəyişdi: ")+(n.name||"");
+  if(T==="readers")return L("Mütəxəssisi ")+(op==="UPDATE"&&n.archived&&!o.archived?L("siyahıdan çıxardı"):verb)+": "+(v.name||"");
+  if(T==="breaks")return L("Fasiləni ")+verb+": "+(v.title||"");
+  if(T==="staff")return L("İşçi profili (")+verb+"): "+(v.name||"")+(v.role?", "+(v.role==="admin"?"admin":v.role==="specialist"?L("mütəxəssis"):L("satış agenti")):"");
   return T+" "+op;
 }
 function auditSheet(){
-  var h='<h2>Dəyişikliklər jurnalı'+CLOSE+'</h2>';
-  if(!sheet.rows)return h+'<p class="hint">Yüklənir…</p>';
-  if(sheet.err)return h+'<p class="err">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>';
+  var h=L('<h2>Dəyişikliklər jurnalı')+CLOSE+'</h2>';
+  if(!sheet.rows)return h+L('<p class="hint">Yüklənir…</p>');
+  if(sheet.err)return h+L('<p class="err">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>');
   var only=sheet.only==="del",rows=sheet.rows.filter(function(x){return !only||x.op==="DELETE"});
-  h+='<div class="seg" style="grid-template-columns:1fr 1fr"><button data-act="audit-f" data-id="all" aria-pressed="'+!only+'">Hamısı</button><button data-act="audit-f" data-id="del" aria-pressed="'+only+'">Yalnız silinənlər</button></div>';
-  if(!rows.length)return h+'<p class="hint">Hələ qeyd yoxdur.</p>';
+  h+='<div class="seg" style="grid-template-columns:1fr 1fr"><button data-act="audit-f" data-id="all" aria-pressed="'+!only+L('">Hamısı</button><button data-act="audit-f" data-id="del" aria-pressed="')+only+L('">Yalnız silinənlər</button></div>');
+  if(!rows.length)return h+L('<p class="hint">Hələ qeyd yoxdur.</p>');
   h+='<div>';
   rows.forEach(function(x){
-    var t=bk(+new Date(x.at)),who=x.uid?(state.staff[x.uid]||"Adsız istifadəçi"):"Baza paneli";
+    var t=bk(+new Date(x.at)),who=x.uid?(state.staff[x.uid]||L("Adsız istifadəçi")):L("Baza paneli");
     h+='<div class="log'+(x.op==="DELETE"?" del":"")+'">'+esc(auditLine(x))+'<small class="num">'+esc(who)+' · '+fmtDay(t.d)+', '+hhmm(t.m)+'</small></div>';
   });
-  return h+'</div><p class="hint">Son '+sheet.rows.length+' dəyişiklik göstərilir. Bu jurnalı yalnız rəhbər görür.</p>';
+  return h+L('</div><p class="hint">Son ')+sheet.rows.length+L(' dəyişiklik göstərilir. Bu jurnalı yalnız rəhbər görür.</p>');
 }
 function loadAudit(){
   var s=sheet,done=function(rows,err){if(sheet!==s)return;s.rows=rows.sort(function(a,b){return b.id-a.id});s.err=err;byId("sheet").innerHTML=auditSheet()};
@@ -1386,82 +1823,82 @@ function meForm(){
   if(sheet.role)role=sheet.role;
   if(adm)role="admin";
   var rs=activeReaders(),nm=state.staff[me]||"";
-  var h=(first?'<h2>Xoş gəlmisiniz!'+CLOSE+'</h2><p class="hint" style="font-size:15px;color:var(--ink)">'+(adm?"Adınızı yazın və «Yadda saxla» basın.":"Kim olduğunuzu seçin və «Yadda saxla» basın.")+'</p>':'<h2>Profil'+CLOSE+'</h2>');
+  var h=(first?L('<h2>Xoş gəlmisiniz!')+CLOSE+'</h2><p class="hint" style="font-size:15px;color:var(--ink)">'+(adm?L("Adınızı yazın və «Yadda saxla» basın."):L("Kim olduğunuzu seçin və «Yadda saxla» basın."))+'</p>':L('<h2>Profil')+CLOSE+'</h2>');
   if(state.hasRole&&!adm){
-    h+='<div class="field"><label>Siz kimsiniz?</label><div class="seg" style="grid-template-columns:1fr 1fr">'+
-      '<button data-act="me-role" data-id="agent" aria-pressed="'+(role==="agent")+'">Satış agenti</button>'+
-      '<button data-act="me-role" data-id="specialist" aria-pressed="'+(role==="specialist")+'">Mütəxəssis</button></div></div>';
+    h+=L('<div class="field"><label>Siz kimsiniz?</label><div class="seg" style="grid-template-columns:1fr 1fr">')+
+      '<button data-act="me-role" data-id="agent" aria-pressed="'+(role==="agent")+L('">Satış agenti</button>')+
+      '<button data-act="me-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button></div></div>');
   }
   if(state.hasRole&&role==="specialist"&&rs.length){
     var cur=rs.filter(function(r){return r.name===nm})[0];
-    h+='<div class="field"><label for="m-reader">Təqvimdə hansı mütəxəssissiniz?</label><select id="m-reader">'+
+    h+=L('<div class="field"><label for="m-reader">Təqvimdə hansı mütəxəssissiniz?</label><select id="m-reader">')+
       rs.map(function(r){return '<option value="'+esc(r.name)+'"'+(cur&&cur.id===r.id?" selected":"")+'>'+esc(r.name)+'</option>'}).join("")+'</select></div>'+
-      '<p class="hint">Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.</p>';
+      L('<p class="hint">Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.</p>');
   }else{
-    h+='<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" maxlength="60" autocomplete="off" value="'+esc(nm)+'"></div>'+
-      '<p class="hint">'+(state.hasRole&&role==="specialist"?"Rəhbər hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. ":"")+'Statistikada və hesabatda bu adla görünəcəksiniz.</p>';
+    h+=L('<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" maxlength="60" autocomplete="off" value="')+esc(nm)+'"></div>'+
+      '<p class="hint">'+(state.hasRole&&role==="specialist"?L("Rəhbər hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. "):"")+L('Statistikada və hesabatda bu adla görünəcəksiniz.</p>');
   }
-  return h+'<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>';
+  return h+L('<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
 }
 function paySheet(){
-  var a=appt(sheet.id);if(!a)return '<h2>Ödəniş'+CLOSE+'</h2>';
-  return '<h2>Ödəniş'+CLOSE+'</h2><p class="hint">'+esc(a.name)+', saat '+esc(a.time)+'</p>'+
-    '<div class="field"><label for="p-price">Ödənilən məbləğ, '+CUR+'</label><input id="p-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(a.price>0?a.price:"")+'"></div>'+
-    '<p class="err" id="p-err" hidden></p><div class="btns"><button class="primary" data-act="save-pay">Gəldi və ödədi</button></div>';
+  var a=appt(sheet.id);if(!a)return L('<h2>Ödəniş')+CLOSE+'</h2>';
+  return L('<h2>Ödəniş')+CLOSE+'</h2><p class="hint">'+esc(a.name)+L(', saat ')+esc(a.time)+'</p>'+
+    L('<div class="field"><label for="p-price">Ödənilən məbləğ, ')+CUR+'</label><input id="p-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(a.price>0?a.price:"")+'"></div>'+
+    L('<p class="err" id="p-err" hidden></p><div class="btns"><button class="primary" data-act="save-pay">Gəldi və ödədi</button></div>');
 }
 function productsIn(r){
   return state.products.filter(function(x){return x.date>=r.s&&x.date<=r.e}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0});
 }
 function productsMain(){
   if(!auth.loaded)return "";
-  if(!state.hasProducts)return '<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>';
+  if(!state.hasProducts)return L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>');
   var r=range(),pr=productsIn(r),sum=pr.reduce(function(t,x){return t+x.amount},0),days={},by={};
   pr.forEach(function(x){
-    var k=state.staff[x.by]||"Adsız istifadəçi";(by[k]=by[k]||{n:0,sum:0});by[k].n++;by[k].sum+=x.amount;
+    var k=state.staff[x.by]||L("Adsız istifadəçi");(by[k]=by[k]||{n:0,sum:0});by[k].n++;by[k].sum+=x.amount;
     (days[x.date]=days[x.date]||{n:0,sum:0});days[x.date].n++;days[x.date].sum+=x.amount;
   });
   var nd=Object.keys(days).length;
   var h='<div class="strip">'+
-    '<div class="tile main"><b class="num">'+money(sum)+'</b><span>cəmi satış</span></div>'+
-    '<div class="tile"><b class="num">'+pr.length+'</b><span>məhsul satılıb</span></div>'+
-    '<div class="tile"><b class="num">'+money(pr.length?sum/pr.length:0)+'</b><span>orta qiymət</span></div></div>';
-  h+='<button class="primary" data-act="new-prod">+ Məhsul satışı</button>';
+    '<div class="tile main"><b class="num">'+money(sum)+L('</b><span>cəmi satış</span></div>')+
+    '<div class="tile"><b class="num">'+pr.length+L('</b><span>məhsul satılıb</span></div>')+
+    '<div class="tile"><b class="num">'+money(pr.length?sum/pr.length:0)+L('</b><span>orta qiymət</span></div></div>');
+  h+=L('<button class="primary" data-act="new-prod">+ Məhsul satışı</button>');
   var names=Object.keys(by).sort(function(a,b){return by[b].sum-by[a].sum});
-  h+='<div class="pay"><div class="head"><b>Kim nə qədər satıb</b><span class="num">'+names.length+' nəfər</span></div>';
+  h+=L('<div class="pay"><div class="head"><b>Kim nə qədər satıb</b><span class="num">')+names.length+L(' nəfər</span></div>');
   if(names.length){h+='<div>';names.forEach(function(k){
-    h+='<div class="visit"><span>'+esc(k)+'</span><span class="num" style="color:var(--muted)">'+by[k].n+' ədəd</span><b class="num">'+money(by[k].sum)+'</b></div>'});h+='</div>'}
-  else h+='<div class="foot">Bu müddətdə məhsul satılmayıb.</div>';
+    h+='<div class="visit"><span>'+esc(k)+'</span><span class="num" style="color:var(--muted)">'+by[k].n+L(' ədəd</span><b class="num">')+money(by[k].sum)+'</b></div>'});h+='</div>'}
+  else h+=L('<div class="foot">Bu müddətdə məhsul satılmayıb.</div>');
   h+='</div>';
   if(ui.period!=="day"&&nd){
-    h+='<div class="pay"><div class="head"><b>Günlər üzrə</b><span class="num">gündə orta '+money(sum/nd)+'</span></div><div>';
+    h+=L('<div class="pay"><div class="head"><b>Günlər üzrə</b><span class="num">gündə orta ')+money(sum/nd)+'</span></div><div>';
     Object.keys(days).sort().forEach(function(d){
-      h+='<div class="visit"><span>'+fmtDay(d,"w")+'</span><span class="num" style="color:var(--muted)">'+days[d].n+' ədəd</span><b class="num">'+money(days[d].sum)+'</b></div>'});
+      h+='<div class="visit"><span>'+fmtDay(d,"w")+'</span><span class="num" style="color:var(--muted)">'+days[d].n+L(' ədəd</span><b class="num">')+money(days[d].sum)+'</b></div>'});
     h+='</div></div>';
   }
   if(pr.length){
-    h+='<div class="pay"><div class="head"><b>Satışlar</b><span class="num">'+pr.length+'</span></div><div>';
+    h+=L('<div class="pay"><div class="head"><b>Satışlar</b><span class="num">')+pr.length+'</span></div><div>';
     pr.slice().reverse().forEach(function(x){
-      h+='<div class="visit"><span>Məhsul'+(ui.period==="day"?'':' · '+fmtDay(x.date))+' · Satdı: '+esc(state.staff[x.by]||"Adsız istifadəçi")+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">Sil</button></div>'});
+      h+=L('<div class="visit"><span>Məhsul')+(ui.period==="day"?'':' · '+fmtDay(x.date))+L(' · Satdı: ')+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+L('">Sil</button></div>')});
     h+='</div></div>';
   }
   return h;
 }
 function productForm(){
   var r=range(),dd=today>=r.s&&today<=r.e?today:ui.date;
-  return '<h2>Məhsul satışı'+CLOSE+'</h2>'+
-    '<div class="two"><div class="field"><label for="pr-amount">Qiymət, '+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
-    '<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="'+dd+'"></div></div>'+
-    '<p class="hint">Satan avtomatik qeyd olunur: '+esc(state.staff[auth.user.id]||"siz")+'.</p>'+
-    '<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>';
+  return L('<h2>Məhsul satışı')+CLOSE+'</h2>'+
+    L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
+    L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
+    L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[auth.user.id]||L("siz"))+'.</p>'+
+    L('<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
 }
 function expenseForm(){
   var x=sheet.id?expense(sheet.id):null,r=range(),dd=x?x.date:(today>=r.s&&today<=r.e?today:ui.date);
-  return '<h2>'+(x?"Xərci dəyiş":"Yeni xərc")+CLOSE+'</h2>'+
-    '<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="'+esc(x?x.title:"")+'"></div>'+
-    '<div class="two"><div class="field"><label for="x-amount">Məbləğ, '+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
-    '<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="'+dd+'"></div></div>'+
+  return '<h2>'+(x?L("Xərci dəyiş"):L("Yeni xərc"))+CLOSE+'</h2>'+
+    L('<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="')+esc(x?x.title:"")+'"></div>'+
+    L('<div class="two"><div class="field"><label for="x-amount">Məbləğ, ')+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
+    L('<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="')+dd+'"></div></div>'+
     '<p class="err" id="x-err" hidden></p>'+
-    '<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>'+(x?'<button class="danger" data-act="del-expense">Sil</button>':'')+'</div>';
+    L('<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>')+(x?L('<button class="danger" data-act="del-expense">Sil</button>'):'')+'</div>';
 }
 
 /* ---------- sheets ---------- */
@@ -1490,7 +1927,7 @@ function slotGrid(){
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
   box.innerHTML=h;
-  el.textContent=(taken.length?"Tutulub: "+taken.join(", ")+". ":(date===today?"Bu gün":"Bu tarixdə")+" mütəxəssis boşdur. ")+(state.breaks.length?"Fasilələr: "+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
+  el.textContent=(taken.length?L("Tutulub: ")+taken.join(", ")+". ":(date===today?L("Bu gün"):L("Bu tarixdə"))+L(" mütəxəssis boşdur. "))+(state.breaks.length?L("Fasilələr: ")+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
@@ -1499,52 +1936,52 @@ function apptForm(){
   var pre=sheet.pre||{},pm=patients();
   var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
-  return '<h2>'+(a?"Qəbulu dəyiş":"Yeni qəbul")+CLOSE+'</h2>'+
-    '<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">'+opts+'</select></div>'+
-    '<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="'+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
-    '<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="'+esc(a?a.time:(pre.time||""))+'"></div>'+
-    (state.hasDur?'<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">'+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+" dəq":(Math.floor(d/60)+" saat"+(d%60?" "+d%60+" dəq":"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+  return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
+    L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">')+opts+'</select></div>'+
+    L('<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
+    L('<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
-    '<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
-    '<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    '<div class="field"><label for="f-price">Qiymət, '+CUR+'</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
-    (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+(k==="wait"?"Seçilməyib":ST[k])+'</option>'}).join("")+'</select></div>':'')+
-    '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
+    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" list="f-names" value="')+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
+    L('<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
+    L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L('</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="')+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
+    (a?L('<div class="field"><label for="f-status">Status</label><select id="f-status">')+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+(k==="wait"?L("Seçilməyib"):ST[k])+'</option>'}).join("")+'</select></div>':'')+
+    L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
-    '<div class="btns"><button class="primary" data-act="save-appt">'+(a?"Yadda saxla":"Yaz")+'</button></div>';
+    '<div class="btns"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
 }
 function readerForm(){
   var r=sheet.id?reader(sheet.id):null;
-  return '<h2>'+(r?"Mütəxəssisi dəyiş":"Yeni mütəxəssis")+CLOSE+'</h2>'+
-    '<div class="field"><label for="r-name">Ad</label><input id="r-name" type="text" maxlength="40" autocomplete="off" value="'+esc(r?r.name:"")+'"></div>'+
+  return '<h2>'+(r?L("Mütəxəssisi dəyiş"):L("Yeni mütəxəssis"))+CLOSE+'</h2>'+
+    L('<div class="field"><label for="r-name">Ad</label><input id="r-name" type="text" maxlength="40" autocomplete="off" value="')+esc(r?r.name:"")+'"></div>'+
     '<p class="err" id="r-err" hidden></p>'+
-    '<div class="btns"><button class="primary" data-act="save-reader">Yadda saxla</button>'+
-    (r?'<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>':'')+'</div>'+
+    L('<div class="btns"><button class="primary" data-act="save-reader">Yadda saxla</button>')+
+    (r?L('<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>'):'')+'</div>'+
     (function(){if(!r)return "";var fut=state.appts.filter(function(a){return a.readerId===r.id&&a.date>=today&&a.status==="wait"}).length;
-      return fut?'<p class="hint" style="color:var(--warn)">Diqqət: bu mütəxəssisin qarşıda '+fut+' qəbulu var. Siyahıdan çıxarsanız da, onlar təqvimdə qalacaq — əvvəlcə başqa mütəxəssisə keçirin və ya ləğv edin.</p>':""})();
+      return fut?L('<p class="hint" style="color:var(--warn)">Diqqət: bu mütəxəssisin qarşıda ')+fut+L(' qəbulu var. Siyahıdan çıxarsanız da, onlar təqvimdə qalacaq — əvvəlcə başqa mütəxəssisə keçirin və ya ləğv edin.</p>'):""})();
 }
 
 function saveAppt(){
   if(!sheet)return;
   var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status=val("f-status");
   var r=reader(rid),service="";
-  if(!r)return fail("f-err","Mütəxəssisi seçin.");
-  if(!okDate(date))return fail("f-err","Tarixi düzgün seçin.");
-  if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err","Saatı seçin.");
-  if(!name)return fail("f-err","Pasiyentin adını yazın.");
-  if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err","Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5.");
-  if(status==="paid"&&!(price>0))return fail("f-err","«Gəldi və ödədi» üçün ödənilən məbləği yazın.");
+  if(!r)return fail("f-err",L("Mütəxəssisi seçin."));
+  if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
+  if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçin."));
+  if(!name)return fail("f-err",L("Pasiyentin adını yazın."));
+  if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err",L("Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5."));
+  if(status==="paid"&&!(price>0))return fail("f-err",L("«Gəldi və ödədi» üçün ödənilən məbləği yazın."));
   var a=sheet.id?appt(sheet.id):null;
-  if(sheet.id&&!a){closeSheet();flash("Bu qəbul artıq silinib.");return}
+  if(sheet.id&&!a){closeSheet();flash(L("Bu qəbul artıq silinib."));return}
   var dur=+(val("f-dur")||(a?a.dur:90))||90;
-  if(mins(time)<DAY0||mins(time)+dur>DAY1)return fail("f-err","Seans 08:00 ilə 00:00 arasında olmalıdır. Başlama saatını və ya müddəti dəyişin.");
+  if(mins(time)<DAY0||mins(time)+dur>DAY1)return fail("f-err",L("Seans 08:00 ilə 00:00 arasında olmalıdır. Başlama saatını və ya müddəti dəyişin."));
   /* A booking whose time is not being changed is not re-checked: a phone number can always be corrected,
      even if a break was added later or the booking was made before the overlap rule. */
   var moved=!a||a.readerId!==rid||a.date!==date||a.time!==time||(a.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
   var clash=status==="cancel"||!moved?null:overlap(rid,date,time,dur,sheet.id);
-  if(clash)return fail("f-err",r.name+" bu vaxt məşğuldur: "+clash.name+", "+clash.time+"–"+endOf(clash)+". Başqa vaxt seçin.");
+  if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
   var br=status==="cancel"||!moved?null:inBreak(time,dur);
-  if(br)return fail("f-err","Bu vaxt fasilədir: "+br.title+" "+br.start+"–"+br.end+".");
+  if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   if(a){
     a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;a.dur=dur;
     var up={reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,note:note};
@@ -1566,9 +2003,9 @@ function saveAppt(){
 function saveReader(){
   if(!sheet||!isAdmin())return;
   var name=val("r-name");
-  if(!name)return fail("r-err","Mütəxəssisin adını yazın.");
+  if(!name)return fail("r-err",L("Mütəxəssisin adını yazın."));
   /* Specialists' own accounts are linked to the calendar by name, so two active specialists may not share one. */
-  if(activeReaders().some(function(x){return x.id!==sheet.id&&low(x.name)===low(name)}))return fail("r-err","Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə).");
+  if(activeReaders().some(function(x){return x.id!==sheet.id&&low(x.name)===low(name)}))return fail("r-err",L("Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə)."));
   if(sheet.id){
     var r=reader(sheet.id);
     if(r)r.name=name;
@@ -1587,22 +2024,28 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("[data-act]");if(!b)return;
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="reload"){location.reload();return}
+  if(act==="lang"){
+    if(id!=="ru")id="az";
+    if(id===LANG)return;
+    try{localStorage.setItem("ruqya.lang",id)}catch(err){}
+    location.reload();return;
+  }
   if(act==="login"){
     var mail=val("l-mail").toLowerCase(),pass=byId("l-pass").value;
-    if(!mail||!pass){auth.msg="E-poçt və şifrəni yazın.";render();return}
+    if(!mail||!pass){auth.msg=L("E-poçt və şifrəni yazın.");render();return}
     b.disabled=true;auth.msg="";render();
     sb.auth.signInWithPassword({email:mail,password:pass}).then(function(r){
       b.disabled=false;
       if(r.error){var em=String(r.error.message||"");
-        auth.msg=/not confirmed/i.test(em)?"Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin.":
-          r.error.status===429||/rate limit|too many/i.test(em)?"Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın.":
-          (r.error.status===400||/invalid/i.test(em))?"E-poçt və ya şifrə səhvdir.":"Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.";render()}
-    },function(){b.disabled=false;auth.msg="Serverlə əlaqə yoxdur. İnterneti yoxlayın.";render()});
+        auth.msg=/not confirmed/i.test(em)?L("Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin."):
+          r.error.status===429||/rate limit|too many/i.test(em)?L("Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın."):
+          (r.error.status===400||/invalid/i.test(em))?L("E-poçt və ya şifrə səhvdir."):L("Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.");render()}
+    },function(){b.disabled=false;auth.msg=L("Serverlə əlaqə yoxdur. İnterneti yoxlayın.");render()});
     return;
   }
   if(!auth.user)return;
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
-  if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$|pick-color$)/.test(act)&&act!=="save-me-x"){flash("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun.");return}
+  if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$|pick-color$)/.test(act)&&act!=="save-me-x"){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
     if(ui.tab!==b.dataset.tab){ui.tab=b.dataset.tab;byId("top").innerHTML="";byId("main").scrollTop=0}
   }
@@ -1628,7 +2071,7 @@ document.addEventListener("click",function(e){
     if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
     if(a&&a.status==="cancel"&&st!=="cancel"&&ST[st]){
       var cl=overlap(a.readerId,a.date,a.time,a.dur||90,a.id);
-      if(cl){flash("Geri qaytarmaq olmur: bu vaxta artıq başqa qəbul yazılıb ("+cl.name+", "+cl.time+"–"+endOf(cl)+").");return}
+      if(cl){flash(L("Geri qaytarmaq olmur: bu vaxta artıq başqa qəbul yazılıb (")+cl.name+", "+cl.time+"–"+endOf(cl)+").");return}
     }
     if(a&&ST[st]&&a.status!==st){
       a.status=st;if(st!=="paid")a.settled=false;
@@ -1643,9 +2086,9 @@ document.addEventListener("click",function(e){
   else if(act==="save-pay"){
     var pa=sheet&&appt(sheet.id),pv=amount("p-price");
     if(!pa){closeSheet();return}
-    if(!(pv>0)||pv>MAXSUM)return fail("p-err","Məbləği düzgün yazın.");
+    if(!(pv>0)||pv>MAXSUM)return fail("p-err",L("Məbləği düzgün yazın."));
     if(pa.status==="cancel"){var cl2=overlap(pa.readerId,pa.date,pa.time,pa.dur||90,pa.id);
-      if(cl2)return fail("p-err","Bu vaxta artıq başqa qəbul yazılıb ("+cl2.name+", "+cl2.time+"–"+endOf(cl2)+"). Əvvəlcə vaxtı dəyişin.")}
+      if(cl2)return fail("p-err",L("Bu vaxta artıq başqa qəbul yazılıb (")+cl2.name+", "+cl2.time+"–"+endOf(cl2)+L("). Əvvəlcə vaxtı dəyişin."))}
     pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
   }
   else if(act==="report"){openSheet({type:"report"});return}
@@ -1664,7 +2107,7 @@ document.addEventListener("click",function(e){
   else if(act==="widget"){
     var pinned=false;try{pinned=NATIVE&&NATIVE.pinWidget()}catch(err){}
     wLast="";pushWidget();
-    flash(pinned?"Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək.":"Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin.");
+    flash(pinned?L("Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək."):L("Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin."));
     return;
   }
   else if(act==="theme"){
@@ -1691,13 +2134,13 @@ document.addEventListener("click",function(e){
   else if(act==="save-staff"){
     if(!sheet||sheet.type!=="staff"||!isAdmin())return;
     var sk=sheet.id,sn=val("s-name"),sr=sheet.role||state.roles[sk]||"agent";
-    if(!sn)return fail("s-err","Adı yazın.");
-    if((sr==="admin"||state.roles[sk]==="admin")&&!isOwner()){if(sr!==state.roles[sk])return fail("s-err","Admin rolunu yalnız rəhbər dəyişə bilər.")}
+    if(!sn)return fail("s-err",L("Adı yazın."));
+    if((sr==="admin"||state.roles[sk]==="admin")&&!isOwner()){if(sr!==state.roles[sk])return fail("s-err",L("Admin rolunu yalnız rəhbər dəyişə bilər."))}
     state.staff[sk]=sn;state.roles[sk]=sr;state.roleSet[sk]=1;
     pending++;writes++;
     sb.from("staff").update({name:sn,role:sr}).eq("id",sk).select().then(function(r){
       pending--;
-      if(r.error||!r.data||!r.data.length){flash("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir.");refresh()}
+      if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
     },function(){pending--;unsaved();refresh()});
     closeSheet();
   }
@@ -1705,20 +2148,20 @@ document.addEventListener("click",function(e){
   else if(act==="new-prod"){openSheet({type:"prod"});return}
   else if(act==="save-prod"){
     var pa2=amount("pr-amount"),pd=val("pr-date");
-    if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err","Qiyməti düzgün yazın.");
-    if(!okDate(pd))return fail("pr-err","Tarixi düzgün seçin.");
+    if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
+    if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
     var pid=uuid();state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id});
     db(sb.from("product_sales").insert({id:pid,date:pd,amount:pa2}));closeSheet();
   }
   else if(act==="del-prod"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
   }
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
   else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
   else if(act==="save-me"){
     var mrole=isAdmin()?"admin":(sheet&&sheet.role||state.roles[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
-    if(!mn)return fail("m-err","Adınızı yazın.");
+    if(!mn)return fail("m-err",L("Adınızı yazın."));
     var up2={id:auth.user.id,name:mn};
     state.staff[auth.user.id]=mn;
     if(state.hasRole){up2.role=mrole;state.roles[auth.user.id]=mrole;state.roleSet[auth.user.id]=1}
@@ -1729,9 +2172,9 @@ document.addEventListener("click",function(e){
   else if(act==="save-expense"){
     if(!sheet)return;
     var xt=val("x-title"),xa=amount("x-amount"),xd=val("x-date");
-    if(!xt)return fail("x-err","Xərcin adını yazın.");
-    if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err","Məbləği düzgün yazın.");
-    if(!okDate(xd))return fail("x-err","Tarixi düzgün seçin.");
+    if(!xt)return fail("x-err",L("Xərcin adını yazın."));
+    if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err",L("Məbləği düzgün yazın."));
+    if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
     var xo=sheet.id?expense(sheet.id):null;
     if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
     else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
@@ -1739,7 +2182,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-expense"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs));closeSheet();
   }
   else if(act==="patient"){openSheet({type:"patient",id:id});return}
@@ -1750,8 +2193,8 @@ document.addEventListener("click",function(e){
   }
   else if(act==="copy"){
     var ta=byId("rep"),msg=byId("rep-msg");
-    var no=function(){ta.focus();ta.select();msg.textContent="Avtomatik kopyalanmadı. Mətn seçilib, özünüz kopyalayın."};
-    try{navigator.clipboard.writeText(ta.value).then(function(){msg.textContent="Kopyalandı. WhatsApp-a yapışdırın."},no)}catch(err){no()}
+    var no=function(){ta.focus();ta.select();msg.textContent=L("Avtomatik kopyalanmadı. Mətn seçilib, özünüz kopyalayın.")};
+    try{navigator.clipboard.writeText(ta.value).then(function(){msg.textContent=L("Kopyalandı. WhatsApp-a yapışdırın.")},no)}catch(err){no()}
     return;
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
@@ -1760,27 +2203,27 @@ document.addEventListener("click",function(e){
   else if(act==="newat"){
     var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
-    var tt=hhmm(mm),bb=inBreak(tt,30);if(bb){flash("Bu vaxt fasilədir: "+bb.title+".");return}
+    var tt=hhmm(mm),bb=inBreak(tt,30);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
   }
   else if(act==="del-row"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
   }
   else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
   else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
   else if(act==="save-break"){
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
-    if(!bt)return fail("b-err","Fasilənin adını yazın.");
-    if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err","Başlama və bitmə saatını seçin.");
-    if(mins(be)<=mins(bs))return fail("b-err","Bitmə saatı başlamadan sonra olmalıdır.");
+    if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
+    if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
+    if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
     var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait")return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
-    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent="Yenə də əlavə et";return fail("b-err","Bu vaxta artıq "+hit+" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq.")}
+    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
     var bid=uuid();state.breaks.push({id:bid,title:bt,start:bs,end:be});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert({id:bid,title:bt,start_time:bs,end_time:be}));closeSheet();
   }
   else if(act==="del-break"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
   else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
@@ -1792,7 +2235,7 @@ document.addEventListener("click",function(e){
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent="Bir də basın";return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
     else{
@@ -1805,7 +2248,7 @@ document.addEventListener("click",function(e){
     closeSheet();
   }
   else if(act==="logout"){
-    var lo=function(r){if(r&&r.error&&auth.user)flash("Çıxmaq alınmadı. İnterneti yoxlayın.")};
+    var lo=function(r){if(r&&r.error&&auth.user)flash(L("Çıxmaq alınmadı. İnterneti yoxlayın."))};
     sb.auth.signOut().then(lo,function(){lo({error:1})});return;
   }
   else return;
@@ -1914,7 +2357,7 @@ if(sb){
     var was=auth.user&&auth.user.id,now=sess&&sess.user&&sess.user.id;
     auth.user=sess?sess.user:null;auth.ready=true;
     if(now&&now!==was){auth.msg="";setTimeout(startSync,0)}
-    if(!now&&was){wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1}');wLast='{"out":1}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
+    if(!now&&was){wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
     render();
   });
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);

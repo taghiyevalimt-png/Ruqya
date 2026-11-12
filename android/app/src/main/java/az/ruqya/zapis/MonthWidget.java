@@ -43,6 +43,10 @@ public class MonthWidget extends AppWidgetProvider {
 
     static final String[] MON = {"Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Avqust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"};
     static final String[] WD = {"B.e", "Ç.a", "Ç", "C.a", "C", "Ş", "B"};
+    // Russian, used when the app is switched to Russian (the app sends "l":"ru").
+    static final String[] MON_RU = {"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+    static final String[] MONG_RU = {"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+    static final String[] WD_RU = {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"};
 
     // Proportions shared with res/layout/widget_month.xml (header 14, weekday row 8, six rows of 13).
     static final float HEAD = 14f, WKROW = 8f, ROW = 13f, TOTAL = HEAD + WKROW + 6 * ROW;
@@ -333,6 +337,7 @@ public class MonthWidget extends AppWidgetProvider {
         String todayIso = iso(today());
         String monthKey = String.format(Locale.US, "%04d-%02d", ms.get(Calendar.YEAR), ms.get(Calendar.MONTH) + 1);
         boolean out = data == null || data.optInt("out", 0) == 1;
+        boolean ru = data != null && "ru".equals(data.optString("l", "az"));
 
         // Header: month name, arrows, "+".
         float x0 = 0;
@@ -341,7 +346,7 @@ public class MonthWidget extends AppWidgetProvider {
         for (float v : HEAD_COLS) hsum += v;
         hx[0] = 0;
         for (int i = 0; i < 4; i++) hx[i + 1] = hx[i] + W * HEAD_COLS[i] / hsum;
-        String title = MON[ms.get(Calendar.MONTH)];
+        String title = (ru ? MON_RU : MON)[ms.get(Calendar.MONTH)];
         if (ms.get(Calendar.YEAR) != today().get(Calendar.YEAR)) title += " " + ms.get(Calendar.YEAR);
         p.setTypeface(bold);
         p.setColor(INK);
@@ -367,7 +372,7 @@ public class MonthWidget extends AppWidgetProvider {
         p.setColor(MUTED);
         p.setTextSize(Math.min(wkH * 0.5f, 13 * d));
         for (int i = 0; i < 7; i++) {
-            cv.drawText(WD[i], colW * i + colW / 2, headH + wkH * 0.68f, p);
+            cv.drawText((ru ? WD_RU : WD)[i], colW * i + colW / 2, headH + wkH * 0.68f, p);
         }
 
         // Grid lines.
@@ -378,7 +383,7 @@ public class MonthWidget extends AppWidgetProvider {
         for (int c = 1; c < 7; c++) cv.drawLine(colW * c, gy, colW * c, H - 10 * d, p);
 
         if (out) {
-            note(cv, p, "Görmək üçün Ruqyatz-ı açıb daxil olun", W / 2f, gy + rowH * 3, d, W);
+            note(cv, p, ru ? "Откройте Ruqyatz и войдите" : "Görmək üçün Ruqyatz-ı açıb daxil olun", W / 2f, gy + rowH * 3, d, W);
             return bmp;
         }
 
@@ -454,7 +459,7 @@ public class MonthWidget extends AppWidgetProvider {
 
         // A month older than what the app keeps on the phone: say so instead of showing empty days.
         if (from.length() == 10 && grid[41].compareTo(from) < 0) {
-            note(cv, p, "Bu ayı görmək üçün tətbiqi açın", W / 2f, gy + rowH * 3, d, W);
+            note(cv, p, ru ? "Откройте приложение, чтобы увидеть месяц" : "Bu ayı görmək üçün tətbiqi açın", W / 2f, gy + rowH * 3, d, W);
         }
 
         // When the data was last handed over by the app.
@@ -464,12 +469,12 @@ public class MonthWidget extends AppWidgetProvider {
             uc.setTimeInMillis(u);
             String stamp = String.format(Locale.US, "%02d:%02d", uc.get(Calendar.HOUR_OF_DAY), uc.get(Calendar.MINUTE));
             if (!iso(uc).equals(todayIso)) {
-                stamp = uc.get(Calendar.DAY_OF_MONTH) + " " + MON[uc.get(Calendar.MONTH)].toLowerCase(new Locale("az")) + ", " + stamp;
+                stamp = uc.get(Calendar.DAY_OF_MONTH) + " " + (ru ? MONG_RU[uc.get(Calendar.MONTH)] : MON[uc.get(Calendar.MONTH)].toLowerCase(new Locale("az"))) + ", " + stamp;
             }
             p.setTextAlign(Paint.Align.LEFT);
             p.setColor(MUTED);
             p.setTextSize(Math.min(headH * 0.2f, 11 * d));
-            cv.drawText("Yeniləndi: " + stamp, 16 * d, headH * 0.9f, p);
+            cv.drawText((ru ? "Обновлено: " : "Yeniləndi: ") + stamp, 16 * d, headH * 0.9f, p);
         }
         return bmp;
     }

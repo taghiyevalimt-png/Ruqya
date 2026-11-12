@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
             "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head>"
                     + "<body style='font-family:sans-serif;padding:48px 24px;text-align:center'>"
                     + "<h3>İnternet yoxdur</h3><p>Bağlantını yoxlayın və yenidən cəhd edin.</p>"
-                    + "<p><a href='" + HOME + "'>Yenilə</a></p></body></html>";
+                    + "<h3>Нет интернета</h3><p>Проверьте подключение и попробуйте снова.</p>"
+                    + "<p><a href='" + HOME + "'>Yenilə · Обновить</a></p></body></html>";
 
     private WebView web;
 
@@ -198,9 +199,9 @@ public class MainActivity extends Activity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "Bu linki açacaq proqram tapılmadı", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Bu linki açacaq proqram tapılmadı · Нет приложения для этой ссылки", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            Toast.makeText(this, "Linki açmaq olmadı", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Linki açmaq olmadı · Не удалось открыть ссылку", Toast.LENGTH_LONG).show();
         }
         return true;
     }
