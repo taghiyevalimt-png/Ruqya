@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112114720";
+var APP_VERSION="20261112120324";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -406,8 +406,13 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
 /* ---------- state ---------- */
 var today=bk().d;
-var ui={tab:"day",date:today,filter:"all",period:"day",q:"",view:"grid"};
+var ui={tab:"day",date:today,sel:[],period:"day",q:"",view:"grid"};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
+/* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
+try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
+function shown(rid){return !ui.sel.length||ui.sel.indexOf(rid)>=0}
+function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
+function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
 try{var hz=+localStorage.getItem("ruqya.hour");if(hz>=HMIN&&hz<=HMAX)HOUR=hz}catch(e){}
 var PXM=HOUR/60;
@@ -511,7 +516,8 @@ function refresh(){
     state.staff={};state.roles={};state.roleSet={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name||"";state.roles[x.id]=x.role||"agent";if(x.role)state.roleSet[x.id]=1});
     state.hasRole=!!res[8];
     if(!auth.filterInit){auth.filterInit=true;
-      if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&ui.filter==="all")ui.filter=mine.id}}
+      if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&!ui.sel.length)ui.sel=[mine.id]}}
+    cleanSel();
     auth.loaded=true;render();redrawCard();
     if(isAdmin()&&!secDone){secDone=true;checkSecurity()}
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
@@ -675,7 +681,7 @@ function startSync(){
 }
 function stopSync(){
   if(rt&&sb){try{sb.removeChannel(rt)}catch(e){}rt=null}
-  state=blank();lastFull=0;maxUpd=0;secWarn="";secDone=false;auth.loaded=false;auth.fixed=false;auth.asked=false;auth.filterInit=false;ui.filter="all";seq++;
+  state=blank();lastFull=0;maxUpd=0;secWarn="";secDone=false;auth.loaded=false;auth.fixed=false;auth.asked=false;auth.filterInit=false;ui.sel=[];saveSel();seq++;
 }
 
 function reader(id){for(var i=0;i<state.readers.length;i++)if(state.readers[i].id===id)return state.readers[i];return null}
@@ -777,13 +783,13 @@ function dayTop(){
   var rs=activeReaders();
   h+='<div class="toolrow"><div class="viewsw"><button data-act="view" data-id="grid" aria-pressed="'+(ui.view==="grid")+'">Təqvim</button><button data-act="view" data-id="list" aria-pressed="'+(ui.view==="list")+'">Siyahı</button></div>';
   if(rs.length>1){
-    h+='<div class="chips"><button class="chip" data-act="filter" data-id="all" aria-pressed="'+(ui.filter==="all")+'">Hamısı</button>';
-    rs.forEach(function(r){h+='<button class="chip" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+(ui.filter===r.id)+'">'+esc(r.name)+'</button>'});
+    h+='<div class="chips"><button class="chip" data-act="filter" data-id="all" aria-pressed="'+(!ui.sel.length)+'">Hamısı</button>';
+    rs.forEach(function(r){var on=ui.sel.indexOf(r.id)>=0;h+='<button class="chip" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'">'+(on&&ui.sel.length>1?'✓ ':'')+esc(r.name)+'</button>'});
     h+='</div>';
   }
   h+='</div>';
   var mon=addDays(ui.date,-((parse(ui.date).getDay()+6)%7)),cnt={};
-  state.appts.forEach(function(a){if(a.status!=="cancel"&&(ui.filter==="all"||a.readerId===ui.filter))cnt[a.date]=(cnt[a.date]||0)+1});
+  state.appts.forEach(function(a){if(a.status!=="cancel"&&shown(a.readerId))cnt[a.date]=(cnt[a.date]||0)+1});
   h+='<div class="week">';
   for(var i=0;i<7;i++){var d=addDays(mon,i);
     h+='<button class="wd'+(d===today?" today":"")+'" data-act="goto" data-d="'+d+'" aria-pressed="'+(d===ui.date)+'" aria-label="'+fmtDay(d)+'"><span>'+WD[i]+'</span><b class="num">'+parse(d).getDate()+'</b><i class="num">'+(cnt[d]||"")+'</i></button>'}
@@ -791,10 +797,10 @@ function dayTop(){
 }
 
 function gridMain(){
-  var rs=activeReaders().filter(function(r){return ui.filter==="all"||r.id===ui.filter});
+  var rs=activeReaders().filter(function(r){return shown(r.id)});
   if(!rs.length)rs=activeReaders();
   var ids=rs.map(function(r){return r.id});
-  state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&(ui.filter==="all"||a.readerId===ui.filter)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
+  state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&shown(a.readerId)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
   var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
   var paid=day.filter(function(a){return a.status==="paid"}),sum=paid.reduce(function(t,a){return t+a.price},0);
   var h="";
@@ -872,7 +878,7 @@ function dayMain(){
     h+='<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: '+late.length+'. Seçilməyincə kassa natamam qalır.</p>'+
       (first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+'">Göstər</button>':'')+'</div>';
   }
-  var list=state.appts.filter(function(a){return a.date===ui.date&&(ui.filter==="all"||a.readerId===ui.filter)})
+  var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
   var paid=list.filter(function(a){return a.status==="paid"});
   var sum=paid.reduce(function(t,a){return t+a.price},0);
@@ -1289,7 +1295,7 @@ function colorSheet(){
 function monthSheet(){
   var m0=sheet.m,d=parse(m0),y=d.getFullYear(),mo=d.getMonth(),days=new Date(y,mo+1,0,12).getDate();
   var start=addDays(m0,-((d.getDay()+6)%7)),cnt={},loaded=state.loadedFrom||today;
-  if(ui.tab==="day")state.appts.forEach(function(a){if(a.status!=="cancel"&&(ui.filter==="all"||a.readerId===ui.filter))cnt[a.date]=(cnt[a.date]||0)+1});
+  if(ui.tab==="day")state.appts.forEach(function(a){if(a.status!=="cancel"&&shown(a.readerId))cnt[a.date]=(cnt[a.date]||0)+1});
   var h='<h2>Tarix seçin'+CLOSE+'</h2><div class="mhead"><button class="icon-btn" data-act="m-shift" data-n="-1" aria-label="Əvvəlki ay">‹</button><b>'+cap(MON[mo])+' '+y+'</b><button class="icon-btn" data-act="m-shift" data-n="1" aria-label="Növbəti ay">›</button></div><div class="mgrid">';
   WD.forEach(function(w){h+='<span class="h">'+w+'</span>'});
   var last=ymd(y,mo,days),end=addDays(last,(7-((parse(last).getDay()+6)%7)-1));
@@ -1472,7 +1478,7 @@ function slotGrid(){
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
-  var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:(ui.filter!=="all"&&reader(ui.filter)?ui.filter:(rs[0]?rs[0].id:"")));
+  var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:(ui.sel.length===1&&reader(ui.sel[0])?ui.sel[0]:(rs[0]?rs[0].id:"")));
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
   var pre=sheet.pre||{},pm=patients();
   var names=Object.keys(pm).slice(0,300).map(function(k){return '<option value="'+esc(pm[k].name)+'">'}).join("");
@@ -1538,7 +1544,7 @@ function saveAppt(){
     if(state.hasDur)ins.duration=dur;
     db(sb.from("appts").insert(ins));
   }
-  ui.date=date;ui.tab="day";if(ui.filter!=="all"&&ui.filter!==rid)ui.filter="all";
+  ui.date=date;ui.tab="day";if(!shown(rid)){ui.sel.push(rid);saveSel()}
   closeSheet();render();
 }
 function saveReader(){
@@ -1592,7 +1598,13 @@ document.addEventListener("click",function(e){
     else ui.date=addDays(ui.date,n);
   }
   else if(act==="today"){ui.date=today}
-  else if(act==="filter"){ui.filter=id}
+  else if(act==="filter"){
+    /* "Hamısı" shows everyone; a name adds or removes that specialist, so several can be shown together. */
+    if(id==="all")ui.sel=[];
+    else{var si=ui.sel.indexOf(id);if(si>=0)ui.sel.splice(si,1);else ui.sel.push(id);
+      if(ui.sel.length>=activeReaders().length)ui.sel=[]}
+    saveSel();
+  }
   else if(act==="period"){ui.period=b.dataset.p}
   else if(act==="status"){
     var a=appt(id),st=b.dataset.st;
@@ -1772,7 +1784,7 @@ document.addEventListener("click",function(e){
       if(!isAdmin())return;
       var rr=reader(sid);
       if(rr)rr.archived=true;db(sb.from("readers").update({archived:true}).eq("id",sid));
-      if(ui.filter===sid)ui.filter="all";
+      cleanSel();
     }
     closeSheet();
   }
