@@ -331,16 +331,18 @@ public class MonthWidget extends AppWidgetProvider {
             p.setTextAlign(Paint.Align.CENTER);
             p.setTextSize(numH * 0.78f);
             float ny = cy + numH * 0.92f;
+            // The day number sits at the left so a "+3" fits on the right even in a narrow widget.
+            float nx = cx + 3 * d + numH * 0.62f;
             if (day.equals(todayIso)) {
                 p.setColor(ACCENT);
-                cv.drawCircle(cx + colW / 2, ny - numH * 0.28f, numH * 0.6f, p);
+                cv.drawCircle(nx, ny - numH * 0.28f, numH * 0.6f, p);
                 p.setColor(ACCENT_INK);
                 p.setTypeface(bold);
             } else {
                 p.setColor(inMonth ? INK : MUTED);
                 p.setTypeface(Typeface.DEFAULT);
             }
-            cv.drawText(String.valueOf(dn), cx + colW / 2, ny, p);
+            cv.drawText(String.valueOf(dn), nx, ny, p);
             p.setTypeface(Typeface.DEFAULT);
 
             JSONArray items = days == null ? null : days.optJSONArray(day);
@@ -371,7 +373,7 @@ public class MonthWidget extends AppWidgetProvider {
             if (total > show) {
                 p.setColor(MUTED);
                 p.setTextAlign(Paint.Align.RIGHT);
-                p.setTextSize(Math.min(numH * 0.62f, 11 * d));
+                p.setTextSize(Math.min(numH * 0.58f, 11 * d));
                 cv.drawText("+" + (total - show), cx + colW - 4 * d, ny, p);
                 p.setTextAlign(Paint.Align.CENTER);
             }
