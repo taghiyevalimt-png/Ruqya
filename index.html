@@ -162,6 +162,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 
 .sthead{display:flex;flex-direction:column;gap:8px;margin-top:14px}.sthead h3.sec{margin:0}
 .explain{font-size:14px;gap:6px}.explain p{margin:0}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}.terms{margin:0}.terms dt{font-weight:700;margin-top:8px}.terms dt:first-child{margin-top:0}.terms dd{margin:2px 0 0}.nogap .rules>*+*{margin-top:8px}
 
 .reader{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;gap:12px;align-items:center}
 .reader div{flex:1;min-width:0}
@@ -369,7 +370,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"field\"><label for=\"l-mail\">E-poçt</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>":"<div class=\"field\"><label for=\"l-mail\">Эл. почта</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>",
 "<div class=\"field\"><label for=\"l-pass\">Şifrə</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>":"<div class=\"field\"><label for=\"l-pass\">Пароль</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>",
 "<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Daxil ol</button>":"<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Войти</button>",
-"<p class=\"hint\">E-poçt və şifrəni rəhbər verir.</p>":"<p class=\"hint\">Почту и пароль выдаёт руководитель.</p>",
+"<p class=\"hint\">E-poçt və şifrəni admin verir.</p>":"<p class=\"hint\">Почту и пароль выдаёт админ.</p>",
 "İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq.":"Нет интернета. Изменения не сохранятся.",
 "Köhnə məlumatlar yüklənir…":"Загружаются старые данные…",
 "Köhnə pasiyentlər yüklənir…":"Загружаются старые пациенты…",
@@ -411,7 +412,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"field\"><label for=\"b-end\">Bitir</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>":"<div class=\"field\"><label for=\"b-end\">Конец</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>",
 "<p class=\"hint\">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>":"<p class=\"hint\">Перерыв показывается в календаре каждый день у всех специалистов, и на это время нельзя записать.</p>",
 "<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Əlavə et</button></div>":"<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Добавить</button></div>",
-"<div class=\"empty\">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>":"<div class=\"empty\">В календаре пока нет специалистов. Они появятся здесь, когда руководитель добавит их в разделе «Настройки».</div>",
+"<div class=\"empty\">Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>":"<div class=\"empty\">В календаре пока нет специалистов. Они появятся здесь, когда админ добавит их в разделе «Настройки».</div>",
 "<div class=\"empty\"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button></div>":"<div class=\"empty\"><p>Сначала добавьте специалиста.</p><button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button></div>",
 ". Seçilməyincə kassa natamam qalır.</p>":". Пока статус не выбран, касса неполная.</p>",
 "</b><span>qəbul</span></div>":"</b><span>записей</span></div>",
@@ -539,7 +540,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 ". Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Aç</a></div>":". Отключите это в Supabase, иначе посторонний сможет увидеть данные пациентов.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Открыть</a></div>",
 "<h3 class=\"sec\">Mütəxəssislər</h3>":"<h3 class=\"sec\">Специалисты</h3>",
 "Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Чтобы начать запись, добавьте первого специалиста.",
-"Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.":"В календаре пока нет специалистов. Они появятся здесь, когда руководитель добавит их в разделе «Настройки».",
+"Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.":"В календаре пока нет специалистов. Они появятся здесь, когда админ добавит их в разделе «Настройки».",
 "\" aria-label=\"Rəngi dəyiş\"></button><div style=\"flex:1\"><b>":"\" aria-label=\"Сменить цвет\"></button><div style=\"flex:1\"><b>",
 "<p class=\"hint\">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>":"<p class=\"hint\">Чтобы сменить цвет специалиста, нажмите на кружок рядом с именем или на его имя в календаре.</p>",
 "<button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button>":"<button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button>",
@@ -592,7 +593,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 " — rəng":" — цвет",
 "<p class=\"hint\">Rəng seçmək üçün baza bir dəfə yenilənməlidir. ":"<p class=\"hint\">Чтобы выбирать цвет, базу нужно один раз обновить. ",
 "Bunun üçün SQL faylını işə salın.":"Для этого запустите SQL-файл.",
-"Bunu rəhbər edir.":"Это делает руководитель.",
+"Bunu admin edir.":"Это делает админ.",
 "<p class=\"hint\">Bu mütəxəssisin bütün seansları təqvimdə bu rəngdə görünəcək. Rəng bütün işçilərin telefonunda dəyişir.</p>":"<p class=\"hint\">Все сеансы этого специалиста будут этим цветом в календаре. Цвет меняется на телефонах всех сотрудников.</p>",
 "<h2>Tarix seçin":"<h2>Выберите дату",
 "</h2><div class=\"mhead\"><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"-1\" aria-label=\"Əvvəlki ay\">‹</button><b>":"</h2><div class=\"mhead\"><button class=\"icon-btn\" data-act=\"m-shift\" data-n=\"-1\" aria-label=\"Предыдущий месяц\">‹</button><b>",
@@ -604,7 +605,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "\">Satış agenti</button>":"\">Агент продаж</button>",
 "\">Mütəxəssis</button>":"\">Специалист</button>",
 "\">Admin</button>":"\">Админ</button>",
-"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız rəhbər verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа даёт и забирает только руководитель.",
+"Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız əsas admin verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа даёт и забирает только главный админ.",
 "Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.":"Записи, сделанные специалистами, не попадают в статистику продаж.",
 "<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Yadda saxla</button></div>":"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Сохранить</button></div>",
 "əlavə etdi":"добавлено",
@@ -640,7 +641,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<p class=\"hint\">Hələ qeyd yoxdur.</p>":"<p class=\"hint\">Записей пока нет.</p>",
 "Baza paneli":"Панель базы",
 "</div><p class=\"hint\">Son ":"</div><p class=\"hint\">Показаны последние ",
-" dəyişiklik göstərilir. Bu jurnalı yalnız rəhbər görür.</p>":" изменений. Этот журнал видит только руководство.</p>",
+" dəyişiklik göstərilir. Bu jurnalı yalnız adminlər görür.</p>":" изменений. Этот журнал видят только админы.</p>",
 "<h2>Xoş gəlmisiniz!":"<h2>Добро пожаловать!",
 "Adınızı yazın və «Yadda saxla» basın.":"Введите имя и нажмите «Сохранить».",
 "Kim olduğunuzu seçin və «Yadda saxla» basın.":"Выберите, кто вы, и нажмите «Сохранить».",
@@ -650,13 +651,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"field\"><label for=\"m-reader\">Təqvimdə hansı mütəxəssissiniz?</label><select id=\"m-reader\">":"<div class=\"field\"><label for=\"m-reader\">Какой вы специалист в календаре?</label><select id=\"m-reader\">",
 "<p class=\"hint\">Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.</p>":"<p class=\"hint\">Записи, сделанные специалистами, не попадают в статистику продаж.</p>",
 "<div class=\"field\"><label for=\"m-name\">Adınız</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"m-name\">Ваше имя</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"",
-"Rəhbər hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. ":"Руководитель ещё не добавил специалистов в календарь, впишите имя сами. ",
+"Admin hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. ":"Админ ещё не добавил специалистов в календарь, впишите имя сами. ",
 "Statistikada və hesabatda bu adla görünəcəksiniz.</p>":"Под этим именем вы будете в статистике и отчётах.</p>",
 "<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Yadda saxla</button></div>":"<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Сохранить</button></div>",
 "<h2>Ödəniş":"<h2>Оплата",
 "<div class=\"field\"><label for=\"p-price\">Ödənilən məbləğ, ":"<div class=\"field\"><label for=\"p-price\">Оплаченная сумма, ",
 "<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Gəldi və ödədi</button></div>":"<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Пришёл и оплатил</button></div>",
-"<div class=\"note\"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>":"<div class=\"note\"><p>Для продажи товаров нужно обновить базу. Руководитель делает это один раз.</p></div>",
+"<div class=\"note\"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu admin bir dəfə edir.</p></div>":"<div class=\"note\"><p>Для продажи товаров нужно обновить базу. Админ делает это один раз.</p></div>",
 "</b><span>cəmi satış</span></div>":"</b><span>всего продаж</span></div>",
 "</b><span>məhsul satılıb</span></div>":"</b><span>товаров продано</span></div>",
 "</b><span>orta qiymət</span></div></div>":"</b><span>средняя цена</span></div></div>",
@@ -723,7 +724,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Mütəxəssisin adını yazın.":"Введите имя специалиста.",
 "Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə).":"Специалист с таким именем уже есть. Введите другое имя (например, с фамилией).",
 "E-poçt və şifrəni yazın.":"Введите почту и пароль.",
-"Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin.":"Этот аккаунт ещё не подтверждён. Сообщите руководителю.",
+"Bu hesab hələ təsdiqlənməyib. Adminə deyin.":"Этот аккаунт ещё не подтверждён. Сообщите админу.",
 "Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın.":"Слишком много попыток. Подождите несколько минут и попробуйте снова.",
 "E-poçt və ya şifrə səhvdir.":"Неверная почта или пароль.",
 "Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.":"Не удалось войти. Попробуйте чуть позже.",
@@ -736,7 +737,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək.":"В открывшемся окне нажмите «Добавить» — виджет появится на главном экране.",
 "Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin.":"Нажмите и удерживайте пустое место на главном экране → «Виджеты» → выберите виджет «Ruqyatz» и перетащите на экран.",
 "Adı yazın.":"Введите имя.",
-"Admin rolunu yalnız rəhbər dəyişə bilər.":"Роль админа может менять только руководитель.",
+"Admin rolunu yalnız əsas admin dəyişə bilər.":"Роль админа может менять только главный админ.",
 "Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir.":"Не удалось изменить. Для этого нужно обновить базу.",
 "Qiyməti düzgün yazın.":"Введите цену правильно.",
 "Bir də basın":"Нажмите ещё раз",
@@ -754,6 +755,27 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Qaydalar":"Правила",
+"<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>":"<li><b>Неделя</b> начинается в пятницу и заканчивается в четверг (7 дней).</li>",
+"<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>":"<li><b>Недельная статистика</b> всегда показывает последнюю <b>закончившуюся</b> неделю. Новая неделя появляется после четверга, 23:59. Так в пятницу утром можно открыть, скопировать и отправить руководству.</li>",
+"<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>":"<li><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — 4 недели, если 5 — 5 недель, ни один день не теряется. На экране — последний закончившийся месяц.</li>",
+"<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir və gecə 00:00-da sıfırlanır.</li>":"<li>Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59. «Записи за сегодня» обновляются сразу при каждой новой записи и обнуляются в 00:00.</li>",
+"<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл, его удаляют из календаря. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
+"<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>":"<li>Удалённая запись нигде не считается. Даже если удалили через несколько недель, она уходит из статистики.</li>",
+"<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>":"<li>Запись считается по дню, когда её сделали, на какую бы дату она ни была: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</li>",
+"<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>":"<li>В статистику продаж попадают только записи агентов продаж и админов. Записи, сделанные самими специалистами, туда не попадают, но считаются в денежной статистике.</li>",
+"<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>":"<li>Цена обязательна в каждой записи (в новой записи уже стоит 130). Продавцом товара считается тот, кто записал продажу в Кассе.</li>",
+"<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>":"<li>«Копировать» копирует таблицу текстом для WhatsApp; при вставке таблица видна со столбцами. «Копировать всю …» копирует все три таблицы вместе. Кнопками ‹ › можно посмотреть прошлые недели и месяцы.</li>",
+"Terminlər":"Термины",
+"<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da).</dd>":"<dt>Записи за сегодня</dt><dd>кто сколько записей сделал сегодня (на любую дату).</dd>",
+"<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>":"<dt>Записал</dt><dd>сколько пациентов агент продаж записал в эти дни.</dd>",
+"<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>":"<dt>Записано</dt><dd>сколько пациентов записали к этому специалисту в эти дни.</dd>",
+"<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>":"<dt>Успешно</dt><dd>сколько пациентов с сеансом в эти дни не удалено из календаря.</dd>",
+"<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>":"<dt>Доход</dt><dd>сумма цен успешных сеансов (в манатах).</dd>",
+"<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>":"<dt>Продавец</dt><dd>сотрудник, записавший продажу товара в Кассе (агент продаж или админ).</dd>",
+"<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>":"<dt>Продаж</dt><dd>сколько раз продали товар.</dd>",
+"<dt>Məbləğ</dt><dd>neçə manatlıq məhsul satılıb.</dd>":"<dt>Сумма</dt><dd>на сколько манат продано товаров.</dd>",
+"<dt>Cəmi</dt><dd>cədvəldəki bütün sətirlərin toplamı.</dd>":"<dt>Итого</dt><dd>сумма всех строк таблицы.</dd>",
 "— seçin —":"— выберите —",
 "Boş saatları görmək üçün mütəxəssisi və müddəti seçin.":"Чтобы увидеть свободное время, выберите специалиста и длительность.",
 "Mütəxəssisi seçmək vacibdir. Mütəxəssis olmadan qəbul yadda saxlanmır.":"Специалиста выбрать обязательно. Без специалиста запись не сохраняется.",
@@ -894,7 +916,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112183932";
+var APP_VERSION="20261112184444";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -919,7 +941,7 @@ var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
 /* The owner is always an admin; the owner can also give the admin role to other accounts. */
 function isOwner(){return !!(auth.user&&auth.user.id===ADMIN)}
 function isAdmin(){return !!(auth.user&&(auth.user.id===ADMIN||state.roles[auth.user.id]==="admin"))}
-function roleLabel(k){return k===ADMIN?L("Rəhbər"):state.roles[k]==="admin"?L("Admin"):!state.roleSet[k]?L("seçilməyib"):isSpec(k)?L("Mütəxəssis"):L("Satış agenti")}
+function roleLabel(k){return k===ADMIN?L("Admin"):state.roles[k]==="admin"?L("Admin"):!state.roleSet[k]?L("seçilməyib"):isSpec(k)?L("Mütəxəssis"):L("Satış agenti")}
 var CLOSE=L('<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>');
 
 /* ---------- helpers ---------- */
@@ -1360,7 +1382,7 @@ function render(){
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
        L('<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>')+
        L('<p class="err" id="l-err" hidden></p><button class="primary" data-act="login">Daxil ol</button>')+
-       L('<p class="hint">E-poçt və şifrəni rəhbər verir.</p>')+langSeg();
+       L('<p class="hint">E-poçt və şifrəni admin verir.</p>')+langSeg();
     return;
   }
   var tabs=document.querySelectorAll("#tabs button");
@@ -1495,7 +1517,7 @@ function breakForm(){
 function dayMain(){
   var h="";
   if(!activeReaders().length){
-    if(auth.loaded&&!isAdmin())return L('<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>');
+    if(auth.loaded&&!isAdmin())return L('<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>');
     return auth.loaded?L('<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>'):"";
   }
   h+=noPriceBox();
@@ -1627,26 +1649,35 @@ function statsMain(){
   /* The rules, written out so anyone can read them; the examples use the dates on screen. */
   var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
   var lw=function(d){var t=fmtDay(d,"w");return t.charAt(0).toLowerCase()+t.slice(1)};
-  h+='<h3 class="sec">'+L("Qaydalar və terminlər")+'</h3><div class="pay explain">'+
-    L("<p><b>Həftə</b> — 7 gün: cümə, şənbə, bazar, bazar ertəsi, çərşənbə axşamı, çərşənbə, cümə axşamı.</p>")+
-    L("<p><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Həftə cümə axşamı gecə 23:59-da bitir, yeni həftə o andan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</p>")+
-    '<p>'+(wl.full
+  h+='<h3 class="sec">'+L("Qaydalar")+'</h3><div class="pay explain"><ol class="rules">'+
+    L("<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>")+
+    L("<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>")+
+    '<li>'+(wl.full
       ?tf(L("İndi ekranda {a} həftəsi görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} həftəsi görünəcək."),{a:rg(wl.s,wl.e),b:lw(addDays(wl.e,7)),c:rg(addDays(wl.s,7),addDays(wl.e,7))})
-      :tf(L("İlk həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(wl.s,wl.e),b:lw(wl.e),c:lw(addDays(wl.e,7))}))+'</p>'+
-    L("<p><b>Aylıq statistika</b> — ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — beləcə heç bir gün itmir. Ay bitəndən sonra ekranda yeni ay görünür.</p>")+
-    '<p>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
+      :tf(L("İlk həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(wl.s,wl.e),b:lw(wl.e),c:lw(addDays(wl.e,7))}))+'</li>'+
+    L("<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>")+
+    '<li>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
       return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
-        tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</p>'+
-    L("<p><b>Bu gün yazılan qəbullar</b> — bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da). Hər yeni qəbulda dərhal yenilənir, gecə 00:00-da sıfırlanır.</p>")+
-    L("<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>")+
-    L("<p><b>Uğurlu</b> — həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</p>")+
-    L("<p><b>Qazanc</b> — uğurlu seansların qiymətlərinin cəmi. Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur).</p>")+
-    L("<p><b>Məhsul</b> — Kassada yazılan məhsul satışları: kim satıb, neçə dəfə (Satış) və neçə manatlıq (Məbləğ). Satan avtomatik olaraq satışı yazan işçidir.</p>")+
-    L("<p><b>Cəmi</b> — cədvəldəki bütün sətirlərin toplamı.</p>")+
-    L("<p><b>Silinən qəbul</b> heç yerdə sayılmır — nə «Yazdı»da, nə «Uğurlu»da, nə «Qazanc»da. Həftələr sonra silinsə də, statistikadan çıxır.</p>")+
-    L("<p><b>Satış statistikasında</b> yalnız satış agentlərinin və adminlərin yazdığı qəbullar var; mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</p>")+
-    L("<p><b>Kopyala</b> — cədvəli WhatsApp üçün mətn kimi kopyalayır. WhatsApp-da yapışdırın, cədvəl sütunlarla görünəcək. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır.</p>")+
-    L("<p><b>‹ ›</b> düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</p>")+'</div>';
+        tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</li>'+
+    L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir və gecə 00:00-da sıfırlanır.</li>")+
+    L("<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
+    L("<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>")+
+    L("<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>")+
+    L("<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>")+
+    L("<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>")+
+    L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>")+
+    '</ol></div>';
+  h+='<h3 class="sec">'+L("Terminlər")+'</h3><div class="pay explain"><dl class="terms">'+
+    L("<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da).</dd>")+
+    L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
+    L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
+    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>")+
+    L("<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>")+
+    L("<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>")+
+    L("<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>")+
+    L("<dt>Məbləğ</dt><dd>neçə manatlıq məhsul satılıb.</dd>")+
+    L("<dt>Cəmi</dt><dd>cədvəldəki bütün sətirlərin toplamı.</dd>")+
+    '</dl></div>';
   return h;
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
@@ -1693,7 +1724,7 @@ function cashMain(){
     h+='<div class="pay">'+(pr.length?pr.map(function(x){
       return L('<div class="visit"><span>Satdı: ')+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+L('">Sil</button></div>')}).join("")
       :L('<div class="foot">Bu tarixdə məhsul satılmayıb.</div>'))+'</div>';
-  }else h+=L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>');
+  }else h+=L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu admin bir dəfə edir.</p></div>');
   if(state.v2){
     var ex=state.expenses.filter(function(x){return x.date===ui.date});
     h+=L('<h3 class="sec">Xərclər</h3>')+'<div class="pay">'+(ex.length?ex.map(function(x){
@@ -1761,7 +1792,7 @@ function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="";
   if(adm&&secWarn)h+=L('<div class="note warnbox"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
   h+=L('<h3 class="sec">Mütəxəssislər</h3>');
-  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
+  if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
     h+='<div class="reader"><button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+L('" aria-label="Rəngi dəyiş"></button><div style="flex:1"><b>')+esc(r.name)+'</b></div>'+
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
@@ -1819,7 +1850,7 @@ function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"aut
 function colorSheet(){
   var r=reader(sheet.id);if(!r)return L('<h2>Rəng')+CLOSE+'</h2>';
   var cur=rcolor(r.id),h='<h2>'+esc(r.name)+L(' — rəng')+CLOSE+'</h2>';
-  if(!state.hasColor)return h+L('<p class="hint">Rəng seçmək üçün baza bir dəfə yenilənməlidir. ')+(isOwner()?L('Bunun üçün SQL faylını işə salın.'):L('Bunu rəhbər edir.'))+'</p>';
+  if(!state.hasColor)return h+L('<p class="hint">Rəng seçmək üçün baza bir dəfə yenilənməlidir. ')+(isOwner()?L('Bunun üçün SQL faylını işə salın.'):L('Bunu admin edir.'))+'</p>';
   h+='<div class="swatches">'+PALETTE.map(function(c){return '<button data-act="pick-color" data-id="'+c+'" style="background:'+c+'" aria-pressed="'+(c.toLowerCase()===cur.toLowerCase())+'" aria-label="'+c+'"></button>'}).join("")+'</div>';
   return h+L('<p class="hint">Bu mütəxəssisin bütün seansları təqvimdə bu rəngdə görünəcək. Rəng bütün işçilərin telefonunda dəyişir.</p>');
 }
@@ -1846,7 +1877,7 @@ function staffForm(){
     '<button data-act="st-role" data-id="agent" aria-pressed="'+(role==="agent")+L('">Satış agenti</button>')+
     '<button data-act="st-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button>')+
     (isOwner()?'<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+L('">Admin</button>'):'')+'</div></div>'+
-    '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız rəhbər verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
+    '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız əsas admin verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
     L('<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>');
 }
 function fd(v){v=String(v||"").slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(v)?fmtDay(v):""}
@@ -1890,7 +1921,7 @@ function auditSheet(){
     var t=bk(+new Date(x.at)),who=x.uid?(state.staff[x.uid]||L("Adsız istifadəçi")):L("Baza paneli");
     h+='<div class="log'+(x.op==="DELETE"?" del":"")+'">'+esc(auditLine(x))+'<small class="num">'+esc(who)+' · '+fmtDay(t.d)+', '+hhmm(t.m)+'</small></div>';
   });
-  return h+L('</div><p class="hint">Son ')+sheet.rows.length+L(' dəyişiklik göstərilir. Bu jurnalı yalnız rəhbər görür.</p>');
+  return h+L('</div><p class="hint">Son ')+sheet.rows.length+L(' dəyişiklik göstərilir. Bu jurnalı yalnız adminlər görür.</p>');
 }
 function loadAudit(){
   var s=sheet,done=function(rows,err){if(sheet!==s)return;s.rows=rows.sort(function(a,b){return b.id-a.id});s.err=err;byId("sheet").innerHTML=auditSheet()};
@@ -1914,7 +1945,7 @@ function meForm(){
       L('<p class="hint">Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.</p>');
   }else{
     h+=L('<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" maxlength="60" autocomplete="off" value="')+esc(nm)+'"></div>'+
-      '<p class="hint">'+(state.hasRole&&role==="specialist"?L("Rəhbər hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. "):"")+L('Statistikada və hesabatda bu adla görünəcəksiniz.</p>');
+      '<p class="hint">'+(state.hasRole&&role==="specialist"?L("Admin hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. "):"")+L('Statistikada və hesabatda bu adla görünəcəksiniz.</p>');
   }
   return h+L('<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
 }
@@ -2062,7 +2093,7 @@ document.addEventListener("click",function(e){
     sb.auth.signInWithPassword({email:mail,password:pass}).then(function(r){
       b.disabled=false;
       if(r.error){var em=String(r.error.message||"");
-        auth.msg=/not confirmed/i.test(em)?L("Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin."):
+        auth.msg=/not confirmed/i.test(em)?L("Bu hesab hələ təsdiqlənməyib. Adminə deyin."):
           r.error.status===429||/rate limit|too many/i.test(em)?L("Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın."):
           (r.error.status===400||/invalid/i.test(em))?L("E-poçt və ya şifrə səhvdir."):L("Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.");render()}
     },function(){b.disabled=false;auth.msg=L("Serverlə əlaqə yoxdur. İnterneti yoxlayın.");render()});
@@ -2172,7 +2203,7 @@ document.addEventListener("click",function(e){
     if(!sheet||sheet.type!=="staff"||!isAdmin())return;
     var sk=sheet.id,sn=val("s-name"),sr=sheet.role||state.roles[sk]||"agent";
     if(!sn)return fail("s-err",L("Adı yazın."));
-    if((sr==="admin"||state.roles[sk]==="admin")&&!isOwner()){if(sr!==state.roles[sk])return fail("s-err",L("Admin rolunu yalnız rəhbər dəyişə bilər."))}
+    if((sr==="admin"||state.roles[sk]==="admin")&&!isOwner()){if(sr!==state.roles[sk])return fail("s-err",L("Admin rolunu yalnız əsas admin dəyişə bilər."))}
     state.staff[sk]=sn;state.roles[sk]=sr;state.roleSet[sk]=1;
     pending++;writes++;
     sb.from("staff").update({name:sn,role:sr}).eq("id",sk).select().then(function(r){
