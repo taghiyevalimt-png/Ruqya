@@ -18,6 +18,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Taps on the home-screen widget. Android 13+ only delivers intents that match a filter. -->
+            <intent-filter>
+                <action android:name="az.ruqya.zapis.OPEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="ruqya" />
+            </intent-filter>
         </activity>
 
         <receiver
@@ -26,6 +32,14 @@
             android:label="Ruqyatz — ay">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="az.ruqya.zapis.WIDGET_PREV" />
+                <action android:name="az.ruqya.zapis.WIDGET_NEXT" />
+                <data android:scheme="ruqya" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="az.ruqya.zapis.WIDGET_TEST" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
