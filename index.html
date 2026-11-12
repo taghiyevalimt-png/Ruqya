@@ -179,7 +179,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:13px;color:var(--muted);font-weight:500}
 .field input,.field select{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;width:100%;min-height:46px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
 .err{color:var(--bad);font-size:14px;font-weight:500;margin:0}
 .hint{font-size:13px;color:var(--muted);margin:0}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
@@ -687,10 +687,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Fasilələr: ":"Перерывы: ",
 "Qəbulu dəyiş":"Изменить запись",
 "Yeni qəbul":"Новая запись",
-"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Mütəxəssis</label><select id=\"f-reader\">":"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Специалист</label><select id=\"f-reader\">",
-"<div class=\"field\"><label for=\"f-date\">Tarix</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"f-date\">Дата</label><input id=\"f-date\" type=\"date\" value=\"",
-"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Saat</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Время</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
-"<div class=\"field\"><label for=\"f-dur\">Müddət</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность</label><select id=\"f-dur\">",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Mütəxəssis (vacibdir)</label><select id=\"f-reader\">":"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Специалист (обязательно)</label><select id=\"f-reader\">",
+"<div class=\"field\"><label for=\"f-date\">Tarix (vacibdir)</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"f-date\">Дата (обязательно)</label><input id=\"f-date\" type=\"date\" value=\"",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Saat (vacibdir)</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Время (обязательно)</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
+"<div class=\"field\"><label for=\"f-dur\">Müddət (vacibdir)</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность (обязательно)</label><select id=\"f-dur\">",
 " saat":" ч",
 "<div class=\"field\"><label for=\"f-name\">Pasiyentin adı (vacibdir)</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента (обязательно)</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
 "<div class=\"field\"><label for=\"f-phone\">Telefon</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Телефон</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
@@ -753,6 +753,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Mütəxəssisi seçmək vacibdir. Mütəxəssis olmadan qəbul yadda saxlanmır.":"Специалиста выбрать обязательно. Без специалиста запись не сохраняется.",
+"Tarixi seçmək vacibdir. Tarix olmadan qəbul yadda saxlanmır.":"Дату выбрать обязательно. Без даты запись не сохраняется.",
+"Saatı seçmək vacibdir. Saat olmadan qəbul yadda saxlanmır.":"Время выбрать обязательно. Без времени запись не сохраняется.",
+"Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır.":"Длительность выбрать обязательно. Без длительности запись не сохраняется.",
 "<div class=\"field\"><label for=\"f-phone\">Mobil nömrə (vacibdir)</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный номер (обязательно)</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
 "Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır.":"Имя пациента обязательно. Без имени запись не сохраняется.",
 "Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır.":"Мобильный номер пациента обязателен. Без номера запись не сохраняется.",
@@ -887,7 +891,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112181349";
+var APP_VERSION="20261112181804";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1930,10 +1934,10 @@ function apptForm(){
   var pre=sheet.pre||{},pm=patients();
   var opts=rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
-    L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis</label><select id="f-reader">')+opts+'</select></div>'+
-    L('<div class="field"><label for="f-date">Tarix</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
-    L('<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
-    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis (vacibdir)</label><select id="f-reader">')+opts+'</select></div>'+
+    L('<div class="field"><label for="f-date">Tarix (vacibdir)</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
+    L('<div class="two"><div class="field"><label for="f-time">Saat (vacibdir)</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət (vacibdir)</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     L('<div class="field"><label for="f-name">Pasiyentin adı (vacibdir)</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Mobil nömrə (vacibdir)</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
@@ -1957,9 +1961,11 @@ function saveAppt(){
   if(!sheet)return;
   var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status="";
   var r=reader(rid),service="";
-  if(!r)return fail("f-err",L("Mütəxəssisi seçin."));
+  if(!rid||!r)return fail("f-err",L("Mütəxəssisi seçmək vacibdir. Mütəxəssis olmadan qəbul yadda saxlanmır."));
+  if(!date)return fail("f-err",L("Tarixi seçmək vacibdir. Tarix olmadan qəbul yadda saxlanmır."));
   if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
-  if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçin."));
+  if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçmək vacibdir. Saat olmadan qəbul yadda saxlanmır."));
+  if(state.hasDur&&!(+val("f-dur")>0))return fail("f-err",L("Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
   if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
   var pd=phone.replace(/\D/g,"");
