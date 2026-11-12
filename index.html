@@ -317,7 +317,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112102604";
+var APP_VERSION="20261112103506";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -451,7 +451,7 @@ function upsertBy(list,row){for(var i=0;i<list.length;i++)if(list[i].id===row.id
 function removeBy(list,id){for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
 function refresh(){
   if(!sb||!auth.user)return Promise.resolve();
-  var my=++seq,g=writes,from=state.loadedFrom||addDays(today,-WINDOW),needHist=!state.histLoaded;
+  var my=++seq,g=writes,from=state.loadedFrom||addDays(today,-WINDOW),needHist=false;
   return Promise.all([
     fetchAll(function(){return sb.from("readers").select("*").order("created_at").order("id")}),
     fetchAll(function(){return sb.from("appts").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
@@ -511,6 +511,7 @@ function redrawCard(){
 function uniq(rows){var seen={};return rows.filter(function(x){if(seen[x.id])return false;seen[x.id]=1;return true})}
 /* Safety net for a realtime line that died without saying so: every few minutes ask only for rows changed
    since the last one seen and compare the row count (a deleted row changes it). Costs a few hundred bytes. */
+function catchUp(){if(state.hasUpd&&auth.loaded&&Date.now()-lastFull<6*3600000)poll();else refresh()}
 function cnt(t,from){var q=sb.from(t).select("id",{count:"exact",head:true});return from?q.gte("date",from):q}
 function poll(){
   if(!sb||!auth.user||!auth.loaded||!state.hasUpd||pending||offline)return;
@@ -542,6 +543,17 @@ function checkSecurity(){
     if(j.external&&j.external.anonymous_users===true)w.push("anonim giriş açıqdır («Allow anonymous sign-ins»)");
     secWarn=w.join("; ");if(secWarn)render();
   }).catch(function(){});
+}
+/* Visits older than the loaded weeks are needed only for patient counts; fetch them when a screen shows those. */
+var histLoading=false,histFail=0;
+function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||(ui.tab==="cash"&&ui.period!=="day")||!!(sheet&&/^(patient|appt)$/.test(sheet.type))}
+function ensureHist(){
+  if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
+  histLoading=true;var my=seq,to=state.loadedFrom;
+  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status").gte("date",addDays(today,-400)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
+    histLoading=false;if(my!==seq||!auth.user)return;
+    state.hist=rows.map(mapLite);state.histLoaded=true;render();redrawCard();
+  },function(){histLoading=false;histFail=Date.now()});
 }
 function neededFrom(){
   if(!auth.loaded)return null;
@@ -599,7 +611,7 @@ function startSync(){
   if(rt||!sb)return;
   try{
     rt=sb.channel("all").on("postgres_changes",{event:"*",schema:"public"},onChange).subscribe(function(st){
-      if(st==="SUBSCRIBED"){if(rtDown){rtDown=false;refresh()}}
+      if(st==="SUBSCRIBED"){if(rtDown){rtDown=false;catchUp()}}
       else if(st==="CHANNEL_ERROR"||st==="TIMED_OUT"||st==="CLOSED")rtDown=true;
     });
   }catch(e){rt=null}
@@ -650,7 +662,7 @@ function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmt
 function render(){
   if(pz&&Date.now()-pz.t<15000)return;
   if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
-  setTimeout(ensureLoaded,0);
+  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   byId("tabs").hidden=gate;
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
@@ -670,6 +682,7 @@ function render(){
   for(var i=0;i<tabs.length;i++){if(tabs[i].dataset.tab===ui.tab)tabs[i].setAttribute("aria-current","page");else tabs[i].removeAttribute("aria-current")}
   var note=offline?"İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq.":auth.msg;
   if(!note&&loadingOlder)note="Köhnə məlumatlar yüklənir…";
+  if(!note&&histLoading&&ui.tab==="patients")note="Köhnə pasiyentlər yüklənir…";
   var banner=note?'<div class="note warnbox"><p>'+esc(note)+'</p></div>':(!auth.loaded?'<div class="note"><p>Qəbullar yüklənir…</p></div>':"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML='<h1>Pasiyentlər</h1><input class="search" id="q" type="search" placeholder="Ad və ya telefon ilə axtar" value="'+esc(ui.q)+'">';
@@ -1357,6 +1370,7 @@ function openSheet(s){
   var f={color:colorSheet,agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
+  setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
 function hideSheet(){sheet=null;byId("overlay").hidden=true}
@@ -1405,7 +1419,9 @@ function readerForm(){
     '<div class="field"><label for="r-name">Ad</label><input id="r-name" type="text" maxlength="40" autocomplete="off" value="'+esc(r?r.name:"")+'"></div>'+
     '<p class="err" id="r-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-reader">Yadda saxla</button>'+
-    (r?'<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>':'')+'</div>';
+    (r?'<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>':'')+'</div>'+
+    (function(){if(!r)return "";var fut=state.appts.filter(function(a){return a.readerId===r.id&&a.date>=today&&a.status==="wait"}).length;
+      return fut?'<p class="hint" style="color:var(--warn)">Diqqət: bu mütəxəssisin qarşıda '+fut+' qəbulu var. Siyahıdan çıxarsanız da, onlar təqvimdə qalacaq — əvvəlcə başqa mütəxəssisə keçirin və ya ləğv edin.</p>':""})();
 }
 
 function saveAppt(){
@@ -1451,6 +1467,8 @@ function saveReader(){
   if(!sheet||!isAdmin())return;
   var name=val("r-name");
   if(!name)return fail("r-err","Mütəxəssisin adını yazın.");
+  /* Specialists' own accounts are linked to the calendar by name, so two active specialists may not share one. */
+  if(activeReaders().some(function(x){return x.id!==sheet.id&&low(x.name)===low(name)}))return fail("r-err","Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə).");
   if(sheet.id){
     var r=reader(sheet.id);
     if(r)r.name=name;
@@ -1641,6 +1659,8 @@ document.addEventListener("click",function(e){
     if(!bt)return fail("b-err","Fasilənin adını yazın.");
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err","Başlama və bitmə saatını seçin.");
     if(mins(be)<=mins(bs))return fail("b-err","Bitmə saatı başlamadan sonra olmalıdır.");
+    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait")return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
+    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent="Yenə də əlavə et";return fail("b-err","Bu vaxta artıq "+hit+" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq.")}
     var bid=uuid();state.breaks.push({id:bid,title:bt,start:bs,end:be});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert({id:bid,title:bt,start_time:bs,end_time:be}));closeSheet();
   }
@@ -1768,8 +1788,9 @@ document.addEventListener("visibilitychange",function(){
   if(document.hidden){hiddenAt=Date.now();if(pz)endPinch();return}
   var away=hiddenAt?Date.now()-hiddenAt:0;hiddenAt=0;
   if(rollDay())render();
-  if(auth.user&&!offline&&away>3*60000)refresh();
-  else if(auth.user&&!offline&&away>20000)poll();
+  /* Back in the app: after a long break reload everything; after a short one ask only for what changed. */
+  if(auth.user&&!offline&&away>30*60000)refresh();
+  else if(auth.user&&!offline&&away>20000)catchUp();
   if(!offline)checkUpdate();
 });
 setInterval(tick,60000);
