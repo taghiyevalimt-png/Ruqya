@@ -231,6 +231,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal-head .corner{position:sticky;left:0;z-index:5;width:40px;flex:none;background:var(--surface)}
 .cal-head .ch{flex:1 0 56px;width:56px;padding:6px 3px;font-size:12px;font-weight:600;text-align:center;border-left:1px solid var(--line);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .cal-head .ch{cursor:pointer}
+.cal-head .ch i{display:none}   /* no colour dot in the header; tapping the name still opens the colour choice */
 .cal-head .ch i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
 .cal-body{display:flex;position:relative}
 .axis{position:sticky;left:0;z-index:3;width:40px;flex:none;background:var(--surface)}
@@ -949,7 +950,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112211847";
+var APP_VERSION="20261112212018";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
