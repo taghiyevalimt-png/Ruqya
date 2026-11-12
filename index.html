@@ -308,7 +308,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112053544";
+var APP_VERSION="20261112060055";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -356,7 +356,8 @@ function uuid(){
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function money(n){return (Math.round((+n||0)*100)/100).toLocaleString("ru-RU",{maximumFractionDigits:2})+" "+CUR}
 /* Phones older than Android 7 have no manat sign in their fonts and would draw an empty box. */
-var CUR=(function(){var m=/Android (\d+)/.exec(navigator.userAgent||"");return m&&+m[1]<7?"AZN":"\u20bc"})();
+var OLDAND=(function(){var m=/Android (\d+)/.exec(navigator.userAgent||"");return !!(m&&+m[1]<7)})();
+var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2713 ",G_NO=OLDAND?"\u2013 ":"\u2717 ";
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function fmtDay(s,mode){
   var d=parse(s),base=d.getDate()+" "+MON[d.getMonth()];
@@ -364,6 +365,8 @@ function fmtDay(s,mode){
   if(mode==="y")return base+" "+d.getFullYear();
   return base;
 }
+/* Search that ignores Azerbaijani case quirks: "İlkin" and "ilkin", "ISMAYIL" and "ismayıl" match. */
+function low(x){return String(x||"").toLowerCase().replace(/\u0307/g,"").replace(/\u0131/g,"i")}
 function digits(p){var d=String(p||"").replace(/\D/g,"");return d.length>=9?d.slice(-9):d}
 function byId(id){return document.getElementById(id)}
 function val(id){var e=byId(id);return e?e.value.trim():""}
@@ -470,6 +473,12 @@ function refresh(){
     if(!auth.loaded){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,6000)}
   });
 }
+/* Cards that only show data are redrawn when data changes elsewhere; forms with typing in them are left alone. */
+function redrawCard(){
+  if(!sheet)return;
+  var f={view:viewSheet,agent:agentSheet,patient:patientSheet}[sheet.type];
+  if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
+}
 function uniq(rows){var seen={};return rows.filter(function(x){if(seen[x.id])return false;seen[x.id]=1;return true})}
 /* Safety net for a realtime line that died without saying so: every few minutes ask only for rows changed
    since the last one seen and compare the row count (a deleted row changes it). Costs a few hundred bytes. */
@@ -486,7 +495,7 @@ function poll(){
     rows.forEach(function(x){var o=appt(x.id),u=x.updated_at?+new Date(x.updated_at):0;if(!o||o.upd!==u){upsertBy(state.appts,mapAppt(x));ch=true}});
     var local=state.appts.filter(function(a){return a.date>=from}).length;
     if(typeof res[1].count==="number"&&res[1].count!==local){refresh();return}
-    if(ch){render();if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()}
+    if(ch){render();redrawCard()}
   },function(){});
 }
 function checkSecurity(){
@@ -548,7 +557,7 @@ function onChange(pl){
   else if(t==="expenses"){if(del)removeBy(state.expenses,row.id);else upsertBy(state.expenses,mapExp(row))}
   else if(t==="product_sales"){if(del)removeBy(state.products,row.id);else upsertBy(state.products,mapProd(row))}
   else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}
-  clearTimeout(rtRender);rtRender=setTimeout(function(){render();if(sheet&&sheet.type==="view"&&appt(sheet.id))byId("sheet").innerHTML=viewSheet()},120);
+  clearTimeout(rtRender);rtRender=setTimeout(function(){render();redrawCard()},120);
 }
 function startSync(){
   refresh();
@@ -708,7 +717,7 @@ function gridMain(){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+a.status+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
-        '<b>'+(a.status==="paid"?"✓ ":a.status==="noshow"?"✗ ":"")+esc(a.name)+'</b>'+
+        '<b>'+(a.status==="paid"?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
         (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
         (ht>76&&(state.staff[a.by]||a.by)?'<span class="by">Yazdı: '+esc(state.staff[a.by]||"Adsız")+'</span>':'')+
@@ -1032,10 +1041,10 @@ function bookSheet(){
 }
 
 function patientsList(){
-  var m=patients(),q=ui.q.trim().toLowerCase(),qd=q.replace(/\D/g,"");
+  var m=patients(),q=low(ui.q.trim()),qd=q.replace(/\D/g,"");
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
     if(!q)return true;
-    return p.name.toLowerCase().indexOf(q)>=0||(qd&&String(p.phone||"").replace(/\D/g,"").indexOf(qd)>=0);
+    return low(p.name).indexOf(q)>=0||(qd&&String(p.phone||"").replace(/\D/g,"").indexOf(qd)>=0);
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
   if(!arr.length)return auth.loaded?'<div class="empty">'+(q?"Heç kim tapılmadı. Adı və ya nömrəni yoxlayın.":"Pasiyentlər ilk qəbuldan sonra burada görünəcək.")+'</div>':"";
@@ -1320,7 +1329,7 @@ function slotGrid(){
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
   box.innerHTML=h;
-  el.textContent=(taken.length?"Tutulub: "+taken.join(", ")+". ":"Bu gün mütəxəssis boşdur. ")+(state.breaks.length?"Fasilələr: "+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
+  el.textContent=(taken.length?"Tutulub: "+taken.join(", ")+". ":(date===today?"Bu gün":"Bu tarixdə")+" mütəxəssis boşdur. ")+(state.breaks.length?"Fasilələr: "+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
@@ -1366,9 +1375,12 @@ function saveAppt(){
   if(sheet.id&&!a){closeSheet();flash("Bu qəbul artıq silinib.");return}
   var dur=+(val("f-dur")||(a?a.dur:90))||90;
   if(mins(time)<DAY0||mins(time)+dur>DAY1)return fail("f-err","Seans 08:00 ilə 00:00 arasında olmalıdır. Başlama saatını və ya müddəti dəyişin.");
-  var clash=status==="cancel"?null:overlap(rid,date,time,dur,sheet.id);
+  /* A booking whose time is not being changed is not re-checked: a phone number can always be corrected,
+     even if a break was added later or the booking was made before the overlap rule. */
+  var moved=!a||a.readerId!==rid||a.date!==date||a.time!==time||(a.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
+  var clash=status==="cancel"||!moved?null:overlap(rid,date,time,dur,sheet.id);
   if(clash)return fail("f-err",r.name+" bu vaxt məşğuldur: "+clash.name+", "+clash.time+"–"+endOf(clash)+". Başqa vaxt seçin.");
-  var br=status==="cancel"?null:inBreak(time,dur);
+  var br=status==="cancel"||!moved?null:inBreak(time,dur);
   if(br)return fail("f-err","Bu vaxt fasilədir: "+br.title+" "+br.start+"–"+br.end+".");
   if(a){
     a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;a.dur=dur;
@@ -1456,6 +1468,8 @@ document.addEventListener("click",function(e){
     var pa=sheet&&appt(sheet.id),pv=parseFloat(val("p-price"));
     if(!pa){closeSheet();return}
     if(!(pv>0)||pv>MAXSUM)return fail("p-err","Məbləği düzgün yazın.");
+    if(pa.status==="cancel"){var cl2=overlap(pa.readerId,pa.date,pa.time,pa.dur||90,pa.id);
+      if(cl2)return fail("p-err","Bu vaxta artıq başqa qəbul yazılıb ("+cl2.name+", "+cl2.time+"–"+endOf(cl2)+"). Əvvəlcə vaxtı dəyişin.")}
     pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
   }
   else if(act==="report"){openSheet({type:"report"});return}
@@ -1467,7 +1481,12 @@ document.addEventListener("click",function(e){
     try{localStorage.setItem("ruqya.theme",id)}catch(err){}
     applyTheme(id);render();return;
   }
-  else if(act==="agent"){if(isAdmin()&&id)openSheet({type:"agent",id:id,date:ui.tab==="cash"&&ui.period==="day"?ui.date:today});return}
+  else if(act==="agent"){
+    if(!isAdmin()||!id)return;
+    var ad=ui.tab==="cash"&&ui.period==="day"?ui.date:today;
+    if(ad>today||(state.loadedFrom&&ad<state.loadedFrom))ad=today;
+    openSheet({type:"agent",id:id,date:ad});return;
+  }
   else if(act==="ag-day"){
     if(!sheet||sheet.type!=="agent")return;
     var nd=addDays(sheet.date||today,+b.getAttribute("data-n"));
@@ -1609,8 +1628,8 @@ document.addEventListener("change",function(e){
   var t=e.target.id;
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
   if(t==="f-name"){
-    var ph=byId("f-phone"),nm=e.target.value.trim().toLowerCase(),pm=patients();
-    if(ph&&!ph.value)Object.keys(pm).some(function(k){if(pm[k].name.toLowerCase()===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
+    var ph=byId("f-phone"),nm=low(e.target.value.trim()),pm=patients();
+    if(ph&&!ph.value)Object.keys(pm).some(function(k){if(low(pm[k].name)===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
   }
 });
 document.addEventListener("keydown",function(e){
