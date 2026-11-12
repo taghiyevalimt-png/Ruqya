@@ -4,6 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e6b5b">
+<script>
+/* Light / dark / automatic, chosen in Ayarlar and kept on this phone. */
+function applyTheme(t){
+  var r=document.documentElement;
+  if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
+  var dark=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#0f1514":"#0e6b5b");
+}
+try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
+try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}if(t==="auto")applyTheme("auto")};
+  if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq)}catch(e){}
+</script>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
@@ -236,6 +248,12 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .tags{display:flex;gap:6px;flex-wrap:wrap}
 .tag{border-radius:8px;padding:3px 8px;font-size:12px;font-weight:600;background:var(--accent-soft);color:var(--accent)}
 .tag.warn{background:var(--warn-soft);color:var(--warn)}
+.agent{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;border-top:1px solid var(--line);padding:10px 0;font-size:14px;text-align:left}
+.agent span:first-child{flex:1;min-width:0}.agent .chev{color:var(--muted);font-size:18px;flex:none}
+.agrow{display:flex;gap:10px;align-items:baseline;font-size:14px;padding:9px 0;border-top:1px solid var(--line)}
+.agrow>span:first-child{flex:1;min-width:0}.agrow small{display:block;color:var(--muted);font-size:12.5px}
+.agsum{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:14px;margin:6px 0 0}
+.agsum b{text-align:right}.agsum .h{color:var(--muted);font-size:12px;font-weight:600}
 .memo{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere}
 a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--accent);text-decoration:none;flex:1}
 .settle{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:10px;font-size:14px}
@@ -290,7 +308,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261111122925";
+var APP_VERSION="20261112053544";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -845,9 +863,10 @@ function cashMain(){
     var bb=bookedBy(d.r.s,d.r.e),bt=bb.reduce(function(t,x){return t+x.n},0);
     h+='<div class="pay"><div class="head"><b>'+(ui.period==="day"?(ui.date===today?"Bu gün yazılan qəbullar":fmtDay(ui.date)+" yazılan qəbullar"):"Bu dövrdə yazılan qəbullar")+'</b><span class="num">'+bt+'</span></div>';
     if(bb.length){h+='<div>';bb.forEach(function(x){
-      h+='<div class="visit"><span>'+esc(x.name)+(x.cancel?' <small style="color:var(--muted)">(ləğv: '+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b></div>'});h+='</div>'}
+      var inner='<span>'+esc(x.name)+(x.cancel?' <small style="color:var(--muted)">(ləğv: '+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b>';
+      h+=isAdmin()&&x.id?'<button class="agent" data-act="agent" data-id="'+esc(x.id)+'">'+inner+'<span class="chev">›</span></button>':'<div class="visit">'+inner+'</div>'});h+='</div>'}
     else h+='<div class="foot">Bu müddətdə heç kim qəbul yazmayıb.</div>';
-    h+='<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.</div></div>';
+    h+='<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.'+(isAdmin()&&bb.length?' Ətraflı statistika üçün işçinin adına toxunun.':'')+'</div></div>';
     var PN={day:"günlük",week:"həftəlik",month:"aylıq"}[ui.period];
     h+='<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı ('+PN+')</button>';
     h+='<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>';
@@ -1074,16 +1093,67 @@ function readersMain(){
     var ids2=Object.keys(state.staff).sort(function(a,b){return state.staff[a].localeCompare(state.staff[b])});
     if(ids2.length){
       h+='<div class="pay"><div class="head"><b>İşçilər</b><span class="num">'+ids2.length+'</span></div><div>';
-      ids2.forEach(function(k){h+='<div class="visit"><span>'+esc(state.staff[k])+(k===auth.user.id?' (siz)':'')+'</span><span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+'">Dəyiş</button>':'')+'</div>'});
-      h+='</div></div>';
+      ids2.forEach(function(k){
+        var nm='<span>'+esc(state.staff[k])+(k===auth.user.id?' (siz)':'')+'</span>';
+        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k])+'</button>'+(k===auth.user.id?' (siz)':'')+'</span>';
+        h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+'">Dəyiş</button>':'')+'</div>'});
+      h+='</div><div class="foot">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>';
     }
   }
   if(adm&&state.hasAudit)h+='<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>';
+  var th=curTheme();
+  h+='<h3 class="sec">Görünüş</h3><div class="seg">'+
+    [["auto","Avtomatik"],["light","Açıq"],["dark","Tünd"]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
+    '<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>';
   h+='<h3 class="sec">Hesab</h3>';
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||"Ad yazılmayıb")+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
     (state.v2?'<button class="ghost" data-act="me">Dəyiş</button>':'')+'</div>'+
     (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?'<p class="hint">Rol: '+roleLabel(auth.user.id)+'</p>':'');
   h+='<button class="ghost" data-act="logout">Çıxış</button>';
+  return h;
+}
+function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
+function agentStats(k,s0,e0){
+  /* Booked = made in this period (by the day it was written), whatever date it is for.
+     Came = sessions in this period marked «Gəldi və ödədi», as in the weekly sales sheet. */
+  var r={booked:0,cancel:0,came:0,noshow:0,prod:0,prodSum:0};
+  state.appts.forEach(function(a){
+    if(a.by!==k)return;
+    if(a.created&&a.created>=s0&&a.created<=e0){if(a.status==="cancel")r.cancel++;else r.booked++}
+    if(a.date>=s0&&a.date<=e0){if(a.status==="paid")r.came++;else if(a.status==="noshow")r.noshow++}
+  });
+  state.products.forEach(function(x){if(x.by===k&&x.date>=s0&&x.date<=e0){r.prod++;r.prodSum+=x.amount}});
+  return r;
+}
+function agentSheet(){
+  var k=sheet.id,d=sheet.date||today,name=state.staff[k]||"Adsız istifadəçi";
+  var dd=parse(d),fri=addDays(d,-((dd.getDay()-5+7)%7)),m0=iso(new Date(dd.getFullYear(),dd.getMonth(),1)),m1=iso(new Date(dd.getFullYear(),dd.getMonth()+1,0));
+  var D=agentStats(k,d,d),W=agentStats(k,fri,addDays(fri,6)),M=agentStats(k,m0,m1);
+  var canBack=!state.loadedFrom||addDays(d,-1)>=state.loadedFrom;
+  var h='<h2>'+esc(name)+CLOSE+'</h2>'+
+    '<div class="daynav"><button class="icon-btn" data-act="ag-day" data-n="-1" aria-label="Geri"'+(canBack?'':' disabled')+'>‹</button>'+
+    '<div class="label">'+(d===today?"Bu gün":fmtDay(d,"w"))+'<small>'+(d===today?fmtDay(d,"w"):(d===addDays(today,-1)?"Dünən":""))+'</small></div>'+
+    '<button class="icon-btn" data-act="ag-day" data-n="1" aria-label="İrəli"'+(d>=today?' disabled':'')+'>›</button></div>'+
+    '<div class="stats" style="margin-top:10px"><div class="tile"><b class="num">'+D.booked+'</b><span>'+(d===today?"bu gün yazdı":"həmin gün yazdı")+'</span></div>'+
+    '<div class="tile"><b class="num">'+D.cancel+'</b><span>ləğv olunan</span></div></div>'+
+    '<p class="hint">Hansı tarixə yazılmasından asılı olmayaraq, '+(d===today?"bu gün":"həmin gün")+' yazdığı qəbullar sayılır. Silinənlər sayılmır.</p>';
+  var list=state.appts.filter(function(a){return a.by===k&&a.created===d}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
+  if(list.length){
+    h+='<div>';
+    list.forEach(function(a){var r=reader(a.readerId);
+      h+='<div class="agrow"><span>'+esc(a.name)+'<small class="num">'+fmtDay(a.date,"w")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</small></span>'+
+        (a.status==="wait"?'<span class="tag">Gözlənilir</span>':'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>'});
+    h+='</div>';
+  }
+  var row=function(lbl,v){return '<span>'+lbl+'</span><b class="num">'+v[0]+'</b><b class="num">'+v[1]+'</b>'};
+  h+='<div class="pay" style="margin-top:12px"><div class="head"><b>Ümumi</b></div>'+
+    '<div class="agsum"><span></span><span class="h">Həftə</span><span class="h">Ay</span>'+
+    row("Yazdığı qəbullar",[W.booked,M.booked])+
+    row("Gəlib ödəyənlər",[W.came,M.came])+
+    row("Gəlməyənlər",[W.noshow,M.noshow])+
+    row("Satdığı məhsul",[W.prod+(W.prod?" · "+money(W.prodSum):""),M.prod+(M.prod?" · "+money(M.prodSum):"")])+
+    '</div><div class="foot">Həftə: '+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+' (cümə–cümə axşamı). Ay: '+MON[dd.getMonth()]+'. «Gəlib ödəyənlər» həmin dövrdəki seanslar üzrə sayılır.</div></div>';
+  if(state.loadedFrom&&m0<state.loadedFrom)h+='<p class="hint">Qeyd: telefon son '+WINDOW+' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>';
   return h;
 }
 function staffForm(){
@@ -1229,7 +1299,7 @@ function expenseForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,expense:expenseForm}[s.type];
+  var f={agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   try{if(!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
@@ -1392,6 +1462,18 @@ document.addEventListener("click",function(e){
   else if(act==="xlsx"){openSheet({type:"book",kind:id,tab:0});return}
   else if(act==="book-tab"){if(sheet&&sheet.type==="book"){sheet.tab=+id;byId("sheet").innerHTML=bookSheet()}return}
   else if(act==="me"){openSheet({type:"me"});return}
+  else if(act==="theme"){
+    if(id!=="light"&&id!=="dark")id="auto";
+    try{localStorage.setItem("ruqya.theme",id)}catch(err){}
+    applyTheme(id);render();return;
+  }
+  else if(act==="agent"){if(isAdmin()&&id)openSheet({type:"agent",id:id,date:ui.tab==="cash"&&ui.period==="day"?ui.date:today});return}
+  else if(act==="ag-day"){
+    if(!sheet||sheet.type!=="agent")return;
+    var nd=addDays(sheet.date||today,+b.getAttribute("data-n"));
+    if(nd>today||(state.loadedFrom&&nd<state.loadedFrom))return;
+    sheet.date=nd;byId("sheet").innerHTML=agentSheet();return;
+  }
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
   else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;byId("sheet").innerHTML=auditSheet()}return}
   else if(act==="edit-staff"){if(isAdmin()&&state.staff[id]!=null)openSheet({type:"staff",id:id});return}
