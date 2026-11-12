@@ -200,6 +200,10 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .wd[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
 .wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b,.wd[aria-pressed="true"] i{color:var(--accent-ink)}
 .slots{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.sheet:has(#f-slots){gap:10px}
+.sheet .hint.small{font-size:12px;margin:-2px 0 0}
+#f-slots .slot{padding:5px 0;font-size:12px;border-radius:8px}
+.sticky-save{position:sticky;bottom:-22px;margin:0 -16px -22px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line);z-index:2}
 .slot{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:7px 0;font-size:13px;font-variant-numeric:tabular-nums}
 .slot:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
 .slot[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
@@ -768,6 +772,15 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Mütəxəssis *</label><select id=\"f-reader\">":"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Специалист *</label><select id=\"f-reader\">",
+"<div class=\"field\"><label for=\"f-dur\">Müddət *</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность *</label><select id=\"f-dur\">",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Tarix *</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Дата *</label><input id=\"f-date\" type=\"date\" value=\"",
+"<div class=\"field\"><label for=\"f-time\">Saat *</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"field\"><label for=\"f-time\">Время *</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Pasiyentin adı *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Имя пациента *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
+"<div class=\"field\"><label for=\"f-phone\">Mobil nömrə *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
+"<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Цена, ",
+" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"":" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"",
+"<p class=\"hint small\" style=\"margin:0\">* — vacib sahələr</p>":"<p class=\"hint small\" style=\"margin:0\">* — обязательные поля</p>",
 "</h2><p class=\"hint\">Bu pasiyentin qəbulu qalmayıb.</p>":"</h2><p class=\"hint\">У этого пациента не осталось записей.</p>",
 "<span>Mütəxəssis: ":"<span>Специалист: ",
 "<span>Qiymət: ":"<span>Цена: ",
@@ -936,7 +949,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112210053";
+var APP_VERSION="20261112211508";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2002,18 +2015,21 @@ function apptForm(){
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
   var pre=sheet.pre||{},pm=patients();
   var opts=(def?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
+  /* Kept short so «Yaz» is visible without scrolling: two fields per row, small time buttons, and the button
+     itself stays at the bottom of the window. */
   return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
-    L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis (vacibdir)</label><select id="f-reader">')+opts+'</select></div>'+
-    L('<div class="field"><label for="f-date">Tarix (vacibdir)</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div></div>'+
-    L('<div class="two"><div class="field"><label for="f-time">Saat (vacibdir)</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
-    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət (vacibdir)</label><select id="f-dur">')+(a||pre.dur?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+[45,60,90,120,150,180].concat(a&&[45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||0);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
-    '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
-    L('<div class="field"><label for="f-name">Pasiyentin adı (vacibdir)</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
-    L('<div class="field"><label for="f-phone">Mobil nömrə (vacibdir)</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L(' (vacibdir)</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="130" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
-    L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
+    L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis *</label><select id="f-reader">')+opts+'</select></div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+(a||pre.dur?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+[45,60,90,120,150,180].concat(a&&[45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||0);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
+    L('<div class="field"><label for="f-time">Saat *</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div></div>'+
+    '<div class="slots" id="f-slots"></div><p class="hint small" id="f-busy"></p>'+
+    L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
+    L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
+    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="130" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
+    L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
+    L('<p class="hint small" style="margin:0">* — vacib sahələr</p>')+
     '<p class="err" id="f-err" hidden></p>'+
-    '<div class="btns"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
+    '<div class="btns sticky-save"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
 }
 function readerForm(){
   var r=sheet.id?reader(sheet.id):null;
