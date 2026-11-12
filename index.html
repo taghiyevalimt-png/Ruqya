@@ -330,7 +330,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112130345";
+var APP_VERSION="20261112132457";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -413,7 +413,7 @@ try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.vie
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
 function shown(rid){return !ui.sel.length||ui.sel.indexOf(rid)>=0}
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
-function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
+function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
 try{var hz=+localStorage.getItem("ruqya.hour");if(hz>=HMIN&&hz<=HMAX)HOUR=hz}catch(e){}
 var PXM=HOUR/60;
@@ -1559,7 +1559,7 @@ function saveAppt(){
     if(state.hasDur)ins.duration=dur;
     db(sb.from("appts").insert(ins));
   }
-  ui.date=date;ui.tab="day";if(!shown(rid)){ui.sel.push(rid);saveSel()}
+  ui.date=date;ui.tab="day";if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
   closeSheet();render();
 }
 function saveReader(){
