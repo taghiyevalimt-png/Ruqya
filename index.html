@@ -13,7 +13,7 @@ function applyTheme(t){
   var r=document.documentElement;
   if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
   var dark=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#ffffff");
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#f5f5f3");
 }
 try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
 try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}if(t==="auto")applyTheme("auto")};
@@ -434,6 +434,7 @@ main.enter{animation:fadein .2s var(--ease)}
 .gate .brand{flex-direction:column;gap:14px}
 .gate .brand img{width:96px;height:96px;border:0;border-radius:0;filter:drop-shadow(0 10px 22px rgba(214,178,94,.25))}
 .gate .brand h1{font-size:30px;letter-spacing:.06em;font-weight:700;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent}
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){.gate .brand h1{background:none;color:var(--accent)}}
 .gate main{width:100%;max-width:420px;margin:0 auto;padding-top:22px;gap:16px}
 
 /* Computers: wider page, centred dialogs, hover, quiet scrollbars */
@@ -1103,7 +1104,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112224841";
+var APP_VERSION="20261112230602";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2609,7 +2610,7 @@ window.addEventListener("popstate",function(){
   hideSheet();
 });
 window.addEventListener("offline",function(){offline=true;render()});
-window.addEventListener("online",function(){offline=false;if(/^İnternet yoxdur/.test(auth.msg))auth.msg="";render();refresh()});
+window.addEventListener("online",function(){offline=false;if(/^(İnternet yoxdur|Нет интернета)/.test(auth.msg))auth.msg="";render();refresh()});
 function rollDay(){
   var t=bk().d;if(t===today)return false;
   if(ui.date===today&&!sheet)ui.date=t;today=t;return true;
