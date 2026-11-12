@@ -219,20 +219,20 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal-in{position:relative;min-width:100%}
 .cal-head{position:sticky;top:0;z-index:4;display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
 .cal-head .corner{position:sticky;left:0;z-index:5;width:40px;flex:none;background:var(--surface)}
-.cal-head .ch{flex:1 0 68px;width:68px;padding:6px 3px;font-size:12px;font-weight:600;text-align:center;border-left:1px solid var(--line);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.cal-head .ch{flex:1 0 56px;width:56px;padding:6px 3px;font-size:12px;font-weight:600;text-align:center;border-left:1px solid var(--line);line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .cal-head .ch{cursor:pointer}
 .cal-head .ch i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:1px}
 .cal-body{display:flex;position:relative}
 .axis{position:sticky;left:0;z-index:3;width:40px;flex:none;background:var(--surface)}
 .axis span{position:absolute;right:5px;font-size:10.5px;color:var(--muted);transform:translateY(-50%);font-variant-numeric:tabular-nums}
-.col{flex:1 0 68px;width:68px;position:relative;border-left:1px solid var(--line);cursor:pointer;
+.col{flex:1 0 56px;width:56px;position:relative;border-left:1px solid var(--line);cursor:pointer;
   background-image:linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 100%),
   linear-gradient(to bottom,var(--line-soft) 0,var(--line-soft) 1px,transparent 1px,transparent 100%);background-repeat:repeat-y}
 /* Two fingers on the calendar stretch or shrink the hours, as in Google Calendar; the browser's own page zoom stays off there. */
 .cal{touch-action:pan-x pan-y}
 .cal-body.pinch{will-change:transform}
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
-.ev b{font-weight:600;font-size:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.ev b{font-weight:600;font-size:10px;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev span.ph{white-space:normal;overflow-wrap:anywhere}
 .ev>*{flex-shrink:0}
@@ -930,7 +930,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112205630";
+var APP_VERSION="20261112205904";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1044,7 +1044,7 @@ try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)
 function shown(rid){return !ui.sel.length||ui.sel.indexOf(rid)>=0}
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
 function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
-var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
+var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=56,AXW=40,HMIN=40,HMAX=260;
 /* The hours are always drawn at the smallest size that still fits every block's text; pinching does not change it. */
 var ZOOM=false;HOUR=74;
 var PXM=HOUR/60;
