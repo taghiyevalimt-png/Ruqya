@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112104016";
+var APP_VERSION="20261112104643";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -430,7 +430,13 @@ function inBreak(start,dur){
   return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return s1<e2&&s2<e1})[0];
 }
 var sheet=null;
-var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;
+/* A request that hangs on a bad mobile connection is cut off after 25 s, so the app never waits on it forever. */
+function tfetch(u,o){
+  o=o||{};if(!window.AbortController||o.signal)return fetch(u,o);
+  var c=new AbortController(),t=setTimeout(function(){c.abort()},25000);o.signal=c.signal;
+  return fetch(u,o).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
+}
+var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
 function blank(){return{hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
@@ -456,6 +462,8 @@ function soft(make){return fetchAll(make).then(function(d){return d},function(){
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
 function mapAppt(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
 function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u;return u}
+function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
+function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
 function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||""}}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:"",created:"",lite:true}}
@@ -463,6 +471,8 @@ function upsertBy(list,row){for(var i=0;i<list.length;i++)if(list[i].id===row.id
 function removeBy(list,id){for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
 function refresh(){
   if(!sb||!auth.user)return Promise.resolve();
+  /* A save is still on its way: load afterwards, without spending traffic on a copy that would be thrown away. */
+  if(pending){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,1500);return Promise.resolve()}
   var my=++seq,g=writes,from=state.loadedFrom||addDays(today,-WINDOW),needHist=false;
   return Promise.all([
     fetchAll(function(){return sb.from("readers").select("*").order("created_at").order("id")}),
@@ -484,10 +494,10 @@ function refresh(){
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
     lastFull=Date.now();state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];
     res[1]=uniq(res[1]);
-    state.readers=res[0].map(function(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name,price:+x.price,share:+x.share,archived:!!x.archived}});
+    state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
     if(needHist&&res[9]){state.hist=res[9].map(mapLite);state.histLoaded=true}
-    state.breaks=(res[5]||[]).map(function(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}});
+    state.breaks=(res[5]||[]).map(mapBreak);
     state.hasBreaks=!!res[5];state.hasDur=!!res[7];
     state.hasProducts=!!res[6];
     state.products=uniq(res[6]||[]).map(mapProd);
@@ -615,6 +625,9 @@ function onChange(pl){
   if(t==="appts"){if(del){removeBy(state.appts,row.id);removeBy(state.hist||[],row.id)}else upsertBy(state.appts,mapAppt(row))}
   else if(t==="expenses"){if(del)removeBy(state.expenses,row.id);else upsertBy(state.expenses,mapExp(row))}
   else if(t==="product_sales"){if(del)removeBy(state.products,row.id);else upsertBy(state.products,mapProd(row))}
+  else if(t==="readers"&&!del&&row.name!=null){upsertBy(state.readers,mapReader(row))}
+  else if(t==="breaks"&&!del&&row.start_time!=null){upsertBy(state.breaks,mapBreak(row));state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)})}
+  else if(t==="breaks"&&del){removeBy(state.breaks,row.id)}
   else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}
   clearTimeout(rtRender);rtRender=setTimeout(function(){render();redrawCard()},120);
 }
