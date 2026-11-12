@@ -755,6 +755,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Emoji istifadəsi qadağandır. Zəhmət olmasa, emojisiz yazın.":"Эмодзи использовать запрещено. Пожалуйста, пишите без эмодзи.",
 "Qaydalar":"Правила",
 "<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>":"<li><b>Неделя</b> начинается в пятницу и заканчивается в четверг (7 дней).</li>",
 "<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>":"<li><b>Недельная статистика</b> всегда показывает последнюю <b>закончившуюся</b> неделю. Новая неделя появляется после четверга, 23:59. Так в пятницу утром можно открыть, скопировать и отправить руководству.</li>",
@@ -916,7 +917,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112190739";
+var APP_VERSION="20261112192219";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2074,6 +2075,33 @@ function saveReader(){
 }
 
 /* ---------- events ---------- */
+/* No emoji in anything people type (names, notes, titles): the only mark in the app is the ✅ the app itself
+   puts before successful sessions. An emoji is removed as soon as it is typed or pasted, with a message, and a
+   form that still holds one (an old name) cannot be saved until it is taken out. */
+var EMOJI=/[\uD83C-\uD83E][\uDC00-\uDFFF]|[\u2600-\u27BF\u2B00-\u2BFF\u2300-\u23FF\uFE0F\u200D\u20E3\u3030\u303D\u3297\u3299\u2122\u2139\u24C2\u2934\u2935\u25AA-\u25FE\u2190-\u21FF]/;
+var EMOJI_G=new RegExp(EMOJI.source,"g");
+function hasEmoji(t){return EMOJI.test(String(t||""))}
+function emojiField(el){return el&&!el.readOnly&&el.id!=="q"&&(el.tagName==="TEXTAREA"||(el.tagName==="INPUT"&&/^(text|tel|search|)$/.test(el.type||"")))}
+function emojiMsg(where){
+  var m=L("Emoji istifadəsi qadağandır. Zəhmət olmasa, emojisiz yazın.");
+  var box=where&&where.closest&&where.closest("#sheet"),err=box?box.querySelector("p.err"):null;
+  if(err){err.textContent=m;err.hidden=false}else flash(m);
+}
+document.addEventListener("input",function(e){
+  var el=e.target;if(!emojiField(el)||!hasEmoji(el.value))return;
+  var pos=el.selectionStart,before=el.value.length;
+  el.value=el.value.replace(EMOJI_G,"");
+  try{if(pos!=null){var np=Math.max(0,pos-(before-el.value.length));el.setSelectionRange(np,np)}}catch(err){}
+  emojiMsg(el);
+},true);
+document.addEventListener("click",function(e){
+  var b=e.target.closest&&e.target.closest('[data-act^="save-"],[data-act="login"]');if(!b)return;
+  var box=b.closest("#sheet")||byId("main"),fields=box?box.querySelectorAll("input,textarea"):[];
+  for(var i=0;i<fields.length;i++)if(emojiField(fields[i])&&hasEmoji(fields[i].value)){
+    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+    emojiMsg(fields[i]);try{fields[i].focus()}catch(err){}return;
+  }
+},true);
 document.addEventListener("click",function(e){
   if(e.target.id==="overlay"){closeSheet();return}
   var b=e.target.closest("[data-act]");if(!b)return;
