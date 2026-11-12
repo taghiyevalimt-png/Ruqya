@@ -691,7 +691,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Saat</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-time\">Время</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
 "<div class=\"field\"><label for=\"f-dur\">Müddət</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность</label><select id=\"f-dur\">",
 " saat":" ч",
-"<div class=\"field\"><label for=\"f-name\">Pasiyentin adı</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
+"<div class=\"field\"><label for=\"f-name\">Pasiyentin adı (vacibdir)</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"f-name\">Имя пациента (обязательно)</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
 "<div class=\"field\"><label for=\"f-phone\">Telefon</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Телефон</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
 "<div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"field\"><label for=\"f-price\">Цена, ",
 "</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Bilinmirsə, boş saxlayın\" value=\"":"</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"Если неизвестно, оставьте пустым\" value=\"",
@@ -752,6 +752,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"<div class=\"field\"><label for=\"f-phone\">Mobil nömrə (vacibdir)</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный номер (обязательно)</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
+"Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır.":"Имя пациента обязательно. Без имени запись не сохраняется.",
+"Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır.":"Мобильный номер пациента обязателен. Без номера запись не сохраняется.",
+"Mobil nömrəni düzgün yazın, məsələn: 050 123 45 67 və ya +994 50 123 45 67.":"Введите номер правильно, например: 050 123 45 67 или +994 50 123 45 67.",
 "{w} həftə ({d} gün), cümə – cümə axşamı":"{w} нед. ({d} дн.), пятница – четверг",
 "Aylıq statistika":"Месячная статистика",
 "<p><b>Aylıq statistika</b> — ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — beləcə heç bir gün itmir. Ay bitəndən sonra ekranda yeni ay görünür.</p>":"<p><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — это 4 недели, если 5 — 5 недель, так что ни один день не теряется. Когда месяц закончился, на экране появляется новый.</p>",
@@ -882,7 +886,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112175649";
+var APP_VERSION="20261112181118";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1921,8 +1925,8 @@ function apptForm(){
     L('<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
     (state.hasDur?L('<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
-    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
-    L('<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
+    L('<div class="field"><label for="f-name">Pasiyentin adı (vacibdir)</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
+    L('<div class="field"><label for="f-phone">Mobil nömrə (vacibdir)</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
     L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L(' (vacibdir)</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="130" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
@@ -1946,7 +1950,10 @@ function saveAppt(){
   if(!r)return fail("f-err",L("Mütəxəssisi seçin."));
   if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçin."));
-  if(!name)return fail("f-err",L("Pasiyentin adını yazın."));
+  if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
+  if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
+  var pd=phone.replace(/\D/g,"");
+  if(pd.length<9||pd.length>15||/[^\d\s+()\-.]/.test(phone))return fail("f-err",L("Mobil nömrəni düzgün yazın, məsələn: 050 123 45 67 və ya +994 50 123 45 67."));
   if(pr==="")return fail("f-err",L("Qiyməti yazmaq vacibdir. Pul yazılmadan qəbul yadda saxlanmır."));
   if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err",L("Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5."));
   if(!(price>0))return fail("f-err",L("Qiymət 0 ola bilməz. Seansın pulunu yazın."));
