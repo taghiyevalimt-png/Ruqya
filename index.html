@@ -781,7 +781,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>":"<li>Цена обязательна в каждой записи (в новой записи уже стоит 130). Продавцом товара считается тот, кто записал продажу в Кассе.</li>",
 "<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>":"<li>«Копировать» копирует таблицу текстом для WhatsApp; при вставке таблица видна со столбцами. «Копировать всю …» копирует все три таблицы вместе. Кнопками ‹ › можно посмотреть прошлые недели и месяцы.</li>",
 "Terminlər":"Термины",
-"<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da).</dd>":"<dt>Записи за сегодня</dt><dd>кто сколько записей сделал сегодня (на любую дату).</dd>",
+"<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim bu günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır.</dd>":"<dt>Записи за сегодня</dt><dd>кто сколько записей сделал сегодня на сегодня и следующие дни. Записи на прошедшие дни здесь не считаются.</dd>",
 "<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>":"<dt>Записал</dt><dd>сколько пациентов агент продаж записал в эти дни.</dd>",
 "<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>":"<dt>Записано</dt><dd>сколько пациентов записали к этому специалисту в эти дни.</dd>",
 "<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>":"<dt>Успешно</dt><dd>сколько пациентов с сеансом в эти дни не удалено из календаря.</dd>",
@@ -930,7 +930,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112205443";
+var APP_VERSION="20261112205630";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1611,7 +1611,7 @@ function statData(kind,r){
   if(kind==="prod"){
     state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(x.by||"-",who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
   }else state.appts.forEach(function(a){
-    if(kind==="today"){if(a.created!==today||isSpec(a.by))return;row(a.by||"-",who(a.by)).a++;T.a++;return}
+    if(kind==="today"){if(a.created!==today||a.date<today||isSpec(a.by))return;   /* written today for today or later; bookings put into past days are not counted here */row(a.by||"-",who(a.by)).a++;T.a++;return}
     var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
     if(!inB&&!inS)return;
     if(kind==="sales"){if(isSpec(a.by))return;x=row(a.by||"-",who(a.by))}
@@ -1674,7 +1674,7 @@ function statsMain(){
     L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>")+
     '</ol></div>';
   h+='<h3 class="sec">'+L("Terminlər")+'</h3><div class="pay explain"><dl class="terms">'+
-    L("<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da).</dd>")+
+    L("<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim bu günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır.</dd>")+
     L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
     L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
     L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>")+
