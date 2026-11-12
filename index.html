@@ -317,7 +317,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112102009";
+var APP_VERSION="20261112102604";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -387,6 +387,8 @@ function fmtDay(s,mode){
 function low(x){return String(x||"").toLowerCase().replace(/\u0307/g,"").replace(/\u0131/g,"i")}
 function digits(p){var d=String(p||"").replace(/\D/g,"");return d.length>=9?d.slice(-9):d}
 function byId(id){return document.getElementById(id)}
+/* An amount as typed on any keyboard: "150", "12,5", "1 200". Empty gives "", anything else unreadable gives NaN. */
+function amount(id){var v=val(id).replace(/\s/g,"").replace(",",".");if(v==="")return "";return /^\d+(\.\d{1,2})?$/.test(v)?parseFloat(v):NaN}
 function val(id){var e=byId(id);return e?e.value.trim():""}
 function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
@@ -646,7 +648,8 @@ function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmt
 
 /* ---------- render ---------- */
 function render(){
-  if(pz)return;   /* the calendar is being pinched; it is redrawn when the fingers lift */
+  if(pz&&Date.now()-pz.t<15000)return;
+  if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
   setTimeout(ensureLoaded,0);
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   byId("tabs").hidden=gate;
@@ -1290,7 +1293,7 @@ function meForm(){
 function paySheet(){
   var a=appt(sheet.id);if(!a)return '<h2>Ödəniş'+CLOSE+'</h2>';
   return '<h2>Ödəniş'+CLOSE+'</h2><p class="hint">'+esc(a.name)+', saat '+esc(a.time)+'</p>'+
-    '<div class="field"><label for="p-price">Ödənilən məbləğ, '+CUR+'</label><input id="p-price" type="number" inputmode="decimal" min="0" value="'+(a.price>0?a.price:"")+'"></div>'+
+    '<div class="field"><label for="p-price">Ödənilən məbləğ, '+CUR+'</label><input id="p-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(a.price>0?a.price:"")+'"></div>'+
     '<p class="err" id="p-err" hidden></p><div class="btns"><button class="primary" data-act="save-pay">Gəldi və ödədi</button></div>';
 }
 function productsIn(r){
@@ -1333,7 +1336,7 @@ function productsMain(){
 function productForm(){
   var r=range(),dd=today>=r.s&&today<=r.e?today:ui.date;
   return '<h2>Məhsul satışı'+CLOSE+'</h2>'+
-    '<div class="two"><div class="field"><label for="pr-amount">Qiymət, '+CUR+'</label><input id="pr-amount" type="number" inputmode="decimal" min="0"></div>'+
+    '<div class="two"><div class="field"><label for="pr-amount">Qiymət, '+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
     '<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="'+dd+'"></div></div>'+
     '<p class="hint">Satan avtomatik qeyd olunur: '+esc(state.staff[auth.user.id]||"siz")+'.</p>'+
     '<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>';
@@ -1342,7 +1345,7 @@ function expenseForm(){
   var x=sheet.id?expense(sheet.id):null,r=range(),dd=x?x.date:(today>=r.s&&today<=r.e?today:ui.date);
   return '<h2>'+(x?"Xərci dəyiş":"Yeni xərc")+CLOSE+'</h2>'+
     '<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="'+esc(x?x.title:"")+'"></div>'+
-    '<div class="two"><div class="field"><label for="x-amount">Məbləğ, '+CUR+'</label><input id="x-amount" type="number" inputmode="decimal" min="0" value="'+(x?x.amount:"")+'"></div>'+
+    '<div class="two"><div class="field"><label for="x-amount">Məbləğ, '+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
     '<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="'+dd+'"></div></div>'+
     '<p class="err" id="x-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>'+(x?'<button class="danger" data-act="del-expense">Sil</button>':'')+'</div>';
@@ -1390,7 +1393,7 @@ function apptForm(){
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
     '<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" list="f-names" value="'+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     '<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="'+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    '<div class="field"><label for="f-price">Qiymət, '+CUR+'</label><input id="f-price" type="number" inputmode="decimal" min="0" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
+    '<div class="field"><label for="f-price">Qiymət, '+CUR+'</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="'+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
     (a?'<div class="field"><label for="f-status">Status</label><select id="f-status">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+(k==="wait"?"Seçilməyib":ST[k])+'</option>'}).join("")+'</select></div>':'')+
     '<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="'+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
@@ -1407,14 +1410,13 @@ function readerForm(){
 
 function saveAppt(){
   if(!sheet)return;
-  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=val("f-price"),price=pr===""?0:parseFloat(pr),note=val("f-note"),status=val("f-status");
-  var r=reader(rid),service="",pe=byId("f-price");
-  if(pe&&pe.validity&&pe.validity.badInput)return fail("f-err","Qiyməti düzgün yazın (yalnız rəqəm).");
+  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status=val("f-status");
+  var r=reader(rid),service="";
   if(!r)return fail("f-err","Mütəxəssisi seçin.");
   if(!okDate(date))return fail("f-err","Tarixi düzgün seçin.");
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err","Saatı seçin.");
   if(!name)return fail("f-err","Pasiyentin adını yazın.");
-  if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err","Qiyməti düzgün yazın.");
+  if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err","Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5.");
   if(status==="paid"&&!(price>0))return fail("f-err","«Gəldi və ödədi» üçün ödənilən məbləği yazın.");
   var a=sheet.id?appt(sheet.id):null;
   if(sheet.id&&!a){closeSheet();flash("Bu qəbul artıq silinib.");return}
@@ -1515,7 +1517,7 @@ document.addEventListener("click",function(e){
     db(sb.from("appts").update({settled:on}).eq("reader_id",id).eq("status","paid").gte("date",rg.s).lte("date",rg.e));
   }
   else if(act==="save-pay"){
-    var pa=sheet&&appt(sheet.id),pv=parseFloat(val("p-price"));
+    var pa=sheet&&appt(sheet.id),pv=amount("p-price");
     if(!pa){closeSheet();return}
     if(!(pv>0)||pv>MAXSUM)return fail("p-err","Məbləği düzgün yazın.");
     if(pa.status==="cancel"){var cl2=overlap(pa.readerId,pa.date,pa.time,pa.dur||90,pa.id);
@@ -1569,7 +1571,7 @@ document.addEventListener("click",function(e){
   else if(act==="me-role"){if(sheet&&sheet.type==="me"){var keepName=byId("m-name")?val("m-name"):"";sheet.role=id;byId("sheet").innerHTML=meForm();if(keepName&&byId("m-name"))byId("m-name").value=keepName}return}
   else if(act==="new-prod"){openSheet({type:"prod"});return}
   else if(act==="save-prod"){
-    var pa2=parseFloat(val("pr-amount")),pd=val("pr-date");
+    var pa2=amount("pr-amount"),pd=val("pr-date");
     if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err","Qiyməti düzgün yazın.");
     if(!okDate(pd))return fail("pr-err","Tarixi düzgün seçin.");
     var pid=uuid();state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id});
@@ -1593,7 +1595,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="save-expense"){
     if(!sheet)return;
-    var xt=val("x-title"),xa=parseFloat(val("x-amount")),xd=val("x-date");
+    var xt=val("x-title"),xa=amount("x-amount"),xd=val("x-date");
     if(!xt)return fail("x-err","Xərcin adını yazın.");
     if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err","Məbləği düzgün yazın.");
     if(!okDate(xd))return fail("x-err","Tarixi düzgün seçin.");
@@ -1701,15 +1703,18 @@ document.addEventListener("touchstart",function(e){
   var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
   var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
-  pz={c:c,body:body,d0:Math.max(tdist(e),30),h0:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
+  pz={t:Date.now(),c:c,body:body,d0:Math.max(tdist(e),30),h0:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
   if(!pz||e.touches.length!==2)return;
+  if(Date.now()-pz.t>15000){endPinch();return}
   e.preventDefault();
   var h=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));pz.k=h/pz.h0;
   pz.body.style.transform="scaleY("+pz.k+")";
 },{passive:false});
+/* Safari's own pinch gesture must not zoom the page while the calendar is being pinched. */
+document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
 function endPinch(){
   if(!pz)return;var p=pz;pz=null;
   p.body.style.transform="";p.body.classList.remove("pinch");
@@ -1760,7 +1765,7 @@ function tick(){
 }
 var ticks=0;
 document.addEventListener("visibilitychange",function(){
-  if(document.hidden){hiddenAt=Date.now();return}
+  if(document.hidden){hiddenAt=Date.now();if(pz)endPinch();return}
   var away=hiddenAt?Date.now()-hiddenAt:0;hiddenAt=0;
   if(rollDay())render();
   if(auth.user&&!offline&&away>3*60000)refresh();
