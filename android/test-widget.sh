@@ -3,9 +3,17 @@
 # and opens the app from widget taps. Used by .github/workflows/widget-check.yml.
 API=$1
 P=az.ruqya.zapis
-adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb wait-for-device
+until [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ]; do sleep 2; done
+sleep 20   # newer emulators keep setting themselves up for a while after "boot completed"
+for i in 1 2 3; do
+  adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+  sleep 5
+  adb shell pm path $P | grep -q package: && break
+done
 adb shell am start -W -n $P/.MainActivity
 sleep 8
+adb shell pm path $P || echo "PACKAGE MISSING"
 J=$(base64 -w0 android/test-widget.json)
 shot() { # name width height density data
   adb shell rm -f /data/data/$P/files/widget_test.png 2>/dev/null
@@ -18,6 +26,7 @@ shot widget-small 250 250 2.0 "$J"
 shot widget-big 420 520 2.75 "$J"
 shot widget-out 320 340 2.5 "$(printf '{"out":1}' | base64 -w0)"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
+adb shell pm path $P || echo "PACKAGE MISSING"
 adb logcat -c
 adb shell am start -W -a $P.OPEN -d ruqya://day/2026-11-14 --es what day --es date 2026-11-14 -n $P/.MainActivity
 sleep 6
