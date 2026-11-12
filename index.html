@@ -916,7 +916,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112184657";
+var APP_VERSION="20261112185220";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1031,7 +1031,8 @@ function shown(rid){return !ui.sel.length||ui.sel.indexOf(rid)>=0}
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
 function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=68,AXW=40,HMIN=40,HMAX=260;
-try{var hz=+localStorage.getItem("ruqya.hour");if(hz>=HMIN&&hz<=HMAX)HOUR=hz}catch(e){}
+/* The hours are always drawn at the smallest size that still fits every block's text; pinching does not change it. */
+var ZOOM=false;HOUR=HMIN;
 var PXM=HOUR/60;
 /* However far the hours are pinched smaller, every block keeps room for the name, time, number and who wrote it:
    the day's shortest session decides the smallest hour height, and after drawing, any block whose text still
@@ -2302,7 +2303,7 @@ var pz=null;
 function tdist(e){return Math.abs(e.touches[0].clientY-e.touches[1].clientY)}
 document.addEventListener("touchstart",function(e){
   var c=e.target.closest&&e.target.closest("#cal");
-  if(!c||e.touches.length!==2){return}
+  if(!ZOOM||!c||e.touches.length!==2){return}
   var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
   var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
@@ -2310,6 +2311,7 @@ document.addEventListener("touchstart",function(e){
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
+  if(!ZOOM){if(e.touches.length===2&&e.target.closest&&e.target.closest("#cal"))e.preventDefault();return}   /* no zooming the page either */
   if(!pz||e.touches.length!==2)return;
   if(Date.now()-pz.t>15000){endPinch();return}
   e.preventDefault();
@@ -2332,7 +2334,7 @@ document.addEventListener("touchcancel",function(){if(pz)endPinch()},{passive:tr
 /* On a computer: Ctrl + mouse wheel over the calendar does the same. */
 document.addEventListener("wheel",function(e){
   var c=e.ctrlKey&&e.target.closest&&e.target.closest("#cal");if(!c)return;
-  e.preventDefault();
+  e.preventDefault();if(!ZOOM)return;
   var rc=c.getBoundingClientRect(),head=c.querySelector(".cal-head"),hh=head?head.offsetHeight:0,fy=e.clientY-rc.top;
   var m=DAY0+(c.scrollTop+fy-hh-10)/PXM,base=Math.max(HOUR,curMinHour),h=Math.max(HMIN,Math.min(HMAX,Math.round(base*(e.deltaY<0?1.12:1/1.12))));
   if(h===HOUR||(h<curMinHour&&HOUR<=curMinHour))return;HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
