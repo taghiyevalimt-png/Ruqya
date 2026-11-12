@@ -310,7 +310,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112082713";
+var APP_VERSION="20261112083555";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -340,7 +340,9 @@ var CLOSE='<button class="icon-btn" data-act="close" aria-label="Bağla">×</but
 
 /* ---------- helpers ---------- */
 function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function parse(s){var p=String(s).split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+/* Dates are built at noon, so a phone in a time zone whose clocks change at midnight never lands on the wrong day. */
+function parse(s){var p=String(s).split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}
+function ymd(y,m,d){return iso(new Date(y,m,d,12))}
 function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)}
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
    was made are taken from it, so a phone set to another time zone shows the same thing as everyone else. */
@@ -457,7 +459,7 @@ function refresh(){
     state.v2=!!(res[2]&&res[3]&&res[4]);
     state.services=(res[2]||[]).map(function(x){return{id:x.id,name:svcName(x.name)}});
     state.expenses=uniq(res[3]||[]).map(mapExp);
-    state.staff={};state.roles={};state.roleSet={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name;state.roles[x.id]=x.role||"agent";if(x.role)state.roleSet[x.id]=1});
+    state.staff={};state.roles={};state.roleSet={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name||"";state.roles[x.id]=x.role||"agent";if(x.role)state.roleSet[x.id]=1});
     state.hasRole=!!res[8];
     if(!auth.filterInit){auth.filterInit=true;
       if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&ui.filter==="all")ui.filter=mine.id}}
@@ -486,14 +488,20 @@ function redrawCard(){
 function uniq(rows){var seen={};return rows.filter(function(x){if(seen[x.id])return false;seen[x.id]=1;return true})}
 /* Safety net for a realtime line that died without saying so: every few minutes ask only for rows changed
    since the last one seen and compare the row count (a deleted row changes it). Costs a few hundred bytes. */
+function cnt(t,from){var q=sb.from(t).select("id",{count:"exact",head:true});return from?q.gte("date",from):q}
 function poll(){
   if(!sb||!auth.user||!auth.loaded||!state.hasUpd||pending||offline)return;
   var my=seq,g=writes,from=state.loadedFrom;
   Promise.all([
     maxUpd?sb.from("appts").select("*").gt("updated_at",new Date(maxUpd-90000).toISOString()).limit(500):Promise.resolve({data:[]}),
-    sb.from("appts").select("id",{count:"exact",head:true}).gte("date",from)
+    sb.from("appts").select("id",{count:"exact",head:true}).gte("date",from),
+    cnt("readers"),cnt("staff"),state.hasBreaks?cnt("breaks"):null,state.v2?cnt("expenses",from):null,state.hasProducts?cnt("product_sales",from):null
   ]).then(function(res){
     if(my!==seq||g!==writes||pending||!auth.user||res[0].error||res[1].error)return;
+    /* Specialists, staff, breaks, expenses and product sales: a different number of rows means something was added or removed. */
+    var have=[state.readers.length,Object.keys(state.staff).length,state.breaks.length,
+      state.expenses.filter(function(x){return x.date>=from}).length,state.products.filter(function(x){return x.date>=from}).length];
+    for(var i=0;i<5;i++){var c=res[2+i];if(c&&!c.error&&typeof c.count==="number"&&c.count!==have[i]){refresh();return}}
     var rows=res[0].data||[],ch=false;
     if(rows.length>=500){refresh();return}
     rows.forEach(function(x){var o=appt(x.id),u=x.updated_at?+new Date(x.updated_at):0;if(!o||o.upd!==u){upsertBy(state.appts,mapAppt(x));ch=true}});
@@ -588,10 +596,10 @@ function range(){
   var d=parse(ui.date),s,e;
   if(ui.period==="day"){s=e=ui.date}
   else if(ui.period==="week"){s=addDays(ui.date,-((d.getDay()-5+7)%7));e=addDays(s,6)}
-  else{s=iso(new Date(d.getFullYear(),d.getMonth(),1));e=iso(new Date(d.getFullYear(),d.getMonth()+1,0))}
+  else{s=ymd(d.getFullYear(),d.getMonth(),1);e=ymd(d.getFullYear(),d.getMonth()+1,0)}
   return{s:s,e:e};
 }
-function pkey(a){var d=digits(a.phone);return d.length>=7?"p"+d:"n"+String(a.name).trim().toLowerCase()}
+function pkey(a){var d=digits(a.phone);return d.length>=7?"p"+d:"n"+low(String(a.name).trim())}
 function patients(){
   var m={},seen={};
   state.appts.forEach(function(a){seen[a.id]=1});
@@ -625,7 +633,7 @@ function render(){
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
     top.innerHTML='<div class="brand"><img src="icon-192.png?v=2" alt=""><h1>Ruqyatz</h1></div>';
-    main.innerHTML=!sb?(window.__sbErr?'<div class="empty">Proqram yüklənmədi. İnterneti yoxlayın və tətbiqi yenidən açın.</div>':'<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')
+    main.innerHTML=!sb?(window.__sbErr?'<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>':'<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')
       :!auth.ready?'<div class="empty">Yüklənir…</div>'
       :'<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>'+
        '<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>'+
@@ -922,7 +930,7 @@ function weeklySheet(r){
   var wd=function(d){return parse(d).getDay()},fri=function(d){return addDays(d,-((wd(d)-5+7)%7))};
   var weeks=[];for(var w=fri(r.s);w<=r.e;w=addDays(w,7))weeks.push(w);
   var who={},ids=[];
-  Object.keys(state.staff).forEach(function(k){if(!isSpec(k)&&state.roleSet[k]&&k!==ADMIN&&state.roles[k]!=="admin"){who[k]=state.staff[k];ids.push(k)}});
+  Object.keys(state.staff).forEach(function(k){if(!isSpec(k)&&state.roleSet[k]&&k!==ADMIN&&state.roles[k]!=="admin"){who[k]=state.staff[k]||"Adsız istifadəçi";ids.push(k)}});
   state.appts.forEach(function(a){var k=a.by||"";if(isSpec(k))return;if(!(k in who)){who[k]=state.staff[k]||"Adsız istifadəçi";ids.push(k)}});
   ids.sort(function(a,b){return (a==="")-(b==="")||who[a].localeCompare(who[b])});
   var cnt={};
@@ -948,7 +956,7 @@ function weeklySheet(r){
   weeks.forEach(function(w,i){
     var R=5+i,e=addDays(w,7),n=R+1,tot=0;
     put(R,0,null,serial(w),"d-mmm-yy");put(R,1,null,serial(e),"d-mmm-yy");
-    var wk=parse(e),jan=new Date(wk.getFullYear(),0,1);
+    var wk=parse(e),jan=new Date(wk.getFullYear(),0,1,12);
     put(R,2,"WEEKNUM(B"+n+")",Math.floor((Math.round((wk-jan)/864e5)+jan.getDay())/7)+1,"0");
     groups.forEach(function(g,gi){
       var c=3+gi*4,v=cnt[g.id+"|"+w]||0;tot+=v;
@@ -1107,8 +1115,8 @@ function readersMain(){
     if(ids2.length){
       h+='<div class="pay"><div class="head"><b>İşçilər</b><span class="num">'+ids2.length+'</span></div><div>';
       ids2.forEach(function(k){
-        var nm='<span>'+esc(state.staff[k])+(k===auth.user.id?' (siz)':'')+'</span>';
-        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k])+'</button>'+(k===auth.user.id?' (siz)':'')+'</span>';
+        var nm='<span>'+esc(state.staff[k]||"Ad yazılmayıb")+(k===auth.user.id?' (siz)':'')+'</span>';
+        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k]||"Ad yazılmayıb")+'</button>'+(k===auth.user.id?' (siz)':'')+'</span>';
         h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+'">Dəyiş</button>':'')+'</div>'});
       h+='</div><div class="foot">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>';
     }
@@ -1140,7 +1148,7 @@ function agentStats(k,s0,e0){
 }
 function agentSheet(){
   var k=sheet.id,d=sheet.date||today,name=state.staff[k]||"Adsız istifadəçi";
-  var dd=parse(d),fri=addDays(d,-((dd.getDay()-5+7)%7)),m0=iso(new Date(dd.getFullYear(),dd.getMonth(),1)),m1=iso(new Date(dd.getFullYear(),dd.getMonth()+1,0));
+  var dd=parse(d),fri=addDays(d,-((dd.getDay()-5+7)%7)),m0=ymd(dd.getFullYear(),dd.getMonth(),1),m1=ymd(dd.getFullYear(),dd.getMonth()+1,0);
   var D=agentStats(k,d,d),W=agentStats(k,fri,addDays(fri,6)),M=agentStats(k,m0,m1);
   var canBack=!state.loadedFrom||addDays(d,-1)>=state.loadedFrom;
   var h='<h2>'+esc(name)+CLOSE+'</h2>'+
@@ -1315,11 +1323,12 @@ function openSheet(s){
   var f={agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
-  try{if(!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
+  try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
 function hideSheet(){sheet=null;byId("overlay").hidden=true}
+var backing=false;
 function closeSheet(){
-  try{if(history.state&&history.state.sheet)history.back()}catch(e){}
+  try{if(history.state&&history.state.sheet&&!backing){backing=true;history.back();setTimeout(function(){backing=false},1500)}}catch(e){}
   hideSheet();
 }
 function slotGrid(){
@@ -1368,7 +1377,8 @@ function readerForm(){
 function saveAppt(){
   if(!sheet)return;
   var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=val("f-price"),price=pr===""?0:parseFloat(pr),note=val("f-note"),status=val("f-status");
-  var r=reader(rid),service="";
+  var r=reader(rid),service="",pe=byId("f-price");
+  if(pe&&pe.validity&&pe.validity.badInput)return fail("f-err","Qiyməti düzgün yazın (yalnız rəqəm).");
   if(!r)return fail("f-err","Mütəxəssisi seçin.");
   if(!okDate(date))return fail("f-err","Tarixi düzgün seçin.");
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err","Saatı seçin.");
@@ -1425,6 +1435,7 @@ document.addEventListener("click",function(e){
   if(e.target.id==="overlay"){closeSheet();return}
   var b=e.target.closest("[data-act]");if(!b)return;
   var act=b.dataset.act,id=b.dataset.id;
+  if(act==="reload"){location.reload();return}
   if(act==="login"){
     var mail=val("l-mail").toLowerCase(),pass=byId("l-pass").value;
     if(!mail||!pass){auth.msg="E-poçt və şifrəni yazın.";render();return}
@@ -1447,7 +1458,7 @@ document.addEventListener("click",function(e){
   else if(act==="shift"){
     var n=+b.dataset.n;
     if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="week")ui.date=addDays(ui.date,7*n);
-    else if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="month"){var d=parse(ui.date),last=new Date(d.getFullYear(),d.getMonth()+n+1,0).getDate();ui.date=iso(new Date(d.getFullYear(),d.getMonth()+n,Math.min(d.getDate(),last)))}
+    else if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="month"){var d=parse(ui.date),last=new Date(d.getFullYear(),d.getMonth()+n+1,0,12).getDate();ui.date=ymd(d.getFullYear(),d.getMonth()+n,Math.min(d.getDate(),last))}
     else ui.date=addDays(ui.date,n);
   }
   else if(act==="today"){ui.date=today}
@@ -1502,7 +1513,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
   else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;byId("sheet").innerHTML=auditSheet()}return}
-  else if(act==="edit-staff"){if(isAdmin()&&state.staff[id]!=null)openSheet({type:"staff",id:id});return}
+  else if(act==="edit-staff"){if(isAdmin()&&id in state.staff)openSheet({type:"staff",id:id});return}
   else if(act==="st-role"){if(sheet&&sheet.type==="staff"){sheet.name=val("s-name");sheet.role=id;byId("sheet").innerHTML=staffForm()}return}
   else if(act==="save-staff"){
     if(!sheet||sheet.type!=="staff"||!isAdmin())return;
@@ -1651,7 +1662,11 @@ document.addEventListener("touchend",function(e){
   if(Math.abs(dx)<70||Math.abs(dy)>45||c.scrollWidth>c.clientWidth+2)return;
   ui.date=addDays(ui.date,dx<0?1:-1);render();
 },{passive:true});
-window.addEventListener("popstate",hideSheet);
+window.addEventListener("popstate",function(){
+  /* Our own "back" after closing a sheet: if another sheet was opened meanwhile, keep it and give it its own history entry. */
+  if(backing){backing=false;if(sheet){try{history.pushState({sheet:1},"")}catch(e){}}return}
+  hideSheet();
+});
 window.addEventListener("offline",function(){offline=true;render()});
 window.addEventListener("online",function(){offline=false;if(/^İnternet yoxdur/.test(auth.msg))auth.msg="";render();refresh()});
 function rollDay(){

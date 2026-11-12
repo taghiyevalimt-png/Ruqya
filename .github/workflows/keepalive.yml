@@ -1,0 +1,22 @@
+name: Keep database awake
+
+# The free database plan pauses a project that receives no requests for a week
+# (for example over a holiday). One tiny read twice a week prevents that.
+on:
+  schedule:
+    - cron: "17 3 * * 1,4"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read one row with the public key
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            -H "apikey: sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7" \
+            "https://ldkhdeehrrajvgrtieal.supabase.co/rest/v1/readers?select=id&limit=1")
+          echo "status $code"
+          test "$code" = "200"
