@@ -38,13 +38,19 @@
                 <action android:name="az.ruqya.zapis.WIDGET_NEXT" />
                 <data android:scheme="ruqya" />
             </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/month_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".WidgetTest"
+            android:exported="true"
+            android:permission="android.permission.DUMP">
             <intent-filter>
                 <action android:name="az.ruqya.zapis.WIDGET_TEST" />
                 <action android:name="az.ruqya.zapis.WIDGET_BIND_TEST" />
             </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/month_widget_info" />
         </receiver>
     </application>
 

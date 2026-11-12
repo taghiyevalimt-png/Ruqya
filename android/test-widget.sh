@@ -17,7 +17,7 @@ adb shell pm path $P || echo "PACKAGE MISSING"
 J=$(base64 -w0 android/test-widget.json)
 shot() { # name width height density data
   adb shell rm -f /data/data/$P/files/widget_test.png 2>/dev/null
-  adb shell "am broadcast -f 32 -n $P/.MonthWidget -a $P.WIDGET_TEST --es b64 '$5' --ei w $2 --ei h $3 --ef density $4"
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_TEST --es b64 '$5' --ei w $2 --ei h $3 --ef density $4"
   sleep 3
   adb exec-out run-as $P cat files/widget_test.png > "$1-$API.png"
 }
@@ -28,13 +28,13 @@ shot widget-out 320 340 2.5 "$(printf '{"out":1}' | base64 -w0)"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
 # A real widget instance, as a home screen would hold it.
 adb shell appwidget grantbind --package $P --user 0 || true
-adb shell "am broadcast -f 32 -n $P/.MonthWidget -a $P.WIDGET_BIND_TEST --es b64 '$J'"
+adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_BIND_TEST --es b64 '$J'"
 sleep 15
 adb exec-out run-as $P cat files/widget_bind.txt > "bind-$API.txt" 2>/dev/null || true
 cat "bind-$API.txt"
 # An old month the app no longer keeps on the phone.
 shot widget-old 360 380 3.0 "$J" 
-adb shell "am broadcast -f 32 -n $P/.MonthWidget -a $P.WIDGET_TEST --es b64 '$J' --ei off -3 --ei w 360 --ei h 380 --ef density 3.0"
+adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_TEST --es b64 '$J' --ei off -3 --ei w 360 --ei h 380 --ef density 3.0"
 sleep 3
 adb exec-out run-as $P cat files/widget_test.png > "widget-old-$API.png"
 adb shell pm path $P || echo "PACKAGE MISSING"
