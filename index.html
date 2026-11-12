@@ -159,9 +159,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .stt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .stt tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
 .copyb{flex:none;padding:8px 12px;font-size:14px}
-.sugg{display:flex;flex-direction:column;gap:4px;margin-top:6px}.sugg:empty{display:none}
-.sugg button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:15px}
-.sugg small{color:var(--muted);margin-left:6px}.nogap .sugg>*+*{margin-top:4px}
+
 .sthead{display:flex;flex-direction:column;gap:8px;margin-top:14px}.sthead h3.sec{margin:0}
 .explain{font-size:14px;gap:6px}.explain p{margin:0}
 
@@ -754,6 +752,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"<h2>Qiyməti yazılmayıb":"<h2>Цена не указана",
+"<p class=\"hint\">Hamısının qiyməti yazılıb ✓</p>":"<p class=\"hint\">У всех записей цена указана ✓</p>",
+"<p class=\"hint\">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>":"<p class=\"hint\">Нажмите на запись, впишите цену и сохраните.</p>",
+"<button class=\"ghost\" data-act=\"np-list\">Göstər</button>":"<button class=\"ghost\" data-act=\"np-list\">Показать</button>",
+" (vacibdir)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"":" (обязательно)</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"130\" value=\"",
+"Qiyməti yazmaq vacibdir. Pul yazılmadan qəbul yadda saxlanmır.":"Цену указывать обязательно. Без суммы запись не сохраняется.",
+"Qiymət 0 ola bilməz. Seansın pulunu yazın.":"Цена не может быть 0. Укажите стоимость сеанса.",
 "Kim yazıb":"Кто записал",
 "Qəbul":"Записей",
 "Məhsul statistikası":"Статистика товаров",
@@ -851,7 +856,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112165331";
+var APP_VERSION="20261112171428";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -900,11 +905,19 @@ function stLabel(a){var k=stOf(a);return k==="paid"?L("Uğurlu"):k==="wait"?L("G
 function stPill(a){var k=stOf(a);return k==="wait"?'<span class="tag">'+stLabel(a)+'</span>':'<span class="pill '+k+'">'+stLabel(a)+'</span>'}
 function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
 /* Bookings whose session is over but whose price was never written: the cash total misses them. */
+function npSheet(){
+  var np=state.appts.filter(noPrice).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
+  var h=L('<h2>Qiyməti yazılmayıb')+CLOSE+'</h2>';
+  if(!np.length)return h+L('<p class="hint">Hamısının qiyməti yazılıb ✓</p>');
+  h+=L('<p class="hint">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>')+'<div class="pay">';
+  np.forEach(function(a){var r=reader(a.readerId);
+    h+='<button class="agent" data-act="np-edit" data-id="'+esc(a.id)+'"><span>'+esc(a.name)+'<small class="num" style="display:block;color:var(--muted)">'+fmtDay(a.date,"w")+', '+esc(a.time)+' · '+esc(r?r.name:"—")+'</small></span><span class="chev">›</span></button>'});
+  return h+'</div>';
+}
 function noPriceBox(){
   var np=state.appts.filter(noPrice);if(!np.length)return "";
-  var first=np.reduce(function(m,a){return a.date<m?a.date:m},np[0].date);
   return L('<div class="note warnbox"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
-    (first!==ui.date||ui.view!=="list"?'<button class="ghost" data-act="goto-np" data-d="'+first+L('">Göstər</button>'):'')+'</div>';
+    L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
    was made are taken from it, so a phone set to another time zone shows the same thing as everyone else. */
@@ -920,6 +933,7 @@ function bk(t){var d=new Date((t==null?Date.now()+skew:t)+TZ);
   return{d:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0"),m:d.getUTCHours()*60+d.getUTCMinutes()}}
 function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&d>="2020-01-01"&&d<="2099-12-31"&&iso(parse(d))===d}
 var MAXSUM=1000000;
+var NEW_PRICE=130;   /* written in advance in every new booking; it can be changed */
 function uuid(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   if(window.crypto&&crypto.getRandomValues){var b=new Uint8Array(16),h="";crypto.getRandomValues(b);b[6]=b[6]&15|64;b[8]=b[8]&63|128;
@@ -1813,7 +1827,7 @@ function meForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,prod:productForm,expense:expenseForm}[s.type];
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,np:npSheet,prod:productForm,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
@@ -1851,9 +1865,9 @@ function apptForm(){
     L('<div class="two"><div class="field"><label for="f-time">Saat</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div>'+
     (state.hasDur?L('<div class="field"><label for="f-dur">Müddət</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     '<div class="slots" id="f-slots"></div><p class="hint" id="f-busy"></p>'+
-    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"><div class="sugg" id="f-sugg"></div></div>'+
+    L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
-    L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L('</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="')+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
+    L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L(' (vacibdir)</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="130" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
@@ -1877,7 +1891,9 @@ function saveAppt(){
   if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçin."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazın."));
+  if(pr==="")return fail("f-err",L("Qiyməti yazmaq vacibdir. Pul yazılmadan qəbul yadda saxlanmır."));
   if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err",L("Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5."));
+  if(!(price>0))return fail("f-err",L("Qiymət 0 ola bilməz. Seansın pulunu yazın."));
   var a=sheet.id?appt(sheet.id):null;
   if(sheet.id&&!a){closeSheet();flash(L("Bu qəbul artıq silinib."));return}
   var dur=+(val("f-dur")||(a?a.dur:90))||90;
@@ -1904,7 +1920,8 @@ function saveAppt(){
     if(state.hasDur)ins.duration=dur;
     db(sb.from("appts").insert(ins));
   }
-  ui.date=date;ui.tab="day";if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
+  if(!a||sheet.from!=="np"){ui.date=date;ui.tab="day"}
+  if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
   closeSheet();render();
 }
 function saveReader(){
@@ -1957,7 +1974,8 @@ document.addEventListener("click",function(e){
     if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";byId("main").scrollTop=0}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
-  else if(act==="goto-np"){if(okDate(b.dataset.d))ui.date=b.dataset.d;ui.tab="day";ui.view="list";try{localStorage.setItem("ruqya.view","list")}catch(err){}}
+  else if(act==="np-list"){openSheet({type:"np"});return}
+  else if(act==="np-edit"){if(appt(id))openSheet({type:"appt",id:id,from:"np"});return}
   else if(act==="shift"){
     var n=+b.dataset.n;
     ui.date=addDays(ui.date,n);
@@ -2079,11 +2097,6 @@ document.addEventListener("click",function(e){
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
   }
-  else if(act==="sugg"){
-    var sx=suggList[+b.dataset.i];if(!sx)return;
-    var fn=byId("f-name"),fp=byId("f-phone");if(fn)fn.value=sx.name;if(fp&&sx.phone)fp.value=sx.phone;
-    suggList=[];var sb2=byId("f-sugg");if(sb2)sb2.innerHTML="";return;
-  }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
   else if(act==="view-appt"){if(appt(id))openSheet({type:"view",id:id});return}
@@ -2141,31 +2154,12 @@ document.addEventListener("click",function(e){
   else return;
   render();
 });
-/* Earlier patients as the name is typed: a few quiet buttons under the field, instead of the phone's big
-   dark suggestion list that covered the form. Tapping one fills the name and phone. */
-var suggList=[];
-function nameSugg(){
-  var box=byId("f-sugg"),inp=byId("f-name");if(!box||!inp)return;
-  var q=low(inp.value.trim()),qd=String(inp.value).replace(/\D/g,"");suggList=[];
-  if(q.length>=2){
-    var pm=patients(),first=[],rest=[];
-    Object.keys(pm).forEach(function(k){var x=pm[k],n=low(x.name);if(!x.name||n===q)return;
-      if(n.indexOf(q)===0||n.indexOf(" "+q)>=0)first.push(x);else if(n.indexOf(q)>0||(qd.length>=4&&digits(x.phone).indexOf(qd)>=0))rest.push(x)});
-    suggList=first.concat(rest).slice(0,4);
-  }
-  box.innerHTML=suggList.map(function(x,i){return '<button type="button" data-act="sugg" data-i="'+i+'">'+esc(x.name)+(x.phone?' <small class="num">'+esc(x.phone)+'</small>':'')+'</button>'}).join("");
-}
 document.addEventListener("input",function(e){
-  if(e.target.id==="f-name")nameSugg();
   if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=patientsList()},120)}
 });
 document.addEventListener("change",function(e){
   var t=e.target.id;
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
-  if(t==="f-name"){
-    var ph=byId("f-phone"),nm=low(e.target.value.trim()),pm=patients();
-    if(ph&&!ph.value)Object.keys(pm).some(function(k){if(low(pm[k].name)===nm&&pm[k].phone){ph.value=pm[k].phone;return true}return false});
-  }
 });
 document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
