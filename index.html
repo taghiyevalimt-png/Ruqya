@@ -242,7 +242,9 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal{touch-action:pan-x pan-y}
 .cal-body.pinch{will-change:transform}
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
-.ev b{font-weight:600;font-size:10px;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.ev b{font-weight:600;font-size:10px;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:normal;overflow-wrap:anywhere}
+.ev b i.ok{font-style:normal;font-size:7px;letter-spacing:-1px;vertical-align:1px}
+.ev.tiny{padding:1px 3px;justify-content:center}.ev.tiny>*:not(b){display:none}
 .ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev span.ph{white-space:normal;overflow-wrap:anywhere}
 .ev>*{flex-shrink:0}
@@ -773,6 +775,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"{d} yazılan qəbullar":"Записано {d}",
+"Gündəlik statistika":"Дневная статистика",
+"dünən":"вчера",
+"{n} gün əvvəl":"{n} дн. назад",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Mütəxəssis *</label><select id=\"f-reader\">":"<div class=\"two\"><div class=\"field\"><label for=\"f-reader\">Специалист *</label><select id=\"f-reader\">",
 "<div class=\"field\"><label for=\"f-dur\">Müddət *</label><select id=\"f-dur\">":"<div class=\"field\"><label for=\"f-dur\">Длительность *</label><select id=\"f-dur\">",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Tarix *</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Дата *</label><input id=\"f-date\" type=\"date\" value=\"",
@@ -793,7 +799,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>":"<li><b>Неделя</b> начинается в пятницу и заканчивается в четверг (7 дней).</li>",
 "<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>":"<li><b>Недельная статистика</b> всегда показывает последнюю <b>закончившуюся</b> неделю. Новая неделя появляется после четверга, 23:59. Так в пятницу утром можно открыть, скопировать и отправить руководству.</li>",
 "<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>":"<li><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — 4 недели, если 5 — 5 недель, ни один день не теряется. На экране — последний закончившийся месяц.</li>",
-"<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir və gecə 00:00-da sıfırlanır.</li>":"<li>Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59. «Записи за сегодня» обновляются сразу при каждой новой записи и обнуляются в 00:00.</li>",
+"<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Gündəlik statistika»da ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>":"<li>Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59. «Записано сегодня» обновляется сразу при каждой новой записи. В 00:00 начинается новый день, а прошлые дни не пропадают: в «Дневной статистике» кнопкой ‹ можно посмотреть и скопировать любой из последних 14 дней.</li>",
 "<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл, его удаляют из календаря. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
 "<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>":"<li>Удалённая запись нигде не считается. Даже если удалили через несколько недель, она уходит из статистики.</li>",
 "<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>":"<li>Запись считается по дню, когда её сделали, на какую бы дату она ни была: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</li>",
@@ -801,7 +807,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>":"<li>Цена обязательна в каждой записи (в новой записи уже стоит 130). Продавцом товара считается тот, кто записал продажу в Кассе.</li>",
 "<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>":"<li>«Копировать» копирует таблицу текстом для WhatsApp; при вставке таблица видна со столбцами. «Копировать всю …» копирует все три таблицы вместе. Кнопками ‹ › можно посмотреть прошлые недели и месяцы.</li>",
 "Terminlər":"Термины",
-"<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim bu günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır.</dd>":"<dt>Записи за сегодня</dt><dd>кто сколько записей сделал сегодня на сегодня и следующие дни. Записи на прошедшие дни здесь не считаются.</dd>",
+"<dt>Gündəlik statistika</dt><dd>seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır. Son 14 gün saxlanılır.</dd>":"<dt>Дневная статистика</dt><dd>кто сколько записей сделал в выбранный день на этот день и следующие дни. Записи на прошедшие дни здесь не считаются. Хранятся последние 14 дней.</dd>",
 "<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>":"<dt>Записал</dt><dd>сколько пациентов агент продаж записал в эти дни.</dd>",
 "<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>":"<dt>Записано</dt><dd>сколько пациентов записали к этому специалисту в эти дни.</dd>",
 "<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>":"<dt>Успешно</dt><dd>сколько пациентов с сеансом в эти дни не удалено из календаря.</dd>",
@@ -950,7 +956,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112213252";
+var APP_VERSION="20261112221341";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1057,25 +1063,29 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
 /* ---------- state ---------- */
 var today=bk().d;
-var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0};
+var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
 function shown(rid){return !ui.sel.length||ui.sel.indexOf(rid)>=0}
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
 function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
-var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=56,AXW=40,HMIN=40,HMAX=260;
-/* The hours are always drawn at the smallest size that still fits every block's text; pinching does not change it. */
-var ZOOM=false;HOUR=111;
+var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=56,AXW=40,HMIN=36,HMAX=111;
+/* Two fingers make the blocks smaller or bigger. Biggest (and the default) = 111 px per hour, where a
+   30-minute block shows the name, time and who wrote it; smallest = 36 px per hour, where it shows only the name. */
+var ZOOM=true;HOUR=111;
+try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=Math.max(HMIN,Math.min(HMAX,Math.round(sh)))})()}catch(e){}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
    so narrow that a block's text would not fit, that block alone is drawn tighter (one line each, cut with …). */
-var MIN_DUR=30,STD_HOUR=111,curMinHour=STD_HOUR;
-function dayMinHour(){return STD_HOUR}
+var MIN_DUR=30,STD_HOUR=111,curMinHour=HMIN;
+function dayMinHour(){return HMIN}
 function fitBlocks(){
   var evs=document.querySelectorAll("#cal .ev:not(.cancel)");
-  for(var i=0;i<evs.length;i++){var el=evs[i];if(el.clientHeight>0&&el.scrollHeight>el.clientHeight+1)el.classList.add("tight")}
+  for(var i=0;i<evs.length;i++){var el=evs[i];if(!(el.clientHeight>0&&el.scrollHeight>el.clientHeight+1))continue;el.classList.add("tight");
+    /* a line that would show only half (time, who wrote it) is hidden; the name always stays */
+    for(var k=el.children.length-1;k>0;k--){var ch=el.children[k];if(ch.offsetTop+ch.offsetHeight>el.clientHeight)ch.style.visibility="hidden";else break}}
 }
 var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
@@ -1497,9 +1507,9 @@ function gridMain(){
     evs.sort(function(a,b){return (b.status==="cancel")-(a.status==="cancel")});
     evs.forEach(function(a){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
-      var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
-      h+='<button class="ev '+stOf(a)+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
-        '<b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
+      var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
+      h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
+        '<b>'+(done(a)?'<i class="ok">'+G_OK+'</i>':a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         ((state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
         '</button>';
@@ -1603,6 +1613,12 @@ function weekRange(o){
   var e=addDays(s1,6);
   return{s:s1,e:e,end:e,full:true,canBack:s1>first,canFwd:s1<last,next:addDays(last,13)};
 }
+/* Day-by-day table of who wrote how many bookings: today and the 13 days before it (2 weeks). */
+var ST_DAYS=14;
+function dayRange(o){
+  var off=Math.max(0,Math.min(ST_DAYS-1,(o==null?ui.stDOff:o)|0)),d=addDays(today,-off);
+  return{s:d,end:d,off:off,canBack:off<ST_DAYS-1,canFwd:off>0,label:fmtDay(d,"w")+" "+parse(d).getFullYear()};
+}
 function tf(t,o){return t.replace(/\{(\w+)\}/g,function(_,k){return o[k]})}
 function firstFri(y,m){var d=ymd(y,m,1);return addDays(d,(5-parse(d).getDay()+7)%7)}
 function monthBlock(y,m){
@@ -1631,7 +1647,7 @@ function statData(kind,r){
   if(kind==="prod"){
     state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(x.by||"-",who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
   }else state.appts.forEach(function(a){
-    if(kind==="today"){if(a.created!==today||a.date<today||isSpec(a.by))return;   /* written today for today or later; bookings put into past days are not counted here */row(a.by||"-",who(a.by)).a++;T.a++;return}
+    if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(a.by||"-",who(a.by)).a++;T.a++;return}
     var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
     if(!inB&&!inS)return;
     if(kind==="sales"){if(isSpec(a.by))return;x=row(a.by||"-",who(a.by))}
@@ -1642,14 +1658,14 @@ function statData(kind,r){
   return{rows:order.map(function(k){return rows[k]}),T:T};
 }
 var ST_KINDS={
-  today:{t:function(){return L("Bu gün yazılan qəbullar")},h:function(){return [L("Kim yazıb"),L("Qəbul")]},c:function(x){return [x.name,String(x.a)]}},
+  today:{t:function(r){return !r||r.s===today?L("Bu gün yazılan qəbullar"):tf(L("{d} yazılan qəbullar"),{d:fmtDay(r.s)})},h:function(){return [L("Kim yazıb"),L("Qəbul")]},c:function(x){return [x.name,String(x.a)]}},
   sales:{t:function(){return L("Satış statistikası")},h:function(){return [L("Satış agenti"),L("Yazdı"),L("Uğurlu")]},c:function(x){return [x.name,String(x.a),String(x.b)]}},
   money:{t:function(){return L("Pul statistikası")},h:function(){return [L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]},c:function(x){return [x.name,String(x.a),String(x.b),money(x.c)]}},
   prod:{t:function(){return L("Məhsul statistikası")},h:function(){return [L("Satan"),L("Satış"),L("Məbləğ")]},c:function(x){return [x.name,String(x.a),money(x.c)]}}
 };
 function rangeLabel(r){return fmtDay(r.s)+" – "+fmtDay(r.end,"y")}
 function statTable(kind,r,per){
-  var K=ST_KINDS[kind],d=statData(kind,r),hd=K.h(),h='<div class="pay" data-st="'+kind+'-'+per+'"><div class="head"><b>'+K.t()+'</b>'+
+  var K=ST_KINDS[kind],d=statData(kind,r),hd=K.h(),h='<div class="pay" data-st="'+kind+'-'+per+'"><div class="head"><b>'+K.t(r)+'</b>'+
     '<button class="ghost copyb" data-act="st-copy" data-id="'+kind+'" data-p="'+per+'">⧉ '+L("Kopyala")+'</button></div>';
   h+='<table class="stt"><thead><tr>'+hd.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+esc(x)+'</th>'}).join("")+'</tr></thead><tbody>';
   if(!d.rows.length)h+='<tr><td colspan="'+hd.length+'" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>';
@@ -1659,13 +1675,14 @@ function statTable(kind,r,per){
 }
 function statNav(act,r,title,small){
   return '<div class="sthead"><h3 class="sec">'+title+'</h3><div class="daynav"><button class="icon-btn" data-act="'+act+'" data-n="-1" aria-label="'+L("Geri")+'"'+(r.canBack?'':' disabled')+'>‹</button>'+
-    '<div class="label">'+rangeLabel(r)+'<small>'+small+'</small></div>'+
+    '<div class="label">'+(r.label||rangeLabel(r))+'<small>'+small+'</small></div>'+
     '<button class="icon-btn" data-act="'+act+'" data-n="1" aria-label="'+L("İrəli")+'"'+(r.canFwd?'':' disabled')+'>›</button></div></div>';
 }
 function statsMain(){
   if(!auth.loaded)return "";
   var w=weekRange(),m=monthRange(),h="",ex=function(d){return fmtDay(d)};
-  h+='<h3 class="sec">'+L("Bu gün")+' · '+fmtDay(today,"w")+'</h3>'+statTable("today",{s:today,end:today},"today");
+  var dr=dayRange();
+  h+=statNav("st-day",dr,L("Gündəlik statistika"),dr.off===0?L("bu gün"):dr.off===1?L("dünən"):tf(L("{n} gün əvvəl"),{n:dr.off}))+statTable("today",dr,"today");
   h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
   h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
   h+=statTable("sales",w,"week")+statTable("money",w,"week")+(state.hasProducts?statTable("prod",w,"week"):"");
@@ -1685,7 +1702,7 @@ function statsMain(){
     '<li>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
       return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
         tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</li>'+
-    L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir və gecə 00:00-da sıfırlanır.</li>")+
+    L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Gündəlik statistika»da ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>")+
     L("<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
     L("<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>")+
     L("<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>")+
@@ -1694,7 +1711,7 @@ function statsMain(){
     L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>")+
     '</ol></div>';
   h+='<h3 class="sec">'+L("Terminlər")+'</h3><div class="pay explain"><dl class="terms">'+
-    L("<dt>Bu gün yazılan qəbullar</dt><dd>bu gün kim bu günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır.</dd>")+
+    L("<dt>Gündəlik statistika</dt><dd>seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır. Son 14 gün saxlanılır.</dd>")+
     L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
     L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
     L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>")+
@@ -1714,14 +1731,14 @@ function statText(kind,r,per){
   var pad=function(s,n,right){var k=n-clen(s),sp=k>0?new Array(k+1).join(" "):"";return right?sp+s:s+sp};
   var line=function(x){return x.map(function(c,i){return pad(c,w[i],i>0)}).join(" | ")};
   var sep=w.map(function(n){return new Array(n+1).join("-")}).join("-+-");
-  var head=per==="today"?K.t()+" — "+fmtDay(today,"y"):K.t()+" — "+(per==="month"?L("aylıq")+" ("+r.name+")":L("həftəlik"))+"\n"+rangeLabel(r)+(r.full?"":L(" (həftə hələ bitməyib)"));
+  var head=per==="today"?K.t(r)+" — "+fmtDay(r.s,"y"):K.t()+" — "+(per==="month"?L("aylıq")+" ("+r.name+")":L("həftəlik"))+"\n"+rangeLabel(r)+(r.full?"":L(" (həftə hələ bitməyib)"));
   var out=[head,"```",line(rows[0]),sep];
   rows.slice(1,-1).forEach(function(x){out.push(line(x))});
   out.push(sep,line(rows[rows.length-1]),"```");
   return out.join("\n");
 }
 function statCopyText(kind,per){
-  if(per==="today")return statText("today",{s:today,end:today},"today");
+  if(per==="today")return statText("today",dayRange(),"today");
   var r=per==="month"?monthRange():weekRange();
   var ks=kind==="all"?["sales","money"].concat(state.hasProducts?["prod"]:[]):[kind];
   return ks.map(function(k){return statText(k,r,per)}).join("\n\n");
@@ -2175,6 +2192,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="today"){ui.date=today}
   else if(act==="st-week"){ui.stOff=Math.max(0,(ui.stOff|0)-(+b.dataset.n||0))}
+  else if(act==="st-day"){ui.stDOff=Math.max(0,Math.min(ST_DAYS-1,(ui.stDOff|0)-(+b.dataset.n||0)))}
   else if(act==="st-month"){ui.stMOff=Math.max(0,(ui.stMOff|0)-(+b.dataset.n||0))}
   else if(act==="st-copy"){
     var stt=statCopyText(id,b.dataset.p);if(!stt)return;
