@@ -346,6 +346,7 @@ if(!window.supabase&&!window.__sbTried){window.__sbTried=1;document.write('<scri
 </script>
 <script>
 if(!String.prototype.padStart){String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.slice(-Math.max(n,String(this).length))}}
+if(!String.prototype.padStart)String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.length>n&&c.length>1?s.slice(s.length-n):s};
 if(window.Element&&!Element.prototype.matches){Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector}
 if(window.Element&&!Element.prototype.closest){Element.prototype.closest=function(sel){var el=this;while(el&&el.nodeType===1){if(el.matches(sel))return el;el=el.parentNode}return null}}
 (function(){
@@ -949,7 +950,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112212031";
+var APP_VERSION="20261112213252";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
