@@ -1,0 +1,67 @@
+name: Widget check
+
+# Builds the app, starts Android emulators, draws the home-screen widget with
+# sample data and keeps the pictures, and checks that opening the app from a
+# widget tap does not crash.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [23, 33]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Build
+        working-directory: android
+        run: gradle assembleDebug --no-daemon
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          target: default
+          disable-animations: true
+          script: |
+            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            J=$(cat android/test-widget.json)
+            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '$J' --ei w 360 --ei h 380 --ef density 3.0"
+            sleep 3
+            adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-${{ matrix.api }}.png
+            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '$J' --ei w 250 --ei h 250 --ef density 2.0"
+            sleep 3
+            adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-small-${{ matrix.api }}.png
+            adb shell "am broadcast -n az.ruqya.zapis/.MonthWidget -a az.ruqya.zapis.WIDGET_TEST --es json '{\"out\":1}' --ei w 320 --ei h 340 --ef density 2.5"
+            sleep 3
+            adb exec-out run-as az.ruqya.zapis cat files/widget_test.png > widget-out-${{ matrix.api }}.png
+            adb logcat -c
+            adb shell am start -W -a az.ruqya.zapis.OPEN -d ruqya://day/2026-11-14 --es what day --es date 2026-11-14 -n az.ruqya.zapis/.MainActivity
+            sleep 6
+            adb shell am start -W -a az.ruqya.zapis.OPEN -d ruqya://new/ --es what new -n az.ruqya.zapis/.MainActivity
+            sleep 4
+            adb logcat -d | grep -E "FATAL|AndroidRuntime" > crash-${{ matrix.api }}.txt || true
+            ls -la widget-*.png crash-*.txt
+            test -s widget-${{ matrix.api }}.png
+            ! grep -q "FATAL" crash-${{ matrix.api }}.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: widget-${{ matrix.api }}
+          path: |
+            widget-*.png
+            crash-*.txt

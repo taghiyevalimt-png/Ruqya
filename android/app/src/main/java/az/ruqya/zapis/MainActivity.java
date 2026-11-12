@@ -1,6 +1,8 @@
 package az.ruqya.zapis;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -51,6 +54,7 @@ public class MainActivity extends Activity {
         settings.setTextZoom(100);
         settings.setUserAgentString(settings.getUserAgentString() + " RuqyaApp");
 
+        web.addJavascriptInterface(new Bridge(), "RuqyaApp");
         web.setWebChromeClient(new WebChromeClient());
         web.setWebViewClient(new WebViewClient() {
             // Android 7 and newer.
@@ -108,8 +112,67 @@ public class MainActivity extends Activity {
             }
         });
 
-        if (state == null || web.restoreState(state) == null) {
+        String jump = jump(getIntent());
+        if (jump != null) {
+            web.loadUrl(HOME + "#" + jump);
+        } else if (state == null || web.restoreState(state) == null) {
             web.loadUrl(HOME);
+        }
+    }
+
+    /** From a widget tap: "d=2026-11-14" to open a day, "new=..." to start a booking, or null. */
+    private static String jump(Intent i) {
+        if (i == null || !"az.ruqya.zapis.OPEN".equals(i.getAction())) return null;
+        String what = i.getStringExtra("what");
+        String date = i.getStringExtra("date");
+        if (date != null && !date.matches("\\d{4}-\\d{2}-\\d{2}")) date = null;
+        if ("new".equals(what)) return "new=" + (date == null ? "" : date);
+        if ("day".equals(what) && date != null) return "d=" + date;
+        return null;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        String j = jump(intent);
+        if (j == null || web == null) return;
+        String[] kv = j.split("=", 2);
+        String js = "window.ruqyaOpen&&window.ruqyaOpen('" + (kv.length > 1 ? kv[1] : "") + "'," + ("new".equals(kv[0]) ? "true" : "false") + ")";
+        web.evaluateJavascript(js, null);
+    }
+
+    /** What the web page may ask of the phone: only the widget, nothing else. */
+    public class Bridge {
+        @JavascriptInterface
+        public int version() {
+            return 1;
+        }
+
+        @JavascriptInterface
+        public void setWidgetData(String json) {
+            if (json == null || json.length() > 400000) return;
+            getSharedPreferences(MonthWidget.PREFS, 0).edit().putString("data", json).apply();
+            MonthWidget.updateAll(MainActivity.this);
+        }
+
+        @JavascriptInterface
+        public int widgetCount() {
+            return AppWidgetManager.getInstance(MainActivity.this)
+                    .getAppWidgetIds(new ComponentName(MainActivity.this, MonthWidget.class)).length;
+        }
+
+        /** Android 8 and newer can place the widget on the home screen after one confirmation. */
+        @JavascriptInterface
+        public boolean pinWidget() {
+            if (Build.VERSION.SDK_INT < 26) return false;
+            try {
+                AppWidgetManager m = getSystemService(AppWidgetManager.class);
+                if (m == null || !m.isRequestPinAppWidgetSupported()) return false;
+                return m.requestPinAppWidget(new ComponentName(MainActivity.this, MonthWidget.class), null, null);
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
 

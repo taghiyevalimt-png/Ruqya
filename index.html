@@ -329,7 +329,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112105255";
+var APP_VERSION="20261112105748";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -519,6 +519,7 @@ function refresh(){
       auth.fixed=true;state.roles[ADMIN]="admin";state.roleSet[ADMIN]=1;
       sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(){},function(){});
     }
+    if(wantNew&&!sheet&&activeReaders().length&&state.staff[auth.user.id]){var wn=wantNew;wantNew=null;openSheet({type:"appt",id:null,pre:{date:wn}})}
     if(state.v2&&(!state.staff[auth.user.id]||(state.hasRole&&!state.roleSet[auth.user.id]&&!isAdmin()))&&!sheet&&!auth.asked){auth.asked=true;openSheet({type:"me",first:true})}
   },function(){
     if(my!==seq)return;
@@ -580,6 +581,32 @@ function ensureHist(){
     histLoading=false;if(my!==seq||!auth.user)return;
     state.hist=rows.map(mapLite);state.histLoaded=true;render();redrawCard();
   },function(){histLoading=false;histFail=Date.now()});
+}
+/* ---------- Android home-screen widget ---------- */
+var NATIVE=(function(){try{return window.RuqyaApp&&typeof window.RuqyaApp.setWidgetData==="function"?window.RuqyaApp:null}catch(e){return null}})();
+var wTimer=null,wLast="";
+function widgetSoon(){if(!NATIVE)return;clearTimeout(wTimer);wTimer=setTimeout(pushWidget,1500)}
+function pushWidget(){
+  if(!NATIVE)return;
+  var json;
+  if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1}'}
+  else{
+    /* Per day: up to 4 names in time order with the specialist's colour, plus the day's total. */
+    var from=state.loadedFrom||today,by={},n={};
+    state.appts.forEach(function(a){if(a.date<from||a.status==="cancel")return;(by[a.date]=by[a.date]||[]).push(a)});
+    var d={};
+    Object.keys(by).forEach(function(k){
+      var L=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=L.length;
+      d[k]=L.slice(0,4).map(function(a){return [String(a.name).slice(0,24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
+    });
+    json=JSON.stringify({u:0,d:d,n:n});
+  }
+  if(json===wLast)return;wLast=json;
+  try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()))}catch(e){}
+}
+function widgetHelp(){
+  if(NATIVE)return "";
+  return /RuqyaApp/.test(navigator.userAgent)?"old":/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":"web";
 }
 function neededFrom(){
   if(!auth.loaded)return null;
@@ -691,7 +718,7 @@ function remindText(a){return "Salam aleykum! Qəbulunuzu xatırladırıq: "+fmt
 function render(){
   if(pz&&Date.now()-pz.t<15000)return;
   if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
-  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);
+  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   byId("tabs").hidden=gate;
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length;
@@ -1190,6 +1217,12 @@ function readersMain(){
     }
   }
   if(adm&&state.hasAudit)h+='<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>';
+  h+='<h3 class="sec">Vidcet</h3>';
+  var wh=widgetHelp();
+  if(!wh)h+='<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>';
+  else if(wh==="old")h+='<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>';
+  else if(wh==="ios")h+='<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>';
+  else h+='<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>';
   var th=curTheme();
   h+='<h3 class="sec">Görünüş</h3><div class="seg">'+
     [["auto","Avtomatik"],["light","Açıq"],["dark","Tünd"]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
@@ -1599,6 +1632,12 @@ document.addEventListener("click",function(e){
     var cr=reader(sheet.id);if(!cr)return;
     cr.color=id;db(sb.rpc("ruqya_set_color",{rid:cr.id,c:id}));closeSheet();
   }
+  else if(act==="widget"){
+    var pinned=false;try{pinned=NATIVE&&NATIVE.pinWidget()}catch(err){}
+    wLast="";pushWidget();
+    flash(pinned?"Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək.":"Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Ruqyatz» vidcetini seçib ekrana çəkin.");
+    return;
+  }
   else if(act==="theme"){
     if(id!=="light"&&id!=="dark")id="auto";
     try{localStorage.setItem("ruqya.theme",id)}catch(err){}
@@ -1846,11 +1885,23 @@ if(sb){
     var was=auth.user&&auth.user.id,now=sess&&sess.user&&sess.user.id;
     auth.user=sess?sess.user:null;auth.ready=true;
     if(now&&now!==was){auth.msg="";setTimeout(startSync,0)}
-    if(!now&&was){stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
+    if(!now&&was){wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1}');wLast='{"out":1}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
     render();
   });
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);
 }else{auth.ready=true}
+/* Opened from the widget: "#d=2026-11-14" shows that day, "#new=..." starts a booking. */
+var wantNew=null;
+window.ruqyaOpen=function(d,isNew){
+  if(!okDate(d))d=today;
+  if(sheet)hideSheet();
+  ui.tab="day";ui.date=d;byId("top").innerHTML="";
+  if(isNew){if(auth.loaded&&activeReaders().length)openSheet({type:"appt",id:null,pre:{date:d}});else wantNew=d}
+  render();
+};
+(function(){var m=/^#(d|new)=(\d{4}-\d{2}-\d{2})?$/.exec(location.hash||"");if(!m)return;
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  var d=m[2]&&okDate(m[2])?m[2]:today;ui.tab="day";ui.date=d;if(m[1]==="new")wantNew=d})();
 /* A page reloaded with a form open would otherwise leave the app on the next "close". */
 try{if(history.state&&history.state.sheet)history.replaceState(null,"")}catch(e){}
 render();
