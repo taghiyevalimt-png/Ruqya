@@ -153,6 +153,14 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .split div b{font-size:18px;font-weight:600}
 .split div:last-child{text-align:right}
 .pay .foot{font-size:13px;color:var(--muted)}
+.stt{width:100%;border-collapse:collapse;font-size:15px}
+.stt th{font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px 6px;border-bottom:1px solid var(--line)}
+.stt td{padding:9px 6px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.stt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.stt tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+.copyb{flex:none;padding:8px 12px;font-size:14px}
+.sthead{display:flex;flex-direction:column;gap:8px;margin-top:14px}.sthead h3.sec{margin:0}
+.explain{font-size:14px;gap:6px}.explain p{margin:0}
 
 .reader{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;gap:12px;align-items:center}
 .reader div{flex:1;min-width:0}
@@ -301,8 +309,8 @@ a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius
   </div>
   <nav class="tabs" id="tabs" aria-label="Bölmələr" hidden>
     <button data-act="tab" data-tab="day"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Qəbullar</button>
+    <button data-act="tab" data-tab="stats"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg>Statistika</button>
     <button data-act="tab" data-tab="cash"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M14.8 9.2c-.5-.9-1.5-1.4-2.8-1.4-1.7 0-2.9.8-2.9 2.1 0 3 5.9 1.3 5.9 4.3 0 1.3-1.3 2.1-3 2.1-1.4 0-2.5-.6-3-1.6M12 6v12"/></svg>Kassa</button>
-    <button data-act="tab" data-tab="products"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.5a1.5 1.5 0 0 1-1.5 1.5H7.7a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>Məhsul</button>
     <button data-act="tab" data-tab="patients"><svg viewBox="0 0 24 24"><path d="M6 3.5h9l4 4V20.5H6z"/><path d="M9.5 12h6M9.5 16h6M9.5 8h3"/></svg>Pasiyentlər</button>
     <button data-act="tab" data-tab="readers"><svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5M16 5.3a3.5 3.5 0 0 1 0 6.400M18.5 14.6c1.7.8 2.7 2.5 3 4.900"/></svg>Ayarlar</button>
   </nav>
@@ -470,7 +478,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Mür":"Обр.",
 "Seans":"Сеанс",
 "Cəmi":"Итого",
-"Həftəlik":"За неделю —",
+"Həftəlik":"Недельная",
 "Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur.":"Сеанс: пациенты, которых записал агент и которые пришли и оплатили. Столбцы «Обр.» и «M» в приложении не заполняются.",
 "Hesabat":"Отчёт",
 "Dövr":"Период",
@@ -743,14 +751,76 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Kim yazıb":"Кто записал",
+"Qəbul":"Записей",
+"Məhsul statistikası":"Статистика товаров",
+"Satan":"Продавец",
+"Satış":"Продаж",
+"Hələ heç nə yoxdur.":"Пока ничего нет.",
+"həftə hələ bitməyib — gün bitdikcə əlavə olunur":"неделя ещё идёт — дни добавляются по мере окончания",
+"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"week\">⧉ Bütün həftəlik statistikanı kopyala</button>":"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"week\">⧉ Копировать всю недельную статистику</button>",
+"Aylıq statistika (4 həftə)":"Месячная статистика (4 недели)",
+"4 tam həftə, cümə – cümə axşamı":"4 полные недели, пятница – четверг",
+"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Bütün aylıq statistikanı kopyala</button>":"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Копировать всю месячную статистику</button>",
+"<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>":"<p><b>Записал / Записано</b> — сколько пациентов записали в эти дни. Неважно, на какой день приём: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</p>",
+"<p><b>Uğurlu</b> — həmin günlərdə seansa gələnlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər; gün bitəndə (23:59) təqvimdə qalanların hamısı uğurlu sayılır.</p>":"<p><b>Успешно</b> — кто пришёл на сеанс в эти дни. Если пациент не пришёл, его удаляют из календаря; в конце дня (23:59) все оставшиеся в календаре считаются успешными.</p>",
+"<p><b>Qazanc</b> — uğurlu seansların pulu. <b>Məhsul</b> — kim neçə məhsul satıb və neçə manatlıq.</p>":"<p><b>Доход</b> — деньги за успешные сеансы. <b>Товары</b> — кто сколько товаров продал и на сколько манат.</p>",
+"<p>Silinən qəbullar heç yerdə sayılmır. Həftə cümə başlayır, cümə axşamı bitir. Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür.</p>":"<p>Удалённые записи нигде не считаются. Неделя начинается в пятницу и заканчивается в четверг. Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59.</p>",
+"<p>Tam həftə ":"<p>Полная неделя будет готова: ",
+"<h3 class=\"sec\">Məhsul satışları</h3>":"<h3 class=\"sec\">Продажи товаров</h3>",
+"<div class=\"visit\"><span>Satdı: ":"<div class=\"visit\"><span>Продал(а): ",
+"<div class=\"foot\">Bu tarixdə məhsul satılmayıb.</div>":"<div class=\"foot\">В этот день товары не продавались.</div>",
+"<h3 class=\"sec\">Xərclər</h3>":"<h3 class=\"sec\">Расходы</h3>",
+"<div class=\"foot\">Bu tarixdə xərc yoxdur.</div>":"<div class=\"foot\">В этот день расходов нет.</div>",
+"Kopyalandı ✓ — WhatsApp-a yapışdırın":"Скопировано ✓ — вставьте в WhatsApp",
+"Yazdı":"Записал",
+"Yazılıb":"Записано",
+"Qazanc":"Доход",
+"Satış statistikası":"Статистика продаж",
+"Pul statistikası":"Денежная статистика",
+"aylıq (4 həftə)":"месячная (4 недели)",
+"<h1>Statistika</h1>":"<h1>Статистика</h1>",
+"💰 Pul":"💰 Деньги",
+"📞 Satış":"📞 Продажи",
+"Aylıq":"Месячная",
+"Aylıq statistika 4 tam həftədən sonra hazır olur. İlk aylıq (":"Месячная статистика готова после 4 полных недель. Первая месячная (",
+") ":") будет готова: ",
+" səhər hazır olacaq.":", утром.",
+"cümə – cümə axşamı":"пятница – четверг",
+"həftə hələ bitməyib":"неделя ещё не закончилась",
+"İrəli":"Вперёд",
+"Kopyala":"Копировать",
+"Satış agenti yoxdur.":"Агентов продаж нет.",
+"Mütəxəssis yoxdur.":"Специалистов нет.",
+"bu həftə":"за эту неделю",
+"bu 4 həftədə":"за эти 4 недели",
+"<p><b>Yazdı</b> — agent ":"<p><b>Записал</b> — сколько пациентов агент записал ",
+" neçə pasiyent yazıb. Qəbulun hansı günə olması fərq etmir: məsələn, 11 noyabrda 22 noyabra yazıbsa, 11 noyabrın həftəsinə düşür.</p>":". Неважно, на какой день приём: например, если 11 ноября записал на 22 ноября, это идёт в неделю 11 ноября.</p>",
+"<p><b>Uğurlu</b> — ":"<p><b>Успешно</b> — ",
+" seansa gələn, bu agentin yazdığı pasiyentlər.</p>":" пришли на сеанс (пациенты этого агента).</p>",
+"<p><b>Yazılıb</b> — ":"<p><b>Записано</b> — сколько пациентов записали к этому специалисту ",
+" bu mütəxəssisə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir.</p>":". Неважно, на какой день приём.</p>",
+" seansa gələn pasiyentlər.</p>":" пришли на сеанс.</p>",
+"<p><b>Qazanc</b> — uğurlu seansların pulu.</p>":"<p><b>Доход</b> — деньги за успешные сеансы.</p>",
+"<p>Pasiyent gəlməyibsə, onu təqvimdən silirlər — silinən heç yerdə sayılmır. Günün sonunda (23:59) təqvimdə qalanların hamısı uğurlu sayılır və həmin gün statistikaya əlavə olunur.</p>":"<p>Если пациент не пришёл, его удаляют из календаря — удалённые нигде не считаются. В конце дня (23:59) все, кто остался в календаре, считаются успешными, и этот день добавляется в статистику.</p>",
+"<p>Həftə cümə günü başlayır, cümə axşamı bitir.</p>":"<p>Неделя начинается в пятницу и заканчивается в четверг.</p>",
+"<p>Bu həftə hələ bitməyib: indiyədək ":"<p>Неделя ещё не закончилась: пока учтено ",
+" sayılıb. Tam həftə ":". Полная неделя будет готова: ",
+" səhər hazır olacaq.</p>":", утром.</p>",
+"<p>Aylıq — 4 tam həftədir (cümə – cümə axşamı). Növbəti aylıq ":"<p>Месячная — это 4 полные недели (пятница – четверг). Следующая месячная будет готова: ",
+" (həftə hələ bitməyib)":" (неделя ещё не закончилась)",
+"<h2>Kopyala":"<h2>Копировать",
+"<p class=\"hint\">Avtomatik kopyalanmadı. Mətnin üstünə basıb saxlayın → «Hamısını seç» → «Kopyala».</p>":"<p class=\"hint\">Не удалось скопировать автоматически. Нажмите и удерживайте текст → «Выбрать всё» → «Копировать».</p>",
+"Kopyalandı ✓ İndi WhatsApp-a yapışdırıb göndərə bilərsiniz.":"Скопировано ✓ Теперь можно вставить в WhatsApp и отправить.",
+"Kopyalandı ✓":"Скопировано ✓",
 "hələ bitməyib: ":"ещё не прошли: ",
 "Uğurlu":"Успешно",
 "<div class=\"note warnbox\"><p>Seansı bitib, amma qiyməti yazılmayıb: ":"<div class=\"note warnbox\"><p>Сеанс прошёл, но цена не указана: ",
-". Qiyməti yazmasanız, kassada görünməyəcək.</p>":". Без цены они не попадут в кассу.</p>",
+". Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>":". Без цены они не попадут в денежную статистику.</p>",
 "</b> uğurlu</span><span><b class=\"num\">":"</b> успешно</span><span><b class=\"num\">",
 "\" data-st=\"wait\">Geri qaytar</button></div>":"\" data-st=\"wait\">Вернуть</button></div>",
-"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: kassadan və statistikadan çıxacaq.</p>":"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Сеанс прошёл — считается успешным.</b> Если пациент не пришёл, удалите запись: она уйдёт из кассы и статистики.</p>",
-"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa kassaya düşməyəcək.</p>":"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Цена не указана — нажмите «Изменить» и впишите, иначе сеанс не попадёт в кассу.</p>",
+"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>":"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Сеанс прошёл — считается успешным.</b> Если пациент не пришёл, удалите запись: она уйдёт из статистики.</p>",
+"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>":"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Цена не указана — нажмите «Изменить» и впишите, иначе сеанс не попадёт в денежную статистику.</p>",
 "<p class=\"hint\" style=\"margin:0\">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>":"<p class=\"hint\" style=\"margin:0\">Когда сеанс закончится, он автоматически станет успешным. Если пациент не придёт или отменит, удалите запись.</p>",
 "</b><span>uğurlu</span></div>":"</b><span>успешно</span></div>",
 "<span class=\"tag warn\">Qiymət yazılmayıb</span>":"<span class=\"tag warn\">Цена не указана</span>",
@@ -759,11 +829,11 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Yalnız vaxtı bitmiş və silinməmiş qəbullar, yazan agentə görə.":"Только прошедшие и не удалённые записи, по записавшему агенту.",
 "Uğurlu seanslar":"Успешные сеансы",
 ". «Uğurlu seanslar» — həmin dövrdə vaxtı bitmiş və silinməmiş seanslar.</div></div>":". «Успешные сеансы» — прошедшие и не удалённые сеансы этого периода.</div></div>",
-"Kassadan çıxacaq — bir də basın":"Уйдёт из кассы — нажмите ещё раз"}:null;
+"Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз"}:null;
 function L(s){return RUD&&RUD.hasOwnProperty(s)?RUD[s]:s}
 /* The fixed bottom bar and "+" button are written in the page itself; switch their words too. */
 if(RUD)(function(){
-  var tl={day:"Записи",cash:"Касса",products:"Товары",patients:"Пациенты",readers:"Настройки"};
+  var tl={day:"Записи",stats:"Статистика",cash:"Касса",patients:"Пациенты",readers:"Настройки"};
   var bs=document.querySelectorAll("#tabs button");
   for(var i=0;i<bs.length;i++){var t=tl[bs[i].getAttribute("data-tab")],n=bs[i].lastChild;if(t&&n&&n.nodeType===3)n.nodeValue=t}
   var f=document.getElementById("fab");if(f)f.textContent="+ Записать";
@@ -778,7 +848,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112155148";
+var APP_VERSION="20261112164241";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -830,7 +900,7 @@ function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
 function noPriceBox(){
   var np=state.appts.filter(noPrice);if(!np.length)return "";
   var first=np.reduce(function(m,a){return a.date<m?a.date:m},np[0].date);
-  return L('<div class="note warnbox"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, kassada görünməyəcək.</p>')+
+  return L('<div class="note warnbox"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     (first!==ui.date||ui.view!=="list"?'<button class="ghost" data-act="goto-np" data-d="'+first+L('">Göstər</button>'):'')+'</div>';
 }
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
@@ -876,7 +946,7 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
 /* ---------- state ---------- */
 var today=bk().d;
-var ui={tab:"day",date:today,sel:[],period:"day",q:"",view:"grid"};
+var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0};
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
@@ -1009,7 +1079,7 @@ function redrawCard(){
   pcache=null;
   if(!sheet)return;
   if(sheet.type==="appt"){slotGrid();return}
-  var f={view:viewSheet,agent:agentSheet,patient:patientSheet}[sheet.type];
+  var f={view:viewSheet,patient:patientSheet}[sheet.type];
   if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
 }
 function uniq(rows){var seen={};return rows.filter(function(x){if(seen[x.id])return false;seen[x.id]=1;return true})}
@@ -1050,7 +1120,7 @@ function checkSecurity(){
 }
 /* Visits older than the loaded weeks are needed only for patient counts; fetch them when a screen shows those. */
 var histLoading=false,histFail=0;
-function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||(ui.tab==="cash"&&ui.period!=="day")||!!(sheet&&/^(patient|appt)$/.test(sheet.type))}
+function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&/^(patient|appt)$/.test(sheet.type))}
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom;
@@ -1092,7 +1162,8 @@ function neededFrom(){
   if(!auth.loaded)return null;
   var d=ui.date;
   if(ui.tab==="day")d=addDays(ui.date,-((parse(ui.date).getDay()+6)%7));
-  if(ui.tab==="cash"||ui.tab==="products"||(sheet&&sheet.type==="book")){var r=range();d=addDays(r.s,-((parse(r.s).getDay()-5+7)%7))}
+  if(ui.tab==="stats"){var mr=monthRange(),wr=weekRange();d=!mr.none&&mr.s<wr.s?mr.s:wr.s}
+  if(ui.tab==="cash")d=ui.date;
   return d;
 }
 /* Full data is kept on the phone from a week before the 1st of last month, so this month's and last month's
@@ -1112,7 +1183,6 @@ function ensureLoaded(){
     (res[1]||[]).forEach(function(x){upsertBy(state.expenses,mapExp(x))});
     (res[2]||[]).forEach(function(x){upsertBy(state.products,mapProd(x))});
     state.loadedFrom=need;render();
-    if(sheet&&sheet.type==="book")byId("sheet").innerHTML=bookSheet();
   },function(){loadingOlder=false;olderFail=Date.now();setTimeout(render,15500);flash(L("Köhnə məlumatları yükləmək olmadı. İnterneti yoxlayın."))});
 }
 function db(q){
@@ -1162,17 +1232,9 @@ function stopSync(){
 
 function reader(id){for(var i=0;i<state.readers.length;i++)if(state.readers[i].id===id)return state.readers[i];return null}
 function appt(id){for(var i=0;i<state.appts.length;i++)if(state.appts[i].id===id)return state.appts[i];return null}
-function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
 function r2(n){return Math.round((+n||0)*100)/100}
 function svcName(n){n=n||"Ruqya";return n==="Ruqy\u0259"?"Ruqya":n==="Hicam\u0259"?"Hicama":n}
 function activeReaders(){return state.readers.filter(function(r){return !r.archived})}
-function range(){
-  var d=parse(ui.date),s,e;
-  if(ui.period==="day"){s=e=ui.date}
-  else if(ui.period==="week"){s=addDays(ui.date,-((d.getDay()-5+7)%7));e=addDays(s,6)}
-  else{s=ymd(d.getFullYear(),d.getMonth(),1);e=ymd(d.getFullYear(),d.getMonth()+1,0)}
-  return{s:s,e:e};
-}
 function pkey(a){var d=digits(a.phone);return d.length>=7?"p"+d:"n"+low(String(a.name).trim())}
 /* Grouping a year of visits by patient is the heaviest step; it is reused until the next redraw. */
 var pcache=null;
@@ -1236,8 +1298,8 @@ function render(){
   var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0;
   main.classList.toggle("gridmode",grid);
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
+  else if(ui.tab==="stats"){top.innerHTML=L("<h1>Statistika</h1>");main.innerHTML=banner+statsMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
-  else if(ui.tab==="products"){top.innerHTML=cashTop();main.innerHTML=banner+productsMain()}
   else{top.innerHTML=L("<h1>Ayarlar</h1>");main.innerHTML=banner+readersMain()}
   if(grid){
     cal=byId("cal");
@@ -1282,9 +1344,7 @@ function gridMain(){
   var ids=rs.map(function(r){return r.id});
   state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&shown(a.readerId)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
   var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
-  var paid=day.filter(done),sum=paid.reduce(function(t,a){return t+a.price},0);
   var h=noPriceBox();
-  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+L('</b> qəbul</span><span><b class="num">')+paid.length+L('</b> uğurlu</span><span><b class="num">')+money(sum)+L('</b> kassada</span></div>');
   var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
   h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch" role="button" data-act="color" data-id="'+esc(r.id)+L('" title="Rəngi dəyiş"><i style="background:')+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
@@ -1323,8 +1383,8 @@ function gridMain(){
 function stateLine(a){
   if(gone(a))return '<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
     '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button></div>');
-  if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: kassadan və statistikadan çıxacaq.</p>')+
-    (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa kassaya düşməyəcək.</p>'));
+  if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>')+
+    (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>'));
   return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>');
 }
 function viewSheet(){
@@ -1359,12 +1419,6 @@ function dayMain(){
   h+=noPriceBox();
   var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
-  var paid=list.filter(done);
-  var sum=paid.reduce(function(t,a){return t+a.price},0);
-  h+='<div class="strip">'+
-    '<div class="tile"><b class="num">'+list.filter(function(a){return a.status!=="cancel"}).length+L('</b><span>qəbul</span></div>')+
-    '<div class="tile"><b class="num">'+paid.length+L('</b><span>uğurlu</span></div>')+
-    '<div class="tile main"><b class="num">'+money(sum)+L('</b><span>kassada</span></div></div>');
   if(!list.length)return h+L('<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>');
   var pm=patients();
   list.forEach(function(a){
@@ -1397,239 +1451,162 @@ function dayMain(){
   return h;
 }
 
-function periodTitle(){
-  var r=range(),d=parse(ui.date);
-  if(ui.period==="day")return fmtDay(ui.date,"y");
-  if(ui.period==="week")return fmtDay(r.s)+" – "+fmtDay(r.e);
-  return cap(MONN[d.getMonth()])+" "+d.getFullYear();
+function isSpec(uid){return state.roles[uid]==="specialist"}
+
+/* ---------- Statistics: everything on one page, nothing to open ----------
+   1) bookings made today (live), 2) weekly and 3) "monthly" (4 full weeks) sales, money and product tables.
+   Weeks run Friday–Thursday. A day joins the weekly and monthly tables when it is over (after 23:59), so
+   today never counts there: on Friday morning the week shows Friday–Thursday in full; on other days the
+   current week up to yesterday. Monthly blocks of 4 weeks are counted from the first Friday the centre used the app. */
+var ST_START="2026-11-06";
+function dDiff(a,b){return Math.round((parse(b)-parse(a))/864e5)}
+function friOf(d){return addDays(d,-((parse(d).getDay()-5+7)%7))}
+function weekRange(){
+  var y=addDays(today,-1),off=Math.max(0,ui.stOff|0),s0=friOf(y),s1=addDays(s0,-7*off),first=friOf(ST_START);
+  if(s1<first)s1=first;
+  var e=addDays(s1,6),end=e<y?e:y;
+  return{s:s1,e:e,end:end,full:end===e,canBack:s1>first,canFwd:s1<s0,next:addDays(e,1)};
 }
-function cashTop(){
-  var title=ui.period==="day"?fmtDay(ui.date,"w"):periodTitle();
-  var W=ui.tab==="products"?L("satış"):L("kassa");
-  var small=ui.period==="day"?(ui.date===today?L("Bu gün"):L("Günlük ")+W):ui.period==="week"?L("Həftəlik ")+W:L("Aylıq ")+W;
-  var seg='<div class="seg">';
-  [["day",L("Gün")],["week",L("Həftə")],["month",L("Ay")]].forEach(function(p){seg+='<button data-act="period" data-p="'+p[0]+'" aria-pressed="'+(ui.period===p[0])+'">'+p[1]+'</button>'});
-  return seg+'</div>'+navHtml(title,small);
+function monthRange(){
+  var y=addDays(today,-1),kmax=Math.floor((dDiff(ST_START,y)-27)/28);
+  if(kmax<0)return{none:true,ready:addDays(ST_START,28),s:ST_START,e:addDays(ST_START,27)};
+  var k=Math.max(0,kmax-Math.max(0,ui.stMOff|0)),s=addDays(ST_START,28*k);
+  return{s:s,e:addDays(s,27),end:addDays(s,27),full:true,canBack:k>0,canFwd:k<kmax,next:addDays(ST_START,28*(kmax+2))};
 }
-function cashData(){
-  var r=range(),rows={},order=[];
-  state.readers.forEach(function(x){rows[x.id]={name:x.name,n:0,sum:0,cancel:0,noshow:0,wait:0};order.push(x.id)});
-  state.appts.forEach(function(a){
-    if(a.date<r.s||a.date>r.e)return;
-    var row=rows[a.readerId];if(!row)return;
-    if(done(a)){row.n++;row.sum+=a.price}
-    else row[stOf(a)]++;
+function isAgent(k){return state.roles[k]==="agent"}
+/* Rows for one table. kind: today | sales | money | prod. a, b, c are the table's number columns. */
+function statData(kind,r){
+  var rows={},order=[],T={a:0,b:0,c:0};
+  function row(k,name){if(!rows[k]){rows[k]={name:name,a:0,b:0,c:0};order.push(k)}return rows[k]}
+  var who=function(k){return state.staff[k]||L("Adsız")};
+  if(kind==="money")activeReaders().forEach(function(x){row(x.id,x.name)});
+  else Object.keys(state.staff).filter(isAgent).sort(function(x,y){return String(who(x)).localeCompare(String(who(y)))}).forEach(function(k){row(k,who(k))});
+  if(kind==="prod"){
+    state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(x.by||"-",who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
+  }else state.appts.forEach(function(a){
+    if(kind==="today"){if(a.created!==today||isSpec(a.by))return;row(a.by||"-",who(a.by)).a++;T.a++;return}
+    var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
+    if(!inB&&!inS)return;
+    if(kind==="sales"){if(isSpec(a.by))return;x=row(a.by||"-",who(a.by))}
+    else{var rd=reader(a.readerId);x=row(a.readerId,rd?rd.name:"—")}
+    if(inB){x.a++;T.a++}
+    if(inS){x.b++;T.b++;x.c+=a.price;T.c+=a.price}
   });
-  var T={n:0,sum:0,cancel:0,noshow:0};
-  order.forEach(function(id){var x=rows[id];for(var k in T)T[k]+=x[k]});
-  return{r:r,rows:rows,order:order,T:T};
+  return{rows:order.map(function(k){return rows[k]}),T:T};
 }
-function reportText(){
-  var d=cashData(),T=d.T,pr=productsIn(d.r),ps=pr.reduce(function(t,x){return t+x.amount},0);
-  var t=L("Kassa: ")+periodTitle()+L("\nCəmi: ")+money(T.sum+ps)+L("\nSeanslar: ")+money(T.sum)+" ("+T.n+L(" seans)")+(pr.length?L("\nMəhsul satışı: ")+money(ps)+" ("+pr.length+")":"")+"\n";
-  d.order.forEach(function(id){var x=d.rows[id];if(!x.n)return;t+="\n"+x.name+": "+x.n+L(" seans, ")+money(x.sum)});
-  if(T.cancel||T.noshow)t+=L("\n\nLəğv etdi: ")+T.cancel+L(", gəlmədi: ")+T.noshow;
-  return t;
-}
-function cashMain(){
-  var d=cashData(),rows=d.rows,T=d.T,shown=0,pr=productsIn(d.r),prSum=pr.reduce(function(t,x){return t+x.amount},0);
-  var h='<div class="strip">'+
-    '<div class="tile main"><b class="num">'+money(T.sum+prSum)+L('</b><span>cəmi kassada</span></div>')+
-    '<div class="tile"><b class="num">'+money(T.sum)+'</b><span>'+T.n+L(' seans</span></div>')+
-    '<div class="tile"><b class="num">'+money(prSum)+'</b><span>'+pr.length+L(' məhsul</span></div></div>');
-  d.order.forEach(function(id){
-    var x=rows[id],rd=reader(id),any=x.n+x.cancel+x.noshow+x.wait;
-    if(rd.archived&&!any)return;
-    shown++;
-    var foot=[];
-    if(x.wait)foot.push(L("hələ bitməyib: ")+x.wait);
-    if(x.cancel)foot.push(L("ləğv etdi: ")+x.cancel);
-    if(x.noshow)foot.push(L("gəlmədi: ")+x.noshow);
-    h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+L(' seans · ')+money(x.sum)+'</span></div>'+
-      (foot.length?'<div class="foot">'+cap(foot.join(", "))+'</div>':'')+
-      '</div>';
-  });
-  if(!auth.loaded)return h;
-  if(!shown)h+=L('<div class="empty">Hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə edir.</div>');
-  var fin=T.n+T.cancel+T.noshow,more="";
-  if(state.v2){
-    var ex=expensesIn(d.r),exSum=ex.reduce(function(t,x){return t+x.amount},0);
-    h+=L('<div class="pay"><div class="head"><b>Xərclər</b><span class="num">')+money(exSum)+'</span></div>';
-    if(ex.length){h+='<div>';ex.forEach(function(x){
-      h+='<div class="visit"><span>'+fmtDay(x.date)+' · '+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+L('">Dəyiş</button></div>')});h+='</div>'}
-    h+=L('<button class="ghost" data-act="new-expense">Xərc əlavə et</button>')+
-      '</div>';
-    var bb=bookedBy(d.r.s,d.r.e),bt=bb.reduce(function(t,x){return t+x.n},0);
-    h+='<div class="pay"><div class="head"><b>'+(ui.period==="day"?(ui.date===today?L("Bu gün yazılan qəbullar"):fmtDay(ui.date)+L(" yazılan qəbullar")):L("Bu dövrdə yazılan qəbullar"))+'</b><span class="num">'+bt+'</span></div>';
-    if(bb.length){h+='<div>';bb.forEach(function(x){
-      var inner='<span>'+esc(x.name)+(x.cancel?L(' <small style="color:var(--muted)">(ləğv: ')+x.cancel+')</small>':'')+'</span><b class="num">'+x.n+'</b>';
-      h+=isAdmin()&&x.id?'<button class="agent" data-act="agent" data-id="'+esc(x.id)+'">'+inner+'<span class="chev">›</span></button>':'<div class="visit">'+inner+'</div>'});h+='</div>'}
-    else h+=L('<div class="foot">Bu müddətdə heç kim qəbul yazmayıb.</div>');
-    h+=L('<div class="foot">Qəbulun yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.')+(isAdmin()&&bb.length?L(' Ətraflı statistika üçün işçinin adına toxunun.'):'')+'</div></div>';
-    var PN={day:L("günlük"),week:L("həftəlik"),month:L("aylıq")}[ui.period];
-    h+=L('<button class="primary" data-act="xlsx" data-id="money">Pul hesabatı (')+PN+')</button>';
-    h+=L('<button class="primary" data-act="xlsx" data-id="sales" style="background:var(--surface);color:var(--accent);border:1px solid var(--accent)">Satış hesabatı (agentlər, həftəlik)</button>');
-  }
-  if(ui.period!=="day"){
-    var pm=patients(),nw=0,rp=0,days={},cnt1={};
-    state.appts.forEach(function(a){
-      if(!done(a)||a.date<d.r.s||a.date>d.r.e)return;
-      var k1=pkey(a);
-      days[a.date]=1;if(pm[k1]&&pm[k1].first===a.date&&!cnt1[k1]){cnt1[k1]=1;nw++}else rp++;
-    });
-    var nd=Object.keys(days).length;
-    more+='<div class="stats"><div class="tile"><b class="num">'+nw+L('</b><span>yeni pasiyent</span></div>')+
-      '<div class="tile"><b class="num">'+rp+L('</b><span>təkrar gəliş</span></div>')+
-      '<div class="tile"><b class="num">'+nd+L('</b><span>iş günü</span></div>')+
-      '<div class="tile"><b class="num">'+money(nd?T.sum/nd:0)+L('</b><span>gündə orta</span></div></div>');
-  }
-  more+=L('<button class="ghost" data-act="report">Hesabatı mətn kimi göndər</button>');
-  h+='<details class="more"'+(ui.more?" open":"")+L('><summary>Əlavə</summary><div class="morebody">')+more+'</div></details>';
-  h+='<p class="hint">'+(fin?L('Gələnlər: ')+T.n+' / '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+L('Hesaba vaxtı bitmiş və silinməmiş seanslar düşür.</p>');
+var ST_KINDS={
+  today:{t:function(){return L("Bu gün yazılan qəbullar")},h:function(){return [L("Kim yazıb"),L("Qəbul")]},c:function(x){return [x.name,String(x.a)]}},
+  sales:{t:function(){return L("Satış statistikası")},h:function(){return [L("Satış agenti"),L("Yazdı"),L("Uğurlu")]},c:function(x){return [x.name,String(x.a),String(x.b)]}},
+  money:{t:function(){return L("Pul statistikası")},h:function(){return [L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]},c:function(x){return [x.name,String(x.a),String(x.b),money(x.c)]}},
+  prod:{t:function(){return L("Məhsul statistikası")},h:function(){return [L("Satan"),L("Satış"),L("Məbləğ")]},c:function(x){return [x.name,String(x.a),money(x.c)]}}
+};
+function rangeLabel(r){return fmtDay(r.s)+" – "+fmtDay(r.end,"y")}
+function statTable(kind,r,per){
+  var K=ST_KINDS[kind],d=statData(kind,r),hd=K.h(),h='<div class="pay" data-st="'+kind+'-'+per+'"><div class="head"><b>'+K.t()+'</b>'+
+    '<button class="ghost copyb" data-act="st-copy" data-id="'+kind+'" data-p="'+per+'">⧉ '+L("Kopyala")+'</button></div>';
+  h+='<table class="stt"><thead><tr>'+hd.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+esc(x)+'</th>'}).join("")+'</tr></thead><tbody>';
+  if(!d.rows.length)h+='<tr><td colspan="'+hd.length+'" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>';
+  d.rows.forEach(function(x){h+='<tr>'+K.c(x).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr>'});
+  h+='</tbody><tfoot><tr>'+K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c}).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr></tfoot></table></div>';
   return h;
 }
-function expensesIn(r){
-  return state.expenses.filter(function(x){return x.date>=r.s&&x.date<=r.e})
-    .sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0});
+function statNav(act,r,title,small){
+  return '<div class="sthead"><h3 class="sec">'+title+'</h3><div class="daynav"><button class="icon-btn" data-act="'+act+'" data-n="-1" aria-label="'+L("Geri")+'"'+(r.canBack?'':' disabled')+'>‹</button>'+
+    '<div class="label">'+rangeLabel(r)+'<small>'+small+'</small></div>'+
+    '<button class="icon-btn" data-act="'+act+'" data-n="1" aria-label="'+L("İrəli")+'"'+(r.canFwd?'':' disabled')+'>›</button></div></div>';
 }
-function isSpec(uid){return state.roles[uid]==="specialist"}
-function bookedBy(s0,e0){
-  /* Bookings counted by the day they were made, whatever date they are for. Deleted ones are gone from the data. */
-  var m={};
-  state.appts.forEach(function(a){
-    if(!a.created||a.created<s0||a.created>e0||isSpec(a.by))return;
-    var k=a.by||"",x=m[k]||(m[k]={name:state.staff[k]||L("Adsız istifadəçi"),n:0,cancel:0,days:{}});
-    if(a.status==="cancel")x.cancel++;else{x.n++;x.days[a.created]=(x.days[a.created]||0)+1}
-  });
-  return Object.keys(m).map(function(k){m[k].id=k;return m[k]}).sort(function(a,b){return b.n-a.n||a.name.localeCompare(b.name)});
-}
-function weeklySheet(r){
-  /* Weeks run Friday to Thursday, as in the centre's own table. */
-  var wd=function(d){return parse(d).getDay()},fri=function(d){return addDays(d,-((wd(d)-5+7)%7))};
-  var weeks=[];for(var w=fri(r.s);w<=r.e;w=addDays(w,7))weeks.push(w);
-  var who={},ids=[];
-  Object.keys(state.staff).forEach(function(k){if(!isSpec(k)&&state.roleSet[k]&&k!==ADMIN&&state.roles[k]!=="admin"){who[k]=state.staff[k]||L("Adsız istifadəçi");ids.push(k)}});
-  state.appts.forEach(function(a){var k=a.by||"";if(isSpec(k))return;if(!(k in who)){who[k]=state.staff[k]||L("Adsız istifadəçi");ids.push(k)}});
-  ids.sort(function(a,b){return (a==="")-(b==="")||who[a].localeCompare(who[b])});
-  var cnt={};
-  state.appts.forEach(function(a){
-    if(!done(a))return;
-    var w=fri(a.date),k=(a.by||"")+"|"+w;cnt[k]=(cnt[k]||0)+1;
-  });
-  var serial=function(d){var x=parse(d);return Math.round((Date.UTC(x.getFullYear(),x.getMonth(),x.getDate())-Date.UTC(1899,11,30))/864e5)};
-  var col=function(c){var n="";c++;while(c>0){var m=(c-1)%26;n=String.fromCharCode(65+m)+n;c=Math.floor((c-1)/26)}return n};
-  var groups=ids.map(function(k){return{name:who[k],id:k}}),G=groups.length,TOT=3+G*4;
-  var width=TOT+4,rows=[],cells=[],merges=[],first=5,last=first+weeks.length-1;
-  for(var i=0;i<5+weeks.length;i++){var row=[];for(var j=0;j<width;j++)row.push(null);rows.push(row)}
-  rows[0][0]=L("Həftəlik statistika");rows[0][3]=periodTitle();
-  rows[1][2]=L("Kanal");rows[4][0]="Start";rows[4][1]="End";rows[4][2]=L("Həftə");
-  var put=function(r,c,f,v,z){cells.push({r:r,c:c,f:f,v:v,z:z})};
-  var block=function(c0,title,top){
-    rows[1][c0]=top;rows[2][c0]=title;
-    merges.push({s:{r:1,c:c0},e:{r:1,c:c0+3}},{s:{r:2,c:c0},e:{r:2,c:c0+3}});
-    [L("Mür"),L("Seans"),"M","%"].forEach(function(h,j){rows[4][c0+j]=h});
-  };
-  groups.forEach(function(g,i){block(3+i*4,g.name,"")});
-  block(TOT,L("Cəmi"),L("Toplam"));
-  weeks.forEach(function(w,i){
-    var R=5+i,e=addDays(w,7),n=R+1,tot=0;
-    put(R,0,null,serial(w),"d-mmm-yy");put(R,1,null,serial(e),"d-mmm-yy");
-    var wk=parse(e),jan=new Date(wk.getFullYear(),0,1,12);
-    put(R,2,"WEEKNUM(B"+n+")",Math.floor((Math.round((wk-jan)/864e5)+jan.getDay())/7)+1,"0");
-    groups.forEach(function(g,gi){
-      var c=3+gi*4,v=cnt[g.id+"|"+w]||0;tot+=v;
-      rows[R][c+1]=v;
-      put(R,c+3,"IFERROR("+col(c+1)+n+"/"+col(c)+n+",0)",0,"0%");
-    });
-    var sumOf=function(off){return groups.map(function(g,gi){return col(3+gi*4+off)+n}).join(",")||"0"};
-    put(R,TOT,"SUM("+sumOf(0)+")",0,"0.00");
-    put(R,TOT+1,"SUM("+sumOf(1)+")",tot,"0.00");
-    put(R,TOT+2,"SUM("+sumOf(2)+")",0,"0.00");
-    put(R,TOT+3,"IFERROR("+col(TOT+1)+n+"/"+col(TOT)+n+",0)",0,"0%");
-  });
-  for(var c=3;c<width;c++){
-    var off=(c-3)%4,LN=col(c),tv=0;
-    if(off===1)for(var i2=0;i2<weeks.length;i2++){var x=rows[5+i2][c];if(typeof x==="number")tv+=x;else{var cc=cells.filter(function(q){return q.r===5+i2&&q.c===c})[0];if(cc)tv+=cc.v||0}}
-    if(off===3)put(3,c,"IFERROR("+col(c-2)+"4/"+col(c-3)+"4,0)",0,"0%");
-    else put(3,c,"SUM("+LN+(first+1)+":"+LN+(last+1)+")",tv,"0.00");
+function statsMain(){
+  if(!auth.loaded)return "";
+  var w=weekRange(),m=monthRange(),h="";
+  h+='<h3 class="sec">'+L("Bu gün")+' · '+fmtDay(today,"w")+'</h3>'+statTable("today",{s:today,end:today},"today");
+  h+=statNav("st-week",w,L("Həftəlik statistika"),w.full?L("cümə – cümə axşamı"):L("həftə hələ bitməyib — gün bitdikcə əlavə olunur"));
+  h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
+  h+=statTable("sales",w,"week")+statTable("money",w,"week")+(state.hasProducts?statTable("prod",w,"week"):"");
+  if(m.none)h+='<h3 class="sec">'+L("Aylıq statistika (4 həftə)")+'</h3><div class="pay"><p style="margin:0">'+
+    L("Aylıq statistika 4 tam həftədən sonra hazır olur. İlk aylıq (")+fmtDay(m.s)+" – "+fmtDay(m.e)+L(") ")+fmtDay(m.ready,"w")+L(" səhər hazır olacaq.")+'</p></div>';
+  else{
+    h+=statNav("st-month",m,L("Aylıq statistika (4 həftə)"),L("4 tam həftə, cümə – cümə axşamı"));
+    h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
+    h+=statTable("sales",m,"month")+statTable("money",m,"month")+(state.hasProducts?statTable("prod",m,"month"):"");
   }
-  var widths=[11,11,7];for(var k=3;k<width;k++)widths.push((k-3)%4===3?7:9);
-  return[L("Həftəlik"),rows,widths,{cells:cells,merges:merges},L("Seans: agentin yazdığı, vaxtı bitmiş və silinməmiş qəbullar. Mür və M sütunları tətbiqdə doldurulmur.")];
+  h+='<div class="pay explain">'+
+    L("<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>")+
+    L("<p><b>Uğurlu</b> — həmin günlərdə seansa gələnlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər; gün bitəndə (23:59) təqvimdə qalanların hamısı uğurlu sayılır.</p>")+
+    L("<p><b>Qazanc</b> — uğurlu seansların pulu. <b>Məhsul</b> — kim neçə məhsul satıb və neçə manatlıq.</p>")+
+    L("<p>Silinən qəbullar heç yerdə sayılmır. Həftə cümə başlayır, cümə axşamı bitir. Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür.</p>")+
+    (w.full?'':L("<p>Tam həftə ")+fmtDay(w.next,"w")+L(" səhər hazır olacaq.</p>"))+'</div>';
+  return h;
 }
-function reportBook(){
-  var prL=productsIn(range()),prS=prL.reduce(function(t,x){return t+x.amount},0);
-  var r=range(),d=cashData(),T=d.T,ex=expensesIn(r),exSum=ex.reduce(function(t,x){return t+x.amount},0);
-  var sum=[[L("Hesabat"),periodTitle()],[L("Dövr"),r.s+" — "+r.e],[],
-    [L("Kassa cəmi"),r2(T.sum+prS)],[L("Seanslardan"),r2(T.sum)],[L("Seans sayı"),T.n],[L("Məhsul satışı"),r2(prS)],[L("Xərclər"),r2(exSum)],[],
-    [L("Mütəxəssis"),L("Seans"),L("Kassa"),L("Ləğv etdi"),L("Gəlmədi")]];
-  d.order.forEach(function(id){var x=d.rows[id];if(x.n+x.cancel+x.noshow)sum.push([x.name,x.n,r2(x.sum),x.cancel,x.noshow])});
-  var ap=[[L("Tarix"),L("Saat"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Status"),L("Yazan"),L("Qeyd")]];
-  state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
-    .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
-    .forEach(function(a){var rd=reader(a.readerId);
-      ap.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,r2(a.price),stLabel(a),state.staff[a.by]||"",a.note])});
-  var xp=[[L("Tarix"),L("Xərc"),L("Məbləğ"),L("Yazan")]];
-  ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
-  xp.push([],[L("Cəmi"),"",r2(exSum)]);
-  return{name:"pul_hesabati_"+r.s+(r.e!==r.s?"_"+r.e:"")+".xlsx",sheets:[[L("Yekun"),sum,[22,14,12,12,12]],[L("Qəbullar"),ap,[11,7,16,22,16,9,16,14,24]],[L("Xərclər"),xp,[11,30,12,16]],[L("Məhsullar"),[[L("Tarix"),L("Məbləğ"),L("Satdı")]].concat(prL.map(function(x){return[x.date,r2(x.amount),state.staff[x.by]||L("Adsız istifadəçi")]})).concat([[],[L("Cəmi"),r2(prS)]]),[11,12,20]]]};
+function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
+/* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
+function statText(kind,r,per){
+  var K=ST_KINDS[kind],d=statData(kind,r),hd=K.h(),rows=[hd].concat(d.rows.map(K.c)).concat([K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c})]);
+  var w=hd.map(function(_,i){return rows.reduce(function(m,x){return Math.max(m,clen(x[i]))},0)});
+  var pad=function(s,n,right){var k=n-clen(s),sp=k>0?new Array(k+1).join(" "):"";return right?sp+s:s+sp};
+  var line=function(x){return x.map(function(c,i){return pad(c,w[i],i>0)}).join(" | ")};
+  var sep=w.map(function(n){return new Array(n+1).join("-")}).join("-+-");
+  var head=per==="today"?K.t()+" — "+fmtDay(today,"y"):K.t()+" — "+(per==="month"?L("aylıq (4 həftə)"):L("həftəlik"))+"\n"+rangeLabel(r)+(r.full?"":L(" (həftə hələ bitməyib)"));
+  var out=[head,"```",line(rows[0]),sep];
+  rows.slice(1,-1).forEach(function(x){out.push(line(x))});
+  out.push(sep,line(rows[rows.length-1]),"```");
+  return out.join("\n");
 }
-function salesBook(){
-  var r=range(),rows=[[L("Tarix"),L("Saat"),L("Agent"),L("Pasiyent"),L("Telefon"),L("Mütəxəssis")]];
-  var fri=function(d){return addDays(d,-((parse(d).getDay()-5+7)%7))},s0=fri(r.s),e0=addDays(fri(r.e),6);
-  state.appts.filter(function(a){return done(a)&&a.date>=s0&&a.date<=e0&&!isSpec(a.by)})
-    .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
-    .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||L("Adsız istifadəçi"),a.name,a.phone,rd?rd.name:""])});
-  var bb=bookedBy(s0,e0),dl=[[L("Tarix")].concat(bb.map(function(x){return x.name})).concat([L("Cəmi")])];
-  for(var dd=s0;dd<=e0;dd=addDays(dd,1)){var tt=0;dl.push([dd].concat(bb.map(function(x){var v=x.days[dd]||0;tt+=v;return v})).concat([tt]))}
-  dl.push([L("Cəmi")].concat(bb.map(function(x){return x.n})).concat([bb.reduce(function(t,x){return t+x.n},0)]));
-  var pa={},pl=state.products.filter(function(x){return x.date>=s0&&x.date<=e0});
-  pl.forEach(function(x){var k=state.staff[x.by]||L("Adsız istifadəçi");(pa[k]=pa[k]||{n:0,sum:0});pa[k].n++;pa[k].sum+=x.amount});
-  var ps=[[L("Satdı"),L("Say"),L("Məbləğ")]].concat(Object.keys(pa).sort().map(function(k){return[k,pa[k].n,r2(pa[k].sum)]}));
-  ps.push([],[L("Tarix"),L("Məbləğ"),L("Satdı")]);pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(x){ps.push([x.date,r2(x.amount),state.staff[x.by]||L("Adsız istifadəçi")])});
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),[L("Gündəlik yazılış"),dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,L("Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.")],[L("Gələn pasiyentlər"),rows,[11,7,20,22,16,16],null,L("Yalnız vaxtı bitmiş və silinməmiş qəbullar, yazan agentə görə.")],[L("Məhsul satışı"),ps,[20,10,12]]]};
+function statCopyText(kind,per){
+  if(per==="today")return statText("today",{s:today,end:today},"today");
+  var r=per==="month"?monthRange():weekRange();if(r.none)return "";
+  var ks=kind==="all"?["sales","money"].concat(state.hasProducts?["prod"]:[]):[kind];
+  return ks.map(function(k){return statText(k,r,per)}).join("\n\n");
 }
-function fmtCell(c){
-  if(c==null||c==="")return["",""];
-  if(typeof c==="object"){var v=c.v;
-    if(c.z==="0%")return[Math.round((+v||0)*100)+"%","n"];
-    if(c.z==="d-mmm-yy"){var d=new Date(Date.UTC(1899,11,30)+v*864e5);return[String(d.getUTCDate()).padStart(2,"0")+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."+d.getUTCFullYear(),""]}
-    if(c.z==="0.00")return[r2(v).toLocaleString("ru-RU",{maximumFractionDigits:2}),"n"];
-    return[String(v),"n"];}
-  if(typeof c==="number")return[c.toLocaleString("ru-RU",{maximumFractionDigits:2}),"n"];
-  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(c);if(m)return[m[3]+"."+m[2]+"."+m[1],""];
-  return[String(c),""];
+function stCopySheet(){
+  return L('<h2>Kopyala')+CLOSE+'</h2>'+L('<p class="hint">Avtomatik kopyalanmadı. Mətnin üstünə basıb saxlayın → «Hamısını seç» → «Kopyala».</p>')+
+    '<textarea id="st-ta" readonly style="min-height:300px;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre">'+esc(sheet.text||"")+'</textarea>';
 }
-function colName(c){var n="";c++;while(c>0){var m=(c-1)%26;n=String.fromCharCode(65+m)+n;c=Math.floor((c-1)/26)}return n}
-function sheetTable(sh){
-  var rows=sh[1].map(function(r){return r.slice()}),W=0;
-  rows.forEach(function(r){W=Math.max(W,r.length)});
-  if(sh[3])sh[3].cells.forEach(function(q){rows[q.r][q.c]={v:q.v,z:q.z}});
-  var span={},skip={};
-  if(sh[3])sh[3].merges.forEach(function(m){span[m.s.r+","+m.s.c]=m.e.c-m.s.c+1;for(var c=m.s.c+1;c<=m.e.c;c++)skip[m.s.r+","+c]=1});
-  var h='<table><thead><tr><th class="rn"></th>';
-  for(var c=0;c<W;c++)h+='<th>'+colName(c)+'</th>';
-  h+='</tr></thead><tbody>';
-  rows.forEach(function(r,ri){
-    var ne=r.filter(function(x){return x!==null&&x!==""&&x!==undefined}),hd=ne.length>=3&&ne.every(function(x){return typeof x==="string"&&!/^\d{4}-\d{2}-\d{2}$/.test(x)});
-    h+='<tr class="'+(ri===0?"tt":hd?"hd":"")+'"><td class="rn">'+(ri+1)+'</td>';
-    for(var c=0;c<W;c++){
-      if(skip[ri+","+c])continue;
-      var f=fmtCell(r[c]),sp=span[ri+","+c];
-      h+='<td class="'+f[1]+(sp&&f[0]?" mg":"")+'"'+(sp?' colspan="'+sp+'"':'')+'>'+esc(f[0])+'</td>';
-    }
-    h+='</tr>';
-  });
-  return h+'</tbody></table>';
+function copyText(t,ok,no){
+  var done1=false;
+  try{var ta=document.createElement("textarea");ta.value=t;ta.setAttribute("readonly","");ta.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";
+    document.body.appendChild(ta);ta.focus();ta.select();try{ta.setSelectionRange(0,t.length)}catch(e){}
+    done1=document.execCommand("copy");document.body.removeChild(ta)}catch(e){}
+  if(done1){ok();return}
+  try{navigator.clipboard.writeText(t).then(ok,no)}catch(e){no()}
 }
-function bookSheet(){
-  var rb=sheet.kind==="sales"?salesBook():reportBook(),k=Math.min(sheet.tab||0,rb.sheets.length-1);
-  var title=sheet.kind==="sales"?L("Satış hesabatı"):L("Pul hesabatı");
-  return '<h2>'+title+CLOSE+'</h2>'+
-    '<div class="seg" style="--n:'+rb.sheets.length+'">'+rb.sheets.map(function(x,i){return '<button data-act="book-tab" data-id="'+i+'" aria-pressed="'+(i===k)+'">'+esc(x[0])+'</button>'}).join("")+'</div>'+
-    (rb.sheets[k][4]?'<p class="hint">'+esc(rb.sheets[k][4])+'</p>':'')+
-    '<div class="xl">'+sheetTable(rb.sheets[k])+'</div>';
+/* ---------- Kassa: only recording product sales and expenses, day by day (their totals are in Statistika) ---------- */
+function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
+function cashTop(){return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):(ui.date===addDays(today,-1)?L("Dünən"):""))}
+function cashMain(){
+  if(!auth.loaded)return "";
+  var h="";
+  if(state.hasProducts){
+    var pr=state.products.filter(function(x){return x.date===ui.date});
+    h+=L('<h3 class="sec">Məhsul satışları</h3>')+L('<button class="primary" data-act="new-prod">+ Məhsul satışı</button>');
+    h+='<div class="pay">'+(pr.length?pr.map(function(x){
+      return L('<div class="visit"><span>Satdı: ')+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+L('">Sil</button></div>')}).join("")
+      :L('<div class="foot">Bu tarixdə məhsul satılmayıb.</div>'))+'</div>';
+  }else h+=L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>');
+  if(state.v2){
+    var ex=state.expenses.filter(function(x){return x.date===ui.date});
+    h+=L('<h3 class="sec">Xərclər</h3>')+'<div class="pay">'+(ex.length?ex.map(function(x){
+      return '<div class="visit"><span>'+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+L('">Dəyiş</button></div>')}).join("")
+      :L('<div class="foot">Bu tarixdə xərc yoxdur.</div>'))+L('<button class="ghost" data-act="new-expense">Xərc əlavə et</button>')+'</div>';
+  }
+  return h;
 }
-
+function productForm(){
+  var dd=ui.tab==="cash"?ui.date:today;
+  return L('<h2>Məhsul satışı')+CLOSE+'</h2>'+
+    L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
+    L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
+    L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[auth.user.id]||L("siz"))+'.</p>'+
+    L('<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
+}
+function expenseForm(){
+  var x=sheet.id?expense(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
+  return '<h2>'+(x?L("Xərci dəyiş"):L("Yeni xərc"))+CLOSE+'</h2>'+
+    L('<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="')+esc(x?x.title:"")+'"></div>'+
+    L('<div class="two"><div class="field"><label for="x-amount">Məbləğ, ')+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
+    L('<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="')+dd+'"></div></div>'+
+    '<p class="err" id="x-err" hidden></p>'+
+    L('<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>')+(x?L('<button class="danger" data-act="del-expense">Sil</button>'):'')+'</div>';
+}
 function patientsList(){
   var m=patients(),q=low(ui.q.trim()),qd=q.replace(/\D/g,"");
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
@@ -1667,11 +1644,6 @@ function patientSheet(){
     (next?L('<p class="hint">«Dəyiş» ən yaxın qəbulu (')+fmtDay(next.date)+', '+esc(next.time)+L(') dəyişir. Başqa qəbulu dəyişmək üçün siyahıda ona toxunun. <button class="link" style="padding:0" data-act="repeat" data-id="')+esc(p.key)+L('">Yeni qəbul yaz</button></p>'):'');
   return h;
 }
-function reportSheet(){
-  return L('<h2>Hesabat')+CLOSE+'</h2>'+
-    L('<div class="field"><label for="rep">Bu mətni rəhbərə göndərmək olar</label><textarea id="rep" readonly>')+esc(reportText())+'</textarea></div>'+
-    L('<p class="hint" id="rep-msg"></p><div class="btns"><button class="primary" data-act="copy">Kopyala</button></div>');
-}
 
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="";
@@ -1703,9 +1675,8 @@ function readersMain(){
       h+=L('<div class="pay"><div class="head"><b>İşçilər</b><span class="num">')+ids2.length+'</span></div><div>';
       ids2.forEach(function(k){
         var nm='<span>'+esc(state.staff[k]||L("Ad yazılmayıb"))+(k===auth.user.id?L(' (siz)'):'')+'</span>';
-        if(!isSpec(k)&&k!==ADMIN&&state.roles[k]!=="admin")nm='<span><button class="link" style="padding:0;text-align:left" data-act="agent" data-id="'+esc(k)+'">'+esc(state.staff[k]||L("Ad yazılmayıb"))+'</button>'+(k===auth.user.id?L(' (siz)'):'')+'</span>';
         h+='<div class="visit">'+nm+'<span style="color:var(--muted)">'+roleLabel(k)+'</span>'+(k!==ADMIN&&k!==auth.user.id&&(isOwner()||state.roles[k]!=="admin")?'<button class="link" data-act="edit-staff" data-id="'+esc(k)+L('">Dəyiş</button>'):'')+'</div>'});
-      h+=L('</div><div class="foot">Satış agentinin statistikasını görmək üçün adına toxunun.</div></div>');
+      h+='</div></div>';
     }
   }
   if(adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
@@ -1733,48 +1704,6 @@ function langSeg(){
     [["az","Azərbaycanca"],["ru","Русский"]].map(function(x){return '<button data-act="lang" data-id="'+x[0]+'" aria-pressed="'+(LANG===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
 }
 function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
-function agentStats(k,s0,e0){
-  /* Booked = made in this period (by the day it was written), whatever date it is for.
-     Came = sessions in this period that are over and not deleted, as in the weekly sales sheet. */
-  var r={booked:0,cancel:0,came:0,noshow:0,prod:0,prodSum:0};
-  state.appts.forEach(function(a){
-    if(a.by!==k)return;
-    if(a.created&&a.created>=s0&&a.created<=e0){if(a.status==="cancel")r.cancel++;else r.booked++}
-    if(a.date>=s0&&a.date<=e0){if(done(a))r.came++;else if(a.status==="noshow")r.noshow++}
-  });
-  state.products.forEach(function(x){if(x.by===k&&x.date>=s0&&x.date<=e0){r.prod++;r.prodSum+=x.amount}});
-  return r;
-}
-function agentSheet(){
-  var k=sheet.id,d=sheet.date||today,name=state.staff[k]||L("Adsız istifadəçi");
-  var dd=parse(d),fri=addDays(d,-((dd.getDay()-5+7)%7)),m0=ymd(dd.getFullYear(),dd.getMonth(),1),m1=ymd(dd.getFullYear(),dd.getMonth()+1,0);
-  var D=agentStats(k,d,d),W=agentStats(k,fri,addDays(fri,6)),M=agentStats(k,m0,m1);
-  var canBack=!state.loadedFrom||addDays(d,-1)>=state.loadedFrom;
-  var h='<h2>'+esc(name)+CLOSE+'</h2>'+
-    '<div class="daynav"><button class="icon-btn" data-act="ag-day" data-n="-1" aria-label="'+L("Geri")+'"'+(canBack?'':' disabled')+'>‹</button>'+
-    '<div class="label">'+(d===today?L("Bu gün"):fmtDay(d,"w"))+'<small>'+(d===today?fmtDay(d,"w"):(d===addDays(today,-1)?L("Dünən"):""))+'</small></div>'+
-    L('<button class="icon-btn" data-act="ag-day" data-n="1" aria-label="İrəli"')+(d>=today?' disabled':'')+'>›</button></div>'+
-    '<div class="stats" style="margin-top:10px"><div class="tile"><b class="num">'+D.booked+'</b><span>'+(d===today?L("bu gün yazdı"):L("həmin gün yazdı"))+'</span></div>'+
-    '<div class="tile"><b class="num">'+D.cancel+L('</b><span>ləğv olunan</span></div></div>')+
-    L('<p class="hint">Hansı tarixə yazılmasından asılı olmayaraq, ')+(d===today?L("bu gün"):L("həmin gün"))+L(' yazdığı qəbullar sayılır. Silinənlər sayılmır.</p>');
-  var list=state.appts.filter(function(a){return a.by===k&&a.created===d}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
-  if(list.length){
-    h+='<div>';
-    list.forEach(function(a){var r=reader(a.readerId);
-      h+='<div class="agrow"><span>'+esc(a.name)+'<small class="num">'+fmtDay(a.date,"w")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</small></span>'+
-        stPill(a)+'</div>'});
-    h+='</div>';
-  }
-  var row=function(lbl,v){return '<span>'+lbl+'</span><b class="num">'+v[0]+'</b><b class="num">'+v[1]+'</b>'};
-  h+=L('<div class="pay" style="margin-top:12px"><div class="head"><b>Ümumi</b></div>')+
-    L('<div class="agsum"><span></span><span class="h">Həftə</span><span class="h">Ay</span>')+
-    row(L("Yazdığı qəbullar"),[W.booked,M.booked])+
-    row(L("Uğurlu seanslar"),[W.came,M.came])+
-    row(L("Satdığı məhsul"),[W.prod+(W.prod?" · "+money(W.prodSum):""),M.prod+(M.prod?" · "+money(M.prodSum):"")])+
-    L('</div><div class="foot">Həftə: ')+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+L(' (cümə–cümə axşamı). Ay: ')+MONN[dd.getMonth()]+L('. «Uğurlu seanslar» — həmin dövrdə vaxtı bitmiş və silinməmiş seanslar.</div></div>');
-  if(state.loadedFrom&&m0<state.loadedFrom)h+=L('<p class="hint">Qeyd: telefon son ')+Math.round((parse(today)-parse(state.loadedFrom))/864e5)+L(' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>');
-  return h;
-}
 function colorSheet(){
   var r=reader(sheet.id);if(!r)return L('<h2>Rəng')+CLOSE+'</h2>';
   var cur=rcolor(r.id),h='<h2>'+esc(r.name)+L(' — rəng')+CLOSE+'</h2>';
@@ -1877,67 +1806,14 @@ function meForm(){
   }
   return h+L('<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
 }
-function productsIn(r){
-  return state.products.filter(function(x){return x.date>=r.s&&x.date<=r.e}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0});
-}
-function productsMain(){
-  if(!auth.loaded)return "";
-  if(!state.hasProducts)return L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu rəhbər bir dəfə edir.</p></div>');
-  var r=range(),pr=productsIn(r),sum=pr.reduce(function(t,x){return t+x.amount},0),days={},by={};
-  pr.forEach(function(x){
-    var k=state.staff[x.by]||L("Adsız istifadəçi");(by[k]=by[k]||{n:0,sum:0});by[k].n++;by[k].sum+=x.amount;
-    (days[x.date]=days[x.date]||{n:0,sum:0});days[x.date].n++;days[x.date].sum+=x.amount;
-  });
-  var nd=Object.keys(days).length;
-  var h='<div class="strip">'+
-    '<div class="tile main"><b class="num">'+money(sum)+L('</b><span>cəmi satış</span></div>')+
-    '<div class="tile"><b class="num">'+pr.length+L('</b><span>məhsul satılıb</span></div>')+
-    '<div class="tile"><b class="num">'+money(pr.length?sum/pr.length:0)+L('</b><span>orta qiymət</span></div></div>');
-  h+=L('<button class="primary" data-act="new-prod">+ Məhsul satışı</button>');
-  var names=Object.keys(by).sort(function(a,b){return by[b].sum-by[a].sum});
-  h+=L('<div class="pay"><div class="head"><b>Kim nə qədər satıb</b><span class="num">')+names.length+L(' nəfər</span></div>');
-  if(names.length){h+='<div>';names.forEach(function(k){
-    h+='<div class="visit"><span>'+esc(k)+'</span><span class="num" style="color:var(--muted)">'+by[k].n+L(' ədəd</span><b class="num">')+money(by[k].sum)+'</b></div>'});h+='</div>'}
-  else h+=L('<div class="foot">Bu müddətdə məhsul satılmayıb.</div>');
-  h+='</div>';
-  if(ui.period!=="day"&&nd){
-    h+=L('<div class="pay"><div class="head"><b>Günlər üzrə</b><span class="num">gündə orta ')+money(sum/nd)+'</span></div><div>';
-    Object.keys(days).sort().forEach(function(d){
-      h+='<div class="visit"><span>'+fmtDay(d,"w")+'</span><span class="num" style="color:var(--muted)">'+days[d].n+L(' ədəd</span><b class="num">')+money(days[d].sum)+'</b></div>'});
-    h+='</div></div>';
-  }
-  if(pr.length){
-    h+=L('<div class="pay"><div class="head"><b>Satışlar</b><span class="num">')+pr.length+'</span></div><div>';
-    pr.slice().reverse().forEach(function(x){
-      h+=L('<div class="visit"><span>Məhsul')+(ui.period==="day"?'':' · '+fmtDay(x.date))+L(' · Satdı: ')+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span><b class="num">'+money(x.amount)+'</b><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+L('">Sil</button></div>')});
-    h+='</div></div>';
-  }
-  return h;
-}
-function productForm(){
-  var r=range(),dd=today>=r.s&&today<=r.e?today:ui.date;
-  return L('<h2>Məhsul satışı')+CLOSE+'</h2>'+
-    L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
-    L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
-    L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[auth.user.id]||L("siz"))+'.</p>'+
-    L('<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
-}
-function expenseForm(){
-  var x=sheet.id?expense(sheet.id):null,r=range(),dd=x?x.date:(today>=r.s&&today<=r.e?today:ui.date);
-  return '<h2>'+(x?L("Xərci dəyiş"):L("Yeni xərc"))+CLOSE+'</h2>'+
-    L('<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="')+esc(x?x.title:"")+'"></div>'+
-    L('<div class="two"><div class="field"><label for="x-amount">Məbləğ, ')+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
-    L('<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="')+dd+'"></div></div>'+
-    '<p class="err" id="x-err" hidden></p>'+
-    L('<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>')+(x?L('<button class="danger" data-act="del-expense">Sil</button>'):'')+'</div>';
-}
 
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={month:monthSheet,color:colorSheet,agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,expense:expenseForm}[s.type];
-  byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,prod:productForm,expense:expenseForm}[s.type];
+  byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
+  if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
   setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
@@ -2076,17 +1952,55 @@ document.addEventListener("click",function(e){
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
   if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$|pick-color$)/.test(act)&&act!=="save-me-x"){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
-    if(ui.tab!==b.dataset.tab){ui.tab=b.dataset.tab;byId("top").innerHTML="";byId("main").scrollTop=0}
+    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";byId("main").scrollTop=0}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="goto-np"){if(okDate(b.dataset.d))ui.date=b.dataset.d;ui.tab="day";ui.view="list";try{localStorage.setItem("ruqya.view","list")}catch(err){}}
   else if(act==="shift"){
     var n=+b.dataset.n;
-    if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="week")ui.date=addDays(ui.date,7*n);
-    else if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="month"){var d=parse(ui.date),last=new Date(d.getFullYear(),d.getMonth()+n+1,0,12).getDate();ui.date=ymd(d.getFullYear(),d.getMonth()+n,Math.min(d.getDate(),last))}
-    else ui.date=addDays(ui.date,n);
+    ui.date=addDays(ui.date,n);
   }
   else if(act==="today"){ui.date=today}
+  else if(act==="st-week"){ui.stOff=Math.max(0,(ui.stOff|0)-(+b.dataset.n||0))}
+  else if(act==="st-month"){ui.stMOff=Math.max(0,(ui.stMOff|0)-(+b.dataset.n||0))}
+  else if(act==="st-copy"){
+    var stt=statCopyText(id,b.dataset.p);if(!stt)return;
+    copyText(stt,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");
+        setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},
+      function(){openSheet({type:"stcopy",text:stt})});
+    return;
+  }
+  else if(act==="new-prod"){openSheet({type:"prod"});return}
+  else if(act==="save-prod"){
+    var pa2=amount("pr-amount"),pd=val("pr-date");
+    if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
+    if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
+    var pid=uuid();state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id});
+    db(sb.from("product_sales").insert({id:pid,date:pd,amount:pa2}));closeSheet();
+  }
+  else if(act==="del-prod"){
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
+  }
+  else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
+  else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
+  else if(act==="save-expense"){
+    if(!sheet)return;
+    var xt=val("x-title"),xa=amount("x-amount"),xd=val("x-date");
+    if(!xt)return fail("x-err",L("Xərcin adını yazın."));
+    if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err",L("Məbləği düzgün yazın."));
+    if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
+    var xo=sheet.id?expense(sheet.id):null;
+    if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
+    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
+    closeSheet();
+  }
+  else if(act==="del-expense"){
+    if(!sheet)return;
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs));closeSheet();
+  }
+
   else if(act==="filter"){
     /* "Hamısı" shows everyone; a name adds or removes that specialist, so several can be shown together. */
     if(id==="all")ui.sel=[];
@@ -2094,7 +2008,6 @@ document.addEventListener("click",function(e){
       if(ui.sel.length>=activeReaders().length)ui.sel=[]}
     saveSel();
   }
-  else if(act==="period"){ui.period=b.dataset.p}
   else if(act==="status"){
     /* Only one status change is left: bringing back an old «Ləğv etdi» / «Gəlmədi» booking. */
     var a=appt(id),st=b.dataset.st;
@@ -2109,9 +2022,6 @@ document.addEventListener("click",function(e){
       db(sb.from("appts").update({status:st}).eq("id",a.id));
     }
   }
-  else if(act==="report"){openSheet({type:"report"});return}
-  else if(act==="xlsx"){openSheet({type:"book",kind:id,tab:0});return}
-  else if(act==="book-tab"){if(sheet&&sheet.type==="book"){sheet.tab=+id;byId("sheet").innerHTML=bookSheet()}return}
   else if(act==="me"){openSheet({type:"me"});return}
   else if(act==="month"){openSheet({type:"month",m:ui.date.slice(0,8)+"01"});return}
   else if(act==="m-shift"){if(sheet&&sheet.type==="month"){var mm=parse(sheet.m);sheet.m=ymd(mm.getFullYear(),mm.getMonth()+(+b.dataset.n),1);byId("sheet").innerHTML=monthSheet()}return}
@@ -2133,18 +2043,6 @@ document.addEventListener("click",function(e){
     try{localStorage.setItem("ruqya.theme",id)}catch(err){}
     applyTheme(id);render();return;
   }
-  else if(act==="agent"){
-    if(!isAdmin()||!id)return;
-    var ad=ui.tab==="cash"&&ui.period==="day"?ui.date:today;
-    if(ad>today||(state.loadedFrom&&ad<state.loadedFrom))ad=today;
-    openSheet({type:"agent",id:id,date:ad});return;
-  }
-  else if(act==="ag-day"){
-    if(!sheet||sheet.type!=="agent")return;
-    var nd=addDays(sheet.date||today,+b.getAttribute("data-n"));
-    if(nd>today||(state.loadedFrom&&nd<state.loadedFrom))return;
-    sheet.date=nd;byId("sheet").innerHTML=agentSheet();return;
-  }
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
   else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;byId("sheet").innerHTML=auditSheet()}return}
   else if(act==="edit-staff"){if(isAdmin()&&id in state.staff)openSheet({type:"staff",id:id});return}
@@ -2163,20 +2061,6 @@ document.addEventListener("click",function(e){
     closeSheet();
   }
   else if(act==="me-role"){if(sheet&&sheet.type==="me"){var keepName=byId("m-name")?val("m-name"):"";sheet.role=id;byId("sheet").innerHTML=meForm();if(keepName&&byId("m-name"))byId("m-name").value=keepName}return}
-  else if(act==="new-prod"){openSheet({type:"prod"});return}
-  else if(act==="save-prod"){
-    var pa2=amount("pr-amount"),pd=val("pr-date");
-    if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
-    if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
-    var pid=uuid();state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id});
-    db(sb.from("product_sales").insert({id:pid,date:pd,amount:pa2}));closeSheet();
-  }
-  else if(act==="del-prod"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
-    state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
-  }
-  else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
-  else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
   else if(act==="save-me"){
     var mrole=isAdmin()?"admin":(sheet&&sheet.role||state.roles[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
     if(!mn)return fail("m-err",L("Adınızı yazın."));
@@ -2187,33 +2071,11 @@ document.addEventListener("click",function(e){
     db(sb.from("staff").upsert(up2).then(function(r){return r.error&&up2.role==="admin"?sb.from("staff").upsert({id:up2.id,name:up2.name}):r}));
     closeSheet();
   }
-  else if(act==="save-expense"){
-    if(!sheet)return;
-    var xt=val("x-title"),xa=amount("x-amount"),xd=val("x-date");
-    if(!xt)return fail("x-err",L("Xərcin adını yazın."));
-    if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err",L("Məbləği düzgün yazın."));
-    if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
-    var xo=sheet.id?expense(sheet.id):null;
-    if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
-    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
-    closeSheet();
-  }
-  else if(act==="del-expense"){
-    if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
-    var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs));closeSheet();
-  }
   else if(act==="patient"){openSheet({type:"patient",id:id});return}
   else if(act==="repeat"){
     var pp=patients()[id];
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
-  }
-  else if(act==="copy"){
-    var ta=byId("rep"),msg=byId("rep-msg");
-    var no=function(){ta.focus();ta.select();msg.textContent=L("Avtomatik kopyalanmadı. Mətn seçilib, özünüz kopyalayın.")};
-    try{navigator.clipboard.writeText(ta.value).then(function(){msg.textContent=L("Kopyalandı. WhatsApp-a yapışdırın.")},no)}catch(err){no()}
-    return;
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
@@ -2225,7 +2087,7 @@ document.addEventListener("click",function(e){
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
   }
   else if(act==="del-row"){
-    if(!b.dataset.sure){b.dataset.sure="1";var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Kassadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
   }
   else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
@@ -2253,7 +2115,7 @@ document.addEventListener("click",function(e){
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Kassadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
     else{
@@ -2272,9 +2134,6 @@ document.addEventListener("click",function(e){
   else return;
   render();
 });
-document.addEventListener("toggle",function(e){
-  if(e.target.classList&&e.target.classList.contains("more")&&e.target.closest("#main"))ui.more=e.target.open;
-},true);
 document.addEventListener("input",function(e){
   if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=patientsList()},120)}
 });
