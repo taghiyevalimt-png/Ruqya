@@ -334,7 +334,9 @@ public class MonthWidget extends AppWidgetProvider {
 
         float headH = H * HEAD / TOTAL, wkH = H * WKROW / TOTAL, rowH = H * ROW / TOTAL, colW = W / 7f;
         Calendar ms = monthStart(off);
-        String todayIso = iso(today());
+        Calendar nowCal = today();
+        String todayIso = iso(nowCal);
+        int nowMin = nowCal.get(Calendar.HOUR_OF_DAY) * 60 + nowCal.get(Calendar.MINUTE);
         String monthKey = String.format(Locale.US, "%04d-%02d", ms.get(Calendar.YEAR), ms.get(Calendar.MONTH) + 1);
         boolean out = data == null || data.optInt("out", 0) == 1;
         boolean ru = data != null && "ru".equals(data.optString("l", "az"));
@@ -436,6 +438,10 @@ public class MonthWidget extends AppWidgetProvider {
                 String name = it.optString(0, "");
                 int col = parseColor(it.optString(1, ""), 0xFF546E7A);
                 String st = it.optString(2, "");
+                // A session counts as successful once it is over (the app sends its end minute): the widget
+                // marks it itself, so the tick appears even if nobody opened the app since.
+                int end = it.optInt(3, -1);
+                if (st.isEmpty() && end >= 0 && (day.compareTo(todayIso) < 0 || (day.equals(todayIso) && end <= nowMin))) st = "p";
                 float t = top + i * (chipH + chipGap);
                 RectF rc = new RectF(cx + pad, t, cx + colW - pad, t + chipH);
                 p.setColor(col);

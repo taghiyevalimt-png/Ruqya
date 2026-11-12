@@ -742,7 +742,24 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Çıxmaq alınmadı. İnterneti yoxlayın.":"Не удалось выйти. Проверьте интернет.",
 "kassa":"касса",
 "Geri":"Назад",
-"Toplam":"Итого"}:null;
+"Toplam":"Итого",
+"hələ bitməyib: ":"ещё не прошли: ",
+"Uğurlu":"Успешно",
+"<div class=\"note warnbox\"><p>Seansı bitib, amma qiyməti yazılmayıb: ":"<div class=\"note warnbox\"><p>Сеанс прошёл, но цена не указана: ",
+". Qiyməti yazmasanız, kassada görünməyəcək.</p>":". Без цены они не попадут в кассу.</p>",
+"</b> uğurlu</span><span><b class=\"num\">":"</b> успешно</span><span><b class=\"num\">",
+"\" data-st=\"wait\">Geri qaytar</button></div>":"\" data-st=\"wait\">Вернуть</button></div>",
+"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: kassadan və statistikadan çıxacaq.</p>":"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Сеанс прошёл — считается успешным.</b> Если пациент не пришёл, удалите запись: она уйдёт из кассы и статистики.</p>",
+"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa kassaya düşməyəcək.</p>":"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Цена не указана — нажмите «Изменить» и впишите, иначе сеанс не попадёт в кассу.</p>",
+"<p class=\"hint\" style=\"margin:0\">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>":"<p class=\"hint\" style=\"margin:0\">Когда сеанс закончится, он автоматически станет успешным. Если пациент не придёт или отменит, удалите запись.</p>",
+"</b><span>uğurlu</span></div>":"</b><span>успешно</span></div>",
+"<span class=\"tag warn\">Qiymət yazılmayıb</span>":"<span class=\"tag warn\">Цена не указана</span>",
+"Hesaba vaxtı bitmiş və silinməmiş seanslar düşür.</p>":"В расчёт идут прошедшие и не удалённые сеансы.</p>",
+"Seans: agentin yazdığı, vaxtı bitmiş və silinməmiş qəbullar. Mür və M sütunları tətbiqdə doldurulmur.":"Сеанс: записи агента, время которых прошло и которые не удалены. Столбцы «Обр.» и «M» в приложении не заполняются.",
+"Yalnız vaxtı bitmiş və silinməmiş qəbullar, yazan agentə görə.":"Только прошедшие и не удалённые записи, по записавшему агенту.",
+"Uğurlu seanslar":"Успешные сеансы",
+". «Uğurlu seanslar» — həmin dövrdə vaxtı bitmiş və silinməmiş seanslar.</div></div>":". «Успешные сеансы» — прошедшие и не удалённые сеансы этого периода.</div></div>",
+"Kassadan çıxacaq — bir də basın":"Уйдёт из кассы — нажмите ещё раз"}:null;
 function L(s){return RUD&&RUD.hasOwnProperty(s)?RUD[s]:s}
 /* The fixed bottom bar and "+" button are written in the page itself; switch their words too. */
 if(RUD)(function(){
@@ -761,7 +778,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112135815";
+var APP_VERSION="20261112155148";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -795,6 +812,27 @@ function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"
 function parse(s){var p=String(s).split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}
 function ymd(y,m,d){return iso(new Date(y,m,d,12))}
 function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return iso(d)}
+/* A booking counts as a successful session (came and paid) as soon as its time is over, unless it was deleted.
+   Nothing is written at that moment: it is worked out from the Baku clock every time, so it cannot be missed
+   when phones are off, and deleting a booking later (even days later) takes it out of every total.
+   Sessions always end by 00:00, so by the end of the day every booking left for that day counts.
+   «Ləğv etdi» / «Gəlmədi» marks made before this rule are still respected. */
+var clk=null,clkT=0;
+function nowB(){var t=Date.now();if(!clk||t-clkT>5000||t<clkT){clk=bk();clkT=t}return clk}
+function ended(a){var n=nowB();if(a.date!==n.d)return a.date<n.d;var m=mins(a.time);return m===m&&m+(a.dur||90)<=n.m}
+function gone(a){return a.status==="cancel"||a.status==="noshow"}
+function done(a){return !gone(a)&&ended(a)}
+function stOf(a){return gone(a)?a.status:done(a)?"paid":"wait"}
+function stLabel(a){var k=stOf(a);return k==="paid"?L("Uğurlu"):k==="wait"?L("Gözlənilir"):ST[k]}
+function stPill(a){var k=stOf(a);return k==="wait"?'<span class="tag">'+stLabel(a)+'</span>':'<span class="pill '+k+'">'+stLabel(a)+'</span>'}
+function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
+/* Bookings whose session is over but whose price was never written: the cash total misses them. */
+function noPriceBox(){
+  var np=state.appts.filter(noPrice);if(!np.length)return "";
+  var first=np.reduce(function(m,a){return a.date<m?a.date:m},np[0].date);
+  return L('<div class="note warnbox"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, kassada görünməyəcək.</p>')+
+    (first!==ui.date||ui.view!=="list"?'<button class="ghost" data-act="goto-np" data-d="'+first+L('">Göstər</button>'):'')+'</div>';
+}
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
    was made are taken from it, so a phone set to another time zone shows the same thing as everyone else. */
 var TZ=4*3600000,skew=0;
@@ -914,7 +952,7 @@ function refresh(){
   if(!sb||!auth.user)return Promise.resolve();
   /* A save is still on its way: load afterwards, without spending traffic on a copy that would be thrown away. */
   if(pending){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,1500);return Promise.resolve()}
-  var my=++seq,g=writes,from=state.loadedFrom||addDays(today,-WINDOW),needHist=false;
+  var my=++seq,g=writes,from=state.loadedFrom||winFrom(),needHist=false;
   return Promise.all([
     fetchAll(function(){return sb.from("readers").select("*").order("created_at").order("id")}),
     fetchAll(function(){return sb.from("appts").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
@@ -1036,7 +1074,7 @@ function pushWidget(){
     var d={};
     Object.keys(by).forEach(function(k){
       var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
-      d[k]=LN.slice(0,4).map(function(a){return [cut(String(a.name),24),rcolor(a.readerId),a.status==="paid"?"p":a.status==="noshow"?"n":""]});
+      d[k]=LN.slice(0,4).map(function(a){var e=mins(a.time)+(a.dur||90);return [cut(String(a.name),24),rcolor(a.readerId),done(a)?"p":a.status==="noshow"?"n":"",e===e?e:-1]});
     });
     json=JSON.stringify({u:0,f:from,d:d,n:n,l:LANG});
   }
@@ -1057,6 +1095,9 @@ function neededFrom(){
   if(ui.tab==="cash"||ui.tab==="products"||(sheet&&sheet.type==="book")){var r=range();d=addDays(r.s,-((parse(r.s).getDay()-5+7)%7))}
   return d;
 }
+/* Full data is kept on the phone from a week before the 1st of last month, so this month's and last month's
+   totals (and their weeks) are always complete; anything older is fetched when someone goes back to it. */
+function winFrom(){var t=parse(today),a=addDays(ymd(t.getFullYear(),t.getMonth()-1,1),-7),b=addDays(today,-WINDOW);return a<b?a:b}
 function ensureLoaded(){
   var need=neededFrom();
   if(!need||!state.loadedFrom||need>=state.loadedFrom||loadingOlder||!sb||!auth.user||offline||Date.now()-olderFail<15000)return;
@@ -1141,8 +1182,8 @@ function patients(){
   state.appts.forEach(function(a){seen[a.id]=1});
   state.appts.concat((state.hist||[]).filter(function(a){return !seen[a.id]})).forEach(function(a){
     var k=pkey(a),p=m[k]||(m[k]={key:k,name:a.name,phone:a.phone,paid:0,noshow:0,cancel:0,wait:0,last:"",first:"",list:[]});
-    p[a.status]++;p.list.push(a);
-    if(a.status==="paid"&&(!p.first||a.date<p.first))p.first=a.date;
+    p[stOf(a)]++;p.list.push(a);
+    if(done(a)&&(!p.first||a.date<p.first))p.first=a.date;
     if(a.date>=p.last){p.last=a.date;p.name=a.name;if(a.phone)p.phone=a.phone}
   });
   pcache=m;return m;
@@ -1241,12 +1282,9 @@ function gridMain(){
   var ids=rs.map(function(r){return r.id});
   state.appts.forEach(function(a){if(a.date===ui.date&&ids.indexOf(a.readerId)<0&&shown(a.readerId)){var o=reader(a.readerId);if(o){rs.push(o);ids.push(o.id)}}});
   var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
-  var paid=day.filter(function(a){return a.status==="paid"}),sum=paid.reduce(function(t,a){return t+a.price},0);
-  var h="";
-  var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
-  if(late.length){var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
-    h+=L('<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ')+late.length+'.</p>'+(first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+L('">Göstər</button>'):'')+'</div>'}
-  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+L('</b> qəbul</span><span><b class="num">')+paid.length+L('</b> gəldi</span><span><b class="num">')+money(sum)+L('</b> kassada</span></div>');
+  var paid=day.filter(done),sum=paid.reduce(function(t,a){return t+a.price},0);
+  var h=noPriceBox();
+  h+='<div class="sumline"><span><b class="num">'+day.filter(function(a){return a.status!=="cancel"}).length+L('</b> qəbul</span><span><b class="num">')+paid.length+L('</b> uğurlu</span><span><b class="num">')+money(sum)+L('</b> kassada</span></div>');
   var H=(DAY1-DAY0)*PXM,W=AXW+rs.length*COLW;
   h+='<div class="cal" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
   h+='<div class="cal-head"><div class="corner"></div>'+rs.map(function(r){return '<div class="ch" role="button" data-act="color" data-id="'+esc(r.id)+L('" title="Rəngi dəyiş"><i style="background:')+rcolor(r.id)+'"></i>'+esc(r.name)+'</div>'}).join("")+'</div>';
@@ -1268,8 +1306,8 @@ function gridMain(){
     evs.forEach(function(a){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,22),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
-      h+='<button class="ev '+a.status+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
-        '<b>'+(a.status==="paid"?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
+      h+='<button class="ev '+stOf(a)+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
+        '<b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         (ht>44?'<span class="num">'+esc(a.time)+'</span>':'')+
         (ht>64&&a.phone?'<span class="num">'+esc(String(a.phone).replace(/\D/g,"").slice(-7)||a.phone)+'</span>':'')+
         (ht>76&&(state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
@@ -1281,6 +1319,14 @@ function gridMain(){
   h+='</div></div></div>';
   return h;
 }
+/* What happens to this booking: still ahead, already counted, or an old «Ləğv etdi» / «Gəlmədi» mark. */
+function stateLine(a){
+  if(gone(a))return '<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
+    '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button></div>');
+  if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: kassadan və statistikadan çıxacaq.</p>')+
+    (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa kassaya düşməyəcək.</p>'));
+  return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>');
+}
 function viewSheet(){
   var a=appt(sheet.id);if(!a)return L('<h2>Qəbul')+CLOSE+L('</h2><p class="hint">Bu qəbul silinib.</p>');
   var r=reader(a.readerId),wa=waLink(a.phone,remindText(a)),tel=String(a.phone||"").replace(/[^\d+]/g,"");
@@ -1291,8 +1337,7 @@ function viewSheet(){
     (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+(tel?'<a class="link" href="tel:'+esc(tel)+L('">Zəng</a>'):'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
-    '<div class="stbtns" style="grid-template-columns:1fr 1fr 1fr">'+["paid","noshow","cancel"].map(function(k){return '<button class="'+k+'" data-act="status" data-id="'+esc(a.id)+'" data-st="'+(a.status===k?"wait":k)+'" aria-pressed="'+(a.status===k)+'">'+ST[k]+'</button>'}).join("")+'</div>'+
-    (a.status!=="wait"?L('<p class="hint" style="margin:-4px 0 0">Səhv seçilibsə, seçilmiş düyməyə yenidən basın.</p>'):'')+
+    stateLine(a)+
     '<div class="btns"><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button></div>')+
     L('<button class="danger" data-act="del-appt">Qəbulu sil</button>')+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
@@ -1311,29 +1356,25 @@ function dayMain(){
     if(auth.loaded&&!isAdmin())return L('<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Rəhbər onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>');
     return auth.loaded?L('<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>'):"";
   }
-  var late=state.appts.filter(function(a){return a.date<today&&a.status==="wait"});
-  if(late.length){
-    var first=late.reduce(function(m,a){return a.date<m?a.date:m},late[0].date);
-    h+=L('<div class="note warnbox"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ')+late.length+L('. Seçilməyincə kassa natamam qalır.</p>')+
-      (first!==ui.date?'<button class="ghost" data-act="goto" data-d="'+first+L('">Göstər</button>'):'')+'</div>';
-  }
+  h+=noPriceBox();
   var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
-  var paid=list.filter(function(a){return a.status==="paid"});
+  var paid=list.filter(done);
   var sum=paid.reduce(function(t,a){return t+a.price},0);
   h+='<div class="strip">'+
     '<div class="tile"><b class="num">'+list.filter(function(a){return a.status!=="cancel"}).length+L('</b><span>qəbul</span></div>')+
-    '<div class="tile"><b class="num">'+paid.length+L('</b><span>gəldi</span></div>')+
+    '<div class="tile"><b class="num">'+paid.length+L('</b><span>uğurlu</span></div>')+
     '<div class="tile main"><b class="num">'+money(sum)+L('</b><span>kassada</span></div></div>');
   if(!list.length)return h+L('<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>');
   var pm=patients();
   list.forEach(function(a){
     var r=reader(a.readerId),p=pm[pkey(a)];
-    var was=p.paid-(a.status==="paid"?1:0),miss=p.noshow-(a.status==="noshow"?1:0),tags="";
+    var was=p.paid-(done(a)?1:0),miss=p.noshow-(a.status==="noshow"?1:0),tags="";
+    if(noPrice(a))tags+=L('<span class="tag warn">Qiymət yazılmayıb</span>');
     if(a.status!=="cancel"&&overlap(a.readerId,a.date,a.time,a.dur||90,a.id))tags+=L('<span class="tag warn">Vaxt başqa qəbulla üst-üstə düşür</span>');
     if(was>0)tags+='<span class="tag">'+was+L(' dəfə gəlib</span>');
     if(miss>0)tags+='<span class="tag warn">'+miss+L(' dəfə gəlməyib</span>');
-    h+='<div class="card '+a.status+'"><div class="row">'+
+    h+='<div class="card '+stOf(a)+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
       '<div class="who"><b>'+esc(a.name)+'</b><span>'+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
@@ -1341,16 +1382,13 @@ function dayMain(){
     if(byName)tags=L('<span class="tag by">Yazdı: ')+esc(byName)+'</span>'+tags;
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
-    if(a.status==="wait"){
-      var wa=waLink(a.phone,remindText(a));
-      h+='<div class="actions">'+
-        '<button class="go" data-act="status" data-id="'+esc(a.id)+L('" data-st="paid">Gəldi və ödədi</button>')+
-        '<button class="half" data-act="status" data-id="'+esc(a.id)+L('" data-st="cancel">Ləğv etdi</button>')+
-        '<button class="half" data-act="status" data-id="'+esc(a.id)+L('" data-st="noshow">Gəlmədi</button></div>')+
+    if(!gone(a)){
+      var wa=done(a)?"":waLink(a.phone,remindText(a));
+      h+='<div class="status">'+stPill(a)+'<span class="spacer"></span></div>'+
         '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button>')+
         (wa?'<a class="link" href="'+esc(wa)+L('" target="_blank" rel="noopener">WhatsApp-da xatırlat</a>'):'')+'</div>';
     }else{
-      h+='<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
+      h+='<div class="status">'+stPill(a)+'<span class="spacer"></span>'+
         '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
         '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button></div>');
     }
@@ -1379,8 +1417,8 @@ function cashData(){
   state.appts.forEach(function(a){
     if(a.date<r.s||a.date>r.e)return;
     var row=rows[a.readerId];if(!row)return;
-    if(a.status==="paid"){row.n++;row.sum+=a.price}
-    else row[a.status]++;
+    if(done(a)){row.n++;row.sum+=a.price}
+    else row[stOf(a)]++;
   });
   var T={n:0,sum:0,cancel:0,noshow:0};
   order.forEach(function(id){var x=rows[id];for(var k in T)T[k]+=x[k]});
@@ -1404,7 +1442,7 @@ function cashMain(){
     if(rd.archived&&!any)return;
     shown++;
     var foot=[];
-    if(x.wait)foot.push(L("statusu seçilməyib: ")+x.wait);
+    if(x.wait)foot.push(L("hələ bitməyib: ")+x.wait);
     if(x.cancel)foot.push(L("ləğv etdi: ")+x.cancel);
     if(x.noshow)foot.push(L("gəlmədi: ")+x.noshow);
     h+='<div class="pay"><div class="head"><b>'+esc(x.name)+'</b><span class="num">'+x.n+L(' seans · ')+money(x.sum)+'</span></div>'+
@@ -1435,7 +1473,7 @@ function cashMain(){
   if(ui.period!=="day"){
     var pm=patients(),nw=0,rp=0,days={},cnt1={};
     state.appts.forEach(function(a){
-      if(a.status!=="paid"||a.date<d.r.s||a.date>d.r.e)return;
+      if(!done(a)||a.date<d.r.s||a.date>d.r.e)return;
       var k1=pkey(a);
       days[a.date]=1;if(pm[k1]&&pm[k1].first===a.date&&!cnt1[k1]){cnt1[k1]=1;nw++}else rp++;
     });
@@ -1447,7 +1485,7 @@ function cashMain(){
   }
   more+=L('<button class="ghost" data-act="report">Hesabatı mətn kimi göndər</button>');
   h+='<details class="more"'+(ui.more?" open":"")+L('><summary>Əlavə</summary><div class="morebody">')+more+'</div></details>';
-  h+='<p class="hint">'+(fin?L('Gələnlər: ')+T.n+' / '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+L('Hesaba yalnız «Gəldi və ödədi» seçilmiş seanslar düşür.</p>');
+  h+='<p class="hint">'+(fin?L('Gələnlər: ')+T.n+' / '+fin+' ('+Math.round(T.n/fin*100)+'%). ':'')+L('Hesaba vaxtı bitmiş və silinməmiş seanslar düşür.</p>');
   return h;
 }
 function expensesIn(r){
@@ -1475,7 +1513,7 @@ function weeklySheet(r){
   ids.sort(function(a,b){return (a==="")-(b==="")||who[a].localeCompare(who[b])});
   var cnt={};
   state.appts.forEach(function(a){
-    if(a.status!=="paid")return;
+    if(!done(a))return;
     var w=fri(a.date),k=(a.by||"")+"|"+w;cnt[k]=(cnt[k]||0)+1;
   });
   var serial=function(d){var x=parse(d);return Math.round((Date.UTC(x.getFullYear(),x.getMonth(),x.getDate())-Date.UTC(1899,11,30))/864e5)};
@@ -1516,7 +1554,7 @@ function weeklySheet(r){
     else put(3,c,"SUM("+LN+(first+1)+":"+LN+(last+1)+")",tv,"0.00");
   }
   var widths=[11,11,7];for(var k=3;k<width;k++)widths.push((k-3)%4===3?7:9);
-  return[L("Həftəlik"),rows,widths,{cells:cells,merges:merges},L("Seans: agentin yazdığı və gəlib ödəyən pasiyentlər. Mür və M sütunları tətbiqdə doldurulmur.")];
+  return[L("Həftəlik"),rows,widths,{cells:cells,merges:merges},L("Seans: agentin yazdığı, vaxtı bitmiş və silinməmiş qəbullar. Mür və M sütunları tətbiqdə doldurulmur.")];
 }
 function reportBook(){
   var prL=productsIn(range()),prS=prL.reduce(function(t,x){return t+x.amount},0);
@@ -1529,7 +1567,7 @@ function reportBook(){
   state.appts.filter(function(a){return a.date>=r.s&&a.date<=r.e})
     .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId);
-      ap.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,r2(a.price),ST[a.status],state.staff[a.by]||"",a.note])});
+      ap.push([a.date,a.time,rd?rd.name:"",a.name,a.phone,r2(a.price),stLabel(a),state.staff[a.by]||"",a.note])});
   var xp=[[L("Tarix"),L("Xərc"),L("Məbləğ"),L("Yazan")]];
   ex.forEach(function(x){xp.push([x.date,x.title,r2(x.amount),state.staff[x.by]||""])});
   xp.push([],[L("Cəmi"),"",r2(exSum)]);
@@ -1538,7 +1576,7 @@ function reportBook(){
 function salesBook(){
   var r=range(),rows=[[L("Tarix"),L("Saat"),L("Agent"),L("Pasiyent"),L("Telefon"),L("Mütəxəssis")]];
   var fri=function(d){return addDays(d,-((parse(d).getDay()-5+7)%7))},s0=fri(r.s),e0=addDays(fri(r.e),6);
-  state.appts.filter(function(a){return a.status==="paid"&&a.date>=s0&&a.date<=e0&&!isSpec(a.by)})
+  state.appts.filter(function(a){return done(a)&&a.date>=s0&&a.date<=e0&&!isSpec(a.by)})
     .sort(function(a,b){return (state.staff[a.by]||"").localeCompare(state.staff[b.by]||"")||(a.date+a.time).localeCompare(b.date+b.time)})
     .forEach(function(a){var rd=reader(a.readerId);rows.push([a.date,a.time,state.staff[a.by]||L("Adsız istifadəçi"),a.name,a.phone,rd?rd.name:""])});
   var bb=bookedBy(s0,e0),dl=[[L("Tarix")].concat(bb.map(function(x){return x.name})).concat([L("Cəmi")])];
@@ -1548,7 +1586,7 @@ function salesBook(){
   pl.forEach(function(x){var k=state.staff[x.by]||L("Adsız istifadəçi");(pa[k]=pa[k]||{n:0,sum:0});pa[k].n++;pa[k].sum+=x.amount});
   var ps=[[L("Satdı"),L("Say"),L("Məbləğ")]].concat(Object.keys(pa).sort().map(function(k){return[k,pa[k].n,r2(pa[k].sum)]}));
   ps.push([],[L("Tarix"),L("Məbləğ"),L("Satdı")]);pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(x){ps.push([x.date,r2(x.amount),state.staff[x.by]||L("Adsız istifadəçi")])});
-  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),[L("Gündəlik yazılış"),dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,L("Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.")],[L("Gələn pasiyentlər"),rows,[11,7,20,22,16,16],null,L("Yalnız «Gəldi və ödədi» seçilmiş qəbullar, yazan agentə görə.")],[L("Məhsul satışı"),ps,[20,10,12]]]};
+  return{name:"satis_"+s0+"_"+e0+".xlsx",sheets:[weeklySheet(r),[L("Gündəlik yazılış"),dl,[12].concat(bb.map(function(){return 14})).concat([8]),null,L("Qəbul yazıldığı günə görə sayılır, hansı tarixə yazılmasından asılı olmayaraq. Silinən və ləğv edilən qəbullar sayılmır.")],[L("Gələn pasiyentlər"),rows,[11,7,20,22,16,16],null,L("Yalnız vaxtı bitmiş və silinməmiş qəbullar, yazan agentə görə.")],[L("Məhsul satışı"),ps,[20,10,12]]]};
 }
 function fmtCell(c){
   if(c==null||c==="")return["",""];
@@ -1618,7 +1656,7 @@ function patientSheet(){
     /* A visit still in the loaded weeks opens its own card (status, Dəyiş, Sil). */
     h+=(open?'<button class="visit vbtn" data-act="view-appt" data-id="'+esc(a.id)+'">':'<div class="visit">')+'<span class="num">'+fmtDay(a.date,"y")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+
       (wb?L('<small style="display:block;color:var(--muted);font-size:13px">Yazdı: ')+esc(wb)+'</small>':'')+'</span>'+
-      (a.status==="wait"?L('<span class="tag">Gözlənilir</span>'):'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+(open?'</button>':'</div>');
+      stPill(a)+(open?'</button>':'</div>');
   });
   /* "Dəyiş" changes the patient's next booking; with none ahead the button writes a new one. */
   var next=p.list.filter(function(a){return !a.lite&&a.status==="wait"&&a.date>=today&&appt(a.id)})
@@ -1697,12 +1735,12 @@ function langSeg(){
 function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
 function agentStats(k,s0,e0){
   /* Booked = made in this period (by the day it was written), whatever date it is for.
-     Came = sessions in this period marked «Gəldi və ödədi», as in the weekly sales sheet. */
+     Came = sessions in this period that are over and not deleted, as in the weekly sales sheet. */
   var r={booked:0,cancel:0,came:0,noshow:0,prod:0,prodSum:0};
   state.appts.forEach(function(a){
     if(a.by!==k)return;
     if(a.created&&a.created>=s0&&a.created<=e0){if(a.status==="cancel")r.cancel++;else r.booked++}
-    if(a.date>=s0&&a.date<=e0){if(a.status==="paid")r.came++;else if(a.status==="noshow")r.noshow++}
+    if(a.date>=s0&&a.date<=e0){if(done(a))r.came++;else if(a.status==="noshow")r.noshow++}
   });
   state.products.forEach(function(x){if(x.by===k&&x.date>=s0&&x.date<=e0){r.prod++;r.prodSum+=x.amount}});
   return r;
@@ -1724,18 +1762,17 @@ function agentSheet(){
     h+='<div>';
     list.forEach(function(a){var r=reader(a.readerId);
       h+='<div class="agrow"><span>'+esc(a.name)+'<small class="num">'+fmtDay(a.date,"w")+(a.time?', '+esc(a.time):'')+' · '+esc(r?r.name:"—")+'</small></span>'+
-        (a.status==="wait"?L('<span class="tag">Gözlənilir</span>'):'<span class="pill '+a.status+'">'+ST[a.status]+'</span>')+'</div>'});
+        stPill(a)+'</div>'});
     h+='</div>';
   }
   var row=function(lbl,v){return '<span>'+lbl+'</span><b class="num">'+v[0]+'</b><b class="num">'+v[1]+'</b>'};
   h+=L('<div class="pay" style="margin-top:12px"><div class="head"><b>Ümumi</b></div>')+
     L('<div class="agsum"><span></span><span class="h">Həftə</span><span class="h">Ay</span>')+
     row(L("Yazdığı qəbullar"),[W.booked,M.booked])+
-    row(L("Gəlib ödəyənlər"),[W.came,M.came])+
-    row(L("Gəlməyənlər"),[W.noshow,M.noshow])+
+    row(L("Uğurlu seanslar"),[W.came,M.came])+
     row(L("Satdığı məhsul"),[W.prod+(W.prod?" · "+money(W.prodSum):""),M.prod+(M.prod?" · "+money(M.prodSum):"")])+
-    L('</div><div class="foot">Həftə: ')+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+L(' (cümə–cümə axşamı). Ay: ')+MONN[dd.getMonth()]+L('. «Gəlib ödəyənlər» həmin dövrdəki seanslar üzrə sayılır.</div></div>');
-  if(state.loadedFrom&&m0<state.loadedFrom)h+=L('<p class="hint">Qeyd: telefon son ')+WINDOW+L(' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>');
+    L('</div><div class="foot">Həftə: ')+fmtDay(fri)+' – '+fmtDay(addDays(fri,6))+L(' (cümə–cümə axşamı). Ay: ')+MONN[dd.getMonth()]+L('. «Uğurlu seanslar» — həmin dövrdə vaxtı bitmiş və silinməmiş seanslar.</div></div>');
+  if(state.loadedFrom&&m0<state.loadedFrom)h+=L('<p class="hint">Qeyd: telefon son ')+Math.round((parse(today)-parse(state.loadedFrom))/864e5)+L(' günün məlumatını saxlayır, ona görə ayın əvvəli tam görünməyə bilər.</p>');
   return h;
 }
 function colorSheet(){
@@ -1840,12 +1877,6 @@ function meForm(){
   }
   return h+L('<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
 }
-function paySheet(){
-  var a=appt(sheet.id);if(!a)return L('<h2>Ödəniş')+CLOSE+'</h2>';
-  return L('<h2>Ödəniş')+CLOSE+'</h2><p class="hint">'+esc(a.name)+L(', saat ')+esc(a.time)+'</p>'+
-    L('<div class="field"><label for="p-price">Ödənilən məbləğ, ')+CUR+'</label><input id="p-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(a.price>0?a.price:"")+'"></div>'+
-    L('<p class="err" id="p-err" hidden></p><div class="btns"><button class="primary" data-act="save-pay">Gəldi və ödədi</button></div>');
-}
 function productsIn(r){
   return state.products.filter(function(x){return x.date>=r.s&&x.date<=r.e}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0});
 }
@@ -1904,7 +1935,7 @@ function expenseForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
-  var f={month:monthSheet,color:colorSheet,agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,pay:paySheet,expense:expenseForm}[s.type];
+  var f={month:monthSheet,color:colorSheet,agent:agentSheet,staff:staffForm,audit:auditSheet,prod:productForm,book:bookSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,report:reportSheet,me:meForm,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.toggle("wide",s.type==="book");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   setTimeout(ensureHist,0);
@@ -1945,7 +1976,6 @@ function apptForm(){
     L('<div class="field"><label for="f-name">Pasiyentin adı</label><input id="f-name" type="text" maxlength="80" autocomplete="off" list="f-names" value="')+esc(a?a.name:(pre.name||""))+'"><datalist id="f-names">'+names+'</datalist></div>'+
     L('<div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div>'+
     L('<div class="field"><label for="f-price">Qiymət, ')+CUR+L('</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" placeholder="Bilinmirsə, boş saxlayın" value="')+(a&&a.price>0?a.price:(pre.price>0?pre.price:""))+'"></div>'+
-    (a?L('<div class="field"><label for="f-status">Status</label><select id="f-status">')+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===a.status?" selected":"")+'>'+(k==="wait"?L("Seçilməyib"):ST[k])+'</option>'}).join("")+'</select></div>':'')+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div>'+
     '<p class="err" id="f-err" hidden></p>'+
     '<div class="btns"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
@@ -1963,14 +1993,13 @@ function readerForm(){
 
 function saveAppt(){
   if(!sheet)return;
-  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status=val("f-status");
+  var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status="";
   var r=reader(rid),service="";
   if(!r)return fail("f-err",L("Mütəxəssisi seçin."));
   if(!okDate(date))return fail("f-err",L("Tarixi düzgün seçin."));
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçin."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazın."));
   if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err",L("Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5."));
-  if(status==="paid"&&!(price>0))return fail("f-err",L("«Gəldi və ödədi» üçün ödənilən məbləği yazın."));
   var a=sheet.id?appt(sheet.id):null;
   if(sheet.id&&!a){closeSheet();flash(L("Bu qəbul artıq silinib."));return}
   var dur=+(val("f-dur")||(a?a.dur:90))||90;
@@ -2050,6 +2079,7 @@ document.addEventListener("click",function(e){
     if(ui.tab!==b.dataset.tab){ui.tab=b.dataset.tab;byId("top").innerHTML="";byId("main").scrollTop=0}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
+  else if(act==="goto-np"){if(okDate(b.dataset.d))ui.date=b.dataset.d;ui.tab="day";ui.view="list";try{localStorage.setItem("ruqya.view","list")}catch(err){}}
   else if(act==="shift"){
     var n=+b.dataset.n;
     if((ui.tab==="cash"||ui.tab==="products")&&ui.period==="week")ui.date=addDays(ui.date,7*n);
@@ -2066,30 +2096,18 @@ document.addEventListener("click",function(e){
   }
   else if(act==="period"){ui.period=b.dataset.p}
   else if(act==="status"){
+    /* Only one status change is left: bringing back an old «Ləğv etdi» / «Gəlmədi» booking. */
     var a=appt(id),st=b.dataset.st;
-    if(a&&st==="paid"&&!(a.price>0)){openSheet({type:"pay",id:id});return}
+    if(st!=="wait")return;
     if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
     if(a&&a.status==="cancel"&&st!=="cancel"&&ST[st]){
       var cl=overlap(a.readerId,a.date,a.time,a.dur||90,a.id);
       if(cl){flash(L("Geri qaytarmaq olmur: bu vaxta artıq başqa qəbul yazılıb (")+cl.name+", "+cl.time+"–"+endOf(cl)+").");return}
     }
     if(a&&ST[st]&&a.status!==st){
-      a.status=st;if(st!=="paid")a.settled=false;
-      db(sb.from("appts").update({status:st,settled:a.settled}).eq("id",a.id));
+      a.status=st;
+      db(sb.from("appts").update({status:st}).eq("id",a.id));
     }
-  }
-  else if(act==="settle"||act==="unsettle"){
-    var rg=range(),on=act==="settle";
-    state.appts.forEach(function(x){if(x.readerId===id&&x.status==="paid"&&x.date>=rg.s&&x.date<=rg.e)x.settled=on});
-    db(sb.from("appts").update({settled:on}).eq("reader_id",id).eq("status","paid").gte("date",rg.s).lte("date",rg.e));
-  }
-  else if(act==="save-pay"){
-    var pa=sheet&&appt(sheet.id),pv=amount("p-price");
-    if(!pa){closeSheet();return}
-    if(!(pv>0)||pv>MAXSUM)return fail("p-err",L("Məbləği düzgün yazın."));
-    if(pa.status==="cancel"){var cl2=overlap(pa.readerId,pa.date,pa.time,pa.dur||90,pa.id);
-      if(cl2)return fail("p-err",L("Bu vaxta artıq başqa qəbul yazılıb (")+cl2.name+", "+cl2.time+"–"+endOf(cl2)+L("). Əvvəlcə vaxtı dəyişin."))}
-    pa.price=pv;pa.status="paid";db(sb.from("appts").update({price:pv,status:"paid"}).eq("id",pa.id));closeSheet();
   }
   else if(act==="report"){openSheet({type:"report"});return}
   else if(act==="xlsx"){openSheet({type:"book",kind:id,tab:0});return}
@@ -2207,7 +2225,7 @@ document.addEventListener("click",function(e){
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
   }
   else if(act==="del-row"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Kassadan çıxacaq — bir də basın"):L("Bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
   }
   else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
@@ -2235,7 +2253,7 @@ document.addEventListener("click",function(e){
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Kassadan çıxacaq — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
     else{
@@ -2331,8 +2349,12 @@ function rollDay(){
   var t=bk().d;if(t===today)return false;
   if(ui.date===today&&!sheet)ui.date=t;today=t;return true;
 }
+/* How many bookings are already counted: when a session ends, totals and ✓ marks change without anyone touching the app. */
+var doneN=-1;
+function doneCount(){var n=0;for(var i=0;i<state.appts.length;i++)if(done(state.appts[i]))n++;return n}
 function tick(){
   var turned=rollDay();
+  if(auth.user&&auth.loaded){var dn=doneCount();if(dn!==doneN){if(doneN>=0){turned=turned||!sheet;widgetSoon()}doneN=dn}}
   if(offline&&navigator.onLine!==false){offline=false;turned=true;refresh()}
   if(document.hidden)return;
   if(turned||(ui.tab==="day"&&ui.view==="grid"&&ui.date===today&&!sheet))render();
