@@ -348,10 +348,8 @@ public class MonthWidget extends AppWidgetProvider {
             if (items == null || items.length() == 0) continue;
 
             float top = cy + numH + 3 * d, bottom = cy + rowH - 2 * d;
-            int room = (int) Math.floor((bottom - top + chipGap) / (chipH + chipGap));
-            boolean more = total > room;
-            int show = Math.min(items.length(), more ? Math.max(room - 1, 1) : room);
-            if (room <= 0) show = 0;
+            int room = Math.max(0, (int) Math.floor((bottom - top + chipGap) / (chipH + chipGap)));
+            int show = Math.min(items.length(), room);
             for (int i = 0; i < show; i++) {
                 JSONArray it = items.optJSONArray(i);
                 if (it == null) continue;
@@ -365,18 +363,17 @@ public class MonthWidget extends AppWidgetProvider {
                 if (!inMonth) p.setAlpha(110);
                 cv.drawRoundRect(rc, 4 * d, 4 * d, p);
                 p.setAlpha(255);
-                String label = ("p".equals(st) ? "✓" : "n".equals(st) ? "✗ " : "") + name;
+                String label = ("p".equals(st) ? "✓" : "n".equals(st) ? "✗" : "") + name;
                 tp.setAlpha(inMonth ? 255 : 170);
                 cv.drawText(fit(tp, label, rc.width() - 5 * d), rc.left + 3 * d, rc.top + chipH * 0.74f, tp);
             }
-            if (more || show < total) {
+            // How many more than fit: small, next to the day number, so every line holds a name.
+            if (total > show) {
                 p.setColor(MUTED);
-                p.setTextAlign(Paint.Align.LEFT);
-                p.setTextSize(chipH * 0.72f);
-                float my = top + show * (chipH + chipGap) + chipH * 0.72f;
-                if (my < cy + rowH) {
-                    cv.drawText("+" + (total - show), cx + pad + 2 * d, my, p);
-                }
+                p.setTextAlign(Paint.Align.RIGHT);
+                p.setTextSize(Math.min(numH * 0.62f, 11 * d));
+                cv.drawText("+" + (total - show), cx + colW - 4 * d, ny, p);
+                p.setTextAlign(Paint.Align.CENTER);
             }
         }
 
