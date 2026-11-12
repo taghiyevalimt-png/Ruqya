@@ -112,7 +112,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .card.wait{border-left-color:var(--accent)}
 .card .row{display:flex;gap:12px;align-items:flex-start}
 .card .time{font-family:var(--font-display);font-weight:700;font-size:18px;flex:none;width:52px}
-.card .who{flex:1;min-width:0}
+.card .who{flex:1;min-width:0;background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit;cursor:pointer}.card .who span{display:block}
 .card .who b{display:block;font-weight:600;overflow-wrap:anywhere}
 .card .who span{display:block;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
 .card .price{font-weight:600;flex:none;text-align:right}
@@ -916,7 +916,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112185220";
+var APP_VERSION="20261112190739";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1004,7 +1004,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function money(n){return (Math.round((+n||0)*100)/100).toLocaleString("ru-RU",{maximumFractionDigits:2})+" "+CUR}
 /* Phones older than Android 7 have no manat sign in their fonts and would draw an empty box. */
 var OLDAND=(function(){var m=/Android (\d+)/.exec(navigator.userAgent||"");return !!(m&&+m[1]<7)})();
-var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2713 ",G_NO=OLDAND?"\u2013 ":"\u2717 ";
+var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2705\u00a0",G_NO=OLDAND?"\u2013 ":"\u2717 ";
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function fmtDay(s,mode){
   var d=parse(s),base=d.getDate()+" "+MON[d.getMonth()];
@@ -1037,7 +1037,7 @@ var PXM=HOUR/60;
 /* However far the hours are pinched smaller, every block keeps room for the name, time, number and who wrote it:
    the day's shortest session decides the smallest hour height, and after drawing, any block whose text still
    does not fit (a long name, narrow columns) makes that day a little taller. */
-var MINH=74,fitMin={},fitPass=0,fitDate="",curMinHour=HMIN;
+var MINH=56,fitMin={},fitPass=0,fitDate="",curMinHour=HMIN;
 function dayMinHour(day){
   var md=0;day.forEach(function(a){if(a.status==="cancel")return;var d=a.dur||90;if(!md||d<md)md=d});if(!md)md=90;
   return Math.min(480,Math.max(HMIN,Math.ceil(MINH*60/md),fitMin[ui.date]||0));
@@ -1474,7 +1474,6 @@ function gridMain(){
       h+='<button class="ev '+stOf(a)+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
         '<b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
-        (a.phone?'<span class="num ph">'+esc(phoneShort(a.phone))+'</span>':'')+
         ((state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
         '</button>';
     });
@@ -1535,7 +1534,7 @@ function dayMain(){
     if(miss>0)tags+='<span class="tag warn">'+miss+L(' dəfə gəlməyib</span>');
     h+='<div class="card '+stOf(a)+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small style="display:block;font-size:11px;font-weight:500;color:var(--muted)">'+endOf(a)+'</small>':'')+'</div>'+
-      '<div class="who"><b>'+esc(a.name)+'</b><span>'+esc(r?r.name:"—")+(a.phone?' · '+esc(a.phone):'')+'</span></div>'+
+      '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b><span>'+esc(r?r.name:"—")+'</span></button>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
     var byName=state.staff[a.by]||(a.by?L("Adsız istifadəçi"):"");
     if(byName)tags=L('<span class="tag by">Yazdı: ')+esc(byName)+'</span>'+tags;
@@ -1543,8 +1542,7 @@ function dayMain(){
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(!gone(a)){
       var wa=done(a)?"":waLink(a.phone,remindText(a));
-      h+='<div class="status">'+stPill(a)+'<span class="spacer"></span></div>'+
-        '<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button>')+
+      h+='<div class="links"><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button>')+
         (wa?'<a class="link" href="'+esc(wa)+L('" target="_blank" rel="noopener">WhatsApp-da xatırlat</a>'):'')+'</div>';
     }else{
       h+='<div class="status">'+stPill(a)+'<span class="spacer"></span>'+
