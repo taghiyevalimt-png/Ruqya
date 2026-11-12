@@ -25,7 +25,9 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <title>Ruqyatz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet">
+<!-- Fonts load without holding up the page: if Google is slow or blocked, the app opens at once with the phone's own font. -->
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
    list between them, forms slide up as a bottom sheet. */
@@ -308,7 +310,7 @@ var ST={wait:"Gözlənilir",paid:"Gəldi və ödədi",cancel:"Ləğv etdi",nosho
 var MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
 var WDF=["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112060055";
+var APP_VERSION="20261112082713";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -459,7 +461,7 @@ function refresh(){
     state.hasRole=!!res[8];
     if(!auth.filterInit){auth.filterInit=true;
       if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&ui.filter==="all")ui.filter=mine.id}}
-    auth.loaded=true;render();
+    auth.loaded=true;render();redrawCard();
     if(isAdmin()&&!secDone){secDone=true;checkSecurity()}
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
       /* The owner is never asked who they are: the role is set quietly. */
@@ -470,12 +472,14 @@ function refresh(){
   },function(){
     if(my!==seq)return;
     flash(offline?"İnternet yoxdur.":"Qəbulları yükləmək olmadı. İnterneti yoxlayın.");
-    if(!auth.loaded){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,6000)}
+    /* Try again soon: on first start every few seconds, later once after a short pause (e.g. a phone just woke up). */
+    clearTimeout(rtTimer);rtTimer=setTimeout(refresh,auth.loaded?15000:6000);
   });
 }
 /* Cards that only show data are redrawn when data changes elsewhere; forms with typing in them are left alone. */
 function redrawCard(){
   if(!sheet)return;
+  if(sheet.type==="appt"){slotGrid();return}
   var f={view:viewSheet,agent:agentSheet,patient:patientSheet}[sheet.type];
   if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
 }
@@ -1427,7 +1431,10 @@ document.addEventListener("click",function(e){
     b.disabled=true;auth.msg="";render();
     sb.auth.signInWithPassword({email:mail,password:pass}).then(function(r){
       b.disabled=false;
-      if(r.error){auth.msg=(r.error.status===400||/invalid/i.test(r.error.message||""))?"E-poçt və ya şifrə səhvdir.":"Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.";render()}
+      if(r.error){var em=String(r.error.message||"");
+        auth.msg=/not confirmed/i.test(em)?"Bu hesab hələ təsdiqlənməyib. Rəhbərə deyin.":
+          r.error.status===429||/rate limit|too many/i.test(em)?"Çox cəhd edildi. Bir neçə dəqiqə gözləyib yenidən yoxlayın.":
+          (r.error.status===400||/invalid/i.test(em))?"E-poçt və ya şifrə səhvdir.":"Daxil olmaq alınmadı. Bir az sonra yenidən cəhd edin.";render()}
     },function(){b.disabled=false;auth.msg="Serverlə əlaqə yoxdur. İnterneti yoxlayın.";render()});
     return;
   }
