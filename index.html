@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-K4RsWS6GUWk0TTSO1X2iQzG43cqFt6MyEiqG/ilMu9U='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-gsTpP88Gowa22Yvo1BrVGGl6bI9LKyuwLDFKs0HZldM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1030,6 +1030,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Blokların eni":"Ширина блоков",
+"Standart":"Стандарт",
+"Orta":"Средняя",
+"Geniş":"Широкая",
+"Çox geniş":"Очень широкая",
+"Təqvimdə iki barmaqla yana doğru açıb-yığmaqla da dəyişmək olar. Geniş bloklarda təqvim yana sürüşür.":"Можно менять и в календаре — развести или свести два пальца в стороны. При широких блоках календарь листается вбок.",
+
 "Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.":"Нельзя подтвердить прошедшую или отменённую запись.",
 "✓ Seans bitib — uğurlu sayılır.":"✓ Сеанс прошёл — считается успешным.",
 "Təsdiqlənib":"Подтверждено",
@@ -1366,7 +1373,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113204828";
+var APP_VERSION="20261113210440";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1496,6 +1503,10 @@ var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=56,AXW=54,HMIN=36,HMAX=111;
 /* Two fingers make the blocks smaller or bigger. Biggest (and the default) = 111 px per hour, where a
    30-minute block shows the name, time and who wrote it; smallest = 36 px per hour, where it shows only the name. */
 var ZOOM=true;HOUR=111;
+/* block width: the standard (narrowest) width or wider; wider columns scroll sideways */
+var COLW_MIN=56,COLW_MAX=220,COLW_STEPS=[56,90,130,180];
+try{(function(){var cw=+localStorage.getItem("ruqya.colw");if(cw>0)COLW=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.round(cw)))})()}catch(e){}
+function setColW(w){COLW=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.round(w)));try{localStorage.setItem("ruqya.colw",String(COLW))}catch(e){}}
 try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=Math.max(HMIN,Math.min(HMAX,Math.round(sh)))})()}catch(e){}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
@@ -2715,6 +2726,7 @@ function readersMain(){
   else if(wh==="old")h+=L('<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>');
   else if(wh==="ios")h+=L('<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>');
   else h+=L('<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>');
+  h+=widthSeg();
   h+=langSeg();
   var th=curTheme();
   h+=L('<h3 class="sec">Görünüş</h3><div class="seg">')+
@@ -2728,6 +2740,13 @@ function readersMain(){
   return h;
 }
 /* Language switch, written in both languages so anyone can find it. Changing it reloads the page. */
+function widthSeg(){
+  var names=[L("Standart"),L("Orta"),L("Geniş"),L("Çox geniş")],cur=0;
+  COLW_STEPS.forEach(function(v,i){if(COLW>=v)cur=i});
+  return '<h3 class="sec">'+L("Blokların eni")+'</h3><div class="seg" style="grid-template-columns:repeat(4,1fr)">'+
+    COLW_STEPS.map(function(v,i){return '<button data-act="colw" data-id="'+v+'" aria-pressed="'+(i===cur)+'">'+names[i]+'</button>'}).join("")+'</div>'+
+    '<p class="hint">'+L("Təqvimdə iki barmaqla yana doğru açıb-yığmaqla da dəyişmək olar. Geniş bloklarda təqvim yana sürüşür.")+'</p>';
+}
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
     [["az","Azərbaycanca"],["ru","Русский"]].map(function(x){return '<button data-act="lang" data-id="'+x[0]+'" aria-pressed="'+(LANG===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
@@ -3039,6 +3058,7 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("[data-act]");if(!b)return;
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="reload"){location.reload();return}
+  if(act==="colw"){setColW(+id);render();return}
   if(act==="lang"){
     if(id!=="ru")id="az";
     if(id===LANG)return;
@@ -3344,13 +3364,16 @@ document.addEventListener("keydown",function(e){
 /* ---------- pinch to zoom the hours ---------- */
 var pz=null;
 function tdist(e){return Math.abs(e.touches[0].clientY-e.touches[1].clientY)}
+function txdist(e){return Math.abs(e.touches[0].clientX-e.touches[1].clientX)}
 document.addEventListener("touchstart",function(e){
   var c=e.target.closest&&e.target.closest("#cal");
   if(!ZOOM||!c||e.touches.length!==2){return}
   var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
   var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
-  pz={t:Date.now(),c:c,body:body,d0:Math.max(tdist(e),30),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh};
+  var col0=c.querySelector(".cal-body .col"),inn=c.querySelector(".cal-in"),fx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+  pz={t:Date.now(),c:c,body:body,inn:inn,d0:Math.max(tdist(e),30),x0:Math.max(txdist(e),30),y0:tdist(e),xs:txdist(e),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh,
+    axis:null,cw0:col0?col0.offsetWidth:COLW,cw:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW)};
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
@@ -3358,6 +3381,13 @@ document.addEventListener("touchmove",function(e){
   if(!pz||e.touches.length!==2)return;
   if(Date.now()-pz.t>15000){endPinch();return}
   e.preventDefault();
+  /* fingers moving apart sideways → wider blocks; up and down → taller hours */
+  if(!pz.axis){var ddx=Math.abs(txdist(e)-pz.xs),ddy=Math.abs(tdist(e)-pz.y0);if(ddx<12&&ddy<12)return;pz.axis=ddx>ddy?"x":"y";
+    if(pz.axis==="x"&&pz.inn){pz.inn.style.transformOrigin=(pz.cx+AXW)+"px 0"}}
+  if(pz.axis==="x"){
+    var w=Math.max(COLW_MIN,Math.min(COLW_MAX,pz.cw0*txdist(e)/pz.x0));pz.cw=w;
+    if(pz.inn)pz.inn.style.transform="scaleX("+(w/pz.cw0)+")";return;
+  }
   pz.raw=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));
   var h=Math.max(curMinHour,pz.raw);pz.k=h/pz.h0;
   pz.body.style.transform="scaleY("+pz.k+")";
@@ -3367,6 +3397,14 @@ document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.targ
 function endPinch(){
   if(!pz)return;var p=pz;pz=null;
   p.body.style.transform="";p.body.classList.remove("pinch");
+  if(p.axis==="x"){
+    if(p.inn)p.inn.style.transform="";
+    var nw=Math.round(p.cw);if(nw<COLW_MIN+6)nw=COLW_MIN;   /* close to the standard width: snap to it */
+    var ratio=0;setColW(nw);render();
+    var c2=byId("cal"),col2=c2&&c2.querySelector(".cal-body .col");
+    if(c2&&col2){ratio=col2.offsetWidth/p.cw0;c2.scrollLeft=Math.max(0,p.cx*ratio-p.fx+AXW)}
+    return;
+  }
   var h=Math.round(p.raw);
   if(Math.abs(h-HOUR)>=2){HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
   render();   /* also draws anything that arrived while the fingers were down */
