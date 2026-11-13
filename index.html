@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-PsCfDAu+7OMcuCctsh4act7tLhJtKW4nUKoYRf7iY3w='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-lin1SWiAIEhQcREasq0ocE9+FmGBgxCUKV4SSZD1bO0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -511,6 +511,22 @@ button.ch .x{font-size:10px;opacity:.8}
 .listwrap{flex:none;overflow-x:auto;margin:0 -16px;border-bottom:1px solid var(--line);border-top:1px solid var(--line)}
 .listwrap .cal-head{position:static;border-bottom:0}
 .listwrap .cal-head button.ch{flex:1 0 64px;min-height:44px}
+/* specialist pills in the calendar head */
+.cal-head button.ch.pill{display:flex;align-items:center;justify-content:center;border-left:0;padding:6px 3px;background:none;-webkit-line-clamp:unset}
+.ch.pill span{display:block;max-width:100%;padding:7px 5px;border-radius:999px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);font-size:12.5px;font-weight:600;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background .18s,color .18s,border-color .18s,transform .12s}
+.ch.pill:active span{transform:scale(.96)}
+.ch.pill.on span{background:var(--btn);color:var(--btn-ink);border-color:transparent;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.cal-head:not(.picking) button.ch.pill{padding:6px 2px}.cal-head:not(.picking) .ch.pill span{white-space:normal;overflow-wrap:normal;word-break:keep-all;text-overflow:clip;padding:6px 2px;border-radius:11px;font-size:11.5px;letter-spacing:-.3px;width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ch.pill.all span{background:none;border-style:dashed;color:var(--muted)}
+.cal-head.picking{align-items:center}
+.chbar{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chbar::-webkit-scrollbar{display:none}
+.chbar button.ch.pill{flex:none;width:auto;padding:0;min-height:36px}.chbar .ch.pill span{padding:7px 12px}
+.hdwrap{position:sticky;top:0;z-index:4}.hdwrap .cal-head{position:relative}
+.colnames{display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
+.colnames .corner{width:54px;flex:none;position:sticky;left:0;background:var(--surface)}
+.colnames .cn{flex:1 0 56px;width:56px;text-align:center;font-size:11px;font-weight:600;color:var(--muted);padding:3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:1px solid var(--line)}
+
 /* list view: compact cards, wide not tall */
 .card.compact{padding:8px 12px 8px 12px;gap:5px}
 .card.compact .row{gap:10px;align-items:center}
@@ -988,6 +1004,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"göstər":"показать",
+"gizlət":"скрыть",
 "Bu rəqəmi saxlamaq üçün bazada 2026-11-stat-edits2.sql faylını bir dəfə işə salın.":"Чтобы сохранить это число, один раз запустите в базе файл 2026-11-stat-edits2.sql.",
 "Gündəlik":"По дням",
 "Müraciət":"Обращения",
@@ -1230,7 +1248,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113123000";
+var APP_VERSION="20261113130925";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1362,6 +1380,9 @@ var PXM=HOUR/60;
 var MIN_DUR=30,curMinHour=HMIN;
 function dayMinHour(){return HMIN}
 function fitBlocks(){
+  /* a name too long for its pill gets a smaller letter instead of being cut */
+  var ps=document.querySelectorAll(".cal-head:not(.picking) .ch.pill span");
+  for(var j=0;j<ps.length;j++){var sp=ps[j],fs=11.5;while(sp.scrollWidth>sp.clientWidth+1&&fs>8.5){fs-=.5;sp.style.fontSize=fs+"px"}}
   var evs=document.querySelectorAll("#cal .ev:not(.cancel)");
   for(var i=0;i<evs.length;i++){var el=evs[i];if(!(el.clientHeight>0&&el.scrollHeight>el.clientHeight+1))continue;el.classList.add("tight");
     /* a line that would show only half (time, who wrote it) is hidden; the name always stays */
@@ -1833,16 +1854,21 @@ function navHtml(title,small){
     L('<button class="icon-btn" data-act="shift" data-n="1" aria-label="İrəli">›</button></div>');
 }
 
-/* Calendar head: on the left Təqvim / Siyahı one under the other; then each specialist's name as a button.
-   A name shows only that specialist; tapping it again (✕) shows everyone. */
+/* Calendar head: on the left Təqvim / Siyahı one under the other; then every specialist as a pill button.
+   Tapping names picks several specialists at once (gold = shown); tapping a gold one removes it; «Hamısı» shows everyone.
+   With nobody picked the pills stand over their own columns; with a choice they line up in one row and a thin
+   row of names stands over the columns that are shown. */
 function headRow(rs,list){
-  var one=ui.sel.length===1?ui.sel[0]:"";
-  var h='<div class="cal-head'+(list?' listhead':'')+'"><div class="corner vsw">'+
+  var all=activeReaders(),pick=ui.sel.length>0,aligned=!list&&!pick;
+  var h='<div class="cal-head'+(list?' listhead':'')+(aligned?'':' picking')+'"><div class="corner vsw">'+
     '<button type="button" data-act="view" data-id="grid" aria-pressed="'+(ui.view==="grid")+'">'+L("Təqvim")+'</button>'+
     '<button type="button" data-act="view" data-id="list" aria-pressed="'+(ui.view==="list")+'">'+L("Siyahı")+'</button></div>';
-  rs.forEach(function(r){var on=one===r.id;
-    h+='<button type="button" class="ch'+(on?' on':'')+'" data-act="only" data-id="'+esc(r.id)+'" aria-pressed="'+on+'" aria-label="'+esc(on?r.name+" — "+L("hamısını göstər"):r.name+" — "+L("yalnız bu mütəxəssis"))+'">'+esc(r.name)+(on?' <span class="x">✕</span>':'')+'</button>'});
-  return h+'</div>';
+  function pill(r){var on=pick&&ui.sel.indexOf(r.id)>=0;
+    return '<button type="button" class="ch pill'+(on?' on':'')+'" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'" aria-label="'+esc(r.name+" — "+(on?L("gizlət"):L("göstər")))+'"><span>'+esc(r.name)+'</span></button>'}
+  if(aligned){rs.forEach(function(r){h+=pill(r)});return h+'</div>'}
+  h+='<div class="chbar">'+(pick?'<button type="button" class="ch pill all" data-act="filter" data-id="all"><span>'+L("Hamısı")+'</span></button>':'')+all.map(pill).join("")+'</div></div>';
+  if(!list){h+='<div class="colnames"><div class="corner"></div>';rs.forEach(function(r){h+='<div class="cn">'+esc(r.name)+'</div>'});h='<div class="hdwrap">'+h+'</div></div>'}
+  return h;
 }
 function dayTop(){
   var h=navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):parse(ui.date).getFullYear()+L("-ci il"));
