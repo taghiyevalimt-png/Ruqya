@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-dgTOjcRyJJV85sfN5zOaEI37BeUoirxFfXuHGw2edQ4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-9qlWnLT7bIuDazF5cAK4aYuanvNsMOXar/ij/7qUIwA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1128,7 +1128,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113073117";
+var APP_VERSION="20261113074826";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1153,6 +1153,8 @@ var ADMIN="bad097d4-5edc-402b-ad59-f633252c35d9";
 /* The owner is always an admin; the owner can also give the admin role to other accounts. */
 function isOwner(){return !!(auth.user&&auth.user.id===ADMIN)}
 function isAdmin(){return !!(auth.user&&(auth.user.id===ADMIN||state.roles[auth.user.id]==="admin"))}
+/* Breaks (prayer, meal) are managed by admins and by sales agents. */
+function canBreaks(){return isAdmin()||!!(auth.user&&state.roleSet[auth.user.id]&&state.roles[auth.user.id]==="agent")}
 function roleLabel(k){return k===ADMIN?L("Admin"):state.roles[k]==="admin"?L("Admin"):!state.roleSet[k]?L("seçilməyib"):isSpec(k)?L("Mütəxəssis"):L("Satış agenti")}
 var CLOSE=L('<button class="icon-btn" data-act="close" aria-label="Bağla">×</button>');
 
@@ -2081,7 +2083,8 @@ function readersMain(){
   if(rs.length)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>');
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
   if(state.hasBreaks){
-    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(adm&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
+    var cb=canBreaks();
+    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(cb&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
     /* grouped: breaks for everyone first, then each specialist in calendar order, each group by time */
     var bgroups=[{rid:"",name:L("Hamısı")}].concat(state.readers.slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)}).map(function(r){return{rid:r.id,name:r.name+(r.archived?L(" (siyahıdan çıxarılıb)"):""),arch:r.archived}}));
@@ -2094,10 +2097,10 @@ function readersMain(){
       if(!list.length){if(state.hasBrkReader&&g.rid&&g.rid!=="?"&&!g.arch&&!anyShared&&state.breaks.length)h+='<p class="hint" style="margin:6px 0 0"><b style="color:var(--ink)">'+esc(g.name)+'</b> — '+L("fasilə yoxdur, bu mütəxəssisə istənilən saata yazmaq olar.")+'</p>';return}
       h+='<p class="hint" style="margin:6px 0 0;font-weight:600;color:var(--ink)">'+esc(g.name)+'</p>';
       list.forEach(function(b){
-        h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
+        h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(cb?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
       });
     });
-    if(adm)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
+    if(cb)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
   if(isOwner()){
     h+=L('<h3 class="sec">İşçi hesabları</h3>')+
@@ -2585,7 +2588,7 @@ document.addEventListener("click",function(e){
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
-  else if(act==="new-break"){if(isAdmin())openSheet({type:"brk",sel:{}});return}
+  else if(act==="new-break"){if(canBreaks())openSheet({type:"brk",sel:{}});return}
   else if(act==="b-who"){
     if(!sheet||sheet.type!=="brk")return;
     var keep={t:val("b-title"),s:val("b-start"),e:val("b-end")};
@@ -2593,7 +2596,7 @@ document.addEventListener("click",function(e){
     byId("sheet").innerHTML=breakForm();byId("b-title").value=keep.t;byId("b-start").value=keep.s;byId("b-end").value=keep.e;return;
   }
   else if(act==="save-break"){
-    if(!sheet||sheet.type!=="brk")return;   /* a second tap after the form closed adds nothing */
+    if(!sheet||sheet.type!=="brk"||!canBreaks())return;   /* a second tap after the form closed adds nothing */
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
     if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
@@ -2606,6 +2609,7 @@ document.addEventListener("click",function(e){
     db(sb.from("breaks").insert(rows));closeSheet();
   }
   else if(act==="del-break"){
+    if(!canBreaks())return;
     if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
