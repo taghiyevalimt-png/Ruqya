@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2iJ4XRGeHJySrnZTCVvgfOc1a97+xxoltIK7yg50qdQ='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-yNKZOYybGbzzfOSDinP49lSVKJ4eBa1Huas8aDyfiuw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -930,6 +930,11 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"<div class=\"field\"><label>Kim üçün?</label><div class=\"chips\" style=\"flex-wrap:wrap\">":"<div class=\"field\"><label>Для кого?</label><div class=\"chips\" style=\"flex-wrap:wrap\">",
+"<p class=\"hint\">Fasilə hər gün seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>":"<p class=\"hint\">Перерыв каждый день показывается в календаре выбранных специалистов, и на это время к ним нельзя записать. «Все» — для всех специалистов.</p>",
+"<p class=\"hint\">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>":"<p class=\"hint\">Чтобы ставить перерыв отдельному специалисту, один раз запустите в базе файл 2026-11-breaks.sql.</p>",
+"silinmiş mütəxəssis":"удалённый специалист",
+"hamısı":"все",
 "<div class=\"empty\"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class=\"primary\" data-act=\"reload\">Yenidən yoxla</button></div>":"<div class=\"empty\"><p>Если интернет был слабым, просто попробуйте ещё раз.</p><button class=\"primary\" data-act=\"reload\">Повторить</button></div>",
 "Əlaqə bərpa olundu. Yadda saxlanmayan son dəyişikliyi yoxlayın və lazım olsa yenidən edin.":"Связь восстановлена. Проверьте последнее несохранённое изменение и при необходимости повторите его.",
 "Rol: ":"Роль: ",
@@ -1121,7 +1126,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113055545";
+var APP_VERSION="20261113065909";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1271,9 +1276,9 @@ function overlap(rid,date,start,dur,skip){
   return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.id===skip)return false;
     var s2=mins(x.time),e2=s2+(x.dur||90);return s1<e2&&s2<e1})[0];
 }
-function inBreak(start,dur){
+function inBreak(start,dur,rid){
   var s1=mins(start),e1=s1+dur;
-  return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return s1<e2&&s2<e1})[0];
+  return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return brkFor(b,rid)&&s1<e2&&s2<e1})[0];
 }
 var sheet=null;
 /* A request that hangs on a bad mobile connection is cut off after 25 s, so the app never waits on it forever. */
@@ -1310,7 +1315,9 @@ var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=nul
 function mapAppt(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
 function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u;return u}
 function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
-function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5)}}
+function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5),rid:x.reader_id||""}}
+/* A break with no specialist is for everyone; otherwise only for that specialist. */
+function brkFor(b,rid){return !b.rid||b.rid===rid}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
 function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||""}}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
@@ -1340,12 +1347,13 @@ function refresh(){
     probe("audit_log.id",function(){return soft(function(){return sb.from("audit_log").select("id").limit(1)})}),
     probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})}),
     /* bookings written inside the loaded period for an earlier date: the "written" statistics count them */
-    soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(from)).lt("date",from).order("id")})
+    soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(from)).lt("date",from).order("id")}),
+    probe("breaks.reader_id",function(){return soft(function(){return sb.from("breaks").select("reader_id").limit(1)})})
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1556,7 +1564,7 @@ function startSync(){
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
-var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","v2"];
+var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","v2"];
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
@@ -1713,7 +1721,7 @@ function gridMain(){
   var nowM=bk().m;
   rs.forEach(function(r){
     h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+hEff+'px,100% '+hEff+'px;background-position:0 0,0 '+(hEff/2)+'px">';
-    state.breaks.forEach(function(b){var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
+    state.breaks.forEach(function(b){if(!brkFor(b,r.id))return;var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
       h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
     var lanes=[];evs.forEach(function(a){
@@ -1761,11 +1769,16 @@ function viewSheet(){
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
 function breakForm(){
+  var sel=sheet.sel||{},all=!Object.keys(sel).length,rs=activeReaders();
+  var who=state.hasBrkReader&&rs.length?L('<div class="field"><label>Kim üçün?</label><div class="chips" style="flex-wrap:wrap">')+
+      '<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+L('">Hamısı</button>')+
+      rs.map(function(r){return '<button type="button" class="chip" data-act="b-who" data-id="'+esc(r.id)+'" aria-pressed="'+!!sel[r.id]+'">'+esc(r.name)+'</button>'}).join("")+'</div></div>':"";
   return L('<h2>Yeni fasilə')+CLOSE+'</h2>'+
     L('<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" maxlength="40" autocomplete="off" placeholder="Məsələn: Namaz"></div>')+
     L('<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>')+
-    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+
-    L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>')+
+    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+who+
+    (state.hasBrkReader?L('<p class="hint">Fasilə hər gün seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>'):
+      L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'))+
     L('<p class="err" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
 }
 function dayMain(){
@@ -2064,10 +2077,11 @@ function readersMain(){
   if(rs.length)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə və ya təqvimdə adına toxunun.</p>');
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
   if(state.hasBreaks){
-    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>');
+    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(adm&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
     state.breaks.forEach(function(b){
-      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
+      var bw=b.rid?(reader(b.rid)?reader(b.rid).name:L("silinmiş mütəxəssis")):L("hamısı");
+      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+' · '+esc(bw)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
     });
     if(adm)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
@@ -2243,11 +2257,11 @@ function slotGrid(){
     .sort(function(a,b){return mins(a.time)-mins(b.time)}).map(function(x){return x.time+"–"+endOf(x)});
   var h="";
   for(var m=DAY0;m+dur<=DAY1;m+=30){
-    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur);
+    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur,rid);
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
   box.innerHTML=h;
-  el.textContent=(taken.length?L("Tutulub: ")+taken.join(", ")+". ":(date===today?L("Bu gün"):L("Bu tarixdə"))+L(" mütəxəssis boşdur. "))+(state.breaks.length?L("Fasilələr: ")+state.breaks.map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
+  el.textContent=(taken.length?L("Tutulub: ")+taken.join(", ")+". ":(date===today?L("Bu gün"):L("Bu tarixdə"))+L(" mütəxəssis boşdur. "))+(state.breaks.some(function(b){return brkFor(b,rid)})?L("Fasilələr: ")+state.breaks.filter(function(b){return brkFor(b,rid)}).map(function(b){return b.title+" "+b.start+"–"+b.end}).join(", ")+".":"");
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
@@ -2309,7 +2323,7 @@ function saveAppt(){
   var moved=!a||o.readerId!==rid||o.date!==date||o.time!==time||(o.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
   var clash=status==="cancel"||!moved?null:overlap(rid,date,time,dur,sheet.id);
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
-  var br=status==="cancel"||!moved?null:inBreak(time,dur);
+  var br=status==="cancel"||!moved?null:inBreak(time,dur,rid);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   if(a){
     /* Only what was changed in this form is sent, so a change someone else saved meanwhile is not overwritten. */
@@ -2549,7 +2563,7 @@ document.addEventListener("click",function(e){
   else if(act==="newat"){
     var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
-    var tt=hhmm(mm),bb=inBreak(tt,30);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
+    var tt=hhmm(mm),bb=inBreak(tt,30,id);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
   }
   else if(act==="del-row"){
@@ -2557,17 +2571,25 @@ document.addEventListener("click",function(e){
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
-  else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
+  else if(act==="new-break"){if(isAdmin())openSheet({type:"brk",sel:{}});return}
+  else if(act==="b-who"){
+    if(!sheet||sheet.type!=="brk")return;
+    var keep={t:val("b-title"),s:val("b-start"),e:val("b-end")};
+    if(!id)sheet.sel={};else{sheet.sel=sheet.sel||{};if(sheet.sel[id])delete sheet.sel[id];else sheet.sel[id]=1}
+    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep.t;byId("b-start").value=keep.s;byId("b-end").value=keep.e;return;
+  }
   else if(act==="save-break"){
     if(!sheet||sheet.type!=="brk")return;   /* a second tap after the form closed adds nothing */
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
     if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
     if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
-    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait")return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
+    var rids=state.hasBrkReader?Object.keys(sheet.sel||{}).filter(function(r){return !!reader(r)}):[];
+    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait")return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
     if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
-    var bid=uuid();state.breaks.push({id:bid,title:bt,start:bs,end:be});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
-    db(sb.from("breaks").insert({id:bid,title:bt,start_time:bs,end_time:be}));closeSheet();
+    var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;return o});
+    rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
+    db(sb.from("breaks").insert(rows));closeSheet();
   }
   else if(act==="del-break"){
     if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
