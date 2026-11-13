@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-yNKZOYybGbzzfOSDinP49lSVKJ4eBa1Huas8aDyfiuw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-dgTOjcRyJJV85sfN5zOaEI37BeUoirxFfXuHGw2edQ4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -930,11 +930,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+" (siyahıdan çıxarılıb)":" (убран из списка)",
+"fasilə yoxdur, bu mütəxəssisə istənilən saata yazmaq olar.":"перерывов нет, к этому специалисту можно записать на любое время.",
+"Hamısı":"Все",
 "<div class=\"field\"><label>Kim üçün?</label><div class=\"chips\" style=\"flex-wrap:wrap\">":"<div class=\"field\"><label>Для кого?</label><div class=\"chips\" style=\"flex-wrap:wrap\">",
 "<p class=\"hint\">Fasilə hər gün seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>":"<p class=\"hint\">Перерыв каждый день показывается в календаре выбранных специалистов, и на это время к ним нельзя записать. «Все» — для всех специалистов.</p>",
 "<p class=\"hint\">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>":"<p class=\"hint\">Чтобы ставить перерыв отдельному специалисту, один раз запустите в базе файл 2026-11-breaks.sql.</p>",
 "silinmiş mütəxəssis":"удалённый специалист",
-"hamısı":"все",
 "<div class=\"empty\"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class=\"primary\" data-act=\"reload\">Yenidən yoxla</button></div>":"<div class=\"empty\"><p>Если интернет был слабым, просто попробуйте ещё раз.</p><button class=\"primary\" data-act=\"reload\">Повторить</button></div>",
 "Əlaqə bərpa olundu. Yadda saxlanmayan son dəyişikliyi yoxlayın və lazım olsa yenidən edin.":"Связь восстановлена. Проверьте последнее несохранённое изменение и при необходимости повторите его.",
 "Rol: ":"Роль: ",
@@ -1126,7 +1128,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113065909";
+var APP_VERSION="20261113073117";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1580,6 +1582,8 @@ function loadCache(uid){
     CFIELDS.forEach(function(k){if(o.s[k]!=null)state[k]=o.s[k]});
     state.appts=state.appts.filter(function(a){return a&&a.id&&a.date>=from});
     ["expenses","products","breaks"].forEach(function(k){if(!Array.isArray(state[k]))state[k]=[]});
+    /* a copy from before per-specialist breaks would show every break in every column: breaks wait for the fresh load */
+    if(o.s.hasBrkReader==null)state.breaks=[];
     state.loadedFrom="";auth.loaded=true;return true;
   }catch(e){return false}
 }
@@ -2079,9 +2083,19 @@ function readersMain(){
   if(state.hasBreaks){
     h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(adm&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
-    state.breaks.forEach(function(b){
-      var bw=b.rid?(reader(b.rid)?reader(b.rid).name:L("silinmiş mütəxəssis")):L("hamısı");
-      h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+' · '+esc(bw)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
+    /* grouped: breaks for everyone first, then each specialist in calendar order, each group by time */
+    var bgroups=[{rid:"",name:L("Hamısı")}].concat(state.readers.slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)}).map(function(r){return{rid:r.id,name:r.name+(r.archived?L(" (siyahıdan çıxarılıb)"):""),arch:r.archived}}));
+    var anyShared=state.breaks.some(function(b){return !b.rid});
+    var known={};bgroups.forEach(function(g){known[g.rid]=1});
+    if(state.breaks.some(function(b){return b.rid&&!known[b.rid]}))bgroups.push({rid:"?",name:L("silinmiş mütəxəssis")});
+    bgroups.forEach(function(g){
+      var list=state.breaks.filter(function(b){return g.rid==="?"?(b.rid&&!known[b.rid]):b.rid===g.rid});
+      /* an active specialist with no breaks of his own (and none for everyone) can be booked at prayer time: say so */
+      if(!list.length){if(state.hasBrkReader&&g.rid&&g.rid!=="?"&&!g.arch&&!anyShared&&state.breaks.length)h+='<p class="hint" style="margin:6px 0 0"><b style="color:var(--ink)">'+esc(g.name)+'</b> — '+L("fasilə yoxdur, bu mütəxəssisə istənilən saata yazmaq olar.")+'</p>';return}
+      h+='<p class="hint" style="margin:6px 0 0;font-weight:600;color:var(--ink)">'+esc(g.name)+'</p>';
+      list.forEach(function(b){
+        h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(adm?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
+      });
     });
     if(adm)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
@@ -2183,7 +2197,7 @@ function auditLine(x){
   if(T==="product_sales")return L("Məhsul satışını ")+verb+": "+money(v.amount)+", "+fd(v.date);
   if(T==="readers"&&op==="UPDATE"&&o.color!==n.color&&o.name===n.name&&!!o.archived===!!n.archived)return L("Mütəxəssisin rəngini dəyişdi: ")+(n.name||"");
   if(T==="readers")return L("Mütəxəssisi ")+(op==="UPDATE"&&n.archived&&!o.archived?L("siyahıdan çıxardı"):verb)+": "+(v.name||"");
-  if(T==="breaks")return L("Fasiləni ")+verb+": "+(v.title||"");
+  if(T==="breaks")return L("Fasiləni ")+verb+": "+(v.title||"")+" "+String(v.start_time||"").slice(0,5)+"–"+String(v.end_time||"").slice(0,5)+" ("+(v.reader_id?(rn(v.reader_id)||L("silinmiş mütəxəssis")):L("Hamısı"))+")";
   if(T==="staff")return L("İşçi profili (")+verb+"): "+(v.name||"")+(v.role?", "+(v.role==="admin"?"admin":v.role==="specialist"?L("mütəxəssis"):L("satış agenti")):"");
   return T+" "+op;
 }
@@ -2585,7 +2599,7 @@ document.addEventListener("click",function(e){
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
     if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
     var rids=state.hasBrkReader?Object.keys(sheet.sel||{}).filter(function(r){return !!reader(r)}):[];
-    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait")return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
+    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
     if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
     var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;return o});
     rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
