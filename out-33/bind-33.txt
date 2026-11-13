@@ -1,0 +1,11 @@
+bound=true
+size 250x250: ok
+size 360x380: ok
+size 420x520: ok
+size 600x760: ok
+size 900x1000: ok
+shift off=0
+after shifts: ok
+logged out: ok
+broken data: ok
+no data: ok
