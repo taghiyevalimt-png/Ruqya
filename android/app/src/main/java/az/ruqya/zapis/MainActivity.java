@@ -153,7 +153,45 @@ public class MainActivity extends Activity {
     public class Bridge {
         @JavascriptInterface
         public int version() {
-            return 1;
+            return 2;
+        }
+
+        /** The admin's Excel file: written to Downloads (Android 10 and newer), then opened. */
+        @JavascriptInterface
+        @android.annotation.SuppressLint("NewApi")
+        public boolean saveFile(String name, String b64) {
+            if (name == null || b64 == null || b64.length() > 40000000) return false;
+            final String safe = name.replaceAll("[^A-Za-z0-9._-]", "_");
+            if (!safe.endsWith(".xlsx") || Build.VERSION.SDK_INT < 29) return false;
+            final String mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            try {
+                byte[] data = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
+                android.content.ContentValues v = new android.content.ContentValues();
+                v.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, safe);
+                v.put(android.provider.MediaStore.MediaColumns.MIME_TYPE, mime);
+                final Uri uri = getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);
+                if (uri == null) return false;
+                java.io.OutputStream o = getContentResolver().openOutputStream(uri);
+                if (o == null) return false;
+                try {
+                    o.write(data);
+                } finally {
+                    o.close();
+                }
+                runOnUiThread(() -> {
+                    try {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setDataAndType(uri, mime);
+                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(i);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, safe, Toast.LENGTH_LONG).show();
+                    }
+                });
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
 
         @JavascriptInterface

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2fU7a196IuPum9z4PeqNxk8w+/qohAVOZJriu1OGSRY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Z7/LSPFXTBs0VDwt7QHtc7CPyyq5LCSvzjOVaJYCMjw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -272,7 +272,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
   background:repeating-linear-gradient(135deg,var(--hatch) 0,var(--hatch) 6px,transparent 6px,transparent 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .nowline{position:absolute;left:0;right:0;height:2px;background:#d93025;z-index:2;pointer-events:none}
 .nowline::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#d93025}
-.detail .row2{display:flex;gap:10px;align-items:center;font-size:14px}
+.detail .row2{display:flex;gap:6px 10px;align-items:center;font-size:14px;flex-wrap:wrap}.detail .row2 b.num{white-space:nowrap}
 .detail .row2 span{color:var(--muted)}
 .stbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stbtns button{border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:11px 8px;font-size:14px;font-weight:600}
@@ -393,6 +393,8 @@ h3.sec{font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spac
 .pside span{font-size:12px;color:var(--muted)}
 .pside .link{font-size:13px;padding:2px 0}
 .visit.pend .pwho{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.visit.pend .pwho small{color:var(--warn);font-size:12.5px}
+.log .rest{display:inline-block;margin-top:4px;font-size:13px}.log .rest.ok{color:var(--ok)}
+.sthead{display:flex;align-items:center;justify-content:space-between;gap:10px}.sthead h1{margin:0}.xlsb{width:auto;padding:8px 14px;font-size:14px;min-height:0}
 .pfull{margin:6px 0 0;padding-left:22px;line-height:1.7;font-size:15px}
 #pr-names{min-height:96px;resize:vertical}
 
@@ -1027,6 +1029,43 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.":"Не удалось подготовить файл. Проверьте интернет и попробуйте снова.",
+"Yenidən cəhd et":"Попробовать снова",
+"Bütün məlumatlar yüklənir və fayl hazırlanır…":"Загружаются все данные и готовится файл…",
+"Fayl hazırdır: {n} vərəq, {q} qəbul.":"Файл готов: {n} листов, {q} записей.",
+"Telefona yüklə":"Скачать на телефон",
+"Bu tətbiq versiyası faylı yükləyə bilmir. Yeni versiyanı quraşdırın və ya proqramı brauzerdə açın.":"Эта версия приложения не умеет скачивать файлы. Установите новую версию или откройте программу в браузере.",
+"Yeni versiyanı yüklə":"Скачать новую версию",
+"Faylı yüklə":"Скачать файл",
+"iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.":"На iPhone: нажмите «Скачать», затем откройте файл в «Файлах» или в Excel.",
+"Fayl «Yükləmələr» qovluğuna yazıldı.":"Файл сохранён в папку «Загрузки».",
+"Faylı yazmaq olmadı. Proqramı brauzerdə (Chrome) açıb yenidən cəhd edin.":"Не удалось сохранить файл. Откройте программу в браузере (Chrome) и попробуйте снова.",
+"Günlük":"По дням",
+"pul":"деньги",
+"məhsul":"товары",
+"Gün ərzində yazılanlar":"Записано за день",
+"Bitir":"Конец",
+"Müddət, dəq":"Длительность, мин",
+"Vəziyyət":"Состояние",
+"Bəli":"Да",
+"Bütün qəbullar":"Все записи",
+"Məhsul satışları":"Продажи товаров",
+"Statistika":"Статистика",
+
+"Bərpa olundu":"Восстановлено",
+"Bərpa et":"Восстановить",
+"Bərpa olunur…":"Восстанавливается…",
+"Bərpa olundu.":"Восстановлено.",
+"Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın.":"Для восстановления один раз запустите в базе файл 2026-11-owner.sql.",
+
+"Bu artıq bərpa olunub.":"Это уже восстановлено.",
+"Bərpa etməyi yalnız admin edə bilər.":"Восстанавливать может только админ.",
+"Bunu bərpa etmək olmur.":"Это нельзя восстановить.",
+
+"Bu qəbulu yalnız onu yazan və admin dəyişə bilər.":"Эту запись могут менять только тот, кто её записал, и админ.",
+"Təsdiqləyib":"Подтвердил",
+"Təsdiq aldı":"Получил подтверждение",
+
 "Diqqət: «{n}» adlı təsdiqlənmiş mütəxəssis artıq var. Bu onun ikinci telefonudursa, təsdiq edin; tanımırsınızsa, rol verməyin.":"Внимание: подтверждённый специалист «{n}» уже есть. Если это его второй телефон — подтвердите; если не знаете этого человека — не давайте роль.",
 
 "Mütəxəssisin adını yalnız admin dəyişir.":"Имя специалиста меняет только админ.",
@@ -1321,7 +1360,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113162138";
+var APP_VERSION="20261113165331";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1414,7 +1453,7 @@ function money(n){var v=Math.round((+n||0)*100)/100;return (NF?NF.format(v):v.to
 var OLDAND=(function(){var m=/Android (\d+)/.exec(navigator.userAgent||"");return !!(m&&+m[1]<7)})();
 /* Old or weak phones: the same look without soft shadows and glides, so everything stays quick. */
 (function(){try{var lm=OLDAND||(navigator.deviceMemory&&navigator.deviceMemory<=2);if(lm)document.documentElement.className+=" lite"}catch(e){}})();
-var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2705\u00a0",G_NO=OLDAND?"\u2013 ":"\u2717 ";
+var CUR=OLDAND?"AZN":"\u20bc",G_OK=OLDAND?"+ ":"\u2705\u00a0",G_OK2=OLDAND?"++ ":"\u2705\u2705\u00a0",G_NO=OLDAND?"\u2013 ":"\u2717 ";
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
 function fmtDay(s,mode){
   var d=parse(s),base=d.getDate()+" "+MON[d.getMonth()];
@@ -1438,6 +1477,11 @@ try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(today|day|week|month|rules
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
+/* A session is changed or deleted only by an admin or by the person who wrote it (the server holds the same rule).
+   Everybody who sees it may tick "the patient confirmed". */
+function canEdit(a){return !!(a&&auth.user&&(isAdmin()||(a.by&&a.by===auth.user.id)))}
+/* the mark before a name: ✅ the patient confirmed, ✅✅ the session went well */
+function mark(a){return done(a)?G_OK2:a.status==="noshow"?G_NO:(a.conf&&!gone(a)?G_OK:"")}
 function mineOnly(rid){if(!specMe())return true;var a=activeReaders();for(var i=0;i<a.length;i++)if(a[i].id===rid)return true;return false}
 function shown(rid){return mineOnly(rid)&&(!ui.sel.length||ui.sel.indexOf(rid)>=0)}
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
@@ -1490,7 +1534,7 @@ function tfetch(u,o){
   return fetch(u,o).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
-function blank(){return{wants:{},hasPriv:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
+function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -1514,7 +1558,7 @@ function soft(make){return fetchAll(make).then(function(d){return d},function(){
 /* Data sync, kept light on traffic: a full load on start and on return to the app,
    single-row updates from realtime in between, and older dates fetched only when opened. */
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
-function mapAppt(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
+function mapAppt(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",conf:!!x.confirmed,dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
 function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u;return u}
 function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
 /* A hand correction of one number in the weekly or monthly sales statistics (the computed number stays as it is). */
@@ -1561,12 +1605,13 @@ function refresh(){
     soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(from)).lt("date",from).order("id")}),
     probe("breaks.reader_id",function(){return soft(function(){return sb.from("breaks").select("reader_id").limit(1)})}),
     soft(function(){return sb.from("stat_edits").select("*").order("id")}),
-    probe("staff.want",function(){return soft(function(){return sb.from("staff").select("want").limit(1)})})
+    probe("staff.want",function(){return soft(function(){return sb.from("staff").select("want").limit(1)})}),
+    probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})})
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null&&!res[4]);state.statEdits=(res[15]||[]).map(mapEdit);
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null&&!res[4]);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null&&!res[4]);state.statEdits=(res[15]||[]).map(mapEdit);
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1722,6 +1767,10 @@ function dbMsg(e){
   if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
   if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
   if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Yalniz yazan/.test(m))return L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.");
+  if(/Artiq berpa olunub/.test(m))return L("Bu artıq bərpa olunub.");
+  if(/Yalniz admin berpa/.test(m))return L("Bərpa etməyi yalnız admin edə bilər.");
+  if(/Berpa ucun qeyd yoxdur|Bunu berpa etmek olmur/.test(m))return L("Bunu bərpa etmək olmur.");
   if(/Mutexessisin adini/.test(m))return L("Mütəxəssisin adını yalnız admin dəyişir.");
   if(/Hesab nomresi/.test(m))return L("Bunu etməyə icazəniz yoxdur.");
   if(/Adi yazin/.test(m))return L("Adı yazın.");
@@ -1788,7 +1837,7 @@ function startSync(){
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
-var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants"];
+var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
@@ -1933,7 +1982,7 @@ function render(){
   var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0&&!pendingMe();
   main.classList.toggle("gridmode",grid);
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
-  else if(ui.tab==="stats"){top.innerHTML=L("<h1>Statistika</h1>")+statSecBar();main.innerHTML=banner+statsMain()}
+  else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();main.innerHTML=banner+statsMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
   else{top.innerHTML=L("<h1>Ayarlar</h1>");main.innerHTML=banner+readersMain()}
   if(grid){
@@ -2012,7 +2061,7 @@ function gridMain(){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
-        '<b>'+(done(a)?'<i class="ok">'+G_OK+'</i>':a.status==="noshow"?G_NO:"")+esc(a.name)+'</b>'+
+        '<b>'+(mark(a)?'<i class="ok">'+mark(a)+'</i>':"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         (a.phone?'<span class="num ph">'+esc(a.phone)+'</span>':'')+
         ((state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
@@ -2027,7 +2076,7 @@ function gridMain(){
 /* What happens to this booking: still ahead, already counted, or an old «Ləğv etdi» / «Gəlmədi» mark. */
 function stateLine(a){
   if(gone(a))return '<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
-    '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button></div>');
+    (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+'</div>';
   if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>')+
     (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>'));
   return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>');
@@ -2046,6 +2095,9 @@ function apptText(a){
   ];
   return lines.filter(function(x){return x}).join("\n");
 }
+/* "the patient confirmed by WhatsApp": a switch for everybody, until the session is over */
+function confBtn(a,cls){if(!state.hasConf||gone(a)||done(a))return "";
+  return '<button class="'+cls+(a.conf?' on':'')+'" data-act="conf" data-id="'+esc(a.id)+'" aria-pressed="'+a.conf+'">'+(a.conf?G_OK+L("Təsdiqləyib"):L("Təsdiq aldı"))+'</button>'}
 function viewSheet(){
   var a=appt(sheet.id);if(!a)return L('<h2>Qəbul')+CLOSE+L('</h2><p class="hint">Bu qəbul silinib.</p>');
   var r=reader(a.readerId);
@@ -2056,9 +2108,9 @@ function viewSheet(){
     (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+phoneLinks(a.phone,a)+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
-    stateLine(a)+
-    '<div class="btns"><button class="ghost" data-act="appt-copy" data-id="'+esc(a.id)+'">⧉ '+L("Kopyala")+'</button><button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button></div>')+
-    L('<button class="danger" data-act="del-appt">Qəbulu sil</button>')+
+    stateLine(a)+confBtn(a,"ghost conf")+
+    '<div class="btns"><button class="ghost" data-act="appt-copy" data-id="'+esc(a.id)+'">⧉ '+L("Kopyala")+'</button>'+(canEdit(a)?'<button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button>':'')+'</div>'+
+    (canEdit(a)?L('<button class="danger" data-act="del-appt">Qəbulu sil</button>'):'<p class="hint">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</p>')+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
 function breakForm(){
@@ -2103,16 +2155,16 @@ function dayMain(){
     var sub=[r?r.name:"—",byName?L("Yazdı: ")+byName:""].filter(function(x){return x}).map(esc).join(" · ");
     h+='<div class="card compact '+stOf(a)+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small>'+endOf(a)+'</small>':'')+'</div>'+
-      '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+(done(a)?G_OK:a.status==="noshow"?G_NO:"")+esc(a.name)+'</b><span class="num">'+sub+'</span></button>'+
+      '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+mark(a)+esc(a.name)+'</b><span class="num">'+sub+'</span></button>'+
       '<div class="price num">'+(a.price>0?money(a.price):'—')+'</div></div>';
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(!gone(a)){
-      h+='<div class="links">'+phoneLinks(a.phone,a)+'<span class="spacer"></span><button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button>')+'</div>';
+      h+='<div class="links">'+phoneLinks(a.phone,a)+confBtn(a,"link")+'<span class="spacer"></span>'+(canEdit(a)?'<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">'+L("Sil")+'</button>':'')+'</div>';
     }else{
       h+='<div class="status">'+stPill(a)+'<span class="spacer"></span>'+
-        '<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
-        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="')+esc(a.id)+L('">Sil</button></div>');
+        (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
+        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">'+L("Sil")+'</button>':'')+'</div>';
     }
     h+='</div>';
   });
@@ -2176,14 +2228,17 @@ function isAgent(k){return state.roles[k]==="agent"}
 /* Rows for one table. kind: today | sales | money | prod. a, b, c are the table's number columns. */
 function statData(kind,r,per){
   var rows={},order=[],T={a:0,b:0,c:0};
+  /* a sales agent sees only his own row in the sales and "written today" tables (admins see everyone) */
+  var onlyMe=(kind==="sales"||kind==="today")&&auth.user&&!isAdmin()&&!statAll?auth.user.id:null;
   function row(k,name){if(!rows[k]){rows[k]={k:k,name:name,a:0,b:0,c:0,r:null,w:null,s:null,t:null};order.push(k)}return rows[k]}
   var who=function(k){return state.staff[k]||L("Adsız")};
   var uk=function(k){return k&&state.staff[k]!=null?k:"-"};   /* every unknown or deleted author shares one "Adsız" row */
   if(kind==="money")activeReaders().forEach(function(x){row(x.id,x.name)});
-  else Object.keys(state.staff).filter(isAgent).sort(function(x,y){return String(who(x)).localeCompare(String(who(y)))}).forEach(function(k){row(k,who(k))});
+  else Object.keys(state.staff).filter(function(k){return isAgent(k)&&(!onlyMe||k===onlyMe)}).sort(function(x,y){return String(who(x)).localeCompare(String(who(y)))}).forEach(function(k){row(k,who(k))});
   if(kind==="prod"){
     state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(uk(x.by),who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
   }else state.appts.forEach(function(a){
+    if(onlyMe&&a.by!==onlyMe)return;
     if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(uk(a.by),who(a.by)).a++;T.a++;return}
     var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
     if(!inB&&!inS)return;
@@ -2197,7 +2252,7 @@ function statData(kind,r,per){
   /* Müraciət WP and Müraciət SŞ are typed in; "ümumi" is their sum (an older single number counts if neither is written) */
   if(kind==="sales"){T.w=null;T.s=null;T.t=null;
     /* a person with a typed number keeps his row even on a day he wrote nobody */
-    state.statEdits.forEach(function(e){if(e.kind==="sales"&&e.per===per&&e.s===r.s&&!rows[uk(e.k)]&&!isSpec(e.k))row(uk(e.k),who(e.k))});
+    state.statEdits.forEach(function(e){if(e.kind==="sales"&&e.per===per&&e.s===r.s&&!rows[uk(e.k)]&&!isSpec(e.k)&&(!onlyMe||e.k===onlyMe))row(uk(e.k),who(e.k))});
     if((per==="day"||per==="week"||per==="month")&&state.statEdits.length){
       T.a=0;T.b=0;
       order.forEach(function(k){var x=rows[k];["r","w","s","a","b"].forEach(function(c){var e=findEdit(kind,per,r.s,k,c);if(e){x["o"+c]=x[c];x[c]=e.v;x["e"+c]=e}});
@@ -2208,6 +2263,7 @@ function statData(kind,r,per){
   }
   return{rows:order.map(function(k){return rows[k]}),T:T};
 }
+var statAll=false;   /* true only while an admin's Excel file is being made */
 var ST_KINDS={
   today:{t:function(r){return !r||r.s===today?L("Bu gün yazılan qəbullar"):tf(L("{d} yazılan qəbullar"),{d:fmtDay(r.s)})},h:function(){return [L("Kim yazıb"),L("Qəbul")]},c:function(x){return [x.name,String(x.a)]}},
   sales:{t:function(){return L("Satış statistikası")},h:function(){return [L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]},c:function(x){var n=function(v){return v==null?"—":String(v)};return [x.name,n(x.w),n(x.s),n(x.t),String(x.a),String(x.b)]}},
@@ -2229,7 +2285,7 @@ function statTable(kind,r,per){
   var editable=kind==="sales"&&(per==="day"||per==="week"||per==="month")&&state.hasStatEdits&&canStats();
   d.rows.forEach(function(x){h+='<tr>'+K.c(x).map(function(c,i){
     var col=kind!=="sales"?"":i===1?"w":i===2?"s":i===4?"a":i===5?"b":"",ed=col&&x["e"+col];
-    if(editable&&col)return '<td class="num"><button type="button" class="cellb'+(ed&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(x.k)+'" data-col="'+col+'" data-p="'+per+'" data-s="'+esc(r.s)+'" aria-label="'+esc(x.name+" — "+hd[i]+": "+c)+'">'+esc(c)+'</button></td>';
+    if(editable&&col&&(isAdmin()||x.k===auth.user.id))return '<td class="num"><button type="button" class="cellb'+(ed&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(x.k)+'" data-col="'+col+'" data-p="'+per+'" data-s="'+esc(r.s)+'" aria-label="'+esc(x.name+" — "+hd[i]+": "+c)+'">'+esc(c)+'</button></td>';
     return '<td'+(i?' class="num'+(kind==="sales"&&i===3?' sum':'')+'"':'')+'>'+(ed?'<span class="edited">'+esc(c)+'</span>':esc(c))+'</td>'}).join("")+'</tr>'});
   h+='</tbody><tfoot><tr>'+K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,w:d.T.w,s:d.T.s,t:d.T.t}).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr></tfoot></table></div>';
   return h;
@@ -2355,6 +2411,121 @@ function copyText(t,ok,no){
   if(done1){ok();return}
   try{navigator.clipboard.writeText(t).then(ok,no)}catch(e){no()}
 }
+/* ---------- Excel (.xlsx) for admins: every statistic and all the data behind it. Written by hand, no library. ---------- */
+var CRC_T=null;
+function crc32(u){if(!CRC_T){CRC_T=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);CRC_T[n]=c>>>0}}
+  var c2=0xFFFFFFFF;for(var i=0;i<u.length;i++)c2=CRC_T[(c2^u[i])&255]^(c2>>>8);return (c2^0xFFFFFFFF)>>>0}
+function utf8(s){var b=unescape(encodeURIComponent(s)),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+function le(n,b){var a=[];for(var i=0;i<b;i++){a.push(n&255);n=n>>>8}return a}
+function zipBlob(files){
+  var parts=[],cen=[],off=0,cs=0;
+  files.forEach(function(f){var nm=utf8(f.n),d=utf8(f.d),c=crc32(d),sz=d.length;
+    var h=[0x50,0x4b,3,4].concat(le(20,2),le(0x0800,2),le(0,2),le(0,2),le(0x21,2),le(c,4),le(sz,4),le(sz,4),le(nm.length,2),le(0,2));
+    parts.push(new Uint8Array(h),nm,d);
+    cen.push([new Uint8Array([0x50,0x4b,1,2].concat(le(20,2),le(20,2),le(0x0800,2),le(0,2),le(0,2),le(0x21,2),le(c,4),le(sz,4),le(sz,4),le(nm.length,2),le(0,2),le(0,2),le(0,2),le(0,2),le(0,4),le(off,4))),nm]);
+    off+=h.length+nm.length+sz});
+  cen.forEach(function(x){parts.push(x[0],x[1]);cs+=x[0].length+x[1].length});
+  parts.push(new Uint8Array([0x50,0x4b,5,6].concat(le(0,2),le(0,2),le(files.length,2),le(files.length,2),le(cs,4),le(off,4),le(0,2))));
+  return new Blob(parts,{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
+function xEsc(s){return String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function xCol(i){var s="";i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s}
+function xSheet(rows){
+  var w=[],out=[];
+  rows.forEach(function(r){r.forEach(function(v,i){var l=String(v==null?"":v).length;w[i]=Math.max(w[i]||8,Math.min(60,l+2))})});
+  out.push('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>');
+  w.forEach(function(v,i){out.push('<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+v+'" customWidth="1"/>')});
+  out.push('</cols><sheetData>');
+  rows.forEach(function(r,ri){out.push('<row r="'+(ri+1)+'">');
+    r.forEach(function(v,ci){if(v==null||v==="")return;var ref=xCol(ci)+(ri+1),st=ri===0?' s="1"':'';
+      if(typeof v==="number"&&isFinite(v))out.push('<c r="'+ref+'"'+st+'><v>'+v+'</v></c>');
+      else out.push('<c r="'+ref+'" t="inlineStr"'+st+'><is><t xml:space="preserve">'+xEsc(v)+'</t></is></c>')});
+    out.push('</row>')});
+  out.push('</sheetData></worksheet>');return out.join("");
+}
+function xlsxBlob(sheets){
+  var M='http://schemas.openxmlformats.org/',ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="'+M+'package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>',
+    wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="'+M+'spreadsheetml/2006/main" xmlns:r="'+M+'officeDocument/2006/relationships"><sheets>',
+    wr='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+M+'package/2006/relationships">',files=[],used={};
+  sheets.forEach(function(sh,i){var n=String(sh.name).replace(/[\[\]:*?\/\\]/g," ").slice(0,31),k=n,j=2;while(used[low(k)])k=n.slice(0,28)+" "+(j++);used[low(k)]=1;
+    ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+    wb+='<sheet name="'+xEsc(k)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
+    wr+='<Relationship Id="rId'+(i+1)+'" Type="'+M+'officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
+    files.push({n:"xl/worksheets/sheet"+(i+1)+".xml",d:xSheet(sh.rows)})});
+  wr+='<Relationship Id="rId'+(sheets.length+1)+'" Type="'+M+'officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+  return zipBlob([{n:"[Content_Types].xml",d:ct+'</Types>'},
+    {n:"_rels/.rels",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+M+'package/2006/relationships"><Relationship Id="rId1" Type="'+M+'officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+    {n:"xl/workbook.xml",d:wb+'</sheets></workbook>'},{n:"xl/_rels/workbook.xml.rels",d:wr},
+    {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'}].concat(files));
+}
+/* All periods the statistics know, from the first one to the latest finished one. */
+function allPeriods(per){
+  var out=[],seen={},i,r;
+  if(per==="day"){for(var d=ST_START;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:fmtDay(d,"y")});return out}
+  for(i=0;i<2000;i++){r=per==="week"?weekRange(i):monthRange(i);if(seen[r.s])break;seen[r.s]=1;r.label=per==="week"?rangeLabel(r):r.name+" ("+rangeLabel(r)+")";out.push(r);if(!r.canBack)break}
+  return out.reverse();
+}
+function xlsSheets(all){
+  var sh=[],nz=function(v){return v==null?"":v};
+  var A=all.appts,keep={appts:state.appts,products:state.products,expenses:state.expenses};
+  state.appts=A;state.products=all.products;state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
+  try{
+    [["day",L("Günlük")],["week",L("Həftəlik")],["month",L("Aylıq")]].forEach(function(p){
+      var ps=allPeriods(p[0]),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]],
+        Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]];
+      ps.forEach(function(r){
+        statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b])});
+        statData("money",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.c)Mo.push([r.label,x.name,x.a,x.b,x.c])});
+        if(state.hasProducts)statData("prod",r,p[0]).rows.forEach(function(x){if(x.a||x.c)Pr.push([r.label,x.name,x.a,x.c])});
+      });
+      sh.push({name:p[1]+" — "+L("satış"),rows:S},{name:p[1]+" — "+L("pul"),rows:Mo});
+      if(state.hasProducts)sh.push({name:p[1]+" — "+L("məhsul"),rows:Pr});
+    });
+    var T=[[L("Tarix"),L("Kim yazıb"),L("Qəbul")]];
+    allPeriods("day").forEach(function(r){statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
+    sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
+  }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
+  var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
+  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Vəziyyət"),L("Təsdiq"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
+  A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
+    Q.push([a.date,a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created||"",a.note||""])});
+  sh.push({name:L("Bütün qəbullar"),rows:Q});
+  if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
+    all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([x.date,sn(x.by),prodItems(x.names).join(", "),x.amount])});
+    sh.push({name:L("Məhsul satışları"),rows:P})}
+  if(state.v2){var E=[[L("Tarix"),L("Xərc"),L("Məbləğ")]];
+    all.expenses.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){E.push([x.date,x.title,x.amount])});
+    sh.push({name:L("Xərclər"),rows:E})}
+  return sh;
+}
+function xlsFetch(){
+  return Promise.all([
+    fetchAll(function(){return sb.from("appts").select("*").order("date").order("id")}),
+    state.hasProducts?fetchAll(function(){return sb.from("product_sales").select("*").order("date").order("id")}):Promise.resolve([]),
+    state.v2?fetchAll(function(){return sb.from("expenses").select("*").order("date").order("id")}):Promise.resolve([])
+  ]).then(function(r){return{appts:r[0].map(mapAppt),products:r[1].map(mapProd),expenses:r[2].map(mapExp)}});
+}
+function xlsSheet(){
+  var x=sheet,h='<h2>Excel'+CLOSE+'</h2>';
+  if(x.err)return h+'<p class="err" role="alert">'+L("Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.")+'</p><button class="primary" data-act="xls">'+L("Yenidən cəhd et")+'</button>';
+  if(!x.url)return h+'<p class="hint">'+L("Bütün məlumatlar yüklənir və fayl hazırlanır…")+'</p>';
+  h+='<p class="hint">'+tf(L("Fayl hazırdır: {n} vərəq, {q} qəbul."),{n:x.n,q:x.q})+'</p>';
+  if(NATIVE&&typeof NATIVE.saveFile==="function")return h+'<button class="primary" data-act="xls-save">'+L("Telefona yüklə")+'</button>';
+  if(NATIVE)return h+'<p class="hint">'+L("Bu tətbiq versiyası faylı yükləyə bilmir. Yeni versiyanı quraşdırın və ya proqramı brauzerdə açın.")+'</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">'+L("Yeni versiyanı yüklə")+'</a>';
+  return h+'<a class="primary" href="'+esc(x.url)+'" download="'+esc(x.fname)+'">'+L("Faylı yüklə")+'</a>'+
+    '<p class="hint">'+L("iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.")+'</p>';
+}
+function startXls(){
+  if(!isAdmin())return;
+  var s={type:"xls"};openSheet(s);
+  xlsFetch().then(function(all){
+    if(sheet!==s)return;
+    var sh=xlsSheets(all),blob=xlsxBlob(sh);
+    s.blob=blob;s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
+    try{s.url=URL.createObjectURL(blob)}catch(e){s.url="#"}
+    byId("sheet").innerHTML=xlsSheet();
+  },function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()});
+}
 /* ---------- Kassa: only recording product sales and expenses, day by day (product totals are in Statistika; expenses are listed per day here) ---------- */
 function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
 function cashTop(){return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):(ui.date===addDays(today,-1)?L("Dünən"):""))}
@@ -2440,9 +2611,10 @@ function patientSheet(){
       (open?L('<span>Qiymət: ')+(open.price>0?'<b class="num">'+money(open.price)+'</b>':L('<b style="color:var(--warn)">yazılmayıb</b>'))+'</span>':'')+'</div>'+
       (wb||cr?'<div class="pv-row muted">'+(wb?L('Yazdı: ')+esc(wb):L('Yazılıb'))+(cr?', '+cr:'')+'</div>':'')+
       (open&&open.note?'<p class="memo">'+esc(open.note)+'</p>':'');
-    if(open)h+='<div class="pv-btns">'+(gone(open)?'<button class="ghost" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+
+    if(open&&canEdit(open))h+='<div class="pv-btns">'+(gone(open)?'<button class="ghost" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+
       '<button class="ghost" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button>')+
       '<button class="ghost danger-t" data-act="del-row" data-id="'+esc(a.id)+L('">Sil</button>')+'</div>';
+    else if(open)h+='<div class="pv-row muted">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</div>';
     else h+=L('<div class="pv-row muted">Köhnə qəbul — yalnız baxmaq olar.</div>');
     h+='</div>';
   });
@@ -2604,15 +2776,26 @@ function auditSheet(){
   var h=L('<h2>Dəyişikliklər jurnalı')+CLOSE+'</h2>';
   if(!sheet.rows)return h+L('<p class="hint">Yüklənir…</p>');
   if(sheet.err)return h+L('<p class="err" role="alert">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>');
-  var only=sheet.only==="del",rows=sheet.rows.filter(function(x){return !only||x.op==="DELETE"});
+  var only=sheet.only==="del",rows=(only&&sheet.dels?sheet.dels:sheet.rows).filter(function(x){return !only||x.op==="DELETE"});
   h+='<div class="seg" style="grid-template-columns:1fr 1fr"><button data-act="audit-f" data-id="all" aria-pressed="'+!only+L('">Hamısı</button><button data-act="audit-f" data-id="del" aria-pressed="')+only+L('">Yalnız silinənlər</button></div>');
   if(!rows.length)return h+L('<p class="hint">Hələ qeyd yoxdur.</p>');
   h+='<div>';
   rows.forEach(function(x){
     var t=bk(+new Date(x.at)),who=x.uid?(state.staff[x.uid]||L("Adsız istifadəçi")):L("Baza paneli");
-    h+='<div class="log'+(x.op==="DELETE"?" del":"")+'">'+esc(auditLine(x))+'<small class="num">'+esc(who)+' · '+fmtDay(t.d)+', '+hhmm(t.m)+'</small></div>';
+    var rb="";
+    if(x.op==="DELETE"&&RESTORE_T[x.tbl]&&isAdmin()){
+      rb=x.restored?'<span class="rest ok">'+L("Bərpa olundu")+'</span>':'<button class="link rest" data-act="restore" data-id="'+esc(String(x.id))+'">'+L("Bərpa et")+'</button>';
+    }
+    h+='<div class="log'+(x.op==="DELETE"?" del":"")+'">'+esc(auditLine(x))+'<small class="num">'+esc(who)+' · '+fmtDay(t.d)+', '+hhmm(t.m)+'</small>'+rb+'</div>';
   });
   return h+L('</div><p class="hint">Son ')+sheet.rows.length+L(' dəyişiklik göstərilir. Bu jurnalı yalnız adminlər görür.</p>');
+}
+/* what an admin can bring back from the journal */
+var RESTORE_T={appts:1,expenses:1,product_sales:1,breaks:1,stat_edits:1};
+function loadAuditDels(){
+  var s=sheet;
+  sb.from("audit_log").select("*").eq("op","DELETE").order("id",{ascending:false}).limit(500).then(function(r){
+    if(sheet!==s)return;s.dels=r.error?null:(r.data||[]);byId("sheet").innerHTML=auditSheet()},function(){});
 }
 function loadAudit(){
   var s=sheet,done=function(rows,err){if(sheet!==s)return;s.rows=rows.sort(function(a,b){return b.id-a.id});s.err=err;byId("sheet").innerHTML=auditSheet()};
@@ -2655,7 +2838,7 @@ function openSheet(s){
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,expense:expenseForm}[s.type];
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,xls:xlsSheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
@@ -2717,6 +2900,7 @@ function readerForm(){
 
 function saveAppt(){
   if(!sheet)return;
+  if(sheet.id&&appt(sheet.id)&&!canEdit(appt(sheet.id)))return fail("f-err",L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər."));
   var rid=val("f-reader"),date=val("f-date"),time=val("f-time").slice(0,5),name=val("f-name"),phone=val("f-phone"),pr=amount("f-price"),price=pr===""?0:pr,note=val("f-note"),status="";
   var r=reader(rid),service="";
   if(!rid||!r)return fail("f-err",L("Mütəxəssisi seçmək vacibdir. Mütəxəssis olmadan qəbul yadda saxlanmır."));
@@ -2845,7 +3029,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
-  else if(act==="np-edit"){if(appt(id))openSheet({type:"appt",id:id,from:"np"});return}
+  else if(act==="np-edit"){if(appt(id)&&canEdit(appt(id)))openSheet({type:"appt",id:id,from:"np"});return}
   else if(act==="shift"){
     var n=+b.dataset.n;
     ui.date=addDays(ui.date,n);
@@ -2862,9 +3046,9 @@ document.addEventListener("click",function(e){
       function(){openSheet({type:"stcopy",text:ct})});
     return;
   }
-  else if(act==="st-edit"){if(canStats()&&state.hasStatEdits)openSheet({type:"stedit",k:id,col:b.dataset.col,per:b.dataset.p,s:b.dataset.s});return}
+  else if(act==="st-edit"){if(canStats()&&state.hasStatEdits&&(isAdmin()||id===auth.user.id))openSheet({type:"stedit",k:id,col:b.dataset.col,per:b.dataset.p,s:b.dataset.s});return}
   else if(act==="st-edit-save"||act==="st-edit-reset"){
-    if(!sheet||sheet.type!=="stedit"||!canStats())return;
+    if(!sheet||sheet.type!=="stedit"||!canStats()||!(isAdmin()||sheet.k===auth.user.id))return;
     var se=sheet,ex=findEdit("sales",se.per,se.s,se.k,se.col);
     if(act==="st-edit-reset"){if(ex){removeBy(state.statEdits,ex.id);db(sb.from("stat_edits").delete().eq("id",ex.id))}closeSheet();return}
     var sv=val("se-v").replace(/\s/g,"");
@@ -2883,6 +3067,14 @@ document.addEventListener("click",function(e){
     return;
   }
   else if(act==="new-prod"){openSheet({type:"prod"});return}
+  else if(act==="xls"){startXls();return}
+  else if(act==="xls-save"){
+    if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function")return;
+    var xs=sheet,fr=new FileReader();
+    fr.onload=function(){var ok0=false;try{ok0=NATIVE.saveFile(xs.fname,String(fr.result).split(",")[1]||"")}catch(e){}
+      flash(ok0?L("Fayl «Yükləmələr» qovluğuna yazıldı."):L("Faylı yazmaq olmadı. Proqramı brauzerdə (Chrome) açıb yenidən cəhd edin."),true)};
+    fr.readAsDataURL(xs.blob);return;
+  }
   else if(act==="prod-all"){openSheet({type:"prodall",id:id});return}
   else if(act==="save-prod"){
     if(!sheet||sheet.type!=="prod")return;   /* a second tap after the form closed adds nothing */
@@ -2930,7 +3122,7 @@ document.addEventListener("click",function(e){
   else if(act==="status"){
     /* Only one status change is left: bringing back an old «Ləğv etdi» / «Gəlmədi» booking. */
     var a=appt(id),st=b.dataset.st;
-    if(st!=="wait")return;
+    if(st!=="wait"||!canEdit(a))return;
     if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
     if(a&&a.status==="cancel"&&st!=="cancel"&&ST[st]){
@@ -2964,7 +3156,23 @@ document.addEventListener("click",function(e){
     applyTheme(id);render();return;
   }
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
-  else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;byId("sheet").innerHTML=auditSheet()}return}
+  else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;if(id==="del"&&!sheet.dels)loadAuditDels();byId("sheet").innerHTML=auditSheet()}return}
+  else if(act==="restore"){
+    /* an admin brings a deleted row back (the server checks again that it is an admin) */
+    if(!isAdmin()||!sheet||sheet.type!=="audit"||b.disabled)return;
+    var rid0=+id,s0=sheet;b.disabled=true;b.textContent=L("Bərpa olunur…");
+    sb.rpc("ruqya_restore",{aid:rid0}).then(function(r){
+      if(sheet!==s0)return;
+      var mark0=function(){[s0.rows||[],s0.dels||[]].forEach(function(l){l.forEach(function(x){if(+x.id===rid0)x.restored=true})})};
+      if(r.error){
+        if(/Artiq berpa olunub/.test(r.error.message||""))mark0();
+        else if(r.error.code==="PGRST202"||/function/.test(r.error.message||"")&&/not find|does not exist/.test(r.error.message||""))flash(L("Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın."),true);
+        else flash(dbMsg(r.error),true);
+      }else{mark0();flash(L("Bərpa olundu."),true);refresh()}
+      byId("sheet").innerHTML=auditSheet();
+    },function(){if(sheet===s0){unsaved();byId("sheet").innerHTML=auditSheet()}});
+    return;
+  }
   else if(act==="edit-staff"){if(isAdmin()&&id in state.staff)openSheet({type:"staff",id:id});return}
   else if(act==="st-role"){if(sheet&&sheet.type==="staff"){var sv0=val("s-name");if(sv0)sheet.name=sv0;sheet.role=id;byId("sheet").innerHTML=staffForm()}return}
   else if(act==="save-staff"){
@@ -3016,6 +3224,7 @@ document.addEventListener("click",function(e){
     openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
   }
   else if(act==="del-row"){
+    if(!canEdit(appt(id)))return;
     if(!b.dataset.sure){b.dataset.sure="1";var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
@@ -3046,7 +3255,13 @@ document.addEventListener("click",function(e){
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
   else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
-  else if(act==="edit-appt"){if(appt(id))openSheet({type:"appt",id:id});return}
+  else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))openSheet({type:"appt",id:id});return}
+  else if(act==="conf"){
+    /* the patient confirmed (or the tick is taken back): anybody who sees the session */
+    var ca=appt(id);if(!ca||!state.hasConf||gone(ca)||done(ca))return;
+    ca.conf=!ca.conf;db(sb.from("appts").update({confirmed:ca.conf}).eq("id",id));
+    if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
+  }
   else if(act==="new-reader"){if(!isAdmin())return;openSheet({type:"reader",id:null});return}
   else if(act==="edit-reader"){if(isAdmin()&&reader(id))openSheet({type:"reader",id:id});return}
   else if(act==="close"){closeSheet();return}
@@ -3056,6 +3271,7 @@ document.addEventListener("click",function(e){
     if(!sheet)return;
     if(!b.dataset.sure){b.dataset.sure="1";var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
+    if(act==="del-appt"&&!canEdit(appt(sid)))return;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
     else{
       /* Never erased: old sessions and the cash history of this specialist must stay. */
