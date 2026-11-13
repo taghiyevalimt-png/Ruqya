@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-gsTpP88Gowa22Yvo1BrVGGl6bI9LKyuwLDFKs0HZldM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-TqsPDFWVjoAEU7IzCeyQYlKf5wPOOQLTxxiKiK0sePU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -396,6 +396,17 @@ h3.sec{font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spac
 .log .rest{display:inline-block;margin-top:4px;font-size:13px}.log .rest.ok{color:var(--ok)}
 .sthead{display:flex;align-items:center;justify-content:space-between;gap:10px}.sthead h1{margin:0}.xlsb{width:auto;padding:8px 14px;font-size:14px;min-height:0}
 .opt{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+
+/* Ayarlar sections and the compact breaks */
+.setsec{margin-top:12px}
+.bgrp{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:10px 0}
+.bnames{display:flex;flex-wrap:wrap;gap:4px 10px;font-weight:700;font-size:15px;color:var(--ink)}
+.bnames span:not(:last-child)::after{content:"·";margin-left:10px;color:var(--muted);font-weight:400}
+.bchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.bchip{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);font-size:12.5px;line-height:1.2;text-align:left;width:auto;min-height:0}
+.bchip b{font-size:15px;font-weight:700}
+.bchip span{color:var(--muted)}
+.bchip:disabled{opacity:1}
 .pfull{margin:6px 0 0;padding-left:22px;line-height:1.7;font-size:15px}
 #pr-names{min-height:96px;resize:vertical}
 
@@ -1030,6 +1041,19 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Rəngi yalnız admin dəyişə bilər.":"Цвет может менять только админ.",
+"Ayarlar":"Настройки",
+"Mütəxəssislər":"Специалисты",
+"Fasilələr":"Перерывы",
+"İşçilər":"Сотрудники",
+"Görünüş":"Вид",
+"Hesab":"Аккаунт",
+"Hamısı üçün":"Для всех",
+"Fasilə yoxdur — istənilən saata yazmaq olar.":"Перерывов нет — можно записывать на любое время.",
+"Fasilə":"Перерыв",
+"Bu fasilə artıq silinib.":"Этот перерыв уже удалён.",
+"Hamısından sil ({n})":"Удалить у всех ({n})",
+
 "Blokların eni":"Ширина блоков",
 "Standart":"Стандарт",
 "Orta":"Средняя",
@@ -1373,7 +1397,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113210440";
+var APP_VERSION="20261113214548";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1486,6 +1510,7 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 /* ---------- state ---------- */
 var today=bk().d;
 var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0,stAOff:0,stSec:"today"};
+ui.setSec="spec";try{var se0=localStorage.getItem("ruqya.setsec");if(/^(spec|breaks|staff|view|acc)$/.test(se0||""))ui.setSec=se0}catch(e){}
 try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(today|day|week|month|rules|terms)$/.test(ss0||""))ui.stSec=ss0}catch(e){}
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
@@ -1790,6 +1815,7 @@ function dbMsg(e){
   if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
   if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
   if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Rengi admin deyisir/.test(m))return L("Rəngi yalnız admin dəyişə bilər.");
   if(/Bu qebulu tesdiqlemek olmur/.test(m))return L("Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.");
   if(/Yalniz yazan/.test(m))return L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.");
   if(/Artiq berpa olunub/.test(m))return L("Bu artıq bərpa olunub.");
@@ -2008,7 +2034,7 @@ function render(){
   if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
   else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();main.innerHTML=banner+statsMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
-  else{top.innerHTML=L("<h1>Ayarlar</h1>");main.innerHTML=banner+readersMain()}
+  else{top.innerHTML='<h1>'+L("Ayarlar")+'</h1>'+setSecBar();main.innerHTML=banner+readersMain()}
   if(grid){
     setTimeout(fitBlocks,0);
     cal=byId("cal");
@@ -2670,43 +2696,35 @@ function patientSheet(){
   return h;
 }
 
+/* Ayarlar: one section at a time, chosen with the buttons on top (like Statistika) */
+function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks)x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
+function setSecBar(){var ss=setSecs(),cur=ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec";
+  return '<div class="chips stsec setsec" role="tablist">'+ss.map(function(x){return '<button class="chip" role="tab" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'" aria-selected="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
 function readersMain(){
-  var rs=activeReaders(),adm=isAdmin(),h="";
+  var rs=activeReaders(),adm=isAdmin(),h="",sec=setSecs().some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec";
   if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
-  h+=L('<h3 class="sec">Mütəxəssislər</h3>');
+  if(sec==="spec"){
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
-    h+='<div class="reader">'+(pendingMe()?'<span class="sw" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
+    h+='<div class="reader">'+(!adm?'<span class="sw" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
   });
-  if(rs.length)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
+  if(rs.length&&adm)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
-  if(state.hasBreaks){
+  }
+  if(sec==="breaks"&&state.hasBreaks){
     var cb=canBreaks();
     h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(cb&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
-    /* grouped: breaks for everyone first, then each specialist in calendar order, each group by time */
-    var bgroups=[{rid:"",name:L("Hamısı")}].concat(state.readers.slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)}).map(function(r){return{rid:r.id,name:r.name+(r.archived?L(" (siyahıdan çıxarılıb)"):""),arch:r.archived}}));
-    var anyShared=state.breaks.some(function(b){return !b.rid});
-    var known={};bgroups.forEach(function(g){known[g.rid]=1});
-    if(state.breaks.some(function(b){return b.rid&&!known[b.rid]}))bgroups.push({rid:"?",name:L("silinmiş mütəxəssis")});
-    bgroups.forEach(function(g){
-      var list=state.breaks.filter(function(b){return g.rid==="?"?(b.rid&&!known[b.rid]):b.rid===g.rid});
-      /* an active specialist with no breaks of his own (and none for everyone) can be booked at prayer time: say so */
-      if(!list.length){if(state.hasBrkReader&&g.rid&&g.rid!=="?"&&!g.arch&&!anyShared&&state.breaks.length)h+='<p class="hint" style="margin:6px 0 0"><b style="color:var(--ink)">'+esc(g.name)+'</b> — '+L("fasilə yoxdur, bu mütəxəssisə istənilən saata yazmaq olar.")+'</p>';return}
-      h+='<p class="hint" style="margin:6px 0 0;font-weight:600;color:var(--ink)">'+esc(g.name)+'</p>';
-      list.forEach(function(b){
-        h+='<div class="reader"><div><b>'+esc(b.title)+'</b><span class="num">'+esc(b.start)+'–'+esc(b.end)+'</span></div>'+(cb?'<button class="ghost" data-act="del-break" data-id="'+esc(b.id)+L('">Sil</button>'):'')+'</div>';
-      });
-    });
+    else h+=breakGroups(cb);
     if(cb)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
-  if(isOwner()){
+  if(sec==="staff"&&isOwner()){
     h+=L('<h3 class="sec">İşçi hesabları</h3>')+
       L('<div class="pay"><div class="foot" style="font-size:14px;color:var(--ink)">Mütəxəssislərə və satış agentlərinə login və şifrəni yalnız siz yaradırsınız. Supabase-də «Add user» → «Create new user» basın, e-poçt formatında login (məs. aysel@ruqya.az) və şifrə yazın, «Auto Confirm User» qalsın.</div>')+
       L('<a class="wa" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/users" target="_blank" rel="noopener">Hesab yarat və ya sil</a></div>');
   }
-  if(isAdmin()&&state.hasRole){
+  if(sec==="staff"&&isAdmin()&&state.hasRole){
     var ids2=Object.keys(state.staff).sort(function(a,b){var pa=state.hasPriv&&!state.roleSet[a]&&a!==ADMIN?0:1,pb=state.hasPriv&&!state.roleSet[b]&&b!==ADMIN?0:1;return pa-pb||state.staff[a].localeCompare(state.staff[b])});
     var nPend=state.hasPriv?ids2.filter(function(k){return k!==ADMIN&&!state.roleSet[k]}).length:0;
     if(nPend)h+='<div class="note warnbox" role="status"><p>'+tf(L("{n} nəfər rol gözləyir. Rol verməyənə qədər heç bir seans görmürlər."),{n:nPend})+'</p></div>';
@@ -2719,24 +2737,68 @@ function readersMain(){
       h+='</div></div>';
     }
   }
-  if(adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
+  if(sec==="staff"&&adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
+  if(sec==="view"){
+  h+=widthSeg();
+  var th=curTheme();
+  h+=L('<h3 class="sec">Görünüş</h3><div class="seg">')+
+    [["auto",L("Avtomatik")],["light",L("Açıq")],["dark",L("Tünd")]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
+    L('<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>');
+  h+=langSeg();
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
   if(!wh)h+=L('<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
   else if(wh==="old")h+=L('<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>');
   else if(wh==="ios")h+=L('<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>');
   else h+=L('<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>');
-  h+=widthSeg();
-  h+=langSeg();
-  var th=curTheme();
-  h+=L('<h3 class="sec">Görünüş</h3><div class="seg">')+
-    [["auto",L("Avtomatik")],["light",L("Açıq")],["dark",L("Tünd")]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
-    L('<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>');
+  }
+  if(sec==="acc"){
   h+=L('<h3 class="sec">Hesab</h3>');
   h+='<div class="reader"><div><b>'+esc(state.staff[auth.user.id]||L("Ad yazılmayıb"))+'</b><span>'+esc(auth.user.email||"")+'</span></div>'+
     (state.v2?L('<button class="ghost" data-act="me">Dəyiş</button>'):'')+'</div>'+
     (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?L('<p class="hint">Rol: ')+roleLabel(auth.user.id)+'</p>':'');
   h+=L('<button class="ghost" data-act="logout">Çıxış</button>');
+  }
+  return h;
+}
+/* Breaks, compact: specialists with exactly the same breaks share one card; each break is a small chip.
+   Tapping a chip opens it (with deleting for one specialist or for the whole card). */
+function brkSig(list){return list.map(function(b){return b.start+"|"+b.end+"|"+b.title}).sort().join("#")}
+function breakGroups(cb){
+  var h="",byR={},groups=[],gi={};
+  state.breaks.forEach(function(b){(byR[b.rid||""]||(byR[b.rid||""]=[])).push(b)});
+  var shared=byR[""]||[];
+  if(shared.length)groups.push({names:[L("Hamısı üçün")],rids:[""],list:shared});
+  var rows=state.readers.slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)});
+  var known={"":1};
+  rows.forEach(function(r){known[r.id]=1;var l=byR[r.id]||[];if(r.archived&&!l.length)return;
+    var k=(r.archived?"A":"")+brkSig(l);
+    if(gi[k]==null){gi[k]=groups.length;groups.push({names:[],rids:[],list:[],sig:k,arch:r.archived})}
+    var g=groups[gi[k]];g.names.push(r.name+(r.archived?L(" (siyahıdan çıxarılıb)"):""));g.rids.push(r.id);g.list=g.list.concat(l)});
+  Object.keys(byR).forEach(function(k){if(!known[k])groups.push({names:[L("silinmiş mütəxəssis")],rids:[k],list:byR[k]})});
+  groups.forEach(function(g,ix){
+    /* one chip per distinct break of the card (the same break of several specialists is one chip) */
+    var seen={},chips=[];
+    g.list.slice().sort(function(a,b){return a.start<b.start?-1:a.start>b.start?1:0}).forEach(function(b){var k=b.start+"|"+b.end+"|"+b.title;if(seen[k])return;seen[k]=1;chips.push(b)});
+    h+='<div class="bgrp"><div class="bnames">'+g.names.map(function(n){return '<span>'+esc(n)+'</span>'}).join("")+'</div>';
+    if(!chips.length)h+='<p class="hint" style="margin:6px 0 0">'+L("Fasilə yoxdur — istənilən saata yazmaq olar.")+'</p>';
+    else h+='<div class="bchips">'+chips.map(function(b){
+      return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(b.start+"|"+b.end+"|"+b.title)+'"'+(cb?'':' disabled')+'><b class="num">'+esc(b.start)+'–'+esc(b.end)+'</b><span>'+esc(b.title)+'</span></button>'}).join("")+'</div>';
+    h+='</div>';
+  });
+  brkGroupsCache=groups;
+  return h;
+}
+var brkGroupsCache=[];
+function brkSheet(){
+  var x=sheet,p=x.k.split("|");
+  /* read live, so a change by someone else meanwhile is shown correctly */
+  var items=state.breaks.filter(function(b){return x.rids.indexOf(b.rid||"")>=0&&b.start===p[0]&&b.end===p[1]&&b.title===p.slice(2).join("|")});
+  var h='<h2>'+esc(p.slice(2).join("|"))+CLOSE+'</h2><p class="hint num" style="font-size:16px;color:var(--ink)">'+esc(p[0])+'–'+esc(p[1])+'</p>';
+  if(!items.length)return h+'<p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
+  if(items.length>1)h+='<button class="danger" data-act="del-breaks" data-id="'+esc(items.map(function(b){return b.id}).join(","))+'">'+tf(L("Hamısından sil ({n})"),{n:items.length})+'</button>';
+  h+='<div class="pay">'+items.map(function(b){var r=reader(b.rid);
+    return '<div class="visit"><span>'+esc(b.rid?(r?r.name:L("silinmiş mütəxəssis")):L("Hamısı üçün"))+'</span><button class="link" style="color:var(--bad)" data-act="del-breaks" data-id="'+esc(b.id)+'">'+L("Sil")+'</button></div>'}).join("")+'</div>';
   return h;
 }
 /* Language switch, written in both languages so anyone can find it. Changing it reloads the page. */
@@ -2894,7 +2956,7 @@ function openSheet(s){
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,xls:xlsSheet,expense:expenseForm}[s.type];
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,xls:xlsSheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
@@ -3195,6 +3257,7 @@ document.addEventListener("click",function(e){
   else if(act==="month"){openSheet({type:"month",m:ui.date.slice(0,8)+"01"});return}
   else if(act==="m-shift"){if(sheet&&sheet.type==="month"){var mm=parse(sheet.m);sheet.m=ymd(mm.getFullYear(),mm.getMonth()+(+b.dataset.n),1);byId("sheet").innerHTML=monthSheet()}return}
   else if(act==="m-pick"){if(okDate(b.dataset.d)){ui.date=b.dataset.d;closeSheet()}}
+  else if(act==="color"&&!isAdmin())return;
   else if(act==="color"){if(reader(id)&&!pendingMe())openSheet({type:"color",id:id});return}
   else if(act==="pick-color"){
     if(!sheet||sheet.type!=="color"||!okColor(id)||!state.hasColor)return;
@@ -3305,6 +3368,16 @@ document.addEventListener("click",function(e){
     var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;return o});
     rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert(rows));closeSheet();
+  }
+  else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
+  else if(act==="brk-open"){if(!canBreaks())return;var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg)openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
+  else if(act==="del-breaks"){
+    if(!canBreaks())return;
+    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    var dids=String(id).split(",").filter(function(z){return z});
+    state.breaks=state.breaks.filter(function(x){return dids.indexOf(x.id)<0});
+    dids.forEach(function(z){db(sb.from("breaks").delete().eq("id",z))});
+    closeSheet();
   }
   else if(act==="del-break"){
     if(!canBreaks())return;
