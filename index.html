@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-YtlDin78TdG66fRwgImp/aKptFANCDvrr80HC2i4RPg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qO1DX7HOaYFkg6uTOVxQ3mKhHwcj0pFkXNfhGnp9jS0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1030,6 +1030,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.":"Нельзя подтвердить прошедшую или отменённую запись.",
+"✓ Seans bitib — uğurlu sayılır.":"✓ Сеанс прошёл — считается успешным.",
+"Təsdiqlənib":"Подтверждено",
+
 "istəyə görə":"по желанию",
 "Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.":"Не удалось подготовить файл. Проверьте интернет и попробуйте снова.",
 "Yenidən cəhd et":"Попробовать снова",
@@ -1362,7 +1366,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113200930";
+var APP_VERSION="20261113203928";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1414,7 +1418,7 @@ function stPill(a){var k=stOf(a);return k==="wait"?'<span class="tag">'+stLabel(
 function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
 /* Bookings whose session is over but whose price was never written: the cash total misses them. */
 function npSheet(){
-  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
+  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)&&canEdit(a)}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
   var h=L('<h2>Qiyməti yazılmayıb')+CLOSE+'</h2>';
   if(!np.length)return h+L('<p class="hint">Hamısının qiyməti yazılıb ✓</p>');
   h+=L('<p class="hint">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>')+'<div class="pay">';
@@ -1423,7 +1427,7 @@ function npSheet(){
   return h+'</div>';
 }
 function noPriceBox(){
-  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)});if(!np.length)return "";
+  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)&&canEdit(a)});if(!np.length)return "";
   return L('<div class="note warnbox" role="status"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
@@ -1615,7 +1619,7 @@ function refresh(){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null&&!res[4]);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null&&!res[4]);state.statEdits=(res[15]||[]).map(mapEdit);
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null);state.statEdits=(res[15]||[]).map(mapEdit);
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1695,7 +1699,7 @@ function checkSecurity(){
 }
 /* Visits older than the loaded weeks are needed only for patient counts; fetch them when a screen shows those. */
 var histLoading=false,histFail=0;
-function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&/^(patient|appt)$/.test(sheet.type))}
+function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&sheet.type==="patient")}
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom;
@@ -1771,6 +1775,7 @@ function dbMsg(e){
   if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
   if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
   if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Bu qebulu tesdiqlemek olmur/.test(m))return L("Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.");
   if(/Yalniz yazan/.test(m))return L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.");
   if(/Artiq berpa olunub/.test(m))return L("Bu artıq bərpa olunub.");
   if(/Yalniz admin berpa/.test(m))return L("Bərpa etməyi yalnız admin edə bilər.");
@@ -2081,6 +2086,7 @@ function gridMain(){
 function stateLine(a){
   if(gone(a))return '<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
     (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+'</div>';
+  if(!canEdit(a))return done(a)?'<p class="hint" style="margin:0"><b style="color:var(--ok)">'+L("✓ Seans bitib — uğurlu sayılır.")+'</b></p>':'';
   if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>')+
     (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>'));
   return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>');
@@ -2101,7 +2107,7 @@ function apptText(a){
 }
 /* "the patient confirmed by WhatsApp": a switch for everybody, until the session is over */
 function confBtn(a,cls){if(!state.hasConf||gone(a)||done(a))return "";
-  return '<button class="'+cls+(a.conf?' on':'')+'" data-act="conf" data-id="'+esc(a.id)+'" aria-pressed="'+a.conf+'">'+(a.conf?G_OK+L("Təsdiqləyib"):L("Təsdiq aldı"))+'</button>'}
+  return '<button class="'+cls+(a.conf?' on':'')+'" data-act="conf" data-id="'+esc(a.id)+'" aria-pressed="'+!!a.conf+'">'+(a.conf?G_OK+L("Təsdiqləyib"):L("Təsdiq aldı"))+'</button>'}
 function viewSheet(){
   var a=appt(sheet.id);if(!a)return L('<h2>Qəbul')+CLOSE+L('</h2><p class="hint">Bu qəbul silinib.</p>');
   var r=reader(a.readerId);
@@ -2419,29 +2425,43 @@ function copyText(t,ok,no){
 var CRC_T=null;
 function crc32(u){if(!CRC_T){CRC_T=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);CRC_T[n]=c>>>0}}
   var c2=0xFFFFFFFF;for(var i=0;i<u.length;i++)c2=CRC_T[(c2^u[i])&255]^(c2>>>8);return (c2^0xFFFFFFFF)>>>0}
-function utf8(s){var b=unescape(encodeURIComponent(s)),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+/* text safe for an Excel file: no lone surrogate halves, no U+FFFE/U+FFFF, no control characters */
+function xClean(s){s=String(s);var o="",i,c,d;for(i=0;i<s.length;i++){c=s.charCodeAt(i);
+    if(c>=0xD800&&c<=0xDBFF){d=s.charCodeAt(i+1);if(d>=0xDC00&&d<=0xDFFF){o+=s.charAt(i)+s.charAt(i+1);i++}continue}
+    if(c>=0xDC00&&c<=0xDFFF||c===0xFFFE||c===0xFFFF||(c<32&&c!==9&&c!==10&&c!==13))continue;o+=s.charAt(i)}return o}
+function utf8(s){s=xClean(s);if(typeof TextEncoder!=="undefined")return new TextEncoder().encode(s);
+  var b=unescape(encodeURIComponent(s)),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+/* deflate where the browser can (files ~10 times smaller), otherwise stored as is */
+function deflate(u){
+  if(typeof CompressionStream==="undefined"||typeof Response==="undefined")return Promise.resolve(null);
+  try{return new Response(new Blob([u]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer().then(function(b){return new Uint8Array(b)},function(){return null})}catch(e){return Promise.resolve(null)}
+}
 function le(n,b){var a=[];for(var i=0;i<b;i++){a.push(n&255);n=n>>>8}return a}
 function zipBlob(files){
-  var parts=[],cen=[],off=0,cs=0;
-  files.forEach(function(f){var nm=utf8(f.n),d=utf8(f.d),c=crc32(d),sz=d.length;
-    var h=[0x50,0x4b,3,4].concat(le(20,2),le(0x0800,2),le(0,2),le(0,2),le(0x21,2),le(c,4),le(sz,4),le(sz,4),le(nm.length,2),le(0,2));
-    parts.push(new Uint8Array(h),nm,d);
-    cen.push([new Uint8Array([0x50,0x4b,1,2].concat(le(20,2),le(20,2),le(0x0800,2),le(0,2),le(0,2),le(0x21,2),le(c,4),le(sz,4),le(sz,4),le(nm.length,2),le(0,2),le(0,2),le(0,2),le(0,2),le(0,4),le(off,4))),nm]);
-    off+=h.length+nm.length+sz});
-  cen.forEach(function(x){parts.push(x[0],x[1]);cs+=x[0].length+x[1].length});
-  parts.push(new Uint8Array([0x50,0x4b,5,6].concat(le(0,2),le(0,2),le(files.length,2),le(files.length,2),le(cs,4),le(off,4),le(0,2))));
-  return new Blob(parts,{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  var raw=files.map(function(f){return utf8(f.d)});
+  return Promise.all(raw.map(deflate)).then(function(z){
+    var parts=[],cen=[],off=0,cs=0;
+    files.forEach(function(f,i){var nm=utf8(f.n),d=raw[i],c=crc32(d),sz=d.length,useZ=z[i]&&z[i].length<sz,body=useZ?z[i]:d,m=useZ?8:0;
+      var h=[0x50,0x4b,3,4].concat(le(20,2),le(0x0800,2),le(m,2),le(0,2),le(0x21,2),le(c,4),le(body.length,4),le(sz,4),le(nm.length,2),le(0,2));
+      parts.push(new Uint8Array(h),nm,body);
+      cen.push([new Uint8Array([0x50,0x4b,1,2].concat(le(20,2),le(20,2),le(0x0800,2),le(m,2),le(0,2),le(0x21,2),le(c,4),le(body.length,4),le(sz,4),le(nm.length,2),le(0,2),le(0,2),le(0,2),le(0,2),le(0,4),le(off,4))),nm]);
+      off+=h.length+nm.length+body.length});
+    cen.forEach(function(x){parts.push(x[0],x[1]);cs+=x[0].length+x[1].length});
+    parts.push(new Uint8Array([0x50,0x4b,5,6].concat(le(0,2),le(0,2),le(files.length,2),le(files.length,2),le(cs,4),le(off,4),le(0,2))));
+    return new Blob(parts,{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  });
 }
-function xEsc(s){return String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function xEsc(s){return xClean(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function xCol(i){var s="";i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s}
 function xSheet(rows){
   var w=[],out=[];
-  rows.forEach(function(r){r.forEach(function(v,i){var l=String(v==null?"":v).length;w[i]=Math.max(w[i]||8,Math.min(60,l+2))})});
+  rows.forEach(function(r){r.forEach(function(v,i){var l=v&&v.dt?11:String(v==null?"":v).length;w[i]=Math.max(w[i]||8,Math.min(60,l+2))})});
   out.push('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>');
   w.forEach(function(v,i){out.push('<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+v+'" customWidth="1"/>')});
   out.push('</cols><sheetData>');
   rows.forEach(function(r,ri){out.push('<row r="'+(ri+1)+'">');
     r.forEach(function(v,ci){if(v==null||v==="")return;var ref=xCol(ci)+(ri+1),st=ri===0?' s="1"':'';
+      if(v&&v.dt&&/^\d{4}-\d{2}-\d{2}$/.test(v.dt)){var p=v.dt.split("-"),ser=Math.round((Date.UTC(+p[0],+p[1]-1,+p[2])-Date.UTC(1899,11,30))/864e5);out.push('<c r="'+ref+'" s="2"><v>'+ser+'</v></c>');return}
       if(typeof v==="number"&&isFinite(v))out.push('<c r="'+ref+'"'+st+'><v>'+v+'</v></c>');
       else out.push('<c r="'+ref+'" t="inlineStr"'+st+'><is><t xml:space="preserve">'+xEsc(v)+'</t></is></c>')});
     out.push('</row>')});
@@ -2460,24 +2480,30 @@ function xlsxBlob(sheets){
   return zipBlob([{n:"[Content_Types].xml",d:ct+'</Types>'},
     {n:"_rels/.rels",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+M+'package/2006/relationships"><Relationship Id="rId1" Type="'+M+'officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
     {n:"xl/workbook.xml",d:wb+'</sheets></workbook>'},{n:"xl/_rels/workbook.xml.rels",d:wr},
-    {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'}].concat(files));
+    {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="dd.mm.yyyy"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'}].concat(files));
 }
 /* All periods the statistics know, from the first one to the latest finished one. */
 function allPeriods(per){
   var out=[],seen={},i,r;
-  if(per==="day"){for(var d=ST_START;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:fmtDay(d,"y")});return out}
+  if(per==="day"){for(var d=ST_START;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:{dt:d}});return out}
   for(i=0;i<2000;i++){r=per==="week"?weekRange(i):monthRange(i);if(seen[r.s])break;seen[r.s]=1;r.label=per==="week"?rangeLabel(r):r.name+" ("+rangeLabel(r)+")";out.push(r);if(!r.canBack)break}
   return out.reverse();
 }
 function xlsSheets(all){
   var sh=[],nz=function(v){return v==null?"":v};
   var A=all.appts,keep={appts:state.appts,products:state.products,expenses:state.expenses};
-  state.appts=A;state.products=all.products;state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
+  /* every period only looks at its own days (fast even with years of data) */
+  var byD={},byC={},prD={},put=function(m,k,x){if(k)(m[k]||(m[k]=[])).push(x)};
+  A.forEach(function(a){put(byD,a.date,a);if(a.created&&a.created!==a.date)put(byC,a.created,a)});
+  all.products.forEach(function(x){put(prD,x.date,x)});
+  var slice=function(r){var ap=[],pr=[];for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])ap=ap.concat(byD[d]);if(byC[d])ap=ap.concat(byC[d]);if(prD[d])pr=pr.concat(prD[d])}
+    state.appts=ap;state.products=pr;pcache=null};
+  state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
   try{
     [["day",L("Günlük")],["week",L("Həftəlik")],["month",L("Aylıq")]].forEach(function(p){
       var ps=allPeriods(p[0]),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]],
         Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]];
-      ps.forEach(function(r){
+      ps.forEach(function(r){slice(r);
         statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b])});
         statData("money",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.c)Mo.push([r.label,x.name,x.a,x.b,x.c])});
         if(state.hasProducts)statData("prod",r,p[0]).rows.forEach(function(x){if(x.a||x.c)Pr.push([r.label,x.name,x.a,x.c])});
@@ -2486,19 +2512,19 @@ function xlsSheets(all){
       if(state.hasProducts)sh.push({name:p[1]+" — "+L("məhsul"),rows:Pr});
     });
     var T=[[L("Tarix"),L("Kim yazıb"),L("Qəbul")]];
-    allPeriods("day").forEach(function(r){statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
+    allPeriods("day").forEach(function(r){slice(r);statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
     sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
   }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
   var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
-  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Vəziyyət"),L("Təsdiq"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
+  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
   A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
-    Q.push([a.date,a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created||"",a.note||""])});
+    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
   sh.push({name:L("Bütün qəbullar"),rows:Q});
   if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
-    all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([x.date,sn(x.by),prodItems(x.names).join(", "),x.amount])});
+    all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([{dt:x.date},sn(x.by),prodItems(x.names).join(", "),x.amount])});
     sh.push({name:L("Məhsul satışları"),rows:P})}
   if(state.v2){var E=[[L("Tarix"),L("Xərc"),L("Məbləğ")]];
-    all.expenses.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){E.push([x.date,x.title,x.amount])});
+    all.expenses.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){E.push([{dt:x.date},x.title,x.amount])});
     sh.push({name:L("Xərclər"),rows:E})}
   return sh;
 }
@@ -2519,16 +2545,19 @@ function xlsSheet(){
   return h+'<a class="primary" href="'+esc(x.url)+'" download="'+esc(x.fname)+'">'+L("Faylı yüklə")+'</a>'+
     '<p class="hint">'+L("iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.")+'</p>';
 }
+function dropXlsUrl(x){if(x&&x.url&&x.url!=="#"){try{URL.revokeObjectURL(x.url)}catch(e){}x.url=""}}
 function startXls(){
   if(!isAdmin())return;
-  var s={type:"xls"};openSheet(s);
+  if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
+  var s={type:"xls"},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};openSheet(s);
   xlsFetch().then(function(all){
     if(sheet!==s)return;
-    var sh=xlsSheets(all),blob=xlsxBlob(sh);
-    s.blob=blob;s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
-    try{s.url=URL.createObjectURL(blob)}catch(e){s.url="#"}
-    byId("sheet").innerHTML=xlsSheet();
-  },function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()});
+    var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
+    return xlsxBlob(sh).then(function(blob){
+      if(sheet!==s)return;
+      s.blob=blob;s.url=URL.createObjectURL(blob);byId("sheet").innerHTML=xlsSheet();
+    });
+  }).then(null,fail0);
 }
 /* ---------- Kassa: only recording product sales and expenses, day by day (product totals are in Statistika; expenses are listed per day here) ---------- */
 function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
@@ -2849,7 +2878,7 @@ function openSheet(s){
   setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
-function hideSheet(){sheet=null;byId("overlay").hidden=true}
+function hideSheet(){if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);sheet=null;byId("overlay").hidden=true}
 var backing=false;
 function closeSheet(){
   try{if(history.state&&history.state.sheet&&!backing){backing=true;history.back();setTimeout(function(){backing=false},1500)}}catch(e){}
@@ -2873,7 +2902,7 @@ function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
   var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:"";   /* always chosen by hand in a new booking, even after tapping a specialist's column */
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
-  var pre=sheet.pre||{},pm=patients();
+  var pre=sheet.pre||{};
   var opts=(def?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   /* Kept short so «Yaz» is visible without scrolling: two fields per row, small time buttons, and the button
      itself stays at the bottom of the window. */
@@ -3027,7 +3056,7 @@ document.addEventListener("click",function(e){
   }
   if(!auth.user)return;
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
-  if(offline&&/^(save-|del-|status$|pick-color$)/.test(act)){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
+  if(offline&&/^(save-|del-|status$|pick-color$|conf$|st-edit-(save|reset)$|restore$|xls$)/.test(act)){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
     if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";var mm=byId("main");mm.scrollTop=0;mm.classList.remove("enter");void mm.offsetWidth;mm.classList.add("enter")}
   }
@@ -3073,10 +3102,11 @@ document.addEventListener("click",function(e){
   else if(act==="new-prod"){openSheet({type:"prod"});return}
   else if(act==="xls"){startXls();return}
   else if(act==="xls-save"){
-    if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function")return;
-    var xs=sheet,fr=new FileReader();
-    fr.onload=function(){var ok0=false;try{ok0=NATIVE.saveFile(xs.fname,String(fr.result).split(",")[1]||"")}catch(e){}
+    if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
+    var xs=sheet,fr=new FileReader();xs.saving=true;
+    fr.onload=function(){xs.saving=false;var ok0=false;try{ok0=NATIVE.saveFile(xs.fname,String(fr.result).split(",")[1]||"")}catch(e){}
       flash(ok0?L("Fayl «Yükləmələr» qovluğuna yazıldı."):L("Faylı yazmaq olmadı. Proqramı brauzerdə (Chrome) açıb yenidən cəhd edin."),true)};
+    fr.onerror=function(){xs.saving=false;flash(L("Faylı yazmaq olmadı. Proqramı brauzerdə (Chrome) açıb yenidən cəhd edin."),true)};
     fr.readAsDataURL(xs.blob);return;
   }
   else if(act==="prod-all"){openSheet({type:"prodall",id:id});return}
@@ -3165,7 +3195,7 @@ document.addEventListener("click",function(e){
     if(!isAdmin()||!sheet||sheet.type!=="audit"||b.disabled)return;
     var rid0=+id,s0=sheet;b.disabled=true;b.textContent=L("Bərpa olunur…");
     sb.rpc("ruqya_restore",{aid:rid0}).then(function(r){
-      if(sheet!==s0)return;
+      if(sheet!==s0){flash(r.error?dbMsg(r.error):L("Bərpa olundu."),true);if(!r.error)refresh();return}
       var mark0=function(){[s0.rows||[],s0.dels||[]].forEach(function(l){l.forEach(function(x){if(+x.id===rid0)x.restored=true})})};
       if(r.error){
         if(/Artiq berpa olunub/.test(r.error.message||""))mark0();

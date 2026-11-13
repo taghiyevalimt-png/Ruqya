@@ -16,7 +16,7 @@ begin
     insert into public.audit_log (uid, tbl, op, row_id, old, new) values (auth.uid(), tg_table_name, tg_op, new.id::text, to_jsonb(old), to_jsonb(new));
   end if;
   if random() < 0.005 then
-    delete from public.audit_log where id in (select id from public.audit_log where at < now() - interval '365 days' order by id limit 2000);
+    delete from public.audit_log where id in (select id from public.audit_log where at < now() - interval '730 days' order by id limit 2000);
   end if;
   return null;
 end $$;

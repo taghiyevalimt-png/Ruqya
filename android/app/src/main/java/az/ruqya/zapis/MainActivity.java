@@ -169,14 +169,23 @@ public class MainActivity extends Activity {
                 android.content.ContentValues v = new android.content.ContentValues();
                 v.put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, safe);
                 v.put(android.provider.MediaStore.MediaColumns.MIME_TYPE, mime);
+                v.put(android.provider.MediaStore.MediaColumns.IS_PENDING, 1);
                 final Uri uri = getContentResolver().insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);
                 if (uri == null) return false;
-                java.io.OutputStream o = getContentResolver().openOutputStream(uri);
-                if (o == null) return false;
                 try {
-                    o.write(data);
-                } finally {
-                    o.close();
+                    java.io.OutputStream o = getContentResolver().openOutputStream(uri);
+                    if (o == null) throw new java.io.IOException("no stream");
+                    try {
+                        o.write(data);
+                    } finally {
+                        o.close();
+                    }
+                    android.content.ContentValues done = new android.content.ContentValues();
+                    done.put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0);
+                    getContentResolver().update(uri, done, null, null);
+                } catch (Exception e) {
+                    try { getContentResolver().delete(uri, null, null); } catch (Exception ignored) { }
+                    return false;
                 }
                 runOnUiThread(() -> {
                     try {
