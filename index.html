@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Z7/LSPFXTBs0VDwt7QHtc7CPyyq5LCSvzjOVaJYCMjw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-YtlDin78TdG66fRwgImp/aKptFANCDvrr80HC2i4RPg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -395,6 +395,7 @@ h3.sec{font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spac
 .visit.pend .pwho{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.visit.pend .pwho small{color:var(--warn);font-size:12.5px}
 .log .rest{display:inline-block;margin-top:4px;font-size:13px}.log .rest.ok{color:var(--ok)}
 .sthead{display:flex;align-items:center;justify-content:space-between;gap:10px}.sthead h1{margin:0}.xlsb{width:auto;padding:8px 14px;font-size:14px;min-height:0}
+.opt{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 .pfull{margin:6px 0 0;padding-left:22px;line-height:1.7;font-size:15px}
 #pr-names{min-height:96px;resize:vertical}
 
@@ -1029,6 +1030,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"istəyə görə":"по желанию",
 "Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.":"Не удалось подготовить файл. Проверьте интернет и попробуйте снова.",
 "Yenidən cəhd et":"Попробовать снова",
 "Bütün məlumatlar yüklənir və fayl hazırlanır…":"Загружаются все данные и готовится файл…",
@@ -1360,7 +1362,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113165331";
+var APP_VERSION="20261113200930";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1544,6 +1546,8 @@ function flash(m,force){
   auth.msg=m;render();clearTimeout(msgTimer);
   if(m&&!dirty)msgTimer=setTimeout(function(){if(!dirty){auth.msg="";render()}},7000);
 }
+/* patient history: the last 2 years (management keeps all data 2 years) */
+var HIST_DAYS=731;
 function fetchAll(make){
   var out=[],from=0;
   function next(){return make().range(from,from+999).then(function(r){
@@ -1597,7 +1601,7 @@ function refresh(){
     soft(function(){return sb.from("product_sales").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
     probe("appts.duration",function(){return soft(function(){return sb.from("appts").select("duration").limit(1)})}),
     probe("staff.role",function(){return soft(function(){return sb.from("staff").select("role").limit(1)})}),
-    needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-400)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
+    needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-HIST_DAYS)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
     probe("appts.updated_at",function(){return soft(function(){return sb.from("appts").select("updated_at").limit(1)})}),
     probe("audit_log.id",function(){return soft(function(){return sb.from("audit_log").select("id").limit(1)})}),
     probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})}),
@@ -1695,7 +1699,7 @@ function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom;
-  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-400)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
+  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-HIST_DAYS)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
     histLoading=false;if(my!==seq||!auth.user)return;
     state.hist=rows.map(mapLite);state.histLoaded=true;render();redrawCard();
   },function(){histLoading=false;histFail=Date.now()});
@@ -2563,7 +2567,7 @@ function prodAllSheet(){var x=null;for(var i=0;i<state.products.length;i++)if(st
 function productForm(){
   var dd=ui.tab==="cash"?ui.date:today;
   return L('<h2>Məhsul satışı')+CLOSE+'</h2>'+
-    (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' *</label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'"></textarea></div>'
+    (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'"></textarea></div>'
       :'<p class="hint">'+L("Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.")+'</p>')+
     L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+' *</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
     L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
@@ -3079,7 +3083,6 @@ document.addEventListener("click",function(e){
   else if(act==="save-prod"){
     if(!sheet||sheet.type!=="prod")return;   /* a second tap after the form closed adds nothing */
     var pa2=amount("pr-amount"),pd=val("pr-date"),pn=byId("pr-names")?prodItems(byId("pr-names").value).join("\n"):null;
-    if(pn!==null&&!pn)return fail("pr-err",L("Məhsulların adlarını yazın."));
     if(pn&&pn.length>2000)return fail("pr-err",L("Məhsul adları çox uzundur."));
     if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
     if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
