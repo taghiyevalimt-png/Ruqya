@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-9qlWnLT7bIuDazF5cAK4aYuanvNsMOXar/ij/7qUIwA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qsB8A3yBjUgaBxZEae/WNjN9He5fce43xopCjHyEUbA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -261,7 +261,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev b{font-weight:600;font-size:10px;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:normal;overflow-wrap:anywhere}
 .ev b i.ok{font-style:normal;font-size:7px;letter-spacing:-1px;vertical-align:1px}
 .ev.tiny{padding:1px 3px;justify-content:center}.ev.tiny>*:not(b){display:none}
-.ev span{overflow:hidden;opacity:.92;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
+.ev span{overflow:hidden;white-space:nowrap;font-size:10px;letter-spacing:-.2px}
 .ev span.ph{white-space:normal;overflow-wrap:anywhere}
 .ev>*{flex-shrink:0}
 .ev.tight b{-webkit-line-clamp:1;white-space:nowrap;text-overflow:ellipsis;display:block}.ev.tight span,.ev.tight span.by{white-space:nowrap;text-overflow:ellipsis}
@@ -543,13 +543,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"empty\">Yüklənir…</div>":"<div class=\"empty\">Загрузка…</div>",
 "<div class=\"field\"><label for=\"l-mail\">E-poçt</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>":"<div class=\"field\"><label for=\"l-mail\">Эл. почта</label><input id=\"l-mail\" type=\"email\" autocomplete=\"username\" inputmode=\"email\" autocapitalize=\"off\"></div>",
 "<div class=\"field\"><label for=\"l-pass\">Şifrə</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>":"<div class=\"field\"><label for=\"l-pass\">Пароль</label><input id=\"l-pass\" type=\"password\" autocomplete=\"current-password\"></div>",
-"<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Daxil ol</button>":"<p class=\"err\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Войти</button>",
+"<p class=\"err\" role=\"alert\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Daxil ol</button>":"<p class=\"err\" role=\"alert\" id=\"l-err\" hidden></p><button class=\"primary\" data-act=\"login\">Войти</button>",
 "<p class=\"hint\">E-poçt və şifrəni admin verir.</p>":"<p class=\"hint\">Почту и пароль выдаёт админ.</p>",
 "İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq.":"Нет интернета. Изменения не сохранятся.",
 "Köhnə məlumatlar yüklənir…":"Загружаются старые данные…",
 "Köhnə pasiyentlər yüklənir…":"Загружаются старые пациенты…",
-"<div class=\"note\"><p>Qəbullar yüklənir…</p></div>":"<div class=\"note\"><p>Загружаются записи…</p></div>",
-"<h1>Pasiyentlər</h1><input class=\"search\" id=\"q\" type=\"search\" placeholder=\"Ad və ya telefon ilə axtar\" value=\"":"<h1>Пациенты</h1><input class=\"search\" id=\"q\" type=\"search\" placeholder=\"Поиск по имени или телефону\" value=\"",
+"<div class=\"note\" role=\"status\"><p>Qəbullar yüklənir…</p></div>":"<div class=\"note\" role=\"status\"><p>Загружаются записи…</p></div>",
+"<h1>Pasiyentlər</h1><input class=\"search\" id=\"q\" type=\"search\" aria-label=\"Ad və ya telefon ilə axtar\" placeholder=\"Ad və ya telefon ilə axtar\" value=\"":"<h1>Пациенты</h1><input class=\"search\" id=\"q\" type=\"search\" aria-label=\"Поиск по имени или телефону\" placeholder=\"Поиск по имени или телефону\" value=\"",
 "<h1>Ayarlar</h1>":"<h1>Настройки</h1>",
 "<button class=\"label\" data-act=\"month\" aria-label=\"Ayı aç, tarix seç\">":"<button class=\"label\" data-act=\"month\" aria-label=\"Открыть месяц, выбрать дату\">",
 "<button class=\"ghost\" data-act=\"today\">Bu gün</button>":"<button class=\"ghost\" data-act=\"today\">Сегодня</button>",
@@ -559,7 +559,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "\">Təqvim</button><button data-act=\"view\" data-id=\"list\" aria-pressed=\"":"\">Календарь</button><button data-act=\"view\" data-id=\"list\" aria-pressed=\"",
 "\">Siyahı</button></div>":"\">Список</button></div>",
 "\">Hamısı</button>":"\">Все</button>",
-"<div class=\"note warnbox\"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ":"<div class=\"note warnbox\"><p>Записей прошлых дней без статуса: ",
+"<div class=\"note warnbox\" role=\"status\"><p>Keçmiş günlərdə statusu seçilməmiş qəbul: ":"<div class=\"note warnbox\" role=\"status\"><p>Записей прошлых дней без статуса: ",
 "\">Göstər</button>":"\">Показать</button>",
 "</b> qəbul</span><span><b class=\"num\">":"</b> записей</span><span><b class=\"num\">",
 "</b> gəldi</span><span><b class=\"num\">":"</b> пришли</span><span><b class=\"num\">",
@@ -585,7 +585,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"two\"><div class=\"field\"><label for=\"b-start\">Başlayır</label><input id=\"b-start\" type=\"time\" step=\"300\"></div>":"<div class=\"two\"><div class=\"field\"><label for=\"b-start\">Начало</label><input id=\"b-start\" type=\"time\" step=\"300\"></div>",
 "<div class=\"field\"><label for=\"b-end\">Bitir</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>":"<div class=\"field\"><label for=\"b-end\">Конец</label><input id=\"b-end\" type=\"time\" step=\"300\"></div></div>",
 "<p class=\"hint\">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>":"<p class=\"hint\">Перерыв показывается в календаре каждый день у всех специалистов, и на это время нельзя записать.</p>",
-"<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Əlavə et</button></div>":"<p class=\"err\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Добавить</button></div>",
+"<p class=\"err\" role=\"alert\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Əlavə et</button></div>":"<p class=\"err\" role=\"alert\" id=\"b-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-break\">Добавить</button></div>",
 "<div class=\"empty\">Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>":"<div class=\"empty\">В календаре пока нет специалистов. Они появятся здесь, когда админ добавит их в разделе «Настройки».</div>",
 "<div class=\"empty\"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button></div>":"<div class=\"empty\"><p>Сначала добавьте специалиста.</p><button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button></div>",
 ". Seçilməyincə kassa natamam qalır.</p>":". Пока статус не выбран, касса неполная.</p>",
@@ -710,7 +710,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<h2>Hesabat":"<h2>Отчёт",
 "<div class=\"field\"><label for=\"rep\">Bu mətni rəhbərə göndərmək olar</label><textarea id=\"rep\" readonly>":"<div class=\"field\"><label for=\"rep\">Этот текст можно отправить руководителю</label><textarea id=\"rep\" readonly>",
 "<p class=\"hint\" id=\"rep-msg\"></p><div class=\"btns\"><button class=\"primary\" data-act=\"copy\">Kopyala</button></div>":"<p class=\"hint\" id=\"rep-msg\"></p><div class=\"btns\"><button class=\"primary\" data-act=\"copy\">Копировать</button></div>",
-"<div class=\"note warnbox\"><p>Təhlükəsizlik: ":"<div class=\"note warnbox\"><p>Безопасность: ",
+"<div class=\"note warnbox\" role=\"status\"><p>Təhlükəsizlik: ":"<div class=\"note warnbox\" role=\"status\"><p>Безопасность: ",
 ". Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Aç</a></div>":". Отключите это в Supabase, иначе посторонний сможет увидеть данные пациентов.</p><a class=\"ghost\" href=\"https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers\" target=\"_blank\" rel=\"noopener\">Открыть</a></div>",
 "<h3 class=\"sec\">Mütəxəssislər</h3>":"<h3 class=\"sec\">Специалисты</h3>",
 "Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Чтобы начать запись, добавьте первого специалиста.",
@@ -781,7 +781,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "\">Admin</button>":"\">Админ</button>",
 "Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız adminlər verir və geri alır.":"Админ может добавлять специалистов и перерывы, исправлять имена и роли сотрудников, смотреть журнал изменений. Роль админа дают и забирают только админы.",
 "Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür.":"Записи, сделанные специалистами, не попадают в статистику продаж.",
-"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Yadda saxla</button></div>":"<p class=\"err\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Сохранить</button></div>",
+"<p class=\"err\" role=\"alert\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Yadda saxla</button></div>":"<p class=\"err\" role=\"alert\" id=\"s-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-staff\">Сохранить</button></div>",
 "əlavə etdi":"добавлено",
 "SİLDİ":"УДАЛЕНО",
 "dəyişdi":"изменено",
@@ -809,7 +809,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "satış agenti":"агент продаж",
 "<h2>Dəyişikliklər jurnalı":"<h2>Журнал изменений",
 "<p class=\"hint\">Yüklənir…</p>":"<p class=\"hint\">Загрузка…</p>",
-"<p class=\"err\">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>":"<p class=\"err\">Не удалось загрузить журнал. Проверьте интернет.</p>",
+"<p class=\"err\" role=\"alert\">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>":"<p class=\"err\" role=\"alert\">Не удалось загрузить журнал. Проверьте интернет.</p>",
 "\">Hamısı</button><button data-act=\"audit-f\" data-id=\"del\" aria-pressed=\"":"\">Все</button><button data-act=\"audit-f\" data-id=\"del\" aria-pressed=\"",
 "\">Yalnız silinənlər</button></div>":"\">Только удалённые</button></div>",
 "<p class=\"hint\">Hələ qeyd yoxdur.</p>":"<p class=\"hint\">Записей пока нет.</p>",
@@ -827,10 +827,10 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"field\"><label for=\"m-name\">Adınız</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"":"<div class=\"field\"><label for=\"m-name\">Ваше имя</label><input id=\"m-name\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" value=\"",
 "Admin hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. ":"Админ ещё не добавил специалистов в календарь, впишите имя сами. ",
 "Statistikada və hesabatda bu adla görünəcəksiniz.</p>":"Под этим именем вы будете в статистике и отчётах.</p>",
-"<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Yadda saxla</button></div>":"<p class=\"err\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Сохранить</button></div>",
+"<p class=\"err\" role=\"alert\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Yadda saxla</button></div>":"<p class=\"err\" role=\"alert\" id=\"m-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-me\">Сохранить</button></div>",
 "<h2>Ödəniş":"<h2>Оплата",
 "<div class=\"field\"><label for=\"p-price\">Ödənilən məbləğ, ":"<div class=\"field\"><label for=\"p-price\">Оплаченная сумма, ",
-"<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Gəldi və ödədi</button></div>":"<p class=\"err\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Пришёл и оплатил</button></div>",
+"<p class=\"err\" role=\"alert\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Gəldi və ödədi</button></div>":"<p class=\"err\" role=\"alert\" id=\"p-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-pay\">Пришёл и оплатил</button></div>",
 "<div class=\"note\"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu admin bir dəfə edir.</p></div>":"<div class=\"note\"><p>Для продажи товаров нужно обновить базу. Админ делает это один раз.</p></div>",
 "</b><span>cəmi satış</span></div>":"</b><span>всего продаж</span></div>",
 "</b><span>məhsul satılıb</span></div>":"</b><span>товаров продано</span></div>",
@@ -849,7 +849,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"field\"><label for=\"pr-date\">Tarix</label><input id=\"pr-date\" type=\"date\" value=\"":"<div class=\"field\"><label for=\"pr-date\">Дата</label><input id=\"pr-date\" type=\"date\" value=\"",
 "<p class=\"hint\">Satan avtomatik qeyd olunur: ":"<p class=\"hint\">Продавец указывается автоматически: ",
 "siz":"вы",
-"<p class=\"err\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Yadda saxla</button></div>":"<p class=\"err\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Сохранить</button></div>",
+"<p class=\"err\" role=\"alert\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Yadda saxla</button></div>":"<p class=\"err\" role=\"alert\" id=\"pr-err\" hidden></p><div class=\"btns\"><button class=\"primary\" data-act=\"save-prod\">Сохранить</button></div>",
 "Xərci dəyiş":"Изменить расход",
 "Yeni xərc":"Новый расход",
 "<div class=\"field\"><label for=\"x-title\">Xərc nəyə görədir</label><input id=\"x-title\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"Məsələn: icarə, su, təmizlik\" value=\"":"<div class=\"field\"><label for=\"x-title\">За что расход</label><input id=\"x-title\" type=\"text\" maxlength=\"120\" autocomplete=\"off\" placeholder=\"Например: аренда, вода, уборка\" value=\"",
@@ -930,6 +930,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Bu xərc artıq silinib.":"Этот расход уже удалён.",
+"Son 50 qəbul göstərilir (cəmi {n}).":"Показаны последние 50 записей (всего {n}).",
 " (siyahıdan çıxarılıb)":" (убран из списка)",
 "fasilə yoxdur, bu mütəxəssisə istənilən saata yazmaq olar.":"перерывов нет, к этому специалисту можно записать на любое время.",
 "Hamısı":"Все",
@@ -1094,7 +1096,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Kopyalandı ✓":"Скопировано ✓",
 "hələ bitməyib: ":"ещё не прошли: ",
 "Uğurlu":"Успешно",
-"<div class=\"note warnbox\"><p>Seansı bitib, amma qiyməti yazılmayıb: ":"<div class=\"note warnbox\"><p>Сеанс прошёл, но цена не указана: ",
+"<div class=\"note warnbox\" role=\"status\"><p>Seansı bitib, amma qiyməti yazılmayıb: ":"<div class=\"note warnbox\" role=\"status\"><p>Сеанс прошёл, но цена не указана: ",
 ". Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>":". Без цены они не попадут в денежную статистику.</p>",
 "</b> uğurlu</span><span><b class=\"num\">":"</b> успешно</span><span><b class=\"num\">",
 "\" data-st=\"wait\">Geri qaytar</button></div>":"\" data-st=\"wait\">Вернуть</button></div>",
@@ -1128,7 +1130,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113074826";
+var APP_VERSION="20261113082850";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1190,7 +1192,7 @@ function npSheet(){
 }
 function noPriceBox(){
   var np=state.appts.filter(noPrice);if(!np.length)return "";
-  return L('<div class="note warnbox"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
+  return L('<div class="note warnbox" role="status"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
 /* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
@@ -1455,7 +1457,9 @@ function pushWidget(){
   if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1,"l":"'+LANG+'"}'}
   else{
     /* Per day: up to 4 names in time order with the specialist's colour, plus the day's total. */
-    var from=state.loadedFrom||today,by={},n={};
+    /* days from the loaded start (or the saved copy's start), but never further back than the widget can show (24 months) */
+    var from=state.loadedFrom||state.cacheFrom||today,by={},n={},wmin=(function(){var t=parse(today);return ymd(t.getFullYear(),t.getMonth()-24,1)})();
+    if(from<wmin)from=wmin;
     state.appts.forEach(function(a){if(a.date<from||a.status==="cancel")return;(by[a.date]=by[a.date]||[]).push(a)});
     var d={};
     Object.keys(by).forEach(function(k){
@@ -1586,6 +1590,7 @@ function loadCache(uid){
     ["expenses","products","breaks"].forEach(function(k){if(!Array.isArray(state[k]))state[k]=[]});
     /* a copy from before per-specialist breaks would show every break in every column: breaks wait for the fresh load */
     if(o.s.hasBrkReader==null)state.breaks=[];
+    state.cacheFrom=from;
     state.loadedFrom="";auth.loaded=true;return true;
   }catch(e){return false}
 }
@@ -1620,9 +1625,13 @@ function patients(){
   });
   pcache=m;return m;
 }
+/* Digits of a phone without the country / trunk prefix, so "+994 50 …", "050 …" and "0050 …" match each other. */
+function phoneCore(v){return String(v||"").replace(/\D/g,"").replace(/^00/,"").replace(/^994/,"").replace(/^0/,"")}
 function waLink(phone,text){
   var d=String(phone||"").replace(/\D/g,"");
   if(d.slice(0,2)==="00")d=d.slice(2);
+  if(d.length===13&&d.slice(0,4)==="9940")d="994"+d.slice(4);            /* +994 (050) … */
+  else if(d.length===11&&d.slice(0,2)==="80")d="994"+d.slice(2);          /* 8 050 … (old Azerbaijani long-distance prefix) */
   if(d.length===10&&d.charAt(0)==="0")d="994"+d.slice(1);
   else if(d.length===9)d="994"+d;
   else if(d.length===11&&d.charAt(0)==="8")d="7"+d.slice(1);
@@ -1650,7 +1659,7 @@ function render(){
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
        L('<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>')+
-       L('<p class="err" id="l-err" hidden></p><button class="primary" data-act="login">Daxil ol</button>')+
+       L('<p class="err" role="alert" id="l-err" hidden></p><button class="primary" data-act="login">Daxil ol</button>')+
        L('<p class="hint">E-poçt və şifrəni admin verir.</p>')+langSeg();
     return;
   }
@@ -1659,9 +1668,9 @@ function render(){
   var note=offline?L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."):auth.msg;
   if(!note&&loadingOlder)note=L("Köhnə məlumatlar yüklənir…");
   if(!note&&histLoading&&ui.tab==="patients")note=L("Köhnə pasiyentlər yüklənir…");
-  var banner=note?'<div class="note warnbox"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note"><p>Qəbullar yüklənir…</p></div>'):"");
+  var banner=note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):"");
   if(ui.tab==="patients"){
-    if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
+    if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
     main.innerHTML=banner+'<div id="plist">'+patientsList()+'</div>';
     return;
   }
@@ -1785,7 +1794,7 @@ function breakForm(){
     L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+who+
     (state.hasBrkReader?L('<p class="hint">Fasilə hər gün seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>'):
       L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'))+
-    L('<p class="err" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
+    L('<p class="err" role="alert" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
 }
 function dayMain(){
   var h="";
@@ -1878,15 +1887,16 @@ function statData(kind,r){
   var rows={},order=[],T={a:0,b:0,c:0};
   function row(k,name){if(!rows[k]){rows[k]={name:name,a:0,b:0,c:0};order.push(k)}return rows[k]}
   var who=function(k){return state.staff[k]||L("Adsız")};
+  var uk=function(k){return k&&state.staff[k]!=null?k:"-"};   /* every unknown or deleted author shares one "Adsız" row */
   if(kind==="money")activeReaders().forEach(function(x){row(x.id,x.name)});
   else Object.keys(state.staff).filter(isAgent).sort(function(x,y){return String(who(x)).localeCompare(String(who(y)))}).forEach(function(k){row(k,who(k))});
   if(kind==="prod"){
-    state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(x.by||"-",who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
+    state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(uk(x.by),who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
   }else state.appts.forEach(function(a){
-    if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(a.by||"-",who(a.by)).a++;T.a++;return}
+    if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(uk(a.by),who(a.by)).a++;T.a++;return}
     var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
     if(!inB&&!inS)return;
-    if(kind==="sales"){if(isSpec(a.by))return;x=row(a.by||"-",who(a.by))}
+    if(kind==="sales"){if(isSpec(a.by))return;x=row(uk(a.by),who(a.by))}
     else{var rd=reader(a.readerId);x=row(a.readerId,rd?rd.name:"—")}
     if(inB){x.a++;T.a++}
     if(inS){x.b++;T.b++;x.c+=a.price;T.c+=a.price}
@@ -1991,7 +2001,7 @@ function copyText(t,ok,no){
   if(done1){ok();return}
   try{navigator.clipboard.writeText(t).then(ok,no)}catch(e){no()}
 }
-/* ---------- Kassa: only recording product sales and expenses, day by day (their totals are in Statistika) ---------- */
+/* ---------- Kassa: only recording product sales and expenses, day by day (product totals are in Statistika; expenses are listed per day here) ---------- */
 function expense(id){for(var i=0;i<state.expenses.length;i++)if(state.expenses[i].id===id)return state.expenses[i];return null}
 function cashTop(){return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):(ui.date===addDays(today,-1)?L("Dünən"):""))}
 function cashMain(){
@@ -2018,7 +2028,7 @@ function productForm(){
     L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+'</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
     L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
     L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[auth.user.id]||L("siz"))+'.</p>'+
-    L('<p class="err" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
+    L('<p class="err" role="alert" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
 }
 function expenseForm(){
   var x=sheet.id?expense(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
@@ -2026,14 +2036,14 @@ function expenseForm(){
     L('<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="')+esc(x?x.title:"")+'"></div>'+
     L('<div class="two"><div class="field"><label for="x-amount">Məbləğ, ')+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
     L('<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="')+dd+'"></div></div>'+
-    '<p class="err" id="x-err" hidden></p>'+
+    '<p class="err" role="alert" id="x-err" hidden></p>'+
     L('<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>')+(x?L('<button class="danger" data-act="del-expense">Sil</button>'):'')+'</div>';
 }
 function patientsList(){
-  var m=patients(),q=low(ui.q.trim()),qd=q.replace(/\D/g,"");
+  var m=patients(),q=low(ui.q.trim()),qd=phoneCore(q);
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
     if(!q)return true;
-    return low(p.name).indexOf(q)>=0||(qd&&String(p.phone||"").replace(/\D/g,"").indexOf(qd)>=0);
+    return low(p.name).indexOf(q)>=0||(qd&&phoneCore(p.phone).indexOf(qd)>=0);
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
   if(!arr.length)return auth.loaded?'<div class="empty">'+(q?L("Heç kim tapılmadı. Adı və ya nömrəni yoxlayın."):L("Pasiyentlər ilk qəbuldan sonra burada görünəcək."))+'</div>':"";
@@ -2053,6 +2063,7 @@ function patientSheet(){
     (wa?'<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+'</div>';
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+'<div class="pvisits">';
   /* Every visit is shown in full, with its own «Dəyiş» and «Sil», so nothing has to be opened. */
+  if(p.list.length>50)h+='<p class="hint">'+tf(L("Son 50 qəbul göstərilir (cəmi {n})."),{n:p.list.length})+'</p>';
   p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId),open=!a.lite&&appt(a.id),full=open||a;
     var wb=a.by?(state.staff[a.by]||L("Adsız istifadəçi")):"",cr=/^\d{4}-\d{2}-\d{2}$/.test(full.created||"")?fmtDay(full.created):"";
@@ -2073,7 +2084,7 @@ function patientSheet(){
 
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="";
-  if(adm&&secWarn)h+=L('<div class="note warnbox"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
+  if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
   h+=L('<h3 class="sec">Mütəxəssislər</h3>');
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
@@ -2173,7 +2184,7 @@ function staffForm(){
     '<button data-act="st-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button>')+
     '<button data-act="st-role" data-id="admin" aria-pressed="'+(role==="admin")+L('">Admin</button>')+'</div></div>'+
     '<p class="hint">'+(role==="admin"?L("Admin mütəxəssis və fasilə əlavə edə, işçilərin adını və rolunu düzəldə, dəyişikliklər jurnalını görə bilər. Admin rolunu yalnız adminlər verir və geri alır."):L("Mütəxəssislərin yazdığı qəbullar satış statistikasına düşmür."))+'</p>'+
-    L('<p class="err" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>');
+    L('<p class="err" role="alert" id="s-err" hidden></p><div class="btns"><button class="primary" data-act="save-staff">Yadda saxla</button></div>');
 }
 function fd(v){v=String(v||"").slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(v)?fmtDay(v):""}
 function stName(k){return k==="wait"?L("seçilməyib"):(ST[k]||String(k||""))}
@@ -2207,7 +2218,7 @@ function auditLine(x){
 function auditSheet(){
   var h=L('<h2>Dəyişikliklər jurnalı')+CLOSE+'</h2>';
   if(!sheet.rows)return h+L('<p class="hint">Yüklənir…</p>');
-  if(sheet.err)return h+L('<p class="err">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>');
+  if(sheet.err)return h+L('<p class="err" role="alert">Jurnalı yükləmək olmadı. İnterneti yoxlayın.</p>');
   var only=sheet.only==="del",rows=sheet.rows.filter(function(x){return !only||x.op==="DELETE"});
   h+='<div class="seg" style="grid-template-columns:1fr 1fr"><button data-act="audit-f" data-id="all" aria-pressed="'+!only+L('">Hamısı</button><button data-act="audit-f" data-id="del" aria-pressed="')+only+L('">Yalnız silinənlər</button></div>');
   if(!rows.length)return h+L('<p class="hint">Hələ qeyd yoxdur.</p>');
@@ -2244,7 +2255,7 @@ function meForm(){
     h+=L('<div class="field"><label for="m-name">Adınız</label><input id="m-name" type="text" maxlength="60" autocomplete="off" value="')+esc(nm)+'"></div>'+
       '<p class="hint">'+(state.hasRole&&role==="specialist"?L("Admin hələ təqvimə mütəxəssis əlavə etməyib, adınızı özünüz yazın. "):"")+L('Statistikada və hesabatda bu adla görünəcəksiniz.</p>');
   }
-  return h+L('<p class="err" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
+  return h+L('<p class="err" role="alert" id="m-err" hidden></p><div class="btns"><button class="primary" data-act="save-me">Yadda saxla</button></div>');
 }
 
 /* ---------- sheets ---------- */
@@ -2299,14 +2310,14 @@ function apptForm(){
     L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
     L('<p class="hint small" style="margin:0">* — vacib sahələr</p>')+
-    '<p class="err" id="f-err" hidden></p>'+
+    '<p class="err" role="alert" id="f-err" hidden></p>'+
     '<div class="btns sticky-save"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
 }
 function readerForm(){
   var r=sheet.id?reader(sheet.id):null;
   return '<h2>'+(r?L("Mütəxəssisi dəyiş"):L("Yeni mütəxəssis"))+CLOSE+'</h2>'+
     L('<div class="field"><label for="r-name">Ad</label><input id="r-name" type="text" maxlength="40" autocomplete="off" value="')+esc(r?r.name:"")+'"></div>'+
-    '<p class="err" id="r-err" hidden></p>'+
+    '<p class="err" role="alert" id="r-err" hidden></p>'+
     L('<div class="btns"><button class="primary" data-act="save-reader">Yadda saxla</button>')+
     (r?L('<button class="danger" data-act="del-reader">Siyahıdan çıxar</button>'):'')+'</div>'+
     (function(){if(!r)return "";var fut=state.appts.filter(function(a){return a.readerId===r.id&&a.date>=today&&a.status==="wait"}).length;
@@ -2481,6 +2492,7 @@ document.addEventListener("click",function(e){
     if(isNaN(xa)||xa<=0||xa>MAXSUM)return fail("x-err",L("Məbləği düzgün yazın."));
     if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
     var xo=sheet.id?expense(sheet.id):null;
+    if(sheet.id&&!xo){closeSheet();flash(L("Bu xərc artıq silinib."));return}
     if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
     else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
     closeSheet();
