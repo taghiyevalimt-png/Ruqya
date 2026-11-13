@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-j9poqCTVMw73hNwK/j6vW3GL/KVgGm2zWdlz61YhDag='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2fU7a196IuPum9z4PeqNxk8w+/qohAVOZJriu1OGSRY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -812,7 +812,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<h3 class=\"sec\">Mütəxəssislər</h3>":"<h3 class=\"sec\">Специалисты</h3>",
 "Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin.":"Чтобы начать запись, добавьте первого специалиста.",
 "Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.":"В календаре пока нет специалистов. Они появятся здесь, когда админ добавит их в разделе «Настройки».",
-"\" aria-label=\"Rəngi dəyiş\"></button><div style=\"flex:1\"><b>":"\" aria-label=\"Сменить цвет\"></button><div style=\"flex:1\"><b>",
+"Rəngi dəyiş":"Сменить цвет",
 "<p class=\"hint\">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>":"<p class=\"hint\">Чтобы сменить цвет специалиста, нажмите на кружок рядом с именем.</p>",
 "<button class=\"primary\" data-act=\"new-reader\">Mütəxəssis əlavə et</button>":"<button class=\"primary\" data-act=\"new-reader\">Добавить специалиста</button>",
 "<h3 class=\"sec\">Fasilələr (hər gün)</h3>":"<h3 class=\"sec\">Перерывы (каждый день)</h3>",
@@ -1027,6 +1027,17 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Diqqət: «{n}» adlı təsdiqlənmiş mütəxəssis artıq var. Bu onun ikinci telefonudursa, təsdiq edin; tanımırsınızsa, rol verməyin.":"Внимание: подтверждённый специалист «{n}» уже есть. Если это его второй телефон — подтвердите; если не знаете этого человека — не давайте роль.",
+
+"Mütəxəssisin adını yalnız admin dəyişir.":"Имя специалиста меняет только админ.",
+"Bu adda mütəxəssis artıq var (siyahıdan çıxarılanlar da sayılır). Başqa ad yazın.":"Специалист с таким именем уже есть (считаются и убранные из списка). Напишите другое имя.",
+
+"Əvvəlcə adınızı yazın və kim olduğunuzu seçin, sonra admin sizə rol verəcək.":"Сначала напишите имя и выберите, кто вы, потом админ даст вам роль.",
+"Profili doldur":"Заполнить профиль",
+"Profil":"Профиль",
+
+"sildi":"удалил(а)",
+
 "SŞ":"СС",
 "ümumi":"всего",
 
@@ -1310,7 +1321,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113154642";
+var APP_VERSION="20261113162138";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1362,7 +1373,7 @@ function stPill(a){var k=stOf(a);return k==="wait"?'<span class="tag">'+stLabel(
 function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
 /* Bookings whose session is over but whose price was never written: the cash total misses them. */
 function npSheet(){
-  var np=state.appts.filter(noPrice).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
+  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
   var h=L('<h2>Qiyməti yazılmayıb')+CLOSE+'</h2>';
   if(!np.length)return h+L('<p class="hint">Hamısının qiyməti yazılıb ✓</p>');
   h+=L('<p class="hint">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>')+'<div class="pay">';
@@ -1371,7 +1382,7 @@ function npSheet(){
   return h+'</div>';
 }
 function noPriceBox(){
-  var np=state.appts.filter(noPrice);if(!np.length)return "";
+  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)});if(!np.length)return "";
   return L('<div class="note warnbox" role="status"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
@@ -1479,7 +1490,7 @@ function tfetch(u,o){
   return fetch(u,o).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
-function blank(){return{statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
+function blank(){return{wants:{},hasPriv:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -1508,7 +1519,11 @@ function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u
 function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
 /* A hand correction of one number in the weekly or monthly sales statistics (the computed number stays as it is). */
 function mapEdit(x){return{id:x.id,kind:x.kind,per:x.per,s:String(x.period_start||"").slice(0,10),k:String(x.agent_id||""),col:x.col,v:+x.value,by:x.updated_by||""}}
-function findEdit(kind,per,s,k,col){for(var i=0;i<state.statEdits.length;i++){var e=state.statEdits[i];if(e.kind===kind&&e.per===per&&e.s===s&&e.k===k&&e.col===col)return e}return null}
+/* corrections looked up through a small index, rebuilt only when the list changes */
+var edIdx=null,edSrc=null,edLen=-1;   /* dropped on every render and on every change of the list */
+function findEdit(kind,per,s,k,col){var E=state.statEdits;
+  if(!edIdx||edSrc!==E||edLen!==E.length){edIdx={};for(var i=0;i<E.length;i++){var e=E[i];edIdx[e.kind+"|"+e.per+"|"+e.s+"|"+e.k+"|"+e.col]=e}edSrc=E;edLen=E.length}
+  return edIdx[kind+"|"+per+"|"+s+"|"+k+"|"+col]||null}
 /* Sales agents and admins may correct the sales statistics. */
 function canStats(){return isAdmin()||!!(auth.user&&state.roleSet[auth.user.id]&&state.roles[auth.user.id]==="agent")}
 function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5),rid:x.reader_id||""}}
@@ -1517,8 +1532,8 @@ function brkFor(b,rid){return !b.rid||b.rid===rid}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
 function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||""}}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
-function upsertBy(list,row){for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
-function removeBy(list,id){for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
+function upsertBy(list,row){edIdx=null;for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
+function removeBy(list,id){edIdx=null;for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
 /* Checks for which database updates were run: asked again every 30 minutes, not on every load. */
 var probes={};
 function probe(k,make){var p=probes[k];if(p&&Date.now()-p.t<30*60000&&p.v)return Promise.resolve(p.v);
@@ -1551,7 +1566,7 @@ function refresh(){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasPriv=!!res[16];state.statEdits=(res[15]||[]).map(mapEdit);
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null&&!res[4]);state.statEdits=(res[15]||[]).map(mapEdit);
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1560,10 +1575,10 @@ function refresh(){
     state.hasBreaks=!!res[5];state.hasDur=!!res[7];
     state.hasProducts=!!res[6];
     state.products=uniq(res[6]||[]).map(mapProd);
-    state.v2=!!(res[2]&&res[3]&&res[4]);
+    state.v2=!!(res[2]&&res[3]&&res[4])||(state.v2&&!res[4]);
     state.services=(res[2]||[]).map(function(x){return{id:x.id,name:svcName(x.name)}});
     state.expenses=uniq(res[3]||[]).map(mapExp);
-    state.staff={};state.roles={};state.roleSet={};state.wants={};(res[4]||[]).forEach(function(x){state.staff[x.id]=x.name||"";state.roles[x.id]=x.role||(state.hasPriv?"":"agent");if(x.role)state.roleSet[x.id]=1;if(x.want)state.wants[x.id]=x.want});
+    if(res[4]){state.staff={};state.roles={};state.roleSet={};state.wants={};res[4].forEach(function(x){state.staff[x.id]=x.name||"";state.roles[x.id]=x.role||(state.hasPriv?"":"agent");if(x.role)state.roleSet[x.id]=1;if(x.want)state.wants[x.id]=x.want})}
     state.hasRole=!!res[8];
     if(!auth.filterInit){auth.filterInit=true;
       if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&!ui.sel.length)ui.sel=[mine.id]}}
@@ -1575,6 +1590,7 @@ function refresh(){
       auth.fixed=true;state.roles[ADMIN]="admin";state.roleSet[ADMIN]=1;
       sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(){},function(){});
     }
+    if(wantNew&&pendingMe())wantNew=null;
     if(wantNew&&!sheet&&activeReaders().length&&state.staff[auth.user.id]){var wn=wantNew;wantNew=null;openSheet({type:"appt",id:null,pre:{date:wn}})}
     if(state.v2&&(!state.staff[auth.user.id]||(state.hasRole&&!state.roleSet[auth.user.id]&&!isAdmin()&&!(state.hasPriv&&state.wants[auth.user.id])))&&!sheet&&!auth.asked){auth.asked=true;openSheet({type:"me",first:true})}
   },function(){
@@ -1706,6 +1722,11 @@ function dbMsg(e){
   if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
   if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
   if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Mutexessisin adini/.test(m))return L("Mütəxəssisin adını yalnız admin dəyişir.");
+  if(/Hesab nomresi/.test(m))return L("Bunu etməyə icazəniz yoxdur.");
+  if(/Adi yazin/.test(m))return L("Adı yazın.");
+  if(/readers_name_norm/.test(m))return L("Bu adda mütəxəssis artıq var (siyahıdan çıxarılanlar da sayılır). Başqa ad yazın.");
+  if(/Daxil olmayib/.test(m))return L("Bunu etməyə icazəniz yoxdur.");
   if(/Saat duzgun deyil/.test(m))return L("Saat düzgün deyil.");
   if(/stat_edits_(per|col)_check/.test(m))return L("Bu rəqəmi saxlamaq üçün bazada 2026-11-stat-edits2.sql faylını bir dəfə işə salın.");
   if(/stat_edits/.test(m))return L("Bu rəqəmi başqası indicə dəyişdi. Yenidən baxın.");
@@ -1771,10 +1792,14 @@ var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","pr
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
-  try{localStorage.setItem(CK,JSON.stringify(o))}catch(e){try{localStorage.removeItem(CK)}catch(e2){}}
+  /* a specialist's phone keeps only his own sessions; a person without a role keeps none, and no money lists */
+  if(specMe()||pendingMe()){o.s.appts=pendingMe()?[]:state.appts.filter(function(a){return mineOnly(a.readerId)});o.s.expenses=[];o.s.products=[];o.s.statEdits=[]}
+  var js=JSON.stringify(o.s);if(js===lastCacheJs&&lastFull-lastCacheT<864e5)return;   /* nothing changed: no write (refreshed once a day) */
+  try{localStorage.setItem(CK,JSON.stringify(o));lastCacheJs=js;lastCacheT=lastFull}catch(e){lastCacheJs="";try{localStorage.removeItem(CK)}catch(e2){}}
 }
+var lastCacheJs="",lastCacheT=0;
 function cacheSoon(){if(!cacheT&&auth.loaded&&!auth.provisional)cacheT=setTimeout(saveCache,2500)}
-function dropCache(){clearTimeout(cacheT);cacheT=null;try{localStorage.removeItem(CK)}catch(e){}}
+function dropCache(){clearTimeout(cacheT);cacheT=null;lastCacheJs="";try{localStorage.removeItem(CK)}catch(e){}}
 function loadCache(uid){
   try{
     var o=JSON.parse(localStorage.getItem(CK)||"null");
@@ -1867,9 +1892,10 @@ function appReady(){
 }
 setTimeout(function(){appReady()},2500);   /* never keep the logo longer than this, whatever happens */
 function render(){
-  pcache=null;
+  pcache=null;edIdx=null;
   if(auth.ready&&(!auth.user||auth.loaded||!sb))appReady();
   if(pz&&Date.now()-pz.t<15000)return;
+  if(lp&&Date.now()-lp.t<8000){lpRender=true;return}   /* a finger is holding a block: redraw after it lifts */
   if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
   setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
@@ -2050,7 +2076,9 @@ function breakForm(){
 }
 function dayMain(){
   var h="";
-  if(pendingMe())return '<div class="empty"><p><b>'+L("Rolunuz hələ təsdiqlənməyib.")+'</b></p><p>'+L("Admin «Ayarlar» bölməsində sizə rol verdikdən sonra təqvim burada görünəcək.")+'</p></div>';
+  if(pendingMe()){var me0=auth.user.id,told=state.staff[me0]&&state.wants[me0];
+    return '<div class="empty"><p><b>'+L("Rolunuz hələ təsdiqlənməyib.")+'</b></p><p>'+(told?L("Admin «Ayarlar» bölməsində sizə rol verdikdən sonra təqvim burada görünəcək."):L("Əvvəlcə adınızı yazın və kim olduğunuzu seçin, sonra admin sizə rol verəcək."))+'</p>'+
+      '<button class="'+(told?'ghost':'primary')+'" data-act="me">'+(told?L("Profil"):L("Profili doldur"))+'</button></div>'}
   if(specMe()&&!activeReaders().length&&allReaders().length)return '<div class="empty"><p>'+L("Adınız təqvimdəki mütəxəssislərin heç birinə uyğun gəlmir. Admin «Ayarlar» bölməsində adınızı düzəltməlidir.")+'</p></div>';
   if(!activeReaders().length){
     if(auth.loaded&&!isAdmin())return L('<div class="empty">Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək.</div>');
@@ -2168,6 +2196,8 @@ function statData(kind,r,per){
   /* "Müraciət" (requests) is only ever typed in by the staff: empty ("—") until someone writes a number */
   /* Müraciət WP and Müraciət SŞ are typed in; "ümumi" is their sum (an older single number counts if neither is written) */
   if(kind==="sales"){T.w=null;T.s=null;T.t=null;
+    /* a person with a typed number keeps his row even on a day he wrote nobody */
+    state.statEdits.forEach(function(e){if(e.kind==="sales"&&e.per===per&&e.s===r.s&&!rows[uk(e.k)]&&!isSpec(e.k))row(uk(e.k),who(e.k))});
     if((per==="day"||per==="week"||per==="month")&&state.statEdits.length){
       T.a=0;T.b=0;
       order.forEach(function(k){var x=rows[k];["r","w","s","a","b"].forEach(function(c){var e=findEdit(kind,per,r.s,k,c);if(e){x["o"+c]=x[c];x[c]=e.v;x["e"+c]=e}});
@@ -2199,7 +2229,7 @@ function statTable(kind,r,per){
   var editable=kind==="sales"&&(per==="day"||per==="week"||per==="month")&&state.hasStatEdits&&canStats();
   d.rows.forEach(function(x){h+='<tr>'+K.c(x).map(function(c,i){
     var col=kind!=="sales"?"":i===1?"w":i===2?"s":i===4?"a":i===5?"b":"",ed=col&&x["e"+col];
-    if(editable&&col)return '<td class="num"><button type="button" class="cellb'+(ed?' edited':'')+'" data-act="st-edit" data-id="'+esc(x.k)+'" data-col="'+col+'" data-p="'+per+'" data-s="'+esc(r.s)+'" aria-label="'+esc(x.name+" — "+hd[i]+": "+c)+'">'+esc(c)+'</button></td>';
+    if(editable&&col)return '<td class="num"><button type="button" class="cellb'+(ed&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(x.k)+'" data-col="'+col+'" data-p="'+per+'" data-s="'+esc(r.s)+'" aria-label="'+esc(x.name+" — "+hd[i]+": "+c)+'">'+esc(c)+'</button></td>';
     return '<td'+(i?' class="num'+(kind==="sales"&&i===3?' sum':'')+'"':'')+'>'+(ed?'<span class="edited">'+esc(c)+'</span>':esc(c))+'</td>'}).join("")+'</tr>'});
   h+='</tbody><tfoot><tr>'+K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,w:d.T.w,s:d.T.s,t:d.T.t}).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr></tfoot></table></div>';
   return h;
@@ -2352,7 +2382,7 @@ function cashMain(){
   return h;
 }
 /* the product names are typed by hand, one per line or separated by commas */
-function prodItems(t){return String(t||"").split(/[\n,;]+/).map(function(z){return z.replace(/\s+/g," ").trim()}).filter(function(z){return z})}
+function prodItems(t){return String(t||"").split(/\n|;|,(?!\d)/).map(function(z){return z.replace(/\s+/g," ").trim()}).filter(function(z){return z})}
 function prodAllSheet(){var x=null;for(var i=0;i<state.products.length;i++)if(state.products[i].id===sheet.id)x=state.products[i];
   if(!x)return '<h2>'+L("Məhsulların adları")+CLOSE+'</h2>';
   var it=prodItems(x.names);
@@ -2398,7 +2428,7 @@ function patientSheet(){
   var p=patients()[sheet.id];if(!p)return L('<h2>Pasiyent')+CLOSE+L('</h2><p class="hint">Bu pasiyentin qəbulu qalmayıb.</p>');
   /* «Təsdiq» asks about the patient's next session still ahead, if there is one */
   var nextA=p.list.filter(function(a){return a.status!=="cancel"&&!ended(a)&&appt(a.id)}).sort(function(x,y){return (x.date+x.time).localeCompare(y.date+y.time)})[0];
-  var main='<div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>')+phoneLinks(p.phone,nextA?appt(nextA.id):null,"wa")+'</div>';
+  var main='<div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>')+phoneLinks(nextA&&nextA.phone?nextA.phone:p.phone,nextA?appt(nextA.id):null,"wa")+'</div>';
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+'<div class="pvisits">';
   /* Every visit is shown in full, with its own «Dəyiş» and «Sil», so nothing has to be opened. */
   if(p.list.length>50)h+='<p class="hint">'+tf(L("Son 50 qəbul göstərilir (cəmi {n})."),{n:p.list.length})+'</p>';
@@ -2426,7 +2456,7 @@ function readersMain(){
   h+=L('<h3 class="sec">Mütəxəssislər</h3>');
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
-    h+='<div class="reader"><button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+L('" aria-label="Rəngi dəyiş"></button><div style="flex:1"><b>')+esc(r.name)+'</b></div>'+
+    h+='<div class="reader">'+(pendingMe()?'<span class="sw" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
   });
   if(rs.length)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
@@ -2524,9 +2554,11 @@ function staffForm(){
     var hit=rs.filter(function(r){return low(r.name.trim())===low(String(nm0).trim())})[0];
     nameField='<div class="field"><label for="s-name">'+L("Təqvimdə hansı mütəxəssisdir?")+'</label><select id="s-name">'+(hit?'':'<option value="">'+L("— seçin —")+'</option>')+
       rs.map(function(r){return '<option value="'+esc(r.name)+'"'+(hit&&hit.id===r.id?' selected':'')+'>'+esc(r.name)+'</option>'}).join("")+'</select></div>'+
-      '<p class="hint">'+L("Bu işçi yalnız həmin mütəxəssisin seanslarını görəcək; statistika və Kassa ona görünməyəcək.")+(nm0&&!hit?' '+tf(L("İndiki adı: {n}."),{n:nm0}):'')+'</p>';
+      '<p class="hint">'+L("Bu işçi yalnız həmin mütəxəssisin seanslarını görəcək; statistika və Kassa ona görünməyəcək.")+(nm0&&!hit?' '+tf(L("İndiki adı: {n}."),{n:esc(nm0)}):'')+'</p>';
   }else nameField=L('<div class="field"><label for="s-name">Ad</label><input id="s-name" type="text" autocomplete="off" maxlength="60" value="')+esc(nm0)+'"></div>';
   return L('<h2>İşçi')+CLOSE+'</h2>'+
+    (state.hasPriv&&!state.roleSet[k]&&Object.keys(state.staff).some(function(o){return o!==k&&state.roleSet[o]&&state.roles[o]==="specialist"&&low(String(state.staff[o]).trim())===low(String(state.staff[k]||"").trim())})?
+      '<p class="hint" style="color:var(--warn)">'+tf(L("Diqqət: «{n}» adlı təsdiqlənmiş mütəxəssis artıq var. Bu onun ikinci telefonudursa, təsdiq edin; tanımırsınızsa, rol verməyin."),{n:esc(state.staff[k])})+'</p>':'')+
     (state.hasPriv&&!state.roleSet[k]?'<p class="hint">'+(state.wants[k]?tf(L("Özü belə yazıb: {r}. Yoxlayın və rol verin."),{r:state.wants[k]==="specialist"?L("Mütəxəssis"):L("Satış agenti")}):L("Hələ rolu yoxdur. Rol verməyənə qədər heç bir seans görmür."))+'</p>':'')+
     nameField+
     L('<div class="field"><label>Rol</label><div class="seg" style="grid-template-columns:')+"1fr 1fr 1fr"+'">'+
@@ -2546,15 +2578,15 @@ function auditLine(x){
   if(T==="appts"){
     if(op==="INSERT")return L("Qəbul yazdı: ")+ap(n);
     if(op==="DELETE")return L("Qəbulu SİLDİ: ")+ap(o)+(o.status&&o.status!=="wait"?" ("+stName(o.status)+")":"");
-    var ch=[];
-    if(o.status!==n.status)ch.push(L("status: ")+stName(o.status)+" → "+stName(n.status));
-    if(+o.price!==+n.price)ch.push(L("qiymət: ")+money(o.price)+" → "+money(n.price));
-    if(o.date!==n.date||String(o.time).slice(0,5)!==String(n.time).slice(0,5))ch.push(L("vaxt: ")+fd(o.date)+" "+String(o.time||"").slice(0,5)+" → "+fd(n.date)+" "+String(n.time||"").slice(0,5));
-    if(o.reader_id!==n.reader_id)ch.push(L("mütəxəssis: ")+rn(o.reader_id)+" → "+rn(n.reader_id));
-    if(o.name!==n.name)ch.push(L("ad: ")+(o.name||"")+" → "+(n.name||""));
-    if((o.phone||"")!==(n.phone||""))ch.push(L("telefon: ")+(o.phone||"—")+" → "+(n.phone||"—"));
-    if(+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
-    if((o.note||"")!==(n.note||""))ch.push(L("qeyd"));
+    var ch=[],has=function(k){return k in o||k in n};
+    if(has("status")&&o.status!==n.status)ch.push(L("status: ")+stName(o.status)+" → "+stName(n.status));
+    if(has("price")&&+o.price!==+n.price)ch.push(L("qiymət: ")+money(o.price)+" → "+money(n.price));
+    if((has("date")||has("time"))&&(o.date!==n.date||String(o.time).slice(0,5)!==String(n.time).slice(0,5)))ch.push(L("vaxt: ")+fd(o.date)+" "+String(o.time||"").slice(0,5)+" → "+fd(n.date)+" "+String(n.time||"").slice(0,5));
+    if(has("reader_id")&&o.reader_id!==n.reader_id)ch.push(L("mütəxəssis: ")+rn(o.reader_id)+" → "+rn(n.reader_id));
+    if(has("name")&&o.name!==n.name)ch.push(L("ad: ")+(o.name||"")+" → "+(n.name||""));
+    if(has("phone")&&(o.phone||"")!==(n.phone||""))ch.push(L("telefon: ")+(o.phone||"—")+" → "+(n.phone||"—"));
+    if(has("duration")&&+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
+    if(has("note")&&(o.note||"")!==(n.note||""))ch.push(L("qeyd"));
     return L("Qəbul (")+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||L("dəyişdi"));
   }
   if(T==="expenses")return L("Xərci ")+verb+": "+(v.title||"")+", "+money(v.amount)+(op==="UPDATE"&&+o.amount!==+n.amount?L(" (əvvəl ")+money(o.amount)+")":"");
@@ -2563,7 +2595,8 @@ function auditLine(x){
   if(T==="readers")return L("Mütəxəssisi ")+(op==="UPDATE"&&n.archived&&!o.archived?L("siyahıdan çıxardı"):verb)+": "+(v.name||"");
   if(T==="breaks")return L("Fasiləni ")+verb+": "+(v.title||"")+" "+String(v.start_time||"").slice(0,5)+"–"+String(v.end_time||"").slice(0,5)+" ("+(v.reader_id?(rn(v.reader_id)||L("silinmiş mütəxəssis")):L("Hamısı"))+")";
   if(T==="stat_edits"){var nm=v.agent_id==="-"?L("Adsız"):(state.staff[v.agent_id]||L("Adsız"));
-    return L("Satış statistikasını ")+(op==="DELETE"?L("avtomatik rəqəmə qaytardı"):verb)+": "+nm+", "+(v.col==="a"?L("Yazdı"):L("Uğurlu"))+", "+(v.per==="week"?L("həftəlik"):L("aylıq"))+" "+fd(v.period_start)+(op==="DELETE"?"":" → "+v.value)+(op==="UPDATE"?L(" (əvvəl ")+o.value+")":"")}
+    var cn=v.col==="a"?L("Yazdı"):v.col==="b"?L("Uğurlu"):v.col==="w"?L("Müraciət WP"):v.col==="s"?L("Müraciət SŞ"):L("Müraciət");
+    return L("Satış statistikasını ")+(op==="DELETE"?(v.col==="a"||v.col==="b"?L("avtomatik rəqəmə qaytardı"):L("sildi")):verb)+": "+nm+", "+cn+", "+(v.per==="week"?L("həftəlik"):v.per==="day"?L("günlük"):L("aylıq"))+" "+fd(v.period_start)+(op==="DELETE"?"":" → "+v.value)+(op==="UPDATE"&&o.value!=null?L(" (əvvəl ")+o.value+")":"")}
   if(T==="staff")return L("İşçi profili (")+verb+"): "+(v.name||"")+(v.role?", "+(v.role==="admin"?"admin":v.role==="specialist"?L("mütəxəssis"):L("satış agenti")):"");
   return T+" "+op;
 }
@@ -2913,7 +2946,7 @@ document.addEventListener("click",function(e){
   else if(act==="month"){openSheet({type:"month",m:ui.date.slice(0,8)+"01"});return}
   else if(act==="m-shift"){if(sheet&&sheet.type==="month"){var mm=parse(sheet.m);sheet.m=ymd(mm.getFullYear(),mm.getMonth()+(+b.dataset.n),1);byId("sheet").innerHTML=monthSheet()}return}
   else if(act==="m-pick"){if(okDate(b.dataset.d)){ui.date=b.dataset.d;closeSheet()}}
-  else if(act==="color"){if(reader(id))openSheet({type:"color",id:id});return}
+  else if(act==="color"){if(reader(id)&&!pendingMe())openSheet({type:"color",id:id});return}
   else if(act==="pick-color"){
     if(!sheet||sheet.type!=="color"||!okColor(id)||!state.hasColor)return;
     var cr=reader(sheet.id);if(!cr)return;
@@ -2954,7 +2987,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="me-role"){if(sheet&&sheet.type==="me"){var keepName=byId("m-name")?val("m-name"):"";sheet.role=id;byId("sheet").innerHTML=meForm();if(keepName&&byId("m-name"))byId("m-name").value=keepName}return}
   else if(act==="save-me"){
-    var mrole=isAdmin()?"admin":state.roleSet[auth.user.id]?(state.roles[auth.user.id]||"agent"):(sheet&&sheet.role||state.roles[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
+    var mrole=isAdmin()?"admin":state.roleSet[auth.user.id]?(state.roles[auth.user.id]||"agent"):(sheet&&sheet.role||state.roles[auth.user.id]||(state.wants||{})[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
     if(!mn)return fail("m-err",L("Adınızı yazın."));
     if(sameName(mn,auth.user.id,mrole))return fail("m-err",L("Bu ad artıq başqa işçidədir. Başqa ad yazın."));
     var up2={id:auth.user.id,name:mn};
@@ -3103,18 +3136,19 @@ var toastT=null;
 function toast(m){var t=byId("toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");document.body.appendChild(t)}
   t.textContent=m;t.className="on";clearTimeout(toastT);toastT=setTimeout(function(){t.className=""},2200)}
 /* Press and hold a calendar block: the patient's number is copied (on release, which iOS accepts as a tap). */
-var lp=null,lpDone=0;
-function lpStart(t,x,y){var ev=t&&t.closest&&t.closest("#cal .ev");if(!ev)return;var a=appt(ev.dataset.id);if(!a||!a.phone)return;
+var lp=null,lpDone=0,lpRender=false;
+function lpStop(){if(lp){clearTimeout(lp.timer);lp.ev.classList.remove("held");lp=null}if(lpRender){lpRender=false;setTimeout(render,0)}}
+function lpStart(t,x,y){if(lp)lpStop();var ev=t&&t.closest&&t.closest("#cal .ev");if(!ev)return;var a=appt(ev.dataset.id);if(!a||!a.phone)return;
   lp={ev:ev,phone:a.phone,x:x,y:y,t:Date.now(),ready:false,timer:setTimeout(function(){if(lp){lp.ready=true;ev.classList.add("held");try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}}},480)}}
-function lpMove(x,y){if(lp&&(Math.abs(x-lp.x)>10||Math.abs(y-lp.y)>10)){clearTimeout(lp.timer);lp.ev.classList.remove("held");lp=null}}
-function lpEnd(e){if(!lp)return;var l=lp;lp=null;clearTimeout(l.timer);l.ev.classList.remove("held");
+function lpMove(x,y){if(lp&&(Math.abs(x-lp.x)>10||Math.abs(y-lp.y)>10))lpStop()}
+function lpEnd(e){if(!lp)return;var l=lp;lpStop();
   if(!l.ready&&Date.now()-l.t<480)return;
   lpDone=Date.now();if(e&&e.cancelable)e.preventDefault();
   copyText(l.phone,function(){toast(L("Nömrə kopyalandı: ")+l.phone)},function(){openSheet({type:"stcopy",text:l.phone})})}
-document.addEventListener("touchstart",function(e){if(e.touches.length===1)lpStart(e.target,e.touches[0].clientX,e.touches[0].clientY);else if(lp){clearTimeout(lp.timer);lp.ev.classList.remove("held");lp=null}},{passive:true});
+document.addEventListener("touchstart",function(e){if(e.touches.length===1)lpStart(e.target,e.touches[0].clientX,e.touches[0].clientY);else lpStop()},{passive:true});
 document.addEventListener("touchmove",function(e){if(lp&&e.touches.length)lpMove(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
 document.addEventListener("touchend",lpEnd,{passive:false});
-document.addEventListener("touchcancel",function(){if(lp){clearTimeout(lp.timer);lp.ev.classList.remove("held");lp=null}},{passive:true});
+document.addEventListener("touchcancel",lpStop,{passive:true});
 document.addEventListener("mousedown",function(e){if(e.button===0&&Date.now()-lpDone>700)lpStart(e.target,e.clientX,e.clientY)});
 document.addEventListener("mousemove",function(e){if(lp)lpMove(e.clientX,e.clientY)});
 document.addEventListener("mouseup",function(e){if(lp)lpEnd(e)});
@@ -3193,7 +3227,7 @@ window.ruqyaOpen=function(d,isNew){
   if(!okDate(d))d=today;
   if(sheet)hideSheet();
   ui.tab="day";ui.date=d;byId("top").innerHTML="";
-  if(isNew){if(auth.loaded&&activeReaders().length)openSheet({type:"appt",id:null,pre:{date:d}});else wantNew=d}
+  if(isNew&&!pendingMe()){if(auth.loaded&&activeReaders().length)openSheet({type:"appt",id:null,pre:{date:d}});else wantNew=d}
   render();
 };
 (function(){var m=/^#(d|new)=(\d{4}-\d{2}-\d{2})?$/.exec(location.hash||"");if(!m)return;
