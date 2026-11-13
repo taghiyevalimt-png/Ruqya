@@ -7,6 +7,7 @@ v=$(date -u +%Y%m%d%H%M%S)
 printf "%s\n" "$v" > version.txt
 sed -i "s/^var APP_VERSION=\"[^\"]*\";\$/var APP_VERSION=\"$v\";/" index.html
 grep -q "^var APP_VERSION=\"$v\";\$" index.html
+python3 tools/csp.py && python3 tools/csp.py --check   # new version = new script text = new CSP hash
 python3 -c "
 s=open('index.html',encoding='utf-8').read()
 i=s.rindex('<script>');j=s.rindex('</script>')

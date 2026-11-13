@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2iJ4XRGeHJySrnZTCVvgfOc1a97+xxoltIK7yg50qdQ='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -33,7 +33,8 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts load without holding up the page: if Google is slow or blocked, the app opens at once with the phone's own font. -->
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet" media="print" id="gf">
+<script>(function(){var l=document.getElementById("gf");function on(){l.media="all"}if(l.sheet)on();else l.addEventListener("load",on)})();</script>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
@@ -491,11 +492,13 @@ html.lite .ev::before{display:none}
 </div>
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script>if(typeof globalThis==="undefined")window.globalThis=window;</script>
+<script>if(typeof globalThis==="undefined")window.globalThis=window;
+/* A phone too old for the database library fails while reading it; that is told apart from a failed download. */
+window.__sbOldH=function(e){if(/supabase/.test((e&&e.filename)||""))window.__sbOld=1};window.addEventListener("error",window.__sbOldH);</script>
 <script src="vendor/supabase-2.45.4.js"></script>
 <script>
-/* Own copy first; the public CDN only as a fallback (it can be blocked in some countries). */
-if(!window.supabase&&!window.__sbTried){window.__sbTried=1;document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onerror="window.__sbErr=1"><\/script>')}
+/* The database library comes only from the app's own site (no outside copy can be swapped in). */
+window.removeEventListener("error",window.__sbOldH);if(!window.supabase&&!window.__sbOld)window.__sbErr=1;
 </script>
 <script>
 if(!String.prototype.padStart){String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.slice(-Math.max(n,String(this).length))}}
@@ -927,6 +930,15 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"<div class=\"empty\"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class=\"primary\" data-act=\"reload\">Yenidən yoxla</button></div>":"<div class=\"empty\"><p>Если интернет был слабым, просто попробуйте ещё раз.</p><button class=\"primary\" data-act=\"reload\">Повторить</button></div>",
+"Əlaqə bərpa olundu. Yadda saxlanmayan son dəyişikliyi yoxlayın və lazım olsa yenidən edin.":"Связь восстановлена. Проверьте последнее несохранённое изменение и при необходимости повторите его.",
+"Rol: ":"Роль: ",
+"Rolu admin dəyişir (Ayarlar).":"Роль меняет админ (Настройки).",
+"Bu ad artıq başqa işçidədir. Başqa ad yazın.":"Это имя уже у другого сотрудника. Напишите другое имя.",
+"Rolu yalnız admin dəyişə bilər.":"Роль может менять только админ.",
+"Əsas adminin məlumatı dəyişmir.":"Данные главного админа не меняются.",
+"Saat düzgün deyil.":"Неверное время.",
+"Bunu etməyə icazəniz yoxdur.":"У вас нет прав на это действие.",
 "{d} yazılan qəbullar":"Записано {d}",
 "Gündəlik statistika":"Дневная статистика",
 "dünən":"вчера",
@@ -1109,7 +1121,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113001130";
+var APP_VERSION="20261113055545";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1276,9 +1288,10 @@ var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
 
-function flash(m){
+function flash(m,force){
+  if(dirty&&m!==UNSAVED_MSG()&&!force)return;   /* the lasting "not saved" warning stays until the server copy is back */
   auth.msg=m;render();clearTimeout(msgTimer);
-  if(m)msgTimer=setTimeout(function(){auth.msg="";render()},7000);
+  if(m&&!dirty)msgTimer=setTimeout(function(){if(!dirty){auth.msg="";render()}},7000);
 }
 function fetchAll(make){
   var out=[],from=0;
@@ -1325,13 +1338,15 @@ function refresh(){
     needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-400)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
     probe("appts.updated_at",function(){return soft(function(){return sb.from("appts").select("updated_at").limit(1)})}),
     probe("audit_log.id",function(){return soft(function(){return sb.from("audit_log").select("id").limit(1)})}),
-    probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})})
+    probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})}),
+    /* bookings written inside the loaded period for an earlier date: the "written" statistics count them */
+    soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(from)).lt("date",from).order("id")})
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
     lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];
-    res[1]=uniq(res[1]);
+    res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
     if(needHist&&res[9]){state.hist=res[9].map(mapLite);state.histLoaded=true}
@@ -1457,6 +1472,8 @@ function neededFrom(){
 }
 /* Full data is kept on the phone from a week before the 1st of last month, so this month's and last month's
    totals (and their weeks) are always complete; anything older is fetched when someone goes back to it. */
+/* 00:00 of a day in Baku, as a UTC moment (Baku is UTC+4 all year). */
+function bakuStart(d){return addDays(d,-1)+"T20:00:00Z"}
 function winFrom(){var t=parse(today),a=addDays(ymd(t.getFullYear(),t.getMonth()-1,1),-7),b=addDays(today,-WINDOW);return a<b?a:b}
 function ensureLoaded(){
   var need=neededFrom();
@@ -1464,15 +1481,32 @@ function ensureLoaded(){
   loadingOlder=true;var to=state.loadedFrom,my=seq;
   Promise.all([
     fetchAll(function(){return sb.from("appts").select("*").gte("date",need).lt("date",to).order("date").order("id")}),
+    soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(need)).lt("date",need).order("id")}),
     state.v2?soft(function(){return sb.from("expenses").select("*").gte("date",need).lt("date",to).order("date").order("id")}):Promise.resolve([]),
     state.hasProducts?soft(function(){return sb.from("product_sales").select("*").gte("date",need).lt("date",to).order("date").order("id")}):Promise.resolve([])
   ]).then(function(res){
     loadingOlder=false;if(my!==seq||!auth.user)return;
-    res[0].forEach(function(x){upsertBy(state.appts,mapAppt(x))});
-    (res[1]||[]).forEach(function(x){upsertBy(state.expenses,mapExp(x))});
-    (res[2]||[]).forEach(function(x){upsertBy(state.products,mapProd(x))});
+    res[0].concat(res[1]||[]).forEach(function(x){upsertBy(state.appts,mapAppt(x))});
+    (res[2]||[]).forEach(function(x){upsertBy(state.expenses,mapExp(x))});
+    (res[3]||[]).forEach(function(x){upsertBy(state.products,mapProd(x))});
     state.loadedFrom=need;render();
   },function(){loadingOlder=false;olderFail=Date.now();setTimeout(render,15500);flash(L("Köhnə məlumatları yükləmək olmadı. İnterneti yoxlayın."))});
+}
+/* What to tell the user when the server refuses a change. */
+function dbMsg(e){
+  var m=(e&&e.message)||"",c=e&&e.code;
+  if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
+  if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
+  if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Saat duzgun deyil/.test(m))return L("Saat düzgün deyil.");
+  if(c==="23505")return L("Bu saat artıq tutulub. Başqa saat seçin.");
+  if(c==="23514")return L("Yadda saxlanmadı: yazılan məlumat düzgün deyil.");
+  if(c==="42501")return L("Bunu etməyə icazəniz yoxdur.");
+  return L("Yadda saxlanmadı. Yenidən cəhd edin.");
+}
+function sameName(n,except,role){
+  var k=String(n||"").replace(/\s+/g," ").trim().toLowerCase();
+  return Object.keys(state.staff).some(function(id){return id!==except&&!(role==="specialist"&&state.roles[id]==="specialist")&&String(state.staff[id]||"").replace(/\s+/g," ").trim().toLowerCase()===k});
 }
 function db(q){
   /* The local copy is already updated; realtime confirms the change on every phone. */
@@ -1480,19 +1514,20 @@ function db(q){
   return q.then(function(r){
     pending--;
     if(r.error&&r.status===0){unsaved();return}   /* no answer from the server (supabase-js reports it as status 0) */
-    if(r.error){flash(r.error.code==="23505"?L("Bu saat artıq tutulub. Başqa saat seçin."):r.error.code==="23514"?L("Yadda saxlanmadı: yazılan məlumat düzgün deyil."):L("Yadda saxlanmadı. Yenidən cəhd edin."));return refresh()}
+    if(r.error){flash(dbMsg(r.error),true);return refresh()}
   },function(){pending--;unsaved();return refresh()});
 }
 var retryT=null;
+function UNSAVED_MSG(){return L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.")}
 function unsaved(){
   /* Keep a warning up and retry until the server copy is back on screen, so nothing looks saved when it is not.
      Until then the copy on this phone is not stored for the next start either. */
-  dirty=true;
-  auth.msg=L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.");render();
+  dirty=true;clearTimeout(msgTimer);
+  auth.msg=UNSAVED_MSG();render();
   clearTimeout(retryT);
   retryT=setTimeout(function again(){
     if(!auth.user)return;
-    refresh().then(function(){if(Date.now()-lastFull<5000){auth.msg="";render()}else retryT=setTimeout(again,10000)});
+    refresh().then(function(){if(Date.now()-lastFull<5000&&!dirty){flash(L("Əlaqə bərpa olundu. Yadda saxlanmayan son dəyişikliyi yoxlayın və lazım olsa yenidən edin."))}else retryT=setTimeout(again,10000)});
   },10000);
 }
 function onChange(pl){
@@ -1523,8 +1558,8 @@ function startSync(){
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
 var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","v2"];
 function saveCache(){
-  cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty)return;
-  var o={u:auth.user.id,t:Date.now(),s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
+  cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
+  var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
   try{localStorage.setItem(CK,JSON.stringify(o))}catch(e){try{localStorage.removeItem(CK)}catch(e2){}}
 }
 function cacheSoon(){if(!cacheT&&auth.loaded&&!auth.provisional)cacheT=setTimeout(saveCache,2500)}
@@ -1597,7 +1632,7 @@ function render(){
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
     top.innerHTML='<div class="brand"><img src="logo-192.png" width="96" height="96" alt=""><h1>Ruqyatz</h1></div>';
-    main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>'))
+    main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')+L('<div class="empty"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'))
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
        L('<div class="field"><label for="l-pass">Şifrə</label><input id="l-pass" type="password" autocomplete="current-password"></div>')+
@@ -2162,7 +2197,9 @@ function meForm(){
   if(adm)role="admin";
   var rs=activeReaders(),nm=state.staff[me]||"";
   var h=(first?L('<h2>Xoş gəlmisiniz!')+CLOSE+'</h2><p class="hint" style="font-size:15px;color:var(--ink)">'+(adm?L("Adınızı yazın və «Yadda saxla» basın."):L("Kim olduğunuzu seçin və «Yadda saxla» basın."))+'</p>':L('<h2>Profil')+CLOSE+'</h2>');
-  if(state.hasRole&&!adm){
+  if(state.hasRole&&!adm&&state.roleSet[me]){
+    h+='<p class="hint">'+L("Rol: ")+esc(roleLabel(me))+'. '+L("Rolu admin dəyişir (Ayarlar).")+'</p>';
+  }else if(state.hasRole&&!adm){
     h+=L('<div class="field"><label>Siz kimsiniz?</label><div class="seg" style="grid-template-columns:1fr 1fr">')+
       '<button data-act="me-role" data-id="agent" aria-pressed="'+(role==="agent")+L('">Satış agenti</button>')+
       '<button data-act="me-role" data-id="specialist" aria-pressed="'+(role==="specialist")+L('">Mütəxəssis</button></div></div>');
@@ -2182,6 +2219,9 @@ function meForm(){
 /* ---------- sheets ---------- */
 function openSheet(s){
   sheet=s;
+  /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
+     so a change another phone made meanwhile (price, note, time...) is not put back. */
+  if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
   var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,np:npSheet,prod:productForm,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt")slotGrid();
@@ -2265,7 +2305,8 @@ function saveAppt(){
   if(mins(time)<DAY0||mins(time)+dur>DAY1)return fail("f-err",L("Seans 08:00 ilə 00:00 arasında olmalıdır. Başlama saatını və ya müddəti dəyişin."));
   /* A booking whose time is not being changed is not re-checked: a phone number can always be corrected,
      even if a break was added later or the booking was made before the overlap rule. */
-  var moved=!a||a.readerId!==rid||a.date!==date||a.time!==time||(a.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
+  var o=a&&sheet.orig||a;
+  var moved=!a||o.readerId!==rid||o.date!==date||o.time!==time||(o.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
   var clash=status==="cancel"||!moved?null:overlap(rid,date,time,dur,sheet.id);
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
   var br=status==="cancel"||!moved?null:inBreak(time,dur);
@@ -2273,10 +2314,11 @@ function saveAppt(){
   if(a){
     /* Only what was changed in this form is sent, so a change someone else saved meanwhile is not overwritten. */
     var up={};
-    if(a.readerId!==rid)up.reader_id=rid;if(a.date!==date)up.date=date;if(a.time!==time)up.time=time;
-    if(a.name!==name)up.name=name;if((a.phone||"")!==phone)up.phone=phone;if(+a.price!==price)up.price=price;
-    if((a.note||"")!==note)up.note=note;if(state.hasDur&&(a.dur||90)!==dur)up.duration=dur;
-    a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;a.dur=dur;
+    if(o.readerId!==rid){up.reader_id=rid;a.readerId=rid}if(o.date!==date){up.date=date;a.date=date}if(o.time!==time){up.time=time;a.time=time}
+    if(o.name!==name){up.name=name;a.name=name}if((o.phone||"")!==phone){up.phone=phone;a.phone=phone}if(+o.price!==price){up.price=price;a.price=price}
+    if((o.note||"")!==note){up.note=note;a.note=note}if(state.hasDur&&(o.dur||90)!==dur){up.duration=dur;a.dur=dur}
+    /* the slot must stay whole: if the time moved here, date, specialist and length go with it */
+    if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
     if(service){a.service=service;up.service=service}
     if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id));
@@ -2388,6 +2430,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="new-prod"){openSheet({type:"prod"});return}
   else if(act==="save-prod"){
+    if(!sheet||sheet.type!=="prod")return;   /* a second tap after the form closed adds nothing */
     var pa2=amount("pr-amount"),pd=val("pr-date");
     if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
     if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
@@ -2469,23 +2512,27 @@ document.addEventListener("click",function(e){
     var sk=sheet.id,sn=val("s-name"),sr=sheet.role||state.roles[sk]||"agent";
     if(!sn)return fail("s-err",L("Adı yazın."));
     if(sk===ADMIN&&sr!=="admin")return fail("s-err",L("Əsas adminin rolu dəyişmir."));
+    if(sk===ADMIN&&!isOwner()&&sn!==state.staff[ADMIN])return fail("s-err",L("Əsas adminin məlumatı dəyişmir."));
+    if(sameName(sn,sk,sr))return fail("s-err",L("Bu ad artıq başqa işçidədir. Başqa ad yazın."));
     state.staff[sk]=sn;state.roles[sk]=sr;state.roleSet[sk]=1;
     pending++;writes++;
     sb.from("staff").update({name:sn,role:sr}).eq("id",sk).select().then(function(r){
       pending--;
       if(r.error&&r.status===0){unsaved();return}
-      if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
+      if(r.error&&r.error.code){flash(dbMsg(r.error),true);refresh()}
+      else if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
       else if((r.data[0].role||"agent")!==sr){flash(L("Admin rolunu dəyişmək üçün bazada 2026-11-admins.sql faylını bir dəfə işə salın."));refresh()}
     },function(){pending--;unsaved();refresh()});
     closeSheet();
   }
   else if(act==="me-role"){if(sheet&&sheet.type==="me"){var keepName=byId("m-name")?val("m-name"):"";sheet.role=id;byId("sheet").innerHTML=meForm();if(keepName&&byId("m-name"))byId("m-name").value=keepName}return}
   else if(act==="save-me"){
-    var mrole=isAdmin()?"admin":(sheet&&sheet.role||state.roles[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
+    var mrole=isAdmin()?"admin":state.roleSet[auth.user.id]?(state.roles[auth.user.id]||"agent"):(sheet&&sheet.role||state.roles[auth.user.id]||"agent"),mn=byId("m-reader")?val("m-reader"):val("m-name");
     if(!mn)return fail("m-err",L("Adınızı yazın."));
+    if(sameName(mn,auth.user.id,mrole))return fail("m-err",L("Bu ad artıq başqa işçidədir. Başqa ad yazın."));
     var up2={id:auth.user.id,name:mn};
     state.staff[auth.user.id]=mn;
-    if(state.hasRole){up2.role=mrole;state.roles[auth.user.id]=mrole;state.roleSet[auth.user.id]=1}
+    if(state.hasRole&&(isAdmin()||!state.roleSet[auth.user.id])){up2.role=mrole;state.roles[auth.user.id]=mrole;state.roleSet[auth.user.id]=1}
     /* If the database does not know the admin role yet, the name is still saved. */
     db(sb.from("staff").upsert(up2).then(function(r){return r.error&&up2.role==="admin"?sb.from("staff").upsert({id:up2.id,name:up2.name}):r}));
     closeSheet();
@@ -2512,6 +2559,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
   else if(act==="save-break"){
+    if(!sheet||sheet.type!=="brk")return;   /* a second tap after the form closed adds nothing */
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
     if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
