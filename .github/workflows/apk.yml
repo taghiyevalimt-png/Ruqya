@@ -26,12 +26,27 @@ jobs:
         with:
           gradle-version: "8.9"
 
+      # With the signing secrets set, a release build signed with the one fixed key is published, so every
+      # new version installs over the old one. Without them the old debug build is published, as before.
       - name: Build
         working-directory: android
-        run: gradle assembleDebug --no-daemon
-
-      - name: Rename
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk Ruqya.apk
+        env:
+          KEY_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASS: ${{ secrets.ANDROID_KEY_PASS }}
+        run: |
+          if [ -n "$KEY_B64" ]; then
+            echo "$KEY_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            export ANDROID_KEYSTORE_FILE="$RUNNER_TEMP/release.jks"
+            gradle assembleRelease --no-daemon
+            cp app/build/outputs/apk/release/app-release.apk ../Ruqya.apk
+            rm -f "$RUNNER_TEMP/release.jks"
+          else
+            echo "::warning::Signing secrets are not set: publishing a debug build (each build has a different key)."
+            gradle assembleDebug --no-daemon
+            cp app/build/outputs/apk/debug/app-debug.apk ../Ruqya.apk
+          fi
 
       - name: Publish
         uses: softprops/action-gh-release@v2

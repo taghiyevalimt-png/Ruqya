@@ -186,17 +186,25 @@ public class MainActivity extends Activity {
     /** Returns true when the link was handed to another app. */
     private boolean handle(Uri uri) {
         String scheme = uri.getScheme() == null ? "" : uri.getScheme();
-        if (("https".equals(scheme) || "http".equals(scheme)) && HOST.equals(uri.getHost())) {
+        // Only this app's own pages stay inside (other sites of the same GitHub account open outside).
+        String path = uri.getPath() == null ? "" : uri.getPath();
+        if ("https".equals(scheme) && HOST.equals(uri.getHost()) && (path.equals("/Ruqya") || path.startsWith("/Ruqya/"))) {
             return false;
         }
         try {
             Intent intent;
             if ("intent".equals(scheme)) {
+                // Only what a browser would allow: no named component, no selector, browsable targets only.
                 intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setComponent(null);
+                if (Build.VERSION.SDK_INT >= 15) {
+                    intent.setSelector(null);
+                }
             } else {
                 intent = new Intent(Intent.ACTION_VIEW, uri);
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // no flags taken from the link itself
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Bu linki açacaq proqram tapılmadı · Нет приложения для этой ссылки", Toast.LENGTH_LONG).show();

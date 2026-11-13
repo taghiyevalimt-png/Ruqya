@@ -1,0 +1,43 @@
+name: APK release signing check
+
+# Proves that the release build is signed with the given key and is not debuggable, using a throw-away key.
+# Publishes nothing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Build two release APKs with the same throw-away key
+        working-directory: android
+        shell: bash
+        run: |
+          keytool -genkeypair -keystore "$RUNNER_TEMP/t.jks" -storetype JKS -alias t -keyalg RSA -keysize 2048 -validity 365 \
+            -storepass testpass -keypass testpass -dname "CN=test" >/dev/null
+          export ANDROID_KEYSTORE_FILE="$RUNNER_TEMP/t.jks" ANDROID_KEYSTORE_PASS=testpass ANDROID_KEY_ALIAS=t ANDROID_KEY_PASS=testpass
+          gradle assembleRelease --no-daemon -q
+          cp app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/a.apk"
+          GITHUB_RUN_NUMBER=99999 gradle clean assembleRelease --no-daemon -q
+          cp app/build/outputs/apk/release/app-release.apk "$RUNNER_TEMP/b.apk"
+      - name: Check signature, same key on both, not debuggable
+        shell: bash
+        run: |
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          for f in a b; do "$BT/apksigner" verify --print-certs "$RUNNER_TEMP/$f.apk" | grep "SHA-256" | tee "$RUNNER_TEMP/$f.cert"; done
+          test -s "$RUNNER_TEMP/a.cert" || { echo "NO SIGNATURE"; exit 1; }
+          diff "$RUNNER_TEMP/a.cert" "$RUNNER_TEMP/b.cert" || { echo "KEY MISMATCH"; exit 1; }
+          echo "SAME KEY OK"
+          if "$BT/aapt" dump badging "$RUNNER_TEMP/a.apk" | grep -q "application-debuggable"; then echo "DEBUGGABLE"; exit 1; else echo "NOT DEBUGGABLE OK"; fi
+          "$BT/aapt" dump badging "$RUNNER_TEMP/a.apk" | head -3 || true

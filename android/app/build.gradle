@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
 }
 
+// One fixed signing key, so a new version installs over the old one.
+// The key comes from GitHub Secrets (see .github/workflows/apk.yml); it is never stored in the repository.
+def ks = System.getenv('ANDROID_KEYSTORE_FILE')
+
 android {
     namespace 'az.ruqya.zapis'
     compileSdk 34
@@ -12,6 +16,32 @@ android {
         targetSdk 34
         versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
         versionName '1.1'
+    }
+
+    signingConfigs {
+        release {
+            if (ks) {
+                storeFile file(ks)
+                storePassword System.getenv('ANDROID_KEYSTORE_PASS')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASS')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            debuggable false
+            if (ks) signingConfig signingConfigs.release
+        }
+    }
+
+    // The release check of the build tools also judges the Play Store target level by today's date; this app
+    // is not on the Play Store, so that check must not stop a build.
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     compileOptions {

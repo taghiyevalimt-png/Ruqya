@@ -3,8 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
+/* The app never runs inside another site's frame (that is how click-tricking attacks work). */
+if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location.replace(window.location.href)}catch(e){}}
 /* Interface language, chosen in Ayarlar (or on the sign-in screen) and kept on this phone: "az" (default) or "ru". */
 var LANG="az";try{if(localStorage.getItem("ruqya.lang")==="ru")LANG="ru"}catch(e){}
 if(LANG==="ru")document.documentElement.setAttribute("lang","ru");
@@ -1097,6 +1101,7 @@ if(RUD)(function(){
 })();
 var SB_URL="https://ldkhdeehrrajvgrtieal.supabase.co";
 var SB_KEY="sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7";
+var SB_TOKEN="sb-"+SB_URL.replace(/^https:\/\/|\..*$/g,"")+"-auth-token";   /* where supabase-js keeps the session */
 var ST={wait:L("Gözlənilir"),paid:L("Gəldi və ödədi"),cancel:L("Ləğv etdi"),noshow:L("Gəlmədi")};
 var RU=LANG==="ru";
 /* MON is used after a day number ("12 noyabr" / "12 ноября"), MONN on its own ("Noyabr 2026" / "Ноябрь 2026"). */
@@ -1104,7 +1109,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261112230602";
+var APP_VERSION="20261113001130";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1230,7 +1235,7 @@ var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
    so narrow that a block's text would not fit, that block alone is drawn tighter (one line each, cut with …). */
-var MIN_DUR=30,STD_HOUR=111,curMinHour=HMIN;
+var MIN_DUR=30,curMinHour=HMIN;
 function dayMinHour(){return HMIN}
 function fitBlocks(){
   var evs=document.querySelectorAll("#cal .ev:not(.cancel)");
@@ -1238,15 +1243,17 @@ function fitBlocks(){
     /* a line that would show only half (time, who wrote it) is hidden; the name always stays */
     for(var k=el.children.length-1;k>0;k--){var ch=el.children[k];if(ch.offsetTop+ch.offsetHeight>el.clientHeight)ch.style.visibility="hidden";else break}}
 }
-var COLORS=["#7b4fd1","#1a73e8","#d9480f","#c2185b","#00897b","#5f6b1a","#6d4c41","#3949ab"];
+var COLORS=["#7b4fd1","#1a73e8","#c43e0c","#c2185b","#00796b","#5f6b1a","#6d4c41","#3949ab"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
-var PALETTE=["#7b4fd1","#8e24aa","#3949ab","#1a73e8","#0277bd","#00897b","#2e7d32","#5f6b1a","#9e6a00","#d9480f","#c62828","#c2185b","#6d4c41","#546e7a"];
+var PALETTE=["#7b4fd1","#8e24aa","#3949ab","#1a73e8","#0277bd","#00796b","#2e7d32","#5f6b1a","#9e6a00","#c43e0c","#c62828","#c2185b","#6d4c41","#546e7a"];
 function okColor(c){return typeof c==="string"&&/^#[0-9a-fA-F]{6}$/.test(c)}
 function mins(t){var p=String(t).split(":");return (+p[0])*60+(+p[1]||0)}
 function hhmm(m){m=Math.max(0,Math.min(24*60-1,m));return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
 function endOf(a){var m=mins(a.time)+(a.dur||90);return m>=24*60?"00:00":hhmm(m)}
+/* Two early colours were too light for white text (under 4.5:1); they are drawn a shade darker. */
+var DARKER={"#d9480f":"#c43e0c","#00897b":"#00796b"};
 function rcolor(id){var i=0;for(;i<state.readers.length;i++)if(state.readers[i].id===id)break;
-  var r=state.readers[i];return r&&okColor(r.color)?r.color:COLORS[i%COLORS.length]}
+  var r=state.readers[i],c=r&&okColor(r.color)?r.color:COLORS[i%COLORS.length];return DARKER[c.toLowerCase()]||c}
 function overlap(rid,date,start,dur,skip){
   var s1=mins(start),e1=s1+dur;
   return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.id===skip)return false;
@@ -1323,7 +1330,7 @@ function refresh(){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];
     res[1]=uniq(res[1]);
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1472,12 +1479,15 @@ function db(q){
   pending++;writes++;
   return q.then(function(r){
     pending--;
+    if(r.error&&r.status===0){unsaved();return}   /* no answer from the server (supabase-js reports it as status 0) */
     if(r.error){flash(r.error.code==="23505"?L("Bu saat artıq tutulub. Başqa saat seçin."):r.error.code==="23514"?L("Yadda saxlanmadı: yazılan məlumat düzgün deyil."):L("Yadda saxlanmadı. Yenidən cəhd edin."));return refresh()}
   },function(){pending--;unsaved();return refresh()});
 }
 var retryT=null;
 function unsaved(){
-  /* Keep a warning up and retry until the server copy is back on screen, so nothing looks saved when it is not. */
+  /* Keep a warning up and retry until the server copy is back on screen, so nothing looks saved when it is not.
+     Until then the copy on this phone is not stored for the next start either. */
+  dirty=true;
   auth.msg=L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.");render();
   clearTimeout(retryT);
   retryT=setTimeout(function again(){
@@ -1510,10 +1520,10 @@ function startSync(){
 }
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
-var CK="ruqya.cache.v1",cacheT=null;
+var CK="ruqya.cache.v1",cacheT=null,dirty=false;
 var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","v2"];
 function saveCache(){
-  cacheT=null;if(!auth.user||!auth.loaded||auth.provisional)return;
+  cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty)return;
   var o={u:auth.user.id,t:Date.now(),s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
   try{localStorage.setItem(CK,JSON.stringify(o))}catch(e){try{localStorage.removeItem(CK)}catch(e2){}}
 }
@@ -1529,6 +1539,12 @@ function loadCache(uid){
     ["expenses","products","breaks"].forEach(function(k){if(!Array.isArray(state[k]))state[k]=[]});
     state.loadedFrom="";auth.loaded=true;return true;
   }catch(e){return false}
+}
+/* Everything that must happen on sign-out, with or without internet. */
+function signedOut(){
+  dropCache();auth.user=null;auth.provisional=false;
+  wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}
+  stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML="";render();
 }
 function stopSync(){
   if(rt&&sb){try{sb.removeChannel(rt)}catch(e){}rt=null}
@@ -1554,15 +1570,6 @@ function patients(){
     if(a.date>=p.last){p.last=a.date;p.name=a.name;if(a.phone)p.phone=a.phone}
   });
   pcache=m;return m;
-}
-/* The whole number with its operator prefix, short enough for a calendar block: Azerbaijani numbers as
-   "055 995 77 76" (also when written as +994…), anything else exactly as typed. */
-function phoneShort(p){
-  var d=String(p||"").replace(/\D/g,"");
-  if(d.length===12&&d.indexOf("994")===0)d="0"+d.slice(3);
-  else if(d.length===9&&d.charAt(0)!=="0")d="0"+d;
-  if(d.length===10&&d.charAt(0)==="0")return d.slice(0,3)+" "+d.slice(3,6)+" "+d.slice(6,8)+" "+d.slice(8);
-  return String(p||"");
 }
 function waLink(phone,text){
   var d=String(phone||"").replace(/\D/g,"");
@@ -2264,12 +2271,15 @@ function saveAppt(){
   var br=status==="cancel"||!moved?null:inBreak(time,dur);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   if(a){
+    /* Only what was changed in this form is sent, so a change someone else saved meanwhile is not overwritten. */
+    var up={};
+    if(a.readerId!==rid)up.reader_id=rid;if(a.date!==date)up.date=date;if(a.time!==time)up.time=time;
+    if(a.name!==name)up.name=name;if((a.phone||"")!==phone)up.phone=phone;if(+a.price!==price)up.price=price;
+    if((a.note||"")!==note)up.note=note;if(state.hasDur&&(a.dur||90)!==dur)up.duration=dur;
     a.readerId=rid;a.date=date;a.time=time;a.name=name;a.phone=phone;a.price=price;a.note=note;a.dur=dur;
-    var up={reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,note:note};
-    if(state.hasDur)up.duration=dur;
     if(ST[status]){a.status=status;up.status=status}
     if(service){a.service=service;up.service=service}
-    db(sb.from("appts").update(up).eq("id",a.id));
+    if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id));
   }else{
     var id=uuid();
     state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id,dur:dur,created:bk().d});
@@ -2354,7 +2364,7 @@ document.addEventListener("click",function(e){
   }
   if(!auth.user)return;
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
-  if(offline&&/^(save-|del-|status$|settle|unsettle$|me-role$|pick-color$)/.test(act)&&act!=="save-me-x"){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
+  if(offline&&/^(save-|del-|status$|pick-color$)/.test(act)){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
     if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";var mm=byId("main");mm.scrollTop=0;mm.classList.remove("enter");void mm.offsetWidth;mm.classList.add("enter")}
   }
@@ -2463,6 +2473,7 @@ document.addEventListener("click",function(e){
     pending++;writes++;
     sb.from("staff").update({name:sn,role:sr}).eq("id",sk).select().then(function(r){
       pending--;
+      if(r.error&&r.status===0){unsaved();return}
       if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
       else if((r.data[0].role||"agent")!==sr){flash(L("Admin rolunu dəyişmək üçün bazada 2026-11-admins.sql faylını bir dəfə işə salın."));refresh()}
     },function(){pending--;unsaved();refresh()});
@@ -2499,7 +2510,6 @@ document.addEventListener("click",function(e){
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
-  else if(act==="dup-appt"){var da=appt(id);if(da)openSheet({type:"appt",id:null,pre:{name:da.name,phone:da.phone,reader:da.readerId,service:da.service,price:da.price,dur:da.dur}});return}
   else if(act==="new-break"){if(isAdmin())openSheet({type:"brk"});return}
   else if(act==="save-break"){
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
@@ -2537,7 +2547,11 @@ document.addEventListener("click",function(e){
     closeSheet();
   }
   else if(act==="logout"){
-    var lo=function(r){if(r&&r.error&&auth.user)flash(L("Çıxmaq alınmadı. İnterneti yoxlayın."))};
+    /* Without internet the server cannot be told; the session and the data copy are removed from this phone anyway. */
+    var lo=function(r){if(!(r&&r.error&&auth.user))return;
+      var net=r.error===1||r.error.name==="AuthRetryableFetchError"||!r.error.status||/fetch|network/i.test(String(r.error.message||""));
+      if(!net){flash(L("Çıxmaq alınmadı. İnterneti yoxlayın."));return}
+      try{localStorage.removeItem(SB_TOKEN)}catch(err){}signedOut()};
     sb.auth.signOut().then(lo,function(){lo({error:1})});return;
   }
   else return;
@@ -2643,16 +2657,21 @@ setInterval(tick,60000);
 if(sb){
   sb.auth.onAuthStateChange(function(ev,sess){
     var was=auth.user&&auth.user.id,now=sess&&sess.user&&sess.user.id;
-    var prov=auth.provisional;auth.provisional=false;
+    var prov=auth.provisional,provUser=auth.user;auth.provisional=false;
     auth.user=sess?sess.user:null;auth.ready=true;
     if(now&&(now!==was||prov)){auth.msg="";if(now!==was&&was)stopSync();setTimeout(startSync,0)}
-    if(!now&&was){dropCache();wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML=""}
+    if(!now&&was){
+      /* Opened without internet while the session needs renewing: supabase-js reports "no session" but keeps it
+         stored and renews it once online. Keep showing the saved data; it is not a sign-out. */
+      if(prov&&ev==="INITIAL_SESSION"){var kept=null;try{kept=localStorage.getItem(SB_TOKEN)}catch(e){}if(kept){auth.user=provUser;auth.provisional=true;render();return}}
+      signedOut();return;
+    }
     render();
   });
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);
   /* Draw the saved data before the sign-in check finishes (it may need the internet to renew the session). */
   (function(){try{
-    var raw=localStorage.getItem("sb-"+SB_URL.replace(/^https:\/\/|\..*$/g,"")+"-auth-token");if(!raw)return;
+    var raw=localStorage.getItem(SB_TOKEN);if(!raw)return;
     var ss=JSON.parse(raw),u=ss&&(ss.user||(ss.currentSession&&ss.currentSession.user));
     if(!u||!u.id||auth.user)return;
     if(loadCache(u.id)){auth.user=u;auth.ready=true;auth.provisional=true}
