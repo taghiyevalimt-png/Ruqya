@@ -386,7 +386,7 @@ public class MonthWidget extends AppWidgetProvider {
         for (int c = 1; c < 7; c++) cv.drawLine(colW * c, gy, colW * c, H - 10 * d, p);
 
         if (out) {
-            note(cv, p, ru ? "Откройте Ruqyatz и войдите" : "Görmək üçün Ruqyatz-ı açıb daxil olun", W / 2f, gy + rowH * 3, d, W);
+            note(cv, p, ru ? "Откройте Mərkəz и войдите" : "Görmək üçün Mərkəz-i açıb daxil olun", W / 2f, gy + rowH * 3, d, W);
             return bmp;
         }
 

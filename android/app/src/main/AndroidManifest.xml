@@ -6,7 +6,7 @@
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="Ruqyatz"
+        android:label="Mərkəz"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
@@ -29,7 +29,7 @@
         <receiver
             android:name=".MonthWidget"
             android:exported="true"
-            android:label="Ruqyatz — ay">
+            android:label="Mərkəz — ay">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
