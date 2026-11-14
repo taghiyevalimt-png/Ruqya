@@ -1,0 +1,78 @@
+name: Audit probe
+
+# Read-only checks from outside, run by hand during audits:
+#  - Supabase Auth settings (sign-up open? e-mail confirmation?) — prints only flags;
+#  - what an anonymous visitor (publishable key, no login) can read or call — prints only status codes and row counts;
+#  - security headers of the published site and CORS of the API;
+#  - downloads the two web fonts so the app can serve them itself (artifact "fonts").
+# Never prints keys or row contents.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Read public config from the app
+        run: |
+          URL=$(grep -o 'SB_URL="[^"]*"' index.html | cut -d'"' -f2)
+          KEY=$(grep -o 'SB_KEY="[^"]*"' index.html | cut -d'"' -f2)
+          echo "::add-mask::$KEY"
+          echo "URL=$URL" >> "$GITHUB_ENV"
+          echo "KEY=$KEY" >> "$GITHUB_ENV"
+      - name: Auth settings (flags only)
+        run: |
+          curl -s "$URL/auth/v1/settings" -H "apikey: $KEY" \
+            | jq '{disable_signup, mailer_autoconfirm, phone_autoconfirm, sms_provider, saml_enabled,
+                   enabled_external_providers: ((.external // {}) | to_entries | map(select(.value == true)) | map(.key))}'
+      - name: Anonymous access (status and row count only)
+        run: |
+          for t in appts readers staff services expenses product_sales breaks stat_edits audit_log; do
+            body=$(curl -s -w '\n%{http_code}' "$URL/rest/v1/$t?select=*&limit=5" -H "apikey: $KEY")
+            code=$(printf '%s' "$body" | tail -1); data=$(printf '%s' "$body" | sed '$d')
+            n=$(printf '%s' "$data" | jq 'if type=="array" then length else "n/a" end' 2>/dev/null || echo "n/a")
+            echo "GET  $t -> HTTP $code, rows: $n"
+          done
+          # write attempts are tested on a local copy of the database, never here
+          for f in ruqya_is_admin ruqya_sees_all ruqya_can_stats ruqya_can_breaks ruqya_has_role ruqya_my_readers; do
+            echo "RPC  $f -> HTTP $(curl -s -o /tmp/r -w '%{http_code}' -X POST "$URL/rest/v1/rpc/$f" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{}') body-bytes $(wc -c </tmp/r)"
+          done
+          echo "RPC  ruqya_restore -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/rest/v1/rpc/ruqya_restore" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"aid":1}')"
+          echo "RPC  ruqya_set_color -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/rest/v1/rpc/ruqya_set_color" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"rid":"00000000-0000-0000-0000-000000000000","c":"#ffffff"}')"
+          echo "GraphQL -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/graphql/v1" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"query":"{__typename}"}')"
+          echo "OpenAPI schema (anon) -> HTTP $(curl -s -o /tmp/o -w '%{http_code}' "$URL/rest/v1/" -H "apikey: $KEY") bytes $(wc -c </tmp/o)"
+      - name: Security headers of the published site and API CORS
+        run: |
+          echo "--- https://taghiyevalimt-png.github.io/Ruqya/"
+          curl -sSI https://taghiyevalimt-png.github.io/Ruqya/ | grep -iE '^(HTTP|strict-transport|x-frame|content-security|referrer|x-content-type|permissions-policy|cache-control|server)' || true
+          echo "--- http redirect"
+          curl -sSI http://taghiyevalimt-png.github.io/Ruqya/ | grep -iE '^(HTTP|location)' || true
+          echo "--- API CORS from a foreign origin"
+          curl -sSI -X OPTIONS "$URL/rest/v1/appts" -H 'Origin: https://evil.example' -H 'Access-Control-Request-Method: GET' | grep -iE '^(HTTP|access-control-allow-origin|access-control-allow-credentials)' || true
+
+  fonts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download Golos Text and Onest (woff2) with a local stylesheet
+        run: |
+          mkdir -p fonts && cd fonts
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          curl -sSL -A "$UA" 'https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap' -o google.css
+          grep -o 'https://fonts.gstatic.com/[^)]*' google.css | sort -u > urls.txt
+          i=0; cp google.css fonts.css
+          while read -r u; do i=$((i+1)); f=$(printf 'f%02d.woff2' "$i"); curl -sSL "$u" -o "$f"; sed -i "s#$u#$f#g" fonts.css; done < urls.txt
+          rm urls.txt google.css
+          sha256sum *.woff2 > SHA256SUMS
+          ls -la; du -sh .
+          echo "Licences: Golos Text and Onest are under the SIL Open Font License 1.1 (Google Fonts)." > LICENSE.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: fonts
+          path: fonts/
+          retention-days: 7
