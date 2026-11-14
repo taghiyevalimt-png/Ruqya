@@ -4,7 +4,6 @@ name: Audit probe
 #  - Supabase Auth settings (sign-up open? e-mail confirmation?) — prints only flags;
 #  - what an anonymous visitor (publishable key, no login) can read or call — prints only status codes and row counts;
 #  - security headers of the published site and CORS of the API;
-#  - downloads the two web fonts so the app can serve them itself (artifact "fonts").
 # Never prints keys or row contents.
 on:
   workflow_dispatch:
@@ -58,24 +57,3 @@ jobs:
           echo "--- API CORS from a foreign origin"
           curl -sSI -X OPTIONS "$URL/rest/v1/appts" -H 'Origin: https://evil.example' -H 'Access-Control-Request-Method: GET' | grep -iE '^(HTTP|access-control-allow-origin|access-control-allow-credentials)' || true
 
-  fonts:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Download Golos Text and Onest (woff2) with a local stylesheet
-        run: |
-          mkdir -p fonts && cd fonts
-          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          curl -sSL -A "$UA" 'https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap' -o google.css
-          grep -o 'https://fonts.gstatic.com/[^)]*' google.css | sort -u > urls.txt
-          i=0; cp google.css fonts.css
-          while read -r u; do i=$((i+1)); f=$(printf 'f%02d.woff2' "$i"); curl -sSL "$u" -o "$f"; sed -i "s#$u#$f#g" fonts.css; done < urls.txt
-          rm urls.txt google.css
-          sha256sum *.woff2 > SHA256SUMS
-          ls -la; du -sh .
-          echo "Licences: Golos Text and Onest are under the SIL Open Font License 1.1 (Google Fonts)." > LICENSE.txt
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: fonts
-          path: fonts/
-          retention-days: 7

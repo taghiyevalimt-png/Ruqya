@@ -1,0 +1,39 @@
+name: Vendor fonts
+
+# Copies the two web fonts (Golos Text, Onest; SIL Open Font License 1.1) into the repository,
+# so the app never asks Google's servers for them (they may be closed for the customer).
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/vendor-fonts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fonts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download woff2 files and write a local stylesheet
+        run: |
+          mkdir -p vendor/fonts && cd vendor/fonts
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
+          curl -fsSL -A "$UA" 'https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap' -o /tmp/google.css
+          grep -o 'https://fonts.gstatic.com/[^)]*' /tmp/google.css | sort -u > /tmp/urls.txt
+          cp /tmp/google.css fonts.css; i=0
+          while read -r u; do i=$((i+1)); f=$(printf 'f%02d.woff2' "$i"); curl -fsSL "$u" -o "$f"; sed -i "s#$u#$f#g" fonts.css; done < /tmp/urls.txt
+          sed -i '1i /* Golos Text and Onest — SIL Open Font License 1.1, downloaded from Google Fonts by .github/workflows/vendor-fonts.yml */' fonts.css
+          sha256sum *.woff2 > SHA256SUMS
+          ls -la; du -sh .
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vendor/fonts
+          if git diff --cached --quiet; then echo "No change"; exit 0; fi
+          git commit -m "Vendor web fonts (Golos Text, Onest)"
+          git push
