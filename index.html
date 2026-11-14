@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-TqsPDFWVjoAEU7IzCeyQYlKf5wPOOQLTxxiKiK0sePU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-FgHB+ft0iTLbskPA/LuF+9NLSVYbnFUyW7Np/FHOJNs='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -556,7 +556,7 @@ button.ch .x{font-size:10px;opacity:.8}
 .cal-head:not(.picking) button.ch.pill{padding:6px 2px}.cal-head:not(.picking) .ch.pill span{white-space:normal;overflow-wrap:normal;word-break:keep-all;text-overflow:clip;padding:6px 2px;border-radius:11px;font-size:14px;letter-spacing:-.3px;width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .ch.pill.all span{background:none;border-style:dashed;color:var(--muted)}
 .cal-head.picking{align-items:center}
-.chbar{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chbar{flex:1;min-width:0;position:sticky;left:54px;max-width:calc(100vw - 54px);box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .chbar::-webkit-scrollbar{display:none}
 .chbar button.ch.pill{flex:none;width:auto;padding:0;min-height:36px}.chbar .ch.pill span{padding:7px 12px}
 .hdwrap{position:sticky;top:0;z-index:4}.hdwrap .cal-head{position:relative}
@@ -1041,6 +1041,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "kassa":"касса",
 "Geri":"Назад",
 "Toplam":"Итого",
+"Bir saatda çox dəyişiklik edildi. Bir az sonra yenidən cəhd edin.":"Слишком много изменений за час. Попробуйте чуть позже.",
+"Ayrıca fasilə yoxdur — yalnız «Hamısı üçün» fasilələri.":"Отдельных перерывов нет — только перерывы «Для всех».",
+
 "Rəngi yalnız admin dəyişə bilər.":"Цвет может менять только админ.",
 "Ayarlar":"Настройки",
 "Mütəxəssislər":"Специалисты",
@@ -1397,7 +1400,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261113214548";
+var APP_VERSION="20261114043200";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1539,14 +1542,19 @@ var PXM=HOUR/60;
    so narrow that a block's text would not fit, that block alone is drawn tighter (one line each, cut with …). */
 var MIN_DUR=30,curMinHour=HMIN;
 function dayMinHour(){return HMIN}
+var fitT=null;
+window.addEventListener("resize",function(){clearTimeout(fitT);fitT=setTimeout(function(){if(ui.tab==="day"&&!sheet)render()},250)});
+try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(ui.tab==="day")fitBlocks()})}catch(e){}
 function fitBlocks(){
   /* a name too long for its pill gets a smaller letter instead of being cut */
   var ps=document.querySelectorAll(".cal-head:not(.picking) .ch.pill span");
-  for(var j=0;j<ps.length;j++){var sp=ps[j],fs=14;while(sp.scrollWidth>sp.clientWidth+1&&fs>9.5){fs-=.5;sp.style.fontSize=fs+"px"}}
+  var po=[];for(var j=0;j<ps.length;j++)if(ps[j].scrollWidth>ps[j].clientWidth+1)po.push([ps[j],ps[j].clientWidth/ps[j].scrollWidth]);
+  po.forEach(function(x){x[0].style.fontSize=Math.max(9.5,Math.floor(14*x[1]*2)/2)+"px"});
   /* a patient name that is one long word gets a smaller letter instead of being broken in the middle */
   var bs=document.querySelectorAll("#cal .ev b"),over=[];
   for(var q=0;q<bs.length;q++)if(bs[q].scrollWidth>bs[q].clientWidth+1)over.push(bs[q]);   /* read first, then change only those */
-  over.forEach(function(bb){var f2=parseFloat(getComputedStyle(bb).fontSize)||13,min=f2-4.5;while(bb.scrollWidth>bb.clientWidth+1&&f2>min){f2-=.5;bb.style.fontSize=f2+"px"}});
+  var ov=over.map(function(bb){return [bb,parseFloat(getComputedStyle(bb).fontSize)||13,bb.clientWidth/bb.scrollWidth]});   /* all reads first … */
+  ov.forEach(function(x){x[0].style.fontSize=Math.max(x[1]-4.5,Math.floor(x[1]*x[2]*2)/2)+"px"});   /* … then one write each */
   var evs=document.querySelectorAll("#cal .ev:not(.cancel)");
   for(var i=0;i<evs.length;i++){var el=evs[i];if(!(el.clientHeight>0&&el.scrollHeight>el.clientHeight+1))continue;el.classList.add("tight");
     /* a line that would show only half (time, who wrote it) is hidden; the name always stays */
@@ -1697,6 +1705,7 @@ function refresh(){
 function redrawCard(){
   pcache=null;
   if(!sheet)return;
+  if(sheet.type==="brkview"){byId("sheet").innerHTML=brkSheet();return}   /* a break deleted or added on another phone */
   if(sheet.type==="appt"){slotGrid();return}
   var f={view:viewSheet,patient:patientSheet}[sheet.type];
   if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
@@ -1815,6 +1824,7 @@ function dbMsg(e){
   if(/Bu ad artiq var/.test(m))return L("Bu ad artıq başqa işçidədir. Başqa ad yazın.");
   if(/Rolu admin deyisir/.test(m))return L("Rolu yalnız admin dəyişə bilər.");
   if(/Esas adminin/.test(m))return L("Əsas adminin məlumatı dəyişmir.");
+  if(/Bir saatda cox deyisiklik/.test(m))return L("Bir saatda çox dəyişiklik edildi. Bir az sonra yenidən cəhd edin.");
   if(/Rengi admin deyisir/.test(m))return L("Rəngi yalnız admin dəyişə bilər.");
   if(/Bu qebulu tesdiqlemek olmur/.test(m))return L("Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.");
   if(/Yalniz yazan/.test(m))return L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.");
@@ -2697,11 +2707,12 @@ function patientSheet(){
 }
 
 /* Ayarlar: one section at a time, chosen with the buttons on top (like Statistika) */
-function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks)x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
-function setSecBar(){var ss=setSecs(),cur=ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec";
+function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
+function curSetSec(){var ss=setSecs();if(pendingMe()&&!ui.setSecPicked)return "acc";return ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec"}
+function setSecBar(){var ss=setSecs(),cur=curSetSec();
   return '<div class="chips stsec setsec" role="tablist">'+ss.map(function(x){return '<button class="chip" role="tab" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'" aria-selected="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
 function readersMain(){
-  var rs=activeReaders(),adm=isAdmin(),h="",sec=setSecs().some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec";
+  var rs=activeReaders(),adm=isAdmin(),h="",sec=curSetSec();
   if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
   if(sec==="spec"){
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
@@ -2763,25 +2774,26 @@ function readersMain(){
 }
 /* Breaks, compact: specialists with exactly the same breaks share one card; each break is a small chip.
    Tapping a chip opens it (with deleting for one specialist or for the whole card). */
-function brkSig(list){return list.map(function(b){return b.start+"|"+b.end+"|"+b.title}).sort().join("#")}
+function brkSig(list){return JSON.stringify(list.map(function(b){return [b.start,b.end,b.title]}).sort())}
 function breakGroups(cb){
   var h="",byR={},groups=[],gi={};
   state.breaks.forEach(function(b){(byR[b.rid||""]||(byR[b.rid||""]=[])).push(b)});
   var shared=byR[""]||[];
   if(shared.length)groups.push({names:[L("Hamısı üçün")],rids:[""],list:shared});
-  var rows=state.readers.slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)});
+  var rows=(specMe()?activeReaders():state.readers).slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)});
+  if(!state.hasBrkReader)rows=[];   /* old database: every break is for everyone */
   var known={"":1};
   rows.forEach(function(r){known[r.id]=1;var l=byR[r.id]||[];if(r.archived&&!l.length)return;
     var k=(r.archived?"A":"")+brkSig(l);
     if(gi[k]==null){gi[k]=groups.length;groups.push({names:[],rids:[],list:[],sig:k,arch:r.archived})}
     var g=groups[gi[k]];g.names.push(r.name+(r.archived?L(" (siyahıdan çıxarılıb)"):""));g.rids.push(r.id);g.list=g.list.concat(l)});
-  Object.keys(byR).forEach(function(k){if(!known[k])groups.push({names:[L("silinmiş mütəxəssis")],rids:[k],list:byR[k]})});
+  if(state.hasBrkReader&&!specMe())Object.keys(byR).forEach(function(k){if(!known[k])groups.push({names:[L("silinmiş mütəxəssis")],rids:[k],list:byR[k]})});
   groups.forEach(function(g,ix){
     /* one chip per distinct break of the card (the same break of several specialists is one chip) */
     var seen={},chips=[];
     g.list.slice().sort(function(a,b){return a.start<b.start?-1:a.start>b.start?1:0}).forEach(function(b){var k=b.start+"|"+b.end+"|"+b.title;if(seen[k])return;seen[k]=1;chips.push(b)});
     h+='<div class="bgrp"><div class="bnames">'+g.names.map(function(n){return '<span>'+esc(n)+'</span>'}).join("")+'</div>';
-    if(!chips.length)h+='<p class="hint" style="margin:6px 0 0">'+L("Fasilə yoxdur — istənilən saata yazmaq olar.")+'</p>';
+    if(!chips.length)h+='<p class="hint" style="margin:6px 0 0">'+(shared.length?L("Ayrıca fasilə yoxdur — yalnız «Hamısı üçün» fasilələri."):L("Fasilə yoxdur — istənilən saata yazmaq olar."))+'</p>';
     else h+='<div class="bchips">'+chips.map(function(b){
       return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(b.start+"|"+b.end+"|"+b.title)+'"'+(cb?'':' disabled')+'><b class="num">'+esc(b.start)+'–'+esc(b.end)+'</b><span>'+esc(b.title)+'</span></button>'}).join("")+'</div>';
     h+='</div>';
@@ -2909,7 +2921,7 @@ function auditSheet(){
   return h+L('</div><p class="hint">Son ')+sheet.rows.length+L(' dəyişiklik göstərilir. Bu jurnalı yalnız adminlər görür.</p>');
 }
 /* what an admin can bring back from the journal */
-var RESTORE_T={appts:1,expenses:1,product_sales:1,breaks:1,stat_edits:1};
+var RESTORE_T={appts:1,expenses:1,product_sales:1,breaks:1,stat_edits:1,readers:1};
 function loadAuditDels(){
   var s=sheet;
   sb.from("audit_log").select("*").eq("op","DELETE").order("id",{ascending:false}).limit(500).then(function(r){
@@ -3369,7 +3381,7 @@ document.addEventListener("click",function(e){
     rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert(rows));closeSheet();
   }
-  else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
+  else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;ui.setSecPicked=true;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
   else if(act==="brk-open"){if(!canBreaks())return;var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg)openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
   else if(act==="del-breaks"){
     if(!canBreaks())return;
@@ -3446,7 +3458,7 @@ document.addEventListener("touchstart",function(e){
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
   var col0=c.querySelector(".cal-body .col"),inn=c.querySelector(".cal-in"),fx=(e.touches[0].clientX+e.touches[1].clientX)/2;
   pz={t:Date.now(),c:c,body:body,inn:inn,d0:Math.max(tdist(e),30),x0:Math.max(txdist(e),30),y0:tdist(e),xs:txdist(e),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh,
-    axis:null,cw0:col0?col0.offsetWidth:COLW,cw:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW)};
+    axis:null,act0:col0?col0.offsetWidth:COLW,cw0:COLW,cw:COLW,fill:col0?col0.offsetWidth:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW)};
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
@@ -3458,8 +3470,9 @@ document.addEventListener("touchmove",function(e){
   if(!pz.axis){var ddx=Math.abs(txdist(e)-pz.xs),ddy=Math.abs(tdist(e)-pz.y0);if(ddx<12&&ddy<12)return;pz.axis=ddx>ddy?"x":"y";
     if(pz.axis==="x"&&pz.inn){pz.inn.style.transformOrigin=(pz.cx+AXW)+"px 0"}}
   if(pz.axis==="x"){
-    var w=Math.max(COLW_MIN,Math.min(COLW_MAX,pz.cw0*txdist(e)/pz.x0));pz.cw=w;
-    if(pz.inn)pz.inn.style.transform="scaleX("+(w/pz.cw0)+")";return;
+    /* start from the chosen width; columns stretched to fill the screen look wider than it */
+    var w=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.max(pz.cw0,pz.fill)*txdist(e)/pz.x0));pz.cw=w;
+    if(pz.inn)pz.inn.style.transform="scaleX("+(Math.max(w,pz.fill)/pz.act0)+")";return;
   }
   pz.raw=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));
   var h=Math.max(curMinHour,pz.raw);pz.k=h/pz.h0;
@@ -3467,15 +3480,18 @@ document.addEventListener("touchmove",function(e){
 },{passive:false});
 /* Safari's own pinch gesture must not zoom the page while the calendar is being pinched. */
 document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
-function endPinch(){
+function endPinch(cancel){
   if(!pz)return;var p=pz;pz=null;
-  p.body.style.transform="";p.body.classList.remove("pinch");
+  p.body.style.transform="";p.body.classList.remove("pinch");if(p.inn)p.inn.style.transform="";
+  if(cancel){render();return}   /* a call or the notification shade interrupted: nothing is saved */
   if(p.axis==="x"){
-    if(p.inn)p.inn.style.transform="";
-    var nw=Math.round(p.cw);if(nw<COLW_MIN+6)nw=COLW_MIN;   /* close to the standard width: snap to it */
-    var ratio=0;setColW(nw);render();
+    var nw=Math.round(p.cw);
+    if(nw<COLW_MIN+6)nw=COLW_MIN;   /* close to the standard width: snap to it */
+    else if(nw<=p.fill+4)nw=nw<p.cw0?nw:p.cw0;   /* still not wider than the screen already shows: keep the choice */
+    if(Math.abs(nw-COLW)<Math.max(4,COLW*0.08)&&nw!==COLW_MIN){render();return}   /* a tiny wobble is not a change */
+    setColW(nw);render();
     var c2=byId("cal"),col2=c2&&c2.querySelector(".cal-body .col");
-    if(c2&&col2){ratio=col2.offsetWidth/p.cw0;c2.scrollLeft=Math.max(0,p.cx*ratio-p.fx+AXW)}
+    if(c2&&col2){var ratio=col2.offsetWidth/p.act0;c2.scrollLeft=Math.max(0,p.cx*ratio-p.fx+AXW)}
     return;
   }
   var h=Math.round(p.raw);
@@ -3484,7 +3500,7 @@ function endPinch(){
   var c=byId("cal");if(c)c.scrollTop=Math.max(0,(p.m-DAY0)*PXM+10+p.hh-p.fy);
 }
 document.addEventListener("touchend",function(e){if(pz&&e.touches.length<2)endPinch()},{passive:true});
-document.addEventListener("touchcancel",function(){if(pz)endPinch()},{passive:true});
+document.addEventListener("touchcancel",function(){if(pz)endPinch(true)},{passive:true});
 /* On a computer: Ctrl + mouse wheel over the calendar does the same. */
 document.addEventListener("wheel",function(e){
   var c=e.ctrlKey&&e.target.closest&&e.target.closest("#cal");if(!c)return;

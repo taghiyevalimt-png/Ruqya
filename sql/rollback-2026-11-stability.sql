@@ -1,5 +1,5 @@
 -- Undo of 2026-11-stability.sql (journal back to full copies, overlap check as before, indexes as before).
--- The staff guard is restored by running 2026-11-privacy.sql again after this file.
+-- The staff guard stays as it is now (do not re-run 2026-11-privacy.sql).
 alter function public.ruqya_no_overlap() security definer;
 drop index if exists public.readers_name_norm;
 drop index if exists public.appts_created;

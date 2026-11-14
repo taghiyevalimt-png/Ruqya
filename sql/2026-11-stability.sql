@@ -1,3 +1,5 @@
+-- SUPERSEDED: already applied in production. Do NOT run again — later files (stability, owner, hardening, keep2y, keep2y-b,
+-- colors-admin, limits) replaced parts of it, and re-running would bring old rules back.
 -- Mərkəz, 2026-11-13: smaller journal, faster queries, last privacy holes closed. Safe to run more than once.
 -- Undo: rollback-2026-11-stability.sql
 -- 1) The double-booking check no longer tells a specialist whether a colleague's time is busy.

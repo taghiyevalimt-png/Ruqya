@@ -1,3 +1,5 @@
+-- SUPERSEDED: already applied in production. Do NOT run again — later files (stability, owner, hardening, keep2y, keep2y-b,
+-- colors-admin, limits) replaced parts of it, and re-running would bring old rules back.
 -- Mərkəz, 2026-11-13: who may change a session, arrival confirmation, restoring deleted data. Safe to run more than once.
 -- Undo: rollback-2026-11-owner.sql
 -- 1) "Gəlişi təsdiqləyib" (the patient confirmed by WhatsApp): anyone who sees the session may tick it.

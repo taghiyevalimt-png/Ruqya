@@ -1,3 +1,5 @@
+-- SUPERSEDED: already applied in production. Do NOT run again — later files (stability, owner, hardening, keep2y, keep2y-b,
+-- colors-admin, limits) replaced parts of it, and re-running would bring old rules back.
 -- Mərkəz, 2026-11-14: management order — keep everything 2 years. The only automatic deletion in the database is
 -- the change journal (it held 365 days); now it keeps 730 days. Sessions, statistics, Kassa, staff are never deleted automatically.
 -- Undo: run this file again with '365 days' instead of '730 days'.

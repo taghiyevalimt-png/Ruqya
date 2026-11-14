@@ -1,5 +1,5 @@
 -- Mərkəz, 2026-11-14: only admins change the colours of the specialists. Safe to run more than once.
--- Undo: run 2026-11-stability.sql part 2 (colours for everyone with a role).
+-- Undo: copy only the ruqya_set_color block from 2026-11-stability.sql and run it (colours for everyone with a role).
 create or replace function public.ruqya_set_color(rid uuid, c text) returns void language plpgsql security definer set search_path = public as $$
 begin
   if not public.ruqya_is_admin() then raise exception 'Rengi admin deyisir' using errcode = '42501'; end if;

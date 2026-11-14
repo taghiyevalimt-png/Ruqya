@@ -1,3 +1,5 @@
+-- SUPERSEDED: already applied in production. Do NOT run again — later files (stability, owner, hardening, keep2y, keep2y-b,
+-- colors-admin, limits) replaced parts of it, and re-running would bring old rules back.
 -- Mərkəz, 2026-11-13: privacy of specialists, product names, three "Müraciət" numbers.
 -- Safe to run more than once. Undo: rollback-2026-11-privacy.sql
 -- The only stored change: people who never got a role (empty) keep working as sales agents, as they do today
@@ -85,7 +87,7 @@ begin
 end $$;
 revoke all on function public.ruqya_staff_guard() from public;
 
-update public.staff set role = 'agent' where role is null and id <> 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid;
+-- (13 Nov, run once: people without a role were kept as agents. Removed so a re-run never promotes anyone.)
 
 -- 1) sessions: everything for agents and admins, own column only for a specialist, nothing for a person without a role
 drop policy if exists "staff appts" on public.appts;
