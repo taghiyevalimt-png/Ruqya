@@ -27,9 +27,12 @@ jobs:
           echo "KEY=$KEY" >> "$GITHUB_ENV"
       - name: Auth settings (flags only)
         run: |
-          curl -s "$URL/auth/v1/settings" -H "apikey: $KEY" \
-            | jq '{disable_signup, mailer_autoconfirm, phone_autoconfirm, sms_provider, saml_enabled,
-                   enabled_external_providers: ((.external // {}) | to_entries | map(select(.value == true)) | map(.key))}'
+          code=$(curl -s -o /tmp/s.json -w '%{http_code}' "$URL/auth/v1/settings" -H "apikey: $KEY")
+          echo "settings HTTP $code, keys: $(jq -c 'keys' /tmp/s.json 2>/dev/null)"
+          jq '{disable_signup, mailer_autoconfirm, phone_autoconfirm, sms_provider, saml_enabled,
+               enabled_external_providers: ((.external // {}) | to_entries | map(select(.value == true)) | map(.key))}' /tmp/s.json || true
+          code=$(curl -s -o /tmp/s2.json -w '%{http_code}' "$URL/auth/v1/settings?apikey=$KEY")
+          echo "settings (query apikey) HTTP $code: $(jq -c '{disable_signup, mailer_autoconfirm}' /tmp/s2.json 2>/dev/null)"
       - name: Anonymous access (status and row count only)
         run: |
           for t in appts readers staff services expenses product_sales breaks stat_edits audit_log; do
@@ -44,7 +47,7 @@ jobs:
           done
           echo "RPC  ruqya_restore -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/rest/v1/rpc/ruqya_restore" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"aid":1}')"
           echo "RPC  ruqya_set_color -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/rest/v1/rpc/ruqya_set_color" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"rid":"00000000-0000-0000-0000-000000000000","c":"#ffffff"}')"
-          echo "GraphQL -> HTTP $(curl -s -o /dev/null -w '%{http_code}' -X POST "$URL/graphql/v1" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"query":"{__typename}"}')"
+          echo "GraphQL -> HTTP $(curl -s -o /tmp/g -w '%{http_code}' -X POST "$URL/graphql/v1" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{"query":"{__typename}"}') body: $(head -c 160 /tmp/g)"
           echo "OpenAPI schema (anon) -> HTTP $(curl -s -o /tmp/o -w '%{http_code}' "$URL/rest/v1/" -H "apikey: $KEY") bytes $(wc -c </tmp/o)"
       - name: Security headers of the published site and API CORS
         run: |
