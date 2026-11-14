@@ -1,0 +1,2 @@
+# local settings for tools/configure.py (publish.sh runs "git add -A")
+.env

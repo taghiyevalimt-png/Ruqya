@@ -1,0 +1,234 @@
+name: Database backup
+
+# Every night: a full copy of the database (roles, schema, data with the sign-in accounts) taken the way Supabase
+# documents for moving a project, plus a standard pg_dump archive. The copy is then restored into a fresh local
+# Supabase stack on the runner (not connected to the live project) and checked: every table's row count and content
+# hash must equal the live database's, the structure must match, and the app must open on the restored copy and show
+# the admin every appointment. Only an encrypted archive, its checksum and the count/hash manifests are kept
+# (35 days). Restore steps: docs/BACKUP.md and scripts/restore.sh.
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   SUPABASE_DB_URL    session pooler connection string with the database password
+#                      (Dashboard > Connect > Session pooler), e.g.
+#                      postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+#   BACKUP_PASSPHRASE  long random passphrase for the archive; keep a copy outside GitHub, without it the
+#                      backups cannot be opened
+on:
+  schedule:
+    - cron: "17 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-backup
+  cancel-in-progress: false
+
+env:
+  SUPABASE_CLI_VERSION: "3.1.0"      # npm package "supabase"; the job checks that this exact version runs
+  PLAYWRIGHT_VERSION: "1.63.0"
+  PG_CLIENT_MAJOR: "17"              # the live database is PostgreSQL 17
+
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check the secrets
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          missing=""
+          [ -n "${SUPABASE_DB_URL:-}" ] || missing="$missing SUPABASE_DB_URL"
+          [ -n "${BACKUP_PASSPHRASE:-}" ] || missing="$missing BACKUP_PASSPHRASE"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing. Add them in Settings > Secrets and variables > Actions (see the top of .github/workflows/backup.yml). No backup was made."
+            exit 1
+          fi
+          case "$SUPABASE_DB_URL" in postgres://*|postgresql://*) ;; *)
+            echo "::error::SUPABASE_DB_URL must be a postgresql:// connection string (Dashboard > Connect > Session pooler)."; exit 1;; esac
+          if [ "${#BACKUP_PASSPHRASE}" -lt 20 ]; then
+            echo "::error::BACKUP_PASSPHRASE is shorter than 20 characters; use a long random passphrase."; exit 1
+          fi
+          echo "Secrets present."
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Install PostgreSQL client ${{ env.PG_CLIENT_MAJOR }} (PGDG)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq "postgresql-client-$PG_CLIENT_MAJOR"
+          echo "/usr/lib/postgresql/$PG_CLIENT_MAJOR/bin" >> "$GITHUB_PATH"
+          "/usr/lib/postgresql/$PG_CLIENT_MAJOR/bin/pg_dump" --version
+          "/usr/lib/postgresql/$PG_CLIENT_MAJOR/bin/pg_dump" --version | grep -q " $PG_CLIENT_MAJOR\."
+
+      - name: Install the Supabase CLI ${{ env.SUPABASE_CLI_VERSION }} and Playwright ${{ env.PLAYWRIGHT_VERSION }}
+        run: |
+          npm install --no-save --no-package-lock --no-fund --no-audit --prefix "$RUNNER_TEMP/tools" \
+            "supabase@$SUPABASE_CLI_VERSION" "playwright@$PLAYWRIGHT_VERSION"
+          echo "$RUNNER_TEMP/tools/node_modules/.bin" >> "$GITHUB_PATH"
+          v=$("$RUNNER_TEMP/tools/node_modules/.bin/supabase" --version | tail -1)
+          echo "supabase --version: $v"
+          [ "$v" = "$SUPABASE_CLI_VERSION" ] || { echo "::error::expected Supabase CLI $SUPABASE_CLI_VERSION, got $v"; exit 1; }
+          "$RUNNER_TEMP/tools/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Timestamp
+        id: ts
+        run: echo "ts=$(date -u +%Y%m%dT%H%M%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Dump the live database
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          set -u
+          umask 077
+          W="$RUNNER_TEMP/backup"; mkdir -p "$W"; cd "$W"
+          q() { psql "$SUPABASE_DB_URL" -X -q -At -v ON_ERROR_STOP=1 -v VERBOSITY=terse "$@"; }
+          echo "source: $(q -c 'show server_version')"
+          # manifest query with the source's column lists, used unchanged on the restored copy
+          q -f "$GITHUB_WORKSPACE/scripts/backup-manifest-gen.sql" > manifest-query.sql
+          # exact privileges and realtime membership of the source, applied after schema.sql
+          # (see scripts/backup-post-schema-gen.sql)
+          q -f "$GITHUB_WORKSPACE/scripts/backup-post-schema-gen.sql" > post-schema.sql
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f roles.sql --role-only
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f schema.sql
+          # the data dump is one snapshot; the manifest is taken just before and just after it, and the dump is
+          # repeated if somebody changed data in between, so the manifest describes exactly what was dumped
+          for i in 1 2 3; do
+            q -F $'\t' -f manifest-query.sql > manifest-before.txt
+            supabase db dump --db-url "$SUPABASE_DB_URL" -f data.sql --use-copy --data-only
+            q -F $'\t' -f manifest-query.sql > manifest-after.txt
+            if cmp -s manifest-before.txt manifest-after.txt; then mv manifest-after.txt manifest-source.txt; rm manifest-before.txt; break; fi
+            echo "::warning::data changed while dumping (attempt $i), dumping again"
+            if [ "$i" = 3 ]; then echo "::error::data kept changing during the dump"; exit 1; fi
+            sleep 20
+          done
+          q -F $'\t' -f "$GITHUB_WORKSPACE/scripts/backup-structure.sql" > manifest-structure-source.txt
+          # second, standard-format copy (pg_restore), schemas public, auth and storage
+          pg_dump "$SUPABASE_DB_URL" -Fc -n public -n auth -n storage -f public-auth-storage.dump
+          pg_restore -l public-auth-storage.dump > /dev/null
+          for f in schema.sql post-schema.sql data.sql public-auth-storage.dump; do
+            [ -s "$f" ] || { echo "::error::$f is empty"; exit 1; }
+            printf '%-28s %12s bytes\n' "$f" "$(stat -c %s "$f")"
+          done
+          grep -Eq '^COPY "?auth"?\."?users"? ' data.sql || { echo "::error::data.sql has no auth.users data"; exit 1; }
+          echo "Source manifest (table, rows, md5):"; cat manifest-source.txt
+
+      - name: Start a clean local Supabase stack
+        run: |
+          set -u
+          mkdir -p "$RUNNER_TEMP/drill"; cd "$RUNNER_TEMP/drill"
+          supabase init < /dev/null
+          grep -q '^major_version' supabase/config.toml
+          sed -i "s/^major_version = .*/major_version = $PG_CLIENT_MAJOR/" supabase/config.toml
+          supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,postgres-meta
+          supabase status -o env > "$RUNNER_TEMP/drill/status.env" 2>/dev/null
+          val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
+          for k in ANON_KEY SERVICE_ROLE_KEY PUBLISHABLE_KEY SECRET_KEY JWT_SECRET; do v=$(val "$k"); [ -z "$v" ] || echo "::add-mask::$v"; done
+          db=$(val DB_URL); api=$(val API_URL)
+          [ -n "$db" ] && [ -n "$api" ] || { echo "::error::could not read DB_URL / API_URL from supabase status"; exit 1; }
+          v=$(psql "$db" -X -At -c 'show server_version_num')
+          echo "local stack: $api, PostgreSQL $v"
+          [ "$v" -ge "${PG_CLIENT_MAJOR}0000" ] || { echo "::error::local stack runs PostgreSQL $v, expected $PG_CLIENT_MAJOR"; exit 1; }
+
+      - name: Restore into the local stack and compare
+        run: |
+          set -u
+          W="$RUNNER_TEMP/backup"; cd "$W"
+          val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
+          LOCAL_DB=$(val DB_URL)
+          # as documented by Supabase: roles, schema, then data with triggers off, in one transaction;
+          # post-schema.sql right after schema.sql puts back the source's exact privileges (the new stack's default
+          # privileges would otherwise widen them, e.g. table-wide SELECT on readers instead of some columns)
+          # and its realtime publication membership
+          if ! psql "$LOCAL_DB" -X -q --single-transaction -v ON_ERROR_STOP=1 -v VERBOSITY=terse \
+                 --file roles.sql --file schema.sql --file post-schema.sql \
+                 --command 'SET session_replication_role = replica' --file data.sql \
+                 > restore.log 2>&1; then
+            # never print data: show only the error lines, with quoted values blanked
+            grep -m5 'ERROR' restore.log | sed -E "s/\"[^\"]*\"/\"…\"/g; s/'[^']*'/'…'/g; s/\([^)]*\)=\([^)]*\)/(…)=(…)/g" | cut -c1-300
+            echo "::error::restore failed"; exit 1
+          fi
+          echo "restore ok ($(grep -c . restore.log || true) notice lines)"
+          psql "$LOCAL_DB" -X -q -At -F $'\t' -v ON_ERROR_STOP=1 -f manifest-query.sql > manifest-restored.txt
+          psql "$LOCAL_DB" -X -q -At -F $'\t' -v ON_ERROR_STOP=1 -f "$GITHUB_WORKSPACE/scripts/backup-structure.sql" > manifest-structure-restored.txt
+          echo "Restored manifest (table, rows, md5):"; cat manifest-restored.txt
+          ok=1
+          if ! diff manifest-source.txt manifest-restored.txt; then echo "::error::row counts or content hashes of the restored copy differ from the source"; ok=0; fi
+          if ! diff manifest-structure-source.txt manifest-structure-restored.txt; then echo "::error::the structure of the restored copy differs from the source"; ok=0; fi
+          [ "$ok" = 1 ]
+          echo "Restored copy equals the source: $(wc -l < manifest-source.txt) tables, structure identical."
+
+      - name: Smoke test the app on the restored copy
+        run: |
+          set -u
+          val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
+          LOCAL_DB=$(val DB_URL); API=$(val API_URL)
+          ANON=$(val ANON_KEY); [ -n "$ANON" ] || ANON=$(val PUBLISHABLE_KEY)
+          SERVICE=$(val SERVICE_ROLE_KEY); [ -n "$SERVICE" ] || SERVICE=$(val SECRET_KEY)
+          # temporary admin, only in this throw-away stack (its local service key never leaves the runner)
+          TEST_EMAIL="backup-drill-${{ steps.ts.outputs.ts }}@example.invalid"
+          TEST_PASSWORD=$(openssl rand -base64 30 | tr -d '/+=\n'); echo "::add-mask::$TEST_PASSWORD"
+          body=$(jq -nc --arg e "$TEST_EMAIL" --arg p "$TEST_PASSWORD" '{email:$e,password:$p,email_confirm:true}')
+          uid=$(curl -sS --fail-with-body -X POST "$API/auth/v1/admin/users" -H "apikey: $SERVICE" \
+                  -H "Authorization: Bearer $SERVICE" -H "Content-Type: application/json" -d "$body" | jq -r '.id // empty')
+          [ -n "$uid" ] || { echo "::error::could not create the test user in the local stack"; exit 1; }
+          psql "$LOCAL_DB" -X -q -v ON_ERROR_STOP=1 -v uid="$uid" <<'SQL'
+          insert into public.staff (id, name, role) values (:'uid', 'Backup drill admin', 'admin');
+          SQL
+          EXPECTED=$(psql "$LOCAL_DB" -X -At -c 'select count(*) from public.appts')
+          # the site pointed at the local stack, served like GitHub Pages
+          SUPABASE_URL="$API" SUPABASE_ANON_KEY="$ANON" python3 tools/configure.py "$RUNNER_TEMP/site"
+          python3 -m http.server 8080 --bind 127.0.0.1 --directory "$RUNNER_TEMP/site" > /dev/null 2>&1 &
+          for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8080/index.html && break; sleep 0.5; done
+          SITE_URL=http://127.0.0.1:8080/index.html TEST_EMAIL="$TEST_EMAIL" TEST_PASSWORD="$TEST_PASSWORD" \
+            EXPECTED_APPTS="$EXPECTED" NODE_PATH="$RUNNER_TEMP/tools/node_modules" node scripts/restore-smoke.js
+
+      - name: Encrypt the backup
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          TS: ${{ steps.ts.outputs.ts }}
+        run: |
+          set -u
+          umask 077
+          W="$RUNNER_TEMP/backup"; O="$RUNNER_TEMP/out"; mkdir -p "$O"; cd "$W"
+          n="ruqya-backup-$TS"
+          tar -cf "$n.tar" roles.sql schema.sql post-schema.sql data.sql public-auth-storage.dump \
+            manifest-source.txt manifest-restored.txt manifest-structure-source.txt manifest-structure-restored.txt manifest-query.sql
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --symmetric --cipher-algo AES256 --batch --pinentry-mode loopback \
+            --passphrase-fd 0 --s2k-digest-algo SHA512 --s2k-count 65011712 --output "$O/$n.tar.gpg" "$n.tar"
+          # the archive must open again with the passphrase and give back the same bytes
+          a=$(sha256sum < "$n.tar" | cut -d' ' -f1)
+          b=$(printf '%s' "$BACKUP_PASSPHRASE" | gpg --decrypt --batch --quiet --pinentry-mode loopback --passphrase-fd 0 "$O/$n.tar.gpg" | sha256sum | cut -d' ' -f1)
+          [ "$a" = "$b" ] || { echo "::error::decryption check failed"; exit 1; }
+          rm -f "$n.tar"
+          cp manifest-source.txt manifest-restored.txt manifest-structure-source.txt manifest-structure-restored.txt "$O/"
+          cd "$O" && sha256sum "$n.tar.gpg" > "$n.tar.gpg.sha256"
+          ls -la "$O"; cat "$n.tar.gpg.sha256"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ruqya-backup-${{ steps.ts.outputs.ts }}
+          path: ${{ runner.temp }}/out/
+          retention-days: 35
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Remove the unencrypted copies
+        if: always()
+        run: |
+          (cd "$RUNNER_TEMP/drill" 2>/dev/null && supabase stop --no-backup) || true
+          rm -rf "$RUNNER_TEMP/backup" "$RUNNER_TEMP/drill" "$RUNNER_TEMP/site"
