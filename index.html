@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qLt55aDkULVMY8t5TbnRe1QaWgIwJxaifJmHK/3bHew='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-LXg773HTtxzdbEDzZoYIuI7WPq6OptvNJ5LGE/wZ92w='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1401,7 +1401,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261114044647";
+var APP_VERSION="20261114050202";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3480,7 +3480,8 @@ document.addEventListener("touchstart",function(e){
   var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
   var col0=c.querySelector(".cal-body .col"),inn=c.querySelector(".cal-in"),fx=(e.touches[0].clientX+e.touches[1].clientX)/2;
   pz={t:Date.now(),c:c,body:body,inn:inn,d0:Math.max(tdist(e),30),x0:Math.max(txdist(e),30),y0:tdist(e),xs:txdist(e),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh,
-    axis:null,act0:col0?col0.offsetWidth:COLW,cw0:COLW,cw:COLW,fill:col0?col0.offsetWidth:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW)};
+    axis:null,act0:col0?col0.offsetWidth:COLW,cw0:COLW,cw:COLW,fill:col0?col0.offsetWidth:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW),
+    n:c.querySelectorAll(".cal-body .col").length,raf:0};
   body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
 },{passive:true});
 document.addEventListener("touchmove",function(e){
@@ -3490,11 +3491,16 @@ document.addEventListener("touchmove",function(e){
   e.preventDefault();
   /* fingers moving apart sideways → wider blocks; up and down → taller hours */
   if(!pz.axis){var ddx=Math.abs(txdist(e)-pz.xs),ddy=Math.abs(tdist(e)-pz.y0);if(ddx<12&&ddy<12)return;pz.axis=ddx>ddy?"x":"y";
-    if(pz.axis==="x"&&pz.inn){pz.inn.style.transformOrigin=(pz.cx+AXW)+"px 0"}}
+  }
   if(pz.axis==="x"){
     /* start from the chosen width; columns stretched to fill the screen look wider than it */
     var w=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.max(pz.cw0,pz.fill)*txdist(e)/pz.x0));pz.cw=w;
-    if(pz.inn)pz.inn.style.transform="scaleX("+(Math.max(w,pz.fill)/pz.act0)+")";return;
+    /* the columns really change width under the fingers (both ways), once per frame, and the point
+       between the fingers stays where it is; nothing is squeezed or stretched as a picture */
+    if(pz.inn&&!pz.raf){var q=pz;q.raf=requestAnimationFrame(function(){q.raf=0;if(pz!==q)return;
+      var cw=Math.max(q.cw,q.fill);q.inn.style.minWidth=(AXW+q.n*q.cw)+"px";
+      q.c.scrollLeft=Math.max(0,q.cx*cw/q.act0-q.fx+AXW)})}
+    return;
   }
   pz.raw=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));
   var h=Math.max(curMinHour,pz.raw);pz.k=h/pz.h0;
@@ -3503,7 +3509,7 @@ document.addEventListener("touchmove",function(e){
 /* Safari's own pinch gesture must not zoom the page while the calendar is being pinched. */
 document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
 function endPinch(cancel){
-  if(!pz)return;var p=pz;pz=null;
+  if(!pz)return;var p=pz;pz=null;if(p.raf)cancelAnimationFrame(p.raf);
   p.body.style.transform="";p.body.classList.remove("pinch");if(p.inn)p.inn.style.transform="";
   if(cancel){render();return}   /* a call or the notification shade interrupted: nothing is saved */
   if(p.axis==="x"){
