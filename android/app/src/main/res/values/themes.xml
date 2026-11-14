@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- dark from the very first frame: no white flash while the app starts -->
-    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+    <!-- light parent so the page follows the phone (WebView reads light/dark from the theme); black window = no white flash at start -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <item name="android:statusBarColor">@android:color/black</item>

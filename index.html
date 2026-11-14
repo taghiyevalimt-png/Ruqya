@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-KqA1bmfxKmxWsdvsuyNBfgG2AIN96gYzhzbAsuGqwO0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-AvCSH6/QYt0bkuZ5k0YE4IYQTNpVSffrRB+3c7PgCSg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -272,7 +272,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .col{flex:1 0 56px;width:56px;position:relative;border-left:1px solid var(--line);cursor:pointer;
   background-image:linear-gradient(to bottom,var(--line) 0,var(--line) 1px,transparent 1px,transparent 100%),
   linear-gradient(to bottom,var(--line-soft) 0,var(--line-soft) 1px,transparent 1px,transparent 100%);background-repeat:repeat-y}
-/* Two fingers on the calendar stretch or shrink the hours, as in Google Calendar; the browser's own page zoom stays off there. */
+/* Two fingers on the calendar do nothing (block size is chosen in Ayarlar); the browser's own page zoom stays off there. */
 .cal{touch-action:pan-x pan-y}
 
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
@@ -549,8 +549,8 @@ html.lite .ev::before{display:none}
 @keyframes spShow{to{opacity:1}}
 @keyframes spRun{from{transform:translateX(-110%)}to{transform:translateX(260%)}}
 /* opacity only: moving the whole app would make the browser redraw the big calendar on every frame */
-.app{opacity:0;transition:opacity .8s var(--ease) .15s}
-html.ready .app{opacity:1}
+.app{opacity:0;pointer-events:none;transition:opacity .8s var(--ease) .15s}
+html.ready .app{opacity:1;pointer-events:auto}
 html.ready #splash{opacity:0;visibility:hidden}
 html.lite .app,html.lite #splash{transition-duration:.2s}
 @media (prefers-reduced-motion: reduce){.app{transition:opacity .2s}#splash img,#splash .sp-name{animation:none}}
@@ -1122,6 +1122,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Bu artıq bərpa olunub.":"Это уже восстановлено.",
 "Bərpa etməyi yalnız admin edə bilər.":"Восстанавливать может только админ.",
 "Bunu bərpa etmək olmur.":"Это нельзя восстановить.",
+"Əvvəlcə silinmiş mütəxəssisi bərpa edin, sonra bunu.":"Сначала восстановите удалённого специалиста, потом это.",
+"Bu adda mütəxəssis artıq var.":"Специалист с таким именем уже есть.",
 
 "Bu qəbulu yalnız onu yazan və admin dəyişə bilər.":"Эту запись могут менять только тот, кто её записал, и админ.",
 "Təsdiqləyib":"Подтвердил",
@@ -1421,7 +1423,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261114065247";
+var APP_VERSION="20261114074330";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1551,7 +1553,7 @@ function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=90,AXW=54,HMIN=36,HMAX=111;
 /* Block size is chosen only in Ayarlar → Görünüş: three widths and three heights. No finger gestures on the
    calendar (they felt jumpy); two fingers there do nothing, not even zoom the page.
-   Standard height = 111 px per hour, where a 30-minute block shows the name, time and who wrote it. */
+   Heights 45/75/111 px per hour; at 45 a 1.5-hour block still shows name, time, phone and who wrote it. Default 75. */
 HOUR=75;
 var COLW_MIN=90,COLW_MAX=180,COLW_STEPS=[90,130,180],HOUR_STEPS=[45,75,111];HMAX=111;
 function nearStep(st,v){var b=st[0];st.forEach(function(x){if(Math.abs(x-v)<Math.abs(b-v))b=x});return b}
@@ -1667,7 +1669,9 @@ function refresh(){
   if(pending){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,1500);return Promise.resolve()}
   var my=++seq,g=writes,from=state.loadedFrom||winFrom(),needHist=false;
   return Promise.all([
-    fetchAll(function(){return sb.from("readers").select("*").order("created_at").order("id")}),
+    /* only the columns the app shows: price and share of specialists are closed to everyone but the database owner */
+    fetchAll(function(){return sb.from("readers").select("id,name,archived,created_at,color").order("created_at").order("id")}).then(null,function(){
+      return fetchAll(function(){return sb.from("readers").select("id,name,archived,created_at").order("created_at").order("id")})}),
     fetchAll(function(){return sb.from("appts").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
     Promise.resolve([]),   /* services: no longer used */
     soft(function(){return sb.from("expenses").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
@@ -1853,6 +1857,8 @@ function dbMsg(e){
   if(/Yalniz yazan/.test(m))return L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.");
   if(/Artiq berpa olunub/.test(m))return L("Bu artıq bərpa olunub.");
   if(/Yalniz admin berpa/.test(m))return L("Bərpa etməyi yalnız admin edə bilər.");
+  if(/Bunu berpa etmek olmur/.test(m)&&/foreign key/.test(m))return L("Əvvəlcə silinmiş mütəxəssisi bərpa edin, sonra bunu.");
+  if(/Bunu berpa etmek olmur/.test(m)&&/readers_name_norm/.test(m))return L("Bu adda mütəxəssis artıq var.");
   if(/Berpa ucun qeyd yoxdur|Bunu berpa etmek olmur/.test(m))return L("Bunu bərpa etmək olmur.");
   if(/Mutexessisin adini/.test(m))return L("Mütəxəssisin adını yalnız admin dəyişir.");
   if(/Hesab nomresi/.test(m))return L("Bunu etməyə icazəniz yoxdur.");
@@ -2011,7 +2017,7 @@ function waLink(phone,text){
    Salam, hər vaxtınız xeyir!
    Siz sabah 14 noyabr, 20:00 da Loğman bəyin ruqya seansına yazılmısız.
    Zəhmət olmasa gələcəyinizi təsdiqləyin. */
-function remindText(a){var r=reader(a.readerId),rn=r&&r.name?r.name:"",td=bk().d,svc=String(a.service||"Ruqya").toLowerCase();
+function remindText(a){var r=reader(a.readerId),rn=r&&r.name?r.name:"",td=bk().d,svc=String(a.service||"Ruqya").replace(/\u0130/g,"i").replace(/I/g,"ı").toLowerCase();
   var when=a.date===td?"today":a.date===addDays(td,1)?"tomorrow":"";
   if(LANG==="ru")return "Здравствуйте, доброго вам времени!\nВы записаны на сеанс "+(svc==="hicama"?"хиджамы":"рукьи")+(rn?" к "+rn:"")+" — "+
     (when==="today"?"сегодня, ":when==="tomorrow"?"завтра, ":"")+fmtDay(a.date)+", в "+a.time+".\nПожалуйста, подтвердите, что придёте.";
@@ -2173,7 +2179,7 @@ function stateLine(a){
 }
 /* All of a session's details as plain text, to paste to the specialist (WhatsApp etc.). */
 /* a note like "30 dəqiqəlik ruqya" only repeats the length that is already in brackets */
-function durOnly(t){return /^\s*\d+\s*(-?\s*(dəqiqəlik|deqiqelik|dəqiqə|deqiqe|dəq|deq|dk|мин\S*|min\S*))\.?\s*(ruqya|ruqyə|рукья|seans|сеанс)?\s*\.?\s*$/i.test(String(t||""))}
+function durOnly(t,dur){var m=/^\s*(\d+)/.exec(String(t||""));if(!m||(dur&&+m[1]!==+dur))return false;return /^\s*\d+\s*(-?\s*(dəqiqəlik|deqiqelik|dəqiqə|deqiqe|dəq|deq|dk|мин\S*|min\S*))\.?\s*(ruqya|ruqyə|рукья|seans|сеанс)?\s*\.?\s*$/i.test(String(t||""))}
 function apptText(a){
   /* values only, one per line, no "Label:" in front (easier to read for the specialist) */
   var r=reader(a.readerId),lines=[
@@ -2183,7 +2189,7 @@ function apptText(a){
     a.time+"–"+endOf(a)+" ("+(a.dur||90)+L(" dəq")+")",
     r?r.name:"",
     a.price>0?money(a.price):"",
-    a.note&&!durOnly(a.note)?a.note:""
+    a.note&&!durOnly(a.note,a.dur||90)?a.note:""
   ];
   return lines.filter(function(x){return x}).join("\n");
 }
@@ -3533,11 +3539,14 @@ document.addEventListener("mouseup",function(e){if(lp)lpEnd(e)});
 /* the tap that ends a long press does not also open the session */
 document.addEventListener("click",function(e){if(Date.now()-lpDone<700&&e.target.closest&&e.target.closest("#cal .ev")){e.stopPropagation();e.preventDefault()}},true);
 document.addEventListener("contextmenu",function(e){if(e.target.closest&&e.target.closest("#cal .ev"))e.preventDefault()});
-document.addEventListener("touchstart",function(e){var c=e.target.closest&&e.target.closest("#cal");sw=c&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,c:c}:null},{passive:true});
+document.addEventListener("touchstart",function(e){var c=e.target.closest&&e.target.closest("#cal");sw=c&&e.touches.length===1?{x:e.touches[0].clientX,y:e.touches[0].clientY,c:c,sl:c.scrollLeft}:null},{passive:true});
 document.addEventListener("touchend",function(e){
   if(!sw||!e.changedTouches.length||e.touches.length)return;
-  var dx=e.changedTouches[0].clientX-sw.x,dy=e.changedTouches[0].clientY-sw.y,c=sw.c;sw=null;
-  if(Math.abs(dx)<70||Math.abs(dy)>45||c.scrollWidth>c.clientWidth+2)return;
+  var sw0=sw,dx=e.changedTouches[0].clientX-sw.x,dy=e.changedTouches[0].clientY-sw.y,c=sw.c;sw=null;
+  if(Math.abs(dx)<70||Math.abs(dy)>45)return;
+  /* wide calendar (scrolls sideways): a swipe changes the day only when it started at the edge it pushes past,
+     so ordinary sideways scrolling never jumps to another day */
+  if(c.scrollWidth>c.clientWidth+2){var maxL=c.scrollWidth-c.clientWidth;if(dx<0?sw0.sl<maxL-2:sw0.sl>2)return}
   ui.date=addDays(ui.date,dx<0?1:-1);render();
 },{passive:true});
 window.addEventListener("popstate",function(){
