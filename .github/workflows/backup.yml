@@ -105,11 +105,16 @@ jobs:
           q -f "$GITHUB_WORKSPACE/scripts/backup-post-schema-gen.sql" > post-schema.sql
           supabase db dump --db-url "$SUPABASE_DB_URL" -f roles.sql --role-only
           supabase db dump --db-url "$SUPABASE_DB_URL" -f schema.sql
+          # Storage is not used by the app (no buckets, no files). Its system tables belong to the storage service
+          # and cannot be written on a fresh stack, so the data copy holds public and auth only. If files ever
+          # appear in Storage, stop here instead of silently leaving them out (they would need their own copy).
+          nobj=$(q -c "select (select count(*) from storage.buckets) + (select count(*) from storage.objects)")
+          [ "$nobj" = 0 ] || { echo "::error::Storage now holds $nobj buckets/files; extend the backup to copy them"; exit 1; }
           # the data dump is one snapshot; the manifest is taken just before and just after it, and the dump is
           # repeated if somebody changed data in between, so the manifest describes exactly what was dumped
           for i in 1 2 3; do
             q -F $'\t' -f manifest-query.sql > manifest-before.txt
-            supabase db dump --db-url "$SUPABASE_DB_URL" -f data.sql --use-copy --data-only
+            supabase db dump --db-url "$SUPABASE_DB_URL" -f data.sql --use-copy --data-only --schema public,auth
             q -F $'\t' -f manifest-query.sql > manifest-after.txt
             if cmp -s manifest-before.txt manifest-after.txt; then mv manifest-after.txt manifest-source.txt; rm manifest-before.txt; break; fi
             echo "::warning::data changed while dumping (attempt $i), dumping again"
