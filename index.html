@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-LXg773HTtxzdbEDzZoYIuI7WPq6OptvNJ5LGE/wZ92w='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-15M4QPAV23s7nzVNSS3QGMSQLrBu7oMVlkdeyyLTaqg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -256,7 +256,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
   linear-gradient(to bottom,var(--line-soft) 0,var(--line-soft) 1px,transparent 1px,transparent 100%);background-repeat:repeat-y}
 /* Two fingers on the calendar stretch or shrink the hours, as in Google Calendar; the browser's own page zoom stays off there. */
 .cal{touch-action:pan-x pan-y}
-.cal-body.pinch{will-change:transform}
+
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
 .ev b{font-weight:700;font-size:13px;line-height:1.12;letter-spacing:-.2px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:normal;overflow-wrap:normal}
 .ev b i.ok{font-style:normal;font-size:9px;letter-spacing:-1px;vertical-align:1px}
@@ -1062,7 +1062,11 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Orta":"Средняя",
 "Geniş":"Широкая",
 "Çox geniş":"Очень широкая",
-"Təqvimdə iki barmaqla yana doğru açıb-yığmaqla da dəyişmək olar. Geniş bloklarda təqvim yana sürüşür.":"Можно менять и в календаре — развести или свести два пальца в стороны. При широких блоках календарь листается вбок.",
+"Geniş bloklarda təqvim yana sürüşür.":"При широких блоках календарь листается вбок.",
+"Blokların hündürlüyü":"Высота блоков",
+"Kiçik":"Маленькая",
+"Böyük":"Большая",
+"Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.":"В больших блоках имена и время читаются легче, но календарь длиннее листается вниз.",
 
 "Bitmiş və ya ləğv olunmuş qəbulu təsdiqləmək olmur.":"Нельзя подтвердить прошедшую или отменённую запись.",
 "✓ Seans bitib — uğurlu sayılır.":"✓ Сеанс прошёл — считается успешным.",
@@ -1401,7 +1405,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261114050202";
+var APP_VERSION="20261114054644";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1529,14 +1533,16 @@ function shown(rid){return mineOnly(rid)&&(!ui.sel.length||ui.sel.indexOf(rid)>=
 function saveSel(){try{localStorage.setItem("ruqya.sel",JSON.stringify(ui.sel))}catch(e){}}
 function cleanSel(){var n=ui.sel.filter(function(id){var r=reader(id);return r&&!r.archived});if(n.length&&n.length>=activeReaders().length)n=[];if(n.length!==ui.sel.length){ui.sel=n;saveSel()}}
 var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=90,AXW=54,HMIN=36,HMAX=111;
-/* Two fingers make the blocks smaller or bigger. Biggest (and the default) = 111 px per hour, where a
-   30-minute block shows the name, time and who wrote it; smallest = 36 px per hour, where it shows only the name. */
-var ZOOM=true;HOUR=111;
-/* block width: the standard (narrowest) width or wider; wider columns scroll sideways */
-var COLW_MIN=90,COLW_MAX=220,COLW_STEPS=[90,130,180];
-try{(function(){var cw=+localStorage.getItem("ruqya.colw");if(cw>0)COLW=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.round(cw)))})()}catch(e){}
-function setColW(w){COLW=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.round(w)));try{localStorage.setItem("ruqya.colw",String(COLW))}catch(e){}}
-try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=Math.max(HMIN,Math.min(HMAX,Math.round(sh)))})()}catch(e){}
+/* Block size is chosen only in Ayarlar → Görünüş: three widths and three heights. No finger gestures on the
+   calendar (they felt jumpy); two fingers there do nothing, not even zoom the page.
+   Standard height = 111 px per hour, where a 30-minute block shows the name, time and who wrote it. */
+HOUR=111;
+var COLW_MIN=90,COLW_MAX=180,COLW_STEPS=[90,130,180],HOUR_STEPS=[74,111,150];HMAX=150;
+function nearStep(st,v){var b=st[0];st.forEach(function(x){if(Math.abs(x-v)<Math.abs(b-v))b=x});return b}
+try{(function(){var cw=+localStorage.getItem("ruqya.colw");if(cw>0)COLW=nearStep(COLW_STEPS,cw)})()}catch(e){}
+function setColW(w){COLW=nearStep(COLW_STEPS,+w||COLW_MIN);try{localStorage.setItem("ruqya.colw",String(COLW))}catch(e){}}
+try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=nearStep(HOUR_STEPS,sh)})()}catch(e){}
+function setHour(v){HOUR=nearStep(HOUR_STEPS,+v||111);PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
@@ -2004,9 +2010,7 @@ setTimeout(function(){appReady()},2500);   /* never keep the logo longer than th
 function render(){
   pcache=null;edIdx=null;
   if(auth.ready&&(!auth.user||auth.loaded||!sb))appReady();
-  if(pz&&Date.now()-pz.t<15000)return;
   if(lp&&Date.now()-lp.t<8000){lpRender=true;return}   /* a finger is holding a block: redraw after it lifts */
-  if(pz){pz.body.style.transform="";pz=null}   /* the calendar is being pinched; it is redrawn when the fingers lift */
   setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
@@ -2822,7 +2826,13 @@ function widthSeg(){
   COLW_STEPS.forEach(function(v,i){if(COLW>=v)cur=i});
   return '<h3 class="sec">'+L("Blokların eni")+'</h3><div class="seg" style="grid-template-columns:repeat(3,1fr)">'+
     COLW_STEPS.map(function(v,i){return '<button data-act="colw" data-id="'+v+'" aria-pressed="'+(i===cur)+'">'+names[i]+'</button>'}).join("")+'</div>'+
-    '<p class="hint">'+L("Təqvimdə iki barmaqla yana doğru açıb-yığmaqla da dəyişmək olar. Geniş bloklarda təqvim yana sürüşür.")+'</p>';
+    '<p class="hint">'+L("Geniş bloklarda təqvim yana sürüşür.")+'</p>'+heightSeg();
+}
+function heightSeg(){
+  var names=[L("Kiçik"),L("Standart"),L("Böyük")];
+  return '<h3 class="sec">'+L("Blokların hündürlüyü")+'</h3><div class="seg" style="grid-template-columns:repeat(3,1fr)">'+
+    HOUR_STEPS.map(function(v,i){return '<button data-act="hourh" data-id="'+v+'" aria-pressed="'+(HOUR===v)+'">'+names[i]+'</button>'}).join("")+'</div>'+
+    '<p class="hint">'+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
 }
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
@@ -3152,6 +3162,7 @@ document.addEventListener("click",function(e){
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="reload"){location.reload();return}
   if(act==="colw"){setColW(+id);render();return}
+  if(act==="hourh"){setHour(+id);render();return}
   if(act==="lang"){
     if(id!=="ru")id="az";
     if(id===LANG)return;
@@ -3468,76 +3479,11 @@ document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
   if(e.key==="Escape"&&sheet)closeSheet();
 });
-/* ---------- pinch to zoom the hours ---------- */
-var pz=null;
-function tdist(e){return Math.abs(e.touches[0].clientY-e.touches[1].clientY)}
-function txdist(e){return Math.abs(e.touches[0].clientX-e.touches[1].clientX)}
-document.addEventListener("touchstart",function(e){
-  var c=e.target.closest&&e.target.closest("#cal");
-  if(!ZOOM||!c||e.touches.length!==2){return}
-  var body=c.querySelector(".cal-body"),head=c.querySelector(".cal-head");if(!body)return;
-  var rc=c.getBoundingClientRect(),fy=(e.touches[0].clientY+e.touches[1].clientY)/2;
-  var hh=head?head.offsetHeight:0,y=c.scrollTop+fy-rc.top-hh-10;   /* finger point, in px from 08:00 */
-  var col0=c.querySelector(".cal-body .col"),inn=c.querySelector(".cal-in"),fx=(e.touches[0].clientX+e.touches[1].clientX)/2;
-  pz={t:Date.now(),c:c,body:body,inn:inn,d0:Math.max(tdist(e),30),x0:Math.max(txdist(e),30),y0:tdist(e),xs:txdist(e),h0:PXM*60,raw:HOUR,k:1,fy:fy-rc.top,m:DAY0+y/PXM,hh:hh,
-    axis:null,act0:col0?col0.offsetWidth:COLW,cw0:COLW,cw:COLW,fill:col0?col0.offsetWidth:COLW,fx:fx-rc.left,cx:(c.scrollLeft+fx-rc.left-AXW),
-    n:c.querySelectorAll(".cal-body .col").length,raf:0};
-  body.classList.add("pinch");body.style.transformOrigin="0 "+(y+10)+"px";sw=null;
-},{passive:true});
-document.addEventListener("touchmove",function(e){
-  if(!ZOOM){if(e.touches.length===2&&e.target.closest&&e.target.closest("#cal"))e.preventDefault();return}   /* no zooming the page either */
-  if(!pz||e.touches.length!==2)return;
-  if(Date.now()-pz.t>15000){endPinch();return}
-  e.preventDefault();
-  /* fingers moving apart sideways → wider blocks; up and down → taller hours */
-  if(!pz.axis){var ddx=Math.abs(txdist(e)-pz.xs),ddy=Math.abs(tdist(e)-pz.y0);if(ddx<12&&ddy<12)return;pz.axis=ddx>ddy?"x":"y";
-  }
-  if(pz.axis==="x"){
-    /* start from the chosen width; columns stretched to fill the screen look wider than it */
-    var w=Math.max(COLW_MIN,Math.min(COLW_MAX,Math.max(pz.cw0,pz.fill)*txdist(e)/pz.x0));pz.cw=w;
-    /* the columns really change width under the fingers (both ways), once per frame, and the point
-       between the fingers stays where it is; nothing is squeezed or stretched as a picture */
-    if(pz.inn&&!pz.raf){var q=pz;q.raf=requestAnimationFrame(function(){q.raf=0;if(pz!==q)return;
-      var cw=Math.max(q.cw,q.fill);q.inn.style.minWidth=(AXW+q.n*q.cw)+"px";
-      q.c.scrollLeft=Math.max(0,q.cx*cw/q.act0-q.fx+AXW)})}
-    return;
-  }
-  pz.raw=Math.max(HMIN,Math.min(HMAX,pz.h0*tdist(e)/pz.d0));
-  var h=Math.max(curMinHour,pz.raw);pz.k=h/pz.h0;
-  pz.body.style.transform="scaleY("+pz.k+")";
-},{passive:false});
-/* Safari's own pinch gesture must not zoom the page while the calendar is being pinched. */
+/* ---------- two fingers on the calendar ----------
+   Block size is set only in Ayarlar; two fingers on the calendar do nothing (Safari must not zoom the page). */
+document.addEventListener("touchmove",function(e){if(e.touches.length===2&&e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
 document.addEventListener("gesturestart",function(e){if(e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
-function endPinch(cancel){
-  if(!pz)return;var p=pz;pz=null;if(p.raf)cancelAnimationFrame(p.raf);
-  p.body.style.transform="";p.body.classList.remove("pinch");if(p.inn)p.inn.style.transform="";
-  if(cancel){render();return}   /* a call or the notification shade interrupted: nothing is saved */
-  if(p.axis==="x"){
-    var nw=Math.round(p.cw);
-    if(nw<COLW_MIN+6)nw=COLW_MIN;   /* close to the standard width: snap to it */
-    else if(nw<=p.fill+4)nw=nw<p.cw0?nw:p.cw0;   /* still not wider than the screen already shows: keep the choice */
-    if(Math.abs(nw-COLW)<Math.max(4,COLW*0.08)&&nw!==COLW_MIN){render();return}   /* a tiny wobble is not a change */
-    setColW(nw);render();
-    var c2=byId("cal"),col2=c2&&c2.querySelector(".cal-body .col");
-    if(c2&&col2){var ratio=col2.offsetWidth/p.act0;c2.scrollLeft=Math.max(0,p.cx*ratio-p.fx+AXW)}
-    return;
-  }
-  var h=Math.round(p.raw);
-  if(Math.abs(h-HOUR)>=2){HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
-  render();   /* also draws anything that arrived while the fingers were down */
-  var c=byId("cal");if(c)c.scrollTop=Math.max(0,(p.m-DAY0)*PXM+10+p.hh-p.fy);
-}
-document.addEventListener("touchend",function(e){if(pz&&e.touches.length<2)endPinch()},{passive:true});
-document.addEventListener("touchcancel",function(){if(pz)endPinch(true)},{passive:true});
-/* On a computer: Ctrl + mouse wheel over the calendar does the same. */
-document.addEventListener("wheel",function(e){
-  var c=e.ctrlKey&&e.target.closest&&e.target.closest("#cal");if(!c)return;
-  e.preventDefault();if(!ZOOM)return;
-  var rc=c.getBoundingClientRect(),head=c.querySelector(".cal-head"),hh=head?head.offsetHeight:0,fy=e.clientY-rc.top;
-  var m=DAY0+(c.scrollTop+fy-hh-10)/PXM,base=Math.max(HOUR,curMinHour),h=Math.max(HMIN,Math.min(HMAX,Math.round(base*(e.deltaY<0?1.12:1/1.12))));
-  if(h===HOUR||(h<curMinHour&&HOUR<=curMinHour))return;HOUR=h;PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(err){}
-  render();c=byId("cal");if(c)c.scrollTop=Math.max(0,(m-DAY0)*PXM+10+hh-fy);
-},{passive:false});
+document.addEventListener("wheel",function(e){if(e.ctrlKey&&e.target.closest&&e.target.closest("#cal"))e.preventDefault()},{passive:false});
 var sw=null,qTimer=null;
 /* A short note that floats above the page (does not move the calendar under the finger). */
 var toastT=null;
@@ -3597,7 +3543,7 @@ function tick(){
 }
 var ticks=0;
 document.addEventListener("visibilitychange",function(){
-  if(document.hidden){hiddenAt=Date.now();if(pz)endPinch();return}
+  if(document.hidden){hiddenAt=Date.now();return}
   var away=hiddenAt?Date.now()-hiddenAt:0;hiddenAt=0;
   if(rollDay())render();
   /* Back in the app: after a long break reload everything; after a short one ask only for what changed. */
