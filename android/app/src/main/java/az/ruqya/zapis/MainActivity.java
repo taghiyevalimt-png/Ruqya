@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
         }
 
         web = new WebView(this);
+        web.setBackgroundColor(Color.parseColor("#050505"));   // no white before the page paints
         setContentView(web);
 
         WebSettings settings = web.getSettings();

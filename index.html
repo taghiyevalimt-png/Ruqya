@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="az" style="background:#050505">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gMH35E/+FtztEh3dDco2UfhjjdZm4vGxsQD7qOgsBdI=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-15M4QPAV23s7nzVNSS3QGMSQLrBu7oMVlkdeyyLTaqg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-CoGPYoUqEicrITjKqHcUw4/dezAbphopCkn4ehCEMWU=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-HLP1zVg6bEspkQxUuYyM4lqsRt9UNzfS/8Op1zNCpAA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -18,6 +18,7 @@ function applyTheme(t){
   if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
   var dark=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
   var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#f5f5f3");
+  r.style.background=dark?"#050505":"#f5f5f3";
 }
 try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
 try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}if(t==="auto")applyTheme("auto")};
@@ -26,6 +27,20 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<!-- iPhone shows these dark pictures while the page loads (instead of a white screen) -->
+<link rel="apple-touch-startup-image" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1320x2868.png">
+<link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1290x2796.png">
+<link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1284x2778.png">
+<link rel="apple-touch-startup-image" media="(device-width: 420px) and (device-height: 912px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1260x2736.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1242x2688.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-828x1792.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1242x2208.png">
+<link rel="apple-touch-startup-image" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1206x2622.png">
+<link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1179x2556.png">
+<link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1170x2532.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/l-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-750x1334.png">
+<link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-640x1136.png">
 <link rel="icon" href="favicon.png?v=2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mərkəz">
@@ -520,18 +535,18 @@ html.lite .ev::before{display:none}
 .cellb.edited::after,.stt span.edited::after{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-left:4px;vertical-align:2px}
 /* Opening: the logo rests on the app's own background, then the app fades softly in. */
 #splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-  background:var(--bg);pointer-events:none;transition:opacity .5s var(--ease),visibility 0s linear .5s}
-#splash img{width:88px;height:88px;animation:spIn .7s var(--ease) both,spGlow 2.6s ease-in-out .7s infinite;filter:drop-shadow(0 10px 26px rgba(214,178,94,.22))}
-#splash .sp-name{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:.08em;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent;animation:spIn .7s var(--ease) .12s both}
+  background:var(--bg);pointer-events:none;transition:opacity .9s var(--ease),visibility 0s linear .9s}
+#splash img{width:88px;height:88px;animation:spIn 1.3s var(--ease) .1s both,spGlow 2.6s ease-in-out 1.4s infinite;filter:drop-shadow(0 10px 26px rgba(214,178,94,.22))}
+#splash .sp-name{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:.08em;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent;animation:spIn 1.3s var(--ease) .45s both}
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){#splash .sp-name{background:none;color:var(--accent)}}
-#splash .sp-bar{width:56px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;opacity:0;animation:spShow .4s ease .9s forwards}
+#splash .sp-bar{width:56px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;opacity:0;animation:spShow .5s ease 1.6s forwards}
 #splash .sp-bar i{display:block;width:40%;height:100%;border-radius:2px;background:var(--accent);animation:spRun 1.1s ease-in-out infinite}
-@keyframes spIn{from{opacity:0;transform:scale(.92) translateY(6px)}to{opacity:1;transform:none}}
+@keyframes spIn{from{opacity:0;transform:scale(.86) translateY(10px)}to{opacity:1;transform:none}}
 @keyframes spGlow{0%,100%{transform:none}50%{transform:scale(1.03)}}
 @keyframes spShow{to{opacity:1}}
 @keyframes spRun{from{transform:translateX(-110%)}to{transform:translateX(260%)}}
 /* opacity only: moving the whole app would make the browser redraw the big calendar on every frame */
-.app{opacity:0;transition:opacity .5s var(--ease) .05s}
+.app{opacity:0;transition:opacity .8s var(--ease) .15s}
 html.ready .app{opacity:1}
 html.ready #splash{opacity:0;visibility:hidden}
 html.lite .app,html.lite #splash{transition-duration:.2s}
@@ -646,9 +661,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.":"Нет связи с сервером, последнее изменение не сохранено. Повторите, когда появится интернет.",
 "Ruqyə":"Рукья",
 "Hicamə":"Хиджама",
-"Salam aleykum! Qəbulunuzu xatırladırıq: ":"Ассаляму алейкум! Напоминаем о вашей записи: ",
 ", saat ":", в ",
-" Zəhmət olmasa, gələcəyinizi təsdiqləyin.":" Пожалуйста, подтвердите, что придёте.",
 "<div class=\"empty\"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class=\"primary\" data-act=\"reload\">Yenidən yoxla</button></div>":"<div class=\"empty\"><p>Приложение не загрузилось. Проверьте интернет.</p><button class=\"primary\" data-act=\"reload\">Проверить снова</button></div>",
 "<div class=\"empty\">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>":"<div class=\"empty\">Браузер в телефоне устарел. Обновите в Play Market «Android System WebView» и «Chrome», затем откройте приложение снова.</div>",
 "<div class=\"empty\">Yüklənir…</div>":"<div class=\"empty\">Загрузка…</div>",
@@ -1405,7 +1418,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261114054644";
+var APP_VERSION="20261114060645";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1536,13 +1549,13 @@ var DAY0=8*60,DAY1=24*60,HOUR=92,COLW=90,AXW=54,HMIN=36,HMAX=111;
 /* Block size is chosen only in Ayarlar → Görünüş: three widths and three heights. No finger gestures on the
    calendar (they felt jumpy); two fingers there do nothing, not even zoom the page.
    Standard height = 111 px per hour, where a 30-minute block shows the name, time and who wrote it. */
-HOUR=111;
-var COLW_MIN=90,COLW_MAX=180,COLW_STEPS=[90,130,180],HOUR_STEPS=[74,111,150];HMAX=150;
+HOUR=75;
+var COLW_MIN=90,COLW_MAX=180,COLW_STEPS=[90,130,180],HOUR_STEPS=[45,75,111];HMAX=111;
 function nearStep(st,v){var b=st[0];st.forEach(function(x){if(Math.abs(x-v)<Math.abs(b-v))b=x});return b}
 try{(function(){var cw=+localStorage.getItem("ruqya.colw");if(cw>0)COLW=nearStep(COLW_STEPS,cw)})()}catch(e){}
 function setColW(w){COLW=nearStep(COLW_STEPS,+w||COLW_MIN);try{localStorage.setItem("ruqya.colw",String(COLW))}catch(e){}}
 try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=nearStep(HOUR_STEPS,sh)})()}catch(e){}
-function setHour(v){HOUR=nearStep(HOUR_STEPS,+v||111);PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
+function setHour(v){HOUR=nearStep(HOUR_STEPS,+v||75);PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
@@ -1991,18 +2004,26 @@ function waLink(phone,text){
   return "https://wa.me/"+d+(text?"?text="+encodeURIComponent(text):"");
 }
 /* the reminder always says which specialist the patient is booked with */
-function remindText(a){var r=reader(a.readerId),rn=r&&r.name?r.name:"";
-  return L("Salam aleykum! Qəbulunuzu xatırladırıq: ")+fmtDay(a.date)+L(", saat ")+a.time+"."+(rn?" "+L("Mütəxəssis: ")+rn+".":"")+L(" Zəhmət olmasa, gələcəyinizi təsdiqləyin.")}
+/* in the clinic's own style:
+   Salam, hər vaxtınız xeyir!
+   Siz sabah 14 noyabr, 20:00 da Loğman bəyin ruqya seansına yazılmısız.
+   Zəhmət olmasa gələcəyinizi təsdiqləyin. */
+function remindText(a){var r=reader(a.readerId),rn=r&&r.name?r.name:"",td=bk().d,svc=String(a.service||"Ruqya").toLowerCase();
+  var when=a.date===td?"today":a.date===addDays(td,1)?"tomorrow":"";
+  if(LANG==="ru")return "Здравствуйте, доброго вам времени!\nВы записаны на сеанс "+(svc==="hicama"?"хиджамы":"рукьи")+(rn?" к "+rn:"")+" — "+
+    (when==="today"?"сегодня, ":when==="tomorrow"?"завтра, ":"")+fmtDay(a.date)+", в "+a.time+".\nПожалуйста, подтвердите, что придёте.";
+  return "Salam, hər vaxtınız xeyir!\nSiz "+(when==="today"?"bu gün ":when==="tomorrow"?"sabah ":"")+fmtDay(a.date)+", "+a.time+" da "+
+    (rn?rn+" bəyin ":"")+svc+" seansına yazılmısız.\nZəhmət olmasa gələcəyinizi təsdiqləyin."}
 
 /* ---------- render ---------- */
 /* The app is shown once it has something real to show (the sign-in screen, or bookings), after the fonts
-   (at most 0.35 s) and never sooner than 0.4 s after opening, so the hand-over from the logo is calm, not a flash. */
+   (at most 0.35 s) and never sooner than 2 s after opening (the logo animation plays in full), so the hand-over from the logo is calm, not a flash. */
 var READY0=Date.now(),readyDone=false,readyGo=null;
 function appReady(){
   if(readyDone||readyGo)return;
   readyGo=function(){if(readyDone)return;readyDone=true;var r=document.documentElement;if(r.className.indexOf("ready")<0)r.className+=" ready";
-    setTimeout(function(){var sp=byId("splash");if(sp&&sp.parentNode)sp.parentNode.removeChild(sp)},900)};
-  var wait=Math.max(0,400-(Date.now()-READY0)),fontT=null,go=function(){clearTimeout(fontT);setTimeout(readyGo,wait)};
+    setTimeout(function(){var sp=byId("splash");if(sp&&sp.parentNode)sp.parentNode.removeChild(sp)},1200)};
+  var wait=Math.max(0,2000-(Date.now()-READY0)),fontT=null,go=function(){clearTimeout(fontT);setTimeout(readyGo,wait)};
   try{if(document.fonts&&document.fonts.ready){fontT=setTimeout(go,350);document.fonts.ready.then(go,go);return}}catch(e){}
   go();
 }
