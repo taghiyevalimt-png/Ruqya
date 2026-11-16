@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Cf+oLYujA3JQv7JIx3UdwWN6PTprEhleoXrMUUamHXo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-4bTgXknczpYMDADywDTexBQfj+BTN9x+ETHa+CNbkw0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -48,12 +48,10 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mərkəz">
 <title>Mərkəz</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Fonts load without holding up the page: if Google is slow or blocked, the app opens at once with the phone's own font. -->
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet" media="print" id="gf">
+<!-- Fonts come with the app (vendor/fonts, SIL OFL 1.1): nothing goes to Google, and they never hold up the first screen. -->
+<link href="vendor/fonts/fonts.css" rel="stylesheet" media="print" id="gf">
 <script>(function(){var l=document.getElementById("gf");function on(){l.media="all"}if(l.sheet)on();else l.addEventListener("load",on)})();</script>
-<noscript><link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Onest:wght@600;700&display=swap" rel="stylesheet"></noscript>
+<noscript><link href="vendor/fonts/fonts.css" rel="stylesheet"></noscript>
 <style>
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
    list between them, forms slide up as a bottom sheet. */
@@ -3274,6 +3272,8 @@ document.addEventListener("click",function(e){
 document.addEventListener("click",function(e){
   if(e.target.id==="overlay"){closeSheet();return}
   var b=e.target.closest("[data-act]");if(!b)return;
+  /* "press again" buttons: a second press that comes with the first (a double tap, a bouncing finger) does not count */
+  if(b.dataset.sure&&Date.now()-(+b.dataset.sureT||0)<600)return;
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="reload"){location.reload();return}
   if(act==="colw"){setColW(+id);render();return}
@@ -3364,7 +3364,7 @@ document.addEventListener("click",function(e){
     db(sb.from("product_sales").insert(prow));closeSheet();
   }
   else if(act==="del-prod"){
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
   }
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
@@ -3383,7 +3383,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-expense"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs));closeSheet();
   }
 
@@ -3505,7 +3505,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
-    if(!b.dataset.sure){b.dataset.sure="1";var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
@@ -3524,7 +3524,7 @@ document.addEventListener("click",function(e){
     if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
     var rids=state.hasBrkReader?Object.keys(sheet.sel||{}).filter(function(r){return !!reader(r)}):[];
     var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
-    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
+    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
     var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;return o});
     rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert(rows));closeSheet();
@@ -3533,7 +3533,7 @@ document.addEventListener("click",function(e){
   else if(act==="brk-open"){if(!canBreaks())return;var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg)openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
   else if(act==="del-breaks"){
     if(!canBreaks())return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     var dids=String(id).split(",").filter(function(z){return z});
     state.breaks=state.breaks.filter(function(x){return dids.indexOf(x.id)<0});
     dids.forEach(function(z){db(sb.from("breaks").delete().eq("id",z))});
@@ -3541,7 +3541,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-break"){
     if(!canBreaks())return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.textContent=L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
   else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
@@ -3561,7 +3561,7 @@ document.addEventListener("click",function(e){
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"&&!canEdit(appt(sid)))return;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
