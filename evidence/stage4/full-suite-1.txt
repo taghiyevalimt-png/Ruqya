@@ -1,0 +1,5 @@
+# full suite after stage-4 fixes — commit f78fd36cd2e8be899f4f0a4534ebc8f1262d9fc1 (+ uncommitted Android B-06, not used by these tests) — start 2026-11-16T22:44:14Z
+$ node tests/lint.js && node tests/run.js
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-16T22:44:16.428Z
+# messages: 324
+# by rule: {"no-unused-vars":80,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":176,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":15}

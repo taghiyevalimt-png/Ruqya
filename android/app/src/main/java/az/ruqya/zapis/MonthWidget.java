@@ -180,10 +180,32 @@ public class MonthWidget extends AppWidgetProvider {
         }
     }
 
+    // B-06: the app signs out after 12 hours without use (index.html IDLE_MS), but only while its page runs.
+    // The widget follows the same rule on its own: data the app handed over more than 12 hours ago is
+    // dropped from storage and the widget shows the signed-out state until the app hands over new data.
+    static final long IDLE_MS = 12L * 3600 * 1000;
+
+    static JSONObject fresh(JSONObject d, long now) {
+        if (d == null || d.optInt("out", 0) == 1) return d;
+        long u = d.optLong("u", 0);
+        if (u > 0 && now - u <= IDLE_MS && u - now <= IDLE_MS) return d;
+        JSONObject o = new JSONObject();
+        try {
+            o.put("out", 1);
+            o.put("l", d.optString("l", "az"));
+        } catch (Exception e) {
+            // keep the bare object: still shows the signed-out state
+        }
+        return o;
+    }
+
     static JSONObject data(Context ctx) {
         try {
             String s = ctx.getSharedPreferences(PREFS, 0).getString("data", null);
-            return s == null ? null : new JSONObject(s);
+            if (s == null) return null;
+            JSONObject d = new JSONObject(s), f = fresh(d, System.currentTimeMillis());
+            if (f != d) ctx.getSharedPreferences(PREFS, 0).edit().putString("data", f.toString()).apply();
+            return f;
         } catch (Exception e) {
             return null;
         }

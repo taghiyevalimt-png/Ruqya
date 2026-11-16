@@ -29,6 +29,9 @@ public class WidgetTest extends BroadcastReceiver {
                 String b64 = intent.getStringExtra("b64");
                 if (b64 != null) json = new String(android.util.Base64.decode(b64, android.util.Base64.DEFAULT), "UTF-8");
                 JSONObject d = json == null ? null : new JSONObject(json);
+                // "now": apply the 12-hour rule of the real widget at this moment (B-06 check)
+                long now = intent.getLongExtra("now", 0);
+                if (now > 0) d = MonthWidget.fresh(d, now);
                 Bitmap bmp = MonthWidget.render(ctx, d, intent.getIntExtra("off", 0),
                         intent.getIntExtra("w", 360), intent.getIntExtra("h", 380), intent.getFloatExtra("density", 3f), 2500000L);
                 File f = new File(ctx.getFilesDir(), "widget_test.png");

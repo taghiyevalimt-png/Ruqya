@@ -1,0 +1,3 @@
+# S-05: admin-API calls in the app — 2026-11-16T22:44:52Z commit f78fd36cd2e8be899f4f0a4534ebc8f1262d9fc1
+$ grep -c "auth.admin\|\.admin\." index.html
+0
