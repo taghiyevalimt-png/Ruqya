@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-AvCSH6/QYt0bkuZ5k0YE4IYQTNpVSffrRB+3c7PgCSg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-1j0u7vWYawbHjNsRxFkkRiI43t3V26NVylyv6yqRoZU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1403,7 +1403,12 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Yalnız vaxtı bitmiş və silinməmiş qəbullar, yazan agentə görə.":"Только прошедшие и не удалённые записи, по записавшему агенту.",
 "Uğurlu seanslar":"Успешные сеансы",
 ". «Uğurlu seanslar» — həmin dövrdə vaxtı bitmiş və silinməmiş seanslar.</div></div>":". «Успешные сеансы» — прошедшие и не удалённые сеансы этого периода.</div></div>",
-"Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз"}:null;
+"Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
+"Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
+"Geri aç":"Открыть снова",
+"Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar.":"Введённое сохранено. Его можно вернуть кнопкой «Открыть снова».",
+"Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.":"Вход истёк. Войдите снова — введённая запись не потерялась.",
+"Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın.":"Запись не сохранилась. Введённое не потерялось: нажмите «Открыть снова»."}:null;
 function L(s){return RUD&&RUD.hasOwnProperty(s)?RUD[s]:s}
 /* The fixed bottom bar and "+" button are written in the page itself; switch their words too. */
 if(RUD)(function(){
@@ -1877,14 +1882,57 @@ function sameName(n,except,role){
   var k=String(n||"").replace(/\s+/g," ").trim().toLowerCase();
   return Object.keys(state.staff).some(function(id){return id!==except&&!(role==="specialist"&&state.roles[id]==="specialist")&&String(state.staff[id]||"").replace(/\s+/g," ").trim().toLowerCase()===k});
 }
-function db(q){
-  /* The local copy is already updated; realtime confirms the change on every phone. */
+function db(q,onFail){
+  /* The local copy is already updated; realtime confirms the change on every phone.
+     onFail (bookings) puts the local copy back and keeps what was typed as a draft, so nothing looks saved
+     when it is not and nothing typed is lost. */
   pending++;writes++;
+  var bad=function(){if(onFail){try{onFail()}catch(e){}}};
   return q.then(function(r){
     pending--;
-    if(r.error&&r.status===0){unsaved();return}   /* no answer from the server (supabase-js reports it as status 0) */
-    if(r.error){flash(dbMsg(r.error),true);return refresh()}
-  },function(){pending--;unsaved();return refresh()});
+    if(r.error&&r.status===0){bad();unsaved();return}   /* no answer from the server (supabase-js reports it as status 0) */
+    if(r.error&&authGone(r)){bad();return authLost()}
+    if(r.error){bad();flash(dbMsg(r.error),true);return refresh()}
+  },function(){pending--;bad();unsaved();return refresh()});
+}
+/* The sign-in ran out (token expired and could not be renewed): the server refuses with 401 / PGRST301. */
+function authGone(r){var e=r&&r.error||{};return r.status===401||e.code==="PGRST301"||/JWT/i.test(String(e.message||""))}
+function authLost(){
+  if(!sb)return;
+  return sb.auth.refreshSession().then(function(x){
+    if(x&&!x.error&&x.data&&x.data.session){flash(dbMsg({}),true);return refresh()}
+    var net=x&&x.error&&(x.error.name==="AuthRetryableFetchError"||!x.error.status);
+    if(net){unsaved();return}
+    try{localStorage.removeItem(SB_TOKEN)}catch(e){}
+    signedOut();auth.msg=L("Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.");render();
+  },function(){unsaved()});
+}
+/* ---------- drafts: a booking form whose data did not reach the server ----------
+   Kept on this phone for the signed-in person only (2 days at most), shown as a notice with «Geri aç». */
+var DK="ruqya.draft.v1";
+function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
+  return{readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
+function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,v:v}))}catch(e){}}
+function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
+function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
+/* Closing a booking form (× or the phone's "back") with something typed in it keeps the typing. */
+function formTouched(){
+  if(!sheet||!byId("f-name"))return false;
+  var v=formVals();
+  if(!sheet.id)return !!(v.name.trim()||v.phone.trim()||v.note.trim());
+  var o=sheet.orig;if(!o)return false;
+  return o.name!==v.name.trim()||(o.phone||"")!==v.phone.trim()||(o.note||"")!==v.note.trim()||o.date!==v.date||o.time!==v.time.slice(0,5)||o.readerId!==v.readerId||String(+o.price)!==String(amount("f-price"))||(v.dur!==""&&+v.dur!==(o.dur||90));
+}
+function fmtDayShort(s){var d=parse(s);return d.getDate()+" "+MON[d.getMonth()]}
+function draftBox(){
+  var d=getDraft();if(!d||(sheet&&sheet.type==="appt"))return "";
+  var v=d.v,t=[v.name,v.date&&okDate(v.date)?fmtDayShort(v.date):"",v.time].filter(Boolean).join(", ");
+  return '<div class="note warnbox draftbox" role="status"><p>'+L("Yadda saxlanmayan qəbul: ")+esc(t||"—")+'</p><div class="btns"><button class="primary" data-act="draft-open">'+L("Geri aç")+'</button><button class="ghost" data-act="draft-drop">'+L("Sil")+'</button></div></div>';
+}
+function openDraft(){
+  var d=getDraft();if(!d)return;
+  var a=d.id?appt(d.id):null;
+  openSheet({type:"appt",id:a?d.id:null,orig:a?d.orig:null,vals:d.v});
 }
 var retryT=null;
 function UNSAVED_MSG(){return L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.")}
@@ -2067,7 +2115,7 @@ function render(){
   var note=offline?L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."):auth.msg;
   if(!note&&loadingOlder)note=L("Köhnə məlumatlar yüklənir…");
   if(!note&&histLoading&&ui.tab==="patients")note=L("Köhnə pasiyentlər yüklənir…");
-  var banner=note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):"");
+  var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
     main.innerHTML=banner+'<div id="plist">'+patientsList()+'</div>';
@@ -3029,12 +3077,21 @@ function openSheet(s){
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
   var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,xls:xlsSheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
+  if(s.type==="appt"&&s.vals){var dv=s.vals;
+    ["reader","date","time","name","phone","price","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
+      if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
+    var de=byId("f-dur");if(de&&dv.dur&&de.querySelector('option[value="'+(+dv.dur)+'"]'))de.value=String(+dv.dur);
+    if(dv.price===""&&byId("f-price"))byId("f-price").value="";
+    dropDraft();
+  }
   if(s.type==="appt")slotGrid();
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
   setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
-function hideSheet(){if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);sheet=null;byId("overlay").hidden=true}
+function hideSheet(){if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
+  if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
+  sheet=null;byId("overlay").hidden=true}
 var backing=false;
 function closeSheet(){
   try{if(history.state&&history.state.sheet&&!backing){backing=true;history.back();setTimeout(function(){backing=false},1500)}}catch(e){}
@@ -3117,6 +3174,13 @@ function saveAppt(){
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
   var br=status==="cancel"||!moved?null:inBreak(time,dur,rid);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
+  /* If the server does not take it, the screen goes back to what the server has and the typing is kept as a draft. */
+  var dsh={id:sheet.id,orig:sheet.orig},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
+  var undo=function(newId){return function(){
+    if(before)upsertBy(state.appts,before);else removeBy(state.appts,newId);
+    keepDraft(dsh,dv);render();toast(L("Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın."));
+  }};
+  sheet.saved=true;
   if(a){
     /* Only what was changed in this form is sent, so a change someone else saved meanwhile is not overwritten. */
     var up={};
@@ -3127,14 +3191,14 @@ function saveAppt(){
     if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
     if(service){a.service=service;up.service=service}
-    if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id));
+    if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id),undo());
   }else{
     var id=uuid();
     state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id,dur:dur,created:bk().d});
     var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note};
     if(service)ins.service=service;
     if(state.hasDur)ins.duration=dur;
-    db(sb.from("appts").insert(ins));
+    db(sb.from("appts").insert(ins),undo(id));
   }
   if(!a||sheet.from!=="np"){ui.date=date;ui.tab="day"}
   if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
@@ -3470,6 +3534,8 @@ document.addEventListener("click",function(e){
   else if(act==="new-reader"){if(!isAdmin())return;openSheet({type:"reader",id:null});return}
   else if(act==="edit-reader"){if(isAdmin()&&reader(id))openSheet({type:"reader",id:id});return}
   else if(act==="close"){closeSheet();return}
+  else if(act==="draft-open"){openDraft();return}
+  else if(act==="draft-drop"){dropDraft();render();return}
   else if(act==="save-appt"){saveAppt();return}
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
@@ -3493,7 +3559,7 @@ document.addEventListener("click",function(e){
       var net=r.error===1||r.error.name==="AuthRetryableFetchError"||!r.error.status||/fetch|network/i.test(String(r.error.message||""));
       if(!net){flash(L("Çıxmaq alınmadı. İnterneti yoxlayın."));return}
       try{localStorage.removeItem(SB_TOKEN)}catch(err){}signedOut()};
-    sb.auth.signOut().then(lo,function(){lo({error:1})});return;
+    dropDraft();sb.auth.signOut().then(lo,function(){lo({error:1})});return;
   }
   else return;
   render();
