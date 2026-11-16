@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-AFZOqGpiZZ1Rp1HHYLDGWWBb9/QaC3HvpsX26AnBdvc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-hFgciuH10vH3vQJuYUqV8yvnLr7XyouKa36tudKAMSE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1419,6 +1419,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Ləğv olunanlar":"Отменённые",
 "Ləğv":"Отмена",
 "Ləğv et":"Отменить",
+"Tamamilə sil":"Удалить совсем",
 "Son iki ayda ləğv olunan qəbul yoxdur.":"За последние два месяца отменённых записей нет.",
 "Son iki ayın ləğv olunan qəbulları göstərilir.":"Показаны отменённые записи за последние два месяца.",
 "Yer *":"Место *",
@@ -1982,6 +1983,7 @@ function formTouched(){
   var v=formVals();
   if(!sheet.id)return !!(v.name.trim()||v.phone.trim()||v.note.trim());
   var o=sheet.orig;if(!o)return false;
+  if(v.place&&(o.place||"ofis")!==v.place)return true;
   return o.name!==v.name.trim()||(o.phone||"")!==v.phone.trim()||(o.note||"")!==v.note.trim()||o.date!==v.date||o.time!==v.time.slice(0,5)||o.readerId!==v.readerId||String(+o.price)!==String(amount("f-price"))||(v.dur!==""&&+v.dur!==(o.dur||90));
 }
 function fmtDayShort(s){var d=parse(s);return d.getDate()+" "+MON[d.getMonth()]}
@@ -2399,11 +2401,11 @@ function dayMain(){
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(!gone(a)){
-      h+='<div class="links">'+phoneLinks(a.phone,a)+confBtn(a,"link")+'<span class="spacer"></span>'+(canEdit(a)?'<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">'+L("Sil")+'</button>':'')+'</div>';
+      h+='<div class="links">'+phoneLinks(a.phone,a)+confBtn(a,"link")+'<span class="spacer"></span>'+(canEdit(a)?'<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="cancel-appt" data-id="'+esc(a.id)+'">'+L("Ləğv et")+'</button>':'')+'</div>';
     }else{
       h+='<div class="status">'+stPill(a)+'<span class="spacer"></span>'+
         (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
-        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">'+L("Sil")+'</button>':'')+'</div>';
+        '<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-row" data-id="'+esc(a.id)+'">'+L("Tamamilə sil")+'</button>':'')+'</div>';
     }
     h+='</div>';
   });
@@ -3304,9 +3306,9 @@ function saveAppt(){
      even if a break was added later or the booking was made before the overlap rule. */
   var o=a&&sheet.orig||a;
   var moved=!a||o.readerId!==rid||o.date!==date||o.time!==time||(o.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
-  var clash=status==="cancel"||!moved?null:overlap(rid,date,time,dur,sheet.id);
+  var clash=status==="cancel"||!moved||(a&&gone(a))?null:overlap(rid,date,time,dur,sheet.id);
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
-  var br=status==="cancel"||!moved?null:inBreak(time,dur,rid);
+  var br=status==="cancel"||!moved||(a&&gone(a))?null:inBreak(time,dur,rid);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   /* If the server does not take it, the screen goes back to what the server has and the typing is kept as a draft. */
   var dsh={id:sheet.id,orig:sheet.orig},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
@@ -3632,7 +3634,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var dr0=appt(id);b.textContent=dr0&&done(dr0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Tamamilə silinəcək — bir də basın");return}
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }

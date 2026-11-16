@@ -12,6 +12,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@electric-sql/pglite": "^0.2.17",
+    "acorn": "^8.14.0",
     "playwright-core": "^1.49.1"
   }
 }

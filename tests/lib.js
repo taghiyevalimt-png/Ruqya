@@ -184,7 +184,7 @@ async function open(who = OWNER, opt = {}) {
   const errors = [];
   if (who) {
     const s = session(who);
-    await context.addInitScript(([k, v, lang]) => { if (!sessionStorage.getItem("seeded")) { localStorage.setItem(k, v); if (lang) localStorage.setItem("ruqya.lang", lang); sessionStorage.setItem("seeded", "1"); } }, [tokenKey, JSON.stringify(s), opt.lang || ""]);
+    await context.addInitScript(([k, v, lang]) => { try { if (location.protocol !== "http:") return; } catch (e) { return; } if (!sessionStorage.getItem("seeded")) { localStorage.setItem(k, v); if (lang) localStorage.setItem("ruqya.lang", lang); sessionStorage.setItem("seeded", "1"); } }, [tokenKey, JSON.stringify(s), opt.lang || ""]);
   }
   if (opt.init) await context.addInitScript(opt.init[0], opt.init[1]);
   if (opt.clock) {
