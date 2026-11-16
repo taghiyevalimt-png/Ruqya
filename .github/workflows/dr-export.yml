@@ -1,0 +1,53 @@
+name: DR export (encrypted to an offline key)
+
+# A second, independent copy path for disaster recovery drills outside Supabase and GitHub.
+# 1. The schemas public and auth are dumped as plain SQL (no data, no secrets) — kept as an artifact for review.
+# 2. All data of the app (schema public) and the sign-in accounts (auth.users, auth.identities, with password hashes)
+#    are dumped as plain INSERT statements and encrypted on the runner: a random AES-256 key encrypts the dump
+#    (openssl enc -aes-256-cbc -pbkdf2), and that key is encrypted with the RSA-4096 public key in
+#    .github/dr_public.pem (OAEP, SHA-256). Only the holder of the matching private key (kept offline, never in
+#    GitHub) can open it. Nothing readable leaves the runner except row counts and content hashes per table.
+# Restore: docs/DISASTER_RECOVERY.md («Restore from the DR export»), tools/dr_restore.js.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install PostgreSQL client 17 (PGDG)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+      - name: Dump and encrypt
+        env:
+          DB: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p out
+          pg_dump --version
+          pg_dump "$DB" --schema-only -n public -n auth -f out/schema.sql
+          pg_dump "$DB" --data-only --column-inserts --no-owner -n public -t auth.users -t auth.identities -f data.sql
+          # row count and content hash per table (same formula as tools/dr_restore.js)
+          psql "$DB" -At -v ON_ERROR_STOP=1 -f tools/dr_manifest.sql > out/manifest.tsv
+          openssl rand -out key.bin 32
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt -in data.sql -out out/data.sql.enc -pass file:key.bin
+          openssl pkeyutl -encrypt -pubin -inkey .github/dr_public.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -in key.bin -out out/key.bin.enc
+          sha256sum data.sql | cut -d' ' -f1 > out/data.sql.sha256
+          (cd out && sha256sum data.sql.enc key.bin.enc schema.sql manifest.tsv > SHA256SUMS)
+          shred -u data.sql key.bin
+          ls -la out
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dr-export-${{ github.run_id }}
+          path: out/
+          retention-days: 7
