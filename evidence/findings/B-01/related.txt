@@ -1,0 +1,1 @@
+Related places checked (B-01): statData on screen reads state.appts (kept unique by upsertBy/uniq); refresh() merges window + 'written earlier' lists through uniq(); ensureLoaded() uses upsertBy; xlsFetch() merges with uniq(). Only xlsSheets.slice() concatenated without de-duplication.

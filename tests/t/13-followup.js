@@ -20,6 +20,7 @@ module.exports = async () => {
     await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(700); await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(800);
     await p.click('#tabs [data-tab="patients"]'); await p.click('[data-act="p-sec"][data-id="cancel"]');
     await p.click("#plist >> text=Test Pasiyent");
+    await p.waitForSelector(".folbtns");   // windows open on the frame after the tap (INP)
     check((await p.locator('[data-act="follow"]').count()) === 3, "three follow-up buttons");
     const lbl = await p.textContent(".folbtns");
     check(/Birinci xatırlatma/.test(lbl) && /İkinci xatırlatma/.test(lbl) && /Satış edildi/.test(lbl), "button names: " + lbl);

@@ -1,0 +1,5 @@
+FAIL 23-excel-counts.js 
+    Error: FAIL: weekly money sheet: 130 ₼ booking counted once, not 260: Dövr | Mütəxəssis | Yazılıb | Uğurlu | Ləğv | Qazanc | 6 noyabr – 12 noyabr 2026 | Əli | 2 | 2 | 0 | 260
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:203:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\23-excel-counts.js:33:5)
+1 failed of 1

@@ -1,0 +1,324 @@
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-16T18:12:37.244Z
+# messages: 321
+# by rule: {"no-unused-vars":77,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":176,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":15}
+index.html.script1.js:3:136  no-unused-vars  'e' is defined but never used.
+index.html.script1.js:5:80  no-unused-vars  'e' is defined but never used.
+index.html.script1.js:16:67  no-unused-vars  'e' is defined but never used.
+index.html.script1.js:17:147  no-unused-vars  'e' is defined but never used.
+index.html.script1.js:18:111  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:10:106  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:15:9  no-undef  'LANG' is not defined.
+index.html.script5.js:824:31  no-prototype-builtins  Do not access Object.prototype method 'hasOwnProperty' from target object.
+index.html.script5.js:824:49  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:829:41  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:829:75  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:837:8  no-undef  'LANG' is not defined.
+index.html.script5.js:850:117  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:859:113  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:870:51  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:870:88  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:870:142  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:870:163  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:890:92  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:925:55  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:926:31  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:926:47  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:929:82  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:930:33  no-undef  'Intl' is not defined.
+index.html.script5.js:930:58  no-undef  'Intl' is not defined.
+index.html.script5.js:930:117  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:935:140  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:949:97  security/detect-unsafe-regex  Unsafe Regular Expression
+index.html.script5.js:956:91  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:957:137  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:958:124  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:959:92  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:961:157  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:967:101  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:969:87  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:976:17  no-unused-vars  'COLW_MAX' is assigned a value but never used.
+index.html.script5.js:976:77  no-unused-vars  'HMAX' is assigned a value but never used.
+index.html.script5.js:978:107  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:979:118  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:980:107  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:981:145  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:990:120  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:994:44  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:994:62  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:994:91  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:994:97  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:994:115  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:998:34  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:998:52  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:998:82  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:1002:40  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1004:52  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1015:64  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1016:9  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1061:58  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1061:84  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1070:86  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1080:73  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1080:94  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1081:75  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1084:30  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1084:82  no-undef  'Promise' is not defined.
+index.html.script5.js:1085:34  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1087:29  no-undef  'Promise' is not defined.
+index.html.script5.js:1089:77  no-undef  'Promise' is not defined.
+index.html.script5.js:1091:10  no-undef  'Promise' is not defined.
+index.html.script5.js:1096:5  no-undef  'Promise' is not defined.
+index.html.script5.js:1103:211  no-undef  'Promise' is not defined.
+index.html.script5.js:1138:34  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1138:54  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1140:23  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1140:50  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1170:3  no-undef  'Promise' is not defined.
+index.html.script5.js:1171:106  no-undef  'Promise' is not defined.
+index.html.script5.js:1179:94  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1225:129  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1231:87  no-undef  'LANG' is not defined.
+index.html.script5.js:1240:14  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1240:74  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1241:7  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1243:47  no-undef  'LANG' is not defined.
+index.html.script5.js:1247:75  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1272:3  no-undef  'Promise' is not defined.
+index.html.script5.js:1275:128  no-undef  'Promise' is not defined.
+index.html.script5.js:1276:142  no-undef  'Promise' is not defined.
+index.html.script5.js:1315:96  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1315:136  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1322:52  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1338:49  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1348:166  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1349:156  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1350:60  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1406:10  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1414:70  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1414:77  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1418:91  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1418:147  no-unused-vars  'e2' is defined but never used.
+index.html.script5.js:1422:108  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1428:36  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1428:49  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1428:58  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1430:76  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:1430:86  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1435:10  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1440:118  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1442:54  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1443:64  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1445:77  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1447:77  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1461:65  no-undef  'LANG' is not defined.
+index.html.script5.js:1461:99  no-undef  'LANG' is not defined.
+index.html.script5.js:1461:115  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1465:45  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1469:63  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1469:95  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1470:59  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1470:89  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1471:10  no-unused-vars  'r2' is defined but never used.
+index.html.script5.js:1488:21  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1488:28  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1533:6  no-undef  'LANG' is not defined.
+index.html.script5.js:1547:120  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:1562:102  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1562:126  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1562:147  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1577:37  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1577:66  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1577:115  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1637:154  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1637:227  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1663:13  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1663:24  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1663:83  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1663:93  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1743:45  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1743:63  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1786:29  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1819:69  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1824:99  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:1839:28  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1845:28  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1845:37  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1845:126  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1846:30  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1847:32  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1871:39  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1871:137  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1871:142  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1874:37  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1877:44  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1890:9  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1901:291  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:1919:54  no-unused-vars  'ex' is assigned a value but never used.
+index.html.script5.js:1986:9  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:1987:86  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:1989:64  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2022:101  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2023:76  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2025:58  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2029:125  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2030:61  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2036:47  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:2036:95  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2039:83  no-undef  'Promise' is not defined.
+index.html.script5.js:2040:143  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:2040:189  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2040:199  no-undef  'Promise' is not defined.
+index.html.script5.js:2045:10  no-undef  'Promise' is not defined.
+index.html.script5.js:2047:52  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:2047:87  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2047:93  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2047:118  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2049:22  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:2050:21  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:2053:20  no-undef  'Uint8Array' is not defined.
+index.html.script5.js:2061:97  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2061:111  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2077:65  no-useless-escape  Unnecessary escape character: \[.
+index.html.script5.js:2077:72  no-useless-escape  Unnecessary escape character: \/.
+index.html.script5.js:2107:54  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2107:61  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2110:98  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2110:118  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2110:129  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2110:149  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2110:160  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2110:180  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2129:83  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2145:10  no-undef  'Promise' is not defined.
+index.html.script5.js:2149:132  no-undef  'Promise' is not defined.
+index.html.script5.js:2150:118  no-undef  'Promise' is not defined.
+index.html.script5.js:2155:228  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2164:87  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2168:30  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2181:65  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2181:98  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2208:79  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2208:113  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2214:65  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2214:98  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2265:49  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2343:81  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2343:132  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2343:178  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2343:207  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2344:72  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2349:29  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2350:45  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2392:8  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2392:21  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2393:18  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2394:77  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2394:146  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2398:146  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2398:161  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2425:113  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2431:115  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2436:130  no-undef  'LANG' is not defined.
+index.html.script5.js:2438:90  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2450:163  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2454:21  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2462:35  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2462:51  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2462:108  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2472:22  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2472:96  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2472:114  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2472:156  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2472:193  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2473:194  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2474:22  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2474:59  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2474:129  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2484:55  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2564:67  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2564:84  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2567:26  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2573:28  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2573:47  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2574:27  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2590:28  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2617:96  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2647:150  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2659:216  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2663:134  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2670:7  no-unused-vars  'taken' is assigned a value but never used.
+index.html.script5.js:2757:8  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2795:77  no-misleading-character-class  Unexpected combined character in character class.
+index.html.script5.js:2795:83  no-misleading-character-class  Unexpected joined character sequence in character class.
+index.html.script5.js:2795:89  no-misleading-character-class  Unexpected combined character in character class.
+index.html.script5.js:2796:13  security/detect-non-literal-regexp  Found non-literal argument to RegExp Constructor
+index.html.script5.js:2796:24  no-misleading-character-class  Unexpected combined character in character class.
+index.html.script5.js:2796:24  no-misleading-character-class  Unexpected joined character sequence in character class.
+index.html.script5.js:2808:104  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2814:49  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2814:70  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2816:14  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:2816:29  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2816:53  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2830:13  no-undef  'LANG' is not defined.
+index.html.script5.js:2831:53  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2852:93  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2852:105  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2852:154  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2865:140  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2902:132  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:2915:11  no-redeclare  'ex' is already defined.
+index.html.script5.js:2948:9  no-redeclare  'xs' is already defined.
+index.html.script5.js:2965:47  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2969:11  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:2976:64  no-redeclare  'mm' is already defined.
+index.html.script5.js:2986:66  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2993:54  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:2994:5  no-undef  'applyTheme' is not defined.
+index.html.script5.js:3021:53  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3021:70  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3024:37  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3026:5  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3026:24  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3026:43  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3054:12  security/detect-object-injection  Variable Assigned to Object Injection Sink
+index.html.script5.js:3059:84  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:3062:38  no-redeclare  'mm' is already defined.
+index.html.script5.js:3077:57  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3077:78  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3077:97  security/detect-object-injection  Generic Object Injection Sink
+index.html.script5.js:3093:158  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:3112:9  no-redeclare  'ca' is already defined.
+index.html.script5.js:3120:116  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3130:9  no-redeclare  'ca' is already defined.
+index.html.script5.js:3171:51  no-unused-vars  'err' is defined but never used.
+index.html.script5.js:3202:185  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3230:81  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3244:75  security/detect-object-injection  Function Call Object Injection Sink
+index.html.script5.js:3281:100  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3294:10  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3305:19  security/detect-unsafe-regex  Unsafe Regular Expression
+index.html.script5.js:3306:77  no-unused-vars  'e' is defined but never used.
+index.html.script5.js:3309:79  no-unused-vars  'e' is defined but never used.
+tools\dr_restore.js:18:72  security/detect-object-injection  Generic Object Injection Sink
+tools\dr_restore.js:19:44  no-unused-vars  'e' is defined but never used.
+tools\dr_restore.js:37:22  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:39:24  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:44:16  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:45:123  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:46:31  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:47:16  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:63:18  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:70:36  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:70:146  security/detect-object-injection  Generic Object Injection Sink
+tools\dr_restore.js:84:20  security/detect-non-literal-fs-filename  Found writeFileSync from package "fs" with non literal argument at index 0
+tools\dr_restore.js:86:65  security/detect-non-literal-fs-filename  Found writeFileSync from package "fs" with non literal argument at index 0
+tools\sbom.js:6:55  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\sbom.js:22:38  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\sbom.js:22:126  no-unused-vars  'e' is defined but never used.
+tools\sbom.js:26:13  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\sbom.js:27:30  security/detect-unsafe-regex  Unsafe Regular Expression
+tools\secret_scan.js:32:40  security/detect-non-literal-fs-filename  Found readFileSync from package "fs" with non literal argument at index 0
+tools\secret_scan.js:32:78  no-unused-vars  'e' is defined but never used.
+tools\secret_scan.js:34:36  no-unused-vars  'added' is assigned a value but never used.
+tools\secret_scan.js:45:22  security/detect-non-literal-fs-filename  Found writeFileSync from package "fs" with non literal argument at index 0

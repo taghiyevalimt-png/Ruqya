@@ -11,6 +11,7 @@ module.exports = async () => {
       await p.waitForSelector("#tabs:not([hidden])", { timeout: 15000 }); await p.waitForTimeout(3300);
       await p.click('#tabs [data-tab="patients"]'); await p.click('[data-act="p-sec"][data-id="cancel"]');
       await p.click("#plist >> text=Test Pasiyent");
+      await p.waitForSelector(".ccontact");   // windows open on the frame after the tap (INP)
       const row = p.locator(".ccontact");
       check((await row.count()) === 1, "contact row in the cancelled card");
       check((await row.locator('a[href^="tel:"]').count()) === 1, "Zəng calls the number");
@@ -22,7 +23,7 @@ module.exports = async () => {
       await p.click('[data-act="close"]'); await p.click('[data-act="draft-drop"]').catch(() => {});
       // a number that cannot be dialled: buttons shown greyed out
       await p.click('#tabs [data-tab="patients"]'); await p.click('[data-act="p-sec"][data-id="cancel"]');
-      await p.click("#plist >> text=Nömrəsiz");
+      await p.click("#plist >> text=Nömrəsiz"); await p.waitForSelector(".ccontact");
       check((await p.locator(".ccontact button.wa:disabled").count()) === 2, "Zəng and Wp greyed out without a real number");
       check(!s.errors.length, "no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }

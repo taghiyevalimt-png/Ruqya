@@ -1,0 +1,743 @@
+{
+ "bomFormat": "CycloneDX",
+ "specVersion": "1.5",
+ "serialNumber": "urn:uuid:6799aa08-c256-4ad1-8a4b-2ab2c90b1409",
+ "version": 1,
+ "metadata": {
+  "timestamp": "2026-11-16T18:10:50.464Z",
+  "component": {
+   "type": "application",
+   "name": "Mərkəz (Ruqya)",
+   "version": "20261116165045"
+  },
+  "tools": [
+   {
+    "name": "tools/sbom.js"
+   }
+  ]
+ },
+ "components": [
+  {
+   "type": "library",
+   "name": "@supabase/supabase-js",
+   "version": "2.45.4",
+   "scope": "required",
+   "purl": "pkg:npm/%40supabase/supabase-js@2.45.4",
+   "licenses": [
+    {
+     "license": {
+      "id": "MIT"
+     }
+    }
+   ],
+   "hashes": [
+    {
+     "alg": "SHA-256",
+     "content": "8596965fe918e656600a1b568d3a168f5c0d3d22a600886bb6f44a6555db01e7"
+    }
+   ],
+   "description": "bundled UMD build in vendor/; contains @supabase/auth-js 2.65.0, realtime-js 2.10.2, storage-js 2.7.0, postgrest-js, functions-js",
+   "properties": [
+    {
+     "name": "file",
+     "value": "vendor/supabase-2.45.4.js"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@supabase/auth-js",
+   "version": "2.65.0",
+   "scope": "required",
+   "purl": "pkg:npm/%40supabase/auth-js@2.65.0",
+   "licenses": [
+    {
+     "license": {
+      "id": "MIT"
+     }
+    }
+   ],
+   "description": "inside supabase-js bundle; GHSA-8r88-6cj9-9fh5 (LOW) applies to versions <= 2.69.1"
+  },
+  {
+   "type": "library",
+   "name": "@supabase/realtime-js",
+   "version": "2.10.2",
+   "scope": "required",
+   "purl": "pkg:npm/%40supabase/realtime-js@2.10.2",
+   "licenses": [
+    {
+     "license": {
+      "id": "MIT"
+     }
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@supabase/storage-js",
+   "version": "2.7.0",
+   "scope": "required",
+   "purl": "pkg:npm/%40supabase/storage-js@2.7.0",
+   "licenses": [
+    {
+     "license": {
+      "id": "MIT"
+     }
+    }
+   ]
+  },
+  {
+   "type": "data",
+   "name": "Golos Text (font)",
+   "version": "Google Fonts 2026-11",
+   "scope": "required",
+   "licenses": [
+    {
+     "license": {
+      "id": "OFL-1.1"
+     }
+    }
+   ],
+   "properties": [
+    {
+     "name": "files",
+     "value": "vendor/fonts/*.woff2"
+    }
+   ]
+  },
+  {
+   "type": "data",
+   "name": "Onest (font)",
+   "version": "Google Fonts 2026-11",
+   "scope": "required",
+   "licenses": [
+    {
+     "license": {
+      "id": "OFL-1.1"
+     }
+    }
+   ],
+   "properties": [
+    {
+     "name": "files",
+     "value": "vendor/fonts/*.woff2"
+    }
+   ]
+  },
+  {
+   "type": "framework",
+   "name": "Android Gradle Plugin",
+   "version": "8.5.2",
+   "scope": "excluded",
+   "purl": "pkg:maven/com.android.tools.build/gradle@8.5.2",
+   "licenses": [
+    {
+     "license": {
+      "id": "Apache-2.0"
+     }
+    }
+   ],
+   "description": "builds the Android wrapper (no runtime libraries; WebView of the phone)"
+  },
+  {
+   "type": "platform",
+   "name": "Supabase (hosted): PostgreSQL 17.11, PostgREST, GoTrue, Realtime",
+   "version": "hosted 2026-11",
+   "scope": "required",
+   "licenses": [
+    {
+     "license": {
+      "id": "Apache-2.0"
+     }
+    },
+    {
+     "license": {
+      "id": "PostgreSQL"
+     }
+    }
+   ],
+   "description": "service; open source, self-hostable"
+  },
+  {
+   "type": "library",
+   "name": "@electric-sql/pglite",
+   "version": "0.2.17",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40electric-sql/pglite@0.2.17",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a84a4a453da851a5831fab634712c78ddccca915066039c66652ab9cbe1d27bec954c70fd87a68dcd6273923ca75975e79ce7b07a40fa6b094160d2989cc793f"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/darwin-arm64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/darwin-arm64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "b7b4b17a938446dc2aae4b7495fa8b5a3783758a0ebe3611b9515591eeef609ed74b132ad6c44b45e906eb3bdc37fce6e3a5e8bb35e49ab77f139fd13e1940bf"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/darwin-x64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/darwin-x64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e29dc09f3022ce0506b03b7efe608be5899f914b9b045bd685b5636509a30e19c4dd4af115277ac1f29092196fe1528c4697cdc8b893aed5d63468bbeade4cdd"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/linux-arm",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/linux-arm@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "15ee465c043e9cf058404554408cc1286df34e77ad5a3fad2ef30f49895a9b7772f9ae00e4596c37b2404671c584d37ac1c41181bb2c7d052c5c273697b98841"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/linux-arm64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/linux-arm64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "465ef05a45856bc4d84fd65d3121844ead04884f18e1d8c3ee80156da50797f2965e9426f2b3cb1a01984d8caa7c71b7760d2e2a104894dfc2b37c2f3fb76a7b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/linux-ia32",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/linux-ia32@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "ea97c0fe21e935b3613f6b93a481b91de0a7b94e92d14aeede9ac690735b97dd3720199afd5fdd02e6d824057245bdd1522f5979c059aed02860e9f528610124"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/linux-ppc64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/linux-ppc64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "3c2db4b54143fedb894518695fe5f74ea1ec6efc0202eaefb99afe4e0dcbc79f2d156f8edbae23766752dee412758cd6b174571e68319f6e9ba37b6c315c5a55"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/linux-x64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/linux-x64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "320d9252255fd135bdbc408ef2a7efe35ef7d1680938a82e39a2b869c52e201e0bf07795ba26204339488f6921ef743738bc5175eb9bec3f02fd2904c4c96aae"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@embedded-postgres/windows-x64",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40embedded-postgres/windows-x64@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "cf5fd223206e94260f598b0b5839209e2018a92776281738f33c0f38fa72bb6606608a10e6444253a6c4276abf95cb01bac780756027d65060eca888fe9220e1"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "acorn",
+   "version": "8.14.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/acorn@8.14.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "725ebaf670894d906c2fdece178914426e60e610b6ba2864d0dc58dd610d002d1361d20b5640321f29809ed8311a497b2beb7471722b1f9b22cb94b85e417270"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "axe-core",
+   "version": "4.10.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/axe-core@4.10.2",
+   "licenses": [
+    {
+     "expression": "MPL-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "444de6750ecfdc54527bb7aa096a1e43f67d417aed9e24a3a75c148ede67442dd6229cf9ad20af7baa377ec676682a49b6b663499823c170284cee64e2d108d3"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "embedded-postgres",
+   "version": "17.11.0-beta.19",
+   "scope": "excluded",
+   "purl": "pkg:npm/embedded-postgres@17.11.0-beta.19",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "ef0780129b45e39a869c383d0e38c5ac5181fd36204bc4b04aada2a4eebd43496ea5d03554d73041deac88700b20e830eaf62eeb9fcca8c77c95231e617aaf4a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "exit-hook",
+   "version": "5.1.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/exit-hook@5.1.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "20d8ebdb1cb11e8edb840a9fe689e0fbe1993cf9e972e05c69750ab74df27fb1627bdc960fb15aa4be2d78e534f9ac106b31ace6e70187bc56b3f003fba9e1a2"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg",
+   "version": "8.23.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg@8.23.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "68bf7a00700db568cf2c338baa7871fa7829f7e50aec44c453c549ac3086bec4928bf9862dc598b12e877ab83b96668125ee2ec2b7eab1aee04c415a4a2cc3a1"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-cloudflare",
+   "version": "1.4.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-cloudflare@1.4.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e8f41bb05599729f44989130cb97064362daf80316a4fe3a9606dbf17f94fd7b07214c1e603342a5eb8a724e51c4bd8c755162ee4adb6c48b99d7e1987b261ad"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-connection-string",
+   "version": "2.14.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-connection-string@2.14.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a91de418d3c12e908db73d1ebdb280d18fcc4455f0492753fa94c9bd8a7f6d74dc45e65bbd7d64cc5d08c93735427c6a17b0196ce78184d2fc47999841957f30"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-int8",
+   "version": "1.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-int8@1.0.1",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "582b5a6d2eadddcf129290c15256f59233acee5ebac6c19d2a920f66c838c11f81dfebbd500ba6da8752b05f6d9efc60f348786712d6332e294633ac148a90a7"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-pool",
+   "version": "3.14.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-pool@3.14.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "80ab4f9057503d4dc392ca2854b8bd2ec8d9c6bb015192296beeda571f8b579a4d8742b33f86657ae776a68f82a27af16ee5c6049e877deafa85d829201a416b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-protocol",
+   "version": "1.16.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-protocol@1.16.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a7d54e14c88707f65b2404deb5b83ef7d3f1b2c4d5490467cae3d243aee6375fb52813a365a67cdd943396d9f13e12704ac0b79f0563275d0354995eadb1732e"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pg-types",
+   "version": "2.2.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/pg-types@2.2.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a9300096b12c97cb383a211063af700ef70c21d40deb0773e688d088ecba61132eca7c5e9ce3743b9a02a4923a96c85ceac720018f2abc9d8e9ffa7e09763418"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "pgpass",
+   "version": "1.0.5",
+   "scope": "excluded",
+   "purl": "pkg:npm/pgpass@1.0.5",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "15d5bdaff8d066149ea21b35677b08d72c4540d16f31c9e67ee8f85813144f13ab0322cc693704d5a00c0624e56cc35a5ef04242e562d11ee177cb9d0d23fbba"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "playwright-core",
+   "version": "1.49.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/playwright-core@1.49.1",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "0739a955cb38904d821f5e6b59fce98f354685611125f9a75e69e24b229e45952cf56b3ae66f911888bb9a324afdeb827a07e7de2ee3bea59e5b21def72dd582"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "postgres-array",
+   "version": "2.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/postgres-array@2.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "56966b52a53903af5e4325b6739080d63b4b79c0ac37653f6c3e958a5ac50d6ab9fb95081153bb9dacd2dd311c1dfd73b8f60efeca86bd4bd6eb683ce915d9b8"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "postgres-bytea",
+   "version": "1.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/postgres-bytea@1.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e7ee47a979ec64f13ae4825948c919b544404597a57a5da85d410ef2b1fcdd54bf8711f9befd6e1eab8f839c19b3cc8c01f76ff7bd4853e91c3d47338bb35505"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "postgres-date",
+   "version": "1.0.7",
+   "scope": "excluded",
+   "purl": "pkg:npm/postgres-date@1.0.7",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "b2e0e68cb55083bf2730ad94678e788401be3805be1d03d9ea7fbe4cd0d45fe2f4fae5252f2c27a3124a0e8bb9d599becd30a3ac297436ae89f42e613fdbcafd"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "postgres-interval",
+   "version": "1.2.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/postgres-interval@1.2.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "f5985728cfebc37e74375a2fb961db1b19c687f48d278727c4788cd2bc44e15378d70b20f0ff335a7f61bff6ee2b4d113f85af94ecabfd10438a9b72c556e465"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "split2",
+   "version": "4.2.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/split2@4.2.0",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "51c8dc24e5a49eb36417a3cb5fcdea70733a28781528d915eb663c6b9b980d5bfdc9d19057000730aa877498ded554d6a658c6d1662908386b09d00e607e135a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "xtend",
+   "version": "4.0.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/xtend@4.0.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "2ca614d620172575200179fd5118e2bbe3168725171ecbdfa7b99cb989bd75250a2b4fc28edad4c050310fcdbf98259bb4bb068c521a774c08b28778ceb4c011"
+    }
+   ]
+  },
+  {
+   "type": "application",
+   "name": "actions/checkout",
+   "version": "v4",
+   "scope": "excluded",
+   "purl": "pkg:github/actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+   "description": "GitHub Action used by apk-release-check.yml (pinned to commit 11d5960a326750d5838078e36cf38b85af677262)"
+  },
+  {
+   "type": "application",
+   "name": "actions/setup-java",
+   "version": "v4",
+   "scope": "excluded",
+   "purl": "pkg:github/actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+   "description": "GitHub Action used by apk-release-check.yml (pinned to commit cf277c60eb25467037889841efdb72551f06f6c3)"
+  },
+  {
+   "type": "application",
+   "name": "softprops/action-gh-release",
+   "version": "v2",
+   "scope": "excluded",
+   "purl": "pkg:github/softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65",
+   "description": "GitHub Action used by apk.yml (pinned to commit 3bb12739c298aeb8a4eeaf626c5b8d85266b0e65)"
+  },
+  {
+   "type": "application",
+   "name": "actions/setup-node",
+   "version": "v4",
+   "scope": "excluded",
+   "purl": "pkg:github/actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+   "description": "GitHub Action used by backup.yml (pinned to commit 49933ea5288caeca8642d1e84afbd3f7d6820020)"
+  },
+  {
+   "type": "application",
+   "name": "actions/upload-artifact",
+   "version": "v4",
+   "scope": "excluded",
+   "purl": "pkg:github/actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+   "description": "GitHub Action used by backup.yml (pinned to commit ea165f8d65b6e75b540449e92b4886f43607fa02)"
+  },
+  {
+   "type": "application",
+   "name": "reactivecircus/android-emulator-runner",
+   "version": "v2",
+   "scope": "excluded",
+   "purl": "pkg:github/reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d",
+   "description": "GitHub Action used by widget-check.yml (pinned to commit a421e43855164a8197daf9d8d40fe71c6996bb0d)"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+# dependency vulnerabilities — 2026-11-16T18:08:34Z — commit d537a5ab0930f61091debda2b629371b97dd60d7
+## npm audit (tests/ dev dependencies)
+{"info":0,"low":0,"moderate":0,"high":0,"critical":0,"total":0}
+## GitHub Advisory Database, packages bundled in vendor/supabase-2.45.4.js
+!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.supabase=t():e.supabase=t()}(self,(()=>(()=>{"use strict";var e,t,s,r,i={235:(e,t,s)=>{s.r(t),s.d(t,{AuthAdminApi:()=>ie,AuthApiErro
+
+### @supabase/supabase-js
+### @supabase/auth-js
+LOW <= 2.69.1 GHSA-8r88-6cj9-9fh5 auth-js Vulnerable to Insecure Path Routing from Malformed User Input
+### @supabase/gotrue-js
+### @supabase/postgrest-js
+### @supabase/realtime-js
+### @supabase/storage-js
+### @supabase/functions-js

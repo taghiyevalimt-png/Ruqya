@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-PQGq8AU5SxbKwE5UOQKzxwmra4VNjFFdQAXQZyZG0ug='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-xc0egLaZKRNU0e5GDEawKfX8VrlNmyaDBjMYbDG4VTI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2749,7 +2749,9 @@ function xlsSheets(all){
   var byD={},byC={},prD={},put=function(m,k,x){if(k)(m[k]||(m[k]=[])).push(x)};
   A.forEach(function(a){put(byD,a.date,a);if(a.created&&a.created!==a.date)put(byC,a.created,a)});
   all.products.forEach(function(x){put(prD,x.date,x)});
-  var slice=function(r){var ap=[],pr=[];for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])ap=ap.concat(byD[d]);if(byC[d])ap=ap.concat(byC[d]);if(prD[d])pr=pr.concat(prD[d])}
+  /* a booking written on one day of the period for another day of it is in both lists: take it once (B-01) */
+  var slice=function(r){var ap=[],pr=[],had={},add=function(x){if(!had[x.id]){had[x.id]=1;ap.push(x)}};
+    for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])byD[d].forEach(add);if(byC[d])byC[d].forEach(add);if(prD[d])pr=pr.concat(prD[d])}
     state.appts=ap;state.products=pr;pcache=null};
   state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
   try{
@@ -3234,6 +3236,9 @@ function meForm(){
 }
 
 /* ---------- sheets ---------- */
+/* Heavy drawing right after a tap waits for the next frame: the tap itself is answered at once (the button shows
+   it was pressed, the tab lights up), so the phone never looks stuck (INP). */
+function afterPaint(fn){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(fn,0)});else setTimeout(fn,16)}
 function openSheet(s){
   sheet=s;
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
@@ -3487,7 +3492,10 @@ document.addEventListener("click",function(e){
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
   if(offline&&/^(save-|del-|status$|pick-color$|conf$|st-edit-(save|reset)$|restore$|xls$)/.test(act)){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
-    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";var mm=byId("main");mm.scrollTop=0;mm.classList.remove("enter");void mm.offsetWidth;mm.classList.add("enter")}
+    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";
+      var tb1=document.querySelectorAll("#tabs button");for(var t1=0;t1<tb1.length;t1++){if(tb1[t1]===b)tb1[t1].setAttribute("aria-current","page");else tb1[t1].removeAttribute("aria-current")}
+      byId("top").innerHTML="";var mm=byId("main");mm.innerHTML="";mm.scrollTop=0;mm.classList.remove("enter");
+      afterPaint(function(){mm.classList.add("enter");render()});return}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
@@ -3685,7 +3693,7 @@ document.addEventListener("click",function(e){
     db(sb.from("staff").upsert(up2).then(function(r){return r.error&&up2.role==="admin"?sb.from("staff").upsert({id:up2.id,name:up2.name}):r}));
     closeSheet();
   }
-  else if(act==="patient"){openSheet({type:"patient",id:id});return}
+  else if(act==="patient"){afterPaint(function(){openSheet({type:"patient",id:id})});return}
   else if(act==="repeat"){
     var pp=patients()[id];
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
@@ -3693,12 +3701,12 @@ document.addEventListener("click",function(e){
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
-  else if(act==="view-appt"){if(appt(id))openSheet({type:"view",id:id});return}
+  else if(act==="view-appt"){if(appt(id))afterPaint(function(){if(appt(id))openSheet({type:"view",id:id})});return}
   else if(act==="newat"){
     var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
     var tt=hhmm(mm),bb=inBreak(tt,30,id);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
-    openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
+    afterPaint(function(){openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}})});return;
   }
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
@@ -3741,8 +3749,8 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
-  else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
-  else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))openSheet({type:"appt",id:id});return}
+  else if(act==="new-appt"){if(activeReaders().length)afterPaint(function(){openSheet({type:"appt",id:null})});return}
+  else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))afterPaint(function(){if(appt(id))openSheet({type:"appt",id:id})});return}
   else if(act==="conf"){
     /* the patient confirmed (or the tick is taken back): anybody who sees the session */
     var ca=appt(id);if(!ca||!state.hasConf||gone(ca)||done(ca))return;
