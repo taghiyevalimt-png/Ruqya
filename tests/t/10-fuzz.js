@@ -31,7 +31,7 @@ async function fuzz(who, lang, steps) {
       const r = Math.random();
       if (r < 0.12) { await p.click('#tabs button:not([hidden]) >> nth=' + rnd(4)).catch(() => {}); continue; }
       if (r < 0.22) {
-        const inputs = await p.$$('#sheet input[type="text"]:visible, #sheet textarea:visible, #q');
+        const inputs = await p.$$('#sheet input[type="text"]:visible, #sheet textarea:visible, #q').catch(() => []);   // a language switch reloads the page
         if (inputs.length) await inputs[rnd(inputs.length)].fill(["", "Əli İsmayıl", "12,5", "abc", "050 123 45 67", "<b>x</b>", "9".repeat(20)][rnd(7)]).catch(() => {});
         continue;
       }
@@ -42,6 +42,7 @@ async function fuzz(who, lang, steps) {
         els[Math.floor(Math.random() * els.length)].click(); return els.length;
       }, SKIP.source).catch(() => 0);
       await p.waitForTimeout(40);
+      await p.waitForLoadState("domcontentloaded").catch(() => {});
     }
     console.log("    fuzz", who.slice(0, 4), lang || "az", steps, "steps", ((Date.now() - t0) / 1000).toFixed(0) + "s");
     check(!s.errors.length, `${who.slice(0, 4)} ${lang || "az"}: page errors after ${steps} random steps: ` + s.errors.slice(0, 3).join("; "));

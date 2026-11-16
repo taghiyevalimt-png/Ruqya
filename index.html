@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-JzHGuBWLzb1uRywNqoTls5Eg3xnA02H8pXE/SS+2Opo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-RK7MQWZZ6P2mvml3K/4KVWsKBI2P+V7splG95hVvCGM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -3266,16 +3266,23 @@ document.addEventListener("focusin",function(e){
   var t=e.target;if(sheet&&t&&t.closest&&t.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!/^(radio|checkbox|button)$/.test(t.type||""))pinSheet();
 });
 document.addEventListener("focusout",function(){setTimeout(function(){var ae=document.activeElement;if(pinned&&!(ae&&ae.closest&&ae.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(ae.tagName))&&window.innerHeight>=pinH)unpinSheet()},400)});
-/* iPhone scrolls the whole page up when typing starts, even when the field is already in view: put it back */
-document.addEventListener("focusin",function(e){
-  if(!sheet||!e.target||!e.target.closest||!e.target.closest("#sheet"))return;
-  var t=e.target;
-  setTimeout(function(){
-    if(!(window.scrollY>0)||!window.visualViewport)return;
-    var r=t.getBoundingClientRect(),bottom=r.bottom+window.scrollY;
-    if(bottom<window.visualViewport.height-8)window.scrollTo(0,0);
-  },320);
-});
+/* iPhone scrolls the whole page up when typing starts, even when the field is already in view, and the window
+   jumps. So (1) a tap on a text field focuses it without that scroll, and (2) any scroll of the page while a
+   window is open is undone in the same frame, as long as the field being typed in stays above the keyboard. */
+function textField(t){return !!(t&&t.closest&&t.closest("#sheet")&&(t.tagName==="TEXTAREA"||(t.tagName==="INPUT"&&/^(text|tel|search|email|number|password|url)$/.test(t.type||"text"))))}
+document.addEventListener("touchend",function(e){
+  var t=e.target;if(!sheet||!textField(t)||document.activeElement===t||t.disabled||t.readOnly)return;
+  try{e.preventDefault();t.focus({preventScroll:true});var n=t.value.length;if(t.setSelectionRange&&t.type!=="number")t.setSelectionRange(n,n)}catch(err){}
+},{passive:false});
+function unscroll(){
+  if(!sheet||!(window.scrollY>0))return;
+  var ae=document.activeElement,vh=window.visualViewport?window.visualViewport.height:window.innerHeight;
+  if(textField(ae)){var r=ae.getBoundingClientRect();if(r.bottom+window.scrollY>vh-8)return}   /* this field really is under the keyboard: let it be shown */
+  window.scrollTo(0,0);
+}
+window.addEventListener("scroll",unscroll,{passive:true});
+if(window.visualViewport)window.visualViewport.addEventListener("scroll",unscroll);
+document.addEventListener("focusin",function(e){if(sheet&&textField(e.target)){setTimeout(unscroll,0);setTimeout(unscroll,120);setTimeout(unscroll,320)}});
 function hideSheet(){unpinSheet();if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
   if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
   sheet=null;byId("overlay").hidden=true}
