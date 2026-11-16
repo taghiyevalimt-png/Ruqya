@@ -69,6 +69,8 @@ restore_into() {
   [ "$v" -ge "${MIN_PG}0000" ] || die "the target runs PostgreSQL $v; use PostgreSQL 17 or newer"
   local post=()
   if [ -f "$dir/post-schema.sql" ]; then post=(--file post-schema.sql); else echo "warning: no post-schema.sql in this backup; check privileges by hand" >&2; fi
+  # sign-in columns the target's (older) sign-in service may lack; older backups do not have this file
+  if [ -f "$dir/auth-columns.sql" ]; then post+=(--file auth-columns.sql); fi
   echo "Restoring roles, schema, privileges and data in one transaction..."
   ( cd "$dir" && psql "$db" -X -q --single-transaction -v ON_ERROR_STOP=1 -v VERBOSITY=terse \
       --file roles.sql --file schema.sql "${post[@]}" \

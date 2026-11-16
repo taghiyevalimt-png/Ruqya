@@ -103,6 +103,8 @@ jobs:
           # exact privileges and realtime membership of the source, applied after schema.sql
           # (see scripts/backup-post-schema-gen.sql)
           q -f "$GITHUB_WORKSPACE/scripts/backup-post-schema-gen.sql" > post-schema.sql
+          # sign-in columns of the source, added on an older restore stack (scripts/backup-auth-columns-gen.sql)
+          q -f "$GITHUB_WORKSPACE/scripts/backup-auth-columns-gen.sql" > auth-columns.sql
           supabase db dump --db-url "$SUPABASE_DB_URL" -f roles.sql --role-only
           supabase db dump --db-url "$SUPABASE_DB_URL" -f schema.sql
           # Storage is not used by the app (no buckets, no files). Its system tables belong to the storage service
@@ -125,7 +127,7 @@ jobs:
           # second, standard-format copy (pg_restore), schemas public, auth and storage
           pg_dump "$SUPABASE_DB_URL" -Fc -n public -n auth -n storage -f public-auth-storage.dump
           pg_restore -l public-auth-storage.dump > /dev/null
-          for f in schema.sql post-schema.sql data.sql public-auth-storage.dump; do
+          for f in schema.sql post-schema.sql auth-columns.sql data.sql public-auth-storage.dump; do
             [ -s "$f" ] || { echo "::error::$f is empty"; exit 1; }
             printf '%-28s %12s bytes\n' "$f" "$(stat -c %s "$f")"
           done
@@ -160,7 +162,7 @@ jobs:
           # privileges would otherwise widen them, e.g. table-wide SELECT on readers instead of some columns)
           # and its realtime publication membership
           if ! psql "$LOCAL_DB" -X -q --single-transaction -v ON_ERROR_STOP=1 -v VERBOSITY=terse \
-                 --file roles.sql --file schema.sql --file post-schema.sql \
+                 --file roles.sql --file schema.sql --file post-schema.sql --file auth-columns.sql \
                  --command 'SET session_replication_role = replica' --file data.sql \
                  > restore.log 2>&1; then
             # never print data: show only the error lines, with quoted values blanked
@@ -218,7 +220,7 @@ jobs:
           umask 077
           W="$RUNNER_TEMP/backup"; O="$RUNNER_TEMP/out"; mkdir -p "$O"; cd "$W"
           n="ruqya-backup-$TS"
-          tar -cf "$n.tar" roles.sql schema.sql post-schema.sql data.sql public-auth-storage.dump \
+          tar -cf "$n.tar" roles.sql schema.sql post-schema.sql auth-columns.sql data.sql public-auth-storage.dump \
             manifest-source.txt manifest-restored.txt manifest-structure-source.txt manifest-structure-restored.txt manifest-query.sql
           printf '%s' "$BACKUP_PASSPHRASE" | gpg --symmetric --cipher-algo AES256 --batch --pinentry-mode loopback \
             --passphrase-fd 0 --s2k-digest-algo SHA512 --s2k-count 65011712 --output "$O/$n.tar.gpg" "$n.tar"
