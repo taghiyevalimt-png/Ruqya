@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-4bTgXknczpYMDADywDTexBQfj+BTN9x+ETHa+CNbkw0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-YSKi9xVCCf6P6zJWXkqfUgZJUrr3QNLiGHsjYRJUi8I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1404,6 +1404,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Hansı dövr üçün?":"За какой период?",
+"Bu ay":"Этот месяц",
+"Son 3 ay":"Последние 3 месяца",
+"Bu il":"Этот год",
+"Hamısı (2 il)":"Всё (2 года)",
+"Dövr qısa olanda fayl tez hazırlanır və az internet işlədir.":"Чем короче период, тем быстрее готов файл и тем меньше уходит интернета.",
+"Dövrün məlumatları yüklənir və fayl hazırlanır…":"Загружаются данные за период и готовится файл…",
 "12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.",
 "Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar.":"Введённое сохранено. Его можно вернуть кнопкой «Открыть снова».",
 "Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.":"Вход истёк. Войдите снова — введённая запись не потерялась.",
@@ -2638,11 +2645,19 @@ function xlsxBlob(sheets){
     {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="dd.mm.yyyy"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'}].concat(files));
 }
 /* All periods the statistics know, from the first one to the latest finished one. */
-function allPeriods(per){
-  var out=[],seen={},i,r;
-  if(per==="day"){for(var d=ST_START;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:{dt:d}});return out}
-  for(i=0;i<2000;i++){r=per==="week"?weekRange(i):monthRange(i);if(seen[r.s])break;seen[r.s]=1;r.label=per==="week"?rangeLabel(r):r.name+" ("+rangeLabel(r)+")";out.push(r);if(!r.canBack)break}
+function allPeriods(per,from){
+  var out=[],seen={},i,r,f0=from&&from>ST_START?from:ST_START;
+  if(per==="day"){for(var d=f0;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:{dt:d}});return out}
+  for(i=0;i<2000;i++){r=per==="week"?weekRange(i):monthRange(i);if(seen[r.s])break;seen[r.s]=1;if(r.end<f0)break;r.label=per==="week"?rangeLabel(r):r.name+" ("+rangeLabel(r)+")";out.push(r);if(!r.canBack)break}
   return out.reverse();
+}
+/* Excel covers a chosen period; the first day it needs (whole weeks and months are kept whole). */
+var XLS_PER={m1:"Bu ay",m3:"Son 3 ay",y:"Bu il",all:"Hamısı (2 il)"};
+function xlsFrom(per){
+  var t=parse(today),f=per==="m1"?ymd(t.getFullYear(),t.getMonth(),1):per==="m3"?ymd(t.getFullYear(),t.getMonth()-2,1):per==="y"?ymd(t.getFullYear(),0,1):addDays(today,-HIST_DAYS);
+  /* back to the Friday that starts its week and to the start of its statistics month */
+  var d=parse(f),mb=monthBlock(d.getFullYear(),d.getMonth());if(f<mb.s)mb=monthBlock(d.getFullYear(),d.getMonth()-1);
+  var w=friOf(f);return mb.s<w?mb.s:w;
 }
 function xlsSheets(all){
   var sh=[],nz=function(v){return v==null?"":v};
@@ -2656,7 +2671,7 @@ function xlsSheets(all){
   state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
   try{
     [["day",L("Günlük")],["week",L("Həftəlik")],["month",L("Aylıq")]].forEach(function(p){
-      var ps=allPeriods(p[0]),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]],
+      var ps=allPeriods(p[0],all.from),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]],
         Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]];
       ps.forEach(function(r){slice(r);
         statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b])});
@@ -2667,7 +2682,7 @@ function xlsSheets(all){
       if(state.hasProducts)sh.push({name:p[1]+" — "+L("məhsul"),rows:Pr});
     });
     var T=[[L("Tarix"),L("Kim yazıb"),L("Qəbul")]];
-    allPeriods("day").forEach(function(r){slice(r);statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
+    allPeriods("day",all.from).forEach(function(r){slice(r);statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
     sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
   }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
   var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
@@ -2683,17 +2698,22 @@ function xlsSheets(all){
     sh.push({name:L("Xərclər"),rows:E})}
   return sh;
 }
-function xlsFetch(){
+var XLS_COLS="id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at";
+function xlsFetch(per){
+  var from=xlsFrom(per),cols=state.hasConf?XLS_COLS:XLS_COLS.replace(",confirmed","");if(!state.hasDur)cols=cols.replace(",duration","");
   return Promise.all([
-    fetchAll(function(){return sb.from("appts").select("*").order("date").order("id")}),
-    state.hasProducts?fetchAll(function(){return sb.from("product_sales").select("*").order("date").order("id")}):Promise.resolve([]),
-    state.v2?fetchAll(function(){return sb.from("expenses").select("*").order("date").order("id")}):Promise.resolve([])
-  ]).then(function(r){return{appts:r[0].map(mapAppt),products:r[1].map(mapProd),expenses:r[2].map(mapExp)}});
+    fetchAll(function(){return sb.from("appts").select(cols).gte("date",from).order("date").order("id")}),
+    /* written inside the period for an earlier day: the "written" counts need them */
+    soft(function(){return sb.from("appts").select(cols).gte("created_at",bakuStart(from)).lt("date",from).order("id")}),
+    state.hasProducts?fetchAll(function(){return sb.from("product_sales").select("*").gte("date",from).order("date").order("id")}):Promise.resolve([]),
+    state.v2?fetchAll(function(){return sb.from("expenses").select("*").gte("date",from).order("date").order("id")}):Promise.resolve([])
+  ]).then(function(r){return{from:from,appts:uniq(r[0].concat(r[1]||[])).map(mapAppt),products:r[2].map(mapProd),expenses:r[3].map(mapExp)}});
 }
 function xlsSheet(){
   var x=sheet,h='<h2>Excel'+CLOSE+'</h2>';
+  if(!x.per)return h+'<p class="hint">'+L("Hansı dövr üçün?")+'</p><div class="btns xlsper">'+Object.keys(XLS_PER).map(function(k){return '<button class="'+(k==="m1"?"primary":"ghost")+'" data-act="xls-per" data-id="'+k+'">'+L(XLS_PER[k])+'</button>'}).join("")+'</div><p class="hint small">'+L("Dövr qısa olanda fayl tez hazırlanır və az internet işlədir.")+'</p>';
   if(x.err)return h+'<p class="err" role="alert">'+L("Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.")+'</p><button class="primary" data-act="xls">'+L("Yenidən cəhd et")+'</button>';
-  if(!x.url)return h+'<p class="hint">'+L("Bütün məlumatlar yüklənir və fayl hazırlanır…")+'</p>';
+  if(!x.url)return h+'<p class="hint">'+L("Dövrün məlumatları yüklənir və fayl hazırlanır…")+'</p>';
   h+='<p class="hint">'+tf(L("Fayl hazırdır: {n} vərəq, {q} qəbul."),{n:x.n,q:x.q})+'</p>';
   if(NATIVE&&typeof NATIVE.saveFile==="function")return h+'<button class="primary" data-act="xls-save">'+L("Telefona yüklə")+'</button>';
   if(NATIVE)return h+'<p class="hint">'+L("Bu tətbiq versiyası faylı yükləyə bilmir. Yeni versiyanı quraşdırın və ya proqramı brauzerdə açın.")+'</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">'+L("Yeni versiyanı yüklə")+'</a>';
@@ -2701,13 +2721,15 @@ function xlsSheet(){
     '<p class="hint">'+L("iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.")+'</p>';
 }
 function dropXlsUrl(x){if(x&&x.url&&x.url!=="#"){try{URL.revokeObjectURL(x.url)}catch(e){}x.url=""}}
-function startXls(){
+function startXls(per){
   if(!isAdmin())return;
-  if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
-  var s={type:"xls"},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};openSheet(s);
-  xlsFetch().then(function(all){
+  if(sheet&&sheet.type==="xls"){dropXlsUrl(sheet);if(!per)per=sheet.per}
+  var s={type:"xls",per:per&&XLS_PER[per]?per:""},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};
+  if(sheet&&sheet.type==="xls"){sheet=s;byId("sheet").innerHTML=xlsSheet()}else openSheet(s);
+  if(!s.per)return;
+  xlsFetch(s.per).then(function(all){
     if(sheet!==s)return;
-    var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
+    var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+(s.per==="all"?"":s.per+"-")+today+".xlsx";
     return xlsxBlob(sh).then(function(blob){
       if(sheet!==s)return;
       s.blob=blob;s.url=URL.createObjectURL(blob);byId("sheet").innerHTML=xlsSheet();
@@ -3343,7 +3365,8 @@ document.addEventListener("click",function(e){
     return;
   }
   else if(act==="new-prod"){openSheet({type:"prod"});return}
-  else if(act==="xls"){startXls();return}
+  else if(act==="xls"){startXls(sheet&&sheet.type==="xls"&&sheet.err?sheet.per:"");return}
+  else if(act==="xls-per"){startXls(id);return}
   else if(act==="xls-save"){
     if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
     var xs=sheet,fr=new FileReader();xs.saving=true;
