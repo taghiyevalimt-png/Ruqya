@@ -36,9 +36,13 @@ jobs:
           mkdir -p out
           pg_dump --version
           pg_dump "$DB" --schema-only -n public -n auth -f out/schema.sql
-          pg_dump "$DB" --data-only --column-inserts --no-owner -n public -t auth.users -t auth.identities -f data.sql
+          pg_dump "$DB" --data-only --column-inserts --no-owner -n public -f data-public.sql
+          # (with both -n and -t pg_dump keeps only the -t tables, so the sign-in tables are a second dump)
+          pg_dump "$DB" --data-only --column-inserts --no-owner -t auth.users -t auth.identities -f data-auth.sql
+          cat data-public.sql data-auth.sql > data.sql
+          shred -u data-public.sql data-auth.sql
           # row count and content hash per table (same formula as tools/dr_restore.js)
-          psql "$DB" -At -v ON_ERROR_STOP=1 -f tools/dr_manifest.sql > out/manifest.tsv
+          PGTZ=UTC psql "$DB" -qAt -v ON_ERROR_STOP=1 -f tools/dr_manifest.sql > out/manifest.tsv
           openssl rand -hex 32 > key.txt   # text key (hex + newline): openssl uses the line without its newline
           openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt -in data.sql -out out/data.sql.enc -pass file:key.txt
           openssl pkeyutl -encrypt -pubin -inkey .github/dr_public.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -in key.txt -out out/key.txt.enc
