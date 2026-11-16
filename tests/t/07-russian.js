@@ -15,6 +15,11 @@ module.exports = async () => {
     await p.click('[data-act="close"]');
     await p.click('#tabs [data-tab="patients"]'); await p.click("#plist >> text=Test Pasiyent"); await p.waitForSelector(".pvisit");
     check(/Удалить данные пациента/.test(await p.textContent("#sheet")), "wipe button in Russian");
+    await p.click('[data-act="close"]');
+    check(/Отменённые/.test(await p.textContent("#main")), "cancelled section in Russian");
+    await p.click('#tabs [data-tab="day"]'); await p.click("#fab");
+    const f = await p.textContent("#sheet");
+    check(/Место/.test(f) && /Офис/.test(f) && /Онлайн/.test(f) && !/Ünvan|Ofis/.test(f), "place field in Russian: " + f.slice(0, 200));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-fs0jaUzwjsVcF4mWkRd5WNrXvAKcCcxB6NhzNr8JTZg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-d56tPFFP/sp1FxfIlhhYsdaoNh5udHrnuj8WwjRvGvs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -45,6 +45,7 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-750x1334.png">
 <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-640x1136.png">
 <link rel="icon" href="favicon.png?v=2">
+<link rel="preload" as="image" href="logo-hq.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mərkəz">
 <title>Mərkəz</title>
@@ -171,6 +172,11 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .note p{margin:0;flex:1}
 
 .seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.segb{position:relative;display:block;margin:0}.segb input{position:absolute;opacity:0;width:1px;height:1px}
+.segb span{display:block;text-align:center;padding:8px 4px;border-radius:9px;font-weight:500;cursor:pointer;transition:background .15s var(--ease)}
+.segb input:checked+span{background:var(--accent);color:var(--accent-ink)}.segb input:focus-visible+span{outline:2px solid var(--accent-line)}
+.pbtns{display:flex;gap:12px}.psec{margin:0 0 10px}
 .seg button{border:0;background:none;border-radius:9px;padding:8px;font-size:14px;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
 
@@ -283,7 +289,8 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev.tight b{-webkit-line-clamp:1;white-space:nowrap;text-overflow:ellipsis;display:block}.ev.tight span,.ev.tight span.by{white-space:nowrap;text-overflow:ellipsis}
 .ev span.by{white-space:normal;letter-spacing:0;font-weight:600;opacity:1;line-height:1.15;margin-top:1px}
 .ev.noshow{opacity:.6;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 5px,transparent 5px,transparent 10px)}
-.ev.cancel{background:var(--line)!important;color:var(--muted);text-decoration:line-through;box-shadow:none}
+.ev.cancel{background:#000!important;color:#f2f2f2!important;border:1px solid #3a3a3a;box-shadow:none}
+.ev.cancel b,.ev.cancel span{color:#f2f2f2!important}
 .brk{position:absolute;left:0;right:0;z-index:1;pointer-events:none;font-size:11px;color:var(--muted);padding:2px 6px;
   background:repeating-linear-gradient(135deg,var(--hatch) 0,var(--hatch) 6px,transparent 6px,transparent 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .nowline{position:absolute;left:0;right:0;height:2px;background:#d93025;z-index:2;pointer-events:none}
@@ -492,7 +499,7 @@ main.enter{animation:fadein .2s var(--ease)}
 /* Sign-in screen */
 .gate .top{align-items:center;padding-top:max(40px,8vh)}
 .gate .brand{flex-direction:column;gap:14px}
-.gate .brand img{width:96px;height:96px;border:0;border-radius:0;filter:drop-shadow(0 10px 22px rgba(214,178,94,.25))}
+.gate .brand img{width:112px;height:112px;border:0;border-radius:0;filter:drop-shadow(0 10px 22px rgba(214,178,94,.25))}
 .gate .brand h1{font-size:30px;letter-spacing:.06em;font-weight:700;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent}
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){.gate .brand h1{background:none;color:var(--accent)}}
 .gate main{width:100%;max-width:420px;margin:0 auto;padding-top:22px;gap:16px}
@@ -537,7 +544,7 @@ html.lite .ev::before{display:none}
 /* Opening: the logo rests on the app's own background, then the app fades softly in. */
 #splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
   background:var(--bg);pointer-events:none;transition:opacity .9s var(--ease),visibility 0s linear .9s}
-#splash img{width:88px;height:88px;animation:spIn 1.3s var(--ease) .1s both,spGlow 2.6s ease-in-out 1.4s infinite;filter:drop-shadow(0 10px 26px rgba(214,178,94,.22))}
+#splash img{width:128px;height:128px;image-rendering:auto;animation:spIn 1.3s var(--ease) .1s both,spGlow 2.6s ease-in-out 1.4s infinite;filter:drop-shadow(0 10px 26px rgba(214,178,94,.22))}
 #splash .sp-name{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:.08em;background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent;animation:spIn 1.3s var(--ease) .45s both}
 @supports not ((-webkit-background-clip:text) or (background-clip:text)){#splash .sp-name{background:none;color:var(--accent)}}
 #splash .sp-bar{width:56px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;opacity:0;animation:spShow .5s ease 1.6s forwards}
@@ -602,7 +609,7 @@ button.ch .x{font-size:10px;opacity:.8}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><img src="logo-192.png" width="88" height="88" alt=""><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
+<div id="splash" aria-hidden="true"><img src="logo-hq.png" width="128" height="128" alt="" decoding="sync" fetchpriority="high"><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
 <div class="app">
   <div class="shell">
     <div class="top" id="top"></div>
@@ -1391,9 +1398,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 ". Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>":". Без цены они не попадут в денежную статистику.</p>",
 "</b> uğurlu</span><span><b class=\"num\">":"</b> успешно</span><span><b class=\"num\">",
 "\" data-st=\"wait\">Geri qaytar</button></div>":"\" data-st=\"wait\">Вернуть</button></div>",
-"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>":"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Сеанс прошёл — считается успешным.</b> Если пациент не пришёл, удалите запись: она уйдёт из статистики.</p>",
+"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, «Ləğv et» basın: «Ləğv olunanlar»a düşəcək.</p>":"<p class=\"hint\" style=\"margin:0\"><b style=\"color:var(--ok)\">✓ Сеанс закончился — считается успешным.</b> Если пациент не пришёл, нажмите «Отменить»: запись попадёт в «Отменённые».</p>",
 "<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>":"<p class=\"hint\" style=\"margin:0;color:var(--warn)\">Цена не указана — нажмите «Изменить» и впишите, иначе сеанс не попадёт в денежную статистику.</p>",
-"<p class=\"hint\" style=\"margin:0\">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>":"<p class=\"hint\" style=\"margin:0\">Когда сеанс закончится, он автоматически станет успешным. Если пациент не придёт или отменит, удалите запись.</p>",
+"<p class=\"hint\" style=\"margin:0\">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, «Ləğv et» basın.</p>":"<p class=\"hint\" style=\"margin:0\">Когда сеанс закончится, он автоматически станет успешным. Если пациент не придёт или отменит, нажмите «Отменить».</p>",
 "</b><span>uğurlu</span></div>":"</b><span>успешно</span></div>",
 "<span class=\"tag warn\">Qiymət yazılmayıb</span>":"<span class=\"tag warn\">Цена не указана</span>",
 "Hesaba vaxtı bitmiş və silinməmiş seanslar düşür.</p>":"В расчёт идут прошедшие и не удалённые сеансы.</p>",
@@ -1404,6 +1411,25 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Ləğv et (gəlmədi)":"Отменить (не пришёл)",
+"Səhvən yazılıb — tamamilə sil":"Записан по ошибке — удалить совсем",
+"Ləğv olunanlara düşəcək — bir də basın":"Попадёт в «Отменённые» — нажмите ещё раз",
+"Tamamilə silinəcək — bir də basın":"Удалится совсем — нажмите ещё раз",
+"Qəbul ləğv olundu. «Pasiyentlər → Ləğv olunanlar» bölməsində görünür.":"Запись отменена. Она видна в «Пациенты → Отменённые».",
+"Ləğv olunanlar":"Отменённые",
+"Ləğv":"Отмена",
+"Ləğv et":"Отменить",
+"Son iki ayda ləğv olunan qəbul yoxdur.":"За последние два месяца отменённых записей нет.",
+"Son iki ayın ləğv olunan qəbulları göstərilir.":"Показаны отменённые записи за последние два месяца.",
+"Yer *":"Место *",
+"Yer":"Место",
+"Ofis":"Офис",
+"Onlayn":"Онлайн",
+"Ünvan":"На адресе",
+"Yeri seçmək vacibdir: Ofis, Onlayn və ya Ünvan.":"Выберите место: Офис, Онлайн или На адресе.",
+"Telefon (vacibdir)":"Телефон (обязательно)",
+"Məhsul satışını dəyiş":"Изменить продажу товара",
+"Bu satış artıq silinib.":"Эта продажа уже удалена.",
 "Pasiyentin məlumatını sil":"Удалить данные пациента",
 "Ad, telefon və qeydlər bütün qəbullardan və jurnaldan silinir. Seanslar və pul statistikada qalır. Geri qaytarmaq olmur.":"Имя, телефон и заметки удаляются из всех записей и из журнала. Сеансы и деньги остаются в статистике. Вернуть нельзя.",
 "Bir də basın — geri qaytarmaq olmayacaq":"Нажмите ещё раз — вернуть будет нельзя",
@@ -1556,6 +1582,7 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 /* ---------- state ---------- */
 var today=bk().d;
 var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0,stAOff:0,stSec:"today"};
+ui.psec="all";try{if(localStorage.getItem("ruqya.psec")==="cancel")ui.psec="cancel"}catch(e){}
 ui.setSec="spec";try{var se0=localStorage.getItem("ruqya.setsec");if(/^(spec|breaks|staff|view|acc)$/.test(se0||""))ui.setSec=se0}catch(e){}
 try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(today|day|week|month|rules|terms)$/.test(ss0||""))ui.stSec=ss0}catch(e){}
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
@@ -1659,7 +1686,9 @@ function soft(make){return fetchAll(make).then(function(d){return d},function(){
 /* Data sync, kept light on traffic: a full load on start and on return to the app,
    single-row updates from realtime in between, and older dates fetched only when opened. */
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
-function mapAppt(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",conf:!!x.confirmed,dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
+var PLACES=[["ofis","Ofis"],["onlayn","Onlayn"],["unvan","Ünvan"]];
+function placeName(k){for(var i=0;i<PLACES.length;i++)if(PLACES[i][0]===k)return L(PLACES[i][1]);return L("Ofis")}
+function mapAppt(x){return{place:x.place||"ofis",id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",conf:!!x.confirmed,dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
 function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u;return u}
 function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
 /* A hand correction of one number in the weekly or monthly sales statistics (the computed number stays as it is). */
@@ -1709,12 +1738,13 @@ function refresh(){
     probe("breaks.reader_id",function(){return soft(function(){return sb.from("breaks").select("reader_id").limit(1)})}),
     soft(function(){return sb.from("stat_edits").select("*").order("id")}),
     probe("staff.want",function(){return soft(function(){return sb.from("staff").select("want").limit(1)})}),
-    probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})})
+    probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})}),
+    probe("appts.place",function(){return soft(function(){return sb.from("appts").select("place").limit(1)})})
   ]).then(function(res){
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
-    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null);state.statEdits=(res[15]||[]).map(mapEdit);
+    lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null);state.hasPlace=!!res[18]||(state.hasPlace&&res[18]===null);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null);state.statEdits=(res[15]||[]).map(mapEdit);
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
     state.appts=res[1].map(mapAppt);
@@ -1940,8 +1970,9 @@ function authLost(){
 /* ---------- drafts: a booking form whose data did not reach the server ----------
    Kept on this phone for the signed-in person only (2 days at most), shown as a notice with «Geri aç». */
 var DK="ruqya.draft.v1";
+function placeVal(){var e=document.querySelector('input[name="f-place"]:checked');return e?e.value:""}
 function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
-  return{readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
+  return{place:placeVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
 function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,v:v}))}catch(e){}}
 function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
 function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
@@ -2004,7 +2035,7 @@ function startSync(){
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
-var CFIELDS=["readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
+var CFIELDS=["hasPlace","readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
@@ -2160,7 +2191,7 @@ function render(){
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML='<div class="brand"><img src="logo-192.png" width="96" height="96" alt=""><h1>Mərkəz</h1></div>';
+    top.innerHTML='<div class="brand"><img src="logo-hq.png" width="112" height="112" alt=""><h1>Mərkəz</h1></div>';
     main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')+L('<div class="empty"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'))
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
@@ -2177,7 +2208,8 @@ function render(){
   var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
-    main.innerHTML=banner+'<div id="plist">'+patientsList()+'</div>';
+    main.innerHTML=banner+'<div class="chips stsec psec" role="tablist">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" role="tab" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'" aria-selected="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
+      '<div id="plist">'+(ui.psec==="cancel"?cancelList():patientsList())+'</div>';
     return;
   }
   var cal=byId("cal"),keep=cal?{t:cal.scrollTop,l:cal.scrollLeft,d:cal.dataset.d}:null;
@@ -2254,7 +2286,6 @@ function gridMain(){
       h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
     var lanes=[];evs.forEach(function(a){
-      if(a.status==="cancel"){a._lane=-1;return}
       var s1=mins(a.time),e1=s1+(a.dur||90),LN=0;
       while(lanes[LN]&&lanes[LN].some(function(x){return s1<x[1]&&x[0]<e1}))LN++;(lanes[LN]=lanes[LN]||[]).push([s1,e1]);a._lane=LN});
     var nl=Math.max(1,lanes.length);
@@ -2262,7 +2293,7 @@ function gridMain(){
     evs.forEach(function(a){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
-      h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a._lane<0?';z-index:0;opacity:.75':';z-index:1')+'">'+
+      h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a.status==="cancel"?';z-index:0':';z-index:1')+'">'+
         '<b>'+(mark(a)?'<i class="ok">'+mark(a)+'</i>':"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         (a.phone?'<span class="num ph">'+esc(a.phone)+'</span>':'')+
@@ -2280,9 +2311,9 @@ function stateLine(a){
   if(gone(a))return '<div class="status"><span class="pill '+a.status+'">'+ST[a.status]+'</span><span class="spacer"></span>'+
     (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+'</div>';
   if(!canEdit(a))return done(a)?'<p class="hint" style="margin:0"><b style="color:var(--ok)">'+L("✓ Seans bitib — uğurlu sayılır.")+'</b></p>':'';
-  if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, qəbulu silin: statistikadan çıxacaq.</p>')+
+  if(done(a))return L('<p class="hint" style="margin:0"><b style="color:var(--ok)">✓ Seans bitib — uğurlu sayılır.</b> Pasiyent gəlməyibsə, «Ləğv et» basın: «Ləğv olunanlar»a düşəcək.</p>')+
     (a.price>0?'':L('<p class="hint" style="margin:0;color:var(--warn)">Qiymət yazılmayıb — «Dəyiş» basıb yazın, yoxsa pul statistikasına düşməyəcək.</p>'));
-  return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, qəbulu silin.</p>');
+  return L('<p class="hint" style="margin:0">Seans bitəndə avtomatik uğurlu sayılacaq. Pasiyent gəlməsə və ya ləğv etsə, «Ləğv et» basın.</p>');
 }
 /* All of a session's details as plain text, to paste to the specialist (WhatsApp etc.). */
 /* a note like "30 dəqiqəlik ruqya" only repeats the length that is already in brackets */
@@ -2295,6 +2326,7 @@ function apptText(a){
     fmtDay(a.date,"w")+" "+parse(a.date).getFullYear(),
     a.time+"–"+endOf(a)+" ("+(a.dur||90)+L(" dəq")+")",
     r?r.name:"",
+    state.hasPlace?placeName(a.place):"",
     a.price>0?money(a.price):"",
     a.note&&!durOnly(a.note,a.dur||90)?a.note:""
   ];
@@ -2310,12 +2342,14 @@ function viewSheet(){
   return '<div class="detail" style="display:flex;flex-direction:column;gap:12px"><h2>'+esc(a.name)+CLOSE+'</h2>'+
     L('<div class="row2"><span>Vaxt</span><b class="num">')+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
     L('<div class="row2"><span>Mütəxəssis</span><b>')+esc(r?r.name:"—")+'</b>'+'</div>'+
+    (state.hasPlace?'<div class="row2"><span>'+L("Yer")+'</span><b>'+esc(placeName(a.place))+'</b></div>':'')+
     (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+phoneLinks(a.phone,a)+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
     stateLine(a)+confBtn(a,"ghost conf")+
     '<div class="btns"><button class="ghost" data-act="appt-copy" data-id="'+esc(a.id)+'">⧉ '+L("Kopyala")+'</button>'+(canEdit(a)?'<button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button>':'')+'</div>'+
-    (canEdit(a)?L('<button class="danger" data-act="del-appt">Qəbulu sil</button>'):'<p class="hint">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</p>')+
+    (canEdit(a)?(gone(a)?'':'<button class="danger" data-act="cancel-appt" data-id="'+esc(a.id)+'">'+L("Ləğv et (gəlmədi)")+'</button>')+
+      '<button class="link danger-t" data-act="del-appt">'+L("Səhvən yazılıb — tamamilə sil")+'</button>':'<p class="hint">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</p>')+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
 function breakForm(){
@@ -2357,7 +2391,7 @@ function dayMain(){
     if(miss>0)tags+='<span class="tag warn">'+miss+L(' dəfə gəlməyib</span>');
     /* compact: one line with time, patient and price; a second line with the links (wide, not tall) */
     var byName=state.staff[a.by]||(a.by?L("Adsız istifadəçi"):"");
-    var sub=[r?r.name:"—",byName?L("Yazdı: ")+byName:""].filter(function(x){return x}).map(esc).join(" · ");
+    var sub=[r?r.name:"—",state.hasPlace&&a.place&&a.place!=="ofis"?placeName(a.place):"",byName?L("Yazdı: ")+byName:""].filter(function(x){return x}).map(esc).join(" · ");
     h+='<div class="card compact '+stOf(a)+'"><div class="row">'+
       '<div class="time num">'+esc(a.time)+(state.hasDur?'<small>'+endOf(a)+'</small>':'')+'</div>'+
       '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+mark(a)+esc(a.name)+'</b><span class="num">'+sub+'</span></button>'+
@@ -2432,10 +2466,10 @@ function monthRangeOf(st){var m=monthRange();if(m.s===st)return m;var d=parse(st
 function isAgent(k){return state.roles[k]==="agent"}
 /* Rows for one table. kind: today | sales | money | prod. a, b, c are the table's number columns. */
 function statData(kind,r,per){
-  var rows={},order=[],T={a:0,b:0,c:0};
+  var rows={},order=[],T={a:0,b:0,c:0,d:0};
   /* a sales agent sees only his own row in the sales and "written today" tables (admins see everyone) */
   var onlyMe=(kind==="sales"||kind==="today")&&auth.user&&!isAdmin()&&!statAll?auth.user.id:null;
-  function row(k,name){if(!rows[k]){rows[k]={k:k,name:name,a:0,b:0,c:0,r:null,w:null,s:null,t:null};order.push(k)}return rows[k]}
+  function row(k,name){if(!rows[k]){rows[k]={k:k,name:name,a:0,b:0,c:0,d:0,r:null,w:null,s:null,t:null};order.push(k)}return rows[k]}
   var who=function(k){return state.staff[k]||L("Adsız")};
   var uk=function(k){return k&&state.staff[k]!=null?k:"-"};   /* every unknown or deleted author shares one "Adsız" row */
   if(kind==="money")activeReaders().forEach(function(x){row(x.id,x.name)});
@@ -2444,13 +2478,14 @@ function statData(kind,r,per){
     state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(uk(x.by),who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
   }else state.appts.forEach(function(a){
     if(onlyMe&&a.by!==onlyMe)return;
-    if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(uk(a.by),who(a.by)).a++;T.a++;return}
-    var inB=a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),x;
-    if(!inB&&!inS)return;
+    if(kind==="today"){if(gone(a)||a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(uk(a.by),who(a.by)).a++;T.a++;return}
+    var g0=gone(a),inB=!g0&&a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),inC=g0&&a.date>=r.s&&a.date<=r.end,x;
+    if(!inB&&!inS&&!inC)return;
     if(kind==="sales"){if(isSpec(a.by))return;x=row(uk(a.by),who(a.by))}
     else{var rd=reader(a.readerId);x=row(a.readerId,rd?rd.name:"—")}
     if(inB){x.a++;T.a++}
     if(inS){x.b++;T.b++;x.c+=a.price;T.c+=a.price}
+    if(inC){x.d++;T.d++}
   });
   /* hand corrections replace the computed number; the total is the sum of what is shown */
   /* "Müraciət" (requests) is only ever typed in by the staff: empty ("—") until someone writes a number */
@@ -2471,8 +2506,8 @@ function statData(kind,r,per){
 var statAll=false;   /* true only while an admin's Excel file is being made */
 var ST_KINDS={
   today:{t:function(r){return !r||r.s===today?L("Bu gün yazılan qəbullar"):tf(L("{d} yazılan qəbullar"),{d:fmtDay(r.s)})},h:function(){return [L("Kim yazıb"),L("Qəbul")]},c:function(x){return [x.name,String(x.a)]}},
-  sales:{t:function(){return L("Satış statistikası")},h:function(){return [L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]},c:function(x){var n=function(v){return v==null?"—":String(v)};return [x.name,n(x.w),n(x.s),n(x.t),String(x.a),String(x.b)]}},
-  money:{t:function(){return L("Pul statistikası")},h:function(){return [L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]},c:function(x){return [x.name,String(x.a),String(x.b),money(x.c)]}},
+  sales:{t:function(){return L("Satış statistikası")},h:function(){return [L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu"),L("Ləğv")]},c:function(x){var n=function(v){return v==null?"—":String(v)};return [x.name,n(x.w),n(x.s),n(x.t),String(x.a),String(x.b),String(x.d||0)]}},
+  money:{t:function(){return L("Pul statistikası")},h:function(){return [L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Ləğv"),L("Qazanc")]},c:function(x){return [x.name,String(x.a),String(x.b),String(x.d||0),money(x.c)]}},
   prod:{t:function(){return L("Məhsul statistikası")},h:function(){return [L("Satan"),L("Satış"),L("Məbləğ")]},c:function(x){return [x.name,String(x.a),money(x.c)]}}
 };
 /* who earned how much: admins only */
@@ -2483,7 +2518,7 @@ function statTable(kind,r,per){
     '<button class="ghost copyb" data-act="st-copy" data-id="'+kind+'" data-p="'+per+'">⧉ '+L("Kopyala")+'</button></div>';
   if(kind==="sales"){
     /* "Müraciət" once over its three columns: WP, SŞ, ümumi */
-    h+='<table class="stt wide"><thead><tr><th rowspan="2">'+esc(hd[0])+'</th><th colspan="3" class="grp">'+L("Müraciət")+'</th><th rowspan="2" class="num">'+esc(hd[4])+'</th><th rowspan="2" class="num">'+esc(hd[5])+'</th></tr>'+
+    h+='<table class="stt wide"><thead><tr><th rowspan="2">'+esc(hd[0])+'</th><th colspan="3" class="grp">'+L("Müraciət")+'</th><th rowspan="2" class="num">'+esc(hd[4])+'</th><th rowspan="2" class="num">'+esc(hd[5])+'</th><th rowspan="2" class="num">'+esc(hd[6])+'</th></tr>'+
       '<tr class="sub"><th class="num">WP</th><th class="num">'+L("SŞ")+'</th><th class="num">'+L("ümumi")+'</th></tr></thead><tbody>';
   }else h+='<table class="stt"><thead><tr>'+hd.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+esc(x)+'</th>'}).join("")+'</tr></thead><tbody>';
   if(!d.rows.length)h+='<tr><td colspan="'+hd.length+'" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>';
@@ -2492,7 +2527,7 @@ function statTable(kind,r,per){
     var col=kind!=="sales"?"":i===1?"w":i===2?"s":i===4?"a":i===5?"b":"",ed=col&&x["e"+col];
     if(editable&&col&&(isAdmin()||x.k===auth.user.id))return '<td class="num"><button type="button" class="cellb'+(ed&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(x.k)+'" data-col="'+col+'" data-p="'+per+'" data-s="'+esc(r.s)+'" aria-label="'+esc(x.name+" — "+hd[i]+": "+c)+'">'+esc(c)+'</button></td>';
     return '<td'+(i?' class="num'+(kind==="sales"&&i===3?' sum':'')+'"':'')+'>'+(ed?'<span class="edited">'+esc(c)+'</span>':esc(c))+'</td>'}).join("")+'</tr>'});
-  h+='</tbody><tfoot><tr>'+K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,w:d.T.w,s:d.T.s,t:d.T.t}).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr></tfoot></table></div>';
+  h+='</tbody><tfoot><tr>'+K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,d:d.T.d,w:d.T.w,s:d.T.s,t:d.T.t}).map(function(c,i){return '<td'+(i?' class="num"':'')+'>'+esc(c)+'</td>'}).join("")+'</tr></tfoot></table></div>';
   return h;
 }
 function statNav(act,r,title,small){
@@ -2575,7 +2610,7 @@ function statsMain(){
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
 /* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
 function statText(kind,r,per){
-  var K=ST_KINDS[kind],d=statData(kind,r,per),hd=K.h(),rows=[hd].concat(d.rows.map(K.c)).concat([K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,w:d.T.w,s:d.T.s,t:d.T.t})]);
+  var K=ST_KINDS[kind],d=statData(kind,r,per),hd=K.h(),rows=[hd].concat(d.rows.map(K.c)).concat([K.c({name:L("Cəmi"),a:d.T.a,b:d.T.b,c:d.T.c,d:d.T.d,w:d.T.w,s:d.T.s,t:d.T.t})]);
   var w=hd.map(function(_,i){return rows.reduce(function(m,x){return Math.max(m,clen(x[i]))},0)});
   var pad=function(s,n,right){var k=n-clen(s),sp=k>0?new Array(k+1).join(" "):"";return right?sp+s:s+sp};
   var line=function(x){return x.map(function(c,i){return pad(c,w[i],i>0)}).join(" | ")};
@@ -2704,11 +2739,11 @@ function xlsSheets(all){
   state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
   try{
     [["day",L("Günlük")],["week",L("Həftəlik")],["month",L("Aylıq")]].forEach(function(p){
-      var ps=allPeriods(p[0],all.from),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu")]],
-        Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]];
+      var ps=allPeriods(p[0],all.from),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu"),L("Ləğv")]],
+        Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Ləğv"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]];
       ps.forEach(function(r){slice(r);
-        statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b])});
-        statData("money",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.c)Mo.push([r.label,x.name,x.a,x.b,x.c])});
+        statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.d||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b,x.d])});
+        statData("money",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.c||x.d)Mo.push([r.label,x.name,x.a,x.b,x.d,x.c])});
         if(state.hasProducts)statData("prod",r,p[0]).rows.forEach(function(x){if(x.a||x.c)Pr.push([r.label,x.name,x.a,x.c])});
       });
       sh.push({name:p[1]+" — "+L("satış"),rows:S},{name:p[1]+" — "+L("pul"),rows:Mo});
@@ -2719,9 +2754,9 @@ function xlsSheets(all){
     sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
   }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
   var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
-  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
+  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
   A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
-    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
+    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
   sh.push({name:L("Bütün qəbullar"),rows:Q});
   if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
     all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([{dt:x.date},sn(x.by),prodItems(x.names).join(", "),x.amount])});
@@ -2731,9 +2766,9 @@ function xlsSheets(all){
     sh.push({name:L("Xərclər"),rows:E})}
   return sh;
 }
-var XLS_COLS="id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at";
+var XLS_COLS="id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at,place";
 function xlsFetch(per){
-  var from=xlsFrom(per),cols=state.hasConf?XLS_COLS:XLS_COLS.replace(",confirmed","");if(!state.hasDur)cols=cols.replace(",duration","");
+  var from=xlsFrom(per),cols=state.hasConf?XLS_COLS:XLS_COLS.replace(",confirmed","");if(!state.hasPlace)cols=cols.replace(",place","");if(!state.hasDur)cols=cols.replace(",duration","");
   return Promise.all([
     fetchAll(function(){return sb.from("appts").select(cols).gte("date",from).order("date").order("id")}),
     /* written inside the period for an earlier day: the "written" counts need them */
@@ -2784,7 +2819,7 @@ function cashMain(){
           (more?'<button class="link more" data-act="prod-all" data-id="'+esc(x.id)+'" aria-label="'+esc(L("Hamısını göstər"))+'">… '+tf(L("daha {n}"),{n:it.length-10})+'</button>':'')
         :'<span class="noname">'+L("Adsız satış")+'</span>')+'</div>'+
         '<div class="pside"><b class="num">'+money(x.amount)+'</b><span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>'+
-        '<button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></div></div>'}).join("")
+        '<span class="pbtns"><button class="link" data-act="edit-prod" data-id="'+esc(x.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></span></div></div>'}).join("")
       :L('<div class="foot">Bu tarixdə məhsul satılmayıb.</div>'))+'</div>';
   }else h+=L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu admin bir dəfə edir.</p></div>');
   if(state.v2){
@@ -2803,14 +2838,15 @@ function prodAllSheet(){var x=null;for(var i=0;i<state.products.length;i++)if(st
   return '<h2>'+L("Məhsulların adları")+CLOSE+'</h2><p class="hint">'+esc(fmtDay(x.date))+' · '+money(x.amount)+' · '+esc(state.staff[x.by]||L("Adsız istifadəçi"))+' · '+tf(L("{n} məhsul"),{n:it.length})+'</p>'+
     '<ol class="pfull">'+it.map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ol>';
 }
+function prodRow(id){for(var i=0;i<state.products.length;i++)if(state.products[i].id===id)return state.products[i];return null}
 function productForm(){
-  var dd=ui.tab==="cash"?ui.date:today;
-  return L('<h2>Məhsul satışı')+CLOSE+'</h2>'+
-    (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'"></textarea></div>'
+  var x=sheet.id?prodRow(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
+  return '<h2>'+(x?L("Məhsul satışını dəyiş"):L("Məhsul satışı"))+CLOSE+'</h2>'+
+    (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'">'+(x?esc(prodItems(x.names).join("\n")):'')+'</textarea></div>'
       :'<p class="hint">'+L("Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.")+'</p>')+
-    L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+' *</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12"></div>'+
+    L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+' *</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
     L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
-    L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[auth.user.id]||L("siz"))+'.</p>'+
+    L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[x?x.by:auth.user.id]||L("siz"))+'.</p>'+
     L('<p class="err" role="alert" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
 }
 function expenseForm(){
@@ -2821,6 +2857,19 @@ function expenseForm(){
     L('<div class="field"><label for="x-date">Tarix</label><input id="x-date" type="date" value="')+dd+'"></div></div>'+
     '<p class="err" role="alert" id="x-err" hidden></p>'+
     L('<div class="btns"><button class="primary" data-act="save-expense">Yadda saxla</button>')+(x?L('<button class="danger" data-act="del-expense">Sil</button>'):'')+'</div>';
+}
+/* «Ləğv olunanlar»: bookings the patient did not come to (cancelled from the calendar), newest first */
+function cancelList(){
+  var q=low(ui.q.trim()),qd=phoneCore(q);
+  var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
+    .sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,300);
+  if(!arr.length)return '<div class="empty">'+L("Son iki ayda ləğv olunan qəbul yoxdur.")+'</div>';
+  return '<p class="hint small">'+L("Son iki ayın ləğv olunan qəbulları göstərilir.")+'</p>'+arr.map(function(a){
+    var r=reader(a.readerId),wb=state.staff[a.by]||(a.by?L("Adsız istifadəçi"):"");
+    return '<div class="card compact cancel"><div class="row"><div class="time num">'+esc(a.time)+'<small>'+esc(fmtDay(a.date))+'</small></div>'+
+      '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+esc(a.name)+'</b><span class="num">'+[a.phone,r?r.name:"",wb?L("Yazdı: ")+wb:""].filter(function(x){return x}).map(esc).join(" · ")+'</span></button></div>'+
+      '<div class="links">'+phoneLinks(a.phone,null)+(canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+'</div></div>';
+  }).join("");
 }
 function patientsList(){
   var m=patients(),q=low(ui.q.trim()),qd=phoneCore(q);
@@ -2861,7 +2910,7 @@ function patientSheet(){
       (open&&open.note?'<p class="memo">'+esc(open.note)+'</p>':'');
     if(open&&canEdit(open))h+='<div class="pv-btns">'+(gone(open)?'<button class="ghost" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+
       '<button class="ghost" data-act="edit-appt" data-id="'+esc(a.id)+L('">Dəyiş</button>')+
-      '<button class="ghost danger-t" data-act="del-row" data-id="'+esc(a.id)+L('">Sil</button>')+'</div>';
+      (gone(open)?'':'<button class="ghost danger-t" data-act="cancel-appt" data-id="'+esc(a.id)+'">'+L("Ləğv et")+'</button>')+'</div>';
     else if(open)h+='<div class="pv-row muted">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</div>';
     else h+=L('<div class="pv-row muted">Köhnə qəbul — yalnız baxmaq olar.</div>');
     h+='</div>';
@@ -3062,6 +3111,7 @@ function auditLine(x){
     if(has("phone")&&(o.phone||"")!==(n.phone||""))ch.push(L("telefon: ")+(o.phone||"—")+" → "+(n.phone||"—"));
     if(has("duration")&&+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
     if(has("note")&&(o.note||"")!==(n.note||""))ch.push(L("qeyd"));
+    if(has("place")&&(o.place||"ofis")!==(n.place||"ofis"))ch.push(L("Yer")+": "+placeName(o.place||"ofis")+" → "+placeName(n.place||"ofis"));
     return L("Qəbul (")+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||L("dəyişdi"));
   }
   if(T==="expenses")return L("Xərci ")+verb+": "+(v.title||"")+", "+money(v.amount)+(op==="UPDATE"&&+o.amount!==+n.amount?L(" (əvvəl ")+money(o.amount)+")":"");
@@ -3156,13 +3206,14 @@ function openSheet(s){
   sheet=s;
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
-  if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
+  if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={place:oa.place||"ofis",readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
   var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,xls:xlsSheet,expense:expenseForm}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt"&&s.vals){var dv=s.vals;
     ["reader","date","time","name","phone","price","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
       if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
     var de=byId("f-dur");if(de&&dv.dur&&de.querySelector('option[value="'+(+dv.dur)+'"]'))de.value=String(+dv.dur);
+    if(dv.place){var pe=document.querySelector('input[name="f-place"][value="'+String(dv.place).replace(/[^a-z]/g,"")+'"]');if(pe)pe.checked=true}
     if(dv.price===""&&byId("f-price"))byId("f-price").value="";
     dropDraft();
   }
@@ -3195,7 +3246,7 @@ function slotGrid(){
 }
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
-  var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:"";   /* always chosen by hand in a new booking, even after tapping a specialist's column */
+  var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:"");   /* tapping a specialist's column picks that specialist (can be changed) */
   if(a&&!rs.some(function(r){return r.id===a.readerId})){var old=reader(a.readerId);if(old)rs=rs.concat([old])}
   var pre=sheet.pre||{};
   var opts=(def?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
@@ -3203,12 +3254,13 @@ function apptForm(){
      itself stays at the bottom of the window. */
   return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
     L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis *</label><select id="f-reader">')+opts+'</select></div>'+
-    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+(a||pre.dur?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||0);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
     L('<div class="field"><label for="f-time">Saat *</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div></div>'+
     '<div class="slots" id="f-slots"></div><p class="hint small" id="f-busy"></p>'+
     L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
-    L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="tel" maxlength="30" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
+    L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="text" maxlength="60" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
     L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
     L('<p class="hint small" style="margin:0">* — vacib sahələr</p>')+
@@ -3237,10 +3289,10 @@ function saveAppt(){
   if(!/^\d{2}:\d{2}$/.test(time))return fail("f-err",L("Saatı seçmək vacibdir. Saat olmadan qəbul yadda saxlanmır."));
   if(state.hasDur&&!(+val("f-dur")>0))return fail("f-err",L("Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır."));
   if(state.hasDur&&+val("f-dur")<MIN_DUR)return fail("f-err",L("Seans ən az 30 dəqiqə olmalıdır. Müddəti dəyişin."));
+  var place=state.hasPlace?placeVal():"";
+  if(state.hasPlace&&!place)return fail("f-err",L("Yeri seçmək vacibdir: Ofis, Onlayn və ya Ünvan."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
   if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
-  var pd=phone.replace(/\D/g,"");
-  if(pd.length<9||pd.length>15||/[^\d\s+()\-.]/.test(phone))return fail("f-err",L("Mobil nömrəni düzgün yazın, məsələn: 050 123 45 67 və ya +994 50 123 45 67."));
   if(pr==="")return fail("f-err",L("Qiyməti yazmaq vacibdir. Pul yazılmadan qəbul yadda saxlanmır."));
   if(isNaN(price)||price<0||price>MAXSUM)return fail("f-err",L("Qiyməti düzgün yazın: yalnız rəqəm, məsələn 150 və ya 12,5."));
   if(!(price>0))return fail("f-err",L("Qiymət 0 ola bilməz. Seansın pulunu yazın."));
@@ -3268,7 +3320,7 @@ function saveAppt(){
     var up={};
     if(o.readerId!==rid){up.reader_id=rid;a.readerId=rid}if(o.date!==date){up.date=date;a.date=date}if(o.time!==time){up.time=time;a.time=time}
     if(o.name!==name){up.name=name;a.name=name}if((o.phone||"")!==phone){up.phone=phone;a.phone=phone}if(+o.price!==price){up.price=price;a.price=price}
-    if((o.note||"")!==note){up.note=note;a.note=note}if(state.hasDur&&(o.dur||90)!==dur){up.duration=dur;a.dur=dur}
+    if((o.note||"")!==note){up.note=note;a.note=note}if(state.hasPlace&&(o.place||"ofis")!==place){up.place=place;a.place=place}if(state.hasDur&&(o.dur||90)!==dur){up.duration=dur;a.dur=dur}
     /* the slot must stay whole: if the time moved here, date, specialist and length go with it */
     if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
@@ -3280,6 +3332,7 @@ function saveAppt(){
     var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note};
     if(service)ins.service=service;
     if(state.hasDur)ins.duration=dur;
+    if(state.hasPlace){ins.place=place;state.appts[state.appts.length-1].place=place}
     db(sb.from("appts").insert(ins),undo(id));
   }
   if(!a||sheet.from!=="np"){ui.date=date;ui.tab="day"}
@@ -3406,6 +3459,7 @@ document.addEventListener("click",function(e){
     return;
   }
   else if(act==="new-prod"){openSheet({type:"prod"});return}
+  else if(act==="edit-prod"){var px=prodRow(id);if(px&&(isAdmin()||px.by===auth.user.id))openSheet({type:"prod",id:id});return}
   else if(act==="xls"){startXls(sheet&&sheet.type==="xls"&&sheet.err?sheet.per:"");return}
   else if(act==="xls-per"){startXls(id);return}
   else if(act==="xls-save"){
@@ -3423,9 +3477,18 @@ document.addEventListener("click",function(e){
     if(pn&&pn.length>2000)return fail("pr-err",L("Məhsul adları çox uzundur."));
     if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
     if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
+    if(sheet.id){
+      var ex=prodRow(sheet.id);if(!ex){closeSheet();flash(L("Bu satış artıq silinib."));return}
+      var pup={},pold={date:ex.date,amount:ex.amount,names:ex.names};
+      if(ex.date!==pd){pup.date=pd;ex.date=pd}if(+ex.amount!==pa2){pup.amount=pa2;ex.amount=pa2}
+      if(pn!==null&&(ex.names||"")!==pn){pup.names=pn;ex.names=pn}
+      if(Object.keys(pup).length)db(sb.from("product_sales").update(pup).eq("id",ex.id),function(){ex.date=pold.date;ex.amount=pold.amount;ex.names=pold.names;render()});
+      closeSheet();
+    }else{
     var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
     state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
     db(sb.from("product_sales").insert(prow));closeSheet();
+    }
   }
   else if(act==="del-prod"){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
@@ -3620,7 +3683,17 @@ document.addEventListener("click",function(e){
   else if(act==="edit-reader"){if(isAdmin()&&reader(id))openSheet({type:"reader",id:id});return}
   else if(act==="close"){closeSheet();return}
   else if(act==="draft-open"){openDraft();return}
+  else if(act==="p-sec"){ui.psec=id==="cancel"?"cancel":"all";try{localStorage.setItem("ruqya.psec",ui.psec)}catch(e){}}
   else if(act==="draft-drop"){dropDraft();render();return}
+  else if(act==="cancel-appt"){
+    /* the patient did not come / called off: the booking stays as «Ləğv olunanlar» (black on the calendar), the time is free again */
+    var ca=appt(id);if(!ca||!canEdit(ca)||gone(ca))return;
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Ləğv olunanlara düşəcək — bir də basın");return}
+    var cprev=ca.status;ca.status="cancel";
+    db(sb.from("appts").update({status:"cancel"}).eq("id",ca.id),function(){ca.status=cprev;render()});
+    if(sheet&&sheet.type==="view")closeSheet();else if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
+    toast(L("Qəbul ləğv olundu. «Pasiyentlər → Ləğv olunanlar» bölməsində görünür."));
+  }
   else if(act==="anon"){
     if(!isAdmin()||!sb)return;
     if(offline){flash(L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."));return}
@@ -3637,7 +3710,7 @@ document.addEventListener("click",function(e){
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
     if(!sheet)return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0&&done(da0)?L("Statistikadan çıxacaq — bir də basın"):L("Bir də basın");return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0?L("Tamamilə silinəcək — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"&&!canEdit(appt(sid)))return;
     if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
