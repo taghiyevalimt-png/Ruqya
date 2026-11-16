@@ -50,7 +50,7 @@ function seed() {
       { id: SPEC, name: "Əli", role: "specialist", want: null, created_at: now },
     ],
     appts: [
-      { id: uuid(), reader_id: R1, date: t, time: "10:00", duration: 90, name: "Test Pasiyent", phone: "050 111 22 33", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", created_by: AGENT, created_at: now, updated_at: now },
+      { id: uuid(), reader_id: R1, date: t, time: "10:00", duration: 90, name: "Test Pasiyent", phone: "050 111 22 33", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now },
     ],
     breaks: [], expenses: [], product_sales: [], stat_edits: [], services: [], audit_log: [{ id: 1 }],
   };
