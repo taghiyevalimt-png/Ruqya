@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-ierDv3dl0htQJYoVQts/4Hvk9m+8VOxeDJYcU5phczM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-BfsvMNB1OegHZ/S2t/Q+sRf0JHqV0xRQerJzUi20Vl8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -177,6 +177,9 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 .segb span{display:block;text-align:center;padding:8px 4px;border-radius:9px;font-weight:500;cursor:pointer;transition:background .15s var(--ease)}
 .segb input:checked+span{background:var(--accent);color:var(--accent-ink)}.segb input:focus-visible+span{outline:2px solid var(--accent-line)}
 .pbtns{display:flex;gap:12px}
+/* the booking window always opens high, so its text fields stay above the keyboard and nothing has to move */
+.sheet.tall{min-height:calc(100% - 96px)}
+.sheet.tall .sticky-save{margin-top:auto}
 .folbtns{display:grid;grid-template-columns:1fr;gap:8px}.folbtns button{width:100%}.psec{margin:0 0 10px}
 .seg button{border:0;background:none;border-radius:9px;padding:8px;font-size:14px;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
@@ -3226,7 +3229,7 @@ function openSheet(s){
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={place:oa.place||"ofis",readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
   var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,xls:xlsSheet,expense:expenseForm}[s.type];
-  byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
+  byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("sheet").classList.toggle("tall",s.type==="appt");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt"&&s.vals){var dv=s.vals;
     ["reader","date","time","name","phone","price","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
       if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
@@ -3236,11 +3239,44 @@ function openSheet(s){
     dropDraft();
   }
   if(s.type==="appt")slotGrid();
+  unpinSheet();
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
   setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
 }
-function hideSheet(){if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
+/* The keyboard must not move an open window. Android (also inside the app) makes the page shorter when the keyboard
+   opens, and a window resting on the bottom edge would jump up with it; so the window keeps the place and height it
+   had when it opened, and the keyboard simply covers its lower part. */
+var pinH=0,pinW=0,pinned=false;
+function unpinSheet(){var el=byId("sheet");pinned=false;if(el){el.style.height="";el.style.maxHeight="";el.style.marginBottom=""}}
+/* typing starts: remember where the window is (the keyboard comes a moment later) */
+function pinSheet(){
+  var el=byId("sheet");if(!el||pinned)return;
+  pinH=window.innerHeight;pinW=window.innerWidth;
+  var h=el.offsetHeight;if(!(h>0))return;
+  el.style.height=h+"px";el.style.maxHeight="none";pinned=true;
+}
+function keepSheet(){
+  var el=byId("sheet");if(!pinned||!el)return;
+  if(!sheet||byId("overlay").hidden||window.innerWidth!==pinW||window.innerHeight>=pinH){unpinSheet();return}   /* closed, turned, or the keyboard went away */
+  el.style.marginBottom=-(pinH-window.innerHeight)+"px";
+}
+window.addEventListener("resize",keepSheet);
+document.addEventListener("focusin",function(e){
+  var t=e.target;if(sheet&&t&&t.closest&&t.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!/^(radio|checkbox|button)$/.test(t.type||""))pinSheet();
+});
+document.addEventListener("focusout",function(){setTimeout(function(){var ae=document.activeElement;if(pinned&&!(ae&&ae.closest&&ae.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(ae.tagName))&&window.innerHeight>=pinH)unpinSheet()},400)});
+/* iPhone scrolls the whole page up when typing starts, even when the field is already in view: put it back */
+document.addEventListener("focusin",function(e){
+  if(!sheet||!e.target||!e.target.closest||!e.target.closest("#sheet"))return;
+  var t=e.target;
+  setTimeout(function(){
+    if(!(window.scrollY>0)||!window.visualViewport)return;
+    var r=t.getBoundingClientRect(),bottom=r.bottom+window.scrollY;
+    if(bottom<window.visualViewport.height-8)window.scrollTo(0,0);
+  },320);
+});
+function hideSheet(){unpinSheet();if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
   if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
   sheet=null;byId("overlay").hidden=true}
 var backing=false;
