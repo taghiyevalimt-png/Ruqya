@@ -1,0 +1,2 @@
+PASS 28-publish-guard.js 3.1s
+all 1 passed
