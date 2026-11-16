@@ -1,0 +1,2 @@
+PASS 26-draft-background.js 11.9s
+all 1 passed
