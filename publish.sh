@@ -9,11 +9,12 @@ sed -i "s/^var APP_VERSION=\"[^\"]*\";\$/var APP_VERSION=\"$v\";/" index.html
 grep -q "^var APP_VERSION=\"$v\";\$" index.html
 PY=python3; $PY -c "" 2>/dev/null || PY=python   # Windows: "python3" may be only a shop shortcut
 $PY tools/csp.py && $PY tools/csp.py --check   # new version = new script text = new CSP hash
+mkdir -p tests/out
 $PY -c "
 s=open('index.html',encoding='utf-8').read()
 i=s.rindex('<script>');j=s.rindex('</script>')
-open('/tmp/publish_check.js','w',encoding='utf-8').write(s[i+8:j])"
-node --check /tmp/publish_check.js
+open('tests/out/publish_check.js','w',encoding='utf-8').write(s[i+8:j])"
+node --check tests/out/publish_check.js
 git add -A
 git commit -q -F - <<MSG
 $1
