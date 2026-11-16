@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-l7S9DLU0Jq0Y2UolTnqFl68xrBzKnnz5zkaDDRCX1Gw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tPTSnkPmUIPslm7HsF0yZ3RJn/VU7HjGxBj7o24fOKY='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -180,6 +180,8 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 /* the booking window always opens high, so its text fields stay above the keyboard and nothing has to move */
 .sheet.tall{min-height:calc(100% - 96px)}
 .sheet.tall .sticky-save{margin-top:auto}
+button.wa:disabled{opacity:.4}
+.ccontact{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}.ccontact>*{width:100%}
 .folbtns{display:grid;grid-template-columns:1fr;gap:8px}.folbtns button{width:100%}.psec{margin:0 0 10px}
 .seg button{border:0;background:none;border-radius:9px;padding:8px;font-size:14px;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
@@ -348,7 +350,7 @@ button.visit.vbtn{width:100%;background:none;border:0;border-top:1px solid var(-
 .agsum{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:14px;margin:6px 0 0}
 .agsum b{text-align:right}.agsum .h{color:var(--muted);font-size:12px;font-weight:600}
 .memo{font-size:13px;color:var(--muted);margin:0;overflow-wrap:anywhere}
-a.wa{display:inline-flex;align-items:center;justify-content:center;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--accent);text-decoration:none;flex:1}
+a.wa,button.wa{display:inline-flex;align-items:center;justify-content:center;border-radius:11px;padding:10px 12px;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--accent);text-decoration:none;flex:1}
 .settle{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:10px;font-size:14px}
 .settle span{flex:1}
 .settle.due b{color:var(--warn)}
@@ -391,7 +393,7 @@ button:disabled{opacity:.42;cursor:default}
 .ghost{border-radius:13px;padding:10px 14px}
 .icon-btn{border-radius:14px;width:42px;height:42px;color:var(--ink)}
 .link,a.link{color:var(--accent);text-decoration-color:var(--accent-line)}
-a.wa{color:var(--accent);border-radius:13px;box-shadow:var(--shadow)}
+a.wa,button.wa{color:var(--accent);border-radius:13px;box-shadow:var(--shadow)}
 
 /* Surfaces */
 .card,.pay,.reader,.tile,details.more,.pvisit,.empty,.search{border-radius:var(--r)}
@@ -1415,6 +1417,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Yeni qəbul yaz":"Новая запись",
 "Birinci xatırlatma":"Первое напоминание",
 "xatırlatma":"напоминание",
 "İkinci xatırlatma":"Второе напоминание",
@@ -2355,10 +2358,10 @@ function viewSheet(){
     L('<div class="row2"><span>Vaxt</span><b class="num">')+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
     L('<div class="row2"><span>Mütəxəssis</span><b>')+esc(r?r.name:"—")+'</b>'+'</div>'+
     (state.hasPlace?'<div class="row2"><span>'+L("Yer")+'</span><b>'+esc(placeName(a.place))+'</b></div>':'')+
-    (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+phoneLinks(a.phone,a)+'</div>':'')+
+    (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+(gone(a)?'':phoneLinks(a.phone,a))+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
-    stateLine(a)+folBtns(a)+confBtn(a,"ghost conf")+
+    stateLine(a)+(gone(a)?cancelContact(a):'')+folBtns(a)+confBtn(a,"ghost conf")+
     '<div class="btns"><button class="ghost" data-act="appt-copy" data-id="'+esc(a.id)+'">⧉ '+L("Kopyala")+'</button>'+(canEdit(a)?'<button class="primary" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button>':'')+'</div>'+
     (canEdit(a)?(gone(a)?'':'<button class="danger" data-act="cancel-appt" data-id="'+esc(a.id)+'">'+L("Ləğv et (gəlmədi)")+'</button>')+
       '<button class="link danger-t" data-act="del-appt">'+L("Səhvən yazılıb — tamamilə sil")+'</button>':'<p class="hint">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</p>')+
@@ -2872,6 +2875,14 @@ function expenseForm(){
 }
 /* follow-up of a cancelled booking: 1 first reminder, 2 second reminder, 3 sold — shown as that many ✅ */
 var FOLLOW=[[1,"Birinci xatırlatma"],[2,"İkinci xatırlatma"],[3,"Satış edildi"]];
+/* a cancelled patient's card has the same row as the patient card: new booking, call, WhatsApp
+   (shown even when the number cannot be dialled, then greyed out, so the row always looks the same) */
+function cancelContact(a){
+  var tel=String(a.phone||"").replace(/[^\d+]/g,""),wa=waLink(a.phone,"");
+  return '<div class="btns ccontact"><button class="primary" data-act="repeat" data-id="'+esc(pkey(a))+'">'+L("Yeni qəbul yaz")+'</button>'+
+    (tel.replace(/\D/g,"").length>=5?'<a class="wa" href="tel:'+esc(tel)+'">'+L("Zəng")+'</a>':'<button class="wa" disabled>'+L("Zəng")+'</button>')+
+    (wa?'<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener">Wp</a>':'<button class="wa" disabled>Wp</button>')+'</div>';
+}
 function folMark(a){var n=gone(a)?(a.fol||0):0;if(!n)return "";return OLDAND?new Array(n+1).join("+")+" ":new Array(n+1).join("\u2705")+"\u00a0"}
 function folBtns(a){
   if(!gone(a))return "";
