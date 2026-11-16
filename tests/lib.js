@@ -124,7 +124,9 @@ async function attach(context, db, ctl) {
           const k = pkey(r), o = g[k] || (g[k] = { k, name: r.name, phone: r.phone, n: 0, noshow: 0, cancel: 0, last: r.date, first: null });
           if (r.status === "cancel") o.cancel++; else if (r.status === "noshow") o.noshow++; else { o.n++; if (!o.first || r.date < o.first) o.first = r.date; }
         });
-        return send(route, 200, Object.values(g));
+        // like PostgREST: at most 1000 rows per answer (db max-rows), paging with offset/limit
+        const all = Object.values(g).sort((x, y) => (x.k < y.k ? -1 : 1)), off = +url.searchParams.get("offset") || 0, lim = Math.min(+url.searchParams.get("limit") || 1000, 1000);
+        return send(route, 200, all.slice(off, off + lim));
       }
       if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));
       if (fn === "ruqya_anonymize") {
