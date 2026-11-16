@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-1j0u7vWYawbHjNsRxFkkRiI43t3V26NVylyv6yqRoZU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Cf+oLYujA3JQv7JIx3UdwWN6PTprEhleoXrMUUamHXo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1406,6 +1406,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.",
 "Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar.":"Введённое сохранено. Его можно вернуть кнопкой «Открыть снова».",
 "Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.":"Вход истёк. Войдите снова — введённая запись не потерялась.",
 "Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın.":"Запись не сохранилась. Введённое не потерялось: нажмите «Открыть снова»."}:null;
@@ -2000,6 +2001,26 @@ function loadCache(uid){
     state.loadedFrom="";auth.loaded=true;return true;
   }catch(e){return false}
 }
+/* A phone left on a desk overnight must not keep showing patients: after 12 hours without a touch the
+   session and every copy of data on this device are removed (counted across tabs and app restarts). */
+var IDLE_MS=12*3600e3,SEEN="ruqya.seen",seenW=0;
+function touchSeen(){var t=Date.now();if(t-seenW<60000)return;seenW=t;try{localStorage.setItem(SEEN,String(t))}catch(e){}}
+function idleOut(){
+  var t=0;try{t=+localStorage.getItem(SEEN)||0}catch(e){}
+  var has=false;try{has=!!localStorage.getItem(SB_TOKEN)}catch(e){}
+  if(!has||!t||Date.now()-t<IDLE_MS)return false;
+  try{localStorage.removeItem(SB_TOKEN);localStorage.removeItem(SEEN)}catch(e){}
+  dropCache();dropDraft();
+  if(sb){try{sb.auth.signOut({scope:"local"}).then(null,function(){})}catch(e){}}
+  if(auth.user)signedOut();
+  auth.msg=L("12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
+  return true;
+}
+["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,touchSeen,{passive:true,capture:true})});
+window.addEventListener("storage",function(e){
+  /* signed out (or the data cleared) in another tab of this browser */
+  if((e.key===SB_TOKEN&&!e.newValue)||e.key===null){if(auth.user)signedOut()}
+});
 /* Everything that must happen on sign-out, with or without internet. */
 function signedOut(){
   dropCache();auth.user=null;auth.provisional=false;
@@ -3624,12 +3645,16 @@ window.addEventListener("offline",function(){offline=true;render()});
 window.addEventListener("online",function(){offline=false;if(/^(İnternet yoxdur|Нет интернета)/.test(auth.msg))auth.msg="";render();refresh()});
 function rollDay(){
   var t=bk().d;if(t===today)return false;
-  if(ui.date===today&&!sheet)ui.date=t;today=t;return true;
+  if(ui.date===today)ui.date=t;
+  /* a new booking form opened before midnight and still on that day: it moves to the new day with the calendar */
+  if(sheet&&sheet.type==="appt"&&!sheet.id){var fd0=byId("f-date");if(fd0&&fd0.value===today){fd0.value=t;slotGrid()}}
+  today=t;return true;
 }
 /* How many bookings are already counted: when a session ends, totals and ✓ marks change without anyone touching the app. */
 var doneN=-1;
 function doneCount(){var n=0;for(var i=0;i<state.appts.length;i++)if(done(state.appts[i]))n++;return n}
 function tick(){
+  if(idleOut())return;
   var turned=rollDay();
   if(auth.user&&auth.loaded){var dn=doneCount();if(dn!==doneN){if(doneN>=0){turned=turned||!sheet;widgetSoon()}doneN=dn}}
   if(offline&&navigator.onLine!==false){offline=false;turned=true;refresh()}
@@ -3644,6 +3669,7 @@ var ticks=0;
 document.addEventListener("visibilitychange",function(){
   if(document.hidden){hiddenAt=Date.now();return}
   var away=hiddenAt?Date.now()-hiddenAt:0;hiddenAt=0;
+  if(idleOut())return;touchSeen();
   if(rollDay())render();
   /* Back in the app: after a long break reload everything; after a short one ask only for what changed. */
   if(auth.user&&!offline&&away>30*60000)refresh();
@@ -3656,7 +3682,7 @@ if(sb){
     var was=auth.user&&auth.user.id,now=sess&&sess.user&&sess.user.id;
     var prov=auth.provisional,provUser=auth.user;auth.provisional=false;
     auth.user=sess?sess.user:null;auth.ready=true;
-    if(now&&(now!==was||prov)){auth.msg="";if(now!==was&&was)stopSync();setTimeout(startSync,0)}
+    if(now&&(now!==was||prov)){if(ev==="SIGNED_IN"){seenW=0;touchSeen()}auth.msg="";if(now!==was&&was)stopSync();setTimeout(startSync,0)}
     if(!now&&was){
       /* Opened without internet while the session needs renewing: supabase-js reports "no session" but keeps it
          stored and renews it once online. Keep showing the saved data; it is not a sign-out. */
@@ -3667,6 +3693,7 @@ if(sb){
   });
   setTimeout(function(){if(!auth.ready){auth.ready=true;render()}},8000);
   /* Draw the saved data before the sign-in check finishes (it may need the internet to renew the session). */
+  if(!idleOut())touchSeen();
   (function(){try{
     var raw=localStorage.getItem(SB_TOKEN);if(!raw)return;
     var ss=JSON.parse(raw),u=ss&&(ss.user||(ss.currentSession&&ss.currentSession.user));
