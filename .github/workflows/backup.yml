@@ -157,6 +157,13 @@ jobs:
           W="$RUNNER_TEMP/backup"; cd "$W"
           val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
           LOCAL_DB=$(val DB_URL)
+          # B-16: the restore stack's sign-in tables belong to its own admin role; add the columns the hosted
+          # (newer) sign-in service has and this stack lacks, as that role, on this throwaway local stack only
+          ADMIN_DB=$(printf %s "$LOCAL_DB" | sed -E 's#://[^:@/]+:#://supabase_admin:#')
+          if ! psql "$ADMIN_DB" -X -q -v ON_ERROR_STOP=1 -v VERBOSITY=terse -f auth-columns.sql > auth-columns.log 2>&1; then
+            grep -m5 ERROR auth-columns.log | cut -c1-300; echo "::error::could not add the source's sign-in columns"; exit 1
+          fi
+          grep WARNING auth-columns.log | sed -E 's/^.*WARNING: */::warning::/' || true
           # as documented by Supabase: roles, schema, then data with triggers off, in one transaction;
           # post-schema.sql right after schema.sql puts back the source's exact privileges (the new stack's default
           # privileges would otherwise widen them, e.g. table-wide SELECT on readers instead of some columns)
