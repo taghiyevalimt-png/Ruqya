@@ -165,6 +165,10 @@ jobs:
                  > restore.log 2>&1; then
             # never print data: show only the error lines, with quoted values blanked
             grep -m5 'ERROR' restore.log | sed -E "s/\"[^\"]*\"/\"…\"/g; s/'[^']*'/'…'/g; s/\([^)]*\)=\([^)]*\)/(…)=(…)/g" | cut -c1-300
+            # names of tables and columns are structure, not data: show the COPY header the error points at
+            n=$(grep -m1 -oE 'data\.sql:[0-9]+' restore.log | cut -d: -f2 || true)
+            if [ -n "$n" ]; then sed -n "${n}p" data.sql | grep -E '^COPY [^;]+ FROM stdin;$' | cut -c1-600 || true; fi
+            grep -m3 -oE 'column "[a-z_0-9]+" of relation "[a-z_0-9]+" does not exist' restore.log || true
             echo "::error::restore failed"; exit 1
           fi
           echo "restore ok ($(grep -c . restore.log || true) notice lines)"
