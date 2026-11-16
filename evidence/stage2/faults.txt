@@ -1,0 +1,13 @@
+# fault cases — 2026-11-16T18:23:36.854Z
+save booking → 401	main children 7 (sign-in screen)	message: Girişin vaxtı bitib. | Qəbulları yükləmək olmadı.
+save booking → 403	main children 3	message: Bunu etməyə icazəniz yoxdur. | Yadda saxlanmayan qəbul: Sınaq 403, 16 noyabr, 16:00
+save booking → 409	main children 3	message: Bu saat artıq tutulub. | Yadda saxlanmayan qəbul: Sınaq 409, 16 noyabr, 16:00
+save booking → 429	main children 3	message: Yadda saxlanmadı. | Yadda saxlanmayan qəbul: Sınaq 429, 16 noyabr, 16:00
+save booking → 500	main children 3	message: Yadda saxlanmadı. | Yadda saxlanmayan qəbul: Sınaq 500, 16 noyabr, 16:00
+save booking → net	main children 3	message: Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. | Yadda saxlanmayan qəbul: Sınaq net, 16 noyabr, 16:00
+first load of bookings → 500	main children 1	message: Qəbulları yükləmək olmadı. | Qəbulları yükləmək olmadı.
+first load of bookings → net	main children 1	message: Qəbulları yükləmək olmadı. | Qəbulları yükləmək olmadı.
+two people edit one booking (price on phone 2, note on phone 1)	price 999, note «mənim qeydim»
+phone clock 3 days behind	opens, no error
+browser storage full	booking saved, no error
+browser storage blocked	sign-in screen shown, no error

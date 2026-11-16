@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-xc0egLaZKRNU0e5GDEawKfX8VrlNmyaDBjMYbDG4VTI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-YF5dTKi9/DbFTuw576XJtir7cwOVuYfaCimlo7t11Ag='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -619,7 +619,7 @@ button.ch .x{font-size:10px;opacity:.8}
 <div class="app">
   <div class="shell">
     <div class="top" id="top"></div>
-    <main id="main"></main>
+    <main id="main" tabindex="0" aria-label="Məzmun"></main>
     <button class="fab" id="fab" data-act="new-appt" hidden>+ Yaz</button>
   </div>
   <nav class="tabs" id="tabs" aria-label="Bölmələr" hidden>
@@ -1471,6 +1471,7 @@ if(RUD)(function(){
   for(var i=0;i<bs.length;i++){var t=tl[bs[i].getAttribute("data-tab")],n=bs[i].lastChild;if(t&&n&&n.nodeType===3)n.nodeValue=t}
   var f=document.getElementById("fab");if(f)f.textContent="+ Записать";
   var nv=document.getElementById("tabs");if(nv)nv.setAttribute("aria-label","Разделы");
+  var mn=document.getElementById("main");if(mn)mn.setAttribute("aria-label","Содержимое");
 })();
 var SB_URL="https://ldkhdeehrrajvgrtieal.supabase.co";
 var SB_KEY="sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7";
@@ -2223,7 +2224,7 @@ function render(){
   var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
-    main.innerHTML=banner+'<div class="chips stsec psec" role="tablist">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" role="tab" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'" aria-selected="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
+    main.innerHTML=banner+'<div class="chips stsec psec" role="group">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
       '<div id="plist">'+(ui.psec==="cancel"?cancelList():patientsList())+'</div>';
     return;
   }
@@ -2553,7 +2554,7 @@ function statNav(act,r,title,small){
 /* Buttons on top of Statistika: one section at a time. */
 var ST_SECS=[["today","Bu gün"],["day","Gündəlik"],["week","Həftəlik"],["month","Aylıq"],["rules","Qaydalar"],["terms","Terminlər"]];
 function statSecBar(){
-  return '<div class="chips stsec" role="tablist">'+ST_SECS.map(function(x){return '<button class="chip" role="tab" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'" aria-selected="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
+  return '<div class="chips stsec" role="group">'+ST_SECS.map(function(x){return '<button class="chip" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
 }
 function dayWord(off){return off===0?L("bu gün"):off===1?L("dünən"):tf(L("{n} gün əvvəl"),{n:off})}
 function statsMain(){
@@ -2958,7 +2959,7 @@ function patientSheet(){
 function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
 function curSetSec(){var ss=setSecs();if(pendingMe()&&!ui.setSecPicked)return "acc";return ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec"}
 function setSecBar(){var ss=setSecs(),cur=curSetSec();
-  return '<div class="chips stsec setsec" role="tablist">'+ss.map(function(x){return '<button class="chip" role="tab" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'" aria-selected="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
+  return '<div class="chips stsec setsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="",sec=curSetSec();
   if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');

@@ -1,0 +1,2 @@
+PASS 24-aria.js 8.7s
+all 1 passed

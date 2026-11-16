@@ -1,0 +1,5 @@
+FAIL 24-aria.js 
+    Error: FAIL: axe violations: Statistika/Qaydalar → aria-allowed-attr:6, scrollable-region-focusable:1 | Pasiyentlər → aria-allowed-attr:2 | Ayarlar → aria-allowed-attr:5
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:203:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\24-aria.js:15:5)
+1 failed of 1
