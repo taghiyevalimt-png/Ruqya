@@ -1,0 +1,2 @@
+PASS 27-dialog-focus.js 7.1s
+all 1 passed
