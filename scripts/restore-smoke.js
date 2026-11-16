@@ -44,7 +44,8 @@ const clean=t=>String(t).replace(/\?[^\s"')]*/g,'?…').replace(/"[^"]*"/g,'"…
   const csp=await p.evaluate(()=>window.__csp);
   console.log(JSON.stringify({appointmentsSeenByApp:seen,appointmentsInDatabase:expected,consoleErrors:cons.length,pageErrors:errs.length,cspViolations:csp.length,httpErrors:bad.length}));
   if(errs.length||cons.length||csp.length)await fail('errors in the page');
-  if(seen!==expected)await fail('the app sees '+seen+' appointments, the database has '+expected);
+  const min=process.env.EXPECTED_MIN!=null?+process.env.EXPECTED_MIN:expected;   // bookings of the last two years (B-02)
+  if(seen<min||seen>expected)await fail('the app sees '+seen+' appointments, expected between '+min+' (last two years) and '+expected+' (whole table)');
   console.log('PASS restored copy: calendar loads without errors and the admin sees all '+seen+' appointments');
   await b.close();
 })().catch(e=>{console.log('FAIL '+clean(e.message));process.exit(1)});

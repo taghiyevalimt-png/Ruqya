@@ -195,12 +195,15 @@ jobs:
           insert into public.staff (id, name, role) values (:'uid', 'Backup drill admin', 'admin');
           SQL
           EXPECTED=$(psql "$LOCAL_DB" -X -At -c 'select count(*) from public.appts')
+          # the app's «Hamısı (2 il)» Excel loads the last two years (back to a Friday/month start): it must see every
+          # booking of the last 729 days and never more than the whole table (B-02: older bookings must not fail the job)
+          EXPECTED_MIN=$(psql "$LOCAL_DB" -X -At -c "select count(*) from public.appts where date >= current_date - 729")
           # the site pointed at the local stack, served like GitHub Pages
           SUPABASE_URL="$API" SUPABASE_ANON_KEY="$ANON" python3 tools/configure.py "$RUNNER_TEMP/site"
           python3 -m http.server 8080 --bind 127.0.0.1 --directory "$RUNNER_TEMP/site" > /dev/null 2>&1 &
           for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8080/index.html && break; sleep 0.5; done
           SITE_URL=http://127.0.0.1:8080/index.html TEST_EMAIL="$TEST_EMAIL" TEST_PASSWORD="$TEST_PASSWORD" \
-            EXPECTED_APPTS="$EXPECTED" NODE_PATH="$RUNNER_TEMP/tools/node_modules" node scripts/restore-smoke.js
+            EXPECTED_APPTS="$EXPECTED" EXPECTED_MIN="$EXPECTED_MIN" NODE_PATH="$RUNNER_TEMP/tools/node_modules" node scripts/restore-smoke.js
 
       - name: Encrypt the backup
         env:
