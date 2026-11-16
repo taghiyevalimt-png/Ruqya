@@ -1,0 +1,5 @@
+# gh run view 43970247349 --log-failed (filtered: error lines only, values blanked by the workflow) — 2026-11-16T22:36:36Z
+commit 6134ea460443112e8fc2304520b8c7e6cb0641c2 failure 2026-11-16T22:27:33Z
+2026-11-16T22:31:11.0202316Z psql:auth-columns.sql:1: ERROR:  must be owner of table audit_log_entries
+2026-11-16T22:31:11.0238757Z ##[error]restore failed
+2026-11-16T22:31:11.0244646Z ##[error]Process completed with exit code 1.

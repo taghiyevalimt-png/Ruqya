@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-cxGuSQG4V8qVQuBFHYMaqmdrglNAFkmUIoNvV3zifjs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tfZMpdjUDM+Ue/NVP495xegmTrSbr+VdXXNGUqN5xwU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1285,7 +1285,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<dt>Gündəlik statistika</dt><dd>seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır. Son 14 gün saxlanılır.</dd>":"<dt>Дневная статистика</dt><dd>кто сколько записей сделал в выбранный день на этот день и следующие дни. Записи на прошедшие дни здесь не считаются. Хранятся последние 14 дней.</dd>",
 "<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>":"<dt>Записал</dt><dd>сколько пациентов агент продаж записал в эти дни.</dd>",
 "<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>":"<dt>Записано</dt><dd>сколько пациентов записали к этому специалисту в эти дни.</dd>",
-"<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>":"<dt>Успешно</dt><dd>сколько пациентов с сеансом в эти дни не удалено из календаря.</dd>",
 "<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>":"<dt>Доход</dt><dd>сумма цен успешных сеансов (в манатах).</dd>",
 "<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>":"<dt>Продавец</dt><dd>сотрудник, записавший продажу товара в Кассе (агент продаж или админ).</dd>",
 "<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>":"<dt>Продаж</dt><dd>сколько раз продали товар.</dd>",
@@ -1319,7 +1318,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "İndi ekranda {a} görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} görünəcək.":"Сейчас на экране {a}. Это остаётся до 23:59 ({b}), потом появится {c}.",
 "İndiki 4 həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Bu 4 həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq.":"Текущие 4 недели ({a}) ещё не закончились — показаны уже прошедшие дни. Они станут полными после 23:59 ({b}) и останутся на экране до 23:59 ({c}).",
 "<p><b>Bu gün yazılan qəbullar</b> — bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da). Hər yeni qəbulda dərhal yenilənir, gecə 00:00-da sıfırlanır.</p>":"<p><b>Записи за сегодня</b> — кто сколько записей сделал сегодня (на любую дату). Обновляется сразу при каждой новой записи, в 00:00 обнуляется.</p>",
-"<p><b>Uğurlu</b> — həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</p>":"<p><b>Успешно</b> — пациенты, у которых был сеанс в эти дни и которых не удалили из календаря. Если пациент не пришёл, его удаляют. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların qiymətlərinin cəmi. Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur).</p>":"<p><b>Доход</b> — сумма цен успешных сеансов. Цена обязательна в каждой записи (в новой записи уже стоит 130).</p>",
 "<p><b>Məhsul</b> — Kassada yazılan məhsul satışları: kim satıb, neçə dəfə (Satış) və neçə manatlıq (Məbləğ). Satan avtomatik olaraq satışı yazan işçidir.</p>":"<p><b>Товары</b> — продажи товаров, записанные в Кассе: кто продал, сколько раз (Продаж) и на сколько манат (Сумма). Продавец — сотрудник, который записал продажу.</p>",
 "<p><b>Cəmi</b> — cədvəldəki bütün sətirlərin toplamı.</p>":"<p><b>Итого</b> — сумма всех строк таблицы.</p>",
@@ -1346,7 +1344,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "4 tam həftə, cümə – cümə axşamı":"4 полные недели, пятница – четверг",
 "<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Bütün aylıq statistikanı kopyala</button>":"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Копировать всю месячную статистику</button>",
 "<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>":"<p><b>Записал / Записано</b> — сколько пациентов записали в эти дни. Неважно, на какой день приём: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</p>",
-"<p><b>Uğurlu</b> — həmin günlərdə seansa gələnlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər; gün bitəndə (23:59) təqvimdə qalanların hamısı uğurlu sayılır.</p>":"<p><b>Успешно</b> — кто пришёл на сеанс в эти дни. Если пациент не пришёл, его удаляют из календаря; в конце дня (23:59) все оставшиеся в календаре считаются успешными.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların pulu. <b>Məhsul</b> — kim neçə məhsul satıb və neçə manatlıq.</p>":"<p><b>Доход</b> — деньги за успешные сеансы. <b>Товары</b> — кто сколько товаров продал и на сколько манат.</p>",
 "<p>Silinən qəbullar heç yerdə sayılmır. Həftə cümə başlayır, cümə axşamı bitir. Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür.</p>":"<p>Удалённые записи нигде не считаются. Неделя начинается в пятницу и заканчивается в четверг. Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59.</p>",
 "<p>Tam həftə ":"<p>Полная неделя будет готова: ",
@@ -1385,7 +1382,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 " bu mütəxəssisə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir.</p>":". Неважно, на какой день приём.</p>",
 " seansa gələn pasiyentlər.</p>":" пришли на сеанс.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların pulu.</p>":"<p><b>Доход</b> — деньги за успешные сеансы.</p>",
-"<p>Pasiyent gəlməyibsə, onu təqvimdən silirlər — silinən heç yerdə sayılmır. Günün sonunda (23:59) təqvimdə qalanların hamısı uğurlu sayılır və həmin gün statistikaya əlavə olunur.</p>":"<p>Если пациент не пришёл, его удаляют из календаря — удалённые нигде не считаются. В конце дня (23:59) все, кто остался в календаре, считаются успешными, и этот день добавляется в статистику.</p>",
 "<p>Həftə cümə günü başlayır, cümə axşamı bitir.</p>":"<p>Неделя начинается в пятницу и заканчивается в четверг.</p>",
 "<p>Bu həftə hələ bitməyib: indiyədək ":"<p>Неделя ещё не закончилась: пока учтено ",
 " sayılıb. Tam həftə ":". Полная неделя будет готова: ",

@@ -1,0 +1,4 @@
+# commit ac8d029cd71ea075758914a8c20b4d6adc13e2d9 — 2026-11-16T22:37:27Z
+2026-11-owner.sql faylını: 2
+2026-11-privacy.sql faylını: 2
+DISASTER_RECOVERY.md: 0
