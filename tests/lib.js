@@ -127,6 +127,12 @@ async function attach(context, db, ctl) {
         return send(route, 200, Object.values(g));
       }
       if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));
+      if (fn === "ruqya_anonymize") {
+        if (uid !== OWNER) return send(route, 403, { code: "42501", message: "Yalniz admin anonimlesdirir" });
+        const hit = db.appts.filter((r) => pkey(r) === a.key);
+        hit.forEach((r) => Object.assign(r, { name: "Anonim", phone: "", note: "" }));
+        return send(route, 200, hit.length);
+      }
       return send(route, 200, null);
     }
     const t = p.replace("/rest/v1/", "");

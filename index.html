@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-OvVQzjIawzY2lsFSAB5+OJ+JxjngtPPnorhN82OXACM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-FsBve6+6YNn6siK8+9+W04XFHil6qZnb1Sn9bnjAYws='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1404,6 +1404,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Pasiyentin məlumatını sil":"Удалить данные пациента",
+"Ad, telefon və qeydlər bütün qəbullardan və jurnaldan silinir. Seanslar və pul statistikada qalır. Geri qaytarmaq olmur.":"Имя, телефон и заметки удаляются из всех записей и из журнала. Сеансы и деньги остаются в статистике. Вернуть нельзя.",
+"Bir də basın — geri qaytarmaq olmayacaq":"Нажмите ещё раз — вернуть будет нельзя",
+"Pasiyentin məlumatı silindi: {n} qəbul.":"Данные пациента удалены: записей — {n}.",
+"Bunun üçün bazada 2026-11-patients.sql və 2026-11-anonymize.sql fayllarını bir dəfə işə salın.":"Для этого один раз запустите в базе файлы 2026-11-patients.sql и 2026-11-anonymize.sql.",
+"Pasiyenti anonimləşdirdi: ":"Обезличил пациента: ",
+" qəbul":" зап.",
 "Köhnə qəbullar yüklənir…":"Загружаются старые записи…",
 "Köhnə qəbulları yükləmək olmadı. İnterneti yoxlayın.":"Не удалось загрузить старые записи. Проверьте интернет.",
 "Hansı dövr üçün?":"За какой период?",
@@ -2859,6 +2866,8 @@ function patientSheet(){
     h+='</div>';
   });
   h+='</div>';
+  /* the patient asked to be forgotten: admins wipe name, phone and notes everywhere (sessions stay for the totals) */
+  if(isAdmin()&&p.key)h+='<div class="btns"><button class="danger" data-act="anon" data-id="'+esc(p.key)+'">'+L("Pasiyentin məlumatını sil")+'</button></div><p class="hint small">'+L("Ad, telefon və qeydlər bütün qəbullardan və jurnaldan silinir. Seanslar və pul statistikada qalır. Geri qaytarmaq olmur.")+'</p>';
   return h;
 }
 
@@ -3040,6 +3049,7 @@ function auditLine(x){
   var rn=function(id){var r=reader(id);return r?r.name:""};
   var ap=function(a){return [a.name||"",(fd(a.date)+" "+String(a.time||"").slice(0,5)).trim(),rn(a.reader_id),+a.price>0?money(a.price):""].filter(function(z){return z}).join(", ")};
   if(T==="appts"){
+    if(op==="ANON")return L("Pasiyenti anonimləşdirdi: ")+(+n.count||0)+L(" qəbul");
     if(op==="INSERT")return L("Qəbul yazdı: ")+ap(n);
     if(op==="DELETE")return L("Qəbulu SİLDİ: ")+ap(o)+(o.status&&o.status!=="wait"?" ("+stName(o.status)+")":"");
     var ch=[],has=function(k){return k in o||k in n};
@@ -3610,6 +3620,18 @@ document.addEventListener("click",function(e){
   else if(act==="close"){closeSheet();return}
   else if(act==="draft-open"){openDraft();return}
   else if(act==="draft-drop"){dropDraft();render();return}
+  else if(act==="anon"){
+    if(!isAdmin()||!sb)return;
+    if(offline){flash(L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."));return}
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın — geri qaytarmaq olmayacaq");return}
+    b.disabled=true;
+    sb.rpc("ruqya_anonymize",{key:id}).then(function(r){
+      if(r.error){b.disabled=false;flash(r.error.code==="PGRST202"||r.status===404?L("Bunun üçün bazada 2026-11-patients.sql və 2026-11-anonymize.sql fayllarını bir dəfə işə salın."):dbMsg(r.error),true);return}
+      closeSheet();state.histLoaded=false;state.histP=[];state.hist=[];
+      toast(tf(L("Pasiyentin məlumatı silindi: {n} qəbul."),{n:+r.data||0}));refresh();
+    },function(){b.disabled=false;unsaved()});
+    return;
+  }
   else if(act==="save-appt"){saveAppt();return}
   else if(act==="save-reader"){saveReader();return}
   else if(act==="del-appt"||act==="del-reader"){
