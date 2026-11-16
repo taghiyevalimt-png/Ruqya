@@ -1,0 +1,6 @@
+# green: 354b36d773704332f6ffabb88828ec4c6e5311bb + B-15 fix — 2026-11-16T22:40:43Z
+$ node tests/run.js 30-patient
+PASS 30-patient-search.js 11.7s
+all 1 passed
+PASS 25-many-patients.js 10.8s
+all 1 passed

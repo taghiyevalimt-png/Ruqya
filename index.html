@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tfZMpdjUDM+Ue/NVP495xegmTrSbr+VdXXNGUqN5xwU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-R9pYLKV75t/SHwV8JyFaTzENkck6watudb5/HhOs/uw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2147,6 +2147,8 @@ function patients(){
   pcache=m;return m;
 }
 /* Digits of a phone without the country / trunk prefix, so "+994 50 …", "050 …" and "0050 …" match each other. */
+// B-15: only a query of digits and phone signs looks in phones; with letters it is a name
+function qDigits(q){return /^[\d\s+()\-.]+$/.test(q)?phoneCore(q):""}
 function phoneCore(v){return String(v||"").replace(/\D/g,"").replace(/^00/,"").replace(/^994/,"").replace(/^0/,"")}
 /* Call, plain WhatsApp chat, and «Təsdiq» = WhatsApp with the reminder asking the patient to confirm (only for a session still ahead). */
 function phoneLinks(phone,a,cls){
@@ -2898,7 +2900,7 @@ function folBtns(a){
 }
 /* «Ləğv olunanlar»: bookings the patient did not come to (cancelled from the calendar), newest first */
 function cancelList(){
-  var q=low(ui.q.trim()),qd=phoneCore(q);
+  var q=low(ui.q.trim()),qd=qDigits(q);
   var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
     .sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,300);
   if(!arr.length)return '<div class="empty">'+L("Son iki ayda ləğv olunan qəbul yoxdur.")+'</div>';
@@ -2910,7 +2912,7 @@ function cancelList(){
   }).join("");
 }
 function patientsList(){
-  var m=patients(),q=low(ui.q.trim()),qd=phoneCore(q);
+  var m=patients(),q=low(ui.q.trim()),qd=qDigits(q);
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
     if(!q)return true;
     return low(p.name).indexOf(q)>=0||(qd&&phoneCore(p.phone).indexOf(qd)>=0);
