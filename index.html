@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-YSKi9xVCCf6P6zJWXkqfUgZJUrr3QNLiGHsjYRJUi8I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-OvVQzjIawzY2lsFSAB5+OJ+JxjngtPPnorhN82OXACM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1404,6 +1404,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Köhnə qəbullar yüklənir…":"Загружаются старые записи…",
+"Köhnə qəbulları yükləmək olmadı. İnterneti yoxlayın.":"Не удалось загрузить старые записи. Проверьте интернет.",
 "Hansı dövr üçün?":"За какой период?",
 "Bu ay":"Этот месяц",
 "Son 3 ay":"Последние 3 месяца",
@@ -1787,13 +1789,28 @@ function checkSecurity(){
 /* Visits older than the loaded weeks are needed only for patient counts; fetch them when a screen shows those. */
 var histLoading=false,histFail=0;
 function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&sheet.type==="patient")}
+/* Older visits (before the loaded weeks) come grouped by patient from the server: one short row per patient instead
+   of every visit of two years (2026-11-patients.sql). Without that file the visits themselves are loaded, as before. */
+function mapHistP(x){return{k:String(x.k||""),name:x.name||"",phone:x.phone||"",n:+x.n||0,noshow:+x.noshow||0,cancel:+x.cancel||0,last:String(x.last||"").slice(0,10),first:x.first?String(x.first).slice(0,10):""}}
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
-  histLoading=true;var my=seq,to=state.loadedFrom;
-  fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-HIST_DAYS)).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(rows){
+  histLoading=true;var my=seq,to=state.loadedFrom,since=addDays(today,-HIST_DAYS);
+  var rows=function(){return fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",since).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(r){return{rows:r}})};
+  var grouped=state.noHistFn?rows():sb.rpc("ruqya_hist_patients",{before:to,since:since}).then(function(r){
+    if(r.error&&(r.error.code==="PGRST202"||r.status===404)){state.noHistFn=true;return rows()}
+    if(r.error)throw r.error;return{groups:r.data||[]};
+  });
+  grouped.then(function(x){
     histLoading=false;if(my!==seq||!auth.user)return;
-    state.hist=rows.map(mapLite);state.histLoaded=true;render();redrawCard();
+    state.hist=x.rows?x.rows.map(mapLite):[];state.histP=x.groups?x.groups.map(mapHistP):[];state.histLoaded=true;render();redrawCard();
   },function(){histLoading=false;histFail=Date.now()});
+}
+/* the old visits of one patient, for the card */
+function loadOldVisits(sh,p){
+  if(sh.oldLoading||sh.old||!sb)return;sh.oldLoading=true;
+  sb.rpc("ruqya_hist_visits",{key:p.key,before:state.loadedFrom,since:addDays(today,-HIST_DAYS)}).then(function(r){
+    sh.oldLoading=false;if(r.error)throw r.error;sh.old=(r.data||[]).map(mapLite);if(sheet===sh)redrawCard();
+  }).then(null,function(){sh.oldLoading=false;sh.oldFail=true;if(sheet===sh)redrawCard()});
 }
 /* ---------- Android home-screen widget ---------- */
 var NATIVE=(function(){try{return window.RuqyaApp&&typeof window.RuqyaApp.setWidgetData==="function"?window.RuqyaApp:null}catch(e){return null}})();
@@ -2060,6 +2077,14 @@ function patients(){
     p[stOf(a)]++;p.list.push(a);
     if(done(a)&&(!p.first||a.date<p.first))p.first=a.date;
     if(a.date>=p.last){p.last=a.date;p.name=a.name;if(a.phone)p.phone=a.phone}
+  });
+  (state.histP||[]).forEach(function(g){
+    if(!g.k)return;
+    var p=m[g.k];
+    if(!p){p=m[g.k]={key:g.k,name:g.name,phone:g.phone,paid:0,noshow:0,cancel:0,wait:0,last:g.last,first:"",list:[]}}
+    p.paid+=g.n;p.noshow+=g.noshow;p.cancel+=g.cancel;p.oldN=(p.oldN||0)+g.n+g.noshow+g.cancel;
+    if(g.first&&(!p.first||g.first<p.first))p.first=g.first;
+    if(!p.last||g.last>p.last){p.last=g.last;p.name=g.name;if(g.phone)p.phone=g.phone}
   });
   pcache=m;return m;
 }
@@ -2812,8 +2837,13 @@ function patientSheet(){
   var main='<div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>')+phoneLinks(nextA&&nextA.phone?nextA.phone:p.phone,nextA?appt(nextA.id):null,"wa")+'</div>';
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+'<div class="pvisits">';
   /* Every visit is shown in full, with its own «Dəyiş» and «Sil», so nothing has to be opened. */
-  if(p.list.length>50)h+='<p class="hint">'+tf(L("Son 50 qəbul göstərilir (cəmi {n})."),{n:p.list.length})+'</p>';
-  p.list.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
+  var vis=p.list;
+  if(p.oldN){loadOldVisits(sheet,p);
+    if(sheet.old){var sn0={};vis.forEach(function(a){sn0[a.id]=1});vis=vis.concat(sheet.old.filter(function(a){return !sn0[a.id]}))}
+    else h+='<p class="hint">'+(sheet.oldFail?L("Köhnə qəbulları yükləmək olmadı. İnterneti yoxlayın."):L("Köhnə qəbullar yüklənir…"))+'</p>'}
+  var nAll=p.list.length+(p.oldN||0);
+  if(nAll>50)h+='<p class="hint">'+tf(L("Son 50 qəbul göstərilir (cəmi {n})."),{n:nAll})+'</p>';
+  vis.slice().sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,50).forEach(function(a){
     var r=reader(a.readerId),open=!a.lite&&appt(a.id),full=open||a;
     var wb=a.by?(state.staff[a.by]||L("Adsız istifadəçi")):"",cr=/^\d{4}-\d{2}-\d{2}$/.test(full.created||"")?fmtDay(full.created):"";
     h+='<div class="pvisit"><div class="pv-top"><b class="num">'+WDF[parse(a.date).getDay()]+', '+fmtDay(a.date,"y")+(a.time?', '+esc(a.time)+(open?'–'+endOf(open):''):'')+'</b>'+stPill(a)+'</div>'+

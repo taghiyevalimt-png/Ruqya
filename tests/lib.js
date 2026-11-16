@@ -113,7 +113,22 @@ async function attach(context, db, ctl) {
     }
     if (p === "/auth/v1/user") return ctl.expired ? send(route, 401, { code: 401, msg: "JWT expired" }) : send(route, 200, user(uid));
     if (p === "/auth/v1/logout") return send(route, 204);
-    if (p.startsWith("/rest/v1/rpc/")) return send(route, 200, null);
+    if (p.startsWith("/rest/v1/rpc/")) {
+      const fn = p.slice(13), a = JSON.parse(req.postData() || "{}");
+      if (ctl.noRpc && /^ruqya_hist/.test(fn)) return send(route, 404, { code: "PGRST202", message: "Could not find the function" });
+      ctl.rpc = (ctl.rpc || []).concat(fn);
+      const old = () => db.appts.filter((r) => r.date >= a.since && r.date < a.before);
+      if (fn === "ruqya_hist_patients") {
+        const g = {};
+        old().sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => {
+          const k = pkey(r), o = g[k] || (g[k] = { k, name: r.name, phone: r.phone, n: 0, noshow: 0, cancel: 0, last: r.date, first: null });
+          if (r.status === "cancel") o.cancel++; else if (r.status === "noshow") o.noshow++; else { o.n++; if (!o.first || r.date < o.first) o.first = r.date; }
+        });
+        return send(route, 200, Object.values(g));
+      }
+      if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));
+      return send(route, 200, null);
+    }
     const t = p.replace("/rest/v1/", "");
     if (!db[t]) return send(route, 404, { code: "42P01", message: "relation does not exist" });
     if (ctl.expired) return send(route, 401, { code: "PGRST301", message: "JWT expired" });
@@ -143,6 +158,8 @@ async function attach(context, db, ctl) {
     return send(route, 405);
   });
 }
+// same key as the app's pkey() and the database's ruqya_pkey()
+function pkey(r) { const d = String(r.phone || "").replace(/\D/g, ""); return d.length >= 7 ? "p" + d.slice(-9) : "n" + String(r.name || "").trim().toLowerCase().replace(/̇/g, "").replace(/ı/g, "i"); }
 function user(id) { return { id, aud: "authenticated", role: "authenticated", email: id.slice(0, 4) + "@ruqya.az", app_metadata: {}, user_metadata: {}, created_at: "2026-11-01T00:00:00Z" }; }
 function session(id, expiresIn = 3600) {
   return { access_token: "tok-" + id, token_type: "bearer", expires_in: expiresIn, expires_at: Math.floor(Date.now() / 1000) + expiresIn, refresh_token: "ref-" + id, user: user(id) };
