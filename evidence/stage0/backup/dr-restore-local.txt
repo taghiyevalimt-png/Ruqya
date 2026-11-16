@@ -1,0 +1,20 @@
+# DR restore — 2026-11-16T17:33:38.941Z — artifact C:\Users\taghi\AppData\Local\Temp\ruqya-dr\run-43919463263\dr-export-43919463263
+OK   sha256 data.sql.enc
+OK   sha256 key.txt.enc
+OK   sha256 schema.sql
+OK   sha256 manifest.tsv
+OK   plaintext sha256 of the data dump (257360 bytes)
+OK   schema loaded (138086 chars)
+OK   data loaded
+OK   auth.identities rows 11 (live 11) hash same
+OK   auth.users rows 11 (live 11) hash same
+OK   public.appts rows 115 (live 115) hash same
+OK   public.audit_log rows 289 (live 289) hash same
+OK   public.breaks rows 0 (live 0) hash same
+OK   public.expenses rows 0 (live 0) hash same
+OK   public.product_sales rows 7 (live 7) hash same
+OK   public.readers rows 8 (live 8) hash same
+OK   public.services rows 2 (live 2) hash same
+OK   public.staff rows 9 (live 9) hash same
+OK   public.stat_edits rows 0 (live 0) hash same
+tables compared: 11, mismatches: 0, seconds: 1.9

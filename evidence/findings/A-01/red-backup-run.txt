@@ -1,0 +1,42 @@
+# A-01 RED: backup.yml run 43918407863 (main 4fb4418) — 2026-11-16T17:34:23Z
+command: gh run view 43918407863 -R taghiyevalimt-png/Ruqya --log
+backup	Smoke test the app on the restored copy	﻿2026-11-16T17:30:15.4524440Z ##[group]Run set -u
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4524894Z ^[[36;1mset -u^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4525389Z ^[[36;1mval() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4526025Z ^[[36;1mLOCAL_DB=$(val DB_URL); API=$(val API_URL)^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4526572Z ^[[36;1mANON=$(val ANON_KEY); [ -n "$ANON" ] || ANON=$(val PUBLISHABLE_KEY)^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4527404Z ^[[36;1mSERVICE=$(val SERVICE_ROLE_KEY); [ -n "$SERVICE" ] || SERVICE=$(val SECRET_KEY)^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4528300Z ^[[36;1m# temporary admin, only in this throw-away stack (its local service key never leaves the runner)^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4529053Z ^[[36;1mTEST_EMAIL="backup-drill-20261116T172757Z@example.invalid"^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4529789Z ^[[36;1mTEST_PASSWORD=$(openssl rand -base64 30 | tr -d '/+=\n'); echo "::add-mask::$TEST_PASSWORD"^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4530688Z ^[[36;1mbody=$(jq -nc --arg e "$TEST_EMAIL" --arg p "$TEST_PASSWORD" '{email:$e,password:$p,email_confirm:true}')^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4531582Z ^[[36;1muid=$(curl -sS --fail-with-body -X POST "$API/auth/v1/admin/users" -H "apikey: $SERVICE" \^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4532624Z ^[[36;1m        -H "Authorization: ***" -H "Content-Type: application/json" -d "$body" | jq -r '.id // empty')^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4533434Z ^[[36;1m[ -n "$uid" ] || { echo "::error::could not create the test user in the local stack"; exit 1; }^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4534142Z ^[[36;1mpsql "$LOCAL_DB" -X -q -v ON_ERROR_STOP=1 -v uid="$uid" <<'SQL'^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4534848Z ^[[36;1minsert into public.staff (id, name, role) values (:'uid', 'Backup drill admin', 'admin');^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4535462Z ^[[36;1mSQL^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4535903Z ^[[36;1mEXPECTED=$(psql "$LOCAL_DB" -X -At -c 'select count(*) from public.appts')^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4536601Z ^[[36;1m# the site pointed at the local stack, served like GitHub Pages^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4537853Z ^[[36;1mSUPABASE_URL="$API" SUPABASE_ANON_KEY="$ANON" python3 tools/configure.py "$RUNNER_TEMP/site"^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4538663Z ^[[36;1mpython3 -m http.server 8080 --bind 127.0.0.1 --directory "$RUNNER_TEMP/site" > /dev/null 2>&1 &^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4539524Z ^[[36;1mfor i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:8080/index.html && break; sleep 0.5; done^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4540405Z ^[[36;1mSITE_URL=http://127.0.0.1:8080/index.html TEST_EMAIL="$TEST_EMAIL" TEST_PASSWORD="$TEST_PASSWORD" \^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4541281Z ^[[36;1m  EXPECTED_APPTS="$EXPECTED" NODE_PATH="$RUNNER_TEMP/tools/node_modules" node scripts/restore-smoke.js^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4573459Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4573956Z env:
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4574351Z   SUPABASE_CLI_VERSION: 3.1.0
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4574704Z   PLAYWRIGHT_VERSION: 1.63.0
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4575091Z   PG_CLIENT_MAJOR: 17
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.4575424Z ##[endgroup]
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.8524468Z CSP ok: 5 inline scripts
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.8525166Z configured copy in /home/runner/work/_temp/site for http://127.0.0.1:54321
+backup	Smoke test the app on the restored copy	2026-11-16T17:30:15.8636281Z curl: (7) Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9915096Z FAIL Excel export did not finish
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9929670Z {
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9930391Z  "pageErrors": [],
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9930765Z  "consoleErrors": [],
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9931197Z  "httpErrors": [],
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9931532Z  "csp": []
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:26.9931904Z }
+backup	Smoke test the app on the restored copy	2026-11-16T17:31:27.0202785Z ##[error]Process completed with exit code 1.

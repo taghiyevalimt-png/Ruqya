@@ -34,6 +34,8 @@ const clean=t=>String(t).replace(/\?[^\s"')]*/g,'?…').replace(/"[^"]*"/g,'"…
   await p.click('[data-tab=stats]');
   await p.waitForSelector('[data-act=xls]',{timeout:20000}).catch(()=>fail('no Excel button: the test user is not seen as admin'));
   await p.click('[data-act=xls]');
+  // since 2026-11-16 the file is made for a chosen period: «Hamısı (2 il)» loads every appointment of the last two years
+  await p.click('[data-act=xls-per][data-id=all]').catch(()=>fail('no period choice in the Excel window'));
   const re=/Fayl hazırdır: (\d+) vərəq, (\d+) qəbul|Файл готов: (\d+) .*?, (\d+)/;
   await p.waitForFunction(r=>{const s=document.querySelector('#sheet');return s&&(new RegExp(r).test(s.textContent)||/Faylı hazırlamaq olmadı/.test(s.textContent))},re.source,{timeout:60000}).catch(()=>fail('Excel export did not finish'));
   const m=(await p.textContent('#sheet')).match(re);if(!m)await fail('Excel export failed in the app');

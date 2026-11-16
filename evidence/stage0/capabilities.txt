@@ -1,0 +1,41 @@
+# Capability probe — 2026-11-16T17:21:23Z — commit 3178e1486efe66152d1478a21f646b49b50a4bcd
+## shell / runtimes
+MINGW64_NT-10.0-26300 DESKTOP-5A937Q2 3.6.10-5a1665c8.x86_64 2026-09-28 10:40 UTC x86_64 Msys
+v26.13.1
+Python 3.12.10
+git version 2.56.0.windows.4
+gh version 2.103.3 (2026-10-26)
+## network
+github.io 200
+registry.npmjs.org 200
+## package install
+tests@1.0.0 C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\***\***\scratch-2026-11-16-970e3e\Ruqya\tests
++-- @electric-sql/pglite@0.2.17
++-- acorn@8.14.0
+`-- playwright-core@1.49.1
+
+## browsers
+/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe
+/c/Program Files/Google/Chrome/Application/chrome.exe
+## repo access
+github.com
+  ✓ Logged in to github.com account taghiyevalimt-png (keyring)
+  - Active account: true
+PUBLIC main
+## github actions
+completed	success	pages build and deployment	pages-build-deployment	main	dynamic	43911986508	47s	202
+completed	success	pages build and deployment	pages-build-deployment	main	dynamic	43907178077	48s	202
+completed	success	pages build and deployment	pages-build-deployment	main	dynamic	43903689820	43s	202
+## docker / postgres / psql
+docker: not found
+psql: not found
+pg_dump: not found
+postgres: not found
+ffmpeg: not found
+gitleaks: not found
+semgrep: not found
+## local PostgreSQL (embedded-postgres 17.11, npm @embedded-postgres/windows-x64@17.11.0-beta.19): server only, no psql/pg_dump/pg_restore; SQL via node 'pg' 8.13.1
+[{"version":"PostgreSQL 17.11 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit"}]
+## Supabase: MCP connector (execute_sql, apply_migration, get_advisors, query_logs) — probed in chat session 2026-11-16 (see evidence/stage0/supabase-probe.txt)
+## sub-agents: Agent tool available in this session
+## blocked by environment policy: downloading ffmpeg binary (denied 2026-11-16), publish needs owner's standing approval (given 2026-11-16)
