@@ -1,0 +1,1 @@
+max premultiplied pixel difference png vs webp: 0.0

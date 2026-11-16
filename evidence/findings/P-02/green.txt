@@ -1,0 +1,8 @@
+# green: commit ed82e07516f87db1f3fea3bdbddf948ad14f015f + logo-hq.webp — 2026-11-16T23:15:48Z
+$ node tests/perf/vitals.js evidence/findings/P-02/green.json 5
+run 1: LCP 2196 ms, INP 88 ms, CLS 0, long frames >50ms 7, 12 requests, 438173 bytes
+run 2: LCP 2228 ms, INP 88 ms, CLS 0, long frames >50ms 7, 12 requests, 438173 bytes
+run 3: LCP 2180 ms, INP 72 ms, CLS 0, long frames >50ms 5, 12 requests, 438173 bytes
+run 4: LCP 2176 ms, INP 104 ms, CLS 0, long frames >50ms 6, 12 requests, 438173 bytes
+run 5: LCP 2180 ms, INP 88 ms, CLS 0, long frames >50ms 8, 12 requests, 438173 bytes
+median LCP 2180 (2176–2228) ms; INP 88 (72–104) ms; CLS 0; 12 requests; 438173 bytes — ПРОЙДЕНО

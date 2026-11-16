@@ -155,7 +155,7 @@
 | `tools/csp.py` | 17 | пересчёт хешей CSP для встроенных скриптов |
 | `tools/dr_manifest.sql` | 12 | строки и хеш содержимого по каждой таблице (сверка копии с оригиналом) |
 | `tools/dr_restore.js` | 86 | восстановление DR-выгрузки в чистый PostgreSQL 17 со сверкой |
-| `tools/logo_hq.py` | 54 | изготовление logo-hq.png (прозрачный фон) из logo.png |
+| `tools/logo_hq.py` | 54 | изготовление logo-hq.png (прозрачный фон) и logo-hq.webp (те же пиксели, без потерь) из logo.png |
 | `vendor/fonts/SHA256SUMS` | 11 | контрольные суммы шрифтов |
 | `vendor/supabase-2.45.4.js` | 0 | клиент Supabase (MIT), локальная копия |
 | `version.txt` | 1 | номер опубликованной версии |

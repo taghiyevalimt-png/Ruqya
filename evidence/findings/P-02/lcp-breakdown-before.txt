@@ -1,0 +1,16 @@
+# before: commit ed82e07516f87db1f3fea3bdbddf948ad14f015f — 2026-11-16T23:15:26Z
+$ node tests/perf/lcp-breakdown.js
+LCP candidates [start ms, size, element, render, load]:
+   [2608,80072,"IMG",2608,2577]
+html.ready at 0 ms; navigation [responseEnd, DCL, load] [3657,3748,4309]
+own files [path, start, end, bytes]:
+   ["/logo-hq.png",242,2575,128097]
+   ["/vendor/fonts/fonts.css",245,609,12557]
+   ["/vendor/supabase-2.45.4.js",573,2676,111097]
+   ["/vendor/fonts/f09.woff2",631,1623,34060]
+   ["/vendor/fonts/f06.woff2",632,1574,28752]
+   ["/version.txt?1794870933198",3693,3860,315]
+   ["/vendor/fonts/f03.woff2",3728,4288,38216]
+   ["/vendor/fonts/f01.woff2",3736,4135,19480]
+   ["/vendor/fonts/f11.woff2",3845,4256,18468]
+   ["/favicon.png?v=2",4437,4638,5636]

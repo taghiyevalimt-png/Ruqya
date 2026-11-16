@@ -1,0 +1,16 @@
+# after: commit ed82e07516f87db1f3fea3bdbddf948ad14f015f + logo-hq.webp — 2026-11-16T23:15:38Z
+$ node tests/perf/lcp-breakdown.js
+LCP candidates [start ms, size, element, render, load]:
+   [2192,61678,"IMG",2192,2147]
+html.ready at 0 ms; navigation [responseEnd, DCL, load] [3623,3702,4182]
+own files [path, start, end, bytes]:
+   ["/logo-hq.webp",252,2145,81448]
+   ["/vendor/fonts/fonts.css",254,624,12557]
+   ["/vendor/supabase-2.45.4.js",490,2626,111097]
+   ["/vendor/fonts/f03.woff2",649,1924,38216]
+   ["/vendor/fonts/f09.woff2",650,1826,34060]
+   ["/vendor/fonts/f06.woff2",651,1726,28752]
+   ["/version.txt?1794870944237",3651,3823,315]
+   ["/vendor/fonts/f01.woff2",3681,3954,19480]
+   ["/vendor/fonts/f11.woff2",3821,4125,18468]
+   ["/favicon.png?v=2",4256,4461,5636]

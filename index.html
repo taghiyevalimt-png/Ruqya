@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-R9pYLKV75t/SHwV8JyFaTzENkck6watudb5/HhOs/uw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-ueUaPkhgOSiH2/BD5EYtY+2kgV9X+L5LDQmZUl5G7zk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -45,7 +45,7 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-750x1334.png">
 <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-640x1136.png">
 <link rel="icon" href="favicon.png?v=2">
-<link rel="preload" as="image" href="logo-hq.png">
+<link rel="preload" as="image" href="logo-hq.webp" type="image/webp">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mərkəz">
 <title>Mərkəz</title>
@@ -615,7 +615,7 @@ button.ch .x{font-size:10px;opacity:.8}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><img src="logo-hq.png" width="128" height="128" alt="" decoding="sync" fetchpriority="high"><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
+<div id="splash" aria-hidden="true"><picture><source srcset="logo-hq.webp" type="image/webp"><img src="logo-hq.png" width="128" height="128" alt="" decoding="sync" fetchpriority="high"></picture><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
 <div class="app">
   <div class="shell">
     <div class="top" id="top"></div>
@@ -2212,7 +2212,7 @@ function render(){
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML='<div class="brand"><img src="logo-hq.png" width="112" height="112" alt=""><h1>Mərkəz</h1></div>';
+    top.innerHTML='<div class="brand"><picture><source srcset="logo-hq.webp" type="image/webp"><img src="logo-hq.png" width="112" height="112" alt=""></picture><h1>Mərkəz</h1></div>';
     main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')+L('<div class="empty"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'))
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
