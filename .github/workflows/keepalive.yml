@@ -15,12 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Read one row with the public key
+        # Since 2026-11-14 visitors without a sign-in may not read any table, so the answer is 401 with
+        # PostgreSQL's own "permission denied" (42501). That answer comes from the database itself, so the
+        # database was reached and stays awake; anything else (timeout, 5xx, paused project) is a failure.
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+          code=$(curl -s -o body.json -w "%{http_code}" --max-time 30 \
             -H "apikey: sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7" \
             "https://ldkhdeehrrajvgrtieal.supabase.co/rest/v1/readers?select=id&limit=1")
-          echo "status $code"
-          test "$code" = "200"
+          echo "status $code"; cat body.json; echo
+          if [ "$code" = "200" ]; then exit 0; fi
+          if [ "$code" = "401" ] && grep -q '"code":"42501"' body.json; then exit 0; fi
+          exit 1
       - name: Keep this schedule switched on
         # GitHub switches off scheduled jobs in a repository with no new commits for 60 days.
         # Enabling the workflow again through the API resets that clock.
