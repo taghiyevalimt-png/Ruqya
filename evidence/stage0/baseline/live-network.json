@@ -1,0 +1,77 @@
+{
+ "at": "2026-11-16T17:49:27.485Z",
+ "url": "https://taghiyevalimt-png.github.io/Ruqya/",
+ "hosts": [
+  "taghiyevalimt-png.github.io"
+ ],
+ "requests": [
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/",
+   "type": "document",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/fonts.css",
+   "type": "stylesheet",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/supabase-2.45.4.js",
+   "type": "script",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/logo-hq.png",
+   "type": "image",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/version.txt",
+   "type": "fetch",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/f09.woff2",
+   "type": "font",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/f06.woff2",
+   "type": "font",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/f03.woff2",
+   "type": "font",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/f01.woff2",
+   "type": "font",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/vendor/fonts/f04.woff2",
+   "type": "font",
+   "status": 200
+  },
+  {
+   "host": "taghiyevalimt-png.github.io",
+   "path": "/Ruqya/favicon.png",
+   "type": "other",
+   "status": 200
+  }
+ ],
+ "console": [],
+ "bytesNote": "sizes not recorded here; see vitals.json"
+}

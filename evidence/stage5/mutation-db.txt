@@ -1,0 +1,17 @@
+# DB test mutation check — 2026-11-16T18:01:40.220Z
+# caught 14 of 14
+CAUGHT  M-01 bookings readable by everyone signed in  (4 failing checks)
+CAUGHT  M-02 every signed-in user is admin  (78 failing checks)
+CAUGHT  M-03 owner/writer check removed from bookings  (7 failing checks)
+CAUGHT  M-04 journal readable by everyone  (4 failing checks)
+CAUGHT  M-05 expenses of others visible to agents  (4 failing checks)
+CAUGHT  M-06 role guard removed (self-promotion)  (3 failing checks)
+CAUGHT  M-07 writer stamp removed (fake author)  (2 failing checks)
+CAUGHT  M-08 specialists see every column  (10 failing checks)
+CAUGHT  M-09 price/share columns opened  (1 failing checks)
+CAUGHT  M-10 restore without admin check  (1 failing checks)
+CAUGHT  M-11 RLS switched off on product sales  (12 failing checks)
+CAUGHT  M-12 rate limit removed  (1 failing checks)
+CAUGHT  M-13 journal writable by signed-in users  (21 failing checks)
+CAUGHT  M-14 statistics corrections of others writable  (12 failing checks)
+control (no mutation): 0 failing checks

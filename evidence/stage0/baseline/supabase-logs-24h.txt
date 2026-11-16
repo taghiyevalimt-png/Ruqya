@@ -1,0 +1,8 @@
+# Supabase logs, last 24 h before 2026-11-16 ~17:45 UTC — tool: Supabase MCP query_logs (ClickHouse SQL)
+# Q1: select toString(log_attributes['response.status_code']) k, count(*) n from logs where source='edge_logs' group by k
+[{"k":"200","n":4936},{"k":"101","n":193},{"k":"204","n":34},{"k":"201","n":22},{"k":"401","n":9},{"k":"404","n":3}]
+# Q2: select parsed.error_severity, parsed.sql_state_code, count(*) from postgres_logs group by 1,2
+[{"code":"00000","n":358,"sev":"LOG"},{"code":"08P01","n":35,"sev":"LOG"},{"code":"42501","n":9,"sev":"ERROR"},{"code":"42P01","n":1,"sev":"ERROR"},{"code":"08006","n":1,"sev":"LOG"}]
+# Interpretation (by reading the run history of this audit): 42501 = permission-denied answers to probes that
+# are expected to be refused (anonymous keepalive read of readers, auditor's role checks in rolled-back
+# transactions); 42P01 = auditor's own query of a non-existent cron.job; 401 = anonymous keepalive/probe requests.

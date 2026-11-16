@@ -83,6 +83,7 @@ async function check(p) {
     if (theme === "dark" && st !== "owner") continue;
     const s = await open(who, { viewport: { width: w, height: w < 768 ? 800 : 900 }, bypassCSP: true, colorScheme: theme, db: db(data) });
     const p = s.page;
+    p.setDefaultTimeout(4000);   // a screen this role does not have is skipped quickly
     try {
       await p.waitForSelector("#tabs:not([hidden])", { timeout: 15000 }); await p.waitForTimeout(3300);
       const dir = path.join(outDir, w + "-" + theme); fs.mkdirSync(dir, { recursive: true });

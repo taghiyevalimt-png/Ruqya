@@ -1,0 +1,29 @@
+# attacks on copy — 2026-11-16T17:59:07.793Z
+# attempts: 27, got through: 0
+X-01	agentA	BLOCKED	agent writes a booking in another agent's name (created_by)	rows 1
+X-02	agentA	BLOCKED	agent moves another agent's booking to himself (created_by)	rows 1
+X-03	spec	BLOCKED	specialist reads another specialist's sessions	rows 0
+X-04	spec	BLOCKED	specialist reads all sessions (enumeration)	rows 3
+X-05	spec	BLOCKED	specialist writes into another specialist's column	error 42501 new row violates row-level security policy for table "appts"
+X-06	agentA	BLOCKED	agent makes himself admin	error 42501 Rolu admin deyisir
+X-07	pending	BLOCKED	account without role gives itself a role	error 42501 Rolu admin deyisir
+X-08	pending	BLOCKED	account without role reads the bookings	rows 0
+X-09	agentA	BLOCKED	agent reads specialists' price and share	error 42501 permission denied for table readers
+X-10	agentA	BLOCKED	agent restores a deleted booking from the journal	error 42501 Yalniz admin berpa edir
+X-11	agentA	BLOCKED	agent wipes a patient's data	error 42501 Yalniz admin anonimlesdirir
+X-12	agentA	BLOCKED	agent changes a specialist's colour	error 42501 Rengi admin deyisir
+X-13	anon	BLOCKED	anonymous calls a database function	error 42501 permission denied for function ruqya_sees_all
+X-14	anon	BLOCKED	anonymous reads bookings	rows 0
+X-15	agentA	BLOCKED	agent records a statistics number for another agent	error 42501 new row violates row-level security policy for table "stat_edits"
+X-16	agentA	BLOCKED	agent lists other agents' expenses (enumeration)	rows 0
+X-17	agentA	BLOCKED	agent reads the change journal	rows 0
+X-18	admin2	BLOCKED	admin edits the change journal	error 42501 permission denied for table audit_log
+X-19	owner	BLOCKED	owner deletes the change journal	error 42501 permission denied for table audit_log
+X-20	agentA	BLOCKED	agent confirms a cancelled booking	error 42501 Bu qebulu tesdiqlemek olmur
+X-21	agentA	BLOCKED	agent changes the price of another agent's booking	error 42501 Yalniz yazan ve admin deyisir
+X-22	spec	BLOCKED	specialist changes his own name to another specialist's (takes over a column)	error 42501 Mutexessisin adini admin deyisir
+X-23	agentA	BLOCKED	agent sets follow-up on an active booking	error 42501 Xatirlatma yalniz legv olunana
+X-24	agentA	BLOCKED	huge text into a booking note (storage abuse)	error 23514 new row for relation "appts" violates check constraint "ruqya_appts_text"
+X-25	agentA	BLOCKED	SQL injection text is stored as text, not run	rows 1
+X-26	agentA	BLOCKED	agent deletes his own staff row (hides his history)	rows 0
+X-27	agentA	BLOCKED	more than 300 changes in an hour by one agent are refused	error 54000 Bir saatda cox deyisiklik
