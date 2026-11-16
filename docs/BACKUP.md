@@ -9,6 +9,7 @@ a project:
 | `roles.sql` | database roles (`supabase db dump --role-only`) |
 | `schema.sql` | tables, functions, triggers, row-level security policies, grants (`supabase db dump`) |
 | `post-schema.sql` | the exact privileges and realtime membership of schema `public`, applied after `schema.sql` (a new project's default privileges would otherwise widen access, e.g. make `readers.price` readable) |
+| `auth-columns.sql` | `alter table auth.… add column if not exists …` for every sign-in column of the source: when Supabase has upgraded the hosted sign-in service and the target stack is older, the data still fits (structure only) |
 | `data.sql` | all rows, including the sign-in accounts `auth.users` (with password hashes) and `auth.identities` (`supabase db dump --data-only --use-copy`) |
 | `public-auth-storage.dump` | a second, standard `pg_dump -Fc` copy of schemas `public`, `auth`, `storage` (for `pg_restore`) |
 | `manifest-*.txt`, `manifest-query.sql` | row count and content hash (md5) per table, structure fingerprints; no personal data |
@@ -60,5 +61,5 @@ hashes and structure with the backup, and prints the remaining manual steps (sig
 the new project with `tools/configure.py`, see `.env.example`). Without the script, the same by hand:
 
     psql "$NEW_DB_URL" --single-transaction -v ON_ERROR_STOP=1 \
-      --file roles.sql --file schema.sql --file post-schema.sql \
+      --file roles.sql --file schema.sql --file post-schema.sql --file auth-columns.sql \
       --command 'SET session_replication_role = replica' --file data.sql
