@@ -24,7 +24,7 @@ module.exports = async () => {
     check((await p.locator("#l-mail").count()) === 0, "still signed in after 11 h");
     await p.clock.fastForward(1.5 * 3600e3);
     await p.waitForSelector("#l-mail", { timeout: 10000 });
-    check(/12 saat/.test(await p.textContent("#l-err")), "signed out after 12 h idle while open");
+    { const m = await p.textContent("#l-err"); check(/12 saat/.test(m), "signed out after 12 h idle while open: " + m); }
   } finally { await s.close(); }
 
   // F-32: two tabs, sign out in one
