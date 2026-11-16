@@ -177,7 +177,7 @@ const tokenKey = "sb-ldkhdeehrrajvgrtieal-auth-token";
 async function open(who = OWNER, opt = {}) {
   const srv = await serve();
   const browser = await chromium.launch({ channel: "chrome", headless: !process.env.HEADED });
-  const context = await browser.newContext({ viewport: opt.viewport || { width: 390, height: 844 }, locale: "az-AZ", timezoneId: "Asia/Baku", hasTouch: !!opt.touch, isMobile: !!opt.touch });
+  const context = await browser.newContext({ viewport: opt.viewport || { width: 390, height: 844 }, locale: "az-AZ", timezoneId: "Asia/Baku", hasTouch: !!opt.touch, isMobile: !!opt.touch, bypassCSP: !!opt.bypassCSP, colorScheme: opt.colorScheme || "light" });
   const db = opt.db || seed();
   const ctl = { uid: who };
   await attach(context, db, ctl);

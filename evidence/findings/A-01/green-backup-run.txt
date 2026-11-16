@@ -1,0 +1,18 @@
+# A-01 GREEN: backup.yml run 43919849130 — 2026-11-16T17:48:15Z — commit abda94d
+command: gh run view 43919849130 -R taghiyevalimt-png/Ruqya --log
+backup	Check the secrets	2026-11-16T17:34:56.5691038Z ^[[36;1m[ -n "${BACKUP_PASSPHRASE:-}" ] || missing="$missing BACKUP_PASSPHRASE"^[[0m
+backup	Check the secrets	2026-11-16T17:34:56.5702439Z ^[[36;1mif [ "${#BACKUP_PASSPHRASE}" -lt 20 ]; then^[[0m
+backup	Check the secrets	2026-11-16T17:34:56.5704135Z ^[[36;1m  echo "::error::BACKUP_PASSPHRASE is shorter than 20 characters; use a long random passphrase."; exit 1^[[0m
+backup	Check the secrets	2026-11-16T17:34:57.0118177Z   BACKUP_PASSPHRASE: ***
+backup	Dump the live database	2026-11-16T17:35:48.9065002Z ^[[36;1mecho "Source manifest (table, rows, md5):"; cat manifest-source.txt^[[0m
+backup	Dump the live database	2026-11-16T17:37:31.7098429Z Source manifest (table, rows, md5):
+backup	Restore into the local stack and compare	2026-11-16T17:38:02.8273749Z ^[[36;1mecho "Restored manifest (table, rows, md5):"; cat manifest-restored.txt^[[0m
+backup	Restore into the local stack and compare	2026-11-16T17:38:03.0020029Z Restored manifest (table, rows, md5):
+backup	Smoke test the app on the restored copy	2026-11-16T17:38:03.0110584Z ^[[36;1mTEST_PASSWORD=$(openssl rand -base64 30 | tr -d '/+=\n'); echo "::add-mask::$TEST_PASSWORD"^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:38:03.0111414Z ^[[36;1mbody=$(jq -nc --arg e "$TEST_EMAIL" --arg p "$TEST_PASSWORD" '{email:$e,password:$p,email_confirm:true}')^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:38:03.0121023Z ^[[36;1mSITE_URL=http://127.0.0.1:8080/index.html TEST_EMAIL="$TEST_EMAIL" TEST_PASSWORD="$TEST_PASSWORD" \^[[0m
+backup	Smoke test the app on the restored copy	2026-11-16T17:38:13.1050840Z PASS restored copy: calendar loads without errors and the admin sees all 115 appointments
+backup	Encrypt the backup	2026-11-16T17:38:13.1492499Z ^[[36;1mprintf '%s' "$BACKUP_PASSPHRASE" | gpg --symmetric --cipher-algo AES256 --batch --pinentry-mode loopback \^[[0m
+backup	Encrypt the backup	2026-11-16T17:38:13.1494921Z ^[[36;1mb=$(printf '%s' "$BACKUP_PASSPHRASE" | gpg --decrypt --batch --quiet --pinentry-mode loopback --passphrase-fd 0 "$O/$n.tar.gpg" | sha256sum | cut -d' ' -f1)^
+backup	Encrypt the backup	2026-11-16T17:38:13.1529115Z   BACKUP_PASSPHRASE: ***
+conclusion: success
