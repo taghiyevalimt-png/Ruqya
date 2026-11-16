@@ -52,7 +52,7 @@ module.exports = async () => {
     const p = s.page;
     await p.waitForSelector("#fab:not([hidden])", { timeout: 15000 });
     await p.clock.fastForward(3500);
-    await p.click("#fab");
+    await p.click("#fab"); await p.waitForSelector("#f-reader");
     const d0 = await p.inputValue("#f-date");
     await p.fill("#f-name", "Gecə");
     await p.clock.fastForward(3 * 60000);

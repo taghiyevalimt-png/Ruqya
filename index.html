@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-aMhS400ehJ2pZ1lqicQT5VDs+UUkO7s4JzYqbI1qctc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-cxGuSQG4V8qVQuBFHYMaqmdrglNAFkmUIoNvV3zifjs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1128,7 +1128,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Bərpa olunur…":"Восстанавливается…",
 "Bərpa olundu.":"Восстановлено.",
 "Bərpa olundu — tarix: ":"Восстановлено — дата: ",
-"Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın.":"Для восстановления один раз запустите в базе файл 2026-11-owner.sql.",
 
 "Bu artıq bərpa olunub.":"Это уже восстановлено.",
 "Bərpa etməyi yalnız admin edə bilər.":"Восстанавливать может только админ.",
@@ -1162,7 +1161,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Məhsulların adları":"Названия товаров",
 "{n} məhsul":"{n} товаров",
 "Hər məhsulu yeni sətirdən və ya vergüllə yazın":"Каждый товар с новой строки или через запятую",
-"Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.":"Чтобы писать названия товаров, один раз запустите в базе файл 2026-11-privacy.sql.",
 "Məhsulların adlarını yazın.":"Напишите названия товаров.",
 "Məhsul adları çox uzundur.":"Названия товаров слишком длинные.",
 
@@ -1277,8 +1275,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>":"<li><b>Недельная статистика</b> всегда показывает последнюю <b>закончившуюся</b> неделю. Новая неделя появляется после четверга, 23:59. Так в пятницу утром можно открыть, скопировать и отправить руководству.</li>",
 "<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>":"<li><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — 4 недели, если 5 — 5 недель, ни один день не теряется. На экране — последний закончившийся месяц.</li>",
 "<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Bu gün» bölməsində ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>":"<li>Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59. «Записано сегодня» обновляется сразу при каждой новой записи. В 00:00 начинается новый день, а прошлые дни не пропадают: в разделе «Сегодня» кнопкой ‹ можно посмотреть и скопировать любой из последних 14 дней.</li>",
-"<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл, его удаляют из календаря. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
-"<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>":"<li>Удалённая запись нигде не считается. Даже если удалили через несколько недель, она уходит из статистики.</li>",
+"<li>Pasiyent gəlməyibsə və ya ləğv edibsə, qəbulda «Ləğv et» basılır: qəbul «Ləğv olunanlar»a düşür və «Ləğv» sütununda sayılır. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) ləğv olunmayan hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл или отменил, в записи нажимают «Отменить»: запись попадает в «Отменённые» и считается в столбце «Отмена». Когда время сеанса прошло (не позже 23:59), каждая неотменённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
+"<li>Ləğv olunan qəbul «Yazdı», «Uğurlu» və «Qazanc»da sayılmır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>":"<li>Отменённая запись не считается в «Записал», «Успешные» и «Заработок». Запись, внесённая по ошибке, удаляется кнопкой «Удалить совсем» и нигде не считается.</li>",
 "<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>":"<li>Запись считается по дню, когда её сделали, на какую бы дату она ни была: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</li>",
 "<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>":"<li>В статистику продаж попадают только записи агентов продаж и админов. Записи, сделанные самими специалистами, туда не попадают, но считаются в денежной статистике.</li>",
 "<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>":"<li>Цена обязательна в каждой записи (в новой записи уже стоит 130). Продавцом товара считается тот, кто записал продажу в Кассе.</li>",
@@ -1417,6 +1415,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).":"Для этого обновите базу до последнего состояния: обновления из папки sql/ (порядок: DISASTER_RECOVERY.md).",
+"<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və ləğv olunmayan pasiyentlərin sayı.</dd>":"<dt>Успешные</dt><dd>число пациентов с сеансом в эти дни, запись которых не отменена.</dd>",
+"<dt>Ləğv</dt><dd>həmin günlərdə seansı olan, amma «Ləğv et» ilə ləğv olunan pasiyentlərin sayı (gəlməyənlər).</dd>":"<dt>Отмена</dt><dd>число пациентов с сеансом в эти дни, запись которых отменена кнопкой «Отменить» (не пришли).</dd>",
 "Yeni qəbul yaz":"Новая запись",
 "Birinci xatırlatma":"Первое напоминание",
 "xatırlatma":"напоминание",
@@ -2605,8 +2606,8 @@ function statsMain(){
       return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
         tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</li>'+
     L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Bu gün» bölməsində ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>")+
-    L("<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
-    L("<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>")+
+    L("<li>Pasiyent gəlməyibsə və ya ləğv edibsə, qəbulda «Ləğv et» basılır: qəbul «Ləğv olunanlar»a düşür və «Ləğv» sütununda sayılır. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) ləğv olunmayan hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
+    L("<li>Ləğv olunan qəbul «Yazdı», «Uğurlu» və «Qazanc»da sayılmır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>")+
     L("<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>")+
     L("<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>")+
     L("<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>")+
@@ -2620,7 +2621,8 @@ function statsMain(){
     L("<dt>Müraciət WP / Müraciət SŞ</dt><dd>WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlərin sayı; işçilər özləri yazır.</dd>")+L("<dt>Müraciət ümumi</dt><dd>WP və SŞ-nin cəmi, özü hesablanır.</dd>")+
     L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
     L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
-    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>")+
+    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və ləğv olunmayan pasiyentlərin sayı.</dd>")+
+    L("<dt>Ləğv</dt><dd>həmin günlərdə seansı olan, amma «Ləğv et» ilə ləğv olunan pasiyentlərin sayı (gəlməyənlər).</dd>")+
     L("<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>")+
     L("<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>")+
     L("<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>")+
@@ -2867,7 +2869,7 @@ function productForm(){
   var x=sheet.id?prodRow(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
   return '<h2>'+(x?L("Məhsul satışını dəyiş"):L("Məhsul satışı"))+CLOSE+'</h2>'+
     (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'">'+(x?esc(prodItems(x.names).join("\n")):'')+'</textarea></div>'
-      :'<p class="hint">'+L("Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.")+'</p>')+
+      :'<p class="hint">'+L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).")+'</p>')+
     L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+' *</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
     L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
     L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[x?x.by:auth.user.id]||L("siz"))+'.</p>'+
@@ -3660,7 +3662,7 @@ document.addEventListener("click",function(e){
       var mark0=function(){[s0.rows||[],s0.dels||[]].forEach(function(l){l.forEach(function(x){if(+x.id===rid0)x.restored=true})})};
       if(r.error){
         if(/Artiq berpa olunub/.test(r.error.message||""))mark0();
-        else if(r.error.code==="PGRST202"||/function/.test(r.error.message||"")&&/not find|does not exist/.test(r.error.message||""))flash(L("Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın."),true);
+        else if(r.error.code==="PGRST202"||/function/.test(r.error.message||"")&&/not find|does not exist/.test(r.error.message||""))flash(L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md)."),true);
         else flash(dbMsg(r.error),true);
       }else{
         /* say which day it went back to: a sale from yesterday is not on today's page */

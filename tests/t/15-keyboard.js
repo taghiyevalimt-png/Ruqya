@@ -5,7 +5,7 @@ module.exports = async () => {
   try {
     const p = s.page;
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200);
-    await p.click("#fab"); await p.waitForTimeout(500);
+    await p.click("#fab"); await p.waitForSelector("#f-reader"); await p.waitForTimeout(500);
     const top0 = await p.$eval("#sheet", (e) => Math.round(e.getBoundingClientRect().top));
     await p.click("#f-name");
     await p.setViewportSize({ width: 412, height: 500 });   // keyboard opens (a typical phone keyboard takes ~40%)

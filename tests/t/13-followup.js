@@ -5,7 +5,7 @@ module.exports = async () => {
   try {
     const p = s.page;
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200);
-    await p.click("#fab");
+    await p.click("#fab"); await p.waitForSelector("#f-reader");
     const order = await p.$$eval("#sheet input, #sheet select", (els) => els.map((e) => e.id || e.name).filter(Boolean));
     const want = ["f-reader", "f-dur", "f-name", "f-phone", "f-price", "f-note", "f-place", "f-date", "f-time"];
     check(JSON.stringify(order.filter((x, i, a) => a.indexOf(x) === i)) === JSON.stringify(want), "form order: " + order.join(","));
