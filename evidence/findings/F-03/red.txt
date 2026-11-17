@@ -1,0 +1,4 @@
+# F-03 red — «Bütün gün»: 10 columns on screen, blocks cut (owner screenshot 17.11 14:33) — 2026-11-17T10:58:12Z — commit 0bbebb0
+FAIL 99-whole-day-names.js 
+    Error: FAIL: 390: exactly 7 specialists across the screen: 10 (column 34 px)
+1 failed of 1

@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-iJ5TcRdz2oieMVE9WjTPzJlzFltz9izF7vQyJHyzWN0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-nPjn7/cgLohuWfKZKynW7iyHfpF2eWTO0YabEZeHIng='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -287,6 +287,10 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal{touch-action:pan-x pan-y}
 /* «Bütün gün»: every column shares the width (no minimum), so all specialists fit the screen */
 .cal.fit .col,.cal.fit .cal-head .ch{flex:1 1 0;width:auto;min-width:0}
+/* «Bütün gün» blocks: only the patient's name, whole, line under line; letter size set so 7 letters fit a line */
+.cal.fit .ev{padding:2px 2px;justify-content:flex-start}
+.cal.fit .cal-head:not(.picking) .ch.pill span{padding:5px 1px;letter-spacing:-.4px}
+.cal.fit .ev b,.cal.fit .ev.tight b,.cal.fit .ev.tiny b{display:block;-webkit-line-clamp:unset;white-space:normal;text-overflow:clip;overflow:visible;overflow-wrap:anywhere;word-break:normal;font-size:var(--fitfs,11px);line-height:1;letter-spacing:-.1px}
 .seg.seg4 button{padding-left:2px;padding-right:2px;font-size:13.5px}
 
 .ev{position:absolute;left:2px;right:2px;border-radius:6px;padding:3px 4px;overflow:hidden;font-size:11px;line-height:1.2;color:#fff;cursor:pointer;border:0;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
@@ -1104,7 +1108,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Vidcetin rəngi":"Цвет виджета",
 "Ağ":"Белый",
 "Qara":"Чёрный",
-"«Bütün gün»: 09:00–22:00 və bütün mütəxəssislər bir ekrana sığır, təqvimi sürüşdürmək lazım deyil.":"«Весь день»: 09:00–22:00 и все специалисты помещаются на один экран, календарь листать не нужно.",
+"«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); bloklarda yalnız pasiyentin tam adı.":"«Весь день»: 09:00–22:00 на одном экране, до 7 специалистов на экран (если больше — листается вбок); в блоках только полное имя пациента.",
 "Böyük":"Большая",
 "Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.":"В больших блоках имена и время читаются легче, но календарь длиннее листается вниз.",
 
@@ -1646,7 +1650,7 @@ function setHour(v){if(v==="fit"){FIT=true;try{localStorage.setItem("ruqya.fit",
   HOUR=nearStep(HOUR_STEPS,+v||75);PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
 /* «Bütün gün» (owner 17.11): the whole working day 09:00–22:00 and every specialist on one screen, nothing to move by
    hand. The hour height and column width follow the calendar's own size (measured after drawing, again on turning). */
-var FIT=false,FIT_H=0,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")==="1"}catch(e){}
+var FIT=false,FIT_H=0,FIT_W=0,FIT_FS=0,FIT_N=7,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")==="1"}catch(e){}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
@@ -1660,7 +1664,8 @@ function fitBlocks(){
   /* a name too long for its pill gets a smaller letter instead of being cut */
   var ps=document.querySelectorAll(".cal-head:not(.picking) .ch.pill span");
   var po=[];for(var j=0;j<ps.length;j++)if(ps[j].scrollWidth>ps[j].clientWidth+1)po.push([ps[j],ps[j].clientWidth/ps[j].scrollWidth]);
-  po.forEach(function(x){x[0].style.fontSize=Math.max(9.5,Math.floor(14*x[1]*2)/2)+"px"});
+  po.forEach(function(x){x[0].style.fontSize=Math.max(FIT?7:9.5,Math.floor(14*x[1]*2)/2)+"px"});
+  if(FIT&&byId("cal")&&byId("cal").classList.contains("fit")){fitNames();return}
   /* a patient name that is one long word gets a smaller letter instead of being broken in the middle */
   var bs=document.querySelectorAll("#cal .ev b"),over=[];
   for(var q=0;q<bs.length;q++)if(bs[q].scrollWidth>bs[q].clientWidth+1)over.push(bs[q]);   /* read first, then change only those */
@@ -2300,7 +2305,7 @@ function render(){
     setTimeout(fitBlocks,0);
     cal=byId("cal");
     if(cal){
-      if(FIT){if(fitDay(cal))return;cal.scrollTop=Math.round((FIT0-DAY0)*PXM);cal.scrollLeft=0}
+      if(FIT){if(fitDay(cal))return;cal.scrollTop=Math.round((FIT0-DAY0)*PXM);cal.scrollLeft=keep&&keep.d===ui.date?keep.l:0}
       else if(keep&&keep.d===ui.date){cal.scrollTop=keep.t;cal.scrollLeft=keep.l}
       else{var nowM=bk().m;
         cal.scrollTop=Math.max(0,((ui.date===today?nowM-60:9*60)-DAY0)*PXM);
@@ -2348,8 +2353,21 @@ function dayTop(){
 function fitDay(cal){
   var head=cal.querySelector(".cal-head"),avail=cal.clientHeight-(head?head.offsetHeight:0)-10-8;
   var hh=Math.max(20,Math.floor(avail*60/(FIT1-FIT0)));
-  if(Math.abs(hh-FIT_H)<1)return false;
-  FIT_H=hh;render();return true;
+  /* at most 7 specialists across the screen (owner 17.11); more scroll sideways */
+  var cw=Math.max(30,Math.floor((cal.clientWidth-AXW)/FIT_N));
+  /* letter size: a 7-letter name fits one line of a block (block = column − 4 px margin − 4 px padding) */
+  var fs=FIT_FS;try{var cv=fitDay.cv||(fitDay.cv=document.createElement("canvas")),cx=cv.getContext("2d");
+    cx.font="700 100px "+getComputedStyle(document.body).fontFamily;var w100=cx.measureText("Məmmədo").width;
+    if(w100>0)fs=Math.max(8,Math.min(14,Math.floor((cw-8)*100/w100*2)/2))}catch(e){fs=fs||10}
+  if(Math.abs(hh-FIT_H)<1&&cw===FIT_W&&fs===FIT_FS)return false;
+  FIT_H=hh;FIT_W=cw;FIT_FS=fs;render();return true;
+}
+/* «Bütün gün»: a name that still does not fit its (short) block gets smaller letters, never cut */
+function fitNames(){
+  var evs=document.querySelectorAll("#cal.fit .ev"),over=[];
+  for(var i=0;i<evs.length;i++){var b=evs[i].firstElementChild;if(b&&(b.scrollHeight>evs[i].clientHeight-2||b.scrollWidth>b.clientWidth+1))over.push(b)}
+  over.forEach(function(b){var ev=b.parentNode,f=FIT_FS||11;
+    while(f>6&&(b.scrollHeight>ev.clientHeight-2||b.scrollWidth>b.clientWidth+1)){f-=0.5;b.style.fontSize=f+"px"}});
 }
 function gridMain(){
   var rs=activeReaders().filter(function(r){return shown(r.id)});
@@ -2359,8 +2377,8 @@ function gridMain(){
   var day=state.appts.filter(function(a){return a.date===ui.date&&ids.indexOf(a.readerId)>=0});
   var h=noPriceBox();
   curMinHour=dayMinHour(day);var hEff=FIT?(FIT_H||40):Math.max(HOUR,curMinHour);PXM=hEff/60;
-  var H=(DAY1-DAY0)*PXM,W=FIT?0:AXW+rs.length*COLW;
-  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"><div class="cal-in" style="min-width:'+W+'px">';
+  var H=(DAY1-DAY0)*PXM,W=FIT?(rs.length>FIT_N&&FIT_W?AXW+rs.length*FIT_W:0):AXW+rs.length*COLW;
+  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"'+(FIT&&FIT_FS?' style="--fitfs:'+FIT_FS+'px"':'')+'><div class="cal-in" style="min-width:'+W+'px">';
   h+=headRow(rs,false);
   h+='<div class="cal-body" style="height:'+(H+20)+'px;padding:10px 0"><div class="axis">';
   for(var m=DAY0;m<=DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+(m>=24*60?"00:00":hhmm(m))+'</span>';
@@ -2380,11 +2398,12 @@ function gridMain(){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a.status==="cancel"?';z-index:0':';z-index:1')+'">'+
+        (FIT?'<b>'+esc(a.name)+'</b></button>':
         '<b>'+(mark(a)?'<i class="ok">'+mark(a)+'</i>':"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         (a.phone?'<span class="num ph">'+esc(a.phone)+'</span>':'')+
         ((state.staff[a.by]||a.by)?L('<span class="by">Yazdı: ')+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+
-        '</button>';
+        '</button>');
     });
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
     h+='</div>';
@@ -3157,7 +3176,7 @@ function heightSeg(){
   return '<h3 class="sec">'+L("Blokların hündürlüyü")+'</h3><div class="seg seg4" style="grid-template-columns:repeat(4,1fr)">'+
     '<button data-act="hourh" data-id="fit" aria-pressed="'+FIT+'">'+L("Bütün gün")+'</button>'+
     HOUR_STEPS.map(function(v,i){return '<button data-act="hourh" data-id="'+v+'" aria-pressed="'+(!FIT&&HOUR===v)+'">'+names[i]+'</button>'}).join("")+'</div>'+
-    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 və bütün mütəxəssislər bir ekrana sığır, təqvimi sürüşdürmək lazım deyil.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
+    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); bloklarda yalnız pasiyentin tam adı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
 }
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
