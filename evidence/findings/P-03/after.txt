@@ -1,0 +1,9 @@
+# after: 0a8695053146efcc58ddb3332fae9fe67f56a246 + P-03 (only: Cyrillic font part fetched when idle) — 2026-11-17T00:15:52Z
+$ node tests/perf/frames.js evidence/findings/P-03/after.json 5
+run 1: scroll-day 0, open-window 162/137, window-slide 137, close-window 0, open-window-2 53, window-slide-2 0, close-window-2 0, tab-stats 213, scroll-stats 0, tab-patients 62, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 162/139, window-slide 139, close-window 0, open-window-2 58, window-slide-2 0, close-window-2 0, tab-stats 220, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 164/137, window-slide 137, close-window 0, open-window-2 54, window-slide-2 0, close-window-2 0, tab-stats 237, scroll-stats 0, tab-patients 57, scroll-patients 0, tab-day 0
+run 4: scroll-day 0, open-window 171/140, window-slide 140, close-window 0, open-window-2 0, window-slide-2 0, close-window-2 0, tab-stats 245, scroll-stats 0, tab-patients 58, scroll-patients 0, tab-day 0
+run 5: scroll-day 0, open-window 178/132, window-slide 132, close-window 0, open-window-2 0, window-slide-2 0, close-window-2 0, tab-stats 225, scroll-stats 0, tab-patients 57, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: window-slide (5 frames, max 140 ms)
+exit 1

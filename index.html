@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-ueUaPkhgOSiH2/BD5EYtY+2kgV9X+L5LDQmZUl5G7zk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-WDXI5NTEde8AKIbAKXVcikfs5UPhCEuX+erIBoslAVo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2200,7 +2200,7 @@ function render(){
   pcache=null;edIdx=null;
   if(auth.ready&&(!auth.user||auth.loaded||!sb))appReady();
   if(lp&&Date.now()-lp.t<8000){lpRender=true;return}   /* a finger is holding a block: redraw after it lifts */
-  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();
+  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();if(auth.user&&auth.loaded)fontsSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
   byId("tabs").hidden=gate;
@@ -3246,6 +3246,14 @@ function meForm(){
 /* Heavy drawing right after a tap waits for the next frame: the tap itself is answered at once (the button shows
    it was pressed, the tab lights up), so the phone never looks stuck (INP). */
 function afterPaint(fn){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(fn,0)});else setTimeout(fn,16)}
+/* P-03: names written in Cyrillic (in the patient hints of a booking window, the list...) need the Cyrillic part of
+   the font; fetched only when first drawn, it re-laid out the whole window during its slide-in. Fetched once the
+   app is shown and idle, it is ready before it is needed (22 KB, the browser keeps it). */
+var fontsAsked=false;
+function fontsSoon(){
+  if(fontsAsked)return;fontsAsked=true;
+  setTimeout(function(){try{if(document.fonts&&document.fonts.load){document.fonts.load('400 16px "Golos Text"',"Ж");document.fonts.load('600 16px "Onest"',"Ж")}}catch(e){}},1500);
+}
 function openSheet(s){
   /* keyboard and screen reader (V-03): remember what opened the window, to give the focus back on close */
   if(!s.opener)s.opener=sheet&&sheet.opener||document.activeElement;

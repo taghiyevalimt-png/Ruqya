@@ -1,0 +1,9 @@
+# before: index.html of 0a8695053146efcc58ddb3332fae9fe67f56a246, check tests/perf/frames.js (working tree) — 2026-11-17T00:01:31Z
+$ node tests/perf/frames.js evidence/findings/P-03/before.json 5
+run 1: scroll-day 0, open-window 163/59/102, window-slide 102, close-window 0, open-window-2 84, window-slide-2 0, close-window-2 0, tab-stats 230, scroll-stats 0, tab-patients 58, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 160/73/75, window-slide 75, close-window 0, open-window-2 67, window-slide-2 0, close-window-2 0, tab-stats 252, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 163/58/93, window-slide 93, close-window 0, open-window-2 65, window-slide-2 0, close-window-2 59, tab-stats 274, scroll-stats 0, tab-patients 51, scroll-patients 0, tab-day 0
+run 4: scroll-day 0, open-window 175/165, window-slide 165, close-window 0, open-window-2 78, window-slide-2 0, close-window-2 0, tab-stats 216, scroll-stats 0, tab-patients 67, scroll-patients 0, tab-day 0
+run 5: scroll-day 0, open-window 192/60/92, window-slide 92, close-window 0, open-window-2 82, window-slide-2 0, close-window-2 54, tab-stats 237, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: window-slide (5 frames, max 165 ms); close-window-2 (2 frames, max 59 ms)
+exit 1

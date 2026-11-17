@@ -1,0 +1,10 @@
+# ПОПЫТКА (отменена): шрифт + окно рисуется в стартовой позиции выезда — улучшение не доказано (медиана кадра выезда 118 против 93 мс до), приём откатан
+# after: 0a8695053146efcc58ddb3332fae9fe67f56a246 + P-03 (Cyrillic font fetched when idle, window drawn at the slide's start) — 2026-11-17T00:08:23Z
+$ node tests/perf/frames.js evidence/findings/P-03/after.json 5
+run 1: scroll-day 0, open-window 129/181, window-slide 0, close-window 0, open-window-2 55, window-slide-2 0, close-window-2 0, tab-stats 280, scroll-stats 0, tab-patients 60, scroll-patients 0, tab-day 55
+run 2: scroll-day 0, open-window 161/124, window-slide 124, close-window 0, open-window-2 57, window-slide-2 0, close-window-2 0, tab-stats 213, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 188/125, window-slide 125, close-window 0, open-window-2 51, window-slide-2 51, close-window-2 0, tab-stats 252, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 4: scroll-day 0, open-window 158/118, window-slide 118, close-window 0, open-window-2 55, window-slide-2 0, close-window-2 0, tab-stats 231, scroll-stats 0, tab-patients 58, scroll-patients 0, tab-day 0
+run 5: scroll-day 0, open-window 180/124, window-slide 0, close-window 0, open-window-2 0, window-slide-2 0, close-window-2 0, tab-stats 197, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: window-slide (3 frames, max 125 ms); window-slide-2 (1 frames, max 51 ms)
+exit 1

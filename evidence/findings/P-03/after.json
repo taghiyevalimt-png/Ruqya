@@ -1,0 +1,277 @@
+{
+ "at": "2026-11-17T00:22:45.317Z",
+ "profile": "CPU x4, 412x823 DPR2",
+ "judged": [
+  "scroll-day",
+  "scroll-stats",
+  "scroll-patients",
+  "window-slide",
+  "close-window",
+  "window-slide-2",
+  "close-window-2"
+ ],
+ "verdict": "НЕ ПРОЙДЕНО: window-slide (5 frames, max 140 ms)",
+ "runs": [
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7825.5,
+     "d": 162,
+     "s": [
+      "TimerHandler:setTimeout  152"
+     ]
+    },
+    {
+     "t": 8021.9000000059605,
+     "d": 137,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8021.9000000059605,
+     "d": 137,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39689.70000000298,
+     "d": 53,
+     "s": [
+      "TimerHandler:setTimeout  49"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71425.10000000149,
+     "d": 213,
+     "s": [
+      "TimerHandler:setTimeout  29"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75366.30000000447,
+     "d": 62,
+     "s": [
+      "TimerHandler:setTimeout  24"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7687.79999999702,
+     "d": 162,
+     "s": [
+      "TimerHandler:setTimeout  154"
+     ]
+    },
+    {
+     "t": 7884.29999999702,
+     "d": 139,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 7884.29999999702,
+     "d": 139,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39530.19999999553,
+     "d": 58,
+     "s": [
+      "TimerHandler:setTimeout  50"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71323.10000000149,
+     "d": 220,
+     "s": [
+      "TimerHandler:setTimeout  18"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7811.80000000447,
+     "d": 164,
+     "s": [
+      "TimerHandler:setTimeout  156"
+     ]
+    },
+    {
+     "t": 8014.10000000149,
+     "d": 137,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8014.10000000149,
+     "d": 137,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39668.30000000447,
+     "d": 54,
+     "s": [
+      "TimerHandler:setTimeout  47"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71408.60000000149,
+     "d": 237,
+     "s": [
+      "TimerHandler:setTimeout  17"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75419.70000000298,
+     "d": 57,
+     "s": [
+      "TimerHandler:setTimeout  9"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7826.30000000447,
+     "d": 171,
+     "s": [
+      "TimerHandler:setTimeout  163"
+     ]
+    },
+    {
+     "t": 8031.10000000149,
+     "d": 140,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8031.10000000149,
+     "d": 140,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71363.70000000298,
+     "d": 245,
+     "s": [
+      "TimerHandler:setTimeout  35"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75361,
+     "d": 58,
+     "s": [
+      "TimerHandler:setTimeout  22"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7833.4000000059605,
+     "d": 178,
+     "s": [
+      "TimerHandler:setTimeout  173"
+     ]
+    },
+    {
+     "t": 8044.80000000447,
+     "d": 132,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8044.80000000447,
+     "d": 132,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71344.10000000149,
+     "d": 225,
+     "s": [
+      "TimerHandler:setTimeout  11"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75321.40000000596,
+     "d": 57,
+     "s": [
+      "TimerHandler:setTimeout  9"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": []
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+# experiment 2026-11-17T00:37:25Z, commit 0a8695053146efcc58ddb3332fae9fe67f56a246 + P-03 font: window shadow lighter / none (temporary edits, reverted), node tests/perf/frames.js x 5 each
+shadow: 0 -10px 24px -12px rgba(0,0,0,.6)
+window-slide 128 window-slide 137 window-slide 134 window-slide 123 window-slide 136 window-slide  
+shadow: none
+window-slide 57 window-slide 59 window-slide 54 window-slide 56 window-slide 54 window-slide  
+ index.html | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+[exited with code 0]
