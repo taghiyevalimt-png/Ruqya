@@ -1,0 +1,7 @@
+# F-10 green (owner confirmed the sample 18.11) — 2026-11-17T14:23:18Z — commit 08392f0 + F-10
+PASS 99-whole-day-default.js 12.1s
+PASS 99-whole-day-details.js 11.7s
+PASS 99-whole-day-foot.js 13.5s
+PASS 99-whole-day-names.js 12.4s
+PASS 99-whole-day.js 30.3s
+all 5 passed

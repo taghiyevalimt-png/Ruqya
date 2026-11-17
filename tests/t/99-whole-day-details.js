@@ -3,6 +3,7 @@
 // order: name; name + time; name + time + phone; name + time + phone + Yazdı/agent. The letters of these lines are
 // sized so a 10-character phone (0101111111) fits the block's width. Checked at 390 and 360 px wide.
 // Owner 18.11 (17:19): the time and the word «Yazdı:» are too much — now: name; name + phone; name + phone + agent.
+// Owner 18.11 (18:15): phone and agent bigger; a phone that does not fit one line goes on to a second line, whole.
 const { open, check, OWNER, AGENT, seed, uuid, bakuToday } = require("../lib");
 module.exports = async () => {
   for (const [w, h] of [[390, 844], [360, 740]]) {
@@ -10,8 +11,9 @@ module.exports = async () => {
     db.appts = [];
     while (db.readers.length < 7) db.readers.push({ id: uuid(), name: "M" + db.readers.length, price: 0, share: 0, archived: false, color: null, created_at: "2026-11-03T00:00:00Z" });
     // long (2 h), medium (1 h), short (30 min) blocks
-    const rows = [[0, "09:00", 120, "Terane"], [1, "12:00", 60, "Aysen"], [2, "15:00", 30, "Rəşid"], [3, "17:00", 90, "Leyla Məmmədova"]];
-    for (const [ri, t, d, n] of rows) db.appts.push({ id: uuid(), reader_id: db.readers[ri].id, date: bakuToday(0), time: t, duration: d, name: n, phone: "0101111111", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now });
+    const rows = [[0, "09:00", 120, "Terane"], [1, "12:00", 60, "Aysen"], [2, "15:00", 30, "Rəşid"], [3, "17:00", 90, "Leyla Məmmədova"], [4, "10:00", 120, "Uzun Nömrə"]];
+    const PH = { "Uzun Nömrə": "+994 55 717 12 34" };
+    for (const [ri, t, d, n] of rows) db.appts.push({ id: uuid(), reader_id: db.readers[ri].id, date: bakuToday(0), time: t, duration: d, name: n, phone: PH[n] || "0101111111", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now });
     const s = await open(OWNER, { db, viewport: { width: w, height: h } });
     try {
       const p = s.page;
@@ -25,16 +27,19 @@ module.exports = async () => {
       const by = (n) => evs.find((e) => e.name === n);
       const order = ["name", "phone", "agent"];
       for (const e of evs) {
-        const want = [e.name, "0101111111", "Nurlana"];
+        const want = [e.name, PH[e.name] || "0101111111", "Nurlana"];
         const got = e.vis.map((v) => v.t);
         check(JSON.stringify(got) === JSON.stringify(want.slice(0, got.length)), w + " " + e.name + ": the lines in order, only whole steps (" + order.slice(0, got.length).join(", ") + "): " + JSON.stringify(got));
         check(e.vis.every((v) => v.inside), w + " " + e.name + ": every shown line is fully inside the block (" + e.h + " px): " + JSON.stringify(e.vis));
-        const ph = e.vis.find((v) => v.t === "0101111111");
-        if (ph) check(ph.oneLine, w + " " + e.name + ": the 10-character phone fits the width: " + JSON.stringify(ph));
+        const ph = e.vis[1];
+        if (ph) check(ph.oneLine && ph.inside, w + " " + e.name + ": the phone is wholly visible (on a second line if needed): " + JSON.stringify(ph));
+        if (ph && w === 390) check(ph.fs >= 8, w + " " + e.name + ": phone and agent bigger than before (≥ 8 px, was 6.5): " + ph.fs);
       }
+      check(by("Uzun Nömrə").vis.length >= 2, w + ": a long phone (+994 55 717 12 34) is shown: " + JSON.stringify(by("Uzun Nömrə").vis));
       check(by("Terane").vis.length === 3, w + ": the 2-hour block shows everything: " + JSON.stringify(by("Terane").vis.map((v) => v.t)));
       check(by("Rəşid").vis.length <= 2, w + ": the 30-minute block shows only what fits (name, maybe phone): " + JSON.stringify(by("Rəşid").vis.map((v) => v.t)));
-      check(by("Aysen").vis.length >= 2, w + ": the 1-hour block shows more than the name: " + JSON.stringify(by("Aysen").vis.map((v) => v.t)));
+      // on a small 360×740 screen an hour is 28 px: with the bigger phone (owner 18.11 18:15) a 1-hour block keeps the name only
+      if (w === 390) check(by("Aysen").vis.length >= 2, w + ": the 1-hour block shows more than the name: " + JSON.stringify(by("Aysen").vis.map((v) => v.t)));
       const all = evs.map((e) => e.vis.map((v) => v.t).join("|")).join(" ");
       check(!/Yazdı/.test(all) && !evs.some((e) => e.vis.some((v) => /^\d\d:\d\d$/.test(v.t))), w + ": no time and no «Yazdı:» in the blocks: " + all);
       check(!s.errors.length, w + ": no page errors: " + s.errors.join("; "));
