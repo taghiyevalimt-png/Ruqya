@@ -30,7 +30,8 @@ module.exports = async () => {
       const ours = m.evs.filter((e) => names.includes(e.bText));
       check(ours.length === 5, w + ": our 5 blocks drawn with whole names: " + m.evs.map((e) => e.bText).join(" | "));
       for (const e of m.evs) {
-        check(e.children === 1 && e.text === e.bText, w + ": block shows only the name: " + JSON.stringify(e.text));
+        // owner 18.11: under the name, the time, phone and who wrote it where there is room (test 99-whole-day-details)
+        check(e.text.startsWith(e.bText), w + ": the name comes first in the block: " + JSON.stringify(e.text));
         check(!e.clipped && e.ell !== "ellipsis", w + ": the name is fully visible inside its block: " + JSON.stringify(e));
       }
       const seven = m.evs.find((e) => e.bText === "Rəşidov" && e.lines === 1);

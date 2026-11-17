@@ -1,0 +1,6 @@
+# F-06 red — «Bütün gün» blocks only the name; not the default (owner 18.11) — 2026-11-17T12:11:33Z — commit 79c08a8
+FAIL 99-whole-day-default.js 
+    Error: FAIL: by default the calendar is «Bütün gün»
+FAIL 99-whole-day-details.js 
+    Error: FAIL: 390: the 2-hour block shows everything: ["Terane"]
+2 failed of 2
