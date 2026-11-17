@@ -1,0 +1,5 @@
+# red: intervals between successful scheduled backups (gh run list -w backup.yml, event=schedule) — 2026-11-17T01:54:51.227136Z
+# schedule: cron "17 23 * * *" (once a day); GitHub starts scheduled jobs late (here 29–37 min)
+2026-11-14 23:46 -> 2026-11-15 23:54  24.14 h
+2026-11-15 23:54 -> 2026-11-16 23:53  23.98 h
+largest interval 24.14 h — target RPO ≤ 24 h: НЕ ПРОЙДЕНО

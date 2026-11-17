@@ -24,10 +24,12 @@ the structure is identical, and opens the app on the copy with a temporary admin
 If anything differs the job fails (GitHub e-mails the person who last changed the schedule in the workflow file; check the Actions tab now and then).
 
 ## Schedule, retention, RPO
-- Daily at 23:17 UTC (03:17 in Baku); also by hand: Actions > Database backup > Run workflow.
+- Twice a day at 11:17 and 23:17 UTC (15:17 and 03:17 in Baku; GitHub often starts 30-40 min late); also by hand:
+  Actions > Database backup > Run workflow.
 - Kept 35 days as a GitHub Actions artifact `ruqya-backup-<UTC time>`: `ruqya-backup-<UTC>.tar.gpg` (AES-256,
   passphrase), `.sha256`, and the manifests.
-- **Recovery point objective: 24 hours.** At most one day of changes can be lost.
+- **Recovery point objective: 24 hours** (target). With two copies a day the gap is about 12-13 hours; if GitHub
+  skips one run, the gap is about 24-25 hours (check Actions after a failed or missing run).
 - **The owner must copy each week's archive to two places outside GitHub** (for example an external disk and a
   personal cloud drive). GitHub artifacts disappear after 35 days, and with the GitHub account or repository.
 - The passphrase (`BACKUP_PASSPHRASE` secret) must also be kept outside GitHub (a password manager, plus a sealed
