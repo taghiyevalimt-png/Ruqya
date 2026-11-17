@@ -2,29 +2,29 @@
 const { open, check, AGENT, tokenKey } = require("../lib");
 
 module.exports = async () => {
-  // F-20: opened after 13 hours without a touch -> sign-in screen, no patient data left on the device
+  // F-20: opened after 8 days without a touch (owner 17.11: sign-out after 7 days, was 12 hours) -> sign-in screen, no patient data left on the device
   let s = await open(AGENT, {
-    init: [() => { if (!sessionStorage.getItem("idle")) { localStorage.setItem("ruqya.seen", String(Date.now() - 13 * 3600e3)); localStorage.setItem("ruqya.cache.v1", '{"u":"x","t":1,"s":{}}'); sessionStorage.setItem("idle", "1"); } }, null],
+    init: [() => { if (!sessionStorage.getItem("idle")) { localStorage.setItem("ruqya.seen", String(Date.now() - 8 * 24 * 3600e3)); localStorage.setItem("ruqya.cache.v1", '{"u":"x","t":1,"s":{}}'); sessionStorage.setItem("idle", "1"); } }, null],
   }).catch((e) => { throw e; });
   try {
     const p = s.page;
     await p.waitForSelector("#l-mail", { timeout: 10000 });
-    check(/12 saat/.test(await p.textContent("#l-err")), "idle message shown");
+    check(/7 gün/.test(await p.textContent("#l-err")), "idle message shown");
     const left = await p.evaluate((k) => [localStorage.getItem(k), localStorage.getItem("ruqya.cache.v1")], tokenKey);
     check(!left[0] && !left[1], "session and data copy removed");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 
-  // used recently -> stays signed in; the 12 hours are counted while the app stays open too
+  // used recently -> stays signed in; the 7 days are counted while the app stays open too
   s = await open(AGENT, { clock: Date.now() });
   try {
     const p = s.page;
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 });
-    await p.clock.fastForward(11 * 3600e3);
+    await p.clock.fastForward(6.5 * 24 * 3600e3);
     check((await p.locator("#l-mail").count()) === 0, "still signed in after 11 h");
-    await p.clock.fastForward(1.5 * 3600e3);
+    await p.clock.fastForward(1 * 24 * 3600e3);
     await p.waitForSelector("#l-mail", { timeout: 10000 });
-    { const m = await p.textContent("#l-err"); check(/12 saat/.test(m), "signed out after 12 h idle while open: " + m); }
+    { const m = await p.textContent("#l-err"); check(/7 gün/.test(m), "signed out after 7 days idle while open: " + m); }
   } finally { await s.close(); }
 
   // F-32: two tabs, sign out in one

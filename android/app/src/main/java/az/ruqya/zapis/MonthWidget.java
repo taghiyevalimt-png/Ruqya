@@ -180,10 +180,10 @@ public class MonthWidget extends AppWidgetProvider {
         }
     }
 
-    // B-06: the app signs out after 12 hours without use (index.html IDLE_MS), but only while its page runs.
-    // The widget follows the same rule on its own: data the app handed over more than 12 hours ago is
+    // B-06: the app signs out after 7 days without use (index.html IDLE_MS; owner 17.11, was 12 hours), but only while its page runs.
+    // The widget follows the same rule on its own: data the app handed over (or last used) more than 7 days ago is
     // dropped from storage and the widget shows the signed-out state until the app hands over new data.
-    static final long IDLE_MS = 12L * 3600 * 1000;
+    static final long IDLE_MS = 7L * 24 * 3600 * 1000;
 
     static JSONObject fresh(JSONObject d, long now) {
         if (d == null || d.optInt("out", 0) == 1) return d;

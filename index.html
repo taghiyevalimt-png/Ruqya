@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-oqtCHK0oj1aGqujtgRi0UU8hMz9/th3JIESZDUvxmho='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-zX0G9z2u1TRBpSnNBJAkdarYgvUvGvTB08spo/I+t0M='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1460,7 +1460,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Hamısı (2 il)":"Всё (2 года)",
 "Dövr qısa olanda fayl tez hazırlanır və az internet işlədir.":"Чем короче период, тем быстрее готов файл и тем меньше уходит интернета.",
 "Dövrün məlumatları yüklənir və fayl hazırlanır…":"Загружаются данные за период и готовится файл…",
-"12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.",
+"7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 7 дней, поэтому выполнен выход. Войдите снова.",
 "Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar.":"Введённое сохранено. Его можно вернуть кнопкой «Открыть снова».",
 "Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.":"Вход истёк. Войдите снова — введённая запись не потерялась.",
 "Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın.":"Запись не сохранилась. Введённое не потерялось: нажмите «Открыть снова»."}:null;
@@ -2098,7 +2098,8 @@ function loadCache(uid){
 }
 /* A phone left on a desk overnight must not keep showing patients: after 12 hours without a touch the
    session and every copy of data on this device are removed (counted across tabs and app restarts). */
-var IDLE_MS=12*3600e3,SEEN="ruqya.seen",seenW=0,idled=false;
+var IDLE_MS=7*24*3600e3,   /* owner 17.11: sign out after 7 days without use (was 12 hours; RISK_REGISTER S-09) */
+SEEN="ruqya.seen",seenW=0,idled=false;
 function touchSeen(){var t=Date.now();if(t-seenW<60000)return;seenW=t;try{localStorage.setItem(SEEN,String(t))}catch(e){}}
 function idleOut(){
   var t=0;try{t=+localStorage.getItem(SEEN)||0}catch(e){}
@@ -2109,7 +2110,7 @@ function idleOut(){
   if(sb){try{sb.auth.signOut({scope:"local"}).then(null,function(){})}catch(e){}}
   idled=true;clearTimeout(msgTimer);
   if(auth.user)signedOut();
-  auth.msg=L("12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
+  auth.msg=L("7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
   return true;
 }
 ["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,touchSeen,{passive:true,capture:true})});
