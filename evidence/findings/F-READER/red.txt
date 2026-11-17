@@ -1,0 +1,3 @@
+# red: 7fdffc7a8aa39942a429a0f5d1708f210f16ae86 — 2026-11-17T05:46:49Z
+FAIL 99-short-window-keyboard.js 
+    Error: FAIL: the name field is above the keyboard (inside 500 px): {"top":728,"bottom":776,"h":500,"v":"Yeni Mütəxəssis"}

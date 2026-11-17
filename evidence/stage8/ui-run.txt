@@ -1,0 +1,6 @@
+# UI audit (az + ru) — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:58Z
+$ node tests/visual/audit-ui.js evidence/stage8/ui
+done 1920 light owner-ru
+done 1920 light agent-ru
+shots: 740 with problems: 0
+exit 0  end 2026-11-17T07:39:13Z

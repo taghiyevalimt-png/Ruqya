@@ -3,7 +3,7 @@ const { open, check, AGENT } = require("../lib");
 
 async function ready(p) { await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200); }
 async function fill(p, name, time) {
-  await p.click("#fab");
+  await p.click("#fab"); await p.waitForSelector("#f-reader");
   await p.selectOption("#f-reader", { index: 1 });
   await p.selectOption("#f-dur", "60");
   await p.fill("#f-time", time);
@@ -77,7 +77,7 @@ module.exports = async () => {
     await p.click('[data-act="draft-drop"]');
     check((await draftShown(p)) === 0, "draft can be thrown away");
     // closing an empty form leaves nothing behind
-    await p.click("#fab"); await p.click('[data-act="close"]'); await p.waitForTimeout(300);
+    await p.click("#fab"); await p.waitForSelector("#f-reader"); await p.click('[data-act="close"]'); await p.waitForTimeout(300);
     check((await draftShown(p)) === 0, "empty form leaves no draft");
   } finally { await s.close(); }
 

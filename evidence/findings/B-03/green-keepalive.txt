@@ -1,0 +1,8 @@
+ping	Read one row with the public key	2026-11-16T18:27:10.0434893Z ^[[36;1mecho "status $code"; cat body.json; echo^[[0m
+ping	Read one row with the public key	2026-11-16T18:27:10.0436634Z ^[[36;1mif [ "$code" = "401" ] && grep -q '"code":"42501"' body.json; then exit 0; fi^[[0m
+ping	Read one row with the public key	2026-11-16T18:27:11.3284146Z status 401
+ping	Read one row with the public key	2026-11-16T18:27:11.3286274Z {"code":"42501","details":null,"hint":"Grant the required privileges to the current role with: GRANT SELECT ON public.readers TO anon
+ping	Keep this schedule switched on	2026-11-16T18:27:11.3522453Z ^[[36;1m    "https://api.github.com/repos/taghiyevalimt-png/Ruqya/actions/workflows/$wf/enable")^[[0m
+ping	Keep this schedule switched on	2026-11-16T18:27:11.3525795Z ^[[36;1m  echo "enable $wf: $code"; [ "$code" = "204" ] || { echo "::error::could not keep $wf switched on ($code)"; exit 1; }^[[0m
+ping	Keep this schedule switched on	2026-11-16T18:27:11.9845827Z enable keepalive.yml: 204
+ping	Keep this schedule switched on	2026-11-16T18:27:12.5389623Z enable backup.yml: 204

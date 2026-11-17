@@ -1,0 +1,3 @@
+# green: publish.sh with the R2-12 guard — 2026-11-17T03:14:58Z
+PASS 28-publish-guard.js 4.9s
+all 1 passed

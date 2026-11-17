@@ -22,7 +22,7 @@ async function sweep(who, lang, width) {
     await p.click('#tabs [data-tab="day"]');
     const ev = await p.$("#cal .ev");
     if (ev) { await ev.click(); await p.waitForTimeout(200); await p.click('[data-act="close"]').catch(() => {}); }
-    if (await p.isVisible("#fab")) { await p.click("#fab"); await p.waitForTimeout(200); await p.click('[data-act="close"]'); }
+    if (await p.isVisible("#fab")) { await p.click("#fab"); await p.waitForSelector("#f-reader"); await p.waitForTimeout(200); await p.click('[data-act="close"]'); }
     check(!s.errors.length, `${who.slice(0, 4)} ${lang || "az"} ${width}px: page errors: ` + s.errors.join("; "));
   } finally { await s.close(); }
 }

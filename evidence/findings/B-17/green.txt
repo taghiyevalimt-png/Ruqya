@@ -1,0 +1,21 @@
+# green: commit 664ba75318bb9c8df4a02c59551af976cbb96635 + sql/2026-11-realtime.sql in the install — 2026-11-17T01:17:54Z
+$ node tools/schema_check.js evidence/stage6/structure-live.tsv
+# repository schema (db/schema_live_*.sql + BASE install files) vs live — 2026-11-17T01:18:01.494Z
+SAME  	tables
+SAME  	columns
+SAME  	constraints
+SAME  	indexes
+SAME  	functions
+SAME  	function_grants
+SAME  	triggers
+SAME  	rls
+SAME  	policies
+SAME  	table_grants
+SAME  	column_grants
+SAME  	realtime
+# what the pending migrations change (tests/dbcopy.js AFTER):
+CHANGED	functions
+CHANGED	function_grants
+CHANGED	table_grants
+ПРОЙДЕНО: the repository schema equals the live structure in every part
+exit 0

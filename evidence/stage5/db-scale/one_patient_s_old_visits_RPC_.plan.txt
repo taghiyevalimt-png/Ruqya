@@ -1,0 +1,6 @@
+-- agent
+-- select * from public.ruqya_hist_visits('p500000500', current_date - 45, current_date - 731)
+Function Scan on ruqya_hist_visits  (cost=0.26..10.26 rows=1000 width=148) (actual time=2.512..2.513 rows=1 loops=1)
+  Buffers: shared hit=26 read=6 written=6
+Planning Time: 0.055 ms
+Execution Time: 2.640 ms

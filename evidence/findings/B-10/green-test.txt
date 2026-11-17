@@ -1,0 +1,5 @@
+# green: working tree on b282510d68815ffba09903630d57019b3ed0f979 + dead entries removed — 2026-11-16T22:38:52Z
+$ node tests/run.js 29-rules
+PASS 29-rules-text.js 14.5s
+all 1 passed
+exit 0

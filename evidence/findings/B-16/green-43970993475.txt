@@ -1,0 +1,15 @@
+# gh run view 43970993475 --log (filtered) — 2026-11-16T22:36:39Z
+commit 1937b700b5e7c09eef503b8a6e33dd91aef4c709 success 2026-11-16T22:32:14Z
+Check the secrets	2026-11-16T22:32:24.8259951Z   BACKUP_PASSPHRASE: ***
+Dump the live database	2026-11-16T22:35:17.0024825Z Source manifest (table, rows, md5):
+Start a clean local Supabase stack	2026-11-16T22:35:41.5652677Z ▲  no files matched pattern: supabase/seed.sql
+Restore into the local stack and compare	2026-11-16T22:35:47.2474271Z ##[warning]restore target lacked column auth.one_time_tokens.link_token_hash; added
+Restore into the local stack and compare	2026-11-16T22:35:47.2479704Z ##[warning]restore target lacked column auth.saml_providers.dedicated_scope; added
+Restore into the local stack and compare	2026-11-16T22:35:47.3951862Z restore ok (16 notice lines)
+Restore into the local stack and compare	2026-11-16T22:35:47.4457428Z Restored manifest (table, rows, md5):
+Smoke test the app on the restored copy	2026-11-16T22:35:58.8949155Z PASS restored copy: calendar loads without errors and the admin sees all 135 appointments
+Encrypt the backup	2026-11-16T22:35:58.9268330Z   BACKUP_PASSPHRASE: ***
+Encrypt the backup	2026-11-16T22:35:59.2503078Z -rw------- 1 runner runner    562 Nov 16 22:35 manifest-restored.txt
+Encrypt the backup	2026-11-16T22:35:59.2503604Z -rw------- 1 runner runner    562 Nov 16 22:35 manifest-source.txt
+Encrypt the backup	2026-11-16T22:35:59.2504014Z -rw------- 1 runner runner    682 Nov 16 22:35 manifest-structure-restored.txt
+Encrypt the backup	2026-11-16T22:35:59.2504451Z -rw------- 1 runner runner    682 Nov 16 22:35 manifest-structure-source.txt

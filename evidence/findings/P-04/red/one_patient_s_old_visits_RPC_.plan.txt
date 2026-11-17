@@ -1,0 +1,42 @@
+-- agent
+-- select * from public.ruqya_hist_visits('p0000000123', current_date - 45, current_date - 731)
+Function Scan on ruqya_hist_visits  (cost=0.26..10.26 rows=1000 width=148) (actual time=5652.354..5652.354 rows=0 loops=1)
+  Buffers: shared hit=13623 read=1290
+Planning Time: 0.029 ms
+Execution Time: 5652.475 ms
+---- nested statement (auto_explain) ----
+duration: 5651.064 ms  plan:
+Query Text: 
+  select a.id, a.reader_id, a.date, a.name, a.phone, a.status, a.created_by from public.appts a
+  where a.date >= greatest(since, current_date - 800) and a.date < before
+    and public.ruqya_pkey(a.phone, a.name) = key
+  order by a.date desc, a.id limit 500 
+Query Parameters: $1 = 'p0000000123', $2 = '2026-10-03', $3 = '2024-11-16'
+Limit  (cost=13271.42..13271.45 rows=12 width=84) (actual time=5651.061..5651.064 rows=0 loops=1)
+  Buffers: shared hit=13623 read=1290
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.012..0.013 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.534..0.534 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
+  ->  Sort  (cost=13270.87..13270.90 rows=12 width=84) (actual time=5651.060..5651.061 rows=0 loops=1)
+        Sort Key: a.date DESC, a.id
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=13623 read=1290
+        ->  Bitmap Heap Scan on appts a  (cost=89.97..13270.66 rows=12 width=84) (actual time=5651.053..5651.054 rows=0 loops=1)
+              Recheck Cond: ((date >= GREATEST($3, (CURRENT_DATE - 800))) AND (date < $2))
+              Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))) AND (ruqya_pkey(phone, name) = $1))
+              Rows Removed by Filter: 626415
+              Heap Blocks: exact=14223
+              Buffers: shared hit=13623 read=1290
+              ->  Bitmap Index Scan on appts_date  (cost=0.00..74.43 rows=5000 width=0) (actual time=32.988..32.989 rows=626415 loops=1)
+                    Index Cond: ((date >= GREATEST($3, (CURRENT_DATE - 800))) AND (date < $2))
+                    Buffers: shared hit=688
+              SubPlan 3
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+              SubPlan 5
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)

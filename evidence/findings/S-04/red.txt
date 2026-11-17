@@ -1,0 +1,5 @@
+FAIL 90-sql.js 
+    Error: too many rights: appts anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, breaks anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, expenses anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, product_sales anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, readers anon:MAINTAIN authenticated:MAINTAIN, services anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, staff anon:SELECT anon:MAINTAIN authenticated:MAINTAIN, stat_edits authenticated:MAINTAIN anon:EXECUTE ruqya_min
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\sql-privileges.js:14:33)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+1 failed of 1

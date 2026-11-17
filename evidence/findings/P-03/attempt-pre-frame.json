@@ -1,0 +1,267 @@
+{
+ "at": "2026-11-17T00:15:14.101Z",
+ "profile": "CPU x4, 412x823 DPR2",
+ "judged": [
+  "scroll-day",
+  "scroll-stats",
+  "scroll-patients",
+  "window-slide",
+  "close-window",
+  "window-slide-2",
+  "close-window-2"
+ ],
+ "verdict": "НЕ ПРОЙДЕНО: window-slide (3 frames, max 125 ms); window-slide-2 (1 frames, max 51 ms)",
+ "runs": [
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 8009.10000000149,
+     "d": 129,
+     "s": []
+    },
+    {
+     "t": 7788.20000000298,
+     "d": 181,
+     "s": [
+      "TimerHandler:setTimeout  170"
+     ]
+    }
+   ],
+   "window-slide": [],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39662.90000000596,
+     "d": 55,
+     "s": [
+      "TimerHandler:setTimeout  42"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71371.20000000298,
+     "d": 280,
+     "s": [
+      "TimerHandler:setTimeout  34"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75348.20000000298,
+     "d": 60,
+     "s": [
+      "TimerHandler:setTimeout  23"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": [
+    {
+     "t": 79118.80000000447,
+     "d": 55,
+     "s": [
+      "TimerHandler:setTimeout  43"
+     ]
+    }
+   ]
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7436.29999999702,
+     "d": 161,
+     "s": [
+      "TimerHandler:setTimeout  152"
+     ]
+    },
+    {
+     "t": 7647,
+     "d": 124,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 7647,
+     "d": 124,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39283.5,
+     "d": 57,
+     "s": [
+      "TimerHandler:setTimeout  51"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71021.89999999851,
+     "d": 213,
+     "s": []
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7927,
+     "d": 188,
+     "s": [
+      "TimerHandler:setTimeout  180"
+     ]
+    },
+    {
+     "t": 8158.79999999702,
+     "d": 125,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8158.79999999702,
+     "d": 125,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39844.29999999702,
+     "d": 51,
+     "s": []
+    }
+   ],
+   "window-slide-2": [
+    {
+     "t": 39844.29999999702,
+     "d": 51,
+     "s": []
+    }
+   ],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71636,
+     "d": 252,
+     "s": [
+      "TimerHandler:setTimeout  20"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7980.20000000298,
+     "d": 158,
+     "s": [
+      "TimerHandler:setTimeout  149"
+     ]
+    },
+    {
+     "t": 8179.39999999851,
+     "d": 118,
+     "s": []
+    }
+   ],
+   "window-slide": [
+    {
+     "t": 8179.39999999851,
+     "d": 118,
+     "s": []
+    }
+   ],
+   "close-window": [],
+   "open-window-2": [
+    {
+     "t": 39818.30000000447,
+     "d": 55,
+     "s": [
+      "TimerHandler:setTimeout  49"
+     ]
+    }
+   ],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71524.10000000149,
+     "d": 231,
+     "s": [
+      "TimerHandler:setTimeout  36"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [
+    {
+     "t": 75267.80000000447,
+     "d": 58,
+     "s": [
+      "TimerHandler:setTimeout  18"
+     ]
+    }
+   ],
+   "scroll-patients": [],
+   "tab-day": []
+  },
+  {
+   "scroll-day": [],
+   "open-window": [
+    {
+     "t": 7665.39999999851,
+     "d": 180,
+     "s": [
+      "TimerHandler:setTimeout  171"
+     ]
+    },
+    {
+     "t": 7877.89999999851,
+     "d": 124,
+     "s": []
+    }
+   ],
+   "window-slide": [],
+   "close-window": [],
+   "open-window-2": [],
+   "window-slide-2": [],
+   "close-window-2": [],
+   "tab-stats": [
+    {
+     "t": 71229,
+     "d": 197,
+     "s": [
+      "TimerHandler:setTimeout  18"
+     ]
+    }
+   ],
+   "scroll-stats": [],
+   "tab-patients": [],
+   "scroll-patients": [],
+   "tab-day": []
+  }
+ ]
+}

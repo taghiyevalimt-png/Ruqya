@@ -1,0 +1,31 @@
+-- agent
+-- select * from public.product_sales where date >= current_date - 45 order by date desc, id limit 1000
+Limit  (cost=278.17..278.82 rows=258 width=51) (actual time=2.793..3.042 rows=873 loops=1)
+  Buffers: shared hit=34
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.002..0.003 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.570..0.571 rows=1 loops=1)
+          Buffers: shared hit=1
+  InitPlan 3
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.836..0.837 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.004..0.005 rows=1 loops=1)
+  ->  Sort  (cost=277.60..278.24 rows=258 width=51) (actual time=2.791..2.902 rows=873 loops=1)
+        Sort Key: product_sales.date DESC, product_sales.id
+        Sort Method: quicksort  Memory: 140kB
+        Buffers: shared hit=34
+        ->  Bitmap Heap Scan on product_sales  (cost=14.98..267.26 rows=258 width=51) (actual time=1.567..2.213 rows=873 loops=1)
+              Recheck Cond: (date >= (CURRENT_DATE - 45))
+              Filter: (((InitPlan 2).col1 OR ((InitPlan 3).col1 AND (created_by = (InitPlan 4).col1))) AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
+              Rows Removed by Filter: 2
+              Heap Blocks: exact=28
+              Buffers: shared hit=34
+              ->  Bitmap Index Scan on product_sales_date  (cost=0.00..14.92 rows=883 width=0) (actual time=0.112..0.112 rows=875 loops=1)
+                    Index Cond: (date >= (CURRENT_DATE - 45))
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=35 read=2 written=1
+Planning Time: 1.077 ms
+Execution Time: 3.346 ms

@@ -52,3 +52,7 @@ sq.paste(res, ((side - res.width) // 2, (side - res.height) // 2), res)
 sq = sq.resize((384, 384), Image.LANCZOS)   # 128 px on a 3x screen
 sq.save(os.path.join(root, "logo-hq.png"), optimize=True)
 print("logo-hq.png", sq.size)
+# P-02: the same pixels as lossless WebP (81 KB instead of 128 KB) — the splash logo is the page's largest paint,
+# so its size sets LCP on a slow network; browsers without WebP take the PNG (<picture> in index.html)
+sq.save(os.path.join(root, "logo-hq.webp"), "WEBP", lossless=True, quality=100, method=6, exact=False)
+print("logo-hq.webp", os.path.getsize(os.path.join(root, "logo-hq.webp")), "bytes")

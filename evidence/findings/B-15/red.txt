@@ -1,0 +1,5 @@
+# red: 354b36d773704332f6ffabb88828ec4c6e5311bb — 2026-11-16T22:40:24Z
+$ node tests/run.js 30-patient
+FAIL 30-patient-search.js 
+    Error: FAIL: all: «Rəna 5» finds only Rəna (not phones with a 5): Test Pasiyent, Rəna 5, Aysel
+1 failed of 1

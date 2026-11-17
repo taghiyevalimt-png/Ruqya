@@ -1,0 +1,2 @@
+PASS 25-many-patients.js 11.1s
+all 1 passed

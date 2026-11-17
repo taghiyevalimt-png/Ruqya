@@ -1,0 +1,7 @@
+# gh run view 43969449184 --log-failed (filtered: error lines only, values blanked by the workflow) — 2026-11-16T22:36:34Z
+commit 6abe7b708438eb94cb4da429ac5586b817fd4f35 failure 2026-11-16T22:22:33Z
+2026-11-16T22:26:03.8143413Z psql:data.sql:210: ERROR:  column "…" of relation "…" does not exist
+2026-11-16T22:26:03.8177892Z COPY "auth"."one_time_tokens" ("id", "user_id", "token_type", "token_hash", "relates_to", "created_at", "updated_at", "expires_at", "link_token_hash") FROM stdin;
+2026-11-16T22:26:03.8190652Z column "link_token_hash" of relation "one_time_tokens" does not exist
+2026-11-16T22:26:03.8208396Z ##[error]restore failed
+2026-11-16T22:26:03.8216354Z ##[error]Process completed with exit code 1.

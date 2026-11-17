@@ -1,0 +1,3 @@
+# red: index.html of 65173aecd53ef2e9b2e7384ec2398f52a285361a — 2026-11-17T05:45:26Z
+FAIL 99-service-ui.js 
+    Error: FAIL: six services, Ruqya chosen: 

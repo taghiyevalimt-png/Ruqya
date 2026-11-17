@@ -1,0 +1,22 @@
+-- agent
+-- select * from public.breaks order by start_time limit 1000
+Limit  (cost=1.57..1.58 rows=1 width=58) (actual time=0.665..0.667 rows=1 loops=1)
+  Buffers: shared hit=2 read=1 written=1
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.002..0.003 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.592..0.593 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 3
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
+  ->  Sort  (cost=1.03..1.03 rows=1 width=58) (actual time=0.664..0.665 rows=1 loops=1)
+        Sort Key: breaks.start_time
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=2 read=1 written=1
+        ->  Seq Scan on breaks  (cost=0.00..1.02 rows=1 width=58) (actual time=0.656..0.657 rows=1 loops=1)
+              Filter: (((InitPlan 2).col1 OR (InitPlan 3).col1) AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
+              Buffers: shared hit=2 read=1 written=1
+Planning:
+  Buffers: shared hit=40 read=2 written=1
+Planning Time: 1.128 ms
+Execution Time: 0.705 ms

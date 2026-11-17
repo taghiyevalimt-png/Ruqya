@@ -1,0 +1,158 @@
+{
+ "at": "2026-11-17T04:33:27.955Z",
+ "person": "made-up test person",
+ "key": "p557776655",
+ "bookings": [
+  {
+   "id": "d0000000-0000-4000-8000-000000000002",
+   "reader_id": "b0000000-0000-4000-8000-000000000002",
+   "date": "2026-09-17T20:00:00.000Z",
+   "time": "11:00",
+   "duration": 60,
+   "name": "Zərifə Testova",
+   "phone": "055 777 66 55",
+   "price": "130",
+   "status": "wait",
+   "note": "baş ağrısı (test) 2",
+   "place": "ofis",
+   "created_at": "2026-11-17T04:33:27.891Z"
+  },
+  {
+   "id": "d0000000-0000-4000-8000-000000000001",
+   "reader_id": "b0000000-0000-4000-8000-000000000001",
+   "date": "2026-10-17T20:00:00.000Z",
+   "time": "11:00",
+   "duration": 60,
+   "name": "Zərifə Testova",
+   "phone": "055 777 66 55",
+   "price": "130",
+   "status": "wait",
+   "note": "baş ağrısı (test)",
+   "place": "ofis",
+   "created_at": "2026-11-17T04:33:27.872Z"
+  }
+ ],
+ "journal": [
+  {
+   "id": "2",
+   "at": "2026-11-17T04:33:27.872Z",
+   "tbl": "appts",
+   "op": "INSERT",
+   "row_id": "d0000000-0000-4000-8000-000000000001",
+   "old": null,
+   "new": {
+    "date": "2026-10-18",
+    "name": "Zərifə Testova",
+    "note": "baş ağrısı (test)",
+    "time": "11:00",
+    "phone": "055 777 66 55",
+    "place": "ofis",
+    "price": 130,
+    "share": 0,
+    "follow": 0,
+    "status": "wait",
+    "service": "Ruqya",
+    "settled": false,
+    "duration": 60,
+    "confirmed": false,
+    "reader_id": "b0000000-0000-4000-8000-000000000001"
+   }
+  },
+  {
+   "id": "3",
+   "at": "2026-11-17T04:33:27.891Z",
+   "tbl": "appts",
+   "op": "INSERT",
+   "row_id": "d0000000-0000-4000-8000-000000000002",
+   "old": null,
+   "new": {
+    "date": "2026-09-18",
+    "name": "Zərifə Testova",
+    "note": "",
+    "time": "11:00",
+    "phone": "055 777 66 55",
+    "place": "ofis",
+    "price": 130,
+    "share": 0,
+    "follow": 0,
+    "status": "wait",
+    "service": "Ruqya",
+    "settled": false,
+    "duration": 60,
+    "confirmed": false,
+    "reader_id": "b0000000-0000-4000-8000-000000000002"
+   }
+  },
+  {
+   "id": "4",
+   "at": "2026-11-17T04:33:27.902Z",
+   "tbl": "appts",
+   "op": "INSERT",
+   "row_id": "d0000000-0000-4000-8000-000000000003",
+   "old": null,
+   "new": {
+    "date": "2026-08-19",
+    "name": "Zərifə Testova",
+    "note": "",
+    "time": "11:00",
+    "phone": "055 777 66 55",
+    "place": "ofis",
+    "price": 130,
+    "share": 0,
+    "follow": 0,
+    "status": "wait",
+    "service": "Ruqya",
+    "settled": false,
+    "duration": 60,
+    "confirmed": false,
+    "reader_id": "b0000000-0000-4000-8000-000000000001"
+   }
+  },
+  {
+   "id": "5",
+   "at": "2026-11-17T04:33:27.909Z",
+   "tbl": "appts",
+   "op": "UPDATE",
+   "row_id": "d0000000-0000-4000-8000-000000000002",
+   "old": {
+    "date": "2026-09-18",
+    "name": "Zərifə Testova",
+    "note": ""
+   },
+   "new": {
+    "date": "2026-09-18",
+    "name": "Zərifə Testova",
+    "note": "baş ağrısı (test) 2"
+   }
+  },
+  {
+   "id": "6",
+   "at": "2026-11-17T04:33:27.927Z",
+   "tbl": "appts",
+   "op": "DELETE",
+   "row_id": "d0000000-0000-4000-8000-000000000003",
+   "old": {
+    "id": "d0000000-0000-4000-8000-000000000003",
+    "date": "2026-08-19",
+    "name": "Zərifə Testova",
+    "note": "",
+    "time": "11:00",
+    "phone": "055 777 66 55",
+    "place": "ofis",
+    "price": 130,
+    "share": 0,
+    "follow": 0,
+    "status": "wait",
+    "service": "Ruqya",
+    "settled": false,
+    "duration": 60,
+    "confirmed": false,
+    "reader_id": "b0000000-0000-4000-8000-000000000001",
+    "created_at": "2026-11-17T08:33:27.902264+04:00",
+    "created_by": "bad097d4-5edc-402b-ad59-f633252c35d9",
+    "updated_at": "2026-11-17T08:33:27.902264+04:00"
+   },
+   "new": null
+  }
+ ]
+}

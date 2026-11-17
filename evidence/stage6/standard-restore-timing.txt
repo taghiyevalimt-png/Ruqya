@@ -1,0 +1,19 @@
+# backup.yml run 43970993475 (nightly standard copy, restored into a fresh local Supabase stack + app smoke test) — step times
+      5 s  success  Set up job
+      0 s  success  Check the secrets
+      7 s  success  Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      8 s  success  Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+     34 s  success  Install PostgreSQL client 17 (PGDG)
+     18 s  success  Install the Supabase CLI 3.1.0 and Playwright 1.63.0
+      0 s  success  Timestamp
+    106 s  success  Dump the live database
+     30 s  success  Start a clean local Supabase stack
+      0 s  success  Restore into the local stack and compare
+     11 s  success  Smoke test the app on the restored copy
+      1 s  success  Encrypt the backup
+      2 s  success  Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      2 s  success  Remove the unencrypted copies
+      0 s  success  Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      0 s  success  Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      0 s  success  Complete job
+total 224 s

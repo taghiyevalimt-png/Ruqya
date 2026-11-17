@@ -1,0 +1,5 @@
+FAIL 28-publish-guard.js 
+    Error: FAIL: publish.sh on a feature branch must fail, it exited 0 with: version 20261116183417
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:205:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\28-publish-guard.js:21:5)
+1 failed of 1

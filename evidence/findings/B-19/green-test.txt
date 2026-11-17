@@ -1,0 +1,3 @@
+# green test
+PASS 94-configured-copy.js 1.1s
+all 1 passed

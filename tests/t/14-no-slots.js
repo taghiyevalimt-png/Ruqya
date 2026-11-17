@@ -5,7 +5,7 @@ module.exports = async () => {
   try {
     const p = s.page;
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200);
-    await p.click("#fab");
+    await p.click("#fab"); await p.waitForSelector("#f-reader");
     await p.selectOption("#f-reader", R1);
     check((await p.locator("#sheet .slot, #f-slots, #f-busy").count()) === 0, "no time buttons and no busy line");
     await p.fill("#f-time", "10:30"); await p.fill("#f-name", "Üst-üstə"); await p.fill("#f-phone", "050 999 00 11");

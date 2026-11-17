@@ -1,0 +1,30 @@
+// B-07: publish.sh run from another branch must stop without pushing (before: it pushed the unchanged local main
+// and still printed «version …», so nothing was published while it looked successful).
+// Runs in throw-away clones with a local bare repository as "origin"; the real GitHub repository is never touched.
+const { execSync } = require("child_process"), fs = require("fs"), os = require("os"), path = require("path");
+const { check } = require("../lib");
+const sh = (cmd, cwd) => execSync(cmd, { cwd, stdio: "pipe", encoding: "utf8", env: { ...process.env, GIT_TERMINAL_PROMPT: "0" } });
+module.exports = async () => {
+  const root = path.resolve(__dirname, "..", ".."), t = fs.mkdtempSync(path.join(os.tmpdir(), "pubguard-")), script = process.env.PUBLISH_SH || path.join(root, "publish.sh");
+  try {
+    sh(`git init -q --bare -b main origin.git`, t);
+    sh(`git init -q -b main work && cd work && git config user.name T && git config user.email t@t && git config core.autocrlf false`, t);
+    const w = path.join(t, "work");
+    for (const f of ["index.html", "version.txt"]) fs.copyFileSync(path.join(root, f), path.join(w, f));
+    fs.mkdirSync(path.join(w, "tools")); fs.copyFileSync(path.join(root, "tools", "csp.py"), path.join(w, "tools", "csp.py"));
+    fs.copyFileSync(script, path.join(w, "publish.sh"));
+    sh(`git add -A && git commit -qm base && git remote add origin ../origin.git && git push -q origin main`, w);
+    const before = sh(`git rev-parse main`, path.join(t, "origin.git")).trim();
+    sh(`git checkout -q -b feature`, w);
+    let code = 0, out = ""; try { out = sh(`sh publish.sh test`, w); } catch (e) { code = e.status; out = String(e.stdout) + String(e.stderr); }
+    const after = sh(`git rev-parse main`, path.join(t, "origin.git")).trim();
+    check(code !== 0, "publish.sh on a feature branch must fail, it exited 0 with: " + out.trim().split("\n").pop());
+    check(after === before, "origin/main unchanged");
+    // R2-12: on main, an unknown new file stops the publication (nothing is pushed, the file is not committed)
+    sh(`git checkout -q main`, w); fs.writeFileSync(path.join(w, "notes-private.txt"), "x");
+    let code2 = 0, out2 = ""; try { out2 = sh(`sh publish.sh test2`, w); } catch (e) { code2 = e.status; out2 = String(e.stdout) + String(e.stderr); }
+    check(code2 !== 0 && /new files not yet in git/.test(out2) && /notes-private\.txt/.test(out2), "publish.sh stops on an untracked file: " + out2.trim().split("\n").slice(-2).join(" | "));
+    check(sh(`git rev-parse main`, path.join(t, "origin.git")).trim() === before, "origin/main still unchanged");
+    check(!sh(`git log --all --name-only --format=`, w).includes("notes-private.txt"), "the untracked file was not committed");
+  } finally { fs.rmSync(t, { recursive: true, force: true }); }
+};

@@ -1,0 +1,2 @@
+# L() literal calls: 660, dictionary keys: 789, without translation: 1
+<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="text" maxlength="60" autocomplete="off" placeholder="050 000 00 00" value="

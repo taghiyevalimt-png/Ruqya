@@ -1,0 +1,14 @@
+# green: tools/configure.py fixed — 2026-11-17T01:58:32Z
+apple-touch-icon.png
+favicon.png
+icon-192.png
+icon-512.png
+index.html
+launch
+logo-192.png
+logo-hq.png
+logo-hq.webp
+logo.png
+manifest.webmanifest
+vendor
+version.txt

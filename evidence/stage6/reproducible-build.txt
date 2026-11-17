@@ -1,0 +1,5 @@
+# reproducible build: two clean checkouts of 080a5623631cdb08f782bdc167d98fce97287032, tools/configure.py into two folders — 2026-11-17T01:59:32Z
+$ (per checkout) SUPABASE_URL=http://127.0.0.1:54321 SUPABASE_ANON_KEY=<test value> python tools/configure.py OUT; find OUT -type f | sort | xargs sha256sum
+files: 38
+ПРОЙДЕНО: all sha256 identical
+sha256 of the sum list: 19e329e6462a26353b646335c32acb46ba4072ff0a801697a539cce400cf8f90

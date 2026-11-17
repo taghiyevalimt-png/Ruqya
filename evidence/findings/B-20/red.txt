@@ -1,0 +1,6 @@
+# red: runs whose restore check failed kept no copy (artifacts per run) — 2026-11-17T03:17:18Z
+43918407863 failure artifacts: 0
+43928936075 failure artifacts: 0
+43930946242 failure artifacts: 0
+43969449184 failure artifacts: 0
+43970247349 failure artifacts: 0

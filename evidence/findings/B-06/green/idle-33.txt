@@ -1,0 +1,5 @@
+B-06 widget 12-hour rule (API 33)
+out      1c27ffb738eb9ca994ac6c4f8b5baa7a
+after1h  0ba42d3c534a7382b942d130142f58f1
+after13h 1c27ffb738eb9ca994ac6c4f8b5baa7a
+PASS: 13 h old data shows the signed-out picture, 1 h old data the month

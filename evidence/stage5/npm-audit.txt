@@ -1,0 +1,22 @@
+# 2026-11-17T02:28:20Z
+$ cd tests && npm audit
+
+2 low severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+# npm audit report
+
+@eslint/plugin-kit  <0.3.4
+@eslint/plugin-kit is vulnerable to Regular Expression Denial of Service attacks through ConfigCommentParser - https://github.com/advisories/GHSA-xffm-g5w8-qvg7
+fix available via `npm audit fix`
+node_modules/@eslint/plugin-kit
+  eslint  9.10.0 - 9.26.0
+  Depends on vulnerable versions of @eslint/plugin-kit
+  node_modules/eslint
+
+2 low severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+# counts: {"info":0,"low":2,"moderate":0,"high":0,"critical":0} — both in eslint (tests/ only, not shipped with the app)

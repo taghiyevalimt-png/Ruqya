@@ -1,0 +1,51 @@
+-- agent
+-- select * from public.ruqya_hist_patients(current_date - 45, current_date - 731)
+Function Scan on ruqya_hist_patients  (cost=0.26..10.26 rows=1000 width=116) (actual time=8495.164..8578.712 rows=626415 loops=1)
+  Buffers: shared hit=3854 read=11139 written=2427, temp read=16849 written=16866
+Planning Time: 0.038 ms
+Execution Time: 8610.749 ms
+---- nested statement (auto_explain) ----
+duration: 8485.105 ms  plan:
+Query Text: 
+  select x.k,
+         (array_agg(x.name order by x.date desc, x.id))[1],
+         (array_agg(x.phone order by x.date desc, x.id) filter (where coalesce(x.phone,'') <> ''))[1],
+         (count(*) filter (where x.status not in ('cancel','noshow')))::int,
+         (count(*) filter (where x.status = 'noshow'))::int,
+         (count(*) filter (where x.status = 'cancel'))::int,
+         max(x.date),
+         min(x.date) filter (where x.status not in ('cancel','noshow'))
+    from (select a.id, a.date, a.name, a.phone, a.status, public.ruqya_pkey(a.phone, a.name) k
+            from public.appts a
+           where a.date >= greatest(since, current_date - 800) and a.date < before) x
+   group by x.k
+   order by x.k 
+Query Parameters: $1 = '2026-10-03', $2 = '2024-11-16'
+GroupAggregate  (cost=12726.49..13447.27 rows=2344 width=116) (actual time=7094.411..8240.802 rows=626415 loops=1)
+  Group Key: (ruqya_pkey(a.phone, a.name))
+  Buffers: shared hit=3816 read=11130 written=2420, temp read=11531 written=11548
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.012..0.013 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.611..0.612 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
+  ->  Sort  (cost=12725.94..12731.80 rows=2344 width=84) (actual time=7094.385..7216.334 rows=626415 loops=1)
+        Sort Key: (ruqya_pkey(a.phone, a.name)), a.date DESC, a.id
+        Sort Method: external merge  Disk: 46144kB
+        Buffers: shared hit=3816 read=11130 written=2420, temp read=11531 written=11548
+        ->  Bitmap Heap Scan on appts a  (cost=90.55..12594.74 rows=2344 width=84) (actual time=52.419..6604.912 rows=626415 loops=1)
+              Recheck Cond: ((date >= GREATEST($2, (CURRENT_DATE - 800))) AND (date < $1))
+              Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
+              Heap Blocks: exact=14223
+              Buffers: shared hit=3816 read=11130 written=2420
+              ->  Bitmap Index Scan on appts_date  (cost=0.00..74.43 rows=5000 width=0) (actual time=48.671..48.672 rows=626415 loops=1)
+                    Index Cond: ((date >= GREATEST($2, (CURRENT_DATE - 800))) AND (date < $1))
+                    Buffers: shared hit=1 read=687 written=285
+              SubPlan 3
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+              SubPlan 5
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)

@@ -5,7 +5,7 @@ module.exports = async () => {
     const p = s.page;
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 });
     await p.waitForTimeout(3200); // logo animation
-    await p.click("#fab");
+    await p.click("#fab"); await p.waitForSelector("#f-reader");
     await p.selectOption("#f-reader", { index: 1 });
     await p.selectOption("#f-dur", "60");
     await p.fill("#f-time", "14:00");

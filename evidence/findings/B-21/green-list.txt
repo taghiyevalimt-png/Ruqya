@@ -1,0 +1,2 @@
+# L() literal calls: 660, dictionary keys: 789, without translation: 0
+

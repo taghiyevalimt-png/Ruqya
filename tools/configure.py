@@ -14,7 +14,7 @@ import os, re, shutil, subprocess, sys, tempfile
 from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE = ['index.html', 'manifest.webmanifest', 'version.txt', 'vendor', 'launch']   # plus the *.png icons
+SITE = ['index.html', 'manifest.webmanifest', 'version.txt', 'vendor', 'launch']   # plus the *.png icons and *.webp pictures
 
 
 def die(msg):
@@ -117,7 +117,7 @@ def main(argv):
 
     tmp = tempfile.mkdtemp(prefix='ruqya-site-', dir=os.path.dirname(out) or None)
     try:
-        for name in SITE + sorted(f for f in os.listdir(ROOT) if f.endswith('.png')):
+        for name in SITE + sorted(f for f in os.listdir(ROOT) if f.endswith(('.png', '.webp'))):
             p = os.path.join(ROOT, name)
             if os.path.isdir(p):
                 shutil.copytree(p, os.path.join(tmp, name))

@@ -1,0 +1,6 @@
+# event timing breakdown of the old code (vitals flow, 5 runs): [name, duration, input delay, processing, presentation, target]
+[["click",88,23,25,40,"svg"],["click",72,14,11,48,"svg"],["click",32,11,7,14,"svg"],["click",24,12,8,5,"svg"],["click",48,17,1,30,"new-appt"],["click",40,18,0,22,"f-name"],["click",40,15,8,17,"close"],["click",96,16,23,57,""]]
+[["click",88,22,26,40,"svg"],["click",40,13,9,19,"svg"],["click",40,13,11,16,"svg"],["click",40,12,9,19,"svg"],["click",56,17,0,38,"new-appt"],["click",56,17,0,39,"f-name"],["click",512,16,6,490,"close"],["click",72,18,27,28,""]]
+[["click",56,6,17,33,"svg"],["click",40,10,7,23,"svg"],["click",40,12,14,14,"svg"],["click",40,8,9,23,"svg"],["click",56,14,0,42,"new-appt"],["click",40,19,0,21,"f-name"],["click",432,20,6,406,"close"],["click",72,19,30,23,""]]
+[["click",88,25,24,40,"svg"],["click",40,12,12,16,"svg"],["click",40,12,7,21,"svg"],["click",56,12,6,39,"svg"],["click",40,14,1,26,"new-appt"],["click",56,24,1,32,"f-name"],["click",480,20,6,454,"close"],["click",56,14,21,21,""]]
+[["click",104,33,28,43,"svg"],["click",40,11,6,24,"svg"],["click",56,10,10,35,"svg"],["click",32,12,8,12,"svg"],["click",56,17,1,39,"new-appt"],["click",56,28,1,28,"f-name"],["click",496,25,7,464,"close"],["click",64,17,22,25,""]]

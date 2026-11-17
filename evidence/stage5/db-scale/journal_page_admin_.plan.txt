@@ -1,0 +1,15 @@
+-- owner
+-- select * from public.audit_log order by id desc limit 200
+Limit  (cost=0.71..42.04 rows=200 width=117) (actual time=0.328..0.414 rows=200 loops=1)
+  Buffers: shared hit=9
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.003..0.004 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.310..0.310 rows=1 loops=1)
+  ->  Index Scan Backward using audit_log_pkey on audit_log  (cost=0.42..51665.45 rows=250000 width=117) (actual time=0.327..0.399 rows=200 loops=1)
+        Filter: ((InitPlan 2).col1 AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
+        Buffers: shared hit=9
+Planning:
+  Buffers: shared hit=66 read=5
+Planning Time: 1.636 ms
+Execution Time: 0.454 ms

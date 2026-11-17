@@ -1,0 +1,559 @@
+{
+ "at": "2026-11-17T04:10:46.493Z",
+ "profile": "CPU x4, 412x823 DPR2",
+ "verdict": "НЕ ПРОЙДЕНО: scroll-day (5 frames in 5/5 runs, max 202 ms, during scroll); open-window (6 frames in 5/5 runs, max 166 ms, during overlay:fadein,sheet:up)",
+ "runs": [
+  {
+   "scroll-day": {
+    "judged": [
+     {
+      "t": 4956.29999999702,
+      "d": 174,
+      "s": [],
+      "during": [
+       "scroll"
+      ]
+     }
+    ],
+    "other": [],
+    "animations": []
+   },
+   "open-window": {
+    "judged": [
+     {
+      "t": 8230.5,
+      "d": 134,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     }
+    ],
+    "other": [
+     {
+      "t": 8017.199999988079,
+      "d": 174,
+      "s": [
+       "TimerHandler:setTimeout  167"
+      ]
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "open-window-2": {
+    "judged": [],
+    "other": [
+     {
+      "t": 9242.89999999106,
+      "d": 350,
+      "s": []
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-stats": {
+    "judged": [],
+    "other": [
+     {
+      "t": 14001.79999999702,
+      "d": 128,
+      "s": []
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-stats": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-patients": {
+    "judged": [],
+    "other": [
+     {
+      "t": 18402.09999999404,
+      "d": 61,
+      "s": [
+       "TimerHandler:setTimeout  6"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-patients": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-day": {
+    "judged": [],
+    "other": [
+     {
+      "t": 22642.29999999702,
+      "d": 51,
+      "s": [
+       "TimerHandler:setTimeout  38"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   }
+  },
+  {
+   "scroll-day": {
+    "judged": [
+     {
+      "t": 4998.800000011921,
+      "d": 202,
+      "s": [],
+      "during": [
+       "scroll"
+      ]
+     }
+    ],
+    "other": [],
+    "animations": []
+   },
+   "open-window": {
+    "judged": [
+     {
+      "t": 8277.20000000298,
+      "d": 131,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     }
+    ],
+    "other": [
+     {
+      "t": 8085.9000000059605,
+      "d": 156,
+      "s": [
+       "TimerHandler:setTimeout  148"
+      ]
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "open-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-stats": {
+    "judged": [],
+    "other": [
+     {
+      "t": 14029.60000000894,
+      "d": 149,
+      "s": [
+       "TimerHandler:setTimeout  13"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-stats": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-patients": {
+    "judged": [],
+    "other": [
+     {
+      "t": 18371.40000000596,
+      "d": 53,
+      "s": []
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-patients": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-day": {
+    "judged": [],
+    "other": [
+     {
+      "t": 22559.70000000298,
+      "d": 51,
+      "s": [
+       "TimerHandler:setTimeout  38"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   }
+  },
+  {
+   "scroll-day": {
+    "judged": [
+     {
+      "t": 4930.399999991059,
+      "d": 188,
+      "s": [],
+      "during": [
+       "scroll"
+      ]
+     }
+    ],
+    "other": [],
+    "animations": []
+   },
+   "open-window": {
+    "judged": [
+     {
+      "t": 8128.0999999940395,
+      "d": 122,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     }
+    ],
+    "other": [
+     {
+      "t": 7925.699999988079,
+      "d": 167,
+      "s": [
+       "TimerHandler:setTimeout  158"
+      ]
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "open-window-2": {
+    "judged": [],
+    "other": [
+     {
+      "t": 9160.29999999702,
+      "d": 354,
+      "s": []
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-stats": {
+    "judged": [],
+    "other": [
+     {
+      "t": 13878.39999999106,
+      "d": 156,
+      "s": [
+       "TimerHandler:setTimeout  10"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-stats": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-patients": {
+    "judged": [],
+    "other": [
+     {
+      "t": 18190.69999998808,
+      "d": 54,
+      "s": [
+       "TimerHandler:setTimeout  7"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-patients": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-day": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "main:fadein"
+    ]
+   }
+  },
+  {
+   "scroll-day": {
+    "judged": [
+     {
+      "t": 5041.9000000059605,
+      "d": 156,
+      "s": [],
+      "during": [
+       "scroll"
+      ]
+     }
+    ],
+    "other": [],
+    "animations": []
+   },
+   "open-window": {
+    "judged": [
+     {
+      "t": 8314.79999999702,
+      "d": 166,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     },
+     {
+      "t": 8482.29999999702,
+      "d": 51,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     }
+    ],
+    "other": [
+     {
+      "t": 8061.4000000059605,
+      "d": 218,
+      "s": [
+       "TimerHandler:setTimeout  216"
+      ]
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "open-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-stats": {
+    "judged": [],
+    "other": [
+     {
+      "t": 14033.29999999702,
+      "d": 159,
+      "s": [
+       "TimerHandler:setTimeout  10"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-stats": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-patients": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-patients": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-day": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "main:fadein"
+    ]
+   }
+  },
+  {
+   "scroll-day": {
+    "judged": [
+     {
+      "t": 5072.0999999940395,
+      "d": 95,
+      "s": [],
+      "during": [
+       "scroll"
+      ]
+     }
+    ],
+    "other": [],
+    "animations": []
+   },
+   "open-window": {
+    "judged": [
+     {
+      "t": 8198.20000000298,
+      "d": 124,
+      "s": [],
+      "during": [
+       "overlay:fadein",
+       "sheet:up"
+      ]
+     }
+    ],
+    "other": [
+     {
+      "t": 8002.5999999940395,
+      "d": 157,
+      "s": [
+       "TimerHandler:setTimeout  150"
+      ]
+     }
+    ],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "open-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "overlay:fadein",
+     "sheet:up"
+    ]
+   },
+   "close-window-2": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-stats": {
+    "judged": [],
+    "other": [
+     {
+      "t": 13912,
+      "d": 134,
+      "s": [
+       "TimerHandler:setTimeout  9"
+      ]
+     }
+    ],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-stats": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-patients": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "main:fadein"
+    ]
+   },
+   "scroll-patients": {
+    "judged": [],
+    "other": [],
+    "animations": []
+   },
+   "tab-day": {
+    "judged": [],
+    "other": [],
+    "animations": [
+     "main:fadein"
+    ]
+   }
+  }
+ ]
+}

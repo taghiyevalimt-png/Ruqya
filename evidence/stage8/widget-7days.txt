@@ -1,0 +1,13 @@
+# widget-check run 44026732176 on 51bb71d (7-day rule + WhatsApp Business build) — 2026-11-17T06:07:41Z
+B-06 widget 12-hour rule (API 23)
+out      22a923b8998b5594c564acba1454c992
+after1h  7188dc348c2796ce36ee32bd1cbc9c60
+after13h 22a923b8998b5594c564acba1454c992
+seen13h  22a923b8998b5594c564acba1454c992
+PASS: 8 days after the hand-over or after the last use the signed-out picture, 1 h old data the month
+B-06 widget 12-hour rule (API 33)
+out      1c27ffb738eb9ca994ac6c4f8b5baa7a
+after1h  0ba42d3c534a7382b942d130142f58f1
+after13h 1c27ffb738eb9ca994ac6c4f8b5baa7a
+seen13h  1c27ffb738eb9ca994ac6c4f8b5baa7a
+PASS: 8 days after the hand-over or after the last use the signed-out picture, 1 h old data the month

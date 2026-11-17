@@ -16,7 +16,7 @@ module.exports = async () => {
     const bg = await p.$eval("#cal .ev.cancel", (e) => getComputedStyle(e).backgroundColor);
     check(bg === "rgb(0, 0, 0)", "cancelled block is black: " + bg);
     // another patient can take that time
-    await p.click("#fab");
+    await p.click("#fab"); await p.waitForSelector("#f-reader");
     await p.selectOption("#f-reader", R1);
     check((await p.inputValue("#f-dur")) === "90", "1 h 30 min by default");
     await p.fill("#f-time", "10:00"); await p.fill("#f-name", "Yeni"); await p.fill("#f-phone", "yalnız WhatsApp +7 912 345");

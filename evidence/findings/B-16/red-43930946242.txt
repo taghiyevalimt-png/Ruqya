@@ -1,0 +1,5 @@
+# gh run view 43930946242 --log-failed (filtered: error lines only, values blanked by the workflow) — 2026-11-16T22:36:31Z
+commit 514e319a782aeeac2c7c9daf630d3233c684aae1 failure 2026-11-16T18:38:27Z
+2026-11-16T18:42:03.3380297Z psql:data.sql:210: ERROR:  column "…" of relation "…" does not exist
+2026-11-16T18:42:03.3396583Z ##[error]restore failed
+2026-11-16T18:42:03.3404253Z ##[error]Process completed with exit code 1.

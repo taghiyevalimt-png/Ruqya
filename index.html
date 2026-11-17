@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-PQGq8AU5SxbKwE5UOQKzxwmra4VNjFFdQAXQZyZG0ug='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8UoYLepFmHN7bWhbyeI8QVYbaV9XVuVqqEKEcwM5i+I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -45,7 +45,7 @@ try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var
 <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-750x1334.png">
 <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/l-640x1136.png">
 <link rel="icon" href="favicon.png?v=2">
-<link rel="preload" as="image" href="logo-hq.png">
+<link rel="preload" as="image" href="logo-hq.webp" type="image/webp">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mərkəz">
 <title>Mərkəz</title>
@@ -173,6 +173,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 
 .seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
 .lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.seg.svc{grid-template-columns:repeat(3,1fr)}
 .segb{position:relative;display:block;margin:0}.segb input{position:absolute;opacity:0;width:1px;height:1px}
 .segb span{display:block;text-align:center;padding:8px 4px;border-radius:9px;font-weight:500;cursor:pointer;transition:background .15s var(--ease)}
 .segb input:checked+span{background:var(--accent);color:var(--accent-ink)}.segb input:focus-visible+span{outline:2px solid var(--accent-line)}
@@ -598,8 +599,8 @@ button.ch .x{font-size:10px;opacity:.8}
 .card.compact .row{gap:10px;align-items:center}
 .card.compact .time{font-size:15px;width:46px;line-height:1.1}
 .card.compact .time small{display:block;font-size:10.5px;font-weight:500;color:var(--muted)}
-.card.compact .who b{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card.compact .who span{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.compact .who b{font-size:15px;line-height:1.2;overflow-wrap:anywhere}   /* R2-6: a long name wraps, it is not cut */
+.card.compact .who span{font-size:12px;line-height:1.25;overflow-wrap:anywhere}
 .card.compact .price{font-size:14px}
 .card.compact .links{gap:14px;font-size:13.5px;padding-left:56px}
 .card.compact .links .link{padding:2px 0}
@@ -612,14 +613,18 @@ button.ch .x{font-size:10px;opacity:.8}
 .stsec{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible}
 .stsec .chip{padding:8px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media (min-width:700px){.stsec{grid-template-columns:repeat(6,1fr)}}
+/* R2-6: section names are never cut: the two patient sections take half the width each, and on screens narrower
+   than 360 px the section names are a little smaller (the longest, «Mütəxəssislər» / «Специалисты», then fits) */
+.stsec.psec{grid-template-columns:repeat(2,1fr)}
+@media (max-width:359px){.stsec .chip{font-size:12.5px;padding:8px 2px}}
 </style>
 </head>
 <body>
-<div id="splash" aria-hidden="true"><img src="logo-hq.png" width="128" height="128" alt="" decoding="sync" fetchpriority="high"><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
+<div id="splash" aria-hidden="true"><picture><source srcset="logo-hq.webp" type="image/webp"><img src="logo-hq.png" width="128" height="128" alt="" decoding="sync" fetchpriority="high"></picture><div class="sp-name">Mərkəz</div><div class="sp-bar"><i></i></div></div>
 <div class="app">
   <div class="shell">
     <div class="top" id="top"></div>
-    <main id="main"></main>
+    <main id="main" tabindex="0" aria-label="Məzmun"></main>
     <button class="fab" id="fab" data-act="new-appt" hidden>+ Yaz</button>
   </div>
   <nav class="tabs" id="tabs" aria-label="Bölmələr" hidden>
@@ -1128,7 +1133,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Bərpa olunur…":"Восстанавливается…",
 "Bərpa olundu.":"Восстановлено.",
 "Bərpa olundu — tarix: ":"Восстановлено — дата: ",
-"Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın.":"Для восстановления один раз запустите в базе файл 2026-11-owner.sql.",
 
 "Bu artıq bərpa olunub.":"Это уже восстановлено.",
 "Bərpa etməyi yalnız admin edə bilər.":"Восстанавливать может только админ.",
@@ -1162,7 +1166,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Məhsulların adları":"Названия товаров",
 "{n} məhsul":"{n} товаров",
 "Hər məhsulu yeni sətirdən və ya vergüllə yazın":"Каждый товар с новой строки или через запятую",
-"Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.":"Чтобы писать названия товаров, один раз запустите в базе файл 2026-11-privacy.sql.",
 "Məhsulların adlarını yazın.":"Напишите названия товаров.",
 "Məhsul adları çox uzundur.":"Названия товаров слишком длинные.",
 
@@ -1261,7 +1264,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Tarix *</label><input id=\"f-date\" type=\"date\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-date\">Дата *</label><input id=\"f-date\" type=\"date\" value=\"",
 "<div class=\"field\"><label for=\"f-time\">Saat *</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"":"<div class=\"field\"><label for=\"f-time\">Время *</label><input id=\"f-time\" type=\"time\" step=\"300\" value=\"",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Pasiyentin adı *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"":"<div class=\"two\"><div class=\"field\"><label for=\"f-name\">Имя пациента *</label><input id=\"f-name\" type=\"text\" maxlength=\"80\" autocomplete=\"off\" value=\"",
-"<div class=\"field\"><label for=\"f-phone\">Mobil nömrə *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный *</label><input id=\"f-phone\" type=\"tel\" maxlength=\"30\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
+"<div class=\"field\"><label for=\"f-phone\">Mobil nömrə *</label><input id=\"f-phone\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"":"<div class=\"field\"><label for=\"f-phone\">Мобильный *</label><input id=\"f-phone\" type=\"text\" maxlength=\"60\" autocomplete=\"off\" placeholder=\"050 000 00 00\" value=\"",
 "<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Qiymət, ":"<div class=\"two\"><div class=\"field\"><label for=\"f-price\">Цена, ",
 " *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"":" *</label><input id=\"f-price\" type=\"text\" inputmode=\"decimal\" autocomplete=\"off\" maxlength=\"12\" value=\"",
 "<p class=\"hint small\" style=\"margin:0\">* — vacib sahələr</p>":"<p class=\"hint small\" style=\"margin:0\">* — обязательные поля</p>",
@@ -1277,8 +1280,8 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>":"<li><b>Недельная статистика</b> всегда показывает последнюю <b>закончившуюся</b> неделю. Новая неделя появляется после четверга, 23:59. Так в пятницу утром можно открыть, скопировать и отправить руководству.</li>",
 "<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>":"<li><b>Месячная статистика</b> начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего месяца (в четверг в 23:59). Если в месяце 4 пятницы — 4 недели, если 5 — 5 недель, ни один день не теряется. На экране — последний закончившийся месяц.</li>",
 "<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Bu gün» bölməsində ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>":"<li>Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59. «Записано сегодня» обновляется сразу при каждой новой записи. В 00:00 начинается новый день, а прошлые дни не пропадают: в разделе «Сегодня» кнопкой ‹ можно посмотреть и скопировать любой из последних 14 дней.</li>",
-"<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл, его удаляют из календаря. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
-"<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>":"<li>Удалённая запись нигде не считается. Даже если удалили через несколько недель, она уходит из статистики.</li>",
+"<li>Pasiyent gəlməyibsə və ya ləğv edibsə, qəbulda «Ləğv et» basılır: qəbul «Ləğv olunanlar»a düşür və «Ləğv» sütununda sayılır. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) ləğv olunmayan hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>":"<li>Если пациент не пришёл или отменил, в записи нажимают «Отменить»: запись попадает в «Отменённые» и считается в столбце «Отмена». Когда время сеанса прошло (не позже 23:59), каждая неотменённая запись считается успешной. Запись на прошедший день сразу считается успешной.</li>",
+"<li>Ləğv olunan qəbul «Yazdı», «Uğurlu» və «Qazanc»da sayılmır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>":"<li>Отменённая запись не считается в «Записал», «Успешные» и «Заработок». Запись, внесённая по ошибке, удаляется кнопкой «Удалить совсем» и нигде не считается.</li>",
 "<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>":"<li>Запись считается по дню, когда её сделали, на какую бы дату она ни была: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</li>",
 "<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>":"<li>В статистику продаж попадают только записи агентов продаж и админов. Записи, сделанные самими специалистами, туда не попадают, но считаются в денежной статистике.</li>",
 "<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>":"<li>Цена обязательна в каждой записи (в новой записи уже стоит 130). Продавцом товара считается тот, кто записал продажу в Кассе.</li>",
@@ -1287,7 +1290,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "<dt>Gündəlik statistika</dt><dd>seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır. Son 14 gün saxlanılır.</dd>":"<dt>Дневная статистика</dt><dd>кто сколько записей сделал в выбранный день на этот день и следующие дни. Записи на прошедшие дни здесь не считаются. Хранятся последние 14 дней.</dd>",
 "<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>":"<dt>Записал</dt><dd>сколько пациентов агент продаж записал в эти дни.</dd>",
 "<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>":"<dt>Записано</dt><dd>сколько пациентов записали к этому специалисту в эти дни.</dd>",
-"<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>":"<dt>Успешно</dt><dd>сколько пациентов с сеансом в эти дни не удалено из календаря.</dd>",
 "<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>":"<dt>Доход</dt><dd>сумма цен успешных сеансов (в манатах).</dd>",
 "<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>":"<dt>Продавец</dt><dd>сотрудник, записавший продажу товара в Кассе (агент продаж или админ).</dd>",
 "<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>":"<dt>Продаж</dt><dd>сколько раз продали товар.</dd>",
@@ -1321,7 +1323,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "İndi ekranda {a} görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} görünəcək.":"Сейчас на экране {a}. Это остаётся до 23:59 ({b}), потом появится {c}.",
 "İndiki 4 həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Bu 4 həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq.":"Текущие 4 недели ({a}) ещё не закончились — показаны уже прошедшие дни. Они станут полными после 23:59 ({b}) и останутся на экране до 23:59 ({c}).",
 "<p><b>Bu gün yazılan qəbullar</b> — bu gün kim neçə qəbul yazıb (qəbul hansı günə olsa da). Hər yeni qəbulda dərhal yenilənir, gecə 00:00-da sıfırlanır.</p>":"<p><b>Записи за сегодня</b> — кто сколько записей сделал сегодня (на любую дату). Обновляется сразу при каждой новой записи, в 00:00 обнуляется.</p>",
-"<p><b>Uğurlu</b> — həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</p>":"<p><b>Успешно</b> — пациенты, у которых был сеанс в эти дни и которых не удалили из календаря. Если пациент не пришёл, его удаляют. Когда время сеанса прошло (не позже 23:59), каждая неудалённая запись считается успешной. Запись на прошедший день сразу считается успешной.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların qiymətlərinin cəmi. Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur).</p>":"<p><b>Доход</b> — сумма цен успешных сеансов. Цена обязательна в каждой записи (в новой записи уже стоит 130).</p>",
 "<p><b>Məhsul</b> — Kassada yazılan məhsul satışları: kim satıb, neçə dəfə (Satış) və neçə manatlıq (Məbləğ). Satan avtomatik olaraq satışı yazan işçidir.</p>":"<p><b>Товары</b> — продажи товаров, записанные в Кассе: кто продал, сколько раз (Продаж) и на сколько манат (Сумма). Продавец — сотрудник, который записал продажу.</p>",
 "<p><b>Cəmi</b> — cədvəldəki bütün sətirlərin toplamı.</p>":"<p><b>Итого</b> — сумма всех строк таблицы.</p>",
@@ -1348,7 +1349,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "4 tam həftə, cümə – cümə axşamı":"4 полные недели, пятница – четверг",
 "<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Bütün aylıq statistikanı kopyala</button>":"<button class=\"ghost\" data-act=\"st-copy\" data-id=\"all\" data-p=\"month\">⧉ Копировать всю месячную статистику</button>",
 "<p><b>Yazdı / Yazılıb</b> — həmin günlərdə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</p>":"<p><b>Записал / Записано</b> — сколько пациентов записали в эти дни. Неважно, на какой день приём: если 11 ноября записали на 22 ноября, это идёт в неделю 11 ноября.</p>",
-"<p><b>Uğurlu</b> — həmin günlərdə seansa gələnlər. Pasiyent gəlməyibsə, onu təqvimdən silirlər; gün bitəndə (23:59) təqvimdə qalanların hamısı uğurlu sayılır.</p>":"<p><b>Успешно</b> — кто пришёл на сеанс в эти дни. Если пациент не пришёл, его удаляют из календаря; в конце дня (23:59) все оставшиеся в календаре считаются успешными.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların pulu. <b>Məhsul</b> — kim neçə məhsul satıb və neçə manatlıq.</p>":"<p><b>Доход</b> — деньги за успешные сеансы. <b>Товары</b> — кто сколько товаров продал и на сколько манат.</p>",
 "<p>Silinən qəbullar heç yerdə sayılmır. Həftə cümə başlayır, cümə axşamı bitir. Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür.</p>":"<p>Удалённые записи нигде не считаются. Неделя начинается в пятницу и заканчивается в четверг. Данные сегодняшнего дня попадают в недельную и месячную таблицы после 23:59.</p>",
 "<p>Tam həftə ":"<p>Полная неделя будет готова: ",
@@ -1387,7 +1387,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 " bu mütəxəssisə neçə pasiyent yazılıb. Qəbulun hansı günə olması fərq etmir.</p>":". Неважно, на какой день приём.</p>",
 " seansa gələn pasiyentlər.</p>":" пришли на сеанс.</p>",
 "<p><b>Qazanc</b> — uğurlu seansların pulu.</p>":"<p><b>Доход</b> — деньги за успешные сеансы.</p>",
-"<p>Pasiyent gəlməyibsə, onu təqvimdən silirlər — silinən heç yerdə sayılmır. Günün sonunda (23:59) təqvimdə qalanların hamısı uğurlu sayılır və həmin gün statistikaya əlavə olunur.</p>":"<p>Если пациент не пришёл, его удаляют из календаря — удалённые нигде не считаются. В конце дня (23:59) все, кто остался в календаре, считаются успешными, и этот день добавляется в статистику.</p>",
 "<p>Həftə cümə günü başlayır, cümə axşamı bitir.</p>":"<p>Неделя начинается в пятницу и заканчивается в четверг.</p>",
 "<p>Bu həftə hələ bitməyib: indiyədək ":"<p>Неделя ещё не закончилась: пока учтено ",
 " sayılıb. Tam həftə ":". Полная неделя будет готова: ",
@@ -1417,6 +1416,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Statistikadan çıxacaq — bir də basın":"Уйдёт из статистики — нажмите ещё раз",
 "Yadda saxlanmayan qəbul: ":"Несохранённая запись: ",
 "Geri aç":"Открыть снова",
+"Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).":"Для этого обновите базу до последнего состояния: обновления из папки sql/ (порядок: DISASTER_RECOVERY.md).",
+"<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və ləğv olunmayan pasiyentlərin sayı.</dd>":"<dt>Успешные</dt><dd>число пациентов с сеансом в эти дни, запись которых не отменена.</dd>",
+"<dt>Ləğv</dt><dd>həmin günlərdə seansı olan, amma «Ləğv et» ilə ləğv olunan pasiyentlərin sayı (gəlməyənlər).</dd>":"<dt>Отмена</dt><dd>число пациентов с сеансом в эти дни, запись которых отменена кнопкой «Отменить» (не пришли).</dd>",
 "Yeni qəbul yaz":"Новая запись",
 "Birinci xatırlatma":"Первое напоминание",
 "xatırlatma":"напоминание",
@@ -1435,6 +1437,16 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Son iki ayda ləğv olunan qəbul yoxdur.":"За последние два месяца отменённых записей нет.",
 "Son iki ayın ləğv olunan qəbulları göstərilir.":"Показаны отменённые записи за последние два месяца.",
 "Yer *":"Место *",
+"Xidmət *":"Услуга *",
+"Xidmət":"Услуга",
+"Xidmətlər":"Услуги",
+"Xidmət növünü seçmək vacibdir.":"Выберите вид услуги.",
+"Ruqya":"Рукья",
+"Hicama":"Хиджама",
+"Kombo":"Комбо",
+"Masaj":"Массаж",
+"Dr.Günel":"Dr.Günel",
+"Psixoloq":"Психолог",
 "Yer":"Место",
 "Ofis":"Офис",
 "Onlayn":"Онлайн",
@@ -1459,7 +1471,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Hamısı (2 il)":"Всё (2 года)",
 "Dövr qısa olanda fayl tez hazırlanır və az internet işlədir.":"Чем короче период, тем быстрее готов файл и тем меньше уходит интернета.",
 "Dövrün məlumatları yüklənir və fayl hazırlanır…":"Загружаются данные за период и готовится файл…",
-"12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.",
+"7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 7 дней, поэтому выполнен выход. Войдите снова.",
 "Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar.":"Введённое сохранено. Его можно вернуть кнопкой «Открыть снова».",
 "Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.":"Вход истёк. Войдите снова — введённая запись не потерялась.",
 "Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın.":"Запись не сохранилась. Введённое не потерялось: нажмите «Открыть снова»."}:null;
@@ -1471,6 +1483,7 @@ if(RUD)(function(){
   for(var i=0;i<bs.length;i++){var t=tl[bs[i].getAttribute("data-tab")],n=bs[i].lastChild;if(t&&n&&n.nodeType===3)n.nodeValue=t}
   var f=document.getElementById("fab");if(f)f.textContent="+ Записать";
   var nv=document.getElementById("tabs");if(nv)nv.setAttribute("aria-label","Разделы");
+  var mn=document.getElementById("main");if(mn)mn.setAttribute("aria-label","Содержимое");
 })();
 var SB_URL="https://ldkhdeehrrajvgrtieal.supabase.co";
 var SB_KEY="sb_publishable_HgWeQpSVqGfOdPKOWkwUBg_L67kK0O7";
@@ -1658,7 +1671,7 @@ function rcolor(id){var i=0;for(;i<state.readers.length;i++)if(state.readers[i].
   var r=state.readers[i],c=r&&okColor(r.color)?r.color:COLORS[i%COLORS.length];return DARKER[c.toLowerCase()]||c}
 function overlap(rid,date,start,dur,skip){
   var s1=mins(start),e1=s1+dur;
-  return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.id===skip)return false;
+  return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.sold||x.id===skip)return false;
     var s2=mins(x.time),e2=s2+(x.dur||90);return s1<e2&&s2<e1})[0];
 }
 function inBreak(start,dur,rid){
@@ -1700,8 +1713,15 @@ function soft(make){return fetchAll(make).then(function(d){return d},function(){
    single-row updates from realtime in between, and older dates fetched only when opened. */
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
 var PLACES=[["ofis","Ofis"],["onlayn","Onlayn"],["unvan","Ünvan"]];
+/* the kind of session (owner 17.11): stored as written here; Ruqya by default */
+var SERVICES=["Ruqya","Hicama","Kombo","Masaj","Dr.Günel","Psixoloq"];
+function svcVal(){var e=document.querySelector('input[name="f-service"]:checked');return e?e.value:""}
 function placeName(k){for(var i=0;i<PLACES.length;i++)if(PLACES[i][0]===k)return L(PLACES[i][1]);return L("Ofis")}
-function mapAppt(x){return{fol:Math.max(0,Math.min(3,+x.follow||0)),place:x.place||"ofis",id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",conf:!!x.confirmed,dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
+/* owner 17.11: a cancelled booking marked «Satış edildi» (follow 3) counts as a successful one everywhere in the app
+   (own colour on the calendar, «Uğurlu» in statistics and Excel, not in «Ləğv olunanlar»); the database keeps
+   status cancel + follow 3, so access rules and the free time slot stay as they were */
+function soldRow(x){return x.status==="cancel"&&(+x.follow||0)>=3}
+function mapAppt(x){return{sold:soldRow(x),fol:Math.max(0,Math.min(3,+x.follow||0)),place:x.place||"ofis",id:x.id,readerId:x.reader_id,date:x.date,time:String(x.time||"").slice(0,5),name:x.name||"",phone:x.phone||"",price:+x.price||0,share:+x.share||0,status:soldRow(x)?"wait":ST[x.status]?x.status:"wait",note:x.note||"",settled:!!x.settled,service:svcName(x.service),by:x.created_by||"",conf:!!x.confirmed,dur:+x.duration>0?+x.duration:90,created:x.created_at&&!isNaN(new Date(x.created_at))?bk(+new Date(x.created_at)).d:"",upd:stamp(x.updated_at)}}
 function stamp(v){var u=v?+new Date(v):0;if(!(u>0))return 0;if(u>maxUpd)maxUpd=u;return u}
 function mapReader(x){return{color:okColor(x.color)?x.color:"",id:x.id,name:x.name||"",price:+x.price||0,share:+x.share||0,archived:!!x.archived}}
 /* A hand correction of one number in the weekly or monthly sales statistics (the computed number stays as it is). */
@@ -1847,9 +1867,19 @@ function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom,since=addDays(today,-HIST_DAYS);
   var rows=function(){return fetchAll(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",since).lt("date",to).order("date",{ascending:false}).order("id")}).then(function(r){return{rows:r}})};
-  var grouped=state.noHistFn?rows():sb.rpc("ruqya_hist_patients",{before:to,since:since}).then(function(r){
-    if(r.error&&(r.error.code==="PGRST202"||r.status===404)){state.noHistFn=true;return rows()}
-    if(r.error)throw r.error;return{groups:r.data||[]};
+  /* the database answers at most 1000 rows per request: the grouped list is read page by page (B-04), each page
+     after the last patient key of the previous one, so a page reads only its own patients (P-05,
+     2026-11-patients-scale.sql); a database without that function is read with offsets as before */
+  var missing=function(e){return e&&(e.code==="PGRST202"||e.status===404||/Could not find the function/i.test(String(e.message||"")))};
+  var byOffset=function(){return fetchAll(function(){return sb.rpc("ruqya_hist_patients",{before:to,since:since})})};
+  var byKey=function(){var out=[];
+    function next(after){return sb.rpc("ruqya_hist_patients_page",{before:to,since:since,after_k:after,lim:1000}).then(function(r){
+      if(r.error)throw r.error;var d=r.data||[];out=out.concat(d);
+      return d.length===1000?next(String(d[d.length-1].k||"")):out})}
+    return next("")};
+  var grouped=state.noHistFn?rows():(state.noPageFn?byOffset():byKey().then(null,function(e){if(missing(e)){state.noPageFn=true;return byOffset()}throw e})).then(function(g){return{groups:g}},function(e){
+    if(missing(e)){state.noHistFn=true;return rows()}
+    throw e;
   });
   grouped.then(function(x){
     histLoading=false;if(my!==seq||!auth.user)return;
@@ -1882,11 +1912,14 @@ function pushWidget(){
       var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
       d[k]=LN.slice(0,4).map(function(a){var e=mins(a.time)+(a.dur||90);return [cut(String(a.name),24),rcolor(a.readerId),done(a)?"p":a.status==="noshow"?"n":"",e===e?e:-1]});
     });
-    json=JSON.stringify({u:0,f:from,d:d,n:n,l:LANG});
+    json=JSON.stringify({u:0,s:0,f:from,d:d,n:n,l:LANG});
   }
   /* Unchanged data is handed over again every 10 minutes, so "Yeniləndi" on the widget stays honest. */
   if(json===wLast&&Date.now()-wLastT<600000)return;wLast=json;wLastT=Date.now();
-  try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()))}catch(e){}
+  /* "s": the last time somebody used the app (the 12-hour sign-out counts from it); the widget hides the names 12 hours
+     after it, also when this page is gone by then (B-06, stage 7 R2-7) */
+  var seen0=0;try{seen0=+localStorage.getItem(SEEN)||0}catch(e){}
+  try{NATIVE.setWidgetData(json.replace('"u":0','"u":'+Date.now()).replace('"s":0','"s":'+(seen0||Date.now())))}catch(e){}
 }
 /* Shortens text without splitting an emoji in half (which would show as a broken box). */
 function cut(t,n){t=t.slice(0,n);var c=t.charCodeAt(t.length-1);return c>=0xD800&&c<=0xDBFF?t.slice(0,-1):t}
@@ -1986,10 +2019,15 @@ function authLost(){
 var DK="ruqya.draft.v1";
 function placeVal(){var e=document.querySelector('input[name="f-place"]:checked');return e?e.value:""}
 function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
-  return{place:placeVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
+  return{place:placeVal(),service:svcVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
 function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,v:v}))}catch(e){}}
 function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
 function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
+/* The phone may close the app while it is in the background (e.g. the user went to WhatsApp): the typing of an open
+   booking form is kept as a draft each time the app goes to the background (B-05). */
+function keepTyping(){try{if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user&&formTouched())keepDraft(sheet,formVals())}catch(e){}}
+document.addEventListener("visibilitychange",function(){if(document.hidden)keepTyping()});
+window.addEventListener("pagehide",keepTyping);
 /* Closing a booking form (× or the phone's "back") with something typed in it keeps the typing. */
 function formTouched(){
   if(!sheet||!byId("f-name"))return false;
@@ -1997,6 +2035,7 @@ function formTouched(){
   if(!sheet.id)return !!(v.name.trim()||v.phone.trim()||v.note.trim());
   var o=sheet.orig;if(!o)return false;
   if(v.place&&(o.place||"ofis")!==v.place)return true;
+  if(v.service&&svcName(o.service)!==v.service)return true;
   return o.name!==v.name.trim()||(o.phone||"")!==v.phone.trim()||(o.note||"")!==v.note.trim()||o.date!==v.date||o.time!==v.time.slice(0,5)||o.readerId!==v.readerId||String(+o.price)!==String(amount("f-price"))||(v.dur!==""&&+v.dur!==(o.dur||90));
 }
 function fmtDayShort(s){var d=parse(s);return d.getDate()+" "+MON[d.getMonth()]}
@@ -2078,7 +2117,8 @@ function loadCache(uid){
 }
 /* A phone left on a desk overnight must not keep showing patients: after 12 hours without a touch the
    session and every copy of data on this device are removed (counted across tabs and app restarts). */
-var IDLE_MS=12*3600e3,SEEN="ruqya.seen",seenW=0,idled=false;
+var IDLE_MS=7*24*3600e3,   /* owner 17.11: sign out after 7 days without use (was 12 hours; RISK_REGISTER S-09) */
+SEEN="ruqya.seen",seenW=0,idled=false;
 function touchSeen(){var t=Date.now();if(t-seenW<60000)return;seenW=t;try{localStorage.setItem(SEEN,String(t))}catch(e){}}
 function idleOut(){
   var t=0;try{t=+localStorage.getItem(SEEN)||0}catch(e){}
@@ -2089,7 +2129,7 @@ function idleOut(){
   if(sb){try{sb.auth.signOut({scope:"local"}).then(null,function(){})}catch(e){}}
   idled=true;clearTimeout(msgTimer);
   if(auth.user)signedOut();
-  auth.msg=L("12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
+  auth.msg=L("7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
   return true;
 }
 ["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,touchSeen,{passive:true,capture:true})});
@@ -2143,6 +2183,8 @@ function patients(){
   pcache=m;return m;
 }
 /* Digits of a phone without the country / trunk prefix, so "+994 50 …", "050 …" and "0050 …" match each other. */
+// B-15: only a query of digits and phone signs looks in phones; with letters it is a name
+function qDigits(q){return /^[\d\s+()\-.]+$/.test(q)?phoneCore(q):""}
 function phoneCore(v){return String(v||"").replace(/\D/g,"").replace(/^00/,"").replace(/^994/,"").replace(/^0/,"")}
 /* Call, plain WhatsApp chat, and «Təsdiq» = WhatsApp with the reminder asking the patient to confirm (only for a session still ahead). */
 function phoneLinks(phone,a,cls){
@@ -2194,7 +2236,7 @@ function render(){
   pcache=null;edIdx=null;
   if(auth.ready&&(!auth.user||auth.loaded||!sb))appReady();
   if(lp&&Date.now()-lp.t<8000){lpRender=true;return}   /* a finger is holding a block: redraw after it lifts */
-  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();
+  setTimeout(ensureLoaded,0);setTimeout(ensureHist,0);widgetSoon();cacheSoon();if(auth.user&&auth.loaded)fontsSoon();
   var top=byId("top"),main=byId("main"),gate=!auth.user;
   if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
   byId("tabs").hidden=gate;
@@ -2206,7 +2248,7 @@ function render(){
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
-    top.innerHTML='<div class="brand"><img src="logo-hq.png" width="112" height="112" alt=""><h1>Mərkəz</h1></div>';
+    top.innerHTML='<div class="brand"><picture><source srcset="logo-hq.webp" type="image/webp"><img src="logo-hq.png" width="112" height="112" alt=""></picture><h1>Mərkəz</h1></div>';
     main.innerHTML=!sb?(window.__sbErr?L('<div class="empty"><p>Proqram yüklənmədi. İnterneti yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'):L('<div class="empty">Telefonun brauzer hissəsi köhnədir. Play Market-də «Android System WebView» və «Chrome» proqramlarını yeniləyin, sonra tətbiqi yenidən açın.</div>')+L('<div class="empty"><p>İnternet zəif idisə, sadəcə yenidən yoxlayın.</p><button class="primary" data-act="reload">Yenidən yoxla</button></div>'))
       :!auth.ready?L('<div class="empty">Yüklənir…</div>')
       :L('<div class="field"><label for="l-mail">E-poçt</label><input id="l-mail" type="email" autocomplete="username" inputmode="email" autocapitalize="off"></div>')+
@@ -2223,7 +2265,7 @@ function render(){
   var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
-    main.innerHTML=banner+'<div class="chips stsec psec" role="tablist">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" role="tab" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'" aria-selected="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
+    main.innerHTML=banner+'<div class="chips stsec psec" role="group">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
       '<div id="plist">'+(ui.psec==="cancel"?cancelList():patientsList())+'</div>';
     return;
   }
@@ -2358,6 +2400,7 @@ function viewSheet(){
     L('<div class="row2"><span>Vaxt</span><b class="num">')+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
     L('<div class="row2"><span>Mütəxəssis</span><b>')+esc(r?r.name:"—")+'</b>'+'</div>'+
     (state.hasPlace?'<div class="row2"><span>'+L("Yer")+'</span><b>'+esc(placeName(a.place))+'</b></div>':'')+
+    '<div class="row2"><span>'+L("Xidmət")+'</span><b>'+esc(L(svcName(a.service)))+'</b></div>'+
     (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+(gone(a)?'':phoneLinks(a.phone,a))+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
@@ -2526,6 +2569,15 @@ var ST_KINDS={
   prod:{t:function(){return L("Məhsul statistikası")},h:function(){return [L("Satan"),L("Satış"),L("Məbləğ")]},c:function(x){return [x.name,String(x.a),money(x.c)]}}
 };
 /* who earned how much: admins only */
+/* owner 17.11: every kind of session in statistics — sessions on the days of the period (not cancelled) and the
+   successful ones among them; an agent sees his own bookings, like in the sales table */
+function svcTable(r){
+  var onlyMe=auth.user&&!isAdmin()?auth.user.id:null,rows={},T={a:0,b:0};SERVICES.forEach(function(x){rows[x]={a:0,b:0}});
+  state.appts.forEach(function(a){if(onlyMe&&a.by!==onlyMe)return;if(a.date<r.s||a.date>r.end||gone(a))return;var k=svcName(a.service);if(!rows[k])rows[k]={a:0,b:0};rows[k].a++;T.a++;if(done(a)){rows[k].b++;T.b++}});
+  return '<div class="pay" data-st="svc"><div class="head"><b>'+L("Xidmətlər")+'</b></div><table class="stt"><thead><tr><th>'+L("Xidmət")+'</th><th class="num">'+L("Seans")+'</th><th class="num">'+L("Uğurlu")+'</th></tr></thead><tbody>'+
+    Object.keys(rows).map(function(k){return '<tr><td>'+esc(L(k))+'</td><td class="num">'+rows[k].a+'</td><td class="num">'+rows[k].b+'</td></tr>'}).join("")+
+    '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+T.a+'</td><td class="num">'+T.b+'</td></tr></tfoot></table></div>';
+}
 function moneyTables(r,per){return isAdmin()?statTable("money",r,per)+(state.hasProducts?statTable("prod",r,per):""):""}
 function rangeLabel(r){return fmtDay(r.s)+" – "+fmtDay(r.end,"y")}
 function statTable(kind,r,per){
@@ -2553,7 +2605,7 @@ function statNav(act,r,title,small){
 /* Buttons on top of Statistika: one section at a time. */
 var ST_SECS=[["today","Bu gün"],["day","Gündəlik"],["week","Həftəlik"],["month","Aylıq"],["rules","Qaydalar"],["terms","Terminlər"]];
 function statSecBar(){
-  return '<div class="chips stsec" role="tablist">'+ST_SECS.map(function(x){return '<button class="chip" role="tab" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'" aria-selected="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
+  return '<div class="chips stsec" role="group">'+ST_SECS.map(function(x){return '<button class="chip" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
 }
 function dayWord(off){return off===0?L("bu gün"):off===1?L("dünən"):tf(L("{n} gün əvvəl"),{n:off})}
 function statsMain(){
@@ -2569,17 +2621,17 @@ function statsMain(){
     var da=dayAllRange();
     return statNav("st-all",da,L("Gündəlik statistika"),dayWord(da.off)+(da.off===0?L(" — gün hələ bitməyib"):""))+
       L('<button class="ghost" data-act="st-copy" data-id="all" data-p="day">⧉ Bütün gündəlik statistikanı kopyala</button>')+
-      statTable("sales",da,"day")+edHint+moneyTables(da,"day");
+      statTable("sales",da,"day")+edHint+svcTable(da)+moneyTables(da,"day");
   }
   if(sec==="week"){
     h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
     h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
-    return h+statTable("sales",w,"week")+edHint+moneyTables(w,"week");
+    return h+statTable("sales",w,"week")+edHint+svcTable(w)+moneyTables(w,"week");
   }
   if(sec==="month"){
     h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,tf(L("{w} həftə ({d} gün), cümə – cümə axşamı"),{w:m.weeks,d:m.weeks*7}));
     h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
-    return h+statTable("sales",m,"month")+edHint+moneyTables(m,"month");
+    return h+statTable("sales",m,"month")+edHint+svcTable(m)+moneyTables(m,"month");
   }
   /* The rules, written out so anyone can read them; the examples use the dates on screen. */
   var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
@@ -2598,8 +2650,8 @@ function statsMain(){
       return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
         tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</li>'+
     L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Bu gün» bölməsində ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>")+
-    L("<li>Pasiyent gəlməyibsə, onu təqvimdən silirlər. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) silinməyən hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
-    L("<li>Silinən qəbul heç yerdə sayılmır. Həftələr sonra silinsə də, statistikadan çıxır.</li>")+
+    L("<li>Pasiyent gəlməyibsə və ya ləğv edibsə, qəbulda «Ləğv et» basılır: qəbul «Ləğv olunanlar»a düşür və «Ləğv» sütununda sayılır. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) ləğv olunmayan hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
+    L("<li>Ləğv olunan qəbul «Yazdı», «Uğurlu» və «Qazanc»da sayılmır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>")+
     L("<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>")+
     L("<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>")+
     L("<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>")+
@@ -2613,7 +2665,8 @@ function statsMain(){
     L("<dt>Müraciət WP / Müraciət SŞ</dt><dd>WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlərin sayı; işçilər özləri yazır.</dd>")+L("<dt>Müraciət ümumi</dt><dd>WP və SŞ-nin cəmi, özü hesablanır.</dd>")+
     L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
     L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
-    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və təqvimdən silinməyən pasiyentlərin sayı.</dd>")+
+    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və ləğv olunmayan pasiyentlərin sayı.</dd>")+
+    L("<dt>Ləğv</dt><dd>həmin günlərdə seansı olan, amma «Ləğv et» ilə ləğv olunan pasiyentlərin sayı (gəlməyənlər).</dd>")+
     L("<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>")+
     L("<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>")+
     L("<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>")+
@@ -2749,7 +2802,9 @@ function xlsSheets(all){
   var byD={},byC={},prD={},put=function(m,k,x){if(k)(m[k]||(m[k]=[])).push(x)};
   A.forEach(function(a){put(byD,a.date,a);if(a.created&&a.created!==a.date)put(byC,a.created,a)});
   all.products.forEach(function(x){put(prD,x.date,x)});
-  var slice=function(r){var ap=[],pr=[];for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])ap=ap.concat(byD[d]);if(byC[d])ap=ap.concat(byC[d]);if(prD[d])pr=pr.concat(prD[d])}
+  /* a booking written on one day of the period for another day of it is in both lists: take it once (B-01) */
+  var slice=function(r){var ap=[],pr=[],had={},add=function(x){if(!had[x.id]){had[x.id]=1;ap.push(x)}};
+    for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])byD[d].forEach(add);if(byC[d])byC[d].forEach(add);if(prD[d])pr=pr.concat(prD[d])}
     state.appts=ap;state.products=pr;pcache=null};
   state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
   try{
@@ -2769,9 +2824,9 @@ function xlsSheets(all){
     sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
   }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
   var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
-  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
+  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Xidmət"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
   A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
-    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
+    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),L(svcName(a.service)),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
   sh.push({name:L("Bütün qəbullar"),rows:Q});
   if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
     all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([{dt:x.date},sn(x.by),prodItems(x.names).join(", "),x.amount])});
@@ -2858,7 +2913,7 @@ function productForm(){
   var x=sheet.id?prodRow(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
   return '<h2>'+(x?L("Məhsul satışını dəyiş"):L("Məhsul satışı"))+CLOSE+'</h2>'+
     (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'">'+(x?esc(prodItems(x.names).join("\n")):'')+'</textarea></div>'
-      :'<p class="hint">'+L("Məhsul adlarını yazmaq üçün bazada 2026-11-privacy.sql faylını bir dəfə işə salın.")+'</p>')+
+      :'<p class="hint">'+L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).")+'</p>')+
     L('<div class="two"><div class="field"><label for="pr-amount">Qiymət, ')+CUR+' *</label><input id="pr-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
     L('<div class="field"><label for="pr-date">Tarix</label><input id="pr-date" type="date" value="')+dd+'"></div></div>'+
     L('<p class="hint">Satan avtomatik qeyd olunur: ')+esc(state.staff[x?x.by:auth.user.id]||L("siz"))+'.</p>'+
@@ -2883,15 +2938,15 @@ function cancelContact(a){
     (tel.replace(/\D/g,"").length>=5?'<a class="wa" href="tel:'+esc(tel)+'">'+L("Zəng")+'</a>':'<button class="wa" disabled>'+L("Zəng")+'</button>')+
     (wa?'<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener">Wp</a>':'<button class="wa" disabled>Wp</button>')+'</div>';
 }
-function folMark(a){var n=gone(a)?(a.fol||0):0;if(!n)return "";return OLDAND?new Array(n+1).join("+")+" ":new Array(n+1).join("\u2705")+"\u00a0"}
+function folMark(a){var n=gone(a)||a.sold?(a.fol||0):0;if(!n)return "";return OLDAND?new Array(n+1).join("+")+" ":new Array(n+1).join("\u2705")+"\u00a0"}
 function folBtns(a){
-  if(!gone(a))return "";
+  if(!gone(a)&&!a.sold)return "";
   if(!state.hasFollow)return isAdmin()?'<p class="hint small">'+L("Bunun üçün bazada 2026-11-follow.sql faylını bir dəfə işə salın.")+'</p>':"";
   return '<div class="folbtns">'+FOLLOW.map(function(x){var on=(a.fol||0)>=x[0];return '<button class="'+(on?"primary":"ghost")+'" data-act="follow" data-id="'+esc(a.id)+'" data-n="'+x[0]+'" aria-pressed="'+on+'">'+(on?new Array(x[0]+1).join(OLDAND?"+":"\u2705")+" ":"")+L(x[1])+'</button>'}).join("")+'</div>';
 }
 /* «Ləğv olunanlar»: bookings the patient did not come to (cancelled from the calendar), newest first */
 function cancelList(){
-  var q=low(ui.q.trim()),qd=phoneCore(q);
+  var q=low(ui.q.trim()),qd=qDigits(q);
   var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
     .sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,300);
   if(!arr.length)return '<div class="empty">'+L("Son iki ayda ləğv olunan qəbul yoxdur.")+'</div>';
@@ -2903,7 +2958,7 @@ function cancelList(){
   }).join("");
 }
 function patientsList(){
-  var m=patients(),q=low(ui.q.trim()),qd=phoneCore(q);
+  var m=patients(),q=low(ui.q.trim()),qd=qDigits(q);
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
     if(!q)return true;
     return low(p.name).indexOf(q)>=0||(qd&&phoneCore(p.phone).indexOf(qd)>=0);
@@ -2956,7 +3011,7 @@ function patientSheet(){
 function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
 function curSetSec(){var ss=setSecs();if(pendingMe()&&!ui.setSecPicked)return "acc";return ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec"}
 function setSecBar(){var ss=setSecs(),cur=curSetSec();
-  return '<div class="chips stsec setsec" role="tablist">'+ss.map(function(x){return '<button class="chip" role="tab" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'" aria-selected="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
+  return '<div class="chips stsec setsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="",sec=curSetSec();
   if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
@@ -3143,6 +3198,7 @@ function auditLine(x){
     if(has("duration")&&+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
     if(has("note")&&(o.note||"")!==(n.note||""))ch.push(L("qeyd"));
     if(has("follow")&&(+o.follow||0)!==(+n.follow||0))ch.push(L("xatırlatma")+": "+(+o.follow||0)+" → "+(+n.follow||0));
+    if(has("service")&&svcName(o.service)!==svcName(n.service))ch.push(L("Xidmət")+": "+L(svcName(o.service))+" → "+L(svcName(n.service)));
     if(has("place")&&(o.place||"ofis")!==(n.place||"ofis"))ch.push(L("Yer")+": "+placeName(o.place||"ofis")+" → "+placeName(n.place||"ofis"));
     return L("Qəbul (")+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||L("dəyişdi"));
   }
@@ -3234,7 +3290,20 @@ function meForm(){
 }
 
 /* ---------- sheets ---------- */
+/* Heavy drawing right after a tap waits for the next frame: the tap itself is answered at once (the button shows
+   it was pressed, the tab lights up), so the phone never looks stuck (INP). */
+function afterPaint(fn){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(fn,0)});else setTimeout(fn,16)}
+/* P-03: names written in Cyrillic (in the patient hints of a booking window, the list...) need the Cyrillic part of
+   the font; fetched only when first drawn, it re-laid out the whole window during its slide-in. Fetched once the
+   app is shown and idle, it is ready before it is needed (22 KB, the browser keeps it). */
+var fontsAsked=false;
+function fontsSoon(){
+  if(fontsAsked)return;fontsAsked=true;
+  setTimeout(function(){try{if(document.fonts&&document.fonts.load){document.fonts.load('400 16px "Golos Text"',"Ж");document.fonts.load('600 16px "Onest"',"Ж")}}catch(e){}},1500);
+}
 function openSheet(s){
+  /* keyboard and screen reader (V-03): remember what opened the window, to give the focus back on close */
+  if(!s.opener)s.opener=sheet&&sheet.opener||document.activeElement;
   sheet=s;
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
@@ -3246,11 +3315,14 @@ function openSheet(s){
       if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
     var de=byId("f-dur");if(de&&dv.dur&&de.querySelector('option[value="'+(+dv.dur)+'"]'))de.value=String(+dv.dur);
     if(dv.place){var pe=document.querySelector('input[name="f-place"][value="'+String(dv.place).replace(/[^a-z]/g,"")+'"]');if(pe)pe.checked=true}
+    if(dv.service&&SERVICES.indexOf(dv.service)>=0){[].forEach.call(document.querySelectorAll('input[name="f-service"]'),function(e){e.checked=e.value===dv.service})}
     if(dv.price===""&&byId("f-price"))byId("f-price").value="";
     dropDraft();
   }
   if(s.type==="appt")slotGrid();
   unpinSheet();
+  (function(){var d=byId("sheet"),h=d.querySelector("h2");if(h){h.id="sheet-title";d.setAttribute("aria-labelledby","sheet-title")}else d.removeAttribute("aria-labelledby");
+    d.setAttribute("tabindex","-1");if(s.type!=="stcopy"){try{d.focus({preventScroll:true})}catch(e){d.focus()}}})();   /* the window, not a field: no phone keyboard pops up */
   if(s.type==="stcopy")setTimeout(function(){var t=byId("st-ta");if(t){t.focus();t.select()}},50);
   setTimeout(ensureHist,0);
   try{if(!backing&&!(history.state&&history.state.sheet))history.pushState({sheet:1},"")}catch(e){}
@@ -3274,7 +3346,9 @@ function keepSheet(){
 }
 window.addEventListener("resize",keepSheet);
 document.addEventListener("focusin",function(e){
-  var t=e.target;if(sheet&&t&&t.closest&&t.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!/^(radio|checkbox|button)$/.test(t.type||""))pinSheet();
+  /* only the tall booking window stays in place; a short window (e.g. «Yeni mütəxəssis», one field at the bottom of
+     the screen) must rise above the keyboard, or what is typed is hidden under it (owner 17.11) */
+  var t=e.target;if(sheet&&sheet.type==="appt"&&t&&t.closest&&t.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(t.tagName)&&!/^(radio|checkbox|button)$/.test(t.type||""))pinSheet();
 });
 document.addEventListener("focusout",function(){setTimeout(function(){var ae=document.activeElement;if(pinned&&!(ae&&ae.closest&&ae.closest("#sheet")&&/^(INPUT|TEXTAREA)$/.test(ae.tagName))&&window.innerHeight>=pinH)unpinSheet()},400)});
 /* iPhone scrolls the whole page up when typing starts, even when the field is already in view, and the window
@@ -3294,13 +3368,19 @@ function unscroll(){
 window.addEventListener("scroll",unscroll,{passive:true});
 if(window.visualViewport)window.visualViewport.addEventListener("scroll",unscroll);
 document.addEventListener("focusin",function(e){if(sheet&&textField(e.target)){setTimeout(unscroll,0);setTimeout(unscroll,120);setTimeout(unscroll,320)}});
-function hideSheet(){unpinSheet();if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
+function hideSheet(){unpinSheet();
+  var op=sheet&&sheet.opener;if(op&&op!==document.body&&document.contains(op)&&op.focus)setTimeout(function(){try{op.focus({preventScroll:true})}catch(e){}},0);if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
   if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
   sheet=null;byId("overlay").hidden=true}
 var backing=false;
 function closeSheet(){
-  try{if(history.state&&history.state.sheet&&!backing){backing=true;history.back();setTimeout(function(){backing=false},1500)}}catch(e){}
+  /* P-07: the window disappears first; our own "back" (which drops the window's history entry) follows after that
+     frame — a history step started before the window was hidden held the next frame back (about 0.45 s on a slow
+     network profile) */
+  var drop=false;try{drop=!!(history.state&&history.state.sheet&&!backing)}catch(e){}
+  if(drop)backing=true;
   hideSheet();
+  if(drop)afterPaint(function(){try{if(history.state&&history.state.sheet)history.back()}catch(e){}setTimeout(function(){backing=false},1500)});
 }
 function slotGrid(){
   var el=byId("f-busy"),box=byId("f-slots");if(!el||!box||!sheet)return;
@@ -3334,6 +3414,7 @@ function apptForm(){
     (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
     L('<div class="field"><label for="f-time">Saat *</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div></div>'+
+    '<div class="field"><span class="lbl">'+L("Xidmət *")+'</span><div class="seg svc" role="radiogroup">'+SERVICES.map(function(x){var cur=a?svcName(a.service):(pre.service||"Ruqya");return '<label class="segb"><input type="radio" name="f-service" value="'+esc(x)+'"'+(x===cur?" checked":"")+'><span>'+esc(L(x))+'</span></label>'}).join("")+'</div></div>'+
     '<p class="err" role="alert" id="f-err" hidden></p>'+
     '<div class="btns sticky-save"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
 }
@@ -3360,6 +3441,8 @@ function saveAppt(){
   if(state.hasDur&&!(+val("f-dur")>0))return fail("f-err",L("Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır."));
   if(state.hasDur&&+val("f-dur")<MIN_DUR)return fail("f-err",L("Seans ən az 30 dəqiqə olmalıdır. Müddəti dəyişin."));
   var place=state.hasPlace?placeVal():"";
+  service=svcVal();
+  if(!service)return fail("f-err",L("Xidmət növünü seçmək vacibdir."));
   if(state.hasPlace&&!place)return fail("f-err",L("Yeri seçmək vacibdir: Ofis, Onlayn və ya Ünvan."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
   if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
@@ -3394,7 +3477,7 @@ function saveAppt(){
     /* the slot must stay whole: if the time moved here, date, specialist and length go with it */
     if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
-    if(service){a.service=service;up.service=service}
+    if(svcName(o.service)!==service){a.service=service;up.service=service}
     if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id),undo());
   }else{
     var id=uuid();
@@ -3487,7 +3570,10 @@ document.addEventListener("click",function(e){
   if(offline&&navigator.onLine!==false){offline=false;refresh()}
   if(offline&&/^(save-|del-|status$|pick-color$|conf$|st-edit-(save|reset)$|restore$|xls$)/.test(act)){flash(L("İnternet yoxdur. Dəyişiklik etmək üçün internetə qoşulun."));return}
   if(act==="tab"){
-    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";byId("top").innerHTML="";var mm=byId("main");mm.scrollTop=0;mm.classList.remove("enter");void mm.offsetWidth;mm.classList.add("enter")}
+    if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";
+      var tb1=document.querySelectorAll("#tabs button");for(var t1=0;t1<tb1.length;t1++){if(tb1[t1]===b)tb1[t1].setAttribute("aria-current","page");else tb1[t1].removeAttribute("aria-current")}
+      byId("top").innerHTML="";var mm=byId("main");mm.innerHTML="";mm.scrollTop=0;mm.classList.remove("enter");
+      afterPaint(function(){mm.classList.add("enter");render()});return}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
@@ -3640,7 +3726,7 @@ document.addEventListener("click",function(e){
       var mark0=function(){[s0.rows||[],s0.dels||[]].forEach(function(l){l.forEach(function(x){if(+x.id===rid0)x.restored=true})})};
       if(r.error){
         if(/Artiq berpa olunub/.test(r.error.message||""))mark0();
-        else if(r.error.code==="PGRST202"||/function/.test(r.error.message||"")&&/not find|does not exist/.test(r.error.message||""))flash(L("Bərpa üçün bazada 2026-11-owner.sql faylını bir dəfə işə salın."),true);
+        else if(r.error.code==="PGRST202"||/function/.test(r.error.message||"")&&/not find|does not exist/.test(r.error.message||""))flash(L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md)."),true);
         else flash(dbMsg(r.error),true);
       }else{
         /* say which day it went back to: a sale from yesterday is not on today's page */
@@ -3685,7 +3771,7 @@ document.addEventListener("click",function(e){
     db(sb.from("staff").upsert(up2).then(function(r){return r.error&&up2.role==="admin"?sb.from("staff").upsert({id:up2.id,name:up2.name}):r}));
     closeSheet();
   }
-  else if(act==="patient"){openSheet({type:"patient",id:id});return}
+  else if(act==="patient"){afterPaint(function(){openSheet({type:"patient",id:id})});return}
   else if(act==="repeat"){
     var pp=patients()[id];
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
@@ -3693,12 +3779,12 @@ document.addEventListener("click",function(e){
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
-  else if(act==="view-appt"){if(appt(id))openSheet({type:"view",id:id});return}
+  else if(act==="view-appt"){if(appt(id))afterPaint(function(){if(appt(id))openSheet({type:"view",id:id})});return}
   else if(act==="newat"){
     var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
     var tt=hhmm(mm),bb=inBreak(tt,30,id);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
-    openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}});return;
+    afterPaint(function(){openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}})});return;
   }
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
@@ -3741,8 +3827,8 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
-  else if(act==="new-appt"){if(activeReaders().length)openSheet({type:"appt",id:null});return}
-  else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))openSheet({type:"appt",id:id});return}
+  else if(act==="new-appt"){if(activeReaders().length)afterPaint(function(){openSheet({type:"appt",id:null})});return}
+  else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))afterPaint(function(){if(appt(id))openSheet({type:"appt",id:id})});return}
   else if(act==="conf"){
     /* the patient confirmed (or the tick is taken back): anybody who sees the session */
     var ca=appt(id);if(!ca||!state.hasConf||gone(ca)||done(ca))return;
@@ -3756,17 +3842,20 @@ document.addEventListener("click",function(e){
   else if(act==="p-sec"){ui.psec=id==="cancel"?"cancel":"all";try{localStorage.setItem("ruqya.psec",ui.psec)}catch(e){}}
   else if(act==="draft-drop"){dropDraft();render();return}
   else if(act==="follow"){
-    var fa=appt(id),fn=+b.dataset.n;if(!fa||!gone(fa)||!state.hasFollow||!(fn>=1&&fn<=3))return;
-    var fprev=fa.fol||0,fnew=fprev===fn?fn-1:fn;fa.fol=fnew;
-    db(sb.from("appts").update({follow:fnew}).eq("id",fa.id),function(){fa.fol=fprev;render();redrawCard()});
+    var fa=appt(id),fn=+b.dataset.n;if(!fa||!(gone(fa)||fa.sold)||!state.hasFollow||!(fn>=1&&fn<=3))return;
+    var fprev=fa.fol||0,fnew=fprev===fn?fn-1:fn,sprev=fa.status,soprev=!!fa.sold;fa.fol=fnew;
+    if(fa.status==="cancel"||fa.sold){fa.sold=fnew>=3;fa.status=fa.sold?"wait":"cancel"}   /* «Satış edildi»: successful; pressed again: cancelled again */
+    db(sb.from("appts").update({follow:fnew}).eq("id",fa.id),function(){fa.fol=fprev;fa.status=sprev;fa.sold=soprev;render();redrawCard()});
+    render();
     if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet();
   }
   else if(act==="cancel-appt"){
     /* the patient did not come / called off: the booking stays as «Ləğv olunanlar» (black on the calendar), the time is free again */
     var ca=appt(id);if(!ca||!canEdit(ca)||gone(ca))return;
+    var wasSold=!!ca.sold,fol0=ca.fol||0;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Ləğv olunanlara düşəcək — bir də basın");return}
-    var cprev=ca.status;ca.status="cancel";
-    db(sb.from("appts").update({status:"cancel"}).eq("id",ca.id),function(){ca.status=cprev;render()});
+    var cprev=ca.status;ca.status="cancel";if(wasSold){ca.sold=false;ca.fol=0}
+    db(sb.from("appts").update(wasSold?{status:"cancel",follow:0}:{status:"cancel"}).eq("id",ca.id),function(){ca.status=cprev;if(wasSold){ca.sold=true;ca.fol=fol0}render()});
     if(sheet&&sheet.type==="view")closeSheet();else if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
     toast(L("Qəbul ləğv olundu. «Pasiyentlər → Ləğv olunanlar» bölməsində görünür."));
   }
@@ -3820,6 +3909,14 @@ document.addEventListener("change",function(e){
 document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
   if(e.key==="Escape"&&sheet)closeSheet();
+  /* Tab stays inside an open window */
+  if(e.key==="Tab"&&sheet&&!byId("overlay").hidden){
+    var d=byId("sheet"),f=[].filter.call(d.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'),function(x){return x.offsetParent!==null});
+    if(f.length){var a=document.activeElement,first=f[0],last=f[f.length-1];
+      if(!d.contains(a)||a===d){e.preventDefault();(e.shiftKey?last:first).focus()}
+      else if(e.shiftKey&&a===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&a===last){e.preventDefault();first.focus()}}
+  }
 });
 /* ---------- two fingers on the calendar ----------
    Block size is set only in Ayarlar; two fingers on the calendar do nothing (Safari must not zoom the page). */

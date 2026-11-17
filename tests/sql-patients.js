@@ -22,5 +22,14 @@ module.exports = async () => {
   if (x.n !== 1 || x.noshow !== 1 || x.cancel !== 1 || x.name !== "Ali") throw new Error("counts/name wrong " + JSON.stringify(x));
   const v = (await db.query("select * from public.ruqya_hist_visits('p501112233', current_date-45, current_date-731)")).rows;
   if (v.length !== 3) throw new Error("3 old visits expected, got " + v.length);
+  // B-04: with ORDER BY, two pages read with LIMIT/OFFSET give every patient exactly once
+  await db.exec(fs.readFileSync(path.join(__dirname, "../sql/2026-11-patients-order.sql"), "utf8"));
+  await db.exec("insert into appts(date,time,name,phone,status) select current_date-100-(g%200),'10:00','P'||g,'055'||(1000000+g),'wait' from generate_series(1,2500) g");
+  const p1 = (await db.query("select k from public.ruqya_hist_patients(current_date-45, current_date-731) limit 1000 offset 0")).rows.map((r) => r.k);
+  const p2 = (await db.query("select k from public.ruqya_hist_patients(current_date-45, current_date-731) limit 1000 offset 1000")).rows.map((r) => r.k);
+  const p3 = (await db.query("select k from public.ruqya_hist_patients(current_date-45, current_date-731) limit 1000 offset 2000")).rows.map((r) => r.k);
+  const all = new Set([...p1, ...p2, ...p3]);
+  if (all.size !== p1.length + p2.length + p3.length || all.size !== 2501) throw new Error("paging overlaps or skips: " + all.size);
+  await db.exec(fs.readFileSync(path.join(__dirname, "../sql/rollback-2026-11-patients-order.sql"), "utf8"));
   await db.exec(fs.readFileSync(path.join(__dirname, "../sql/rollback-2026-11-patients.sql"), "utf8"));
 };

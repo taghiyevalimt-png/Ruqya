@@ -1,0 +1,9 @@
+# ПОПЫТКА (отменена): заставка 1,5 с вместо 2 с — LCP не изменился, причина в другом (см. lcp-breakdown-*.txt)
+# green: commit ed82e07516f87db1f3fea3bdbddf948ad14f015f + splash 1.5 s — 2026-11-16T23:09:53Z
+$ node tests/perf/vitals.js evidence/findings/P-02/green.json 5
+run 1: LCP 2628 ms, INP 72 ms, CLS 0, long frames >50ms 4, 12 requests, 418868 bytes
+run 2: LCP 2696 ms, INP 80 ms, CLS 0, long frames >50ms 7, 12 requests, 438063 bytes
+run 3: LCP 2740 ms, INP 88 ms, CLS 0, long frames >50ms 10, 12 requests, 457811 bytes
+run 4: LCP 2664 ms, INP 120 ms, CLS 0, long frames >50ms 8, 12 requests, 438616 bytes
+run 5: LCP 2728 ms, INP 88 ms, CLS 0, long frames >50ms 5, 12 requests, 456799 bytes
+median LCP 2696 (2628–2740) ms; INP 88 (72–120) ms; CLS 0; 12 requests; 438616 bytes — НЕ ПРОЙДЕНО: LCP

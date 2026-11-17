@@ -1,0 +1,28 @@
+-- owner
+-- select id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at,place from public.appts where date >= current_date - 31 order by date, id limit 1000
+Limit  (cost=103.45..1111.47 rows=1000 width=114) (actual time=12.090..14.268 rows=1000 loops=1)
+  Buffers: shared hit=1273 read=559 written=77
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.015..0.016 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.879..0.879 rows=1 loops=1)
+  InitPlan 4
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
+  ->  Incremental Sort  (cost=102.90..96434.43 rows=95565 width=114) (actual time=12.088..14.199 rows=1000 loops=1)
+        Sort Key: appts.date, appts.id
+        Presorted Key: appts.date
+        Full-sort Groups: 2  Sort Method: quicksort  Average Memory: 41kB  Peak Memory: 41kB
+        Pre-sorted Groups: 2  Sort Methods: top-N heapsort, quicksort  Average Memory: 260kB  Peak Memory: 260kB
+        Buffers: shared hit=1273 read=559 written=77
+        ->  Index Scan using appts_date on appts  (cost=15.96..92137.20 rows=95565 width=114) (actual time=1.324..12.557 rows=1827 loops=1)
+              Index Cond: (date >= (CURRENT_DATE - 31))
+              Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
+              Buffers: shared hit=1273 read=559 written=77
+              SubPlan 3
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+              SubPlan 5
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+Planning Time: 0.417 ms
+Execution Time: 14.497 ms

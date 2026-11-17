@@ -1,0 +1,17 @@
+-- agent
+-- select id,name,archived,created_at,color from public.readers order by created_at, id limit 1000
+Limit  (cost=1.56..1.58 rows=10 width=47) (actual time=0.072..0.075 rows=21 loops=1)
+  Buffers: shared hit=1
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.013..0.013 rows=1 loops=1)
+  ->  Sort  (cost=1.53..1.56 rows=10 width=47) (actual time=0.068..0.069 rows=21 loops=1)
+        Sort Key: readers.created_at, readers.id
+        Sort Method: quicksort  Memory: 26kB
+        Buffers: shared hit=1
+        ->  Seq Scan on readers  (cost=0.00..1.37 rows=10 width=47) (actual time=0.032..0.038 rows=21 loops=1)
+              Filter: (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false))
+              Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=62 read=8
+Planning Time: 0.771 ms
+Execution Time: 0.108 ms

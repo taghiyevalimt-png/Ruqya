@@ -1,0 +1,9 @@
+# green: commit 3788d727d5e3a78882646fbc937e3604383b3fec + P-07 (closeSheet hides first, history back after paint) — 2026-11-17T04:28:40Z
+$ node tests/perf/vitals.js evidence/findings/P-07/green.json 5
+run 1: LCP 2184 ms, INP 88 ms, CLS 0, long frames >50ms 7, 13 requests, 456427 bytes
+run 2: LCP 2168 ms, INP 96 ms, CLS 0, long frames >50ms 5, 13 requests, 456427 bytes
+run 3: LCP 2136 ms, INP 88 ms, CLS 0, long frames >50ms 6, 13 requests, 456427 bytes
+run 4: LCP 2192 ms, INP 88 ms, CLS 0, long frames >50ms 7, 13 requests, 456427 bytes
+run 5: LCP 2160 ms, INP 88 ms, CLS 0, long frames >50ms 7, 13 requests, 456427 bytes
+median LCP 2168 (2136–2192) ms; INP 88 (88–96) ms; CLS 0; 13 requests; 456427 bytes — ПРОЙДЕНО
+exit 0

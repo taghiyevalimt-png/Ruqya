@@ -1,0 +1,41 @@
+# colour values in CSS of index.html (comments removed): tokens --x: 72 ; literals in rules: 40
+.actions .go { color: #fff }
+:root[data-theme="dark"] .actions .go { color: #06210f }
+:root:not([data-theme="light"]) .actions .go { color: #06210f }
+.overlay { background: rgba(0,0,0,.45) }
+.ev { color: #fff }
+.ev { box-shadow: 0 1px 2px rgba(0,0,0,.18) }
+.ev.noshow { background-image: repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgb }
+.ev.cancel { background: #000!important }
+.ev.cancel { color: #f2f2f2!important }
+.ev.cancel { border: 1px solid #3a3a3a }
+.ev.cancel b,.ev.cancel span { color: #f2f2f2!important }
+.nowline { background: #d93025 }
+.nowline::before { background: #d93025 }
+.stbtns button[aria-pressed="true"].paid { color: #fff }
+.stbtns button[aria-pressed="true"].cancel { color: #fff }
+.stbtns button[aria-pressed="true"].noshow { color: #fff }
+.xl { border-top: 1px solid #c8c8c8 }
+.xl { background: #fff }
+.xl table { color: #111 }
+.xl td,.xl th { border-right: 1px solid #d4d4d4 }
+.xl td,.xl th { border-bottom: 1px solid #d4d4d4 }
+.xl td,.xl th { background: #fff }
+.xl th { background: #f2f2f2 }
+.xl th { color: #555 }
+.xl th.rn,.xl td.rn { background: #f2f2f2 }
+.xl th.rn,.xl td.rn { color: #555 }
+.xl tr.hd td:not(.rn) { background: #e2efda }
+.xl td.mg { background: #fff2cc }
+.swatches button { box-shadow: inset 0 0 0 2px rgba(255,255,255,.25) }
+.overlay { background: rgba(0,0,0,.55) }
+.sheet { box-shadow: 0 -18px 50px -20px rgba(0,0,0,.6) }
+.ev { box-shadow: 0 1px 2px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,. }
+.ev::before { background: linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,25 }
+.gate .brand img { filter: drop-shadow(0 10px 22px rgba(214,178,94,.25)) }
+#splash img { filter: drop-shadow(0 10px 26px rgba(214,178,94,.22)) }
+.ch.pill.on span { box-shadow: 0 2px 8px rgba(0,0,0,.25) }
+#toast { background: rgba(18,18,18,.94) }
+#toast { color: #fff }
+#toast { border: 1px solid rgba(201,162,74,.55) }
+.ev.held { box-shadow: 0 0 0 2px var(--accent),0 6px 18px -6px rgba(0,0,0,.6) }

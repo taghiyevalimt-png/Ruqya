@@ -1,0 +1,8 @@
+# red: index.html of ac8d029cd71ea075758914a8c20b4d6adc13e2d9 — 2026-11-16T22:38:35Z
+$ node tests/run.js 29-rules
+FAIL 29-rules-text.js 
+    Error: FAIL: az: rules/terms no longer say no-shows are deleted (/gəlməyibsə, onu təqvimdən silirlər/)
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:205:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\29-rules-text.js:15:35)
+1 failed of 1
+exit 1

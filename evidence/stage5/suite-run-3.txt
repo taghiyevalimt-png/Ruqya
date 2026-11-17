@@ -1,0 +1,45 @@
+# run 3 of 3 — commit 664ba75318bb9c8df4a02c59551af976cbb96635, tree 5 changed files — start 2026-11-17T01:03:40Z
+$ node tests/lint.js && node tests/run.js
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-17T01:03:42.351Z
+# messages: 332
+# by rule: {"no-unused-vars":81,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":182,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":16}
+PASS 00-smoke.js 7.2s
+PASS 01-drafts.js 38.1s
+PASS 02-session.js 20.6s
+PASS 03-delete-fonts.js 8.4s
+PASS 04-excel.js 6.8s
+PASS 05-patients.js 12.0s
+PASS 06-anonymize.js 13.1s
+PASS 07-russian.js 8.2s
+PASS 08-sweep.js 152.1s
+PASS 09-features.js 42.8s
+    fuzz bad0 az 120 steps 21s
+    fuzz bad0 ru 120 steps 37s
+    fuzz 1111 az 120 steps 72s
+    fuzz 1111 ru 120 steps 95s
+    fuzz 2222 az 120 steps 125s
+    fuzz 2222 ru 120 steps 151s
+PASS 10-fuzz.js 151.5s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 8.8s
+PASS 13-followup.js 41.4s
+PASS 14-no-slots.js 7.2s
+PASS 15-keyboard.js 7.0s
+PASS 16-ios-scroll.js 6.6s
+PASS 17-cancel-contact.js 12.7s
+PASS 18-faults.js 104.0s
+PASS 19-a11y.js 19.7s
+PASS 20-xss.js 11.0s
+PASS 21-access-matrix.js 7.8s
+PASS 22-attacks.js 9.9s
+PASS 23-excel-counts.js 6.7s
+PASS 24-aria.js 7.8s
+PASS 25-many-patients.js 10.2s
+PASS 26-draft-background.js 10.6s
+PASS 27-dialog-focus.js 6.3s
+PASS 28-publish-guard.js 2.6s
+PASS 29-rules-text.js 12.7s
+PASS 30-patient-search.js 10.8s
+PASS 90-sql.js 15.3s
+all 32 passed
+exit 0  end 2026-11-17T01:16:42Z

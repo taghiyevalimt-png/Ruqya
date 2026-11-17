@@ -1,0 +1,68 @@
+# deploy-check run 43989546222 on audit4 c659aa83af0801c5a10d298f60c04311c4961465 — 2026-11-17T00:41:35Z
+iles	2026-11-17T00:41:14.0694155Z http: 301 https://merkez.example.az/
+iles	2026-11-17T00:41:14.0776537Z --- /
+iles	2026-11-17T00:41:14.0788393Z HTTP/2 200 
+iles	2026-11-17T00:41:14.0788660Z cache-control: no-cache
+iles	2026-11-17T00:41:14.0789083Z strict-transport-security: max-age=31536000; includeSubDomains
+iles	2026-11-17T00:41:14.0789414Z x-content-type-options: nosniff
+iles	2026-11-17T00:41:14.0789690Z x-frame-options: DENY
+iles	2026-11-17T00:41:14.0790088Z content-security-policy: frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+iles	2026-11-17T00:41:14.0790631Z referrer-policy: no-referrer
+iles	2026-11-17T00:41:14.0791147Z permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+iles	2026-11-17T00:41:14.0791717Z cross-origin-opener-policy: same-origin
+iles	2026-11-17T00:41:14.0931241Z --- /index.html
+iles	2026-11-17T00:41:14.0944532Z HTTP/2 200 
+iles	2026-11-17T00:41:14.0946286Z cache-control: no-cache
+iles	2026-11-17T00:41:14.0946984Z strict-transport-security: max-age=31536000; includeSubDomains
+iles	2026-11-17T00:41:14.0948107Z x-content-type-options: nosniff
+iles	2026-11-17T00:41:14.0948579Z x-frame-options: DENY
+iles	2026-11-17T00:41:14.0949216Z content-security-policy: frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+iles	2026-11-17T00:41:14.0949851Z referrer-policy: no-referrer
+iles	2026-11-17T00:41:14.0950447Z permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+iles	2026-11-17T00:41:14.0951098Z cross-origin-opener-policy: same-origin
+iles	2026-11-17T00:41:14.1082799Z --- /version.txt
+iles	2026-11-17T00:41:14.1095247Z HTTP/2 200 
+iles	2026-11-17T00:41:14.1095592Z cache-control: no-store
+iles	2026-11-17T00:41:14.1095934Z strict-transport-security: max-age=31536000; includeSubDomains
+iles	2026-11-17T00:41:14.1096272Z x-content-type-options: nosniff
+iles	2026-11-17T00:41:14.1096558Z x-frame-options: DENY
+iles	2026-11-17T00:41:14.1096952Z content-security-policy: frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+iles	2026-11-17T00:41:14.1097865Z referrer-policy: no-referrer
+iles	2026-11-17T00:41:14.1098348Z permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+iles	2026-11-17T00:41:14.1099058Z cross-origin-opener-policy: same-origin
+iles	2026-11-17T00:41:14.1232646Z --- /vendor/fonts/fonts.css
+iles	2026-11-17T00:41:14.1244530Z HTTP/2 200 
+iles	2026-11-17T00:41:14.1244941Z cache-control: public, max-age=2592000, immutable
+iles	2026-11-17T00:41:14.1245512Z strict-transport-security: max-age=31536000; includeSubDomains
+iles	2026-11-17T00:41:14.1245958Z x-content-type-options: nosniff
+iles	2026-11-17T00:41:14.1246255Z x-frame-options: DENY
+iles	2026-11-17T00:41:14.1246724Z content-security-policy: frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+iles	2026-11-17T00:41:14.1247510Z referrer-policy: no-referrer
+iles	2026-11-17T00:41:14.1248075Z permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+iles	2026-11-17T00:41:14.1248609Z cross-origin-opener-policy: same-origin
+iles	2026-11-17T00:41:14.1376386Z --- /logo-hq.webp
+iles	2026-11-17T00:41:14.1388026Z HTTP/2 200 
+iles	2026-11-17T00:41:14.1388432Z strict-transport-security: max-age=31536000; includeSubDomains
+iles	2026-11-17T00:41:14.1388897Z x-content-type-options: nosniff
+iles	2026-11-17T00:41:14.1389277Z x-frame-options: DENY
+iles	2026-11-17T00:41:14.1389796Z content-security-policy: frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+iles	2026-11-17T00:41:14.1390367Z referrer-policy: no-referrer
+iles	2026-11-17T00:41:14.1390855Z permissions-policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+iles	2026-11-17T00:41:14.1391446Z cross-origin-opener-policy: same-origin
+iles	2026-11-17T00:41:14.1524818Z PASS deploy kit: nginx -t ok, https redirect, all headers on every path
+5960a326750d5838078e36cf38b85af677262	﻿2026-11-17T00:41:14.1618095Z Post job cleanup.
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2298706Z [command]/usr/bin/git version
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2308645Z git version 2.56.1
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2327200Z Temporarily overriding HOME='/home/runner/work/_temp/9f990e7d-694c-403f-8f7e-ad1b512e2622' before making global git config changes
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2328619Z Adding repository directory to the temporary git global config as a safe directory
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2331541Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Ruqya/Ruqya
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2361332Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2385692Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.ss
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2546034Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2567283Z http.https://github.com/.extraheader
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2575252Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2599517Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config -
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2754347Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+5960a326750d5838078e36cf38b85af677262	2026-11-17T00:41:14.2776728Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+:41:14.3090035Z Cleaning up orphan processes
+:14.3390221Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262. For more information see: https://githu

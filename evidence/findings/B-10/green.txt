@@ -1,0 +1,5 @@
+# commit 156ee6585fcad98a991ef4eaccbf13d45bace82c — 2026-11-16T22:37:26Z
+$ git show 156ee65:index.html | grep -c '<pattern>'
+onu təqvimdən silirlər: 3
+<dt>Ləğv</dt>: 2
+«Ləğv et» basılır: 2
