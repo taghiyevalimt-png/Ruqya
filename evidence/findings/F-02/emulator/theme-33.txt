@@ -1,0 +1,7 @@
+F-02 widget colour (API 33)
+light 7c135f436738a1d10f88b4e5023e6321 114915 bytes
+dark bba04c3be25a48a480fced7542f8c6b9 116631 bytes
+auto 7c135f436738a1d10f88b4e5023e6321 114915 bytes
+out-light 2e92bf130bdcf98b33ebe1f506426bd0 27625 bytes
+out-dark 1c27ffb738eb9ca994ac6c4f8b5baa7a 28801 bytes
+PASS: white and black pictures differ; without a choice the light phone gets the white one; signed-out keeps the colour
