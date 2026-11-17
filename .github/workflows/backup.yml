@@ -15,7 +15,9 @@ name: Database backup
 #                      backups cannot be opened
 on:
   schedule:
-    - cron: "17 23 * * *"
+    # B-18: twice a day. GitHub starts scheduled jobs late (30-40 min seen), so once a day gave gaps over
+    # 24 h (the RPO target); twice a day keeps the gap near 12 h even with delays or one skipped run
+    - cron: "17 11,23 * * *"
   workflow_dispatch:
 
 permissions:
