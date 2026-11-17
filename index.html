@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-LNyG+h3wvuGUDuLnhwBDQmgBYPOfiNUx1RTSG0cZP4k='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-GY8XPZAp5Dcb63Ep6spcH+VkNWUyxUa7uuMuKqgqR3A='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -290,7 +290,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 /* «Bütün gün» blocks: only the patient's name, whole, line under line; letter size set so 7 letters fit a line */
 .cal.fit .ev{padding:2px 2px;justify-content:flex-start;gap:0}
 .cal.fit .ev .fx,.cal.fit .ev.tight .fx{display:block;font-size:var(--fitfs2,8px);line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:clip;font-weight:500;letter-spacing:-.03em;margin-top:1px}
-.cal.fit .ev .fx.ag{white-space:normal;overflow-wrap:anywhere;font-weight:700;margin-top:0}
+.cal.fit .ev .fx.ag{white-space:normal;overflow-wrap:anywhere;font-weight:700}
 .cal.fit .ev.tiny .fx{display:none}
 .cal-foot{position:sticky;bottom:0;z-index:4;display:flex;height:40px;background:var(--surface);border-top:1px solid var(--line)}
 .cal-foot .corner{position:sticky;left:0;z-index:5;width:54px;flex:none;background:var(--surface);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:2px 4px}
@@ -1127,7 +1127,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Vidcetin rəngi":"Цвет виджета",
 "Ağ":"Белый",
 "Qara":"Чёрный",
-"«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda saat, nömrə və kimin yazdığı.":"«Весь день»: 09:00–22:00 на одном экране, до 7 специалистов на экран (если больше — листается вбок); в блоке имя, а где помещается — время, номер и кто записал.",
+"«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda nömrə və kimin yazdığı.":"«Весь день»: 09:00–22:00 на одном экране, до 7 специалистов на экран (если больше — листается вбок); в блоке имя, а где помещается — номер и кто записал.",
 "Böyük":"Большая",
 "Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.":"В больших блоках имена и время читаются легче, но календарь длиннее листается вниз.",
 
@@ -2396,9 +2396,9 @@ function fitNames(){
   for(var i=0;i<evs.length;i++){var b=evs[i].firstElementChild;if(b&&(b.scrollHeight>evs[i].clientHeight-2||b.scrollWidth>b.clientWidth+1))over.push(b)}
   over.forEach(function(b){var ev=b.parentNode,f=FIT_FS||11;
     while(f>6&&(b.scrollHeight>ev.clientHeight-2||b.scrollWidth>b.clientWidth+1)){f-=0.5;b.style.fontSize=f+"px"}});
-  /* under the name (owner 18.11): time, phone, «Yazdı:» + agent — each step only when it fits the block wholly */
+  /* under the name (owner 18.11): phone, then who wrote it (no time, no «Yazdı:») — each only when it fits wholly */
   for(var j=0;j<evs.length;j++){var e=evs[j],H=e.clientHeight-1,ch=e.children;
-    for(var g=3;g>=1;g--){var last=null;for(var k=ch.length-1;k>0;k--)if(ch[k].style.display!=="none"){last=ch[k];break}
+    for(var g=2;g>=1;g--){var last=null;for(var k=ch.length-1;k>0;k--)if(ch[k].style.display!=="none"){last=ch[k];break}
       if(!last||(last.offsetTop+last.offsetHeight<=H&&last.scrollWidth<=last.clientWidth+1))break;
       for(var q=1;q<ch.length;q++)if(+ch[q].getAttribute("data-g")===g)ch[q].style.display="none"}}
 }
@@ -2431,8 +2431,8 @@ function gridMain(){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a.status==="cancel"?';z-index:0':';z-index:1')+'">'+
-        (FIT?'<b>'+esc(a.name)+'</b><span class="num fx" data-g="1">'+esc(a.time)+'</span>'+(a.phone?'<span class="num fx" data-g="2">'+esc(a.phone)+'</span>':'')+
-          ((state.staff[a.by]||a.by)?'<span class="fx" data-g="3">'+L("Yazdı:")+'</span><span class="fx ag" data-g="3">'+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+'</button>':
+        (FIT?'<b>'+esc(a.name)+'</b>'+(a.phone?'<span class="num fx" data-g="1">'+esc(a.phone)+'</span>':'')+
+          ((state.staff[a.by]||a.by)?'<span class="fx ag" data-g="2">'+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+'</button>':
         '<b>'+(mark(a)?'<i class="ok">'+mark(a)+'</i>':"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         (a.phone?'<span class="num ph">'+esc(a.phone)+'</span>':'')+
@@ -3239,7 +3239,7 @@ function heightSeg(){
   return '<h3 class="sec">'+L("Blokların hündürlüyü")+'</h3><div class="seg seg4" style="grid-template-columns:repeat(4,1fr)">'+
     '<button data-act="hourh" data-id="fit" aria-pressed="'+FIT+'">'+L("Bütün gün")+'</button>'+
     HOUR_STEPS.map(function(v,i){return '<button data-act="hourh" data-id="'+v+'" aria-pressed="'+(!FIT&&HOUR===v)+'">'+names[i]+'</button>'}).join("")+'</div>'+
-    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda saat, nömrə və kimin yazdığı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
+    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda nömrə və kimin yazdığı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
 }
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+

@@ -1,0 +1,64 @@
+# full suite after F-08 — 2026-11-17T13:23:05Z — commit 885ff13 + F-08
+lint exit 0
+PASS 00-smoke.js 10.1s
+PASS 01-drafts.js 38.8s
+PASS 02-session.js 21.6s
+PASS 03-delete-fonts.js 8.6s
+PASS 04-excel.js 7.0s
+PASS 05-patients.js 12.4s
+PASS 06-anonymize.js 13.6s
+PASS 07-russian.js 7.6s
+PASS 08-sweep.js 156.7s
+PASS 09-features.js 43.2s
+    fuzz bad0 az 120 steps 27s
+    fuzz bad0 ru 120 steps 51s
+    fuzz 1111 az 120 steps 77s
+    fuzz 1111 ru 120 steps 95s
+    fuzz 2222 az 120 steps 118s
+    fuzz 2222 ru 120 steps 137s
+PASS 10-fuzz.js 137.4s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 9.1s
+PASS 13-followup.js 41.6s
+PASS 14-no-slots.js 7.3s
+PASS 15-keyboard.js 7.4s
+PASS 16-ios-scroll.js 6.9s
+PASS 17-cancel-contact.js 13.0s
+PASS 18-faults.js 98.8s
+PASS 19-a11y.js 20.2s
+PASS 20-xss.js 11.2s
+PASS 21-access-matrix.js 8.7s
+PASS 22-attacks.js 10.7s
+PASS 23-excel-counts.js 6.8s
+PASS 24-aria.js 8.0s
+PASS 25-many-patients.js 10.3s
+PASS 26-draft-background.js 10.7s
+PASS 27-dialog-focus.js 6.4s
+PASS 28-publish-guard.js 4.1s
+PASS 29-rules-text.js 13.0s
+PASS 30-patient-search.js 10.8s
+PASS 31-patients-keyset.js 23.3s
+PASS 90-sql.js 16.9s
+PASS 91-schema.js 10.9s
+PASS 92-visits-access.js 8.0s
+PASS 93-restore-one.js 7.7s
+PASS 94-configured-copy.js 0.7s
+PASS 95-no-third-party.js 9.7s
+PASS 96-close-history.js 8.3s
+PASS 97-person-export-delete.js 8.8s
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-agent-services.js 25.2s
+PASS 99-list-specialists-bar.js 7.7s
+PASS 99-mock-defaults.js 8.2s
+PASS 99-service-db.js 7.5s
+PASS 99-service-ui.js 15.7s
+PASS 99-short-window-iphone.js 7.9s
+PASS 99-short-window-keyboard.js 6.8s
+PASS 99-sold.js 17.8s
+PASS 99-whole-day-default.js 11.5s
+PASS 99-whole-day-details.js 11.7s
+PASS 99-whole-day-foot.js 13.6s
+PASS 99-whole-day-names.js 12.5s
+PASS 99-whole-day.js 30.5s
+PASS 99-widget-color.js 13.3s
+all 55 passed
