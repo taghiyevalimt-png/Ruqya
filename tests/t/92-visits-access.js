@@ -15,6 +15,13 @@ module.exports = async () => {
     check(!dropped.rows[0].f, "the old whole-list function is gone");
     const p = await as(c, "agentA", "select k, n from public.ruqya_hist_patients_page(current_date + 5, current_date - 700, '', 1000)");
     check(p.ok && p.rowCount >= 3, "page function lists the copy's patients for an agent: " + (p.ok ? p.rowCount : p.error));
+    // owner 17.11: a cancelled booking marked «Satış edildi» (follow 3) counts as successful in the history functions
+    await c.query("update public.appts set status = 'cancel', follow = 3 where id = 'c0000000-0000-4000-8000-000000000002'");
+    const sp = await as(c, "agentA", "select n, cancel from public.ruqya_hist_patients_page(current_date + 5, current_date - 700, '', 1000) where k = 'p500000002'");
+    check(sp.ok && sp.rowCount === 1 && sp.rows[0].n === 1 && sp.rows[0].cancel === 0, "sold booking: counted as a visit, not as cancelled: " + JSON.stringify(sp.rows));
+    const sv = await as(c, "agentA", "select status from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)");
+    check(sv.ok && sv.rows[0] && sv.rows[0].status === "wait", "sold booking: visit status shown as successful: " + JSON.stringify(sv.rows));
+    await c.query("update public.appts set status = 'wait', follow = 0 where id = 'c0000000-0000-4000-8000-000000000002'");
     // rollback and again: the rollback file puts the old visits function back, the migration can run twice
     const sql = (f) => fs.readFileSync(path.join(__dirname, "..", "..", "sql", f), "utf8");
     await c.query(sql("rollback-2026-11-patients-scale.sql"));

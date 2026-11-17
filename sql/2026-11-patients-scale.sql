@@ -5,6 +5,7 @@
 --  2. ruqya_hist_patients_page: the grouped list one page at a time, after the last key of the previous page
 --     (keyset paging), so each page reads only its own patients. The old ruqya_hist_patients (whole list for every
 --     page) is dropped: this app no longer calls it, and older app versions fall back to reading the visits.
+--  4. a cancelled booking marked «Satış edildi» (follow 3) counts as successful in both (owner 17.11).
 -- Safe to run again. Rollback: sql/rollback-2026-11-patients-scale.sql.
 create index if not exists appts_pkey_date on public.appts (public.ruqya_pkey(phone, name), date);
 
@@ -14,11 +15,11 @@ language sql stable security invoker set search_path = public as $$
   select public.ruqya_pkey(a.phone, a.name),
          (array_agg(a.name order by a.date desc, a.id))[1],
          (array_agg(a.phone order by a.date desc, a.id) filter (where coalesce(a.phone,'') <> ''))[1],
-         (count(*) filter (where a.status not in ('cancel','noshow')))::int,
+         (count(*) filter (where (case when a.status = 'cancel' and coalesce(a.follow, 0) >= 3 then 'wait' else a.status end) not in ('cancel','noshow')))::int,
          (count(*) filter (where a.status = 'noshow'))::int,
-         (count(*) filter (where a.status = 'cancel'))::int,
+         (count(*) filter (where (case when a.status = 'cancel' and coalesce(a.follow, 0) >= 3 then 'wait' else a.status end) = 'cancel'))::int,
          max(a.date),
-         min(a.date) filter (where a.status not in ('cancel','noshow'))
+         min(a.date) filter (where (case when a.status = 'cancel' and coalesce(a.follow, 0) >= 3 then 'wait' else a.status end) not in ('cancel','noshow'))
     from public.appts a
    where public.ruqya_pkey(a.phone, a.name) > coalesce(after_k, '')
      and a.date >= greatest(since, current_date - 800) and a.date < before
@@ -56,7 +57,7 @@ grant execute on function private.ruqya_visit_ids(text, date, date) to authentic
 create or replace function public.ruqya_hist_visits(key text, before date, since date)
 returns table(id uuid, reader_id uuid, date date, name text, phone text, status text, created_by uuid)
 language sql stable set search_path = public as $$
-  select a.id, a.reader_id, a.date, a.name, a.phone, a.status, a.created_by from public.appts a
+  select a.id, a.reader_id, a.date, a.name, a.phone, (case when a.status = 'cancel' and coalesce(a.follow, 0) >= 3 then 'wait' else a.status end), a.created_by from public.appts a
   where a.id = any(private.ruqya_visit_ids(key, before, since))
   order by a.date desc, a.id limit 500 $$;
 drop function if exists public.ruqya_hist_patients(date, date);

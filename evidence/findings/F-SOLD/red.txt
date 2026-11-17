@@ -1,0 +1,3 @@
+# red: index.html of bd0f67351810b63eb134775f20c5ab1b8b8ff6fc — 2026-11-17T05:33:42Z
+FAIL 99-sold.js 
+    Error: FAIL: after: gone from «Ləğv olunanlar»
