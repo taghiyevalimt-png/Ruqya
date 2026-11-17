@@ -598,8 +598,8 @@ button.ch .x{font-size:10px;opacity:.8}
 .card.compact .row{gap:10px;align-items:center}
 .card.compact .time{font-size:15px;width:46px;line-height:1.1}
 .card.compact .time small{display:block;font-size:10.5px;font-weight:500;color:var(--muted)}
-.card.compact .who b{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card.compact .who span{font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.compact .who b{font-size:15px;line-height:1.2;overflow-wrap:anywhere}   /* R2-6: a long name wraps, it is not cut */
+.card.compact .who span{font-size:12px;line-height:1.25;overflow-wrap:anywhere}
 .card.compact .price{font-size:14px}
 .card.compact .links{gap:14px;font-size:13.5px;padding-left:56px}
 .card.compact .links .link{padding:2px 0}
@@ -612,6 +612,10 @@ button.ch .x{font-size:10px;opacity:.8}
 .stsec{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible}
 .stsec .chip{padding:8px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media (min-width:700px){.stsec{grid-template-columns:repeat(6,1fr)}}
+/* R2-6: section names are never cut: the two patient sections take half the width each, and on screens narrower
+   than 360 px the section names are a little smaller (the longest, «Mütəxəssislər» / «Специалисты», then fits) */
+.stsec.psec{grid-template-columns:repeat(2,1fr)}
+@media (max-width:359px){.stsec .chip{font-size:12.5px;padding:8px 2px}}
 </style>
 </head>
 <body>

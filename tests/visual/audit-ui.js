@@ -1,7 +1,8 @@
 // Every screen and window, every state, five widths, light and dark: screenshot + automatic checks.
 //   node tests/visual/audit-ui.js <outDir> [widths=320,375,768,1280,1920]
 // Checks per shot: horizontal page scroll; text cut off inside a box (scrollWidth > clientWidth with overflow hidden),
-// listing intentional cuts (calendar blocks only — R2-6: any other text shortened with "…" counts as cut) separately; overlapping controls in the top layer
+// listing intentional cuts separately: calendar blocks and column names, the one-line note preview of a list row
+// (its full text is in the card) — R2-6: any other text shortened with "…" counts as cut; overlapping controls in the top layer
 // (each box cut by its scrolling ancestors; a control under a fixed/sticky bar is listed apart for review);
 // controls smaller than 44x44 px; axe-core 4.10.2 rules for WCAG 2.0/2.1 A+AA (incl. colour contrast 4.5:1).
 // Output: <outDir>/<width>-<theme>/<screen>.jpg, <outDir>/report.json, <outDir>/summary.tsv. Exit 1 on overflow,
@@ -60,7 +61,7 @@ async function check(p) {
       if (!vis(e) || !e.childNodes.length || ![...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
       const cs = getComputedStyle(e);
       if ((cs.overflow === "hidden" || cs.overflowX === "hidden" || cs.overflowX === "clip") && e.scrollWidth > e.clientWidth + 1) {
-        if (e.closest(".ev")) out.cutIntended++; else out.cut.push(name(e) + (cs.textOverflow === "ellipsis" ? " (…)" : ""));
+        if (e.closest(".ev,.colnames,.memo")) out.cutIntended++; else out.cut.push(name(e) + (cs.textOverflow === "ellipsis" ? " (…)" : ""));
       }
     }
     const ctl = [...layer.querySelectorAll("button,a[href],input:not([type=hidden]),select,textarea,[data-act]")].filter((e) => vis(e) && (!sheetOpen || e.closest("#sheet")) && (sheetOpen || !e.closest("#overlay")));
