@@ -1,0 +1,17 @@
+# DB scale check — 2026-11-17T01:34:36.841Z — PostgreSQL 17.11 embedded, 1000000 bookings
+data generated: 1000000 appts, 1000000 audit_log rows in 47 s
+ПРОЙДЕНО	0.132 ms	readers	max rows read on a big table: 0
+ПРОЙДЕНО	2507.963 ms	appts window (refresh)	max rows read on a big table: 1827
+ПРОЙДЕНО	282.894 ms	appts written in window for earlier days	max rows read on a big table: 22862
+ПРОЙДЕНО	10.278 ms	appts changed since (poll)	max rows read on a big table: 1000
+ПРОЙДЕНО	41.785 ms	appts window as specialist (RLS by column)	max rows read on a big table: 21009
+ПРОЙДЕНО	1.572 ms	expenses window	max rows read on a big table: 0
+ПРОЙДЕНО	3.346 ms	product_sales window	max rows read on a big table: 0
+ПРОЙДЕНО	0.654 ms	staff	max rows read on a big table: 0
+ПРОЙДЕНО	0.705 ms	breaks	max rows read on a big table: 0
+ПРОЙДЕНО	2.227 ms	stat_edits	max rows read on a big table: 0
+НЕ ПРОЙДЕНО (no LIMIT anywhere) (reads 626415 rows of a big table)	8610.749 ms	patients grouped (RPC, 2 years)	max rows read on a big table: 626415
+НЕ ПРОЙДЕНО (reads 626415 rows of a big table)	5652.475 ms	one patient's old visits (RPC)	max rows read on a big table: 626415
+ПРОЙДЕНО	8.892 ms	Excel one month	max rows read on a big table: 1827
+ПРОЙДЕНО	0.515 ms	journal page (admin)	max rows read on a big table: 200
+ПРОЙДЕНО	0.339 ms	journal deleted only (admin)	max rows read on a big table: 1

@@ -1,0 +1,24 @@
+-- agent
+-- select * from public.appts where updated_at > now() - interval '3 minutes' order by id limit 1000
+Limit  (cost=16.50..313.66 rows=1000 width=134) (actual time=0.547..10.169 rows=1000 loops=1)
+  Buffers: shared hit=492 read=516 written=171
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.010..0.010 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.475..0.476 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
+  ->  Index Scan using appts_pkey on appts  (cost=15.96..139311.37 rows=468752 width=134) (actual time=0.546..10.072 rows=1000 loops=1)
+        Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND (updated_at > (now() - '00:03:00'::interval)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
+        Buffers: shared hit=492 read=516 written=171
+        SubPlan 3
+          ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+        SubPlan 5
+          ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
+                ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.284 ms
+Execution Time: 10.280 ms

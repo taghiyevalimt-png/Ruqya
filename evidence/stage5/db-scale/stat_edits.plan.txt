@@ -1,0 +1,34 @@
+-- agent
+-- select * from public.stat_edits order by id limit 1000
+Limit  (cost=2.17..2.18 rows=1 width=98) (actual time=1.315..1.316 rows=0 loops=1)
+  Buffers: shared hit=6 read=1
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.009..0.010 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.282..0.282 rows=1 loops=1)
+          Buffers: shared hit=1
+  InitPlan 3
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.425..0.426 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.003..0.004 rows=1 loops=1)
+  InitPlan 5
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.185..0.185 rows=1 loops=1)
+          Buffers: shared hit=1
+  InitPlan 6
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.364..0.364 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 7
+    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.004..0.004 rows=1 loops=1)
+  ->  Sort  (cost=1.04..1.05 rows=1 width=98) (actual time=1.314..1.314 rows=0 loops=1)
+        Sort Key: stat_edits.id
+        Sort Method: quicksort  Memory: 25kB
+        Buffers: shared hit=6 read=1
+        ->  Seq Scan on stat_edits  (cost=0.00..1.03 rows=1 width=98) (actual time=1.309..1.309 rows=0 loops=1)
+              Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR ((InitPlan 3).col1 AND (agent_id = ((InitPlan 4).col1)::text)) OR (InitPlan 5).col1 OR ((InitPlan 6).col1 AND (agent_id = ((InitPlan 7).col1)::text))))
+              Rows Removed by Filter: 1
+              Buffers: shared hit=6 read=1
+Planning:
+  Buffers: shared hit=48 read=2
+Planning Time: 0.678 ms
+Execution Time: 1.418 ms

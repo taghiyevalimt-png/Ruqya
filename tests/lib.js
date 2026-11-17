@@ -118,14 +118,18 @@ async function attach(context, db, ctl) {
       if (ctl.noRpc && /^ruqya_hist/.test(fn)) return send(route, 404, { code: "PGRST202", message: "Could not find the function" });
       ctl.rpc = (ctl.rpc || []).concat(fn);
       const old = () => db.appts.filter((r) => r.date >= a.since && r.date < a.before);
-      if (fn === "ruqya_hist_patients") {
+      // P-05: the page function (keyset: after_k, lim ≤ 1000); ctl.noPage = a database without it (older install)
+      if (fn === "ruqya_hist_patients_page" && ctl.noPage) return send(route, 404, { code: "PGRST202", message: "Could not find the function public.ruqya_hist_patients_page" });
+      if (fn === "ruqya_hist_patients" || fn === "ruqya_hist_patients_page") {
         const g = {};
         old().sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => {
           const k = pkey(r), o = g[k] || (g[k] = { k, name: r.name, phone: r.phone, n: 0, noshow: 0, cancel: 0, last: r.date, first: null });
           if (r.status === "cancel") o.cancel++; else if (r.status === "noshow") o.noshow++; else { o.n++; if (!o.first || r.date < o.first) o.first = r.date; }
         });
         // like PostgREST: at most 1000 rows per answer (db max-rows), paging with offset/limit
-        const all = Object.values(g).sort((x, y) => (x.k < y.k ? -1 : 1)), off = +url.searchParams.get("offset") || 0, lim = Math.min(+url.searchParams.get("limit") || 1000, 1000);
+        const all = Object.values(g).sort((x, y) => (x.k < y.k ? -1 : 1));
+        if (fn === "ruqya_hist_patients_page") { const after = a.after_k || ""; return send(route, 200, all.filter((x) => x.k > after).slice(0, Math.max(1, Math.min(+a.lim || 1000, 1000)))); }
+        const off = +url.searchParams.get("offset") || 0, lim = Math.min(+url.searchParams.get("limit") || 1000, 1000);
         return send(route, 200, all.slice(off, off + lim));
       }
       if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));

@@ -35,5 +35,11 @@ const ATTACKS = [
   ["X-26", "agent deletes his own staff row (hides his history)", "agentA", `delete from public.staff where id='a0000000-0000-4000-8000-0000000000aa'`, (r) => !r.ok || r.rowCount === 0],
   ["X-27", "more than 300 changes in an hour by one agent are refused", "agentA",
     `do $$ begin for i in 1..305 loop update public.appts set note='n'||i where id='c0000000-0000-4000-8000-000000000003'; end loop; end $$`, (r) => !r.ok && /cox deyisiklik/i.test(r.error)],
+  // P-04/P-05 (2026-11-patients-scale.sql)
+  ["X-28", "anonymous visitor calls the internal visit-id helper", "anon", `select private.ruqya_visit_ids('n test', current_date + 1, current_date - 700)`, (r) => !r.ok],
+  ["X-29", "anonymous visitor reads the patient list page", "anon", `select * from public.ruqya_hist_patients_page(current_date + 1, current_date - 700, '', 1000)`, (r) => !r.ok || r.rowCount === 0],
+  ["X-30", "account without a role reads the patient list page", "pending", `select * from public.ruqya_hist_patients_page(current_date + 1, current_date - 700, '', 1000)`, (r) => !r.ok || r.rowCount === 0],
+  ["X-31", "account without a role reads a patient's visits", "pending", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
+  ["X-32", "specialist of column Əli reads the visits of a patient of column İlkin (helper finds the id, RLS must hide the row)", "spec", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
 ];
 module.exports = { ATTACKS };

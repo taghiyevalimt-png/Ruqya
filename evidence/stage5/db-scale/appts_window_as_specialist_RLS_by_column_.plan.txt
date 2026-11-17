@@ -1,0 +1,32 @@
+-- spec
+-- select * from public.appts where date >= current_date - 45 order by date desc, id limit 1000
+Limit  (cost=104.15..1053.52 rows=1000 width=134) (actual time=9.819..30.484 rows=1000 loops=1)
+  Buffers: shared hit=20291 read=796 written=86
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.011..0.011 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.656..0.656 rows=1 loops=1)
+          Buffers: shared hit=2
+  InitPlan 4
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.506..0.507 rows=1 loops=1)
+          Buffers: shared hit=2
+  ->  Incremental Sort  (cost=103.61..97291.40 rows=102371 width=134) (actual time=9.817..30.417 rows=1000 loops=1)
+        Sort Key: appts.date DESC, appts.id
+        Presorted Key: appts.date
+        Full-sort Groups: 23  Sort Method: quicksort  Average Memory: 36kB  Peak Memory: 36kB
+        Buffers: shared hit=20291 read=796 written=86
+        ->  Index Scan Backward using appts_date on appts  (cost=15.96..92638.88 rows=102371 width=134) (actual time=2.520..29.934 rows=1013 loops=1)
+              Index Cond: (date >= (CURRENT_DATE - 45))
+              Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
+              Rows Removed by Filter: 19996
+              Buffers: shared hit=20291 read=796 written=86
+              SubPlan 3
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.518..0.537 rows=1 loops=1)
+                      Buffers: shared hit=21 read=2 written=2
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (actual time=0.000..0.001 rows=1 loops=1)
+              SubPlan 5
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.260..0.278 rows=1 loops=1)
+                      Buffers: shared hit=2
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (actual time=0.000..0.001 rows=1 loops=1)
+Planning Time: 0.274 ms
+Execution Time: 30.899 ms

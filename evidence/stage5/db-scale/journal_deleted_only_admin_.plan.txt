@@ -1,0 +1,15 @@
+-- owner
+-- select * from public.audit_log where op = 'DELETE' order by id desc limit 200
+Limit  (cost=0.41..4.43 rows=1 width=117) (actual time=0.451..0.455 rows=1 loops=1)
+  Buffers: shared hit=1 read=2
+  InitPlan 1
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.012..0.012 rows=1 loops=1)
+  InitPlan 2
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.327..0.327 rows=1 loops=1)
+  ->  Index Scan Backward using audit_log_del on audit_log  (cost=0.12..4.15 rows=1 width=117) (actual time=0.450..0.454 rows=1 loops=1)
+        Filter: ((InitPlan 2).col1 AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
+        Buffers: shared hit=1 read=2
+Planning:
+  Buffers: shared hit=1
+Planning Time: 0.369 ms
+Execution Time: 0.489 ms

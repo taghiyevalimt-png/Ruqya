@@ -1,0 +1,2 @@
+# soak 120 min — commit ffbcf51f5380a29765496693a277607a7d8cdec9 — start 2026-11-17T01:20:18Z
+$ node tests/perf/soak.js evidence/stage5/soak.json 120
