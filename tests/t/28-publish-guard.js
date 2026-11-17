@@ -20,5 +20,11 @@ module.exports = async () => {
     const after = sh(`git rev-parse main`, path.join(t, "origin.git")).trim();
     check(code !== 0, "publish.sh on a feature branch must fail, it exited 0 with: " + out.trim().split("\n").pop());
     check(after === before, "origin/main unchanged");
+    // R2-12: on main, an unknown new file stops the publication (nothing is pushed, the file is not committed)
+    sh(`git checkout -q main`, w); fs.writeFileSync(path.join(w, "notes-private.txt"), "x");
+    let code2 = 0, out2 = ""; try { out2 = sh(`sh publish.sh test2`, w); } catch (e) { code2 = e.status; out2 = String(e.stdout) + String(e.stderr); }
+    check(code2 !== 0 && /new files not yet in git/.test(out2) && /notes-private\.txt/.test(out2), "publish.sh stops on an untracked file: " + out2.trim().split("\n").slice(-2).join(" | "));
+    check(sh(`git rev-parse main`, path.join(t, "origin.git")).trim() === before, "origin/main still unchanged");
+    check(!sh(`git log --all --name-only --format=`, w).includes("notes-private.txt"), "the untracked file was not committed");
   } finally { fs.rmSync(t, { recursive: true, force: true }); }
 };

@@ -1,0 +1,54 @@
+{
+ "at": "2026-11-17T04:02:47.401Z",
+ "minutes": 8,
+ "actions": 396,
+ "samples": [
+  {
+   "min": 0.1,
+   "heap": 2256456,
+   "dom": 101
+  },
+  {
+   "min": 1.1,
+   "heap": 2782880,
+   "dom": 157
+  },
+  {
+   "min": 2.1,
+   "heap": 2954280,
+   "dom": 157
+  },
+  {
+   "min": 3.1,
+   "heap": 3030240,
+   "dom": 157
+  },
+  {
+   "min": 4.1,
+   "heap": 2981868,
+   "dom": 137
+  },
+  {
+   "min": 5.1,
+   "heap": 3007912,
+   "dom": 224
+  },
+  {
+   "min": 6.1,
+   "heap": 3021140,
+   "dom": 229
+  },
+  {
+   "min": 7.1,
+   "heap": 3043532,
+   "dom": 236
+  }
+ ],
+ "heapAfterStabilisation": 2782880,
+ "heapEnd": 3043532,
+ "growthPct": 9.4,
+ "failedRequests": {},
+ "pageErrors": [],
+ "consoleErrors": [],
+ "verdict": "ПРОЙДЕНО"
+}

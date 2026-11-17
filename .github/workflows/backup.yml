@@ -19,6 +19,11 @@ on:
     # 24 h (the RPO target); twice a day keeps the gap near 12 h even with delays or one skipped run
     - cron: "17 11,23 * * *"
   workflow_dispatch:
+    inputs:
+      break_check:
+        description: "Test of B-20 only: make the restore check fail on purpose (the copy must still be kept, as UNVERIFIED)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -136,7 +141,11 @@ jobs:
           grep -Eq '^COPY "?auth"?\."?users"? ' data.sql || { echo "::error::data.sql has no auth.users data"; exit 1; }
           echo "Source manifest (table, rows, md5):"; cat manifest-source.txt
 
+      # B-20: the checks below may fail (e.g. B-16) — the copy is still encrypted and kept, marked UNVERIFIED, and
+      # the run fails at the end, so a broken check never costs a night's copy
       - name: Start a clean local Supabase stack
+        id: stack
+        continue-on-error: true
         run: |
           set -u
           mkdir -p "$RUNNER_TEMP/drill"; cd "$RUNNER_TEMP/drill"
@@ -154,7 +163,11 @@ jobs:
           [ "$v" -ge "${PG_CLIENT_MAJOR}0000" ] || { echo "::error::local stack runs PostgreSQL $v, expected $PG_CLIENT_MAJOR"; exit 1; }
 
       - name: Restore into the local stack and compare
+        id: restore
+        if: steps.stack.outcome == 'success'
+        continue-on-error: true
         run: |
+          if [ "${{ inputs.break_check }}" = "true" ]; then echo "::error::restore check failed on purpose (test of B-20)"; exit 1; fi
           set -u
           W="$RUNNER_TEMP/backup"; cd "$W"
           val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
@@ -193,6 +206,9 @@ jobs:
           echo "Restored copy equals the source: $(wc -l < manifest-source.txt) tables, structure identical."
 
       - name: Smoke test the app on the restored copy
+        id: smoke
+        if: steps.restore.outcome == 'success'
+        continue-on-error: true
         run: |
           set -u
           val() { sed -n "s/^$1=//p" "$RUNNER_TEMP/drill/status.env" | head -1 | sed 's/^"\(.*\)"$/\1/'; }
@@ -221,16 +237,21 @@ jobs:
             EXPECTED_APPTS="$EXPECTED" EXPECTED_MIN="$EXPECTED_MIN" NODE_PATH="$RUNNER_TEMP/tools/node_modules" node scripts/restore-smoke.js
 
       - name: Encrypt the backup
+        id: enc
         env:
           BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
           TS: ${{ steps.ts.outputs.ts }}
+          VERIFIED: ${{ steps.smoke.outcome == 'success' }}
         run: |
           set -u
           umask 077
           W="$RUNNER_TEMP/backup"; O="$RUNNER_TEMP/out"; mkdir -p "$O"; cd "$W"
-          n="ruqya-backup-$TS"
+          n="ruqya-backup-$TS"; [ "$VERIFIED" = "true" ] || n="$n-UNVERIFIED"
+          echo "name=$n" >> "$GITHUB_OUTPUT"
+          # the restored manifests exist only when the restore ran
+          extra=""; for f in manifest-restored.txt manifest-structure-restored.txt; do [ -f "$f" ] && extra="$extra $f"; done
           tar -cf "$n.tar" roles.sql schema.sql post-schema.sql auth-columns.sql data.sql public-auth-storage.dump \
-            manifest-source.txt manifest-restored.txt manifest-structure-source.txt manifest-structure-restored.txt manifest-query.sql
+            manifest-source.txt manifest-structure-source.txt manifest-query.sql $extra
           printf '%s' "$BACKUP_PASSPHRASE" | gpg --symmetric --cipher-algo AES256 --batch --pinentry-mode loopback \
             --passphrase-fd 0 --s2k-digest-algo SHA512 --s2k-count 65011712 --output "$O/$n.tar.gpg" "$n.tar"
           # the archive must open again with the passphrase and give back the same bytes
@@ -238,17 +259,23 @@ jobs:
           b=$(printf '%s' "$BACKUP_PASSPHRASE" | gpg --decrypt --batch --quiet --pinentry-mode loopback --passphrase-fd 0 "$O/$n.tar.gpg" | sha256sum | cut -d' ' -f1)
           [ "$a" = "$b" ] || { echo "::error::decryption check failed"; exit 1; }
           rm -f "$n.tar"
-          cp manifest-source.txt manifest-restored.txt manifest-structure-source.txt manifest-structure-restored.txt "$O/"
+          cp manifest-source.txt manifest-structure-source.txt $extra "$O/"
           cd "$O" && sha256sum "$n.tar.gpg" > "$n.tar.gpg.sha256"
           ls -la "$O"; cat "$n.tar.gpg.sha256"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ruqya-backup-${{ steps.ts.outputs.ts }}
+          name: ${{ steps.enc.outputs.name }}
           path: ${{ runner.temp }}/out/
           retention-days: 35
           if-no-files-found: error
           compression-level: 0
+
+      - name: The copy was kept, but its check failed
+        if: steps.smoke.outcome != 'success'
+        run: |
+          echo "::error::the encrypted copy was saved as UNVERIFIED: stack=${{ steps.stack.outcome }} restore=${{ steps.restore.outcome }} smoke=${{ steps.smoke.outcome }} - see the failed step above"
+          exit 1
 
       - name: Remove the unencrypted copies
         if: always()

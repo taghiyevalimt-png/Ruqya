@@ -1,8 +1,6 @@
-# UI audit after fixes — commit 1f671cf31889bf789a2b5ba34972c57579539b43 (+ overlap checker change in tests/visual/audit-ui.js) — start 2026-11-17T02:01:57Z
+# UI audit (az + ru) — commit ad76b9319bb228175777d8caa68969c689066971 — start 2026-11-17T03:12:51Z
 $ node tests/visual/audit-ui.js evidence/stage5/ui
-done 375 dark owner
-done 768 dark owner
-done 1280 dark owner
-done 1920 dark owner
-shots: 515 with problems: 0
-exit 0  end 2026-11-17T02:26:48Z
+done 1920 light owner-ru
+done 1920 light agent-ru
+shots: 740 with problems: 0
+exit 0  end 2026-11-17T03:46:59Z

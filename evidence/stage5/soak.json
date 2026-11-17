@@ -1,0 +1,664 @@
+{
+ "at": "2026-11-17T03:20:24.830Z",
+ "minutes": 120.1,
+ "actions": 215,
+ "samples": [
+  {
+   "min": 0.6,
+   "heap": 2308348,
+   "dom": 101
+  },
+  {
+   "min": 1.1,
+   "heap": 2359344,
+   "dom": 81
+  },
+  {
+   "min": 2.1,
+   "heap": 2462188,
+   "dom": 138
+  },
+  {
+   "min": 3.1,
+   "heap": 2487860,
+   "dom": 138
+  },
+  {
+   "min": 4.1,
+   "heap": 2593696,
+   "dom": 198
+  },
+  {
+   "min": 5.2,
+   "heap": 2742564,
+   "dom": 177
+  },
+  {
+   "min": 6.2,
+   "heap": 2748368,
+   "dom": 130
+  },
+  {
+   "min": 7.2,
+   "heap": 2765708,
+   "dom": 117
+  },
+  {
+   "min": 8.7,
+   "heap": 2848432,
+   "dom": 177
+  },
+  {
+   "min": 9.2,
+   "heap": 2842132,
+   "dom": 208
+  },
+  {
+   "min": 10.2,
+   "heap": 2848012,
+   "dom": 208
+  },
+  {
+   "min": 11.2,
+   "heap": 2857400,
+   "dom": 182
+  },
+  {
+   "min": 12.2,
+   "heap": 2865512,
+   "dom": 110
+  },
+  {
+   "min": 13.3,
+   "heap": 2877464,
+   "dom": 182
+  },
+  {
+   "min": 14.3,
+   "heap": 2890576,
+   "dom": 182
+  },
+  {
+   "min": 15.3,
+   "heap": 2908500,
+   "dom": 213
+  },
+  {
+   "min": 16.3,
+   "heap": 2918772,
+   "dom": 187
+  },
+  {
+   "min": 17.3,
+   "heap": 2927880,
+   "dom": 130
+  },
+  {
+   "min": 18.3,
+   "heap": 2928912,
+   "dom": 127
+  },
+  {
+   "min": 19.8,
+   "heap": 2932740,
+   "dom": 187
+  },
+  {
+   "min": 20.3,
+   "heap": 2930460,
+   "dom": 218
+  },
+  {
+   "min": 21.3,
+   "heap": 2935296,
+   "dom": 218
+  },
+  {
+   "min": 22.4,
+   "heap": 2942240,
+   "dom": 192
+  },
+  {
+   "min": 23.4,
+   "heap": 2941016,
+   "dom": 110
+  },
+  {
+   "min": 24.4,
+   "heap": 2941772,
+   "dom": 192
+  },
+  {
+   "min": 25.4,
+   "heap": 2941700,
+   "dom": 192
+  },
+  {
+   "min": 26.4,
+   "heap": 2954876,
+   "dom": 223
+  },
+  {
+   "min": 27.4,
+   "heap": 2965252,
+   "dom": 197
+  },
+  {
+   "min": 28.4,
+   "heap": 2997692,
+   "dom": 130
+  },
+  {
+   "min": 29.5,
+   "heap": 3005488,
+   "dom": 137
+  },
+  {
+   "min": 31,
+   "heap": 3007968,
+   "dom": 197
+  },
+  {
+   "min": 31.5,
+   "heap": 3019708,
+   "dom": 228
+  },
+  {
+   "min": 32.5,
+   "heap": 3019632,
+   "dom": 228
+  },
+  {
+   "min": 33.5,
+   "heap": 3027972,
+   "dom": 202
+  },
+  {
+   "min": 34.5,
+   "heap": 3027184,
+   "dom": 110
+  },
+  {
+   "min": 35.5,
+   "heap": 3030064,
+   "dom": 202
+  },
+  {
+   "min": 36.5,
+   "heap": 3030704,
+   "dom": 202
+  },
+  {
+   "min": 37.5,
+   "heap": 3026600,
+   "dom": 233
+  },
+  {
+   "min": 38.6,
+   "heap": 3037356,
+   "dom": 207
+  },
+  {
+   "min": 39.6,
+   "heap": 3039224,
+   "dom": 130
+  },
+  {
+   "min": 40.6,
+   "heap": 3040676,
+   "dom": 147
+  },
+  {
+   "min": 41.1,
+   "heap": 3038900,
+   "dom": 207
+  },
+  {
+   "min": 42.1,
+   "heap": 3040376,
+   "dom": 207
+  },
+  {
+   "min": 43.1,
+   "heap": 3037260,
+   "dom": 238
+  },
+  {
+   "min": 44.1,
+   "heap": 3053376,
+   "dom": 212
+  },
+  {
+   "min": 45.1,
+   "heap": 3058276,
+   "dom": 130
+  },
+  {
+   "min": 46.2,
+   "heap": 3067404,
+   "dom": 152
+  },
+  {
+   "min": 47.7,
+   "heap": 3073056,
+   "dom": 212
+  },
+  {
+   "min": 48.2,
+   "heap": 3112940,
+   "dom": 243
+  },
+  {
+   "min": 49.2,
+   "heap": 3111284,
+   "dom": 243
+  },
+  {
+   "min": 50.2,
+   "heap": 3141296,
+   "dom": 217
+  },
+  {
+   "min": 51.2,
+   "heap": 3142420,
+   "dom": 110
+  },
+  {
+   "min": 52.2,
+   "heap": 3144212,
+   "dom": 217
+  },
+  {
+   "min": 53.2,
+   "heap": 3143936,
+   "dom": 217
+  },
+  {
+   "min": 54.3,
+   "heap": 3147376,
+   "dom": 248
+  },
+  {
+   "min": 55.3,
+   "heap": 3154364,
+   "dom": 222
+  },
+  {
+   "min": 56.3,
+   "heap": 3157032,
+   "dom": 130
+  },
+  {
+   "min": 57.3,
+   "heap": 3161760,
+   "dom": 162
+  },
+  {
+   "min": 58.8,
+   "heap": 3177424,
+   "dom": 222
+  },
+  {
+   "min": 59.3,
+   "heap": 3183576,
+   "dom": 253
+  },
+  {
+   "min": 60.3,
+   "heap": 3185508,
+   "dom": 253
+  },
+  {
+   "min": 61.4,
+   "heap": 3209476,
+   "dom": 227
+  },
+  {
+   "min": 62.4,
+   "heap": 3223020,
+   "dom": 110
+  },
+  {
+   "min": 63.4,
+   "heap": 3224388,
+   "dom": 227
+  },
+  {
+   "min": 64.4,
+   "heap": 3224316,
+   "dom": 227
+  },
+  {
+   "min": 65.4,
+   "heap": 3220320,
+   "dom": 258
+  },
+  {
+   "min": 66.4,
+   "heap": 3231516,
+   "dom": 232
+  },
+  {
+   "min": 67.4,
+   "heap": 3225784,
+   "dom": 130
+  },
+  {
+   "min": 68.4,
+   "heap": 3226404,
+   "dom": 162
+  },
+  {
+   "min": 70,
+   "heap": 3226896,
+   "dom": 232
+  },
+  {
+   "min": 70.5,
+   "heap": 3220804,
+   "dom": 263
+  },
+  {
+   "min": 71.5,
+   "heap": 3221572,
+   "dom": 263
+  },
+  {
+   "min": 72.5,
+   "heap": 3231948,
+   "dom": 237
+  },
+  {
+   "min": 73.5,
+   "heap": 3230732,
+   "dom": 110
+  },
+  {
+   "min": 74.5,
+   "heap": 3232188,
+   "dom": 237
+  },
+  {
+   "min": 75.5,
+   "heap": 3232144,
+   "dom": 237
+  },
+  {
+   "min": 76.5,
+   "heap": 3227920,
+   "dom": 268
+  },
+  {
+   "min": 77.6,
+   "heap": 3234212,
+   "dom": 242
+  },
+  {
+   "min": 78.6,
+   "heap": 3232448,
+   "dom": 130
+  },
+  {
+   "min": 79.6,
+   "heap": 3236036,
+   "dom": 162
+  },
+  {
+   "min": 80.1,
+   "heap": 3233788,
+   "dom": 242
+  },
+  {
+   "min": 81.1,
+   "heap": 3234404,
+   "dom": 242
+  },
+  {
+   "min": 82.1,
+   "heap": 3230500,
+   "dom": 273
+  },
+  {
+   "min": 83.1,
+   "heap": 3249428,
+   "dom": 247
+  },
+  {
+   "min": 84.1,
+   "heap": 3247620,
+   "dom": 130
+  },
+  {
+   "min": 85.2,
+   "heap": 3248256,
+   "dom": 162
+  },
+  {
+   "min": 86.7,
+   "heap": 3248980,
+   "dom": 247
+  },
+  {
+   "min": 87.2,
+   "heap": 3242756,
+   "dom": 278
+  },
+  {
+   "min": 88.2,
+   "heap": 3245552,
+   "dom": 278
+  },
+  {
+   "min": 89.2,
+   "heap": 3252672,
+   "dom": 252
+  },
+  {
+   "min": 90.2,
+   "heap": 3248844,
+   "dom": 110
+  },
+  {
+   "min": 91.2,
+   "heap": 3251388,
+   "dom": 252
+  },
+  {
+   "min": 92.2,
+   "heap": 3268820,
+   "dom": 252
+  },
+  {
+   "min": 93.3,
+   "heap": 3247120,
+   "dom": 283
+  },
+  {
+   "min": 94.3,
+   "heap": 3254132,
+   "dom": 257
+  },
+  {
+   "min": 95.3,
+   "heap": 3252216,
+   "dom": 130
+  },
+  {
+   "min": 96.3,
+   "heap": 3252852,
+   "dom": 162
+  },
+  {
+   "min": 97.8,
+   "heap": 3255296,
+   "dom": 257
+  },
+  {
+   "min": 98.3,
+   "heap": 3251908,
+   "dom": 288
+  },
+  {
+   "min": 99.3,
+   "heap": 3251832,
+   "dom": 288
+  },
+  {
+   "min": 100.4,
+   "heap": 3253104,
+   "dom": 262
+  },
+  {
+   "min": 101.4,
+   "heap": 3250632,
+   "dom": 110
+  },
+  {
+   "min": 102.4,
+   "heap": 3258188,
+   "dom": 262
+  },
+  {
+   "min": 103.4,
+   "heap": 3258148,
+   "dom": 262
+  },
+  {
+   "min": 104.4,
+   "heap": 3253796,
+   "dom": 293
+  },
+  {
+   "min": 105.4,
+   "heap": 3260000,
+   "dom": 267
+  },
+  {
+   "min": 106.4,
+   "heap": 3257876,
+   "dom": 130
+  },
+  {
+   "min": 107.4,
+   "heap": 3258552,
+   "dom": 162
+  },
+  {
+   "min": 108.9,
+   "heap": 3279636,
+   "dom": 267
+  },
+  {
+   "min": 109.5,
+   "heap": 3256736,
+   "dom": 298
+  },
+  {
+   "min": 110.5,
+   "heap": 3246936,
+   "dom": 298
+  },
+  {
+   "min": 111.5,
+   "heap": 3264936,
+   "dom": 272
+  },
+  {
+   "min": 112.5,
+   "heap": 3262140,
+   "dom": 110
+  },
+  {
+   "min": 113.5,
+   "heap": 3268852,
+   "dom": 272
+  },
+  {
+   "min": 114.5,
+   "heap": 3269408,
+   "dom": 272
+  },
+  {
+   "min": 115.5,
+   "heap": 3283500,
+   "dom": 303
+  },
+  {
+   "min": 116.6,
+   "heap": 3275004,
+   "dom": 277
+  },
+  {
+   "min": 117.6,
+   "heap": 3290128,
+   "dom": 130
+  },
+  {
+   "min": 118.6,
+   "heap": 3275988,
+   "dom": 162
+  },
+  {
+   "min": 120.1,
+   "heap": 3284548,
+   "dom": 277
+  }
+ ],
+ "heapAfterStabilisation": 2865512,
+ "heapEnd": 3284548,
+ "growthPct": 14.6,
+ "pageErrors": [],
+ "consoleErrors": [
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+ ],
+ "verdict": "НЕ ПРОЙДЕНО"
+}

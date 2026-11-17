@@ -9,6 +9,10 @@ br=$(git rev-parse --abbrev-ref HEAD)
 [ "$br" = "main" ] || { echo "publish.sh: switch to main first (now on $br)"; exit 1; }
 git fetch -q origin main
 [ "$(git rev-list --count HEAD..origin/main)" = "0" ] || { echo "publish.sh: origin/main has commits this main does not have; pull first"; exit 1; }
+# R2-12: the repository is public — never sweep unknown files into it. New files must be added on purpose
+# (git add <file>) or listed in .gitignore; only files git already tracks are committed below.
+new=$(git ls-files --others --exclude-standard)
+[ -z "$new" ] || { echo "publish.sh: new files not yet in git (add them with git add, or ignore them):"; echo "$new"; exit 1; }
 v=$(date -u +%Y%m%d%H%M%S)
 printf "%s\n" "$v" > version.txt
 sed -i "s/^var APP_VERSION=\"[^\"]*\";\$/var APP_VERSION=\"$v\";/" index.html
@@ -21,7 +25,9 @@ s=open('index.html',encoding='utf-8').read()
 i=s.rindex('<script>');j=s.rindex('</script>')
 open('tests/out/publish_check.js','w',encoding='utf-8').write(s[i+8:j])"
 node --check tests/out/publish_check.js
-git add -A
+git add -u
+# no secret goes out: tools/secret_scan.js checks every tracked file and the history (needs node, as above)
+[ ! -f tools/secret_scan.js ] || node tools/secret_scan.js > tests/out/secret_scan.txt || { cat tests/out/secret_scan.txt; echo "publish.sh: possible secret found, nothing was pushed"; exit 1; }
 git commit -q -F - <<MSG
 $1
 
