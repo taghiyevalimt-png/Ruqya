@@ -112,6 +112,8 @@
 | `evidence/findings/T-01/green.txt` | 157 | b8959cb04939d381 | # green: 15-keyboard 5x alone + 8x with 4 copies in parallel (busy machine) — 2026-11-17T05:02:11Z |
 | `evidence/findings/T-01/red-suite-run-2.txt` | 2380 | b7472e5e0dbb9cf1 | # run 2 of 3 — commit 8355be8a31ff2cec447f674a59ff43ddef3f236d, tree 14 changed files — start 2026-11-17T04:44:08Z |
 | `evidence/findings/T-01/suite-run-1.txt` | 1821 | bd395152223a9241 | # run 1 of 3 — commit 8355be8a31ff2cec447f674a59ff43ddef3f236d, tree 2 changed files — start 2026-11-17T04:30:25Z |
+| `evidence/findings/T-03/green.txt` | 211 | c8b9a888a5ace558 | # T-03 green — mock appts with the real column defaults — 2026-11-17T09:09:21Z — commit bc0b725 + tests/lib.js change |
+| `evidence/findings/T-03/red.txt` | 717 | b971222271fc471d | # T-03 red — mock appts without real defaults — 2026-11-17T09:08:58Z — commit bc0b725 |
 | `evidence/findings/V-01/green.txt` | 34 | 38690c41773ac60f | PASS 24-aria.js 8.7s |
 | `evidence/findings/V-01/red.txt` | 677 | 63bbacbdf396448c | FAIL 24-aria.js  |
 | `evidence/findings/V-03/green.txt` | 42 | cec2812c94fa0a5a | PASS 27-dialog-focus.js 7.1s |
@@ -191,15 +193,27 @@
 | `evidence/stage6/structure-live.tsv` | 807 | b938d4d966d30808 | # live structure fingerprint (scripts/backup-structure.sql via Supabase MCP execute_sql, read-only) — 2026-11-17T00:42:42Z |
 | `evidence/stage7/independent/acceptance-review.md` | 29205 | 658dea1a1de90e59 | # Повторная приёмка «Mərkəz» (этап 7, независимый приёмщик) |
 | `evidence/stage7/independent/pentest-report.md` | 10769 | 79392e109dca2f6d | # Penetration Test Report — Ruqya booking DB (stage 7, independent) |
+| `evidence/stage8/advisors-performance.json` | 740 | ad57e8680501ffd3 | { |
+| `evidence/stage8/advisors-security.json` | 1114 | e9894fcb9c40d11d | { |
+| `evidence/stage8/dr-drill.txt` | 1791 | ce64acdf8761e451 | # DR drill — 2026-11-17T09:27:46.305Z |
+| `evidence/stage8/live-db-after-migrations.txt` | 978 | 9da81358e9f02e9a | # live database after the 4 migrations — 2026-11-17T09:23Z — release commit b1c38b2 (main), migrations from sql/ of audit4 |
+| `evidence/stage8/live-network.json` | 1636 | d3e51b6c241cea05 | { |
+| `evidence/stage8/live-verify.txt` | 1943 | e0b359bc93a55403 | # live site = release b1c38b2 — 2026-11-17T09:24:47Z |
 | `evidence/stage8/load50.json` | 685 | d5982c4b212e1e98 | { |
 | `evidence/stage8/load50.txt` | 1445 | 155a945030b0e4bb | # load test — commit 4e30e2790e79e83ba22f878c5bd86920c2bd8fa1 + load50 fixes (phone, error codes, pause) — 2026-11-17T06:59:47Z |
 | `evidence/stage8/mutate-app-first-run.txt` | 670 | 2ba8a666c8c855cd | # app mutations, first run — 2026-11-17 ~05:55 UTC (tests before strengthening), node tests/mutate-app.js |
 | `evidence/stage8/mutate-app.txt` | 1039 | 07d2b08301604a53 | # app mutations — 2026-11-17T06:07:05.317Z |
-| `evidence/stage8/soak.txt` | 154 | 8781f69e2ad07a3f | # soak 120 min — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:57Z |
+| `evidence/stage8/soak-1-fail.json` | 11694 | 0561ad8099dc81f9 | { |
+| `evidence/stage8/soak-1-fail.txt` | 292 | f43a87dea71ade8a | # soak 120 min — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:57Z |
 | `evidence/stage8/suite-run-1.txt` | 2004 | ee03119288becc25 | # run 1 of 3 — commit 1f9919a2f80a0e6bf0c21702a3a8234583e7dded, tree 1 changed files — start 2026-11-17T06:08:06Z |
 | `evidence/stage8/suite-run-2.txt` | 2004 | 025b0fc3bf29781d | # run 2 of 3 — commit 1f9919a2f80a0e6bf0c21702a3a8234583e7dded, tree 10 changed files — start 2026-11-17T06:23:16Z |
 | `evidence/stage8/suite-run-3.txt` | 2004 | fffaba87d3d5d03a | # run 3 of 3 — commit 1f9919a2f80a0e6bf0c21702a3a8234583e7dded, tree 11 changed files — start 2026-11-17T06:38:07Z |
-| `evidence/stage8/ui-run.txt` | 155 | ea5581d2dda36779 | # UI audit (az + ru) — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:58Z |
+| `evidence/stage8/ui-covered-review.txt` | 727 | 032b683646792e5b | # review of "covered by a fixed/sticky bar" in evidence/stage8/ui/summary.tsv (89 cases) — 2026-11-17 |
+| `evidence/stage8/ui-run.txt` | 266 | 2ee24d74ad500c05 | # UI audit (az + ru) — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:58Z |
+| `evidence/stage8/ui/report.json` | 226792 | abc254923728e00e | [ |
+| `evidence/stage8/ui/summary.tsv` | 39671 | af00a4f5c53b6355 | width	theme	state	screen	overflowX	cut	cutIntended	overlaps	coveredByBar(review)	small<44	axe |
+| `evidence/stage8/vitals.json` | 8609 | f1392cc0ac2decf6 | { |
+| `evidence/stage8/vitals.txt` | 739 | 947a899d81290a20 | # T-15 web vitals ×5 on final code (index.html = release b1c38b2 without the version stamp) — 2026-11-17T09:39:23Z — commit 02f5e6d |
 | `evidence/stage8/widget-7days.txt` | 714 | 93e4ebde66e6bb4e | # widget-check run 44026732176 on 51bb71d (7-day rule + WhatsApp Business build) — 2026-11-17T06:07:41Z |
 
 ## Снимки экранов
@@ -227,4 +241,13 @@
 | `evidence/stage5/ui/375-light` | 124 |
 | `evidence/stage5/ui/768-dark` | 24 |
 | `evidence/stage5/ui/768-light` | 124 |
-| `evidence/stage8/ui/320-light` | 39 |
+| `evidence/stage8/ui/1280-dark` | 24 |
+| `evidence/stage8/ui/1280-light` | 124 |
+| `evidence/stage8/ui/1920-dark` | 24 |
+| `evidence/stage8/ui/1920-light` | 124 |
+| `evidence/stage8/ui/320-dark` | 24 |
+| `evidence/stage8/ui/320-light` | 124 |
+| `evidence/stage8/ui/375-dark` | 24 |
+| `evidence/stage8/ui/375-light` | 124 |
+| `evidence/stage8/ui/768-dark` | 24 |
+| `evidence/stage8/ui/768-light` | 124 |

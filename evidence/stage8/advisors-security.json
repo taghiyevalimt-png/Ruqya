@@ -1,0 +1,35 @@
+{
+ "tool": "Supabase MCP get_advisors(type=security)",
+ "project": "ldkhdeehrrajvgrtieal",
+ "fetched": "2026-11-17T09:23:28Z",
+ "after": "migrations patients-order, least-privilege, patients-scale, service (17.11 09:2x UTC)",
+ "result": {
+  "lints": [
+   {
+    "name": "authenticated_security_definer_function_executable",
+    "level": "WARN",
+    "count": 9,
+    "findings": [
+     "public.ruqya_anonymize(key text)",
+     "public.ruqya_can_breaks()",
+     "public.ruqya_can_stats()",
+     "public.ruqya_has_role()",
+     "public.ruqya_is_admin()",
+     "public.ruqya_my_readers()",
+     "public.ruqya_restore(aid bigint)",
+     "public.ruqya_sees_all()",
+     "public.ruqya_set_color(rid uuid, c text)"
+    ]
+   },
+   {
+    "name": "auth_leaked_password_protection",
+    "level": "WARN",
+    "count": 1,
+    "findings": [
+     "Auth"
+    ]
+   }
+  ]
+ },
+ "compare_with_stage0": "same 2 lints and the same 9 functions as evidence/stage0/baseline/supabase-advisors-security.json; private.ruqya_visit_ids is not reported (schema private is not exposed by the API); no new finding"
+}

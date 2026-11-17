@@ -1,0 +1,21 @@
+# package scan before SHA256SUMS — 2026-11-17T09:41:34Z — commit 44b178c
+$ node tools/secret_scan.js
+# findings: 0
+# info (allowed by design):
+supabase publishable key (public by design) in .github/workflows/keepalive.yml
+exit 0
+## e-mail addresses in tracked files (domains only; test domains expected)
+      4 ruqya.az
+      1 x.az
+      1 users.noreply.github.com
+      1 example.invalid
+      1 anthropic.com
+## Azerbaijani mobile numbers other than made-up 050 000… / 050 111… in evidence and docs
+      6 055 777 66 55
+      5 0999999940
+## review of the hits (by hand)
+ruqya.az: aysel@ruqya.az — placeholder text of the sign-in field (index.html); agent@ruqya.az, agent@x.az — made-up test accounts of the mock (tests/t/01, 18)
+example.invalid, users.noreply.github.com, anthropic.com — test / commit attribution addresses
+055 777 66 55 — made-up patient «Zərifə Testova» / «Köhnə Xəstə» of tests 05 and 97 (and their export evidence)
+0999999940 — part of timing numbers like 1.30999999940 in frames experiment JSON, not a phone
+real personal data in the package: 0 found
