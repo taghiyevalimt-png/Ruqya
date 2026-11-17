@@ -1,0 +1,48 @@
+name: Deploy kit check
+
+# Proves deploy/nginx.conf works on a plain Ubuntu server: nginx accepts it, the site is served over https
+# with every security header (S-01), http redirects to https, and the app's own files load. No secrets, no data.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nginx:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install nginx
+        run: sudo apt-get update -q && sudo apt-get install -y -q nginx
+      - name: Put the site and the config in place (self-signed certificate for the test name)
+        run: |
+          set -eu
+          sudo mkdir -p /var/www/merkez /etc/ssl/merkez
+          sudo cp -r index.html manifest.webmanifest version.txt *.png *.webp vendor launch /var/www/merkez/
+          sudo openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj "/CN=merkez.example.az" \
+            -keyout /etc/ssl/merkez/privkey.pem -out /etc/ssl/merkez/fullchain.pem 2>/dev/null
+          sudo cp deploy/merkez-headers.conf /etc/nginx/merkez-headers.conf
+          sudo cp deploy/nginx.conf /etc/nginx/sites-available/merkez
+          sudo ln -sf /etc/nginx/sites-available/merkez /etc/nginx/sites-enabled/merkez
+          sudo rm -f /etc/nginx/sites-enabled/default
+          sudo nginx -t
+          sudo systemctl restart nginx
+      - name: Check redirect, headers and files
+        run: |
+          set -eu
+          R="--resolve merkez.example.az:443:127.0.0.1 --resolve merkez.example.az:80:127.0.0.1 -k -s"
+          fail=0
+          code=$(curl $R -o /dev/null -w "%{http_code} %{redirect_url}" http://merkez.example.az/)
+          echo "http: $code"; case "$code" in "301 https://merkez.example.az/"*) ;; *) echo "::error::no redirect to https"; fail=1;; esac
+          for path in / /index.html /version.txt /vendor/fonts/fonts.css /logo-hq.webp; do
+            h=$(curl $R -D - -o /dev/null "https://merkez.example.az$path")
+            echo "--- $path"; echo "$h" | grep -iE '^(HTTP|strict-transport|x-content-type|x-frame|content-security|referrer|permissions|cross-origin|cache-control)' || true
+            echo "$h" | head -1 | grep -q " 200" || { echo "::error::$path not 200"; fail=1; }
+            for k in strict-transport-security x-content-type-options x-frame-options content-security-policy referrer-policy permissions-policy; do
+              echo "$h" | grep -qi "^$k:" || { echo "::error::$path lacks $k"; fail=1; }
+            done
+          done
+          curl $R https://merkez.example.az/ | grep -q '<title>' || { echo "::error::page body missing"; fail=1; }
+          [ "$fail" = 0 ] && echo "PASS deploy kit: nginx -t ok, https redirect, all headers on every path"
+          exit $fail
