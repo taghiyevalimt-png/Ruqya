@@ -52,9 +52,34 @@ public class MonthWidget extends AppWidgetProvider {
     static final float HEAD = 14f, WKROW = 8f, ROW = 13f, TOTAL = HEAD + WKROW + 6 * ROW;
     static final float[] HEAD_COLS = {52f, 15f, 15f, 18f};
 
-    // Black and gold, like the app's dark look.
-    static final int BG = 0xFF0D0C0A, LINE = 0xFF2A251B, INK = 0xFFF4ECD8, MUTED = 0xFF9B917C,
-            ACCENT = 0xFFD4B062, ACCENT_INK = 0xFF0B0905;
+    // Two looks (owner 17.11: «white too»). Dark: black and gold, like the app's dark look. Light: white with black,
+    // like the app's light look. The app sends the choice as "t": "light", "dark" or "auto" (= the phone's own
+    // dark mode); older app versions send nothing, which is "auto".
+    static int BG, LINE, INK, MUTED, ACCENT, ACCENT_INK;
+
+    static boolean dark(Context ctx, JSONObject data) {
+        String t = data == null ? "auto" : data.optString("t", "auto");
+        if ("dark".equals(t)) return true;
+        if ("light".equals(t)) return false;
+        try {
+            int m = ctx.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+            return m == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    static void palette(boolean dark) {
+        if (dark) {
+            BG = 0xFF0D0C0A; LINE = 0xFF2A251B; INK = 0xFFF4ECD8; MUTED = 0xFF9B917C; ACCENT = 0xFFD4B062; ACCENT_INK = 0xFF0B0905;
+        } else {
+            BG = 0xFFFFFFFF; LINE = 0xFFE4E0D8; INK = 0xFF16140F; MUTED = 0xFF7C7568; ACCENT = 0xFF16140F; ACCENT_INK = 0xFFFFFFFF;
+        }
+    }
+
+    static {
+        palette(true);
+    }
 
     static TimeZone baku() {
         TimeZone tz = TimeZone.getTimeZone("Asia/Baku");
@@ -194,6 +219,7 @@ public class MonthWidget extends AppWidgetProvider {
         try {
             o.put("out", 1);
             o.put("l", d.optString("l", "az"));
+            o.put("t", d.optString("t", "auto"));   // the signed-out picture keeps the chosen colour
         } catch (Exception e) {
             // keep the bare object: still shows the signed-out state
         }
@@ -350,6 +376,7 @@ public class MonthWidget extends AppWidgetProvider {
         }
         Bitmap bmp = Bitmap.createBitmap(Math.max(W, 10), Math.max(H, 10), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(bmp);
+        palette(dark(ctx, data));
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         Typeface bold = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
 
