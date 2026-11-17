@@ -57,6 +57,7 @@ const ROLES = ["anon", "authenticated", "service_role", "authenticator", "supaba
   for (const r of ROLES) await admin.query(`do $$ begin if not exists (select 1 from pg_roles where rolname='${r}') then create role ${r} nologin; end if; end $$`);
   await admin.end();
   const c = new pg.Client({ ...base, database: db }); await c.connect();
+  let bad0 = 0;
   await c.query("drop schema public cascade;");   /* the dump creates schema public itself */
   await c.query("create schema if not exists extensions; create extension if not exists pgcrypto with schema extensions; create extension if not exists \"uuid-ossp\" with schema extensions;");
   // pg_dump 17.6+ writes psql-only lines (\restrict / \unrestrict): drop every backslash line
@@ -66,12 +67,19 @@ const ROLES = ["anon", "authenticated", "service_role", "authenticator", "supaba
   const sql = data.toString("utf8").split("\n").filter((l) => !/^\\/.test(l)).join("\n");
   await c.query("begin; set local session_replication_role = replica;\n" + sql + "\ncommit;");
   log("OK   data loaded");
+  // the app's functions must work on the copy, not only the tables (stage 7 R2-5: ruqya_hist_visits needs schema
+  // private, which an older export did not carry)
+  for (const f of ["select count(*) from public.ruqya_hist_visits('x', current_date, current_date - 1)", "select count(*) from public.ruqya_hist_patients_page(current_date, current_date - 1, '', 1)"]) {
+    const name = f.match(/public\.(\w+)/)[1];
+    if (!(await c.query("select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' and p.proname = $1", [name])).rowCount) { log("--   " + name + " not in this database (older structure)"); continue; }
+    try { await c.query(f); log("OK   " + name + " runs on the copy"); } catch (e) { bad0++; log("FAIL " + name + ": " + String(e.message).slice(0, 120)); }
+  }
   // 4. compare
   const live = {}; for (const l of fs.readFileSync(path.join(dir, "manifest.tsv"), "utf8").trim().split("\n")) { const [t, n, h] = l.split("|"); live[t] = { n, h }; }
   const q = fs.readFileSync(path.join(__dirname, "dr_manifest.sql"), "utf8");
   await c.query("set timezone = 'UTC'");   /* timestamps print the same as on the live side (PGTZ=UTC) */
   const r = await c.query(q);
-  let bad = 0;
+  let bad = bad0;
   for (const row of r.rows) {
     const L = live[row.tbl], ok = L && L.n === row.rows && L.h === row.hash;
     if (!ok) bad++;

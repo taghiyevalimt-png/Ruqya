@@ -1,32 +1,32 @@
 -- spec
 -- select * from public.appts where date >= current_date - 45 order by date desc, id limit 1000
-Limit  (cost=104.31..1041.27 rows=1000 width=134) (actual time=11.543..32.530 rows=1000 loops=1)
-  Buffers: shared hit=20327 read=760 written=222
+Limit  (cost=104.08..1059.10 rows=1000 width=134) (actual time=8.490..28.215 rows=1000 loops=1)
+  Buffers: shared hit=20340 read=747
   InitPlan 1
-    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.011..0.011 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.011..0.012 rows=1 loops=1)
   InitPlan 2
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.602..0.602 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.636..0.636 rows=1 loops=1)
           Buffers: shared hit=2
   InitPlan 4
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.551..0.551 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.521..0.522 rows=1 loops=1)
           Buffers: shared hit=2
-  ->  Incremental Sort  (cost=103.77..97485.89 rows=103934 width=134) (actual time=11.541..32.461 rows=1000 loops=1)
+  ->  Incremental Sort  (cost=103.53..97199.53 rows=101669 width=134) (actual time=8.488..28.145 rows=1000 loops=1)
         Sort Key: appts.date DESC, appts.id
         Presorted Key: appts.date
         Full-sort Groups: 23  Sort Method: quicksort  Average Memory: 36kB  Peak Memory: 36kB
-        Buffers: shared hit=20327 read=760 written=222
-        ->  Index Scan Backward using appts_date on appts  (cost=15.96..92751.31 rows=103934 width=134) (actual time=2.386..31.962 rows=1013 loops=1)
+        Buffers: shared hit=20340 read=747
+        ->  Index Scan Backward using appts_date on appts  (cost=15.96..92583.81 rows=101669 width=134) (actual time=2.169..27.656 rows=1013 loops=1)
               Index Cond: (date >= (CURRENT_DATE - 45))
               Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
               Rows Removed by Filter: 19996
-              Buffers: shared hit=20327 read=760 written=222
+              Buffers: shared hit=20340 read=747
               SubPlan 3
-                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.676..0.708 rows=1 loops=1)
-                      Buffers: shared hit=21 read=2 written=1
-                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (actual time=0.000..0.001 rows=1 loops=1)
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.505..0.525 rows=1 loops=1)
+                      Buffers: shared hit=21 read=2
+                      ->  Result  (cost=0.00..0.01 rows=1 width=0) (actual time=0.000..0.000 rows=1 loops=1)
               SubPlan 5
-                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.286..0.304 rows=1 loops=1)
+                ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (actual time=0.282..0.300 rows=1 loops=1)
                       Buffers: shared hit=2
                       ->  Result  (cost=0.00..0.01 rows=1 width=0) (actual time=0.000..0.000 rows=1 loops=1)
-Planning Time: 0.285 ms
-Execution Time: 32.959 ms
+Planning Time: 0.359 ms
+Execution Time: 28.646 ms

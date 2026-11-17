@@ -1,22 +1,22 @@
 -- agent
 -- select * from public.staff order by id limit 1000
-Limit  (cost=2.56..2.59 rows=13 width=70) (actual time=0.543..0.550 rows=50 loops=1)
+Limit  (cost=2.56..2.59 rows=13 width=70) (actual time=0.892..0.904 rows=50 loops=1)
   Buffers: shared hit=3
   InitPlan 1
-    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.002..0.002 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.003..0.004 rows=1 loops=1)
   InitPlan 2
-    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.014..0.015 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.022..0.023 rows=1 loops=1)
   InitPlan 3
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.472..0.472 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.783..0.783 rows=1 loops=1)
           Buffers: shared hit=2
-  ->  Sort  (cost=2.24..2.27 rows=13 width=70) (actual time=0.542..0.545 rows=50 loops=1)
+  ->  Sort  (cost=2.24..2.27 rows=13 width=70) (actual time=0.890..0.895 rows=50 loops=1)
         Sort Key: staff.id
         Sort Method: quicksort  Memory: 28kB
         Buffers: shared hit=3
-        ->  Seq Scan on staff  (cost=0.00..2.00 rows=13 width=70) (actual time=0.507..0.518 rows=50 loops=1)
+        ->  Seq Scan on staff  (cost=0.00..2.00 rows=13 width=70) (actual time=0.835..0.863 rows=50 loops=1)
               Filter: (((id = (InitPlan 2).col1) OR (InitPlan 3).col1) AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
               Buffers: shared hit=3
 Planning:
   Buffers: shared hit=8 read=3 dirtied=1
-Planning Time: 0.314 ms
-Execution Time: 0.584 ms
+Planning Time: 0.440 ms
+Execution Time: 0.954 ms

@@ -43,12 +43,17 @@ const { start } = require("../localpg"), { build, U } = require("../dbcopy");
       ["patients page 1 (RPC, keyset)", "agent", `select * from public.ruqya_hist_patients_page(${from}, current_date - 731, '', 1000)`],
       ["patients page in the middle (RPC, keyset)", "agent", `select * from public.ruqya_hist_patients_page(${from}, current_date - 731, 'p0000500000', 1000)`],
       ["patients page as specialist (RPC, keyset, RLS)", "spec", `select * from public.ruqya_hist_patients_page(${from}, current_date - 731, '', 1000)`],
-      ["one patient's old visits (RPC)", "agent", `select * from public.ruqya_hist_visits('p0000000123', ${from}, current_date - 731)`],
-      ["one patient's old visits as specialist (RPC, RLS)", "spec", `select * from public.ruqya_hist_visits('p0000000123', ${from}, current_date - 731)`],
+      // a real patient of the generated data: phone "050 0000500" (g = 500, day 500 of 1095: inside the two-year window) → key p500000500 (R2-4: the key used
+      // before could not exist, so the query found nothing)
+      ["one patient's old visits (RPC)", "agent", `select * from public.ruqya_hist_visits('p500000500', ${from}, current_date - 731)`],
+      ["one patient's old visits as specialist (RPC, RLS)", "spec", `select * from public.ruqya_hist_visits('p500000500', ${from}, current_date - 731)`],
       ["Excel one month", "owner", "select id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at,place from public.appts where date >= current_date - 31 order by date, id limit 1000"],
       ["journal page (admin)", "owner", "select * from public.audit_log order by id desc limit 200"],
       ["journal deleted only (admin)", "owner", "select * from public.audit_log where op = 'DELETE' order by id desc limit 200"],
     ];
+    // the visits query must find the generated patient (otherwise it measures nothing)
+    const pv = await c.query("select count(*)::int n from public.appts where public.ruqya_pkey(phone, name) = 'p500000500' and date >= current_date - 731 and date < current_date - 45");
+    log.push("patient p500000500 has " + pv.rows[0].n + " visit(s) in the window");
     const rows = [];
     const notes = []; c.on("notice", (m) => notes.push(String(m.message)));
     await c.query("load 'auto_explain'");
