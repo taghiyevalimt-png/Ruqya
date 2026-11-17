@@ -88,9 +88,13 @@ async function check(p) {
   const outDir = process.argv[2], widths = (process.argv[3] || "320,375,768,1280,1920").split(",").map(Number), rep = [];
   fs.mkdirSync(outDir, { recursive: true });
   const states = [["owner", OWNER, "full"], ["owner-empty", OWNER, "empty"], ["agent", AGENT, "full"], ["specialist", SPEC, "full"]];
-  for (const theme of ["light", "dark"]) for (const w of widths) for (const [st, who, data] of states) {
-    if (theme === "dark" && st !== "owner") continue;
-    const s = await open(who, { viewport: { width: w, height: w < 768 ? 800 : 900 }, bypassCSP: true, colorScheme: theme, db: db(data) });
+  // R2-11: the Russian interface too (its texts are longer): light theme, owner and agent, every width and window
+  const langs = (process.env.LANGS || "az,ru").split(",");
+  for (const lang of langs) for (const theme of ["light", "dark"]) for (const w of widths) for (const [st0, who, data] of states) {
+    if (theme === "dark" && st0 !== "owner") continue;
+    if (lang === "ru" && (theme === "dark" || (st0 !== "owner" && st0 !== "agent"))) continue;
+    const st = lang === "az" ? st0 : st0 + "-" + lang;
+    const s = await open(who, { viewport: { width: w, height: w < 768 ? 800 : 900 }, bypassCSP: true, colorScheme: theme, db: db(data), lang: lang === "az" ? undefined : lang });
     const p = s.page;
     p.setDefaultTimeout(4000);   // a screen this role does not have is skipped quickly
     try {
@@ -111,10 +115,10 @@ async function check(p) {
     console.log("done", w, theme, st);
   }
   fs.writeFileSync(path.join(outDir, "report.json"), JSON.stringify(rep, null, 1));
-  const lines = ["width\ttheme\tstate\tscreen\toverflowX\tcut\tcutIntended\toverlaps\tsmall<44\taxe"];
+  const lines = ["width\ttheme\tstate\tscreen\toverflowX\tcut\tcutIntended\toverlaps\tcoveredByBar(review)\tsmall<44\taxe"];
   let bad = 0;
   for (const r of rep) {
-    if (r.skipped || r.screen === "_console") { if (r.errors && r.errors.length) { bad++; lines.push([r.w, r.theme, r.state, "console", "", "", "", "", "", r.errors.join(" | ")].join("\t")); } continue; }
+    if (r.skipped || r.screen === "_console") { if (r.errors && r.errors.length) { bad++; lines.push([r.w, r.theme, r.state, "console", "", "", "", "", "", "", r.errors.join(" | ")].join("\t")); } continue; }
     const ax = (r.axe || []).map((v) => v.id + ":" + v.n).join(" ");
     if (r.overflowX > 1 || r.cut.length || r.overlaps.length || (r.axe || []).length) bad++;
     lines.push([r.w, r.theme, r.state, r.screen, r.overflowX, r.cut.length + (r.cut.length ? " " + r.cut.slice(0, 2).join(" ; ") : ""), r.cutIntended, r.overlaps.length + (r.overlaps.length ? " " + r.overlaps.slice(0, 2).join(" ; ") : ""), (r.covered || []).length + ((r.covered || []).length ? " " + r.covered.slice(0, 2).join(" ; ") : ""), r.small, ax].join("\t"));

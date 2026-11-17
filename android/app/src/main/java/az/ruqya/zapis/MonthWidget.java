@@ -187,7 +187,8 @@ public class MonthWidget extends AppWidgetProvider {
 
     static JSONObject fresh(JSONObject d, long now) {
         if (d == null || d.optInt("out", 0) == 1) return d;
-        long u = d.optLong("u", 0);
+        // from the last use of the app ("s", R2-7); older app versions send only the hand-over time "u"
+        long u = d.optLong("s", 0) > 0 ? d.optLong("s", 0) : d.optLong("u", 0);
         if (u > 0 && now - u <= IDLE_MS && u - now <= IDLE_MS) return d;
         JSONObject o = new JSONObject();
         try {
