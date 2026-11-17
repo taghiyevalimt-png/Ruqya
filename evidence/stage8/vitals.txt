@@ -1,0 +1,9 @@
+# T-15 web vitals ×5 on final code (index.html = release b1c38b2 without the version stamp) — 2026-11-17T09:39:23Z — commit 02f5e6d
+$ node tests/perf/vitals.js evidence/stage8/vitals.json 5
+run 1: LCP 2172 ms, INP 96 ms, CLS 0, long frames >50ms 6, 13 requests, 460371 bytes
+run 2: LCP 2180 ms, INP 80 ms, CLS 0, long frames >50ms 4, 13 requests, 460371 bytes
+run 3: LCP 2188 ms, INP 104 ms, CLS 0, long frames >50ms 7, 13 requests, 460371 bytes
+run 4: LCP 2224 ms, INP 384 ms, CLS 0, long frames >50ms 4, 13 requests, 460371 bytes
+run 5: LCP 2128 ms, INP 96 ms, CLS 0, long frames >50ms 6, 13 requests, 460371 bytes
+median LCP 2180 (2128–2224) ms; INP 96 (80–384) ms; CLS 0; 13 requests; 460371 bytes — ПРОЙДЕНО
+exit 0
