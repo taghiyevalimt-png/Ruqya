@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-NfuqOLiTSsKYHx4EB3HQ7YMeTZkk3bLWuGJifxdAeQg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-GvA/YdhUNKnldLvn0N6B40sHBiEv2ikm8H0Wl5xeR7o='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -288,7 +288,10 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 /* «Bütün gün»: every column shares the width (no minimum), so all specialists fit the screen */
 .cal.fit .col,.cal.fit .cal-head .ch{flex:1 1 0;width:auto;min-width:0}
 /* «Bütün gün» blocks: only the patient's name, whole, line under line; letter size set so 7 letters fit a line */
-.cal.fit .ev{padding:2px 2px;justify-content:flex-start}
+.cal.fit .ev{padding:2px 2px;justify-content:flex-start;gap:0}
+.cal.fit .ev .fx,.cal.fit .ev.tight .fx{display:block;font-size:var(--fitfs2,8px);line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:clip;font-weight:500;letter-spacing:-.03em;margin-top:1px}
+.cal.fit .ev .fx.ag{white-space:normal;overflow-wrap:anywhere;font-weight:700;margin-top:0}
+.cal.fit .ev.tiny .fx{display:none}
 .cal.fit .cal-head:not(.picking) .ch.pill span{padding:5px 1px;letter-spacing:-.4px}
 .cal.fit .ev b,.cal.fit .ev.tight b,.cal.fit .ev.tiny b{display:block;-webkit-line-clamp:unset;white-space:normal;text-overflow:clip;overflow:visible;overflow-wrap:anywhere;word-break:normal;font-size:var(--fitfs,11px);line-height:1;letter-spacing:-.1px}
 .seg.seg4 button{padding-left:2px;padding-right:2px;font-size:13.5px}
@@ -738,6 +741,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "\">Dəyiş</button></div>":"\">Изменить</button></div>",
 "<button class=\"danger\" data-act=\"del-appt\">Qəbulu sil</button>":"<button class=\"danger\" data-act=\"del-appt\">Удалить запись</button>",
 "Yazdı: ":"Записал(а): ",
+"Yazdı:":"Записал(а):",
 "Yazılıb: ":"Записано: ",
 "<h2>Yeni fasilə":"<h2>Новый перерыв",
 "<div class=\"field\"><label for=\"b-title\">Adı</label><input id=\"b-title\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" placeholder=\"Məsələn: Namaz\"></div>":"<div class=\"field\"><label for=\"b-title\">Название</label><input id=\"b-title\" type=\"text\" maxlength=\"40\" autocomplete=\"off\" placeholder=\"Например: Намаз\"></div>",
@@ -1117,7 +1121,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Vidcetin rəngi":"Цвет виджета",
 "Ağ":"Белый",
 "Qara":"Чёрный",
-"«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); bloklarda yalnız pasiyentin tam adı.":"«Весь день»: 09:00–22:00 на одном экране, до 7 специалистов на экран (если больше — листается вбок); в блоках только полное имя пациента.",
+"«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda saat, nömrə və kimin yazdığı.":"«Весь день»: 09:00–22:00 на одном экране, до 7 специалистов на экран (если больше — листается вбок); в блоке имя, а где помещается — время, номер и кто записал.",
 "Böyük":"Большая",
 "Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.":"В больших блоках имена и время читаются легче, но календарь длиннее листается вниз.",
 
@@ -1656,11 +1660,12 @@ try{(function(){var cw=+localStorage.getItem("ruqya.colw");if(cw>0)COLW=nearStep
 function setColW(w){COLW=nearStep(COLW_STEPS,+w||COLW_MIN);try{localStorage.setItem("ruqya.colw",String(COLW))}catch(e){}if(FIT)setHour(HOUR)}
 try{(function(){var sh=+localStorage.getItem("ruqya.hour");if(sh>0)HOUR=nearStep(HOUR_STEPS,sh)})()}catch(e){}
 function setHour(v){if(v==="fit"){FIT=true;try{localStorage.setItem("ruqya.fit","1")}catch(e){}return}
-  FIT=false;try{localStorage.removeItem("ruqya.fit")}catch(e){}
+  FIT=false;try{localStorage.setItem("ruqya.fit","0")}catch(e){}
   HOUR=nearStep(HOUR_STEPS,+v||75);PXM=Math.max(HOUR,curMinHour)/60;try{localStorage.setItem("ruqya.hour",String(HOUR))}catch(e){}}
 /* «Bütün gün» (owner 17.11): the whole working day 09:00–22:00 and every specialist on one screen, nothing to move by
    hand. The hour height and column width follow the calendar's own size (measured after drawing, again on turning). */
-var FIT=false,FIT_H=0,FIT_W=0,FIT_FS=0,FIT_N=7,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")==="1"}catch(e){}
+/* the default for everybody (owner 18.11); "0" = this phone chose another size */
+var FIT=true,FIT_H=0,FIT_W=0,FIT_FS=0,FIT_FS2=0,FIT_N=7,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")!=="0"}catch(e){}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
@@ -2370,8 +2375,11 @@ function fitDay(cal){
   var fs=FIT_FS;try{var cv=fitDay.cv||(fitDay.cv=document.createElement("canvas")),cx=cv.getContext("2d");
     cx.font="700 100px "+getComputedStyle(document.body).fontFamily;var w100=cx.measureText("Məmmədo").width;
     if(w100>0)fs=Math.max(8,Math.min(14,Math.floor((cw-8)*100/w100*2)/2))}catch(e){fs=fs||10}
-  if(Math.abs(hh-FIT_H)<1&&cw===FIT_W&&fs===FIT_FS)return false;
-  FIT_H=hh;FIT_W=cw;FIT_FS=fs;render();return true;
+  /* the lines under the name: a 10-character phone (0101111111) fits the block's width; never bigger than the name */
+  var fs2=FIT_FS2;try{cx.font="500 100px "+getComputedStyle(document.body).fontFamily;var p100=cx.measureText("0000000000").width;   /* digits are equal width in the blocks (tabular) */
+    if(p100>0)fs2=Math.max(6,Math.min(fs,Math.floor((cw-9)/(p100/100-0.3)*2)/2))}   /* the lines are set 0.03 em tighter (CSS .fx) */catch(e){fs2=fs2||8}
+  if(Math.abs(hh-FIT_H)<1&&cw===FIT_W&&fs===FIT_FS&&fs2===FIT_FS2)return false;
+  FIT_H=hh;FIT_W=cw;FIT_FS=fs;FIT_FS2=fs2;render();return true;
 }
 /* «Bütün gün»: a name that still does not fit its (short) block gets smaller letters, never cut */
 function fitNames(){
@@ -2379,6 +2387,11 @@ function fitNames(){
   for(var i=0;i<evs.length;i++){var b=evs[i].firstElementChild;if(b&&(b.scrollHeight>evs[i].clientHeight-2||b.scrollWidth>b.clientWidth+1))over.push(b)}
   over.forEach(function(b){var ev=b.parentNode,f=FIT_FS||11;
     while(f>6&&(b.scrollHeight>ev.clientHeight-2||b.scrollWidth>b.clientWidth+1)){f-=0.5;b.style.fontSize=f+"px"}});
+  /* under the name (owner 18.11): time, phone, «Yazdı:» + agent — each step only when it fits the block wholly */
+  for(var j=0;j<evs.length;j++){var e=evs[j],H=e.clientHeight-1,ch=e.children;
+    for(var g=3;g>=1;g--){var last=null;for(var k=ch.length-1;k>0;k--)if(ch[k].style.display!=="none"){last=ch[k];break}
+      if(!last||(last.offsetTop+last.offsetHeight<=H&&last.scrollWidth<=last.clientWidth+1))break;
+      for(var q=1;q<ch.length;q++)if(+ch[q].getAttribute("data-g")===g)ch[q].style.display="none"}}
 }
 function gridMain(){
   var rs=activeReaders().filter(function(r){return shown(r.id)});
@@ -2389,7 +2402,7 @@ function gridMain(){
   var h=noPriceBox();
   curMinHour=dayMinHour(day);var hEff=FIT?(FIT_H||40):Math.max(HOUR,curMinHour);PXM=hEff/60;
   var H=(DAY1-DAY0)*PXM,W=FIT?(rs.length>FIT_N&&FIT_W?AXW+rs.length*FIT_W:0):AXW+rs.length*COLW;
-  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"'+(FIT&&FIT_FS?' style="--fitfs:'+FIT_FS+'px"':'')+'><div class="cal-in" style="min-width:'+W+'px">';
+  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"'+(FIT&&FIT_FS?' style="--fitfs:'+FIT_FS+'px;--fitfs2:'+(FIT_FS2||FIT_FS)+'px"':'')+'><div class="cal-in" style="min-width:'+W+'px">';
   h+=headRow(rs,false);
   h+='<div class="cal-body" style="height:'+(H+20)+'px;padding:10px 0"><div class="axis">';
   for(var m=DAY0;m<=DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+(m>=24*60?"00:00":hhmm(m))+'</span>';
@@ -2409,7 +2422,8 @@ function gridMain(){
       var s1=Math.max(mins(a.time),DAY0),e1=Math.min(mins(a.time)+(a.dur||90),DAY1);if(e1<=DAY0||s1>=DAY1)return;
       var top=(s1-DAY0)*PXM,ht=Math.max((e1-s1)*PXM-2,14),w=a._lane<0?100:100/nl,ln=a._lane<0?0:a._lane;
       h+='<button class="ev '+stOf(a)+(ht<26?' tiny':'')+'" data-act="view-appt" data-id="'+esc(a.id)+'" style="top:'+top+'px;height:'+ht+'px;background:'+rcolor(r.id)+';left:calc('+(ln*w)+'% + 2px);right:auto;width:calc('+w+'% - 4px)'+(a.status==="cancel"?';z-index:0':';z-index:1')+'">'+
-        (FIT?'<b>'+esc(a.name)+'</b></button>':
+        (FIT?'<b>'+esc(a.name)+'</b><span class="num fx" data-g="1">'+esc(a.time)+'</span>'+(a.phone?'<span class="num fx" data-g="2">'+esc(a.phone)+'</span>':'')+
+          ((state.staff[a.by]||a.by)?'<span class="fx" data-g="3">'+L("Yazdı:")+'</span><span class="fx ag" data-g="3">'+esc(state.staff[a.by]||L("Adsız"))+'</span>':'')+'</button>':
         '<b>'+(mark(a)?'<i class="ok">'+mark(a)+'</i>':"")+esc(a.name)+'</b>'+
         '<span class="num">'+esc(a.time)+'</span>'+
         (a.phone?'<span class="num ph">'+esc(a.phone)+'</span>':'')+
@@ -3211,7 +3225,7 @@ function heightSeg(){
   return '<h3 class="sec">'+L("Blokların hündürlüyü")+'</h3><div class="seg seg4" style="grid-template-columns:repeat(4,1fr)">'+
     '<button data-act="hourh" data-id="fit" aria-pressed="'+FIT+'">'+L("Bütün gün")+'</button>'+
     HOUR_STEPS.map(function(v,i){return '<button data-act="hourh" data-id="'+v+'" aria-pressed="'+(!FIT&&HOUR===v)+'">'+names[i]+'</button>'}).join("")+'</div>'+
-    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); bloklarda yalnız pasiyentin tam adı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
+    '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda saat, nömrə və kimin yazdığı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
 }
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+

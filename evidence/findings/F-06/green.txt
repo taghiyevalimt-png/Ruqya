@@ -1,0 +1,6 @@
+# F-06 green — 2026-11-17T12:15:06Z — commit 79c08a8 + F-06
+PASS 99-whole-day-default.js 12.3s
+PASS 99-whole-day-details.js 11.9s
+PASS 99-whole-day-names.js 12.8s
+PASS 99-whole-day.js 30.9s
+all 4 passed
