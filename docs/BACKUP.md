@@ -28,8 +28,8 @@ If anything differs the job fails (GitHub e-mails the person who last changed th
   Actions > Database backup > Run workflow.
 - Kept 35 days as a GitHub Actions artifact `ruqya-backup-<UTC time>`: `ruqya-backup-<UTC>.tar.gpg` (AES-256,
   passphrase), `.sha256`, and the manifests.
-- **Recovery point objective: 24 hours** (target). With two copies a day the gap is about 12-13 hours; even one
-  missed run stays within 24 hours.
+- **Recovery point objective: 24 hours** (target). With two copies a day the gap is about 12-13 hours; if GitHub
+  skips one run, the gap is about 24-25 hours (check Actions after a failed or missing run).
 - **The owner must copy each week's archive to two places outside GitHub** (for example an external disk and a
   personal cloud drive). GitHub artifacts disappear after 35 days, and with the GitHub account or repository.
 - The passphrase (`BACKUP_PASSPHRASE` secret) must also be kept outside GitHub (a password manager, plus a sealed
