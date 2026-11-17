@@ -1,0 +1,9 @@
+# F-05 red (final test) — 2026-11-17T11:51:11Z — commit ddecfce
+FAIL 99-agent-services.js 
+    Error: FAIL: day: the table «Agentlər üzrə xidmətlər» is shown
+1 failed of 1
+
+# F-04 red (final test) — commit ddecfce
+FAIL 99-list-specialists-bar.js 
+    Error: FAIL: the specialists' bar is shown in the list view
+1 failed of 1

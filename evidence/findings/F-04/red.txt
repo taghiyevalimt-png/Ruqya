@@ -1,0 +1,4 @@
+# F-04 red — specialists' names over the list, «Hamısı» disappears (owner 18.11) — 2026-11-17T11:47:03Z — commit ddecfce
+FAIL 99-list-specialists-bar.js 
+    Error: FAIL: the specialists' bar is shown in the list view
+1 failed of 1
