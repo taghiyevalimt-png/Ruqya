@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+gF075flApdb3gDnCJkLifyIqyeshzMHb6A64ny6buk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-jLTvro0Dzow5fuQgUkYYE4Z4ZNYtLsJ6FsXvE5x/Lfo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -292,6 +292,12 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal.fit .ev .fx,.cal.fit .ev.tight .fx{display:block;font-size:var(--fitfs2,8px);line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:clip;font-weight:500;letter-spacing:-.03em;margin-top:1px}
 .cal.fit .ev .fx.ag{white-space:normal;overflow-wrap:anywhere;font-weight:700;margin-top:0}
 .cal.fit .ev.tiny .fx{display:none}
+.cal-foot{position:sticky;bottom:0;z-index:4;display:flex;height:40px;background:var(--surface);border-top:1px solid var(--line)}
+.cal-foot .corner{position:sticky;left:0;z-index:5;width:54px;flex:none;background:var(--surface);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:2px 4px}
+.cal-foot .fn{flex:1 1 0;min-width:0;border:0;background:none;padding:3px 1px 0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink);font:inherit;border-left:1px solid transparent}
+.cal-foot .fn span{display:block;max-width:100%;font-size:var(--fitnfs,11px);font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
+.cal-foot .fn i{display:block;width:78%;height:3px;border-radius:2px;margin-top:4px}
+.cal-foot .fn[aria-pressed="true"] span{text-decoration:underline}
 .cal.fit .cal-head:not(.picking) .ch.pill span{padding:5px 1px;letter-spacing:-.4px}
 .cal.fit .ev b,.cal.fit .ev.tight b,.cal.fit .ev.tiny b{display:block;-webkit-line-clamp:unset;white-space:normal;text-overflow:clip;overflow:visible;overflow-wrap:anywhere;word-break:normal;font-size:var(--fitfs,11px);line-height:1;letter-spacing:-.1px}
 .seg.seg4 button{padding-left:2px;padding-right:2px;font-size:13.5px}
@@ -1665,7 +1671,7 @@ function setHour(v){if(v==="fit"){FIT=true;try{localStorage.setItem("ruqya.fit",
 /* «Bütün gün» (owner 17.11): the whole working day 09:00–22:00 and every specialist on one screen, nothing to move by
    hand. The hour height and column width follow the calendar's own size (measured after drawing, again on turning). */
 /* the default for everybody (owner 18.11); "0" = this phone chose another size */
-var FIT=true,FIT_H=0,FIT_W=0,FIT_FS=0,FIT_FS2=0,FIT_N=7,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")!=="0"}catch(e){}
+var FIT=true,FIT_H=0,FIT_W=0,FIT_FS=0,FIT_FS2=0,FIT_NFS=0,FIT_N=7,FIT0=9*60,FIT1=22*60;try{FIT=localStorage.getItem("ruqya.fit")!=="0"}catch(e){}
 var PXM=HOUR/60;
 /* One fixed scale everywhere: a 30-minute session (the shortest allowed) is the standard block, about 53 px,
    with room for the name, time and who wrote it; longer sessions are taller in proportion. When a column is
@@ -2285,7 +2291,7 @@ function render(){
   if(!gate&&noTab[ui.tab])ui.tab="day";
   var tb0=document.querySelectorAll("#tabs button");for(var ti=0;ti<tb0.length;ti++){var hid=!!noTab[tb0[ti].dataset.tab];if(tb0[ti].hidden!==hid)tb0[ti].hidden=hid}
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length||pendingMe();
-  spBar(!byId("fab").hidden&&ui.view!=="grid");
+  spBar(!byId("fab").hidden&&(ui.view!=="grid"||(FIT&&ui.sel.length>0)));
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
     if(byId("l-mail")&&auth.ready&&sb){var le=byId("l-err");le.textContent=auth.msg;le.hidden=!auth.msg;return}
@@ -2367,7 +2373,7 @@ function dayTop(){
 /* «Bütün gün»: measure the drawn calendar; if 09:00–22:00 does not fill it exactly, set the hour height and draw again
    (once: the second drawing has the same size). Returns true when it drew again. */
 function fitDay(cal){
-  var head=cal.querySelector(".cal-head"),avail=cal.clientHeight-(head?head.offsetHeight:0)-10-8;
+  var head=cal.querySelector(".cal-head"),foot=cal.querySelector(".cal-foot"),avail=cal.clientHeight-(head?head.offsetHeight:0)-(foot?foot.offsetHeight:0)-10-8;
   var hh=Math.max(20,Math.floor(avail*60/(FIT1-FIT0)));
   /* at most 7 specialists across the screen (owner 17.11); more scroll sideways */
   var cw=Math.max(30,Math.floor((cal.clientWidth-AXW)/FIT_N));
@@ -2378,8 +2384,11 @@ function fitDay(cal){
   /* the lines under the name: a 10-character phone (0101111111) fits the block's width; never bigger than the name */
   var fs2=FIT_FS2;try{cx.font="500 100px "+getComputedStyle(document.body).fontFamily;var p100=cx.measureText("0000000000").width;   /* digits are equal width in the blocks (tabular) */
     if(p100>0)fs2=Math.max(6,Math.min(fs,Math.floor((cw-9)/(p100/100-0.3)*2)/2))}   /* the lines are set 0.03 em tighter (CSS .fx) */catch(e){fs2=fs2||8}
-  if(Math.abs(hh-FIT_H)<1&&cw===FIT_W&&fs===FIT_FS&&fs2===FIT_FS2)return false;
-  FIT_H=hh;FIT_W=cw;FIT_FS=fs;FIT_FS2=fs2;render();return true;
+  /* the names at the bottom: one letter size for all, the size at which the longest name fits its column (8–12.5 px) */
+  var nfs=FIT_NFS;try{cx.font="600 100px "+getComputedStyle(document.body).fontFamily;var wl=1;activeReaders().forEach(function(r){wl=Math.max(wl,cx.measureText(r.name).width)});
+    nfs=Math.max(8,Math.min(12.5,Math.floor((cw-6)*100/wl*2)/2))}catch(e){nfs=nfs||11}
+  if(Math.abs(hh-FIT_H)<1&&cw===FIT_W&&fs===FIT_FS&&fs2===FIT_FS2&&nfs===FIT_NFS)return false;
+  FIT_H=hh;FIT_W=cw;FIT_FS=fs;FIT_FS2=fs2;FIT_NFS=nfs;render();return true;
 }
 /* «Bütün gün»: a name that still does not fit its (short) block gets smaller letters, never cut */
 function fitNames(){
@@ -2402,8 +2411,8 @@ function gridMain(){
   var h=noPriceBox();
   curMinHour=dayMinHour(day);var hEff=FIT?(FIT_H||40):Math.max(HOUR,curMinHour);PXM=hEff/60;
   var H=(DAY1-DAY0)*PXM,W=FIT?(rs.length>FIT_N&&FIT_W?AXW+rs.length*FIT_W:0):AXW+rs.length*COLW;
-  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"'+(FIT&&FIT_FS?' style="--fitfs:'+FIT_FS+'px;--fitfs2:'+(FIT_FS2||FIT_FS)+'px"':'')+'><div class="cal-in" style="min-width:'+W+'px">';
-  h+=headRow(rs,false);
+  h+='<div class="cal'+(FIT?' fit':'')+'" id="cal" data-d="'+ui.date+'"'+(FIT&&FIT_FS?' style="--fitfs:'+FIT_FS+'px;--fitfs2:'+(FIT_FS2||FIT_FS)+'px;--fitnfs:'+(FIT_NFS||11)+'px"':'')+'><div class="cal-in" style="min-width:'+W+'px">';
+  if(!FIT)h+=headRow(rs,false);
   h+='<div class="cal-body" style="height:'+(H+20)+'px;padding:10px 0"><div class="axis">';
   for(var m=DAY0;m<=DAY1;m+=60)h+='<span style="top:'+((m-DAY0)*PXM)+'px">'+(m>=24*60?"00:00":hhmm(m))+'</span>';
   h+='</div>';
@@ -2433,7 +2442,12 @@ function gridMain(){
     if(ui.date===today&&nowM>DAY0&&nowM<DAY1)h+='<div class="nowline" style="top:'+((nowM-DAY0)*PXM)+'px"></div>';
     h+='</div>';
   });
-  h+='</div></div></div>';
+  h+='</div>';
+  /* «Bütün gün» (owner 18.11): the names at the bottom, each under its column, all in one letter size, a line in the
+     specialist's colour; the Təqvim / Siyahı switch on the left. A tap shows that specialist only (again: everyone). */
+  if(FIT)h+='<div class="cal-foot"><div class="corner vsw"><button type="button" data-act="view" data-id="grid" aria-pressed="true">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="false">'+L("Siyahı")+'</button></div>'+
+    rs.map(function(r){var on=ui.sel.indexOf(r.id)>=0;return '<button type="button" class="fn" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'" aria-label="'+esc(r.name)+'"><span>'+esc(r.name)+'</span><i style="background:'+rcolor(r.id)+'"></i></button>'}).join("")+'</div>';
+  h+='</div></div>';
   return h;
 }
 /* What happens to this booking: still ahead, already counted, or an old «Ləğv etdi» / «Gəlmədi» mark. */

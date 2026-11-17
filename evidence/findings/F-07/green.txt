@@ -1,0 +1,7 @@
+# F-07 green — 2026-11-17T12:41:59Z — commit ecefa3a + F-07
+PASS 99-whole-day-default.js 23.5s
+PASS 99-whole-day-details.js 20.5s
+PASS 99-whole-day-foot.js 28.6s
+PASS 99-whole-day-names.js 36.6s
+PASS 99-whole-day.js 78.3s
+all 5 passed

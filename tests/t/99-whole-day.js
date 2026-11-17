@@ -17,10 +17,11 @@ module.exports = async () => {
       check(await btn.getAttribute("aria-pressed") === "true", w + ": «Bütün gün» is shown as chosen");
       await p.click('#tabs [data-tab="day"]'); await p.waitForTimeout(600);
       const m = await p.evaluate(() => {
-        const cal = document.getElementById("cal"), head = cal.querySelector(".cal-head").getBoundingClientRect(), cr = cal.getBoundingClientRect();
+        // owner 18.11: in «Bütün gün» the names are at the bottom (.cal-foot); 09:00 at the top, 22:00 above the names
+        const cal = document.getElementById("cal"), cr = cal.getBoundingClientRect(), ft = cal.querySelector(".cal-foot").getBoundingClientRect(), head = { bottom: cr.top };
         const lab = (t) => { const e = [...cal.querySelectorAll(".axis span")].find((x) => x.textContent.trim() === t); return e && e.getBoundingClientRect(); };
         const a9 = lab("09:00"), a22 = lab("22:00"), cols = [...cal.querySelectorAll(".col")].map((c) => c.getBoundingClientRect());
-        return { n: cols.length, sideways: cal.scrollWidth - cal.clientWidth, t9: Math.round(a9.top), b22: Math.round(a22.bottom), headBottom: Math.round(head.bottom), calBottom: Math.round(cr.bottom), lastRight: Math.round(cols[cols.length - 1].right), calRight: Math.round(cr.right) };
+        return { n: cols.length, sideways: cal.scrollWidth - cal.clientWidth, t9: Math.round(a9.top), b22: Math.round(a22.bottom), headBottom: Math.round(head.bottom), calBottom: Math.round(ft.top), lastRight: Math.round(cols[cols.length - 1].right), calRight: Math.round(cr.right) };
       });
       check(m.n === 7, w + ": 7 specialist columns: " + m.n);
       check(m.sideways <= 1 && m.lastRight <= m.calRight + 1, w + ": all columns fit the width, no sideways scrolling: " + JSON.stringify(m));
