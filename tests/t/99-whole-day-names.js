@@ -36,6 +36,8 @@ module.exports = async () => {
         check(e.text.startsWith(e.bText), w + ": the name comes first in the block: " + JSON.stringify(e.text));
         check(!e.clipped && e.ell !== "ellipsis", w + ": the name is fully visible inside its block: " + JSON.stringify(e));
       }
+      // owner 18.11: the name a little bigger, a 7-letter name still on one line (was 8 px at 390 px wide)
+      if (w === 390) check(m.evs.filter((e) => e.bText === "Rəşidov").every((e) => e.fs >= 8.5), w + ": the name is bigger than before (≥ 8.5 px): " + m.evs.filter((e) => e.bText === "Rəşidov").map((e) => e.fs).join(","));
       const seven = m.evs.find((e) => e.bText === "Rəşidov" && e.lines === 1);
       check(seven, w + ": a 7-letter name fits one line: " + JSON.stringify(m.evs.filter((e) => e.bText === "Rəşidov")));
       const long = m.evs.find((e) => e.bText === names[2]);

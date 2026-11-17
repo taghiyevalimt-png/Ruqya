@@ -1,0 +1,4 @@
+# F-09 red — name in «Bütün gün» blocks too small (owner 18.11) — 2026-11-17T13:45:27Z — commit cd99cf5
+FAIL 99-whole-day-names.js 
+    Error: FAIL: 390: the name is bigger than before (≥ 8.5 px): 8,8
+1 failed of 1
