@@ -1,57 +1,13 @@
-# run 1 of 3 — commit ed82e07516f87db1f3fea3bdbddf948ad14f015f, tree 1 changed files — start 2026-11-16T22:58:20Z
+# run 1 of 3 — commit 6cd35666ce2043848310cb0b0440adb38c3f27f9, tree 1 changed files — start 2026-11-17T00:37:57Z
 $ node tests/lint.js && node tests/run.js
-# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-16T22:58:22.872Z
-# messages: 324
-# by rule: {"no-unused-vars":80,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":176,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":15}
-PASS 00-smoke.js 8.2s
-PASS 01-drafts.js 38.9s
-PASS 02-session.js 21.7s
-PASS 03-delete-fonts.js 8.6s
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-17T00:37:59.244Z
+# messages: 325
+# by rule: {"no-unused-vars":81,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":176,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":15}
+PASS 00-smoke.js 8.7s
+PASS 01-drafts.js 39.9s
+PASS 02-session.js 22.1s
+PASS 03-delete-fonts.js 8.5s
 PASS 04-excel.js 7.2s
-PASS 05-patients.js 12.3s
-PASS 06-anonymize.js 13.6s
-PASS 07-russian.js 7.8s
-PASS 08-sweep.js 155.9s
-PASS 09-features.js 43.2s
-    fuzz bad0 az 120 steps 17s
-    fuzz bad0 ru 120 steps 36s
-    fuzz 1111 az 120 steps 56s
-    fuzz 1111 ru 120 steps 82s
-    fuzz 2222 az 120 steps 106s
-    fuzz 2222 ru 120 steps 133s
-PASS 10-fuzz.js 133.4s
-PASS 11-es5.js 0.1s
-PASS 12-list.js 8.9s
-PASS 13-followup.js 41.5s
-PASS 14-no-slots.js 7.5s
-PASS 15-keyboard.js 7.2s
-PASS 16-ios-scroll.js 7.6s
-PASS 17-cancel-contact.js 14.4s
-PASS 18-faults.js 116.8s
-PASS 19-a11y.js 27.1s
-PASS 20-xss.js 14.8s
-FAIL 21-access-matrix.js 
-    Error: Command failed: C:\Users\taghi\AppData\Local\Temp\ruqya-pgbin-17.11.0-beta.19\bin\initdb.exe -D C:\Users\taghi\AppData\Local\Temp\ruqya-pg-54331 -U postgres -A trust -E UTF8 --locale=C --pwfile C:\Users\taghi\AppData\Local\Temp\pgpw-54331
-        at genericNodeError (node:internal/errors:999:15)
-        at wrappedFn (node:internal/errors:544:14)
-FAIL 22-attacks.js 
-    Error: Command failed: C:\Users\taghi\AppData\Local\Temp\ruqya-pgbin-17.11.0-beta.19\bin\initdb.exe -D C:\Users\taghi\AppData\Local\Temp\ruqya-pg-54333 -U postgres -A trust -E UTF8 --locale=C --pwfile C:\Users\taghi\AppData\Local\Temp\pgpw-54333
-        at genericNodeError (node:internal/errors:999:15)
-        at wrappedFn (node:internal/errors:544:14)
-PASS 23-excel-counts.js 8.3s
-PASS 24-aria.js 10.6s
-PASS 25-many-patients.js 14.2s
-PASS 26-draft-background.js 12.1s
-PASS 27-dialog-focus.js 7.9s
-FAIL 28-publish-guard.js 
-    Error: Command failed: git init -q --bare -b main origin.git
-        at genericNodeError (node:internal/errors:999:15)
-        at wrappedFn (node:internal/errors:544:14)
-PASS 29-rules-text.js 16.7s
-PASS 30-patient-search.js 11.1s
-FAIL 90-sql.js 
-    Error: Command failed: C:\Users\taghi\AppData\Local\Temp\ruqya-pgbin-17.11.0-beta.19\bin\initdb.exe -D C:\Users\taghi\AppData\Local\Temp\ruqya-pg-54336 -U postgres -A trust -E UTF8 --locale=C --pwfile C:\Users\taghi\AppData\Local\Temp\pgpw-54336
-        at genericNodeError (node:internal/errors:999:15)
-        at wrappedFn (node:internal/errors:544:14)
-4 failed of 32
-exit 1  end 2026-11-16T23:11:30Z
+PASS 05-patients.js 12.5s
+PASS 06-anonymize.js 14.6s
+PASS 07-russian.js 7.7s
