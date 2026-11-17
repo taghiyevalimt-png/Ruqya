@@ -2,14 +2,16 @@
 // made-up bookings ≈ 3 years of the centre). Each user, as role authenticated through RLS, repeats what the app does:
 // the visible window, the changes poll, the patient list page, a patient's visits, and now and then a booking
 // written and cancelled. Reports latency median / p95 / max per query and the error share.
-//   node tests/perf/load50.js <out.json> [users=50] [seconds=120]
+//   node tests/perf/load50.js <out.json> [users=50] [seconds=120] [pause ms between rounds = 200]
+// The default pause (200 ms) is a strict profile: every user repeats the 4 reads about once a second, ~200 requests/s
+// in all. A pause of 3000 ms is closer to a person at work (one round every few seconds); both are reported.
 // Criterion of the plan: errors 0 %, p95 of every read ≤ 500 ms. (The network and PostgREST of the real service are
 // not part of this measurement — it covers the database under concurrent load.)
 const fs = require("fs"), path = require("path");
 const { start } = require("../localpg"), { build, U, R } = require("../dbcopy");
 const pgmod = require("pg");
 (async () => {
-  const out = process.argv[2], users = +process.argv[3] || 50, secs = +process.argv[4] || 120;
+  const out = process.argv[2], users = +process.argv[3] || 50, secs = +process.argv[4] || 120, pause = process.argv[5] != null ? +process.argv[5] : 200;
   const pg = await start(54336), c = await build(pg, "load");
   await c.query("set session_replication_role = replica");
   await c.query(`insert into public.appts (id, reader_id, date, time, duration, name, phone, price, share, status, note, created_by, created_at, place)
@@ -24,7 +26,7 @@ const pgmod = require("pg");
     patients: "select * from public.ruqya_hist_patients_page(current_date - 45, current_date - 731, '', 1000)",
     visits: "select * from public.ruqya_hist_visits('p500000123', current_date - 45, current_date - 731)",
   };
-  const lat = {}, errs = {}; let ops = 0;
+  const lat = {}, errs = {}, codes = {}; let ops = 0;
   const t0 = Date.now(), until = t0 + secs * 1000;
   const who = [U.agentA, U.agentB, U.owner, U.admin2, U.spec];
   await Promise.all(Array.from({ length: users }, async (_, u) => {
@@ -33,7 +35,8 @@ const pgmod = require("pg");
     const run = async (k, sql, args) => {
       const s = Date.now();
       try { await cl.query("begin"); await cl.query("set local role authenticated"); await cl.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub, role: "authenticated" })]); await cl.query(sql, args); await cl.query(k === "write" ? "commit" : "rollback"); }
-      catch (e) { await cl.query("rollback").catch(() => {}); if (!(k === "write" && /23P01|23505|Bu saat|42501|cox deyisiklik/i.test(e.code + " " + e.message))) { errs[k] = (errs[k] || 0) + 1; } }
+      catch (e) { await cl.query("rollback").catch(() => {}); const ck = k + " " + e.code + " " + String(e.message).slice(0, 40); codes[ck] = (codes[ck] || 0) + 1;
+        if (!(k === "write" && /23P01|23505|Bu saat|cox deyisiklik/i.test(e.code + " " + e.message))) { errs[k] = (errs[k] || 0) + 1; } }
       (lat[k] = lat[k] || []).push(Date.now() - s); ops++;
     };
     let i = 0;
@@ -41,19 +44,20 @@ const pgmod = require("pg");
       for (const k of ["window", "poll", "patients", "visits"]) await run(k, Q[k]);
       if (i++ % 5 === 0 && sub !== U.spec) {
         const id = "e" + String(u).padStart(3, "0") + "0000-0000-4000-8000-" + String(i).padStart(12, "0");
-        await run("write", "insert into public.appts (id, reader_id, date, time, duration, name, phone, price, share, status, note, created_by) values ($1, $2, current_date + 30 + $3::int, $4, 30, 'Yük testi', '', 130, 0, 'wait', '', $5)", [id, R.ali, u, String(8 + (i % 14)).padStart(2, "0") + ":" + String((i * 7) % 60).padStart(2, "0"), sub]);
+        await run("write", "insert into public.appts (id, reader_id, date, time, duration, name, phone, price, share, status, note, created_by) values ($1, $2, current_date + 30 + $3::int, $4, 30, 'Yük testi', '050 000 00 00', 130, 0, 'wait', '', $5)", [id, R.ali, u, String(8 + (i % 14)).padStart(2, "0") + ":" + String((i * 7) % 60).padStart(2, "0"), sub]);
       }
-      await new Promise((r) => setTimeout(r, 200));   // a person does not click 5 times a second
+      await new Promise((r) => setTimeout(r, pause));
     }
     await cl.end();
   }));
   await pg.stop();
   const st = (a) => { a.sort((x, y) => x - y); return { n: a.length, median: a[Math.floor(a.length / 2)], p95: a[Math.floor(a.length * 0.95)], max: a[a.length - 1] }; };
-  const res = { at: new Date().toISOString(), users, seconds: secs, ops, perQuery: Object.fromEntries(Object.entries(lat).map(([k, a]) => [k, { ...st(a), errors: errs[k] || 0 }])) };
+  const res = { at: new Date().toISOString(), users, seconds: secs, pauseMs: pause, ops, errorCodes: codes, perQuery: Object.fromEntries(Object.entries(lat).map(([k, a]) => [k, { ...st(a), errors: errs[k] || 0 }])) };
   const errTotal = Object.values(errs).reduce((a, b) => a + b, 0);
   const slow = Object.entries(res.perQuery).filter(([k, v]) => k !== "write" && v.p95 > 500).map(([k]) => k);
   res.verdict = !errTotal && !slow.length ? "ПРОЙДЕНО" : "НЕ ПРОЙДЕНО" + (errTotal ? " (errors " + errTotal + ")" : "") + (slow.length ? " (p95 > 500 ms: " + slow.join(",") + ")" : "");
   fs.mkdirSync(path.dirname(out), { recursive: true }); fs.writeFileSync(out, JSON.stringify(res, null, 1));
-  console.log(users + " users, " + secs + " s, " + ops + " requests; " + Object.entries(res.perQuery).map(([k, v]) => k + " median " + v.median + " p95 " + v.p95 + " max " + v.max + " ms, errors " + v.errors).join("; ") + " — " + res.verdict);
+  console.log("error codes: " + JSON.stringify(codes));
+  console.log(users + " users, " + secs + " s, pause " + pause + " ms, " + ops + " requests; " + Object.entries(res.perQuery).map(([k, v]) => k + " median " + v.median + " p95 " + v.p95 + " max " + v.max + " ms, errors " + v.errors).join("; ") + " — " + res.verdict);
   process.exit(errTotal || slow.length ? 1 : 0);
 })();

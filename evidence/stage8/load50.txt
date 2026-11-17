@@ -1,0 +1,8 @@
+# load test — commit 4e30e2790e79e83ba22f878c5bd86920c2bd8fa1 + load50 fixes (phone, error codes, pause) — 2026-11-17T06:59:47Z
+# machine: Intel Core i5-4210U (2 cores, 4 threads, 2014), embedded PostgreSQL 17.11 and the 50 clients on the same laptop
+$ node tests/perf/load50.js out.json 50 120 200
+50 users, 120 s, pause 200 ms, 6695 requests; window median 720 p95 1274 max 2506 ms, errors 0; poll median 682 p95 1196 max 2232 ms, errors 0; patients median 1087 p95 1847 max 2745 ms, errors 0; visits median 652 p95 1173 max 2042 ms, errors 0; write median 602 p95 1115 max 2193 ms, errors 0 — НЕ ПРОЙДЕНО (p95 > 500 ms: window,poll,patients,visits)
+$ node tests/perf/load50.js out.json 50 120 3000
+50 users, 120 s, pause 3000 ms, 6252 requests; window median 120 p95 603 max 1232 ms, errors 0; poll median 101 p95 516 max 1261 ms, errors 0; patients median 409 p95 1060 max 2392 ms, errors 0; visits median 72 p95 369 max 966 ms, errors 0; write median 96 p95 431 max 1052 ms, errors 0 — НЕ ПРОЙДЕНО (p95 > 500 ms: window,poll,patients)
+$ node tests/perf/load50.js out.json 10 60 200
+10 users, 60 s, pause 200 ms, 3426 requests; window median 65 p95 178 max 278 ms, errors 0; poll median 66 p95 147 max 241 ms, errors 0; patients median 325 p95 512 max 755 ms, errors 0; visits median 30 p95 115 max 259 ms, errors 0; write median 25 p95 129 max 215 ms, errors 0 — НЕ ПРОЙДЕНО (p95 > 500 ms: patients)
