@@ -1,0 +1,10 @@
+# red: INP 488 ms median; slow interaction = closing the booking window (7th click), see breakdown.txt
+# vitals, quiet machine — commit 3788d727d5e3a78882646fbc937e3604383b3fec — 2026-11-17T04:10:59Z
+$ node tests/perf/vitals.js evidence/stage5/vitals.json 5
+run 1: LCP 2168 ms, INP 504 ms, CLS 0, long frames >50ms 7, 13 requests, 456054 bytes
+run 2: LCP 2124 ms, INP 488 ms, CLS 0, long frames >50ms 9, 13 requests, 456039 bytes
+run 3: LCP 2192 ms, INP 520 ms, CLS 0, long frames >50ms 8, 13 requests, 456054 bytes
+run 4: LCP 2224 ms, INP 480 ms, CLS 0, long frames >50ms 7, 13 requests, 456054 bytes
+run 5: LCP 2152 ms, INP 80 ms, CLS 0, long frames >50ms 7, 13 requests, 456054 bytes
+median LCP 2168 (2124–2224) ms; INP 488 (80–520) ms; CLS 0; 13 requests; 456054 bytes — НЕ ПРОЙДЕНО: INP
+exit 1

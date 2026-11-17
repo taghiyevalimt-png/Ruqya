@@ -1,0 +1,9 @@
+# frames, quiet machine — commit 3788d727d5e3a78882646fbc937e3604383b3fec — 2026-11-17T04:03:37Z
+$ node tests/perf/frames.js evidence/stage5/frames.json 5
+run 1: scroll-day 171, open-window 163/55 (other 169), close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 97), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 128 (other 173), close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 188), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0 (other 52)
+run 3: scroll-day 0, open-window 118 (other 177), close-window 0, open-window-2 0 (other 348), close-window-2 0, tab-stats 0 (other 163), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0 (other 54)
+run 4: scroll-day 233, open-window 135 (other 177), close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 129), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 5: scroll-day 186, open-window 154 (other 202), close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 153), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: scroll-day (3 frames in 3/5 runs, max 233 ms, during scroll); open-window (6 frames in 5/5 runs, max 163 ms, during overlay:fadein,sheet:up)
+exit 1
