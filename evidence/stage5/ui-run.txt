@@ -1,0 +1,2 @@
+# UI audit after fixes — commit 1f671cf31889bf789a2b5ba34972c57579539b43 (+ overlap checker change in tests/visual/audit-ui.js) — start 2026-11-17T02:01:57Z
+$ node tests/visual/audit-ui.js evidence/stage5/ui

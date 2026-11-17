@@ -1,7 +1,8 @@
 // Every screen and window, every state, five widths, light and dark: screenshot + automatic checks.
 //   node tests/visual/audit-ui.js <outDir> [widths=320,375,768,1280,1920]
 // Checks per shot: horizontal page scroll; text cut off inside a box (scrollWidth > clientWidth with overflow hidden),
-// listing intentional cuts (calendar blocks, which end with "…") separately; overlapping controls in the top layer;
+// listing intentional cuts (calendar blocks, which end with "…") separately; overlapping controls in the top layer
+// (each box cut by its scrolling ancestors; a control under a fixed/sticky bar is listed apart for review);
 // controls smaller than 44x44 px; axe-core 4.10.2 rules for WCAG 2.0/2.1 A+AA (incl. colour contrast 4.5:1).
 // Output: <outDir>/<width>-<theme>/<screen>.jpg, <outDir>/report.json, <outDir>/summary.tsv. Exit 1 on overflow,
 // unintended cuts, overlaps or axe violations.
@@ -51,7 +52,7 @@ async function closeSheet(p) { if (!(await p.locator("#overlay").isHidden())) { 
 
 async function check(p) {
   return p.evaluate(() => {
-    const W = window.innerWidth, out = { overflowX: Math.max(0, document.documentElement.scrollWidth - W), cut: [], cutIntended: 0, overlaps: [], small: 0, controls: 0 };
+    const W = window.innerWidth, out = { overflowX: Math.max(0, document.documentElement.scrollWidth - W), cut: [], cutIntended: 0, overlaps: [], covered: [], small: 0, controls: 0 };
     const vis = (e) => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e); return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && cs.display !== "none" && +cs.opacity > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < W; };
     const name = (e) => e.tagName.toLowerCase() + (e.id ? "#" + e.id : "") + (e.className && typeof e.className === "string" ? "." + e.className.trim().split(/\s+/).slice(0, 2).join(".") : "") + (e.dataset && e.dataset.act ? "[" + e.dataset.act + "]" : "") + " «" + (e.textContent || "").trim().slice(0, 30) + "»";
     const sheetOpen = !document.getElementById("overlay").hidden, layer = sheetOpen ? document.getElementById("sheet") : document.body;
@@ -65,11 +66,19 @@ async function check(p) {
     const ctl = [...layer.querySelectorAll("button,a[href],input:not([type=hidden]),select,textarea,[data-act]")].filter((e) => vis(e) && (!sheetOpen || e.closest("#sheet")) && (sheetOpen || !e.closest("#overlay")));
     out.controls = ctl.length;
     for (const e of ctl) { const r = e.getBoundingClientRect(); if ((r.width < 44 || r.height < 44) && !e.closest("#cal")) out.small++; }
+    // what of a control can be seen: its box cut by every scrolling/clipping ancestor (a control scrolled out of a
+    // list is not "under" the one now in view); and its layer: inside a fixed or sticky bar or not — a bar over
+    // scrolled content covers it by design, that is not an overlap of two controls
+    const clip = (e) => { let r = e.getBoundingClientRect(), x0 = r.left, y0 = r.top, x1 = r.right, y1 = r.bottom;
+      for (let p = e.parentElement; p && p !== document.body; p = p.parentElement) { const cs = getComputedStyle(p); if (cs.overflow !== "visible" || cs.overflowX !== "visible" || cs.overflowY !== "visible") { const q = p.getBoundingClientRect(); x0 = Math.max(x0, q.left); y0 = Math.max(y0, q.top); x1 = Math.min(x1, q.right); y1 = Math.min(y1, q.bottom); } }
+      return { left: x0, top: y0, right: x1, bottom: y1 }; };
+    const layerOf = (e) => { for (let p = e; p && p !== document.body; p = p.parentElement) { const ps = getComputedStyle(p).position; if (ps === "fixed" || ps === "sticky") return p; } return null; };
     for (let i = 0; i < ctl.length; i++) for (let j = i + 1; j < ctl.length; j++) {
       const a = ctl[i], b = ctl[j]; if (a.contains(b) || b.contains(a)) continue;
-      const r = a.getBoundingClientRect(), s = b.getBoundingClientRect();
+      const cross = layerOf(a) !== layerOf(b);
+      const r = clip(a), s = clip(b);
       const ix = Math.min(r.right, s.right) - Math.max(r.left, s.left), iy = Math.min(r.bottom, s.bottom) - Math.max(r.top, s.top);
-      if (ix > 4 && iy > 4) { const top = document.elementFromPoint(Math.max(r.left, s.left) + ix / 2, Math.max(r.top, s.top) + iy / 2); if (top && (a.contains(top) || b.contains(top))) out.overlaps.push(name(a) + " × " + name(b)); }
+      if (ix > 4 && iy > 4) { const top = document.elementFromPoint(Math.max(r.left, s.left) + ix / 2, Math.max(r.top, s.top) + iy / 2); if (top && (a.contains(top) || b.contains(top))) (cross ? out.covered : out.overlaps).push(name(a) + " × " + name(b)); }
     }
     return out;
   });
@@ -108,7 +117,7 @@ async function check(p) {
     if (r.skipped || r.screen === "_console") { if (r.errors && r.errors.length) { bad++; lines.push([r.w, r.theme, r.state, "console", "", "", "", "", "", r.errors.join(" | ")].join("\t")); } continue; }
     const ax = (r.axe || []).map((v) => v.id + ":" + v.n).join(" ");
     if (r.overflowX > 1 || r.cut.length || r.overlaps.length || (r.axe || []).length) bad++;
-    lines.push([r.w, r.theme, r.state, r.screen, r.overflowX, r.cut.length + (r.cut.length ? " " + r.cut.slice(0, 2).join(" ; ") : ""), r.cutIntended, r.overlaps.length + (r.overlaps.length ? " " + r.overlaps.slice(0, 2).join(" ; ") : ""), r.small, ax].join("\t"));
+    lines.push([r.w, r.theme, r.state, r.screen, r.overflowX, r.cut.length + (r.cut.length ? " " + r.cut.slice(0, 2).join(" ; ") : ""), r.cutIntended, r.overlaps.length + (r.overlaps.length ? " " + r.overlaps.slice(0, 2).join(" ; ") : ""), (r.covered || []).length + ((r.covered || []).length ? " " + r.covered.slice(0, 2).join(" ; ") : ""), r.small, ax].join("\t"));
   }
   fs.writeFileSync(path.join(outDir, "summary.tsv"), lines.join("\n") + "\n");
   console.log("shots:", rep.filter((r) => r.shot).length, "with problems:", bad);
