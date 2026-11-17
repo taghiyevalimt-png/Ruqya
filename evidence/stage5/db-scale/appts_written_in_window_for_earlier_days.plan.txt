@@ -1,18 +1,18 @@
 -- agent
 -- select * from public.appts where created_at >= (current_date - 45)::timestamptz and date < current_date - 45 order by id limit 1000
-Limit  (cost=16.50..9443.50 rows=1000 width=134) (actual time=0.745..278.234 rows=1000 loops=1)
-  Buffers: shared hit=7844 read=15365 written=7904
+Limit  (cost=16.50..9399.03 rows=1000 width=134) (actual time=1.416..276.879 rows=1000 loops=1)
+  Buffers: shared hit=7901 read=15282 written=8025
   InitPlan 1
-    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.011..0.011 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.010..0.011 rows=1 loops=1)
   InitPlan 2
     ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.517..0.517 rows=1 loops=1)
           Buffers: shared hit=2
   InitPlan 4
     ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
-  ->  Index Scan using appts_pkey on appts  (cost=15.96..149311.41 rows=15837 width=134) (actual time=0.745..278.020 rows=1000 loops=1)
+  ->  Index Scan using appts_pkey on appts  (cost=15.96..149329.60 rows=15914 width=134) (actual time=1.414..276.675 rows=1000 loops=1)
         Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND (date < (CURRENT_DATE - 45)) AND (created_at >= ((CURRENT_DATE - 45))::timestamp with time zone) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
-        Rows Removed by Filter: 22102
-        Buffers: shared hit=7844 read=15365 written=7904
+        Rows Removed by Filter: 22074
+        Buffers: shared hit=7901 read=15282 written=8025
         SubPlan 3
           ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
                 ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
@@ -21,5 +21,5 @@ Limit  (cost=16.50..9443.50 rows=1000 width=134) (actual time=0.745..278.234 row
                 ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
 Planning:
   Buffers: shared hit=3
-Planning Time: 0.344 ms
-Execution Time: 278.629 ms
+Planning Time: 0.365 ms
+Execution Time: 277.250 ms

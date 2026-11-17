@@ -1,31 +1,31 @@
 -- agent
 -- select * from public.expenses where date >= current_date - 45 order by date desc, id limit 1000
-Limit  (cost=257.17..257.82 rows=258 width=51) (actual time=1.219..1.304 rows=873 loops=1)
+Limit  (cost=257.17..257.82 rows=258 width=51) (actual time=1.246..1.333 rows=873 loops=1)
   Buffers: shared hit=33
   InitPlan 1
     ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.002..0.002 rows=1 loops=1)
   InitPlan 2
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.283..0.283 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.280..0.280 rows=1 loops=1)
           Buffers: shared hit=1
   InitPlan 3
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.365..0.365 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.385..0.385 rows=1 loops=1)
           Buffers: shared hit=2
   InitPlan 4
-    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.003..0.004 rows=1 loops=1)
-  ->  Sort  (cost=256.60..257.24 rows=258 width=51) (actual time=1.218..1.253 rows=873 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=16) (actual time=0.004..0.004 rows=1 loops=1)
+  ->  Sort  (cost=256.60..257.24 rows=258 width=51) (actual time=1.246..1.280 rows=873 loops=1)
         Sort Key: expenses.date DESC, expenses.id
         Sort Method: quicksort  Memory: 140kB
         Buffers: shared hit=33
-        ->  Bitmap Heap Scan on expenses  (cost=14.98..246.26 rows=258 width=51) (actual time=0.723..0.962 rows=873 loops=1)
+        ->  Bitmap Heap Scan on expenses  (cost=14.98..246.26 rows=258 width=51) (actual time=0.748..0.987 rows=873 loops=1)
               Recheck Cond: (date >= (CURRENT_DATE - 45))
               Filter: (((InitPlan 2).col1 OR ((InitPlan 3).col1 AND (created_by = (InitPlan 4).col1))) AND (NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)))
               Rows Removed by Filter: 2
               Heap Blocks: exact=27
               Buffers: shared hit=33
-              ->  Bitmap Index Scan on expenses_date  (cost=0.00..14.92 rows=883 width=0) (actual time=0.042..0.042 rows=875 loops=1)
+              ->  Bitmap Index Scan on expenses_date  (cost=0.00..14.92 rows=883 width=0) (actual time=0.048..0.048 rows=875 loops=1)
                     Index Cond: (date >= (CURRENT_DATE - 45))
                     Buffers: shared hit=3
 Planning:
   Buffers: shared hit=34 read=3
-Planning Time: 0.754 ms
-Execution Time: 1.452 ms
+Planning Time: 0.788 ms
+Execution Time: 1.512 ms

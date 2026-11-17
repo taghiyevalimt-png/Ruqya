@@ -1,0 +1,6 @@
+# red: 4ae9e2326ede97132d2159e753e134d0d5bc3691 + X-33/X-34 — 2026-11-17T02:36:25Z
+FAIL 22-attacks.js 
+    Error: 2 attacks got through:
+        X-33	spec	SUCCEEDED (data not safe)	specialist of column Əli asks the helper for the ids of an İlkin patient (direct SQL)	rows 1
+        X-34	pending	SUCCEEDED (data not safe)	account without a role asks the helper for ids (direct SQL)	rows 1
+1 failed of 1

@@ -1,28 +1,28 @@
 -- owner
 -- select id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at,place from public.appts where date >= current_date - 31 order by date, id limit 1000
-Limit  (cost=103.50..1107.22 rows=1000 width=114) (actual time=10.779..12.695 rows=1000 loops=1)
-  Buffers: shared hit=1294 read=538 written=204
+Limit  (cost=103.62..1096.64 rows=1000 width=114) (actual time=9.858..11.487 rows=1000 loops=1)
+  Buffers: shared hit=1256 read=576 written=106
   InitPlan 1
-    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.010..0.010 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.009..0.010 rows=1 loops=1)
   InitPlan 2
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.404..0.404 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.386..0.386 rows=1 loops=1)
   InitPlan 4
     ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
-  ->  Incremental Sort  (cost=102.95..96495.03 rows=96035 width=114) (actual time=10.777..12.623 rows=1000 loops=1)
+  ->  Incremental Sort  (cost=103.08..96645.07 rows=97221 width=114) (actual time=9.857..11.421 rows=1000 loops=1)
         Sort Key: appts.date, appts.id
         Presorted Key: appts.date
         Full-sort Groups: 2  Sort Method: quicksort  Average Memory: 41kB  Peak Memory: 41kB
         Pre-sorted Groups: 2  Sort Methods: top-N heapsort, quicksort  Average Memory: 260kB  Peak Memory: 260kB
-        Buffers: shared hit=1294 read=538 written=204
-        ->  Index Scan using appts_date on appts  (cost=15.96..92173.37 rows=96035 width=114) (actual time=0.474..11.284 rows=1827 loops=1)
+        Buffers: shared hit=1256 read=576 written=106
+        ->  Index Scan using appts_date on appts  (cost=15.96..92261.71 rows=97221 width=114) (actual time=0.462..10.224 rows=1827 loops=1)
               Index Cond: (date >= (CURRENT_DATE - 31))
               Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))))
-              Buffers: shared hit=1294 read=538 written=204
+              Buffers: shared hit=1256 read=576 written=106
               SubPlan 3
                 ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
                       ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
               SubPlan 5
                 ->  ProjectSet  (cost=0.00..5.27 rows=1000 width=16) (never executed)
                       ->  Result  (cost=0.00..0.01 rows=1 width=0) (never executed)
-Planning Time: 0.276 ms
-Execution Time: 12.889 ms
+Planning Time: 0.355 ms
+Execution Time: 11.665 ms

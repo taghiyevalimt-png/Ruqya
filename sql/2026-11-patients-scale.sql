@@ -44,6 +44,10 @@ returns uuid[] language sql stable security definer set search_path = public as 
     select a.id from public.appts a
      where public.ruqya_pkey(a.phone, a.name) = key
        and a.date >= greatest(since, current_date - 800) and a.date < before
+       -- the same rule as the read policies of appts (ruqya_appts_read, ruqya_no_anonymous): even called by direct
+       -- SQL it gives out only ids of rows the caller may read (stage 7 pentest F-1)
+       and (public.ruqya_sees_all() or a.reader_id in (select public.ruqya_my_readers()))
+       and coalesce((auth.jwt() ->> 'is_anonymous')::boolean, false) = false
      order by a.date desc, a.id limit 500) s $$;
 revoke all on function private.ruqya_visit_ids(text, date, date) from public;
 revoke all on function private.ruqya_visit_ids(text, date, date) from anon;

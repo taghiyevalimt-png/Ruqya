@@ -41,5 +41,9 @@ const ATTACKS = [
   ["X-30", "account without a role reads the patient list page", "pending", `select * from public.ruqya_hist_patients_page(current_date + 1, current_date - 700, '', 1000)`, (r) => !r.ok || r.rowCount === 0],
   ["X-31", "account without a role reads a patient's visits", "pending", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
   ["X-32", "specialist of column Əli reads the visits of a patient of column İlkin (helper finds the id, RLS must hide the row)", "spec", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
+  // stage 7 pentest F-1: the helper itself must not hand out ids of rows the caller may not read (defence in depth,
+  // the schema is not exposed by the API)
+  ["X-33", "specialist of column Əli asks the helper for the ids of an İlkin patient (direct SQL)", "spec", `select x from unnest(private.ruqya_visit_ids('p500000002', current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
+  ["X-34", "account without a role asks the helper for ids (direct SQL)", "pending", `select x from unnest(private.ruqya_visit_ids('p500000002', current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
 ];
 module.exports = { ATTACKS };

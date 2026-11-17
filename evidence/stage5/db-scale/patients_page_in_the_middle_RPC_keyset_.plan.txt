@@ -1,11 +1,11 @@
 -- agent
 -- select * from public.ruqya_hist_patients_page(current_date - 45, current_date - 731, 'p0000500000', 1000)
-Function Scan on ruqya_hist_patients_page  (cost=0.26..10.26 rows=1000 width=116) (actual time=24.080..24.145 rows=1000 loops=1)
+Function Scan on ruqya_hist_patients_page  (cost=0.26..10.26 rows=1000 width=116) (actual time=25.743..25.806 rows=1000 loops=1)
   Buffers: shared hit=36
 Planning Time: 0.029 ms
-Execution Time: 24.368 ms
+Execution Time: 26.052 ms
 ---- nested statement (auto_explain) ----
-duration: 22.876 ms  plan:
+duration: 24.438 ms  plan:
 Query Text: 
   select public.ruqya_pkey(a.phone, a.name),
          (array_agg(a.name order by a.date desc, a.id))[1],
@@ -22,24 +22,24 @@ Query Text:
    order by public.ruqya_pkey(a.phone, a.name)
    limit least(greatest(coalesce(lim, 1000), 1), 1000) 
 Query Parameters: $1 = '2026-10-03', $2 = '2024-11-16', $3 = 'p0000500000', $4 = '1000'
-Limit  (cost=61.17..3567.09 rows=78 width=116) (actual time=1.385..22.574 rows=1000 loops=1)
+Limit  (cost=61.17..3567.09 rows=78 width=116) (actual time=2.272..24.132 rows=1000 loops=1)
   Buffers: shared hit=36
   InitPlan 1
-    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.010..0.010 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.03 rows=1 width=32) (actual time=0.017..0.017 rows=1 loops=1)
   InitPlan 2
-    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.506..0.506 rows=1 loops=1)
+    ->  Result  (cost=0.00..0.26 rows=1 width=1) (actual time=0.655..0.655 rows=1 loops=1)
           Buffers: shared hit=2
   InitPlan 4
     ->  Result  (cost=0.00..0.26 rows=1 width=1) (never executed)
-  ->  GroupAggregate  (cost=60.63..35164.73 rows=781 width=116) (actual time=1.383..22.490 rows=1000 loops=1)
+  ->  GroupAggregate  (cost=60.63..35164.73 rows=781 width=116) (actual time=2.269..24.053 rows=1000 loops=1)
         Group Key: (ruqya_pkey(a.phone, a.name))
         Buffers: shared hit=36
-        ->  Incremental Sort  (cost=60.63..34926.52 rows=781 width=84) (actual time=1.373..20.645 rows=1001 loops=1)
+        ->  Incremental Sort  (cost=60.63..34926.52 rows=781 width=84) (actual time=2.248..22.177 rows=1001 loops=1)
               Sort Key: (ruqya_pkey(a.phone, a.name)), a.date DESC, a.id
               Presorted Key: (ruqya_pkey(a.phone, a.name))
               Full-sort Groups: 32  Sort Method: quicksort  Average Memory: 27kB  Peak Memory: 27kB
               Buffers: shared hit=36
-              ->  Index Scan using appts_pkey_date on appts a  (cost=15.96..34891.38 rows=781 width=84) (actual time=0.756..20.118 rows=1025 loops=1)
+              ->  Index Scan using appts_pkey_date on appts a  (cost=15.96..34891.38 rows=781 width=84) (actual time=0.989..21.582 rows=1025 loops=1)
                     Index Cond: ((date >= GREATEST($2, (CURRENT_DATE - 800))) AND (date < $1))
                     Filter: ((NOT COALESCE((((InitPlan 1).col1 ->> 'is_anonymous'::text))::boolean, false)) AND ((InitPlan 2).col1 OR (ANY (reader_id = (hashed SubPlan 3).col1)) OR (InitPlan 4).col1 OR (ANY (reader_id = (hashed SubPlan 5).col1))) AND (ruqya_pkey(phone, name) > COALESCE($3, ''::text)))
                     Buffers: shared hit=36
