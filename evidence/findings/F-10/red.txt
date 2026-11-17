@@ -1,0 +1,4 @@
+# F-10 red — phone/agent small in «Bütün gün» (owner 18.11 18:15) — 2026-11-17T14:16:35Z — commit 08392f0
+FAIL 99-whole-day-details.js 
+    Error: FAIL: 390 Terane: phone and agent bigger than before (≥ 8 px, was 6.5): 6.5
+1 failed of 1
