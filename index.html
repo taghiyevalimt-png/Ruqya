@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-mcC1wPkhz0I582hh9b2zVoUWQdnqHz9JIpCBaWp3FGA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-hwUxDzic1Uszs5v01OfZ3bGAXZkQxSAJ/E6Uhwg6YpY='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -173,6 +173,7 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
 
 .seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
 .lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.seg.svc{grid-template-columns:repeat(3,1fr)}
 .segb{position:relative;display:block;margin:0}.segb input{position:absolute;opacity:0;width:1px;height:1px}
 .segb span{display:block;text-align:center;padding:8px 4px;border-radius:9px;font-weight:500;cursor:pointer;transition:background .15s var(--ease)}
 .segb input:checked+span{background:var(--accent);color:var(--accent-ink)}.segb input:focus-visible+span{outline:2px solid var(--accent-line)}
@@ -1436,6 +1437,16 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Son iki ayda ləğv olunan qəbul yoxdur.":"За последние два месяца отменённых записей нет.",
 "Son iki ayın ləğv olunan qəbulları göstərilir.":"Показаны отменённые записи за последние два месяца.",
 "Yer *":"Место *",
+"Xidmət *":"Услуга *",
+"Xidmət":"Услуга",
+"Xidmətlər":"Услуги",
+"Xidmət növünü seçmək vacibdir.":"Выберите вид услуги.",
+"Ruqya":"Рукья",
+"Hicama":"Хиджама",
+"Kombo":"Комбо",
+"Masaj":"Массаж",
+"Dr.Günel":"Dr.Günel",
+"Psixoloq":"Психолог",
 "Yer":"Место",
 "Ofis":"Офис",
 "Onlayn":"Онлайн",
@@ -1702,6 +1713,9 @@ function soft(make){return fetchAll(make).then(function(d){return d},function(){
    single-row updates from realtime in between, and older dates fetched only when opened. */
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
 var PLACES=[["ofis","Ofis"],["onlayn","Onlayn"],["unvan","Ünvan"]];
+/* the kind of session (owner 17.11): stored as written here; Ruqya by default */
+var SERVICES=["Ruqya","Hicama","Kombo","Masaj","Dr.Günel","Psixoloq"];
+function svcVal(){var e=document.querySelector('input[name="f-service"]:checked');return e?e.value:""}
 function placeName(k){for(var i=0;i<PLACES.length;i++)if(PLACES[i][0]===k)return L(PLACES[i][1]);return L("Ofis")}
 /* owner 17.11: a cancelled booking marked «Satış edildi» (follow 3) counts as a successful one everywhere in the app
    (own colour on the calendar, «Uğurlu» in statistics and Excel, not in «Ləğv olunanlar»); the database keeps
@@ -2005,7 +2019,7 @@ function authLost(){
 var DK="ruqya.draft.v1";
 function placeVal(){var e=document.querySelector('input[name="f-place"]:checked');return e?e.value:""}
 function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
-  return{place:placeVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
+  return{place:placeVal(),service:svcVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
 function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,v:v}))}catch(e){}}
 function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
 function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
@@ -2021,6 +2035,7 @@ function formTouched(){
   if(!sheet.id)return !!(v.name.trim()||v.phone.trim()||v.note.trim());
   var o=sheet.orig;if(!o)return false;
   if(v.place&&(o.place||"ofis")!==v.place)return true;
+  if(v.service&&svcName(o.service)!==v.service)return true;
   return o.name!==v.name.trim()||(o.phone||"")!==v.phone.trim()||(o.note||"")!==v.note.trim()||o.date!==v.date||o.time!==v.time.slice(0,5)||o.readerId!==v.readerId||String(+o.price)!==String(amount("f-price"))||(v.dur!==""&&+v.dur!==(o.dur||90));
 }
 function fmtDayShort(s){var d=parse(s);return d.getDate()+" "+MON[d.getMonth()]}
@@ -2385,6 +2400,7 @@ function viewSheet(){
     L('<div class="row2"><span>Vaxt</span><b class="num">')+fmtDay(a.date,"w")+', '+esc(a.time)+'–'+endOf(a)+'</b></div>'+
     L('<div class="row2"><span>Mütəxəssis</span><b>')+esc(r?r.name:"—")+'</b>'+'</div>'+
     (state.hasPlace?'<div class="row2"><span>'+L("Yer")+'</span><b>'+esc(placeName(a.place))+'</b></div>':'')+
+    '<div class="row2"><span>'+L("Xidmət")+'</span><b>'+esc(L(svcName(a.service)))+'</b></div>'+
     (a.phone?L('<div class="row2"><span>Telefon</span><b class="num">')+esc(a.phone)+'</b>'+(gone(a)?'':phoneLinks(a.phone,a))+'</div>':'')+
     L('<div class="row2"><span>Qiymət</span><b class="num">')+(a.price>0?money(a.price):L("yazılmayıb"))+'</b></div>'+
     (a.note?'<p class="memo">'+esc(a.note)+'</p>':'')+
@@ -2553,6 +2569,15 @@ var ST_KINDS={
   prod:{t:function(){return L("Məhsul statistikası")},h:function(){return [L("Satan"),L("Satış"),L("Məbləğ")]},c:function(x){return [x.name,String(x.a),money(x.c)]}}
 };
 /* who earned how much: admins only */
+/* owner 17.11: every kind of session in statistics — sessions on the days of the period (not cancelled) and the
+   successful ones among them; an agent sees his own bookings, like in the sales table */
+function svcTable(r){
+  var onlyMe=auth.user&&!isAdmin()?auth.user.id:null,rows={},T={a:0,b:0};SERVICES.forEach(function(x){rows[x]={a:0,b:0}});
+  state.appts.forEach(function(a){if(onlyMe&&a.by!==onlyMe)return;if(a.date<r.s||a.date>r.end||gone(a))return;var k=svcName(a.service);if(!rows[k])rows[k]={a:0,b:0};rows[k].a++;T.a++;if(done(a)){rows[k].b++;T.b++}});
+  return '<div class="pay" data-st="svc"><div class="head"><b>'+L("Xidmətlər")+'</b></div><table class="stt"><thead><tr><th>'+L("Xidmət")+'</th><th class="num">'+L("Seans")+'</th><th class="num">'+L("Uğurlu")+'</th></tr></thead><tbody>'+
+    Object.keys(rows).map(function(k){return '<tr><td>'+esc(L(k))+'</td><td class="num">'+rows[k].a+'</td><td class="num">'+rows[k].b+'</td></tr>'}).join("")+
+    '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+T.a+'</td><td class="num">'+T.b+'</td></tr></tfoot></table></div>';
+}
 function moneyTables(r,per){return isAdmin()?statTable("money",r,per)+(state.hasProducts?statTable("prod",r,per):""):""}
 function rangeLabel(r){return fmtDay(r.s)+" – "+fmtDay(r.end,"y")}
 function statTable(kind,r,per){
@@ -2596,17 +2621,17 @@ function statsMain(){
     var da=dayAllRange();
     return statNav("st-all",da,L("Gündəlik statistika"),dayWord(da.off)+(da.off===0?L(" — gün hələ bitməyib"):""))+
       L('<button class="ghost" data-act="st-copy" data-id="all" data-p="day">⧉ Bütün gündəlik statistikanı kopyala</button>')+
-      statTable("sales",da,"day")+edHint+moneyTables(da,"day");
+      statTable("sales",da,"day")+edHint+svcTable(da)+moneyTables(da,"day");
   }
   if(sec==="week"){
     h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
     h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
-    return h+statTable("sales",w,"week")+edHint+moneyTables(w,"week");
+    return h+statTable("sales",w,"week")+edHint+svcTable(w)+moneyTables(w,"week");
   }
   if(sec==="month"){
     h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,tf(L("{w} həftə ({d} gün), cümə – cümə axşamı"),{w:m.weeks,d:m.weeks*7}));
     h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
-    return h+statTable("sales",m,"month")+edHint+moneyTables(m,"month");
+    return h+statTable("sales",m,"month")+edHint+svcTable(m)+moneyTables(m,"month");
   }
   /* The rules, written out so anyone can read them; the examples use the dates on screen. */
   var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
@@ -2799,9 +2824,9 @@ function xlsSheets(all){
     sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
   }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
   var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
-  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
+  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Xidmət"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
   A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
-    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
+    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),L(svcName(a.service)),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
   sh.push({name:L("Bütün qəbullar"),rows:Q});
   if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
     all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([{dt:x.date},sn(x.by),prodItems(x.names).join(", "),x.amount])});
@@ -3173,6 +3198,7 @@ function auditLine(x){
     if(has("duration")&&+o.duration!==+n.duration)ch.push(L("müddət: ")+(+o.duration||90)+" → "+(+n.duration||90)+L(" dəq"));
     if(has("note")&&(o.note||"")!==(n.note||""))ch.push(L("qeyd"));
     if(has("follow")&&(+o.follow||0)!==(+n.follow||0))ch.push(L("xatırlatma")+": "+(+o.follow||0)+" → "+(+n.follow||0));
+    if(has("service")&&svcName(o.service)!==svcName(n.service))ch.push(L("Xidmət")+": "+L(svcName(o.service))+" → "+L(svcName(n.service)));
     if(has("place")&&(o.place||"ofis")!==(n.place||"ofis"))ch.push(L("Yer")+": "+placeName(o.place||"ofis")+" → "+placeName(n.place||"ofis"));
     return L("Qəbul (")+[n.name||"",fd(n.date)].join(", ")+"): "+(ch.join("; ")||L("dəyişdi"));
   }
@@ -3289,6 +3315,7 @@ function openSheet(s){
       if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
     var de=byId("f-dur");if(de&&dv.dur&&de.querySelector('option[value="'+(+dv.dur)+'"]'))de.value=String(+dv.dur);
     if(dv.place){var pe=document.querySelector('input[name="f-place"][value="'+String(dv.place).replace(/[^a-z]/g,"")+'"]');if(pe)pe.checked=true}
+    if(dv.service&&SERVICES.indexOf(dv.service)>=0){[].forEach.call(document.querySelectorAll('input[name="f-service"]'),function(e){e.checked=e.value===dv.service})}
     if(dv.price===""&&byId("f-price"))byId("f-price").value="";
     dropDraft();
   }
@@ -3385,6 +3412,7 @@ function apptForm(){
     (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
     L('<div class="field"><label for="f-time">Saat *</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div></div>'+
+    '<div class="field"><span class="lbl">'+L("Xidmət *")+'</span><div class="seg svc" role="radiogroup">'+SERVICES.map(function(x){var cur=a?svcName(a.service):(pre.service||"Ruqya");return '<label class="segb"><input type="radio" name="f-service" value="'+esc(x)+'"'+(x===cur?" checked":"")+'><span>'+esc(L(x))+'</span></label>'}).join("")+'</div></div>'+
     '<p class="err" role="alert" id="f-err" hidden></p>'+
     '<div class="btns sticky-save"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
 }
@@ -3411,6 +3439,8 @@ function saveAppt(){
   if(state.hasDur&&!(+val("f-dur")>0))return fail("f-err",L("Müddəti seçmək vacibdir. Müddət olmadan qəbul yadda saxlanmır."));
   if(state.hasDur&&+val("f-dur")<MIN_DUR)return fail("f-err",L("Seans ən az 30 dəqiqə olmalıdır. Müddəti dəyişin."));
   var place=state.hasPlace?placeVal():"";
+  service=svcVal();
+  if(!service)return fail("f-err",L("Xidmət növünü seçmək vacibdir."));
   if(state.hasPlace&&!place)return fail("f-err",L("Yeri seçmək vacibdir: Ofis, Onlayn və ya Ünvan."));
   if(!name)return fail("f-err",L("Pasiyentin adını yazmaq vacibdir. Ad olmadan qəbul yadda saxlanmır."));
   if(!phone)return fail("f-err",L("Pasiyentin mobil nömrəsini yazmaq vacibdir. Nömrə olmadan qəbul yadda saxlanmır."));
@@ -3445,7 +3475,7 @@ function saveAppt(){
     /* the slot must stay whole: if the time moved here, date, specialist and length go with it */
     if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
-    if(service){a.service=service;up.service=service}
+    if(svcName(o.service)!==service){a.service=service;up.service=service}
     if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id),undo());
   }else{
     var id=uuid();

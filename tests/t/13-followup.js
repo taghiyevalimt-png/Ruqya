@@ -7,7 +7,7 @@ module.exports = async () => {
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200);
     await p.click("#fab"); await p.waitForSelector("#f-reader");
     const order = await p.$$eval("#sheet input, #sheet select", (els) => els.map((e) => e.id || e.name).filter(Boolean));
-    const want = ["f-reader", "f-dur", "f-name", "f-phone", "f-price", "f-note", "f-place", "f-date", "f-time"];
+    const want = ["f-reader", "f-dur", "f-name", "f-phone", "f-price", "f-note", "f-place", "f-date", "f-time", "f-service"];   // owner 17.11: the service is the last field
     check(JSON.stringify(order.filter((x, i, a) => a.indexOf(x) === i)) === JSON.stringify(want), "form order: " + order.join(","));
     await p.selectOption("#f-reader", R1);
     const txt = await p.textContent("#sheet");
