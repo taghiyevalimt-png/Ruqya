@@ -28,19 +28,23 @@ shot widget-out 320 340 2.5 "$(printf '{"out":1}' | base64 -w0)"
 # B-06: the widget applies the app's 12-hour sign-out itself. Same data, drawn 1 hour and 13 hours after the
 # app handed it over: the first shows the month, the second must be the signed-out picture.
 U=$(grep -o '"u":[0-9]*' android/test-widget.json | cut -d: -f2)
-shotat() { # name now
+shotat() { # name now [b64 data]
   adb shell rm -f /data/data/$P/files/widget_test.png 2>/dev/null
-  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_TEST --es b64 '$J' --ei w 320 --ei h 340 --ef density 2.5 --el now $2"
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_TEST --es b64 '${3:-$J}' --ei w 320 --ei h 340 --ef density 2.5 --el now $2"
   sleep 3
   adb exec-out run-as $P cat files/widget_test.png > "$1-$API.png"
 }
 shotat widget-1h $((U + 3600000))
 shotat widget-13h $((U + 46800000))
+# R2-7: data handed over just now, but the app was last used 13 hours ago ("s") — must be the signed-out picture
+JS=$(sed "s/\"u\":$U/\"u\":$U,\"s\":$((U - 46800000))/" android/test-widget.json | base64 -w0)
+shotat widget-seen13h $((U + 3600000)) "$JS"
 { echo "B-06 widget 12-hour rule (API $API)"
   echo "out      $(md5sum < widget-out-$API.png | cut -c1-32)"
   echo "after1h  $(md5sum < widget-1h-$API.png | cut -c1-32)"
   echo "after13h $(md5sum < widget-13h-$API.png | cut -c1-32)"
-  if cmp -s widget-13h-$API.png widget-out-$API.png && ! cmp -s widget-1h-$API.png widget-out-$API.png; then echo "PASS: 13 h old data shows the signed-out picture, 1 h old data the month"; else echo "FAIL"; fi
+  echo "seen13h  $(md5sum < widget-seen13h-$API.png | cut -c1-32)"
+  if cmp -s widget-13h-$API.png widget-out-$API.png && cmp -s widget-seen13h-$API.png widget-out-$API.png && ! cmp -s widget-1h-$API.png widget-out-$API.png; then echo "PASS: 13 h after the hand-over or after the last use the signed-out picture, 1 h old data the month"; else echo "FAIL"; fi
 } > "idle-$API.txt"
 cat "idle-$API.txt"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
