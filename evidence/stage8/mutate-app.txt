@@ -1,0 +1,14 @@
+# app mutations — 2026-11-17T06:07:05.317Z
+A-01	CAUGHT by 20-xss	output escaping removed (names, notes shown as HTML)
+A-02	CAUGHT by 30-patient-search	B-15 back: a search with letters also matches phones
+A-03	CAUGHT by 23-excel-counts	B-01 back: Excel counts a booking twice
+A-04	CAUGHT by 02-session	sign-out after 8 days instead of 7
+A-05	CAUGHT by 99-sold	«Satış edildi» ignored (stays cancelled)
+A-06	CAUGHT by 99-service-ui	service no longer required
+A-07	CAUGHT by 96-close-history	closing a window leaves its history entry (Back reopens nothing / closes twice)
+A-08	CAUGHT by 31-patients-keyset	patient list read with offsets again (keyset pages off)
+A-09	CAUGHT by 99-short-window-keyboard	every window pinned again (short windows hidden by the keyboard)
+A-10	CAUGHT by 26-draft-background	B-05 back: typing not kept when the app goes to the background
+A-11	CAUGHT by 13-followup	cancelling does not change the status
+A-12	CAUGHT by 98-ru-dictionary	Russian dictionary entry broken (phone label untranslated)
+caught 12 of 12

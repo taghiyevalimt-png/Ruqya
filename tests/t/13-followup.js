@@ -17,7 +17,11 @@ module.exports = async () => {
     await p.click('[data-act="close"]'); await p.click('[data-act="draft-drop"]').catch(() => {});
     // cancel the booking, then mark it from the cancelled list
     await p.click("#cal >> text=Test Pasiyent");
-    await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(700); await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(800);
+    await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(700); await p.click('[data-act="cancel-appt"]'); await p.waitForTimeout(150);
+    // the calendar shows it cancelled at once (black), not only after the next refresh from the server
+    const cls = await p.$eval("#cal .ev >> text=Test Pasiyent", (e) => (e.closest(".ev") || e).className).catch(() => "");
+    check(/\bcancel\b/.test(cls), "cancelled booking is black on the calendar at once: " + cls);
+    await p.waitForTimeout(650);
     await p.click('#tabs [data-tab="patients"]'); await p.click('[data-act="p-sec"][data-id="cancel"]');
     await p.click("#plist >> text=Test Pasiyent");
     await p.waitForSelector(".folbtns");   // windows open on the frame after the tap (INP)

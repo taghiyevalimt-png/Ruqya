@@ -27,6 +27,11 @@ module.exports = async () => {
     check(b1 && !/\bcancel\b/.test(b1.cls) && b1.bg !== "rgb(0, 0, 0)", "after: own colour on the calendar: " + JSON.stringify(b1));
     const st1 = await stats();
     check(st1 !== st0, "after: statistics changed (counted as successful, not cancelled)");
+    // the app opened again (data read from the database): still successful
+    await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
+    check(!(await inCancelled()), "after reopening: still not in «Ləğv olunanlar»");
+    const b2 = await block();
+    check(b2 && !/\bcancel\b/.test(b2.cls), "after reopening: still in its own colour: " + JSON.stringify(b2));
     // the card still has the buttons: pressing «Satış edildi» again makes it cancelled again
     await block(); await p.click("#cal .ev >> text=Satış Pasiyent"); await p.locator(".folbtns").waitFor();
     await p.locator('[data-act="follow"][data-n="3"]').first().click(); await p.waitForTimeout(600);

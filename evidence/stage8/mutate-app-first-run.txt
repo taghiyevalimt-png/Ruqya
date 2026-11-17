@@ -1,0 +1,7 @@
+# app mutations, first run — 2026-11-17 ~05:55 UTC (tests before strengthening), node tests/mutate-app.js
+A-01..A-04, A-07..A-09, A-12: CAUGHT
+A-05 SURVIVED (99-sold passed)            -> 99-sold now also checks after reopening the app (data from the database)
+A-06 SURVIVED (99-service-ui passed)      -> 99-service-ui now edits an old booking with an unknown service (nothing chosen)
+A-10 SURVIVED (26-draft-background passed)-> 26 now simulates only visibilitychange (Android), not pagehide as well
+A-11 SURVIVED (17, 13 passed)             -> 13 now checks the calendar shows the cancellation at once
+caught 8 of 12; after strengthening: 12 of 12 (mutate-app.txt)
