@@ -4,8 +4,9 @@
 
 ## 1. Что именно принимается
 ```bash
-git fetch --tags && git checkout audit4-accept      # тег принятой версии (релиз b1c38b2, опубликован 17.11.2026)
-sha256sum -c SHA256SUMS                             # контрольные суммы файлов пакета
+git fetch --tags && git checkout main                # пакет сдачи (документы, доказательства, SHA256SUMS)
+sha256sum -c SHA256SUMS                             # контрольные суммы всех файлов пакета
+git diff --stat audit4-accept HEAD -- index.html sw.js manifest.json vendor   # пусто: сайт = тег audit4-accept (релиз b1c38b2)
 ```
 Опубликованный сайт должен совпадать с тегом: `node tests/perf/live-network.js` (сеть живого сайта) и сравнение файлов из раздела 5.
 
