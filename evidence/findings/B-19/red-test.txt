@@ -1,0 +1,3 @@
+# red test on configure.py of e0b77c03a6efaca353bef3ffb7fc846c508c0528
+FAIL 94-configured-copy.js 
+    Error: FAIL: every local file the page refers to is in the configured copy; missing: logo-hq.webp

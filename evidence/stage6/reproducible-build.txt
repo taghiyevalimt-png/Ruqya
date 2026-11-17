@@ -1,0 +1,4 @@
+# reproducible build: two clean checkouts of e0b77c03a6efaca353bef3ffb7fc846c508c0528, tools/configure.py into two folders — 2026-11-17T01:58:08Z
+files: 37
+ПРОЙДЕНО: all sha256 identical
+sha256 of the sum list: d524e7a6ea8279b31683d84e374c3cd2ff8609837a9c90072ebfe4cd24c40cfc
