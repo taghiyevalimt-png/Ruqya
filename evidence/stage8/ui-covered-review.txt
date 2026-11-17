@@ -1,0 +1,7 @@
+# review of "covered by a fixed/sticky bar" in evidence/stage8/ui/summary.tsv (89 cases) — 2026-11-17
+All 89: button.ch.pill[filter] (the sticky row of specialist names above the day calendar) × a calendar column or a booking
+block (div.col[newat], button.ev[view-appt]) on day-grid at 320/375/768 px.
+Cause: the run was in Baku daytime; the day calendar opens scrolled to the current time, so the top part of the grid lies
+under the sticky name row. The grid scrolls freely out from under it (scrolling is checked by tests/perf/frames.js and
+the UI tests); the night run (evidence/stage5/ui) had 0 such cases. Verdict: by design (sticky header over scrolled
+content), not an overlap of two controls that cannot be reached.
