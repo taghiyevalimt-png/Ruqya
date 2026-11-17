@@ -1,0 +1,3 @@
+# F-04 green — 2026-11-17T11:51:35Z — commit ddecfce + F-04
+PASS 99-list-specialists-bar.js 8.9s
+all 1 passed
