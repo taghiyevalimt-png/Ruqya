@@ -39,7 +39,7 @@ shotat widget-13h $((U + 691200000))   # 8 days (file name kept)
 # R2-7: data handed over just now, but the app was last used 8 days ago ("s") — must be the signed-out picture
 JS=$(sed "s/\"u\":$U/\"u\":$U,\"s\":$((U - 691200000))/" android/test-widget.json | base64 -w0)
 shotat widget-seen13h $((U + 3600000)) "$JS"
-{ echo "B-06 widget 12-hour rule (API $API)"
+{ echo "B-06 widget sign-out rule, 7 days (API $API)"
   echo "out      $(md5sum < widget-out-$API.png | cut -c1-32)"
   echo "after1h  $(md5sum < widget-1h-$API.png | cut -c1-32)"
   echo "after13h $(md5sum < widget-13h-$API.png | cut -c1-32)"
