@@ -1,0 +1,7 @@
+# F-08 green — 2026-11-17T13:21:22Z — commit 885ff13 + F-08
+PASS 99-whole-day-default.js 12.2s
+PASS 99-whole-day-details.js 11.8s
+PASS 99-whole-day-foot.js 16.2s
+PASS 99-whole-day-names.js 12.7s
+PASS 99-whole-day.js 30.2s
+all 5 passed

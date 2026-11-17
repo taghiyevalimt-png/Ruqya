@@ -2,6 +2,7 @@
 // the phone, then «Yazdı:» on its own line and the agent's name under it — only what fits the block wholly, in that
 // order: name; name + time; name + time + phone; name + time + phone + Yazdı/agent. The letters of these lines are
 // sized so a 10-character phone (0101111111) fits the block's width. Checked at 390 and 360 px wide.
+// Owner 18.11 (17:19): the time and the word «Yazdı:» are too much — now: name; name + phone; name + phone + agent.
 const { open, check, OWNER, AGENT, seed, uuid, bakuToday } = require("../lib");
 module.exports = async () => {
   for (const [w, h] of [[390, 844], [360, 740]]) {
@@ -22,18 +23,20 @@ module.exports = async () => {
         return { name: e.firstElementChild.textContent, h: Math.round(er.height), vis };
       }));
       const by = (n) => evs.find((e) => e.name === n);
-      const order = ["name", "time", "phone", "Yazdı:", "agent"];
+      const order = ["name", "phone", "agent"];
       for (const e of evs) {
-        const want = [e.name, rows.find((r) => r[3] === e.name)[1], "0101111111", "Yazdı:", "Nurlana"];
+        const want = [e.name, "0101111111", "Nurlana"];
         const got = e.vis.map((v) => v.t);
-        check(JSON.stringify(got) === JSON.stringify(want.slice(0, got.length)) && got.length !== 4, w + " " + e.name + ": the lines in order, only whole steps (" + order.slice(0, got.length).join(", ") + "): " + JSON.stringify(got));
+        check(JSON.stringify(got) === JSON.stringify(want.slice(0, got.length)), w + " " + e.name + ": the lines in order, only whole steps (" + order.slice(0, got.length).join(", ") + "): " + JSON.stringify(got));
         check(e.vis.every((v) => v.inside), w + " " + e.name + ": every shown line is fully inside the block (" + e.h + " px): " + JSON.stringify(e.vis));
         const ph = e.vis.find((v) => v.t === "0101111111");
         if (ph) check(ph.oneLine, w + " " + e.name + ": the 10-character phone fits the width: " + JSON.stringify(ph));
       }
-      check(by("Terane").vis.length === 5, w + ": the 2-hour block shows everything: " + JSON.stringify(by("Terane").vis.map((v) => v.t)));
-      check(by("Rəşid").vis.length <= 2, w + ": the 30-minute block shows only what fits (name, maybe time): " + JSON.stringify(by("Rəşid").vis.map((v) => v.t)));
+      check(by("Terane").vis.length === 3, w + ": the 2-hour block shows everything: " + JSON.stringify(by("Terane").vis.map((v) => v.t)));
+      check(by("Rəşid").vis.length <= 2, w + ": the 30-minute block shows only what fits (name, maybe phone): " + JSON.stringify(by("Rəşid").vis.map((v) => v.t)));
       check(by("Aysen").vis.length >= 2, w + ": the 1-hour block shows more than the name: " + JSON.stringify(by("Aysen").vis.map((v) => v.t)));
+      const all = evs.map((e) => e.vis.map((v) => v.t).join("|")).join(" ");
+      check(!/Yazdı/.test(all) && !evs.some((e) => e.vis.some((v) => /^\d\d:\d\d$/.test(v.t))), w + ": no time and no «Yazdı:» in the blocks: " + all);
       check(!s.errors.length, w + ": no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }
   }

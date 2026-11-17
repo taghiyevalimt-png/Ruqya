@@ -1,0 +1,4 @@
+# F-08 red — time and «Yazdı:» in «Bütün gün» blocks (owner 18.11 17:19) — 2026-11-17T13:21:02Z — commit 885ff13
+FAIL 99-whole-day-details.js 
+    Error: FAIL: 390 Terane: the lines in order, only whole steps (name, phone, agent): ["Terane","09:00","0101111111","Yazdı:","Nurlana"]
+1 failed of 1
