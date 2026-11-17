@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-q66pU3/vrNKYYXqUE3RsexB8NtES0pW2JiYFIeSOi2I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-U3u0IjQjFsc7b38xR9JdfQsBJ1DKZ/yHCeyvXcZ8Tqk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1101,6 +1101,9 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Blokların hündürlüyü":"Высота блоков",
 "Kiçik":"Маленькая",
 "Bütün gün":"Весь день",
+"Vidcetin rəngi":"Цвет виджета",
+"Ağ":"Белый",
+"Qara":"Чёрный",
 "«Bütün gün»: 09:00–22:00 və bütün mütəxəssislər bir ekrana sığır, təqvimi sürüşdürmək lazım deyil.":"«Весь день»: 09:00–22:00 и все специалисты помещаются на один экран, календарь листать не нужно.",
 "Böyük":"Большая",
 "Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.":"В больших блоках имена и время читаются легче, но календарь длиннее листается вниз.",
@@ -1910,7 +1913,7 @@ function widgetSoon(){if(!NATIVE)return;clearTimeout(wTimer);wTimer=setTimeout(p
 function pushWidget(){
   if(!NATIVE)return;
   var json;
-  if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1,"l":"'+LANG+'"}'}
+  if(!auth.user||!auth.loaded){if(auth.user||!auth.ready)return;json='{"out":1,"l":"'+LANG+'","t":"'+wTheme()+'"}'}
   else{
     /* Per day: up to 4 names in time order with the specialist's colour, plus the day's total. */
     /* days from the loaded start (or the saved copy's start), but never further back than the widget can show (24 months) */
@@ -1922,7 +1925,7 @@ function pushWidget(){
       var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
       d[k]=LN.slice(0,4).map(function(a){var e=mins(a.time)+(a.dur||90);return [cut(String(a.name),24),rcolor(a.readerId),done(a)?"p":a.status==="noshow"?"n":"",e===e?e:-1]});
     });
-    json=JSON.stringify({u:0,s:0,f:from,d:d,n:n,l:LANG});
+    json=JSON.stringify({u:0,s:0,f:from,d:d,n:n,l:LANG,t:wTheme()});
   }
   /* Unchanged data is handed over again every 10 minutes, so "Yeniləndi" on the widget stays honest. */
   if(json===wLast&&Date.now()-wLastT<600000)return;wLast=json;wLastT=Date.now();
@@ -1933,6 +1936,13 @@ function pushWidget(){
 }
 /* Shortens text without splitting an emoji in half (which would show as a broken box). */
 function cut(t,n){t=t.slice(0,n);var c=t.charCodeAt(t.length-1);return c>=0xD800&&c<=0xDBFF?t.slice(0,-1):t}
+/* The widget's colour (owner 17.11: «white too»): Avtomatik = the phone's own light/dark mode, Ağ, Qara.
+   Kept on this phone and handed to the widget with its data ("t"). */
+function wTheme(){var t="auto";try{t=localStorage.getItem("ruqya.wtheme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
+function widgetColorSeg(){
+  return '<div class="seg" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px" role="group" aria-label="'+esc(L("Vidcetin rəngi"))+'">'+
+    [["auto","Avtomatik"],["light","Ağ"],["dark","Qara"]].map(function(x){return '<button data-act="wtheme" data-id="'+x[0]+'" aria-pressed="'+(wTheme()===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
+}
 function widgetHelp(){
   if(NATIVE)return "";
   return /RuqyaApp/.test(navigator.userAgent)?"old":/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":"web";
@@ -3078,6 +3088,7 @@ function readersMain(){
   h+=langSeg();
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
+  if(!wh)h+=widgetColorSeg();
   if(!wh)h+=L('<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
   else if(wh==="old")h+=L('<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>');
   else if(wh==="ios")h+=L('<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>');
@@ -3742,6 +3753,7 @@ document.addEventListener("click",function(e){
     flash(pinned?L("Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək."):L("Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Mərkəz» vidcetini seçib ekrana çəkin."));
     return;
   }
+  else if(act==="wtheme"){if(/^(auto|light|dark)$/.test(id)){try{localStorage.setItem("ruqya.wtheme",id)}catch(err){}wLast="";pushWidget()}render();return}
   else if(act==="theme"){
     if(id!=="light"&&id!=="dark")id="auto";
     try{localStorage.setItem("ruqya.theme",id)}catch(err){}

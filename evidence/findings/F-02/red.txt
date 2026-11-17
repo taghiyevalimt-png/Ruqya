@@ -1,0 +1,4 @@
+# F-02 red — widget colour choice missing (owner 17.11) — 2026-11-17T10:34:37Z — commit 41e4e86
+FAIL 99-widget-color.js 
+    Error: FAIL: before any choice the widget follows the phone: undefined
+1 failed of 1

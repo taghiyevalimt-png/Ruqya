@@ -48,6 +48,20 @@ shotat widget-seen13h $((U + 3600000)) "$JS"
 } > "idle-$API.txt"
 cat "idle-$API.txt"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
+# F-02 (owner 17.11): the widget in white or black, as chosen in the app ("t"); without "t" it follows the phone
+# (the emulator runs in light mode, so it must be the white picture). Signed out keeps the colour too.
+JL=$(sed 's/"u":/"t":"light","u":/' android/test-widget.json | base64 -w0)
+JD=$(sed 's/"u":/"t":"dark","u":/' android/test-widget.json | base64 -w0)
+shot widget-light 360 380 3.0 "$JL"
+shot widget-dark 360 380 3.0 "$JD"
+shot widget-auto 360 380 3.0 "$J"
+shot widget-out-light 320 340 2.5 "$(printf '{"out":1,"t":"light"}' | base64 -w0)"
+shot widget-out-dark 320 340 2.5 "$(printf '{"out":1,"t":"dark"}' | base64 -w0)"
+{ echo "F-02 widget colour (API $API)"
+  for f in light dark auto out-light out-dark; do echo "$f $(md5sum < widget-$f-$API.png | cut -c1-32) $(stat -c%s widget-$f-$API.png) bytes"; done
+  if [ -s widget-light-$API.png ] && [ -s widget-dark-$API.png ] && ! cmp -s widget-light-$API.png widget-dark-$API.png && cmp -s widget-auto-$API.png widget-light-$API.png && ! cmp -s widget-out-light-$API.png widget-out-dark-$API.png; then echo "PASS: white and black pictures differ; without a choice the light phone gets the white one; signed-out keeps the colour"; else echo "FAIL"; fi
+} > "theme-$API.txt"
+cat "theme-$API.txt"
 # A real widget instance, as a home screen would hold it.
 adb shell appwidget grantbind --package $P --user 0 || true
 adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_BIND_TEST --es b64 '$J'"
