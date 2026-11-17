@@ -1,0 +1,56 @@
+# run 2 of 3 — commit 8355be8a31ff2cec447f674a59ff43ddef3f236d, tree 14 changed files — start 2026-11-17T04:44:08Z
+$ node tests/lint.js && node tests/run.js
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-17T04:44:10.033Z
+# messages: 338
+# by rule: {"no-unused-vars":83,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":182,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":20}
+PASS 00-smoke.js 7.2s
+PASS 01-drafts.js 38.1s
+PASS 02-session.js 19.9s
+PASS 03-delete-fonts.js 8.0s
+PASS 04-excel.js 6.9s
+PASS 05-patients.js 12.3s
+PASS 06-anonymize.js 13.6s
+PASS 07-russian.js 7.7s
+PASS 08-sweep.js 150.0s
+PASS 09-features.js 42.7s
+    fuzz bad0 az 120 steps 24s
+    fuzz bad0 ru 120 steps 45s
+    fuzz 1111 az 120 steps 75s
+    fuzz 1111 ru 120 steps 109s
+    fuzz 2222 az 120 steps 141s
+    fuzz 2222 ru 120 steps 167s
+PASS 10-fuzz.js 167.1s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 9.1s
+PASS 13-followup.js 41.8s
+PASS 14-no-slots.js 7.1s
+FAIL 15-keyboard.js 
+    Error: FAIL: window stays where it was: 98 -> 96
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:209:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\15-keyboard.js:14:5)
+PASS 16-ios-scroll.js 6.5s
+PASS 17-cancel-contact.js 13.0s
+PASS 18-faults.js 102.6s
+PASS 19-a11y.js 19.6s
+PASS 20-xss.js 11.3s
+PASS 21-access-matrix.js 8.9s
+PASS 22-attacks.js 8.4s
+PASS 23-excel-counts.js 6.6s
+PASS 24-aria.js 7.6s
+PASS 25-many-patients.js 10.1s
+PASS 26-draft-background.js 10.4s
+PASS 27-dialog-focus.js 6.1s
+PASS 28-publish-guard.js 3.8s
+PASS 29-rules-text.js 12.6s
+PASS 30-patient-search.js 10.7s
+PASS 31-patients-keyset.js 23.0s
+PASS 90-sql.js 15.9s
+PASS 91-schema.js 13.6s
+PASS 92-visits-access.js 7.8s
+PASS 93-restore-one.js 7.2s
+PASS 94-configured-copy.js 0.7s
+PASS 95-no-third-party.js 9.3s
+PASS 96-close-history.js 8.1s
+PASS 97-person-export-delete.js 6.9s
+1 failed of 40
+exit 1  end 2026-11-17T04:58:39Z

@@ -1,0 +1,2 @@
+# green: 15-keyboard 5x alone + 8x with 4 copies in parallel (busy machine) — 2026-11-17T05:02:11Z
+all PASS (outputs above in the session log: 13/13 PASS)

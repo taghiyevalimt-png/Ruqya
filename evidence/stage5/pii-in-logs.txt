@@ -1,0 +1,14 @@
+# T-43: personal data in Supabase logs (last 24 h), Supabase MCP query_logs (read-only) — 2026-11-17T04:31:52Z
+# query: per source, count of messages with a phone-like digit pattern (\d{3}[ -]?\d{3}[ -]?\d{2}[ -]?\d{2}) and with "phone=" / "name=" in the text
+source            total  phone_like  phone=/name=
+edge_logs          7351           0             0
+realtime_logs       800           0             0
+supavisor_logs      581           0             0
+postgres_logs       523           0             3
+auth_logs           192           0             0
+auth_audit_logs      94           0             0
+postgrest_logs       84           0             0
+pgbouncer_logs       72           0             0
+# the 3 postgres_logs lines (values masked by the query): the auditor's own verification statements of 2026-11-16 14:26–15:26 UTC
+# ("create temp table r(k text, v text) ... string_agg(place||'=' ..."): column names in SQL text, no personal data.
+# result: 0 phone numbers, 0 names/notes in logs, URLs or error messages — ПРОЙДЕНО (window 24 h; Supabase free plan keeps ~1 day)

@@ -3,9 +3,9 @@
 # Output: evidence/stage5/suite-run-<n>.txt with commit, start/end time and every result.
 set -u
 cd "$(dirname "$0")/.."
-mkdir -p evidence/stage5
+mkdir -p "${SUITE_DIR:-evidence/stage5}"
 for n in 1 2 3; do
-  f=evidence/stage5/suite-run-$n.txt
+  f=${SUITE_DIR:-evidence/stage5}/suite-run-$n.txt
   { echo "# run $n of 3 — commit $(git rev-parse HEAD), tree $(git status --porcelain | wc -l | tr -d ' ') changed files — start $(date -u +%FT%TZ)"
     echo '$ node tests/lint.js && node tests/run.js'
     node tests/lint.js 2>&1 | sed -n '1,3p'

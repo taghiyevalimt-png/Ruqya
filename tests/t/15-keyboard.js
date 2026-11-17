@@ -4,12 +4,15 @@ module.exports = async () => {
   const s = await open(AGENT, { viewport: { width: 412, height: 860 } });
   try {
     const p = s.page;
+    // measure only a window at rest: its slide-in animation finished and two frames drawn (stage 8: a fixed 500 ms
+    // wait measured a window still sliding in on a busy machine — 98 -> 96)
+    const settle = () => p.$eval("#sheet", (e) => Promise.all(e.getAnimations().map((a) => a.finished)).then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))));
     await p.waitForSelector("text=Test Pasiyent", { timeout: 15000 }); await p.waitForTimeout(3200);
-    await p.click("#fab"); await p.waitForSelector("#f-reader"); await p.waitForTimeout(500);
+    await p.click("#fab"); await p.locator("#f-reader").waitFor(); await p.waitForTimeout(500); await settle();
     const top0 = await p.$eval("#sheet", (e) => Math.round(e.getBoundingClientRect().top));
     await p.click("#f-name");
     await p.setViewportSize({ width: 412, height: 500 });   // keyboard opens (a typical phone keyboard takes ~40%)
-    await p.waitForTimeout(300);
+    await p.waitForTimeout(300); await settle();
     const top1 = await p.$eval("#sheet", (e) => Math.round(e.getBoundingClientRect().top));
     check(Math.abs(top1 - top0) <= 1, "window stays where it was: " + top0 + " -> " + top1);
     for (const f of ["f-name", "f-phone", "f-price", "f-note"]) {
@@ -19,7 +22,7 @@ module.exports = async () => {
     check(top0 < 140, "the booking window opens high: top " + top0);
     await p.keyboard.type("Klaviatura");
     await p.setViewportSize({ width: 412, height: 860 });   // keyboard closes
-    await p.waitForTimeout(300);
+    await p.waitForTimeout(300); await settle();
     const top2 = await p.$eval("#sheet", (e) => Math.round(e.getBoundingClientRect().top));
     check(Math.abs(top2 - top0) <= 1, "back in place after the keyboard closes: " + top2);
     check(await p.isVisible('[data-act="save-appt"]'), "«Yaz» visible again");

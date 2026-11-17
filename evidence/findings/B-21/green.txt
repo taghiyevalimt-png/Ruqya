@@ -1,0 +1,4 @@
+# green
+PASS 98-ru-dictionary.js 0.5s
+all 1 passed
+# L() literal calls: 660, dictionary keys: 789, without translation: 0
