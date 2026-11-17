@@ -1,0 +1,4 @@
+# F-01 red — no «Bütün gün» size yet (owner request 17.11) — 2026-11-17T10:12:06Z — commit 7558723
+FAIL 99-whole-day.js 
+    Error: FAIL: 390: «Bütün gün» is offered among the block heights
+1 failed of 1
