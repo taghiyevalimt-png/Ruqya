@@ -1,0 +1,8 @@
+# T-03 red — mock appts without real defaults — 2026-11-17T09:08:58Z — commit bc0b725
+$ node tests/run.js 99-mock-defaults
+FAIL 99-mock-defaults.js 
+    Error: FAIL: saved row has column settled (real default false)
+        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:210:46)
+        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\99-mock-defaults.js:19:7)
+1 failed of 1
+exit 1

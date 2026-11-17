@@ -6,6 +6,7 @@
 // handle kept every closed window alive (stage 7: the 14.6 % «growth» of the first run was the test's own handles).
 const fs = require("fs");
 const { open, AGENT, uuid, bakuToday, R1, R2 } = require("../lib");
+const { summary, diff } = require("./heapsum");   // SOAK_SNAP=1: what grows (heap snapshot at stabilisation and at the end)
 (async () => {
   const out = process.argv[2], minutes = +process.argv[3] || 60, t0 = Date.now();
   const s = await open(AGENT, { viewport: { width: 412, height: 860 } });
@@ -17,7 +18,7 @@ const { open, AGENT, uuid, bakuToday, R1, R2 } = require("../lib");
   await p.locator("#cal .ev").first().waitFor(); await p.waitForTimeout(3300);
   await cdp.send("HeapProfiler.enable");
   const heap = async () => { await cdp.send("HeapProfiler.collectGarbage"); const m = await cdp.send("Runtime.getHeapUsage"); return m.usedSize; };
-  let actions = 0, i = 0, next = Date.now();
+  let actions = 0, i = 0, next = Date.now(), snap0 = null;
   const steps = [
     async () => p.click('#tabs [data-tab="stats"]'), async () => p.click('#tabs [data-tab="cash"]'), async () => p.click('#tabs [data-tab="patients"]'),
     async () => p.click('#tabs [data-tab="day"]'), async () => p.click('[data-act="go"][data-n="1"], .navbtn >> nth=1').catch(() => {}),
@@ -33,8 +34,10 @@ const { open, AGENT, uuid, bakuToday, R1, R2 } = require("../lib");
     await p.click('[data-act="draft-drop"]', { timeout: 300 }).catch(() => {});
     if (s.db.appts.length > 60) s.db.appts.splice(4, s.db.appts.length - 60);
     i++; await p.waitForTimeout(250);
-    if (Date.now() >= next) { samples.push({ min: +((Date.now() - t0) / 60000).toFixed(1), heap: await heap(), dom: await p.evaluate(() => document.getElementsByTagName("*").length) }); next += 60000; }
+    if (Date.now() >= next) { samples.push({ min: +((Date.now() - t0) / 60000).toFixed(1), heap: await heap(), dom: await p.evaluate(() => document.getElementsByTagName("*").length) }); next += 60000;
+      if (process.env.SOAK_SNAP && !snap0 && samples.length === Math.max(2, Math.floor(minutes * 0.1) + 1)) snap0 = await summary(cdp); }
   }
+  if (process.env.SOAK_SNAP && snap0) { const d = diff(snap0, await summary(cdp)); fs.writeFileSync(out.replace(/\.json$/, "") + "-heapdiff.json", JSON.stringify(d, null, 1)); }
   const stable = samples[Math.max(1, Math.floor(samples.length * 0.1))] || samples[0], last = samples[samples.length - 1];
   const growth = stable ? (last.heap - stable.heap) / stable.heap : 0;
   const res = { at: new Date().toISOString(), minutes: +((Date.now() - t0) / 60000).toFixed(1), actions, samples, heapAfterStabilisation: stable && stable.heap, heapEnd: last && last.heap, growthPct: +(growth * 100).toFixed(1), failedRequests: failed, pageErrors: s.errors, consoleErrors: cons.slice(0, 50), verdict: growth <= 0.1 && !s.errors.length && !cons.length ? "ПРОЙДЕНО" : "НЕ ПРОЙДЕНО" };

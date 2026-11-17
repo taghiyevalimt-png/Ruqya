@@ -1,2 +1,4 @@
 # soak 120 min — commit c311be5e77fbd5cf1b819656d4c6e632a61ff625 — start 2026-11-17T07:05:57Z
 $ node tests/perf/soak.js evidence/stage8/soak.json 120
+120.1 min, 6009 actions, heap growth 10.6 %, page errors 0, console errors 180 — НЕ ПРОЙДЕНО
+exit 0  end 2026-11-17T09:06:08Z

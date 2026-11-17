@@ -1,0 +1,667 @@
+{
+ "at": "2026-11-17T09:06:02.460Z",
+ "minutes": 120.1,
+ "actions": 6009,
+ "samples": [
+  {
+   "min": 0.1,
+   "heap": 2256436,
+   "dom": 101
+  },
+  {
+   "min": 1.1,
+   "heap": 2787272,
+   "dom": 227
+  },
+  {
+   "min": 2.1,
+   "heap": 2976716,
+   "dom": 134
+  },
+  {
+   "min": 3.1,
+   "heap": 3067688,
+   "dom": 243
+  },
+  {
+   "min": 4.1,
+   "heap": 2996708,
+   "dom": 248
+  },
+  {
+   "min": 5.1,
+   "heap": 3024920,
+   "dom": 253
+  },
+  {
+   "min": 6.1,
+   "heap": 3057112,
+   "dom": 258
+  },
+  {
+   "min": 7.1,
+   "heap": 3069328,
+   "dom": 263
+  },
+  {
+   "min": 8.1,
+   "heap": 3104236,
+   "dom": 268
+  },
+  {
+   "min": 9.1,
+   "heap": 3190300,
+   "dom": 273
+  },
+  {
+   "min": 10.1,
+   "heap": 3209620,
+   "dom": 278
+  },
+  {
+   "min": 11.1,
+   "heap": 3250856,
+   "dom": 283
+  },
+  {
+   "min": 12.1,
+   "heap": 3254632,
+   "dom": 288
+  },
+  {
+   "min": 13.1,
+   "heap": 3257884,
+   "dom": 287
+  },
+  {
+   "min": 14.1,
+   "heap": 3259452,
+   "dom": 292
+  },
+  {
+   "min": 15.1,
+   "heap": 3261240,
+   "dom": 297
+  },
+  {
+   "min": 16.1,
+   "heap": 3262532,
+   "dom": 302
+  },
+  {
+   "min": 17.1,
+   "heap": 3268716,
+   "dom": 307
+  },
+  {
+   "min": 18.2,
+   "heap": 3254852,
+   "dom": 312
+  },
+  {
+   "min": 19.1,
+   "heap": 3266348,
+   "dom": 317
+  },
+  {
+   "min": 20.1,
+   "heap": 3276812,
+   "dom": 322
+  },
+  {
+   "min": 21.1,
+   "heap": 3280988,
+   "dom": 327
+  },
+  {
+   "min": 22.1,
+   "heap": 3283116,
+   "dom": 158
+  },
+  {
+   "min": 23.1,
+   "heap": 3320352,
+   "dom": 337
+  },
+  {
+   "min": 24.1,
+   "heap": 3319492,
+   "dom": 343
+  },
+  {
+   "min": 25.1,
+   "heap": 3340520,
+   "dom": 348
+  },
+  {
+   "min": 26.1,
+   "heap": 3348344,
+   "dom": 353
+  },
+  {
+   "min": 27.1,
+   "heap": 3326708,
+   "dom": 358
+  },
+  {
+   "min": 28.1,
+   "heap": 3328096,
+   "dom": 363
+  },
+  {
+   "min": 29.1,
+   "heap": 3337848,
+   "dom": 133
+  },
+  {
+   "min": 30.1,
+   "heap": 3344220,
+   "dom": 334
+  },
+  {
+   "min": 31.1,
+   "heap": 3355012,
+   "dom": 339
+  },
+  {
+   "min": 32.1,
+   "heap": 3362592,
+   "dom": 344
+  },
+  {
+   "min": 33.1,
+   "heap": 3364836,
+   "dom": 394
+  },
+  {
+   "min": 34.1,
+   "heap": 3367056,
+   "dom": 399
+  },
+  {
+   "min": 35.1,
+   "heap": 3366460,
+   "dom": 404
+  },
+  {
+   "min": 36.1,
+   "heap": 3388892,
+   "dom": 364
+  },
+  {
+   "min": 37.1,
+   "heap": 3378384,
+   "dom": 369
+  },
+  {
+   "min": 38.1,
+   "heap": 3375392,
+   "dom": 374
+  },
+  {
+   "min": 39.1,
+   "heap": 3378340,
+   "dom": 133
+  },
+  {
+   "min": 40.1,
+   "heap": 3400252,
+   "dom": 113
+  },
+  {
+   "min": 41.1,
+   "heap": 3406980,
+   "dom": 428
+  },
+  {
+   "min": 42.1,
+   "heap": 3417520,
+   "dom": 433
+  },
+  {
+   "min": 43.1,
+   "heap": 3429228,
+   "dom": 438
+  },
+  {
+   "min": 44.1,
+   "heap": 3425988,
+   "dom": 178
+  },
+  {
+   "min": 45.1,
+   "heap": 3426132,
+   "dom": 158
+  },
+  {
+   "min": 46.1,
+   "heap": 3435464,
+   "dom": 190
+  },
+  {
+   "min": 47.1,
+   "heap": 3440464,
+   "dom": 458
+  },
+  {
+   "min": 48.1,
+   "heap": 3443936,
+   "dom": 463
+  },
+  {
+   "min": 49.2,
+   "heap": 3449504,
+   "dom": 468
+  },
+  {
+   "min": 50.2,
+   "heap": 3454308,
+   "dom": 473
+  },
+  {
+   "min": 51.1,
+   "heap": 3464584,
+   "dom": 478
+  },
+  {
+   "min": 52.1,
+   "heap": 3471164,
+   "dom": 483
+  },
+  {
+   "min": 53.1,
+   "heap": 3473908,
+   "dom": 488
+  },
+  {
+   "min": 54.1,
+   "heap": 3475268,
+   "dom": 493
+  },
+  {
+   "min": 55.1,
+   "heap": 3476616,
+   "dom": 498
+  },
+  {
+   "min": 56.1,
+   "heap": 3481208,
+   "dom": 503
+  },
+  {
+   "min": 57.1,
+   "heap": 3485136,
+   "dom": 508
+  },
+  {
+   "min": 58.1,
+   "heap": 3501376,
+   "dom": 513
+  },
+  {
+   "min": 59.1,
+   "heap": 3504556,
+   "dom": 513
+  },
+  {
+   "min": 60.1,
+   "heap": 3501620,
+   "dom": 513
+  },
+  {
+   "min": 61.1,
+   "heap": 3502188,
+   "dom": 513
+  },
+  {
+   "min": 62.1,
+   "heap": 3507996,
+   "dom": 513
+  },
+  {
+   "min": 63.1,
+   "heap": 3499204,
+   "dom": 513
+  },
+  {
+   "min": 64.1,
+   "heap": 3516544,
+   "dom": 519
+  },
+  {
+   "min": 65.1,
+   "heap": 3524668,
+   "dom": 519
+  },
+  {
+   "min": 66.1,
+   "heap": 3522140,
+   "dom": 519
+  },
+  {
+   "min": 67.1,
+   "heap": 3522056,
+   "dom": 519
+  },
+  {
+   "min": 68.1,
+   "heap": 3520396,
+   "dom": 519
+  },
+  {
+   "min": 69.1,
+   "heap": 3518844,
+   "dom": 519
+  },
+  {
+   "min": 70.1,
+   "heap": 3523504,
+   "dom": 474
+  },
+  {
+   "min": 71.1,
+   "heap": 3514128,
+   "dom": 474
+  },
+  {
+   "min": 72.1,
+   "heap": 3523732,
+   "dom": 474
+  },
+  {
+   "min": 73.1,
+   "heap": 3520792,
+   "dom": 133
+  },
+  {
+   "min": 74.1,
+   "heap": 3517756,
+   "dom": 133
+  },
+  {
+   "min": 75.1,
+   "heap": 3512304,
+   "dom": 113
+  },
+  {
+   "min": 76.1,
+   "heap": 3523560,
+   "dom": 145
+  },
+  {
+   "min": 77.1,
+   "heap": 3505316,
+   "dom": 513
+  },
+  {
+   "min": 78.1,
+   "heap": 3501492,
+   "dom": 513
+  },
+  {
+   "min": 79.1,
+   "heap": 3507372,
+   "dom": 513
+  },
+  {
+   "min": 80.1,
+   "heap": 3502516,
+   "dom": 178
+  },
+  {
+   "min": 81.1,
+   "heap": 3502400,
+   "dom": 158
+  },
+  {
+   "min": 82.1,
+   "heap": 3502364,
+   "dom": 158
+  },
+  {
+   "min": 83.1,
+   "heap": 3505608,
+   "dom": 190
+  },
+  {
+   "min": 84.1,
+   "heap": 3512048,
+   "dom": 513
+  },
+  {
+   "min": 85.1,
+   "heap": 3510360,
+   "dom": 513
+  },
+  {
+   "min": 86.2,
+   "heap": 3510612,
+   "dom": 513
+  },
+  {
+   "min": 87.2,
+   "heap": 3502168,
+   "dom": 513
+  },
+  {
+   "min": 88.2,
+   "heap": 3520544,
+   "dom": 513
+  },
+  {
+   "min": 89.1,
+   "heap": 3472428,
+   "dom": 513
+  },
+  {
+   "min": 90.1,
+   "heap": 3487128,
+   "dom": 513
+  },
+  {
+   "min": 91.1,
+   "heap": 3512396,
+   "dom": 513
+  },
+  {
+   "min": 92.1,
+   "heap": 3513088,
+   "dom": 513
+  },
+  {
+   "min": 93.1,
+   "heap": 3515608,
+   "dom": 513
+  },
+  {
+   "min": 94.1,
+   "heap": 3534008,
+   "dom": 513
+  },
+  {
+   "min": 95.1,
+   "heap": 3509728,
+   "dom": 513
+  },
+  {
+   "min": 96.1,
+   "heap": 3526996,
+   "dom": 519
+  },
+  {
+   "min": 97.1,
+   "heap": 3531144,
+   "dom": 519
+  },
+  {
+   "min": 98.1,
+   "heap": 3531288,
+   "dom": 519
+  },
+  {
+   "min": 99.1,
+   "heap": 3528376,
+   "dom": 519
+  },
+  {
+   "min": 100.1,
+   "heap": 3568452,
+   "dom": 519
+  },
+  {
+   "min": 101.1,
+   "heap": 3574672,
+   "dom": 474
+  },
+  {
+   "min": 102.1,
+   "heap": 3586064,
+   "dom": 474
+  },
+  {
+   "min": 103.1,
+   "heap": 3587480,
+   "dom": 474
+  },
+  {
+   "min": 104.1,
+   "heap": 3594184,
+   "dom": 474
+  },
+  {
+   "min": 105.1,
+   "heap": 3592596,
+   "dom": 133
+  },
+  {
+   "min": 106.1,
+   "heap": 3592680,
+   "dom": 133
+  },
+  {
+   "min": 107.1,
+   "heap": 3595964,
+   "dom": 113
+  },
+  {
+   "min": 108.1,
+   "heap": 3597408,
+   "dom": 113
+  },
+  {
+   "min": 109.1,
+   "heap": 3577604,
+   "dom": 513
+  },
+  {
+   "min": 110.1,
+   "heap": 3573844,
+   "dom": 513
+  },
+  {
+   "min": 111.1,
+   "heap": 3588624,
+   "dom": 513
+  },
+  {
+   "min": 112.1,
+   "heap": 3564752,
+   "dom": 178
+  },
+  {
+   "min": 113.1,
+   "heap": 3570300,
+   "dom": 158
+  },
+  {
+   "min": 114.1,
+   "heap": 3570780,
+   "dom": 158
+  },
+  {
+   "min": 115.1,
+   "heap": 3586496,
+   "dom": 190
+  },
+  {
+   "min": 116.1,
+   "heap": 3593832,
+   "dom": 190
+  },
+  {
+   "min": 117.1,
+   "heap": 3600540,
+   "dom": 513
+  },
+  {
+   "min": 118.2,
+   "heap": 3598784,
+   "dom": 513
+  },
+  {
+   "min": 119.2,
+   "heap": 3598820,
+   "dom": 513
+  }
+ ],
+ "heapAfterStabilisation": 3254632,
+ "heapEnd": 3598820,
+ "growthPct": 10.6,
+ "failedRequests": {
+  "GET /rest/v1/appts 400": 180
+ },
+ "pageErrors": [],
+ "consoleErrors": [
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+ ],
+ "verdict": "НЕ ПРОЙДЕНО"
+}
