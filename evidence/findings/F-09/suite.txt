@@ -1,0 +1,64 @@
+# full suite after F-09 — attempt 1 — 2026-11-17T13:52:43Z — commit cd99cf5 + F-09 (earlier attempts stopped: test browser closed — low free memory on this PC)
+lint exit 0
+PASS 00-smoke.js 15.6s
+PASS 01-drafts.js 46.9s
+PASS 02-session.js 29.7s
+PASS 03-delete-fonts.js 9.7s
+PASS 04-excel.js 8.2s
+PASS 05-patients.js 14.1s
+PASS 06-anonymize.js 15.9s
+PASS 07-russian.js 10.8s
+PASS 08-sweep.js 188.0s
+PASS 09-features.js 44.4s
+    fuzz bad0 az 120 steps 25s
+    fuzz bad0 ru 120 steps 49s
+    fuzz 1111 az 120 steps 72s
+    fuzz 1111 ru 120 steps 106s
+    fuzz 2222 az 120 steps 139s
+    fuzz 2222 ru 120 steps 163s
+PASS 10-fuzz.js 163.9s
+PASS 11-es5.js 0.2s
+PASS 12-list.js 9.4s
+PASS 13-followup.js 41.9s
+PASS 14-no-slots.js 7.6s
+PASS 15-keyboard.js 7.8s
+PASS 16-ios-scroll.js 7.0s
+PASS 17-cancel-contact.js 14.2s
+PASS 18-faults.js 103.9s
+PASS 19-a11y.js 24.9s
+PASS 20-xss.js 12.6s
+PASS 21-access-matrix.js 10.4s
+PASS 22-attacks.js 10.5s
+PASS 23-excel-counts.js 7.6s
+PASS 24-aria.js 9.3s
+PASS 25-many-patients.js 11.0s
+PASS 26-draft-background.js 12.6s
+PASS 27-dialog-focus.js 8.5s
+PASS 28-publish-guard.js 6.3s
+PASS 29-rules-text.js 15.4s
+PASS 30-patient-search.js 11.7s
+PASS 31-patients-keyset.js 27.1s
+PASS 90-sql.js 27.0s
+PASS 91-schema.js 12.7s
+PASS 92-visits-access.js 11.7s
+PASS 93-restore-one.js 10.8s
+PASS 94-configured-copy.js 1.2s
+PASS 95-no-third-party.js 11.4s
+PASS 96-close-history.js 9.2s
+PASS 97-person-export-delete.js 11.2s
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-agent-services.js 29.9s
+PASS 99-list-specialists-bar.js 9.4s
+PASS 99-mock-defaults.js 12.7s
+PASS 99-service-db.js 8.9s
+PASS 99-service-ui.js 18.3s
+PASS 99-short-window-iphone.js 9.5s
+PASS 99-short-window-keyboard.js 8.2s
+PASS 99-sold.js 20.3s
+PASS 99-whole-day-default.js 14.2s
+PASS 99-whole-day-details.js 13.7s
+PASS 99-whole-day-foot.js 15.6s
+PASS 99-whole-day-names.js 14.9s
+PASS 99-whole-day.js 33.9s
+PASS 99-widget-color.js 15.0s
+all 55 passed

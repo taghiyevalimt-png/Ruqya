@@ -1,0 +1,7 @@
+# F-09 green — 2026-11-17T13:49:02Z — commit cd99cf5 + F-09
+PASS 99-whole-day-default.js 12.2s
+PASS 99-whole-day-details.js 12.4s
+PASS 99-whole-day-foot.js 14.5s
+PASS 99-whole-day-names.js 16.3s
+PASS 99-whole-day.js 31.3s
+all 5 passed
