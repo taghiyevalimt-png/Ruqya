@@ -231,6 +231,17 @@ public class MainActivity extends Activity {
         }
     }
 
+    /** WhatsApp Business first, then the ordinary WhatsApp (owner 17.11). */
+    static final String[] WA_PACKAGES = {"com.whatsapp.w4b", "com.whatsapp"};
+
+    /** wa.me / api.whatsapp.com links and the whatsapp: scheme. */
+    static boolean isWhatsApp(Uri uri) {
+        String scheme = uri.getScheme() == null ? "" : uri.getScheme();
+        String host = uri.getHost() == null ? "" : uri.getHost().toLowerCase(java.util.Locale.ROOT);
+        return "whatsapp".equals(scheme)
+                || ("https".equals(scheme) && ("wa.me".equals(host) || "api.whatsapp.com".equals(host) || "www.whatsapp.com".equals(host)));
+    }
+
     /** Returns true when the link was handed to another app. */
     private boolean handle(Uri uri) {
         String scheme = uri.getScheme() == null ? "" : uri.getScheme();
@@ -253,6 +264,21 @@ public class MainActivity extends Activity {
                 intent = new Intent(Intent.ACTION_VIEW, uri);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // no flags taken from the link itself
+            // Owner 17.11: WhatsApp links (Wp, «Təsdiq») open WhatsApp Business first; without it the ordinary WhatsApp;
+            // without both, whatever the phone offers (browser).
+            if (isWhatsApp(uri)) {
+                for (String pkg : WA_PACKAGES) {
+                    try {
+                        Intent wa = new Intent(Intent.ACTION_VIEW, uri);
+                        wa.setPackage(pkg);
+                        wa.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(wa);
+                        return true;
+                    } catch (ActivityNotFoundException notInstalled) {
+                        // try the next one
+                    }
+                }
+            }
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Bu linki açacaq proqram tapılmadı · Нет приложения для этой ссылки", Toast.LENGTH_LONG).show();
