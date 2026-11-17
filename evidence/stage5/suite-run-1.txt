@@ -11,3 +11,35 @@ PASS 04-excel.js 7.2s
 PASS 05-patients.js 12.5s
 PASS 06-anonymize.js 14.6s
 PASS 07-russian.js 7.7s
+PASS 08-sweep.js 163.1s
+PASS 09-features.js 43.1s
+    fuzz bad0 az 120 steps 17s
+    fuzz bad0 ru 120 steps 35s
+    fuzz 1111 az 120 steps 57s
+    fuzz 1111 ru 120 steps 77s
+    fuzz 2222 az 120 steps 98s
+    fuzz 2222 ru 120 steps 123s
+PASS 10-fuzz.js 123.6s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 8.8s
+PASS 13-followup.js 41.5s
+PASS 14-no-slots.js 7.1s
+PASS 15-keyboard.js 7.1s
+PASS 16-ios-scroll.js 6.7s
+PASS 17-cancel-contact.js 12.6s
+PASS 18-faults.js 103.9s
+PASS 19-a11y.js 19.9s
+PASS 20-xss.js 11.1s
+PASS 21-access-matrix.js 8.2s
+PASS 22-attacks.js 8.6s
+PASS 23-excel-counts.js 6.7s
+PASS 24-aria.js 8.0s
+PASS 25-many-patients.js 10.3s
+PASS 26-draft-background.js 10.8s
+PASS 27-dialog-focus.js 6.2s
+PASS 28-publish-guard.js 2.6s
+PASS 29-rules-text.js 12.8s
+PASS 30-patient-search.js 10.8s
+PASS 90-sql.js 15.8s
+all 32 passed
+exit 0  end 2026-11-17T00:50:50Z

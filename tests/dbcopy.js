@@ -7,6 +7,7 @@
 const fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const SCHEMA = path.join(ROOT, "db", "schema_live_20261116.sql");
+const BASE = ["2026-11-realtime.sql"];   // part of the install, not carried by the dump (B-17): Realtime publication membership
 const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
 const U = {
   owner: "bad097d4-5edc-402b-ad59-f633252c35d9", admin2: "a0000000-0000-4000-8000-0000000000a2",
@@ -27,6 +28,7 @@ async function build(pg, name, opts = {}) {
   await c.query("drop schema public cascade; create schema extensions; create extension pgcrypto with schema extensions; create extension \"uuid-ossp\" with schema extensions;");
   await c.query(fs.readFileSync(SCHEMA, "utf8").split("\n").filter((l) => !/^\\/.test(l)).join("\n"));
   await c.query("reset all");   // the dump sets row_security = off etc. for its own session
+  for (const f of BASE) await c.query(fs.readFileSync(path.join(ROOT, "sql", f), "utf8"));
   for (const f of (opts.after || AFTER)) await c.query(fs.readFileSync(path.join(ROOT, "sql", f), "utf8"));
   await seed(c);
   return c;

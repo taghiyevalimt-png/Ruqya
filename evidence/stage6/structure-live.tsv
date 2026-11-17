@@ -1,0 +1,13 @@
+# live structure fingerprint (scripts/backup-structure.sql via Supabase MCP execute_sql, read-only) — 2026-11-17T00:42:42Z
+tables	9
+columns	64b2ef07d6deee4832fa5d1e14ba94d7
+constraints	35 d3181a3296f2fe6c5ef6c513345637b8
+indexes	22 d54dd3b811594a0732ae940d990fc0b6
+functions	24 35fa767a46cb3bcb67b08417675760b8
+function_grants	df58aa6e610590403acedc20444c96af
+triggers	24 5072d5db89bbe7b764e17fcc85da02dc
+rls	appts=true/false,audit_log=true/false,breaks=true/false,expenses=true/false,product_sales=true/false,readers=true/false,services=true/false,staff=true/false,stat_edits=true/false
+policies	26 ab6d1fc61e70645047448385b080b21a
+table_grants	1a3e90b9fb0933b486dbe8ef9bf17b75
+column_grants	ed0e68429935c3679b64cd3773959cca
+realtime	appts,breaks,expenses,product_sales,readers,services,staff,stat_edits
