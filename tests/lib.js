@@ -159,7 +159,10 @@ async function attach(context, db, ctl) {
     if (m === "POST") {
       let b = JSON.parse(req.postData() || "[]"); if (!Array.isArray(b)) b = [b];
       const now = new Date().toISOString();
-      for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...r });
+      // column defaults of the real table (live schema 17.11), so a row saved with only the form's fields reads back
+      // like on the server (T-03)
+      const def = t === "appts" ? { phone: "", note: "", status: "wait", settled: false, service: "Ruqya", duration: 90, confirmed: false, place: "ofis", follow: 0 } : {};
+      for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
       return send(route, 201);
     }
     if (m === "PATCH") {

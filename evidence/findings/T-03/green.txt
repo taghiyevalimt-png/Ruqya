@@ -1,0 +1,5 @@
+# T-03 green — mock appts with the real column defaults — 2026-11-17T09:09:21Z — commit bc0b725 + tests/lib.js change
+$ node tests/run.js 99-mock-defaults
+PASS 99-mock-defaults.js 9.7s
+all 1 passed
+exit 0
