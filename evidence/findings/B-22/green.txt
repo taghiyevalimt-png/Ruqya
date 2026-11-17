@@ -1,0 +1,5 @@
+# B-22 green — the short window rises above the iPhone keyboard — 2026-11-17T09:52:05Z — commit 7f27ce4 + index.html liftSheet
+$ node tests/run.js 99-short-window
+PASS 99-short-window-iphone.js 9.0s
+PASS 99-short-window-keyboard.js 7.0s
+all 2 passed

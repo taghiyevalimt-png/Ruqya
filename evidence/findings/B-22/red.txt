@@ -1,0 +1,5 @@
+# B-22 red — iPhone keyboard covers «Yeni mütəxəssis» (owner screen recording 17.11 13:42) — 2026-11-17T09:51:39Z — commit 7f27ce4
+$ node tests/run.js 99-short-window-iphone
+FAIL 99-short-window-iphone.js 
+    Error: FAIL: the name field is above the iPhone keyboard (visible 508 of 844 px): {"top":712,"bottom":760,"save":822,"visible":508,"ih":844,"v":"Yeni Mütəxəssis"}
+1 failed of 1
