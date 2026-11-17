@@ -1,0 +1,4 @@
+# F-07 red — names over the calendar (owner 18.11) — 2026-11-17T12:38:39Z — commit ecefa3a
+FAIL 99-whole-day-foot.js 
+    Error: FAIL: 390: no specialists' names over the calendar: 10
+1 failed of 1

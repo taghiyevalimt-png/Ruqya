@@ -5,7 +5,9 @@ const { open, check, OWNER, AGENT, seed, uuid, bakuToday } = require("../lib");
 module.exports = async () => {
   for (const [w, h] of [[390, 844], [360, 740]]) {
     const db = seed(), now = new Date().toISOString();
-    while (db.readers.length < 10) db.readers.push({ id: uuid(), name: "Mütəxəssis " + db.readers.length, price: 0, share: 0, archived: false, color: null, created_at: "2026-11-03T00:00:00Z" });
+    // the centre's real specialists (owner 18.11 uses one letter size for all names at the bottom, so a made-up 12-letter
+    // name like «Mütəxəssis 2» would end in «…» in a 42 px column — see AUDIT_LOG F-07)
+    for (const n of ["Logman", "Zeyd", "Rizvan", "Ruhanə", "Aqşin", "Təranə", "Dr. Günel", "Psixoloq"]) db.readers.push({ id: uuid(), name: n, price: 0, share: 0, archived: false, color: null, created_at: "2026-11-03T00:00:00Z" });
     const names = ["Rəşidov", "Leyla Məmmədova", "Səbinə Hüseynova Əliqızı", "Orxan"];
     const rows = [[4, "10:00", 90, names[0]], [5, "12:00", 60, names[1]], [2, "14:00", 90, names[2]], [3, "16:00", 30, names[3]], [9, "18:00", 60, names[0]]];   // columns without other bookings (two at one time share a column)
     for (const [ri, t, d, n] of rows) db.appts.push({ id: uuid(), reader_id: db.readers[ri].id, date: bakuToday(0), time: t, duration: d, name: n, phone: "050 000 00 1" + ri, price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: true, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now });
@@ -20,13 +22,13 @@ module.exports = async () => {
         const onScreen = cols.filter((c) => c.left >= cr.left - 1 && c.right <= cr.right + 1).length;
         const evs = [...cal.querySelectorAll(".ev")].map((e) => { const b = e.firstElementChild, bs = getComputedStyle(b), fs = parseFloat(bs.fontSize), lh = parseFloat(bs.lineHeight) || fs;
           return { text: e.textContent, children: e.children.length, bText: b.textContent, fs, lines: Math.round(b.scrollHeight / lh), clipped: b.scrollHeight > e.clientHeight - 2 || b.scrollWidth > b.clientWidth + 1 || b.getBoundingClientRect().bottom > e.getBoundingClientRect().bottom + 1, ell: bs.textOverflow }; });
-        const pills = [...cal.querySelectorAll(".cal-head .ch.pill span")].filter((x) => x.getBoundingClientRect().right <= cr.right + 1).map((x) => ({ t: x.textContent, cut: x.scrollWidth > x.clientWidth + 1 }));
+        const pills = [...cal.querySelectorAll(".cal-foot .fn span")].filter((x) => x.getBoundingClientRect().right <= cr.right + 1).map((x) => ({ t: x.textContent, cut: x.scrollWidth > x.clientWidth + 1 }));
         return { pills, hour: getComputedStyle(cal.querySelector(".col")).backgroundSize, n: cols.length, onScreen, colW: Math.round(cols[0].width), sideways: cal.scrollWidth > cal.clientWidth + 1, evs };
       });
       check(m.n === 10, w + ": 10 columns: " + m.n);
       check(m.onScreen === 7, w + ": exactly 7 specialists across the screen: " + m.onScreen + " (column " + m.colW + " px)");
       check(m.sideways, w + ": the other 3 are reached sideways");
-      check(m.pills.length >= 7 && m.pills.every((x) => !x.cut), w + ": specialists' names in the header are not cut: " + JSON.stringify(m.pills));
+      check(m.pills.length >= 7 && m.pills.every((x) => !x.cut), w + ": specialists' names at the bottom are not cut: " + JSON.stringify(m.pills));
       const ours = m.evs.filter((e) => names.includes(e.bText));
       check(ours.length === 5, w + ": our 5 blocks drawn with whole names: " + m.evs.map((e) => e.bText).join(" | "));
       for (const e of m.evs) {
