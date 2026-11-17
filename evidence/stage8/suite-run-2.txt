@@ -1,0 +1,58 @@
+# run 2 of 3 — commit 1f9919a2f80a0e6bf0c21702a3a8234583e7dded, tree 10 changed files — start 2026-11-17T06:23:16Z
+$ node tests/lint.js && node tests/run.js
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-17T06:23:17.941Z
+# messages: 345
+# by rule: {"no-unused-vars":83,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":189,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":6,"security/detect-non-literal-fs-filename":20}
+PASS 00-smoke.js 7.2s
+PASS 01-drafts.js 38.6s
+PASS 02-session.js 20.3s
+PASS 03-delete-fonts.js 8.2s
+PASS 04-excel.js 7.0s
+PASS 05-patients.js 12.4s
+PASS 06-anonymize.js 13.7s
+PASS 07-russian.js 7.8s
+PASS 08-sweep.js 150.7s
+PASS 09-features.js 42.7s
+    fuzz bad0 az 120 steps 16s
+    fuzz bad0 ru 120 steps 33s
+    fuzz 1111 az 120 steps 63s
+    fuzz 1111 ru 120 steps 79s
+    fuzz 2222 az 120 steps 103s
+    fuzz 2222 ru 120 steps 134s
+PASS 10-fuzz.js 134.6s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 9.1s
+PASS 13-followup.js 42.1s
+PASS 14-no-slots.js 7.2s
+PASS 15-keyboard.js 7.5s
+PASS 16-ios-scroll.js 6.5s
+PASS 17-cancel-contact.js 13.0s
+PASS 18-faults.js 104.6s
+PASS 19-a11y.js 19.7s
+PASS 20-xss.js 11.7s
+PASS 21-access-matrix.js 8.3s
+PASS 22-attacks.js 8.0s
+PASS 23-excel-counts.js 6.4s
+PASS 24-aria.js 7.7s
+PASS 25-many-patients.js 10.4s
+PASS 26-draft-background.js 10.4s
+PASS 27-dialog-focus.js 6.1s
+PASS 28-publish-guard.js 3.8s
+PASS 29-rules-text.js 12.6s
+PASS 30-patient-search.js 10.7s
+PASS 31-patients-keyset.js 23.0s
+PASS 90-sql.js 15.5s
+PASS 91-schema.js 8.5s
+PASS 92-visits-access.js 7.6s
+PASS 93-restore-one.js 7.0s
+PASS 94-configured-copy.js 0.7s
+PASS 95-no-third-party.js 9.4s
+PASS 96-close-history.js 8.3s
+PASS 97-person-export-delete.js 9.8s
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-service-db.js 8.8s
+PASS 99-service-ui.js 15.3s
+PASS 99-short-window-keyboard.js 6.7s
+PASS 99-sold.js 18.9s
+all 45 passed
+exit 0  end 2026-11-17T06:38:06Z
