@@ -1,0 +1,4 @@
+# F-03 green — 2026-11-17T11:06:31Z — commit 0bbebb0 + F-03
+PASS 99-whole-day-names.js 15.3s
+PASS 99-whole-day.js 30.7s
+all 2 passed
