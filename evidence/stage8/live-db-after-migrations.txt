@@ -1,0 +1,16 @@
+# live database after the 4 migrations — 2026-11-17T09:23Z — release commit b1c38b2 (main), migrations from sql/ of audit4
+$ Supabase MCP list_migrations (before): ruqya_2026_11_place, ruqya_2026_11_follow
+$ apply_migration ruqya_2026_11_patients_order / ruqya_2026_11_least_privilege / ruqya_2026_11_patients_scale / ruqya_2026_11_service -> success x4
+  (before ruqya_2026_11_service: live text of ruqya_appt_rules compared with sql/2026-11-place.sql — identical; only the service rule is new)
+$ execute_sql (read only, catalog + counts, no row data):
+old_fn ruqya_hist_patients = 0 (dropped)
+page_fn ruqya_hist_patients_page = 1
+private.ruqya_visit_ids = 1
+index appts_pkey_date = 1
+service rule in ruqya_appt_rules = true
+anon table grants in public = 0
+authenticated MAINTAIN grants = 0
+anon may execute ruqya_hist_patients_page = false
+anon may execute private.ruqya_visit_ids = false
+bookings with a service outside the six = 0
+server_version 17.11

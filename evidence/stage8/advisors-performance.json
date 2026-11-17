@@ -1,0 +1,32 @@
+{
+ "tool": "Supabase MCP get_advisors(type=performance)",
+ "project": "ldkhdeehrrajvgrtieal",
+ "fetched": "2026-11-17T09:23:28Z",
+ "result": {
+  "lints": [
+   {
+    "name": "unused_index",
+    "level": "INFO",
+    "count": 3,
+    "findings": [
+     "public.breaks breaks_reader_id",
+     "public.appts appts_pkey_date (created minutes before, not yet used)",
+     "public.audit_log audit_log_at_brin"
+    ]
+   },
+   {
+    "name": "multiple_permissive_policies",
+    "level": "WARN",
+    "count": 6,
+    "findings": [
+     "appts SELECT {ruqya_appts_read,ruqya_appts_write}",
+     "breaks SELECT",
+     "readers SELECT",
+     "services SELECT",
+     "staff UPDATE",
+     "stat_edits SELECT"
+    ]
+   }
+  ]
+ }
+}

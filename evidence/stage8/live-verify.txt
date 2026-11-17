@@ -1,0 +1,19 @@
+# live site = release b1c38b2 — 2026-11-17T09:24:47Z
+index.html local 20387066a52a3699 live 20387066a52a3699 SAME
+version.txt local 4cb74221c9a96e26 live 4cb74221c9a96e26 SAME
+logo-hq.webp local 701edb8cfdca711c live 701edb8cfdca711c SAME
+logo-hq.png local fbe1d5ea2ef25023 live fbe1d5ea2ef25023 SAME
+## schema private through the API (publishable key of the app, value not shown)
+rpc private.ruqya_visit_ids with Content-Profile private: HTTP 406 {"code":"PGRST106","details":null,"hint":"Only the following schemas are exposed: public, graphql_public","message":"Invalid schema: private"}
+rpc public.ruqya_visit_ids: HTTP 404 {"code":"PGRST202","details":"Searched for the function public.ruqya_visit_ids with parameters before, key, since or wit
+anon read appts: HTTP 401 {"code":"42501","details":null,"hint":"Grant the required privileges to the current role with: GRANT SELECT ON public.ap
+anon rpc ruqya_hist_patients_page: HTTP 401 {"code":"42501","details":null,"hint":null,"message":"permission denied for function ruqya_hist_patients_page"}
+## functions smoke as a signed-in admin (execute_sql: begin; jwt claims of an admin; set local role authenticated; counts only; rollback) — 2026-11-17T09:25Z
+patients_page_rows (visits older than 45 days) = 0 — all 139 live bookings are within the last 45 days, so the older-visits list is empty by data, not by error
+visits_of_first_patient (ruqya_hist_visits via private.ruqya_visit_ids) = 1
+window_rows (appts, last 45 days, under RLS) = 139
+ruqya_is_admin() = true
+## Supabase logs 2026-11-17T09:20Z → 09:26Z (query_logs, counts only)
+postgres_logs 9, error/fatal 0; postgrest_logs 21; edge_logs 166, 5xx 0; auth_logs 3 (the 401/404/406 above are the deliberate checks)
+## live-network.js: hosts taghiyevalimt-png.github.io only, 11 requests, console errors/warnings 0 (evidence/stage8/live-network.json)
+## Pages: run 44054901468 success (b1c38b2); APK: run 44054906091 success

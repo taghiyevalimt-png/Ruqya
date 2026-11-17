@@ -1,0 +1,29 @@
+# DR drill — 2026-11-17T09:27:46.305Z
+$ node tools/dr_drill.js 44055532488 <dr_private.pem> evidence/stage8/dr-drill.txt
+    0.0 s  start (decision to restore), run 44055532488, 2026-11-17T09:27:32.844Z
+    2.9 s  artifact downloaded: data.sql.enc, data.sql.sha256, key.txt.enc, manifest.tsv, schema.sql, SHA256SUMS
+   10.1 s  empty PostgreSQL 17 started
+           | # DR restore — 2026-11-17T09:27:43.153Z — artifact C:\Users\taghi\AppData\Local\Temp\ruqya-drill-pvAhq3\dr-export-44055532488
+           | OK   sha256 data.sql.enc
+           | OK   sha256 key.txt.enc
+           | OK   sha256 schema.sql
+           | OK   sha256 manifest.tsv
+           | OK   plaintext sha256 of the data dump (295108 bytes)
+           | OK   schema loaded (140289 chars)
+           | OK   data loaded
+           | OK   ruqya_hist_visits runs on the copy
+           | OK   ruqya_hist_patients_page runs on the copy
+           | OK   auth.identities rows 13 (live 13) hash same
+           | OK   auth.users rows 13 (live 13) hash same
+           | OK   public.appts rows 139 (live 139) hash same
+           | OK   public.audit_log rows 337 (live 337) hash same
+           | OK   public.breaks rows 0 (live 0) hash same
+           | OK   public.expenses rows 0 (live 0) hash same
+           | OK   public.product_sales rows 7 (live 7) hash same
+           | OK   public.readers rows 10 (live 10) hash same
+           | OK   public.services rows 2 (live 2) hash same
+           | OK   public.staff rows 11 (live 11) hash same
+           | OK   public.stat_edits rows 0 (live 0) hash same
+           | tables compared: 11, mismatches: 0, seconds: 1.9
+   12.3 s  restore and comparison finished, exit 0
+   13.5 s  temporary files removed (decrypted data was only in memory and in the throw-away database)
