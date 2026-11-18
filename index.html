@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-gY0rtajlzW6JheqTL/CqKXKDlnEl2ZvhP8YGxUDT+kI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-FY9qj/llrKrPQ/WbmXXfB4sL4I53dkd8P0vLRTRvvpI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1666,6 +1666,12 @@ function bk(t){var d=new Date((t==null?Date.now()+skew:t)+TZ);
 function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&d>="2020-01-01"&&d<="2099-12-31"&&iso(parse(d))===d}
 var MAXSUM=1000000;
 var NEW_PRICE=130;   /* written in advance in every new booking; it can be changed */
+/* owner 18.11: in a NEW booking, choosing these puts their usual length (minutes) and price; both stay editable */
+var SVC_PRESET={"Masaj":[60,80],"Hicama":[60,40],"Kombo":[60,100]},READER_PRESET={"ilkin":[90,150]};
+function readerPreset(rid){var r=reader(rid);return r?READER_PRESET[low(String(r.name).trim()).replace(/̇/g,"")]:null}
+function putPreset(ps){if(!ps)return;var de=byId("f-dur"),pe=byId("f-price");
+  if(de){if(!de.querySelector('option[value="'+ps[0]+'"]')){var o=document.createElement("option");o.value=String(ps[0]);o.textContent=ps[0]+"";de.appendChild(o)}de.value=String(ps[0])}
+  if(pe)pe.value=String(ps[1]);if(de)slotGrid()}
 function uuid(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   if(window.crypto&&crypto.getRandomValues){var b=new Uint8Array(16),h="";crypto.getRandomValues(b);b[6]=b[6]&15|64;b[8]=b[8]&63|128;
@@ -3734,7 +3740,7 @@ function apptForm(){
     (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="text" maxlength="60" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
-    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):NEW_PRICE)+'"></div>'+
+    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):((readerPreset(pre.reader)||[0,NEW_PRICE])[1]))+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
     (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
@@ -4258,6 +4264,11 @@ document.addEventListener("input",function(e){
 });
 document.addEventListener("change",function(e){
   var t=e.target.id;
+  /* owner 18.11: usual length and price of a service / of İlkin — only in a new booking */
+  if(sheet&&sheet.type==="appt"&&!sheet.id){
+    if(e.target.name==="f-service")putPreset(SVC_PRESET[e.target.value]);
+    if(t==="f-reader")putPreset(readerPreset(e.target.value));
+  }
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
 });
 document.addEventListener("keydown",function(e){
