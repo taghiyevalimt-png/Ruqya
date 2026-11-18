@@ -1,0 +1,3 @@
+# G-02 green — 2026-11-18T08:58:43Z — commit 1b364a0 + sql/2026-11-owner-notes.sql
+PASS 99-owner-notes-db.js 9.1s
+all 1 passed

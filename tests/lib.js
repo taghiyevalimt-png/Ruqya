@@ -45,9 +45,9 @@ function seed() {
       { id: R2, name: "İlkin", archived: false, created_at: "2026-11-02T00:00:00Z", color: "#4a7fc9", price: 0, share: 0 },
     ],
     staff: [
-      { id: OWNER, name: "Admin", role: "admin", want: null, created_at: now },
-      { id: AGENT, name: "Nurlana", role: "agent", want: null, created_at: now },
-      { id: SPEC, name: "Əli", role: "specialist", want: null, created_at: now },
+      { id: OWNER, name: "Admin", role: "admin", want: null, created_at: now, hide_stats: false },
+      { id: AGENT, name: "Nurlana", role: "agent", want: null, created_at: now, hide_stats: false },
+      { id: SPEC, name: "Əli", role: "specialist", want: null, created_at: now, hide_stats: false },
     ],
     appts: [
       { id: uuid(), reader_id: R1, date: t, time: "10:00", duration: 90, name: "Test Pasiyent", phone: "050 111 22 33", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now },
