@@ -1,0 +1,4 @@
+# F-14 red — no «Ödəniş edib» (owner 18.11) — 2026-11-18T13:19:50Z — commit 43c9c78
+FAIL 99-paid-online.js 
+    Error: FAIL: online card: «Ödəniş edib» right after «Ləğv et»: ["✅ OnlaynƏli · Onlayn · Yazdı: Nurlana","✅ Təsdiqləyib","Dəyiş","Ləğv et"]
+1 failed of 1
