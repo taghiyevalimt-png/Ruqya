@@ -1,0 +1,4 @@
+# S-06 DB red (before the migration) — 2026-11-18T15:04:52Z — commit cda6801
+FAIL 99-app-errors-db.js 
+    Error: FAIL: an agent writes his error: relation "public.app_errors" does not exist
+1 failed of 1

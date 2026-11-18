@@ -8,7 +8,7 @@ const fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const SCHEMA = path.join(ROOT, "db", "schema_live_20261116.sql");
 const BASE = ["2026-11-realtime.sql"];   // part of the install, not carried by the dump (B-17): Realtime publication membership
-const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "2026-11-patients-scale.sql", "2026-11-service.sql", "2026-11-owner-notes.sql", "2026-11-my-contacts.sql", "2026-11-paid-online.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
+const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "2026-11-patients-scale.sql", "2026-11-service.sql", "2026-11-owner-notes.sql", "2026-11-my-contacts.sql", "2026-11-paid-online.sql", "2026-11-app-errors.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
 const U = {
   owner: "bad097d4-5edc-402b-ad59-f633252c35d9", admin2: "a0000000-0000-4000-8000-0000000000a2",
   agentA: "a0000000-0000-4000-8000-0000000000aa", agentB: "a0000000-0000-4000-8000-0000000000ab",

@@ -1,0 +1,4 @@
+# S-06 UI red (app without sending) — 2026-11-18T15:09:39Z
+FAIL 99-app-errors.js 
+    Error: FAIL: the error reached the shared table once: 0
+1 failed of 1

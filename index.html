@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-4hy8/bpMpq6V5OKrfwjSSnpFXFvfeWJJvElev7bPMbI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-yzGfbDoCuIRz32/dEn/t8uHs+ZOuxsZNTWCxqPbqVTQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1564,6 +1564,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Jurnalı təmizlə":"Очистить журнал",
 "Yenilə":"Обновить",
 "Xəta yoxdur.":"Ошибок нет.",
+"Bütün telefonların xətaları":"Ошибки всех телефонов",
+"Hamısını sil":"Удалить все",
+"Göstər":"Показать",
+"Yüklənir…":"Загрузка…",
+"Yükləmək olmadı.":"Не удалось загрузить.",
+"Yenə cəhd et":"Попробовать снова",
+"Silmək olmadı.":"Не удалось удалить.",
 "Son 3 ay":"Последние 3 месяца",
 "Bu il":"Этот год",
 "Hamısı (2 il)":"Всё (2 года)",
@@ -1927,6 +1934,7 @@ function refresh(){
       if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&!ui.sel.length)ui.sel=[mine.id]}}
     cleanSel();
     auth.loaded=true;render();redrawCard();
+    clearTimeout(errSendT);errSendT=setTimeout(sendErrs,4000);   /* S-06: errors kept while offline go now (no request when none is waiting) */
     if(isAdmin()&&!secDone){secDone=true;checkSecurity()}
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
       /* The owner is never asked who they are: the role is set quietly. */
@@ -2385,11 +2393,37 @@ var errT=0;
 function reportErr(e,quiet){
   var m=String(e&&(e.message||e.reason)||e||"?").slice(0,300),st=String(e&&e.stack||"").split(String.fromCharCode(10)).slice(0,3).join(" | ").slice(0,400);
   try{var lg=JSON.parse(localStorage.getItem("ruqya.errlog")||"[]");if(!Array.isArray(lg))lg=[];lg.push({t:new Date().toISOString(),v:APP_VERSION,m:m,s:st,tab:ui&&ui.tab||""});localStorage.setItem("ruqya.errlog",JSON.stringify(lg.slice(-30)))}catch(x){}
+  clearTimeout(errSendT);errSendT=setTimeout(sendErrs,3000);
   if(!quiet&&Date.now()-errT>5000){errT=Date.now();try{flash(L("Xəta baş verdi. Səhifəni yeniləyin; təkrarlansa, adminə deyin."),true)}catch(x){}}
 }
 window.addEventListener("error",function(ev){reportErr(ev&&ev.error||ev&&ev.message)});
 window.addEventListener("unhandledrejection",function(ev){reportErr(ev&&ev.reason)});
 function errLog(){try{var lg=JSON.parse(localStorage.getItem("ruqya.errlog")||"[]");return Array.isArray(lg)?lg:[]}catch(e){return []}}
+/* S-06 (stability audit 2, 18.11): the errors of every phone in one place (table app_errors, read only by admins).
+   Each error is sent once; without internet or when the server refuses it stays marked unsent and goes with the
+   next successful load. At most 10 at a time, the same text within a minute only once. A failure to send is never
+   reported again as an error (no loop), and a missing table stops sending until the next start. */
+var errSendT=null,errBusy=false,errOff=false;
+function sendErrs(){
+  if(errBusy||errOff||offline||!sb||!auth.user||auth.user.is_anonymous)return;
+  var lg=errLog(),todo=[],seen={};
+  lg.forEach(function(x){if(!x||x.sent)return;var k=x.m+"|"+String(x.t).slice(0,16);if(seen[k]){x.sent=1;return}seen[k]=1;todo.push(x)});
+  todo=todo.slice(-10);
+  if(!todo.length){try{localStorage.setItem("ruqya.errlog",JSON.stringify(lg))}catch(x){}return}
+  var ua=String(navigator.userAgent||"").slice(0,200);errBusy=true;
+  var done=function(ok,off){errBusy=false;if(off)errOff=true;if(!ok)return;
+    var ts={};todo.forEach(function(x){ts[x.t+"|"+x.m]=1});
+    var cur=errLog();cur.forEach(function(x){if(x&&(ts[x.t+"|"+x.m]||seen[x.m+"|"+String(x.t).slice(0,16)]))x.sent=1});
+    try{localStorage.setItem("ruqya.errlog",JSON.stringify(cur))}catch(x){}
+    if(cur.some(function(x){return x&&!x.sent})){clearTimeout(errSendT);errSendT=setTimeout(sendErrs,3000)}};
+  try{sb.from("app_errors").insert(todo.map(function(x){return {v:String(x.v||"").slice(0,40),m:String(x.m||"?").slice(0,400)||"?",s:String(x.s||"").slice(0,600),tab:String(x.tab||"").slice(0,20),ua:ua}}))
+    .then(function(r){var e=r&&r.error;done(!e,e&&(e.code==="42P01"||e.code==="PGRST205"))},function(){done(false)})}catch(e){done(false)}
+}
+function loadAllErrs(){
+  if(!sb||!isAdmin())return;ui.errsAll="load";render();
+  sb.from("app_errors").select("id,at,uid,v,m,s,tab,ua").order("at",{ascending:false}).limit(50).then(function(r){
+    ui.errsAll=r&&!r.error&&Array.isArray(r.data)?r.data:"fail";render()},function(){ui.errsAll="fail";render()});
+}
 function render(){
   try{renderScreen()}catch(e){
     reportErr(e);try{dropCache()}catch(x){}   /* a saved copy that breaks the screen is not used again */
@@ -3416,7 +3450,7 @@ function readersMain(){
     (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?L('<p class="hint">Rol: ')+roleLabel(auth.user.id)+'</p>':'');
   h+=L('<button class="ghost" data-act="logout">Çıxış</button>');
   /* S-01: the errors this phone met (admins) */
-  if(isAdmin()){var el=errLog();h+='<h3 class="sec">'+L("Xəta jurnalı (bu telefon)")+'</h3>'+(el.length?'<div class="pay errlog">'+el.slice().reverse().map(function(x){return '<div class="visit"><span class="num" style="font-size:12px">'+esc(String(x.t).replace("T"," ").slice(0,19))+' · '+esc(x.v||"")+'</span><span style="font-size:12.5px;overflow-wrap:anywhere">'+esc(x.m)+'</span></div>'}).join("")+'</div><button class="ghost" data-act="errlog-clear">'+L("Jurnalı təmizlə")+'</button>':'<p class="hint">'+L("Xəta yoxdur.")+'</p>')}
+  if(isAdmin()){var el=errLog();h+='<h3 class="sec">'+L("Xəta jurnalı (bu telefon)")+'</h3>'+(el.length?'<div class="pay errlog">'+el.slice().reverse().map(function(x){return '<div class="visit"><span class="num" style="font-size:12px">'+esc(String(x.t).replace("T"," ").slice(0,19))+' · '+esc(x.v||"")+'</span><span style="font-size:12.5px;overflow-wrap:anywhere">'+esc(x.m)+'</span></div>'}).join("")+'</div><button class="ghost" data-act="errlog-clear">'+L("Jurnalı təmizlə")+'</button>':'<p class="hint">'+L("Xəta yoxdur.")+'</p>');var ea=ui.errsAll;h+='<h3 class="sec">'+L("Bütün telefonların xətaları")+'</h3>'+(!ea?'<button class="ghost" data-act="errs-all">'+L("Göstər")+'</button>':ea==="load"?'<p class="hint">'+L("Yüklənir…")+'</p>':ea==="fail"?'<p class="hint">'+L("Yükləmək olmadı.")+'</p><button class="ghost" data-act="errs-all">'+L("Yenə cəhd et")+'</button>':ea.length?'<div class="pay errs-all">'+ea.map(function(x){return '<div class="visit"><span class="num" style="font-size:12px">'+esc(String(x.at||"").replace("T"," ").slice(0,16))+' · '+esc(state.staff[x.uid]||"?")+' · '+esc(x.v||"")+(x.tab?' · '+esc(x.tab):'')+'</span><span style="font-size:12.5px;overflow-wrap:anywhere">'+esc(x.m)+'</span></div>'}).join("")+'</div><button class="ghost" data-act="errs-all">'+L("Yenilə")+'</button> <button class="ghost" data-act="errs-all-clear">'+L("Hamısını sil")+'</button>':'<p class="hint">'+L("Xəta yoxdur.")+'</p><button class="ghost" data-act="errs-all">'+L("Yenilə")+'</button>')}
   }
   return h;
 }
@@ -4290,6 +4324,9 @@ document.addEventListener("click",function(e){
   }
   else if(act==="reload"){location.reload();return}
   else if(act==="errlog-clear"){try{localStorage.removeItem("ruqya.errlog")}catch(e){}render();return}
+  else if(act==="errs-all"){loadAllErrs();return}
+  else if(act==="errs-all-clear"){if(!isAdmin()||!Array.isArray(ui.errsAll))return;var eids=ui.errsAll.map(function(x){return x.id});if(!eids.length)return;
+    sb.from("app_errors").delete().in("id",eids).then(function(r){if(r&&r.error){flash(L("Silmək olmadı."),true);return}ui.errsAll=[];render()},function(){flash(L("Silmək olmadı."),true)});return}
   else if(act==="logout"){
     /* Without internet the server cannot be told; the session and the data copy are removed from this phone anyway. */
     var lo=function(r){if(!(r&&r.error&&auth.user))return;
