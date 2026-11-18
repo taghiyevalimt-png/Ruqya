@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qJPHAHhmVhIVFtK3BqE+k/f1ZJshrlQN87Vx5o8gqXI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2/OiQTXTuQD7YHqprEkWLpTwHwUUuYtTJC0XOBkQwDM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1931,7 +1931,7 @@ function refresh(){
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
       /* The owner is never asked who they are: the role is set quietly. */
       auth.fixed=true;state.roles[ADMIN]="admin";state.roleSet[ADMIN]=1;
-      sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(){},function(){});
+      sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(r){if(r&&r.error)reportErr(r.error,true)},function(e){reportErr(e,true)});   /* S-04: kept in the error list */
     }
     if(wantNew&&pendingMe())wantNew=null;
     if(wantNew&&!sheet&&activeReaders().length&&state.staff[auth.user.id]){var wn=wantNew;wantNew=null;openSheet({type:"appt",id:null,pre:{date:wn}})}
@@ -2382,10 +2382,10 @@ setTimeout(function(){appReady()},2500);   /* never keep the logo longer than th
    is kept in this phone's error list (ruqya.errlog, last 30, shown to an admin in Ayarlar → Hesab). A failure while
    drawing the screen shows a message with «Yenilə» instead of a blank or wrong screen. */
 var errT=0;
-function reportErr(e){
+function reportErr(e,quiet){
   var m=String(e&&(e.message||e.reason)||e||"?").slice(0,300),st=String(e&&e.stack||"").split(String.fromCharCode(10)).slice(0,3).join(" | ").slice(0,400);
   try{var lg=JSON.parse(localStorage.getItem("ruqya.errlog")||"[]");if(!Array.isArray(lg))lg=[];lg.push({t:new Date().toISOString(),v:APP_VERSION,m:m,s:st,tab:ui&&ui.tab||""});localStorage.setItem("ruqya.errlog",JSON.stringify(lg.slice(-30)))}catch(x){}
-  if(Date.now()-errT>5000){errT=Date.now();try{flash(L("Xəta baş verdi. Səhifəni yeniləyin; təkrarlansa, adminə deyin."),true)}catch(x){}}
+  if(!quiet&&Date.now()-errT>5000){errT=Date.now();try{flash(L("Xəta baş verdi. Səhifəni yeniləyin; təkrarlansa, adminə deyin."),true)}catch(x){}}
 }
 window.addEventListener("error",function(ev){reportErr(ev&&ev.error||ev&&ev.message)});
 window.addEventListener("unhandledrejection",function(ev){reportErr(ev&&ev.reason)});
