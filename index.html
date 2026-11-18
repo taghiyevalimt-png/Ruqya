@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-jDZ+mMhTbSmlhBY/WoMmmQTzWIpfvQhCGmD6p+maPUI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-0K7osAPrlLkIk3Pe7bhr7Ox6l/+1QRbvGJplD0iKykU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2256,7 +2256,7 @@ window.addEventListener("storage",function(e){
 });
 /* Everything that must happen on sign-out, with or without internet. */
 function signedOut(){
-  dropCache();auth.user=null;auth.provisional=false;
+  dropCache();myC=null;auth.user=null;auth.provisional=false;
   wLast="";if(NATIVE){try{NATIVE.setWidgetData('{"out":1,"l":"'+LANG+'"}');wLast='{"out":1,"l":"'+LANG+'"}'}catch(e){}}
   stopSync();hideSheet();auth.msg="";byId("main").innerHTML="";byId("top").innerHTML="";render();
 }
@@ -3188,9 +3188,21 @@ function cancelList(){
    Android app: added straight into the contacts (after the phone asks once for permission); a number already in
    the contacts is not added twice. iPhone and other browsers: a contacts file (.vcf) — the phone opens it and adds
    all the contacts with one tap («Add all contacts»); a web page cannot write into the contacts by itself. */
+/* owner 18.11: a sales agent adds to his phone only the patients he wrote himself (a booking of the patient with
+   «Yazdı» = him); admins and specialists as before */
+function agentMe(){return !!(auth.user&&!isAdmin()&&isAgent(auth.user.id))}
+/* older patients come as a summary without the author: the database gives the agent his own (ruqya_my_contacts) */
+var myC=null,myCLoading=false;
+function loadMyContacts(){
+  if(!agentMe()||myC||myCLoading||!sb)return;myCLoading=true;
+  sb.rpc("ruqya_my_contacts",{since:addDays(today,-HIST_DAYS)}).then(function(r){myCLoading=false;myC=r&&!r.error&&Array.isArray(r.data)?r.data:[];if(ui.tab==="patients")render()},function(){myCLoading=false;myC=[]});
+}
+function myContact(p0){if(!agentMe())return true;if((p0.list||[]).some(function(a){return a.by===auth.user.id}))return true;
+  var c=phoneCore(p0.phone);return !!(myC&&c&&myC.some(function(x){return phoneCore(x.phone)===c}))}
 function contactRows(keys){
   var m=patients(),seen={},out=[];
-  (keys||Object.keys(m)).forEach(function(k){var p0=m[k];if(!p0||!p0.phone)return;var c=phoneCore(p0.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(p0.name||"").trim()||p0.phone,String(p0.phone).trim()])});
+  (keys||Object.keys(m)).forEach(function(k){var p0=m[k];if(!p0||!p0.phone||!myContact(p0))return;var c=phoneCore(p0.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(p0.name||"").trim()||p0.phone,String(p0.phone).trim()])});
+  if(!keys&&agentMe()&&myC)myC.forEach(function(x){var c=phoneCore(x.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(x.name||"").trim()||x.phone,String(x.phone).trim()])});
   return out;
 }
 function vcfOf(rows){
@@ -3224,7 +3236,7 @@ function patientsList(){
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
   if(!arr.length)return auth.loaded?'<div class="empty">'+(q?L("Heç kim tapılmadı. Adı və ya nömrəni yoxlayın."):L("Pasiyentlər ilk qəbuldan sonra burada görünəcək."))+'</div>':"";
-  var nc=q?0:contactRows().length;
+  loadMyContacts();var nc=q?0:contactRows().length;
   return (nc?'<button class="ghost cimp" data-act="contacts-all">'+tf(L("Hamısını telefon kontaktlarına əlavə et ({n})"),{n:nc})+'</button>':'')+arr.map(function(p){
     var bits=[p.paid+L(" dəfə gəlib")];
     if(p.noshow)bits.push(L("gəlməyib: ")+p.noshow);
@@ -3239,7 +3251,7 @@ function patientSheet(){
   var nextA=p.list.filter(function(a){return a.status!=="cancel"&&!ended(a)&&appt(a.id)}).sort(function(x,y){return (x.date+x.time).localeCompare(y.date+y.time)})[0];
   var main='<div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>')+phoneLinks(nextA&&nextA.phone?nextA.phone:p.phone,nextA?appt(nextA.id):null,"wa")+'</div>';
   var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+
-    (p.phone?'<button class="ghost" data-act="contact-one" data-id="'+esc(p.key)+'">'+L("Telefon kontaktlarına əlavə et")+'</button>':'')+'<div class="pvisits">';
+    (p.phone&&myContact(p)?'<button class="ghost" data-act="contact-one" data-id="'+esc(p.key)+'">'+L("Telefon kontaktlarına əlavə et")+'</button>':'')+'<div class="pvisits">';
   /* Every visit is shown in full, with its own «Dəyiş» and «Sil», so nothing has to be opened. */
   var vis=p.list;
   if(p.oldN){loadOldVisits(sheet,p);

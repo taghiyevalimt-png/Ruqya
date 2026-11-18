@@ -1,0 +1,5 @@
+# F-11 green — 2026-11-18T11:24:43Z — commit b5fb91b + F-11 (+ sql/2026-11-my-contacts.sql)
+PASS 99-contacts-agent.js 21.5s
+PASS 99-contacts.js 30.3s
+all 2 passed
+all 1 passed

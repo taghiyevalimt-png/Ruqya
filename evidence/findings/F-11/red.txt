@@ -1,0 +1,4 @@
+# F-11 red — agents add every patient to contacts (owner 18.11) — 2026-11-18T11:21:51Z — commit b5fb91b
+FAIL 99-contacts-agent.js 
+    Error: FAIL: agent Nurlana: «Hamısını» adds ["Nurlananın Pasiyenti","Ortaq Pasiyent"]: ["Asiyanın Pasiyenti","Nurlananın Pasiyenti","Ortaq Pasiyent"]
+1 failed of 1
