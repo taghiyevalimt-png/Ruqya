@@ -1,0 +1,3 @@
+# baseline console on main screens (mock server) — 2026-11-18T14:13:16Z — commit a946445
+admin: page errors 0, console 0
+agent: page errors 0, console 0

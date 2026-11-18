@@ -1,0 +1,4 @@
+# S-02 red — 2026-11-18T14:23:58Z — commit 014acdf
+FAIL 99-cache-bad.js 
+    Error: FAIL: with a broken saved copy and no network the calendar shows: {"tabs":true,"cols":0,"login":false,"crash":true,"log":5}
+1 failed of 1

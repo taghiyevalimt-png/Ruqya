@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-uio/DDBxIirAbo50XhsEhw1yH2Qul5m3xophpdMjjlI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2/OiQTXTuQD7YHqprEkWLpTwHwUUuYtTJC0XOBkQwDM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1557,6 +1557,13 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Köhnə qəbulları yükləmək olmadı. İnterneti yoxlayın.":"Не удалось загрузить старые записи. Проверьте интернет.",
 "Hansı dövr üçün?":"За какой период?",
 "Bu ay":"Этот месяц",
+"Xəta baş verdi. Səhifəni yeniləyin; təkrarlansa, adminə deyin.":"Произошла ошибка. Обновите страницу; если повторится — скажите админу.",
+"Ekranı göstərmək olmadı.":"Не удалось показать экран.",
+"Səhifəni yeniləyin. Təkrarlansa, adminə deyin.":"Обновите страницу. Если повторится — скажите админу.",
+"Xəta jurnalı (bu telefon)":"Журнал ошибок (этот телефон)",
+"Jurnalı təmizlə":"Очистить журнал",
+"Yenilə":"Обновить",
+"Xəta yoxdur.":"Ошибок нет.",
 "Son 3 ay":"Последние 3 месяца",
 "Bu il":"Этот год",
 "Hamısı (2 il)":"Всё (2 года)",
@@ -1924,7 +1931,7 @@ function refresh(){
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
       /* The owner is never asked who they are: the role is set quietly. */
       auth.fixed=true;state.roles[ADMIN]="admin";state.roleSet[ADMIN]=1;
-      sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(){},function(){});
+      sb.from("staff").update({role:"admin"}).eq("id",ADMIN).then(function(r){if(r&&r.error)reportErr(r.error,true)},function(e){reportErr(e,true)});   /* S-04: kept in the error list */
     }
     if(wantNew&&pendingMe())wantNew=null;
     if(wantNew&&!sheet&&activeReaders().length&&state.staff[auth.user.id]){var wn=wantNew;wantNew=null;openSheet({type:"appt",id:null,pre:{date:wn}})}
@@ -2120,6 +2127,9 @@ function sameName(n,except,role){
   var k=String(n||"").replace(/\s+/g," ").trim().toLowerCase();
   return Object.keys(state.staff).some(function(id){return id!==except&&!(role==="specialist"&&state.roles[id]==="specialist")&&String(state.staff[id]||"").replace(/\s+/g," ").trim().toLowerCase()===k});
 }
+/* S-05 (stability audit 18.11): a cash line whose write failed is taken back and its form opens again with what was
+   typed (when no other window is open), so nothing looks saved when it is not and nothing typed is lost */
+function reopenForm(sh,vals){setTimeout(function(){if(sheet)return;openSheet(sh);afterPaint(function(){Object.keys(vals).forEach(function(k){var e=byId(k);if(e&&vals[k]!=null)e.value=vals[k]})})},0)}
 function db(q,onFail){
   /* The local copy is already updated; realtime confirms the change on every phone.
      onFail (bookings) puts the local copy back and keeps what was typed as a draft, so nothing looks saved
@@ -2238,7 +2248,12 @@ function loadCache(uid){
     if(!o||!o.s||o.u!==uid||!(Date.now()-o.t<7*864e5)||!Array.isArray(o.s.appts)||!Array.isArray(o.s.readers))return false;
     var from=winFrom();
     CFIELDS.forEach(function(k){if(o.s[k]!=null)state[k]=o.s[k]});
-    state.appts=state.appts.filter(function(a){return a&&a.id&&a.date>=from});
+    /* S-02: a broken item of the saved copy is left out instead of breaking the first screen */
+    var okS=function(x){return typeof x==="string"};
+    state.appts=state.appts.filter(function(a){return a&&okS(a.id)&&okS(a.date)&&okS(a.time)&&okS(a.readerId)&&a.date>=from});
+    ["readers","expenses","products","breaks"].forEach(function(k){if(Array.isArray(state[k]))state[k]=state[k].filter(function(x){return x&&typeof x==="object"&&okS(x.id)})});
+    state.readers=state.readers.filter(function(r){return okS(r.name)});
+    if(!state.staff||typeof state.staff!=="object")state.staff={};
     ["expenses","products","breaks"].forEach(function(k){if(!Array.isArray(state[k]))state[k]=[]});
     /* a copy from before per-specialist breaks would show every break in every column: breaks wait for the fresh load */
     if(o.s.hasBrkReader==null)state.breaks=[];
@@ -2363,7 +2378,26 @@ function appReady(){
   go();
 }
 setTimeout(function(){appReady()},2500);   /* never keep the logo longer than this, whatever happens */
+/* S-01 (stability audit 18.11): no error passes silently. An error nobody caught gives the user a short message and
+   is kept in this phone's error list (ruqya.errlog, last 30, shown to an admin in Ayarlar → Hesab). A failure while
+   drawing the screen shows a message with «Yenilə» instead of a blank or wrong screen. */
+var errT=0;
+function reportErr(e,quiet){
+  var m=String(e&&(e.message||e.reason)||e||"?").slice(0,300),st=String(e&&e.stack||"").split(String.fromCharCode(10)).slice(0,3).join(" | ").slice(0,400);
+  try{var lg=JSON.parse(localStorage.getItem("ruqya.errlog")||"[]");if(!Array.isArray(lg))lg=[];lg.push({t:new Date().toISOString(),v:APP_VERSION,m:m,s:st,tab:ui&&ui.tab||""});localStorage.setItem("ruqya.errlog",JSON.stringify(lg.slice(-30)))}catch(x){}
+  if(!quiet&&Date.now()-errT>5000){errT=Date.now();try{flash(L("Xəta baş verdi. Səhifəni yeniləyin; təkrarlansa, adminə deyin."),true)}catch(x){}}
+}
+window.addEventListener("error",function(ev){reportErr(ev&&ev.error||ev&&ev.message)});
+window.addEventListener("unhandledrejection",function(ev){reportErr(ev&&ev.reason)});
+function errLog(){try{var lg=JSON.parse(localStorage.getItem("ruqya.errlog")||"[]");return Array.isArray(lg)?lg:[]}catch(e){return []}}
 function render(){
+  try{renderScreen()}catch(e){
+    reportErr(e);try{dropCache()}catch(x){}   /* a saved copy that breaks the screen is not used again */
+    var mm=byId("main");if(mm)mm.innerHTML='<div class="empty"><p><b>'+L("Ekranı göstərmək olmadı.")+'</b></p><p>'+L("Səhifəni yeniləyin. Təkrarlansa, adminə deyin.")+'</p><button class="primary" data-act="reload">'+L("Yenilə")+'</button></div>';
+    var tb=byId("tabs");if(tb&&auth.user)tb.hidden=false;
+  }
+}
+function renderScreen(){
   pcache=null;edIdx=null;
   if(auth.ready&&(!auth.user||auth.loaded||!sb))appReady();
   if(lp&&Date.now()-lp.t<8000){lpRender=true;return}   /* a finger is holding a block: redraw after it lifts */
@@ -3381,6 +3415,8 @@ function readersMain(){
     (state.v2?L('<button class="ghost" data-act="me">Dəyiş</button>'):'')+'</div>'+
     (state.hasRole&&(state.roleSet[auth.user.id]||isAdmin())?L('<p class="hint">Rol: ')+roleLabel(auth.user.id)+'</p>':'');
   h+=L('<button class="ghost" data-act="logout">Çıxış</button>');
+  /* S-01: the errors this phone met (admins) */
+  if(isAdmin()){var el=errLog();h+='<h3 class="sec">'+L("Xəta jurnalı (bu telefon)")+'</h3>'+(el.length?'<div class="pay errlog">'+el.slice().reverse().map(function(x){return '<div class="visit"><span class="num" style="font-size:12px">'+esc(String(x.t).replace("T"," ").slice(0,19))+' · '+esc(x.v||"")+'</span><span style="font-size:12.5px;overflow-wrap:anywhere">'+esc(x.m)+'</span></div>'}).join("")+'</div><button class="ghost" data-act="errlog-clear">'+L("Jurnalı təmizlə")+'</button>':'<p class="hint">'+L("Xəta yoxdur.")+'</p>')}
   }
   return h;
 }
@@ -3974,7 +4010,7 @@ document.addEventListener("click",function(e){
     }else{
     var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
     state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
-    db(sb.from("product_sales").insert(prow));closeSheet();
+    db(sb.from("product_sales").insert(prow),function(){state.products=state.products.filter(function(e){return e.id!==pid});render();reopenForm({type:"prod"},{"pr-names":pn||"","pr-amount":String(pa2),"pr-date":pd})});closeSheet();
     }
   }
   else if(act==="del-prod"){
@@ -3991,8 +4027,11 @@ document.addEventListener("click",function(e){
     if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
     var xo=sheet.id?expense(sheet.id):null;
     if(sheet.id&&!xo){closeSheet();flash(L("Bu xərc artıq silinib."));return}
-    if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
-    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
+    var xv={"x-title":xt,"x-amount":String(xa),"x-date":xd};
+    if(xo){var xold={title:xo.title,amount:xo.amount,date:xo.date};xo.title=xt;xo.amount=xa;xo.date=xd;
+      db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id),function(){xo.title=xold.title;xo.amount=xold.amount;xo.date=xold.date;render();reopenForm({type:"expense",id:xo.id},xv)})}
+    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});
+      db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}),function(){state.expenses=state.expenses.filter(function(e){return e.id!==xid});render();reopenForm({type:"expense",id:null},xv)})}
     closeSheet();
   }
   else if(act==="del-expense"){
@@ -4174,7 +4213,8 @@ document.addEventListener("click",function(e){
     var dr=state.breaks.filter(function(x){return dids.indexOf(x.id)>=0}).map(function(x){return x.rid});if(!canBrk(dr))return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return dids.indexOf(x.id)<0});
-    dids.forEach(function(z){db(sb.from("breaks").delete().eq("id",z))});
+    /* S-03: one request for all of them — a broken connection cannot leave half of a group deleted */
+    if(dids.length)db(sb.from("breaks").delete().in("id",dids));
     closeSheet();
   }
   else if(act==="del-break"){
@@ -4248,6 +4288,8 @@ document.addEventListener("click",function(e){
     }
     closeSheet();
   }
+  else if(act==="reload"){location.reload();return}
+  else if(act==="errlog-clear"){try{localStorage.removeItem("ruqya.errlog")}catch(e){}render();return}
   else if(act==="logout"){
     /* Without internet the server cannot be told; the session and the data copy are removed from this phone anyway. */
     var lo=function(r){if(!(r&&r.error&&auth.user))return;
