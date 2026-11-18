@@ -1,0 +1,4 @@
+# S-05 red — 2026-11-18T14:18:36Z — commit b2510c5
+FAIL 99-cash-save-fail.js 
+    Error: FAIL: expense: the failed line is not left in the list as saved
+1 failed of 1

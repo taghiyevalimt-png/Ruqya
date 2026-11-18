@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-uio/DDBxIirAbo50XhsEhw1yH2Qul5m3xophpdMjjlI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8u7SixuwiyoNmO2pP2SQ9YQjPHwwcIjWoNJYzekX4qw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2120,6 +2120,9 @@ function sameName(n,except,role){
   var k=String(n||"").replace(/\s+/g," ").trim().toLowerCase();
   return Object.keys(state.staff).some(function(id){return id!==except&&!(role==="specialist"&&state.roles[id]==="specialist")&&String(state.staff[id]||"").replace(/\s+/g," ").trim().toLowerCase()===k});
 }
+/* S-05 (stability audit 18.11): a cash line whose write failed is taken back and its form opens again with what was
+   typed (when no other window is open), so nothing looks saved when it is not and nothing typed is lost */
+function reopenForm(sh,vals){setTimeout(function(){if(sheet)return;openSheet(sh);afterPaint(function(){Object.keys(vals).forEach(function(k){var e=byId(k);if(e&&vals[k]!=null)e.value=vals[k]})})},0)}
 function db(q,onFail){
   /* The local copy is already updated; realtime confirms the change on every phone.
      onFail (bookings) puts the local copy back and keeps what was typed as a draft, so nothing looks saved
@@ -3974,7 +3977,7 @@ document.addEventListener("click",function(e){
     }else{
     var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
     state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
-    db(sb.from("product_sales").insert(prow));closeSheet();
+    db(sb.from("product_sales").insert(prow),function(){state.products=state.products.filter(function(e){return e.id!==pid});render();reopenForm({type:"prod"},{"pr-names":pn||"","pr-amount":String(pa2),"pr-date":pd})});closeSheet();
     }
   }
   else if(act==="del-prod"){
@@ -3991,8 +3994,11 @@ document.addEventListener("click",function(e){
     if(!okDate(xd))return fail("x-err",L("Tarixi düzgün seçin."));
     var xo=sheet.id?expense(sheet.id):null;
     if(sheet.id&&!xo){closeSheet();flash(L("Bu xərc artıq silinib."));return}
-    if(xo){xo.title=xt;xo.amount=xa;xo.date=xd;db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id))}
-    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}))}
+    var xv={"x-title":xt,"x-amount":String(xa),"x-date":xd};
+    if(xo){var xold={title:xo.title,amount:xo.amount,date:xo.date};xo.title=xt;xo.amount=xa;xo.date=xd;
+      db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id),function(){xo.title=xold.title;xo.amount=xold.amount;xo.date=xold.date;render();reopenForm({type:"expense",id:xo.id},xv)})}
+    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});
+      db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}),function(){state.expenses=state.expenses.filter(function(e){return e.id!==xid});render();reopenForm({type:"expense",id:null},xv)})}
     closeSheet();
   }
   else if(act==="del-expense"){
