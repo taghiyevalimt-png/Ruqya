@@ -1,0 +1,6 @@
+# B-24 red — iPhone «Telefon kontaktlarına əlavə et» does nothing (owner screenshot 18.11 14:49) — 2026-11-18T10:50:54Z — commit 90cd7cb
+FAIL 99-contacts.js 
+    page.click: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('#sheet [data-act="contact-one"]')[22m
+1 failed of 1

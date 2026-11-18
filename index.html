@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-A2+9hWIxwQ7AnRHtsZSYCxEiyeRL4vk+rTG+x8u7F0Q='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-c9bvcPlfv92LRfdttve6i4tFq0l/dHRqOQtkabtbI5s='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1492,6 +1492,7 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Kontaktlar əlavə edilir…":"Контакты добавляются…",
 "Bunun üçün tətbiqin yeni versiyası lazımdır: Ayarlar → Görünüş → Vidcet bölməsindəki linkdən yeniləyin.":"Для этого нужна новая версия приложения: обновите по ссылке в Настройки → Вид → Виджет.",
 "Kontakt faylı yükləndi — açın və «Hamısını əlavə et» seçin.":"Файл контактов скачан — откройте его и выберите «Добавить все».",
+"Kontaktlar":"Контакты",
 "Hamısını telefon kontaktlarına əlavə et ({n})":"Добавить всех в контакты телефона ({n})",
 "Telefon kontaktlarına əlavə et":"Добавить в контакты телефона",
 "{n} nəfər kontaktlara əlavə ediləcək — bir də basın":"{n} чел. будут добавлены в контакты — нажмите ещё раз",
@@ -3206,7 +3207,11 @@ function importContacts(rows){
   if(NATIVE&&typeof NATIVE.importContacts==="function"){try{NATIVE.importContacts(JSON.stringify(rows));flash(L("Kontaktlar əlavə edilir…"))}catch(e){flash(L("Kontaktlara əlavə etmək olmadı."),true)}return}
   if(NATIVE){flash(L("Bunun üçün tətbiqin yeni versiyası lazımdır: Ayarlar → Görünüş → Vidcet bölməsindəki linkdən yeniləyin."),true);return}
   var txt=vcfOf(rows),name=rows.length===1?rows[0][0].replace(/[^\w\u00C0-\u024F\u0400-\u04FF -]/g,"").trim()+".vcf":"merkez-kontaktlar.vcf";
-  if(/iPhone|iPad|iPod/.test(navigator.userAgent)){location.href="data:text/vcard;charset=utf-8,"+encodeURIComponent(txt);return}
+  /* iPhone (B-24, owner 18.11): a data: address does nothing in the app opened from the home screen. The file goes to
+     the share menu instead («Kontaktlar» → add all); where there is no share menu for files, it is downloaded. */
+  var f=null;try{f=new File([txt],name||"kontakt.vcf",{type:"text/vcard"})}catch(e){}
+  if(f&&/iPhone|iPad|iPod|Macintosh.*Mobile/.test(navigator.userAgent)&&navigator.canShare&&navigator.share){var can=false;try{can=navigator.canShare({files:[f]})}catch(e){}
+    if(can){navigator.share({files:[f],title:L("Kontaktlar")}).catch(function(e){if(!e||e.name!=="AbortError")flash(L("Kontaktlara əlavə etmək olmadı."),true)});return}}
   var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/vcard"}));a.download=name||"kontakt.vcf";document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000);
   flash(L("Kontakt faylı yükləndi — açın və «Hamısını əlavə et» seçin."));
