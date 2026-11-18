@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Maohe5qFNystiaFD5cxA3C2zrez97mP2Ph9CIs2gyWQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-lhZO5RYXELA2PlK4youDSgpVvlCQ4X3+XuGxIxqPEsI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -301,6 +301,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .cal:not(.fit) .cal-foot .fn{flex:1 0 56px;width:56px}
 .fitprobe{position:absolute;visibility:hidden;left:0;top:0;white-space:nowrap;font-size:100px;font-weight:700;letter-spacing:-.04em;line-height:1}
 .bchip small.bwhen{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:1px}
+.cimp{width:100%;margin:0 0 10px}
 .chkrow{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;padding:6px 0}.chkrow input{width:22px;height:22px;margin:0;accent-color:var(--accent)}
 .cal-foot{position:sticky;bottom:0;z-index:4;display:flex;height:40px;background:var(--surface);border-top:1px solid var(--line)}
 .cal-foot .corner{position:sticky;left:0;z-index:5;width:54px;flex:none;background:var(--surface);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:2px 4px}
@@ -1484,6 +1485,16 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Agentlər üzrə xidmətlər":"Услуги по агентам",
 "Yer üzrə":"По месту",
 "statistikada yoxdur":"нет в статистике",
+"Kontaktlara icazə verilmədi. Telefonun ayarlarında «Mərkəz» üçün «Kontaktlar» icazəsini açın.":"Доступ к контактам не дан. Включите разрешение «Контакты» для «Mərkəz» в настройках телефона.",
+"Kontaktlara əlavə etmək olmadı.":"Не удалось добавить в контакты.",
+"Kontaktlara əlavə edildi: {a}. Artıq olanlar: {s}.":"Добавлено в контакты: {a}. Уже были: {s}.",
+"Nömrəsi olan pasiyent yoxdur.":"Нет пациентов с номером.",
+"Kontaktlar əlavə edilir…":"Контакты добавляются…",
+"Bunun üçün tətbiqin yeni versiyası lazımdır: Ayarlar → Görünüş → Vidcet bölməsindəki linkdən yeniləyin.":"Для этого нужна новая версия приложения: обновите по ссылке в Настройки → Вид → Виджет.",
+"Kontakt faylı yükləndi — açın və «Hamısını əlavə et» seçin.":"Файл контактов скачан — откройте его и выберите «Добавить все».",
+"Hamısını telefon kontaktlarına əlavə et ({n})":"Добавить всех в контакты телефона ({n})",
+"Telefon kontaktlarına əlavə et":"Добавить в контакты телефона",
+"{n} nəfər kontaktlara əlavə ediləcək — bir də basın":"{n} чел. будут добавлены в контакты — нажмите ещё раз",
 "B.e":"Пн",
 "Ç.a":"Вт",
 "Ç":"Ср",
@@ -3170,6 +3181,34 @@ function cancelList(){
       '<div class="links">'+phoneLinks(a.phone,null)+(canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>'):'')+'</div></div>';
   }).join("");
 }
+/* Owner 18.11: patients' names and numbers into the phone's contacts — everybody at once or one patient.
+   Android app: added straight into the contacts (after the phone asks once for permission); a number already in
+   the contacts is not added twice. iPhone and other browsers: a contacts file (.vcf) — the phone opens it and adds
+   all the contacts with one tap («Add all contacts»); a web page cannot write into the contacts by itself. */
+function contactRows(keys){
+  var m=patients(),seen={},out=[];
+  (keys||Object.keys(m)).forEach(function(k){var p0=m[k];if(!p0||!p0.phone)return;var c=phoneCore(p0.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(p0.name||"").trim()||p0.phone,String(p0.phone).trim()])});
+  return out;
+}
+function vcfOf(rows){
+  var e=function(t){return String(t).replace(/\\/g,"\\\\").replace(/[,;]/g,function(c){return "\\"+c}).replace(/\r?\n/g," ")};
+  return rows.map(function(r){return "BEGIN:VCARD\r\nVERSION:3.0\r\nFN:"+e(r[0])+"\r\nN:;"+e(r[0])+";;;\r\nTEL;TYPE=CELL:"+e(r[1])+"\r\nEND:VCARD\r\n"}).join("");
+}
+window.ruqyaContactsDone=function(added,skipped,err){
+  if(err==="denied")flash(L("Kontaktlara icazə verilmədi. Telefonun ayarlarında «Mərkəz» üçün «Kontaktlar» icazəsini açın."),true);
+  else if(err)flash(L("Kontaktlara əlavə etmək olmadı."),true);
+  else flash(tf(L("Kontaktlara əlavə edildi: {a}. Artıq olanlar: {s}."),{a:added,s:skipped}));
+};
+function importContacts(rows){
+  if(!rows.length){flash(L("Nömrəsi olan pasiyent yoxdur."));return}
+  if(NATIVE&&typeof NATIVE.importContacts==="function"){try{NATIVE.importContacts(JSON.stringify(rows));flash(L("Kontaktlar əlavə edilir…"))}catch(e){flash(L("Kontaktlara əlavə etmək olmadı."),true)}return}
+  if(NATIVE){flash(L("Bunun üçün tətbiqin yeni versiyası lazımdır: Ayarlar → Görünüş → Vidcet bölməsindəki linkdən yeniləyin."),true);return}
+  var txt=vcfOf(rows),name=rows.length===1?rows[0][0].replace(/[^\w\u00C0-\u024F\u0400-\u04FF -]/g,"").trim()+".vcf":"merkez-kontaktlar.vcf";
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent)){location.href="data:text/vcard;charset=utf-8,"+encodeURIComponent(txt);return}
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/vcard"}));a.download=name||"kontakt.vcf";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000);
+  flash(L("Kontakt faylı yükləndi — açın və «Hamısını əlavə et» seçin."));
+}
 function patientsList(){
   var m=patients(),q=low(ui.q.trim()),qd=qDigits(q);
   var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
@@ -3178,7 +3217,8 @@ function patientsList(){
   }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
   if(!arr.length)return auth.loaded?'<div class="empty">'+(q?L("Heç kim tapılmadı. Adı və ya nömrəni yoxlayın."):L("Pasiyentlər ilk qəbuldan sonra burada görünəcək."))+'</div>':"";
-  return arr.map(function(p){
+  var nc=q?0:contactRows().length;
+  return (nc?'<button class="ghost cimp" data-act="contacts-all">'+tf(L("Hamısını telefon kontaktlarına əlavə et ({n})"),{n:nc})+'</button>':'')+arr.map(function(p){
     var bits=[p.paid+L(" dəfə gəlib")];
     if(p.noshow)bits.push(L("gəlməyib: ")+p.noshow);
     if(p.cancel)bits.push(L("ləğv edib: ")+p.cancel);
@@ -3191,7 +3231,8 @@ function patientSheet(){
   /* «Təsdiq» asks about the patient's next session still ahead, if there is one */
   var nextA=p.list.filter(function(a){return a.status!=="cancel"&&!ended(a)&&appt(a.id)}).sort(function(x,y){return (x.date+x.time).localeCompare(y.date+y.time)})[0];
   var main='<div class="btns"><button class="primary" data-act="repeat" data-id="'+esc(p.key)+L('">Yeni qəbul yaz</button>')+phoneLinks(nextA&&nextA.phone?nextA.phone:p.phone,nextA?appt(nextA.id):null,"wa")+'</div>';
-  var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+'<div class="pvisits">';
+  var h='<h2>'+esc(p.name)+CLOSE+'</h2><p class="hint num">'+esc(p.phone||L("Telefon yazılmayıb"))+'</p>'+main+
+    (p.phone?'<button class="ghost" data-act="contact-one" data-id="'+esc(p.key)+'">'+L("Telefon kontaktlarına əlavə et")+'</button>':'')+'<div class="pvisits">';
   /* Every visit is shown in full, with its own «Dəyiş» and «Sil», so nothing has to be opened. */
   var vis=p.list;
   if(p.oldN){loadOldVisits(sheet,p);
@@ -4030,6 +4071,12 @@ document.addEventListener("click",function(e){
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
+  else if(act==="contacts-all"){
+    var cr=contactRows();
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=tf(L("{n} nəfər kontaktlara əlavə ediləcək — bir də basın"),{n:cr.length});return}
+    importContacts(cr);b.dataset.sure="";b.textContent=tf(L("Hamısını telefon kontaktlarına əlavə et ({n})"),{n:cr.length});return;
+  }
+  else if(act==="contact-one"){importContacts(contactRows([id]));return}
   else if(act==="new-break"){if(canAddBrk()){var s0={};if(!canBreaks())activeReaders().forEach(function(r){s0[r.id]=1});openSheet({type:"brk",sel:s0,rep:"all",days:{}})}return}
   else if(act==="b-rep"||act==="b-day"){
     if(!sheet||sheet.type!=="brk")return;

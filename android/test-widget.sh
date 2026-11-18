@@ -48,6 +48,26 @@ shotat widget-seen13h $((U + 3600000)) "$JS"
 } > "idle-$API.txt"
 cat "idle-$API.txt"
 adb exec-out run-as $P cat files/widget_test.txt > "error-$API.txt" 2>/dev/null || true
+# Owner 18.11: patients into the phone's contacts. The app's own import (permissions granted like a «Allow» tap),
+# twice: the first adds 2 (one without a number, one number already given), the second adds nothing.
+adb shell pm grant $P android.permission.READ_CONTACTS || true
+adb shell pm grant $P android.permission.WRITE_CONTACTS || true
+CJ=$(printf '%s' '[["Test Pasiyent Bir","+994 55 111 22 33"],["Test Iki","0501112244"],["Nomresiz",""],["Bir tekrar","0551112233"]]' | base64 -w0)
+cimport() {
+  adb shell rm -f /data/data/$P/files/contacts_test.txt 2>/dev/null
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.CONTACTS_TEST --es b64 '$CJ'"
+  sleep 4
+  adb exec-out run-as $P cat files/contacts_test.txt 2>/dev/null | tr -d '\r'
+}
+C1=$(cimport); C2=$(cimport)
+CQ=$(adb shell content query --uri content://com.android.contacts/data/phones --projection display_name:data1 2>/dev/null | tr -d '\r')
+{ echo "contacts import (API $API)"
+  echo "first:  $C1"
+  echo "second: $C2"
+  echo "$CQ" | grep -E "Test Pasiyent Bir|Test Iki|Bir tekrar|Nomresiz" || true
+  if [ "$C1" = "added=2 skipped=2" ] && [ "$C2" = "added=0 skipped=4" ] && echo "$CQ" | grep -q "display_name=Test Pasiyent Bir, data1=+994 55 111 22 33" && echo "$CQ" | grep -q "display_name=Test Iki, data1=0501112244" && ! echo "$CQ" | grep -q "Bir tekrar"; then echo "PASS: names and numbers in the phone's contacts, a number already there is not added twice"; else echo "FAIL"; fi
+} > "contacts-$API.txt"
+cat "contacts-$API.txt"
 # F-02 (owner 17.11): the widget in white or black, as chosen in the app ("t"); without "t" it follows the phone
 # (the emulator runs in light mode, so it must be the white picture). Signed out keeps the colour too.
 JL=$(sed 's/"u":/"t":"light","u":/' android/test-widget.json | base64 -w0)

@@ -150,11 +150,64 @@ public class MainActivity extends Activity {
         });
     }
 
-    /** What the web page may ask of the phone: only the widget, nothing else. */
+    /** Owner 18.11: patients into the phone's contacts. The list waits here while the phone asks for permission. */
+    private static final int CONTACTS_REQ = 77;
+    private String pendingContacts;
+
+    private void contactsDone(final int added, final int skipped, final String err) {
+        runOnUiThread(() -> {
+            if (web != null) web.evaluateJavascript("window.ruqyaContactsDone&&window.ruqyaContactsDone(" + added + "," + skipped + ",'" + err + "')", null);
+        });
+    }
+
+    private void runContactsImport() {
+        final String json = pendingContacts;
+        pendingContacts = null;
+        if (json == null) return;
+        new Thread(() -> {
+            try {
+                int[] r = Contacts.importAll(MainActivity.this, new org.json.JSONArray(json));
+                contactsDone(r[0], r[1], "");
+            } catch (Exception e) {
+                contactsDone(0, 0, "error");
+            }
+        }).start();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
+        super.onRequestPermissionsResult(code, perms, res);
+        if (code != CONTACTS_REQ) return;
+        boolean ok = res.length > 0;
+        for (int r : res) ok = ok && r == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        if (ok) runContactsImport();
+        else {
+            pendingContacts = null;
+            contactsDone(0, 0, "denied");
+        }
+    }
+
+    /** What the web page may ask of the phone: the widget, saving the Excel file and adding contacts. */
     public class Bridge {
         @JavascriptInterface
         public int version() {
-            return 2;
+            return 3;
+        }
+
+        /** [[name, phone], …] from the patients' list: added straight into the phone's contacts (after permission). */
+        @JavascriptInterface
+        public boolean importContacts(final String json) {
+            if (json == null || json.length() > 5000000) return false;
+            runOnUiThread(() -> {
+                pendingContacts = json;
+                if (Build.VERSION.SDK_INT >= 23 && (checkSelfPermission(android.Manifest.permission.WRITE_CONTACTS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+                        || checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != android.content.pm.PackageManager.PERMISSION_GRANTED)) {
+                    requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS, android.Manifest.permission.WRITE_CONTACTS}, CONTACTS_REQ);
+                } else {
+                    runContactsImport();
+                }
+            });
+            return true;
         }
 
         /** The admin's Excel file: written to Downloads (Android 10 and newer), then opened. */
