@@ -49,4 +49,32 @@ module.exports = async () => {
   };
   await flow(true);
   await flow(false);
+  // owner 18.11 (iPhone, app on the home screen): a tap did nothing — a data: address is blocked there. Now the
+  // contacts file goes to the iPhone share menu (from it: «Kontaktlar» → «Hamısını əlavə et»); without the share
+  // menu the file is downloaded. Simulated: iPhone user agent, the share menu replaced by a recorder.
+  for (const share of [true, false]) {
+    const s = await open(AGENT, { viewport: { width: 390, height: 844 }, db: JSON.parse(JSON.stringify(db)) });
+    try {
+      const p = s.page;
+      await p.addInitScript((share) => {
+        Object.defineProperty(navigator, "userAgent", { get: () => "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148" });
+        window.__sh = [];
+        if (share) { navigator.canShare = (d) => !!(d && d.files && d.files.length); navigator.share = async (d) => { const f = d.files[0]; window.__sh.push({ name: f.name, type: f.type, text: await f.text() }); }; }
+        else { delete navigator.share; navigator.canShare = undefined; }
+      }, share);
+      await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
+      await p.click('#tabs [data-tab="patients"]'); await p.waitForTimeout(500);
+      await p.click('[data-act="patient"] >> nth=0'); await p.locator('#sheet [data-act="contact-one"]').waitFor();
+      if (share) {
+        await p.click('#sheet [data-act="contact-one"]'); await p.waitForTimeout(500);
+        const sh = await p.evaluate(() => window.__sh);
+        check(sh.length === 1 && /\.vcf$/.test(sh[0].name) && /vcard/.test(sh[0].type) && /BEGIN:VCARD[\s\S]*TEL;TYPE=CELL:/.test(sh[0].text), "iPhone: the contacts file goes to the share menu: " + JSON.stringify(sh).slice(0, 200));
+        check(p.url().startsWith("http"), "iPhone: the page stays (no data: address)");
+      } else {
+        const [dl] = await Promise.all([p.waitForEvent("download", { timeout: 10000 }), p.click('#sheet [data-act="contact-one"]')]);
+        check(dl.suggestedFilename().endsWith(".vcf"), "iPhone without the share menu: the .vcf is downloaded: " + dl.suggestedFilename());
+      }
+      check(!s.errors.length, "iPhone: no page errors: " + s.errors.join("; "));
+    } finally { await s.close(); }
+  }
 };
