@@ -1,0 +1,4 @@
+# S-03 red — 2026-11-18T14:26:02Z — commit 2e8a4bb
+FAIL 99-breaks-delete-one-request.js 
+    Error: FAIL: one delete request for the whole group: 2
+1 failed of 1
