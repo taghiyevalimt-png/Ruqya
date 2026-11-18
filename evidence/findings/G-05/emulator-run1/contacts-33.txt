@@ -1,0 +1,10 @@
+contacts import (API 33)
+first:  Broadcasting: Intent { act=az.ruqya.zapis.CONTACTS_TEST flg=0x400020 cmp=az.ruqya.zapis/.WidgetTest (has extras) }
+Broadcast completed: result=0
+added=2 skipped=2
+second: Broadcasting: Intent { act=az.ruqya.zapis.CONTACTS_TEST flg=0x400020 cmp=az.ruqya.zapis/.WidgetTest (has extras) }
+Broadcast completed: result=0
+added=0 skipped=4
+Row: 0 display_name=Test Pasiyent Bir, data1=+994 55 111 22 33
+Row: 1 display_name=Test Iki, data1=0501112244
+FAIL

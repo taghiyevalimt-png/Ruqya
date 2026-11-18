@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-lhZO5RYXELA2PlK4youDSgpVvlCQ4X3+XuGxIxqPEsI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-dsJgqSS3ouxLHTQuWJTmVYvB+AXJTCphlDHmIdRRHng='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1517,7 +1517,6 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Son tarix başlanğıcdan sonra olmalıdır.":"Конечная дата должна быть позже начальной.",
 "Öz sütununuzu seçin.":"Выберите свою колонку.",
 "<p class=\"hint\">Fasilə seçilən günlərdə seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>":"<p class=\"hint\">Перерыв показывается в выбранные дни в календаре выбранных специалистов, и на это время к ним нельзя записать. «Hamısı» — для всех специалистов.</p>",
-"Rol: ":"Роль: ",
 "Statistikada göstərmə":"Не показывать в статистике",
 "Bu agentin sətirləri satış statistikasında, «Bu gün yazılan qəbullar»da və «Agentlər üzrə xidmətlər»də görünməyəcək (Excel-də də).":"Строки этого агента не будут видны в статистике продаж, в «Записано сегодня» и в «Услугах по агентам» (и в Excel).",
 "xidmət":"услуги",
@@ -2478,10 +2477,13 @@ function fitNames(){
   over.forEach(function(b,ix){var ev=b.parentNode,f=f0[ix];
     while(f>6&&(b.scrollHeight>ev.clientHeight-2||b.scrollWidth>b.clientWidth+1)){f-=0.5;b.style.fontSize=f+"px"}});
   /* under the name (owner 18.11): phone, then who wrote it (no time, no «Yazdı:») — each only when it fits wholly */
-  for(var j=0;j<evs.length;j++){var e=evs[j],H=e.clientHeight-1,ch=e.children;
+  var trim=function(e){var H=e.clientHeight-1,ch=e.children,n=0;for(var q0=1;q0<ch.length;q0++)ch[q0].style.display="";
     for(var g=2;g>=1;g--){var last=null;for(var k=ch.length-1;k>0;k--)if(ch[k].style.display!=="none"){last=ch[k];break}
       if(!last||(last.offsetTop+last.offsetHeight<=H&&last.scrollWidth<=last.clientWidth+1))break;
-      for(var q=1;q<ch.length;q++)if(+ch[q].getAttribute("data-g")===g)ch[q].style.display="none"}}
+      for(var q=1;q<ch.length;q++)if(+ch[q].getAttribute("data-g")===g){ch[q].style.display="none";n++}}return n};
+  for(var j=0;j<evs.length;j++){var e=evs[j];
+    /* «Bütün gün»: when the ✅ line pushes the phone or the agent out, the ✅ goes into the corner instead */
+    if(trim(e)&&e.closest(".fit")){var b2=e.firstElementChild;if(b2&&b2.querySelector("i.ok")&&!b2.classList.contains("okc")){b2.classList.add("okc");trim(e)}}}
 }
 function gridMain(){
   var rs=activeReaders().filter(function(r){return shown(r.id)});

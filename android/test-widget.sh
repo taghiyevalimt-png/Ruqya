@@ -55,7 +55,7 @@ adb shell pm grant $P android.permission.WRITE_CONTACTS || true
 CJ=$(printf '%s' '[["Test Pasiyent Bir","+994 55 111 22 33"],["Test Iki","0501112244"],["Nomresiz",""],["Bir tekrar","0551112233"]]' | base64 -w0)
 cimport() {
   adb shell rm -f /data/data/$P/files/contacts_test.txt 2>/dev/null
-  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.CONTACTS_TEST --es b64 '$CJ'"
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.CONTACTS_TEST --es b64 '$CJ'" > /dev/null
   sleep 4
   adb exec-out run-as $P cat files/contacts_test.txt 2>/dev/null | tr -d '\r'
 }
