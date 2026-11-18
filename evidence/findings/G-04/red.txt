@@ -1,0 +1,6 @@
+# G-04 red — breaks every day only, specialists cannot add (owner 18.11 notes) — 2026-11-18T09:06:53Z — commit fb9176f
+FAIL 99-breaks-days.js 
+    page.click: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('[data-act="b-rep"][data-id="wd"]')[22m
+1 failed of 1

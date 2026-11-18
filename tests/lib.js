@@ -161,7 +161,8 @@ async function attach(context, db, ctl) {
       const now = new Date().toISOString();
       // column defaults of the real table (live schema 17.11), so a row saved with only the form's fields reads back
       // like on the server (T-03)
-      const def = t === "appts" ? { phone: "", note: "", status: "wait", settled: false, service: "Ruqya", duration: 90, confirmed: false, place: "ofis", follow: 0 } : {};
+      const def = t === "appts" ? { phone: "", note: "", status: "wait", settled: false, service: "Ruqya", duration: 90, confirmed: false, place: "ofis", follow: 0 }
+        : t === "breaks" ? { reader_id: null, days: null, date_from: null, date_to: null } : {};
       for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
       return send(route, 201);
     }

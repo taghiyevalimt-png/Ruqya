@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-jLF5Rn4v257OfaqYHNfbWbcwqsBaRptiXsqWuVZrJ90='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Maohe5qFNystiaFD5cxA3C2zrez97mP2Ph9CIs2gyWQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -300,6 +300,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 #cal .ev.tiny .fx{display:none}
 .cal:not(.fit) .cal-foot .fn{flex:1 0 56px;width:56px}
 .fitprobe{position:absolute;visibility:hidden;left:0;top:0;white-space:nowrap;font-size:100px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.bchip small.bwhen{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:1px}
 .chkrow{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;padding:6px 0}.chkrow input{width:22px;height:22px;margin:0;accent-color:var(--accent)}
 .cal-foot{position:sticky;bottom:0;z-index:4;display:flex;height:40px;background:var(--surface);border-top:1px solid var(--line)}
 .cal-foot .corner{position:sticky;left:0;z-index:5;width:54px;flex:none;background:var(--surface);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:2px 4px}
@@ -1483,6 +1484,28 @@ var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
 "Agentlər üzrə xidmətlər":"Услуги по агентам",
 "Yer üzrə":"По месту",
 "statistikada yoxdur":"нет в статистике",
+"B.e":"Пн",
+"Ç.a":"Вт",
+"Ç":"Ср",
+"C.a":"Чт",
+"C":"Пт",
+"Ş":"Сб",
+"B":"Вс",
+"Hansı günlər?":"В какие дни?",
+"<div class=\"field\"><label>Hansı günlər?</label><div class=\"seg\" style=\"grid-template-columns:repeat(3,1fr)\">":"<div class=\"field\"><label>В какие дни?</label><div class=\"seg\" style=\"grid-template-columns:repeat(3,1fr)\">",
+"<h3 class=\"sec\">Fasilələr</h3>":"<h3 class=\"sec\">Перерывы</h3>",
+"Hər gün":"Каждый день",
+"Həftənin günləri":"Дни недели",
+"Tarixlər":"Даты",
+"Tarixdən":"С даты",
+"Tarixdən (istəyə görə)":"С даты (по желанию)",
+"Tarixədək (bir gün üçün boş qoyun)":"По дату (для одного дня оставьте пустым)",
+"Tarixədək (istəyə görə)":"По дату (по желанию)",
+"Həftənin günlərini seçin.":"Выберите дни недели.",
+"Tarixi seçin.":"Выберите дату.",
+"Son tarix başlanğıcdan sonra olmalıdır.":"Конечная дата должна быть позже начальной.",
+"Öz sütununuzu seçin.":"Выберите свою колонку.",
+"<p class=\"hint\">Fasilə seçilən günlərdə seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>":"<p class=\"hint\">Перерыв показывается в выбранные дни в календаре выбранных специалистов, и на это время к ним нельзя записать. «Hamısı» — для всех специалистов.</p>",
 "Rol: ":"Роль: ",
 "Statistikada göstərmə":"Не показывать в статистике",
 "Bu agentin sətirləri satış statistikasında, «Bu gün yazılan qəbullar»da və «Agentlər üzrə xidmətlər»də görünməyəcək (Excel-də də).":"Строки этого агента не будут видны в статистике продаж, в «Записано сегодня» и в «Услугах по агентам» (и в Excel).",
@@ -1734,9 +1757,9 @@ function overlap(rid,date,start,dur,skip){
   return state.appts.filter(function(x){if(x.readerId!==rid||x.date!==date||x.status==="cancel"||x.sold||x.id===skip)return false;
     var s2=mins(x.time),e2=s2+(x.dur||90);return s1<e2&&s2<e1})[0];
 }
-function inBreak(start,dur,rid){
-  var s1=mins(start),e1=s1+dur;
-  return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return brkFor(b,rid)&&s1<e2&&s2<e1})[0];
+function inBreak(start,dur,rid,date){
+  var s1=mins(start),e1=s1+dur;date=date||ui.date;
+  return state.breaks.filter(function(b){var s2=mins(b.start),e2=mins(b.end);return brkFor(b,rid)&&brkOn(b,date)&&s1<e2&&s2<e1})[0];
 }
 var sheet=null;
 /* A request that hangs on a bad mobile connection is cut off after 25 s, so the app never waits on it forever. */
@@ -1793,7 +1816,21 @@ function findEdit(kind,per,s,k,col){var E=state.statEdits;
   return edIdx[kind+"|"+per+"|"+s+"|"+k+"|"+col]||null}
 /* Sales agents and admins may correct the sales statistics. */
 function canStats(){return isAdmin()||!!(auth.user&&state.roleSet[auth.user.id]&&state.roles[auth.user.id]==="agent")}
-function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5),rid:x.reader_id||""}}
+function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5),rid:x.reader_id||"",
+  days:Array.isArray(x.days)&&x.days.length?x.days.map(Number).sort():null,from:x.date_from||"",to:x.date_to||""}}
+/* owner 18.11: a break on chosen days of the week (1 = Monday … 7 = Sunday) and/or between two dates; none = every day */
+function wdOf(d){return (parse(d).getDay()+6)%7+1}
+function brkOn(b,d){if(!d)return true;if(b.from&&d<b.from)return false;if(b.to&&d>b.to)return false;return !b.days||b.days.indexOf(wdOf(d))>=0}
+var WDN=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
+function brkWhen(b){
+  var t=[];if(b.days)t.push(b.days.map(function(n){return L(WDN[n-1])}).join(", "));
+  if(b.from&&b.to&&b.from===b.to)t.push(fmtDay(b.from));else if(b.from||b.to)t.push((b.from?fmtDay(b.from):"…")+" – "+(b.to?fmtDay(b.to):"…"));
+  return t.join(" · ");
+}
+function brkSched(b){return (b.days||[]).join(",")+"~"+(b.from||"")+"~"+(b.to||"")}
+/* who may add or change these breaks: admins and agents all of them; a specialist only his own column (owner 18.11) */
+function canBrk(rids){if(canBreaks())return true;if(!specMe()||!state.hasBrkDays||!rids||!rids.length)return false;var mine=activeReaders().map(function(r){return r.id});return rids.every(function(r){return r&&mine.indexOf(r)>=0})}
+function canAddBrk(){return canBreaks()||(specMe()&&!!state.hasBrkDays&&activeReaders().length>0)}
 /* A break with no specialist is for everyone; otherwise only for that specialist. */
 function brkFor(b,rid){return !b.rid||b.rid===rid}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
@@ -1833,8 +1870,10 @@ function refresh(){
     probe("staff.want",function(){return soft(function(){return sb.from("staff").select("want").limit(1)})}),
     probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})}),
     probe("appts.place",function(){return soft(function(){return sb.from("appts").select("place").limit(1)})}),
-    probe("appts.follow",function(){return soft(function(){return sb.from("appts").select("follow").limit(1)})})
+    probe("appts.follow",function(){return soft(function(){return sb.from("appts").select("follow").limit(1)})}),
+    probe("breaks.days",function(){return soft(function(){return sb.from("breaks").select("days").limit(1)})})
   ]).then(function(res){
+    state.hasBrkDays=!!res[res.length-1]||(state.hasBrkDays&&res[res.length-1]===null);
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
     if(pending||g!==writes){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,700);return}
@@ -2449,7 +2488,7 @@ function gridMain(){
   var nowM=bk().m;
   rs.forEach(function(r){
     h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+hEff+'px,100% '+hEff+'px;background-position:0 0,0 '+(hEff/2)+'px">';
-    state.breaks.forEach(function(b){if(!brkFor(b,r.id))return;var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
+    state.breaks.forEach(function(b){if(!brkFor(b,r.id)||!brkOn(b,ui.date))return;var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
       h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
     var lanes=[];evs.forEach(function(a){
@@ -2525,15 +2564,24 @@ function viewSheet(){
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
 function breakForm(){
-  var sel=sheet.sel||{},all=!Object.keys(sel).length,rs=activeReaders();
+  var sel=sheet.sel||{},all=!Object.keys(sel).length,cb=canBreaks(),rs=cb?activeReaders():activeReaders().filter(function(r){return canBrk([r.id])});
   var who=state.hasBrkReader&&rs.length?L('<div class="field"><label>Kim üçün?</label><div class="chips" style="flex-wrap:wrap">')+
-      '<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+L('">Hamısı</button>')+
+      (cb?'<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+L('">Hamısı</button>'):'')+
       rs.map(function(r){return '<button type="button" class="chip" data-act="b-who" data-id="'+esc(r.id)+'" aria-pressed="'+!!sel[r.id]+'">'+esc(r.name)+'</button>'}).join("")+'</div></div>':"";
+  /* owner 18.11: on chosen days, like a calendar — every day, days of the week (with an optional date range), dates */
+  var rep=sheet.rep||"all",days=sheet.days||{},when="";
+  if(state.hasBrkDays){
+    when=L('<div class="field"><label>Hansı günlər?</label><div class="seg" style="grid-template-columns:repeat(3,1fr)">')+
+      [["all","Hər gün"],["wd","Həftənin günləri"],["dates","Tarixlər"]].map(function(x){return '<button type="button" data-act="b-rep" data-id="'+x[0]+'" aria-pressed="'+(rep===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div></div>';
+    if(rep==="wd")when+='<div class="chips wdays" style="flex-wrap:wrap;margin-top:-4px">'+WDN.map(function(n,i){return '<button type="button" class="chip" data-act="b-day" data-id="'+(i+1)+'" aria-pressed="'+!!days[i+1]+'">'+L(n)+'</button>'}).join("")+'</div>';
+    if(rep!=="all")when+='<div class="two"><div class="field"><label for="b-from">'+(rep==="dates"?L("Tarixdən"):L("Tarixdən (istəyə görə)"))+'</label><input id="b-from" type="date"></div>'+
+      '<div class="field"><label for="b-to">'+(rep==="dates"?L("Tarixədək (bir gün üçün boş qoyun)"):L("Tarixədək (istəyə görə)"))+'</label><input id="b-to" type="date"></div></div>';
+  }
   return L('<h2>Yeni fasilə')+CLOSE+'</h2>'+
     L('<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" maxlength="40" autocomplete="off" placeholder="Məsələn: Namaz"></div>')+
     L('<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>')+
-    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+who+
-    (state.hasBrkReader?L('<p class="hint">Fasilə hər gün seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>'):
+    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+who+when+
+    (state.hasBrkReader?L('<p class="hint">Fasilə seçilən günlərdə seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>'):
       L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'))+
     L('<p class="err" role="alert" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
 }
@@ -3191,10 +3239,10 @@ function readersMain(){
   }
   if(sec==="breaks"&&state.hasBreaks){
     var cb=canBreaks();
-    h+=L('<h3 class="sec">Fasilələr (hər gün)</h3>')+(cb&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
+    h+=L('<h3 class="sec">Fasilələr</h3>')+(cb&&!state.hasBrkReader?L('<p class="hint">Fasiləni ayrıca mütəxəssis üçün qoymaq üçün bazada 2026-11-breaks.sql faylını bir dəfə işə salın.</p>'):'');
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
     else h+=breakGroups(cb);
-    if(cb)h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
+    if(canAddBrk())h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
   }
   if(sec==="staff"&&isOwner()){
     h+=L('<h3 class="sec">İşçi hesabları</h3>')+
@@ -3258,11 +3306,12 @@ function breakGroups(cb){
   groups.forEach(function(g,ix){
     /* one chip per distinct break of the card (the same break of several specialists is one chip) */
     var seen={},chips=[];
-    g.list.slice().sort(function(a,b){return a.start<b.start?-1:a.start>b.start?1:0}).forEach(function(b){var k=b.start+"|"+b.end+"|"+b.title;if(seen[k])return;seen[k]=1;chips.push(b)});
+    g.list.slice().sort(function(a,b){return a.start<b.start?-1:a.start>b.start?1:0}).forEach(function(b){var k=brkSched(b)+"|"+b.start+"|"+b.end+"|"+b.title;if(seen[k])return;seen[k]=1;chips.push(b)});
     h+='<div class="bgrp"><div class="bnames">'+g.names.map(function(n){return '<span>'+esc(n)+'</span>'}).join("")+'</div>';
     if(!chips.length)h+='<p class="hint" style="margin:6px 0 0">'+(shared.length?L("Ayrıca fasilə yoxdur — yalnız «Hamısı üçün» fasilələri."):L("Fasilə yoxdur — istənilən saata yazmaq olar."))+'</p>';
     else h+='<div class="bchips">'+chips.map(function(b){
-      return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(b.start+"|"+b.end+"|"+b.title)+'"'+(cb?'':' disabled')+'><b class="num">'+esc(b.start)+'–'+esc(b.end)+'</b><span>'+esc(b.title)+'</span></button>'}).join("")+'</div>';
+      var w=brkWhen(b);
+      return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(brkSched(b)+"|"+b.start+"|"+b.end+"|"+b.title)+'"'+(canBrk(g.rids)?'':' disabled')+'><b class="num">'+esc(b.start)+'–'+esc(b.end)+'</b><span>'+esc(b.title)+'</span>'+(w?'<small class="bwhen">'+esc(w)+'</small>':'')+'</button>'}).join("")+'</div>';
     h+='</div>';
   });
   brkGroupsCache=groups;
@@ -3270,10 +3319,11 @@ function breakGroups(cb){
 }
 var brkGroupsCache=[];
 function brkSheet(){
-  var x=sheet,p=x.k.split("|");
+  var x=sheet,p=x.k.split("|"),sc=p[0];p=p.slice(1);
   /* read live, so a change by someone else meanwhile is shown correctly */
-  var items=state.breaks.filter(function(b){return x.rids.indexOf(b.rid||"")>=0&&b.start===p[0]&&b.end===p[1]&&b.title===p.slice(2).join("|")});
-  var h='<h2>'+esc(p.slice(2).join("|"))+CLOSE+'</h2><p class="hint num" style="font-size:16px;color:var(--ink)">'+esc(p[0])+'–'+esc(p[1])+'</p>';
+  var items=state.breaks.filter(function(b){return x.rids.indexOf(b.rid||"")>=0&&brkSched(b)===sc&&b.start===p[0]&&b.end===p[1]&&b.title===p.slice(2).join("|")});
+  var w0=items[0]?brkWhen(items[0]):"";
+  var h='<h2>'+esc(p.slice(2).join("|"))+CLOSE+'</h2><p class="hint num" style="font-size:16px;color:var(--ink)">'+esc(p[0])+'–'+esc(p[1])+'</p><p class="hint">'+esc(w0||L("Hər gün"))+'</p>';
   if(!items.length)return h+'<p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
   if(items.length>1)h+='<button class="danger" data-act="del-breaks" data-id="'+esc(items.map(function(b){return b.id}).join(","))+'">'+tf(L("Hamısından sil ({n})"),{n:items.length})+'</button>';
   h+='<div class="pay">'+items.map(function(b){var r=reader(b.rid);
@@ -3574,7 +3624,7 @@ function slotGrid(){
     .sort(function(a,b){return mins(a.time)-mins(b.time)}).map(function(x){return x.time+"–"+endOf(x)});
   var h="";
   for(var m=DAY0;m+dur<=DAY1;m+=30){
-    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur,rid);
+    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur,rid,date);
     h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
   }
   box.innerHTML=h;
@@ -3643,7 +3693,7 @@ function saveAppt(){
   var moved=!a||o.readerId!==rid||o.date!==date||o.time!==time||(o.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
   var clash=status==="cancel"||!moved||(a&&gone(a))?null:overlap(rid,date,time,dur,sheet.id);
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
-  var br=status==="cancel"||!moved||(a&&gone(a))?null:inBreak(time,dur,rid);
+  var br=status==="cancel"||!moved||(a&&gone(a))?null:inBreak(time,dur,rid,date);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   /* If the server does not take it, the screen goes back to what the server has and the typing is kept as a draft. */
   var dsh={id:sheet.id,orig:sheet.orig},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
@@ -3971,7 +4021,7 @@ document.addEventListener("click",function(e){
   else if(act==="newat"){
     var rc=b.getBoundingClientRect(),mm=DAY0+Math.floor((e.clientY-rc.top)/PXM/30)*30;
     mm=Math.max(DAY0,Math.min(DAY1-30,mm));
-    var tt=hhmm(mm),bb=inBreak(tt,30,id);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
+    var tt=hhmm(mm),bb=inBreak(tt,30,id,ui.date);if(bb){flash(L("Bu vaxt fasilədir: ")+bb.title+".");return}
     afterPaint(function(){openSheet({type:"appt",id:null,pre:{reader:id,date:ui.date,time:tt}})});return;
   }
   else if(act==="del-row"){
@@ -3980,38 +4030,52 @@ document.addEventListener("click",function(e){
     state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
-  else if(act==="new-break"){if(canBreaks())openSheet({type:"brk",sel:{}});return}
+  else if(act==="new-break"){if(canAddBrk()){var s0={};if(!canBreaks())activeReaders().forEach(function(r){s0[r.id]=1});openSheet({type:"brk",sel:s0,rep:"all",days:{}})}return}
+  else if(act==="b-rep"||act==="b-day"){
+    if(!sheet||sheet.type!=="brk")return;
+    var keep2={t:val("b-title"),s:val("b-start"),e:val("b-end"),f:byId("b-from")?val("b-from"):"",u:byId("b-to")?val("b-to"):""};
+    if(act==="b-rep")sheet.rep=id;else{sheet.days=sheet.days||{};if(sheet.days[id])delete sheet.days[id];else sheet.days[id]=1}
+    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep2.t;byId("b-start").value=keep2.s;byId("b-end").value=keep2.e;if(byId("b-from"))byId("b-from").value=keep2.f;if(byId("b-to"))byId("b-to").value=keep2.u;return;
+  }
   else if(act==="b-who"){
     if(!sheet||sheet.type!=="brk")return;
-    var keep={t:val("b-title"),s:val("b-start"),e:val("b-end")};
-    if(!id)sheet.sel={};else{sheet.sel=sheet.sel||{};if(sheet.sel[id])delete sheet.sel[id];else sheet.sel[id]=1}
-    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep.t;byId("b-start").value=keep.s;byId("b-end").value=keep.e;return;
+    var keep={t:val("b-title"),s:val("b-start"),e:val("b-end"),f:byId("b-from")?val("b-from"):"",u:byId("b-to")?val("b-to"):""};
+    if(!id){if(!canBreaks())return;sheet.sel={}}else{sheet.sel=sheet.sel||{};if(sheet.sel[id])delete sheet.sel[id];else sheet.sel[id]=1}
+    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep.t;byId("b-start").value=keep.s;byId("b-end").value=keep.e;if(byId("b-from"))byId("b-from").value=keep.f;if(byId("b-to"))byId("b-to").value=keep.u;return;
   }
   else if(act==="save-break"){
-    if(!sheet||sheet.type!=="brk"||!canBreaks())return;   /* a second tap after the form closed adds nothing */
+    if(!sheet||sheet.type!=="brk"||!canAddBrk())return;   /* a second tap after the form closed adds nothing */
     var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
     if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
     if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
     if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
     var rids=state.hasBrkReader?Object.keys(sheet.sel||{}).filter(function(r){return !!reader(r)}):[];
-    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
+    if(!canBreaks()&&(!rids.length||!canBrk(rids)))return fail("b-err",L("Öz sütununuzu seçin."));
+    /* days and dates (owner 18.11) */
+    var brep=state.hasBrkDays?sheet.rep||"all":"all",bdays=null,bfrom="",bto="";
+    if(brep==="wd"){bdays=Object.keys(sheet.days||{}).map(Number).sort();if(!bdays.length)return fail("b-err",L("Həftənin günlərini seçin."))}
+    if(brep!=="all"){bfrom=val("b-from");bto=val("b-to");if(brep==="dates"&&!bfrom)return fail("b-err",L("Tarixi seçin."));if(brep==="dates"&&!bto)bto=bfrom;
+      if(bfrom&&bto&&bto<bfrom)return fail("b-err",L("Son tarix başlanğıcdan sonra olmalıdır."))}
+    var tmp={days:bdays,from:bfrom,to:bto};
+    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a)||!brkOn(tmp,a.date))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
     if(hit&&!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
-    var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;return o});
+    var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;
+      if(state.hasBrkDays){o.days=bdays;o.date_from=bfrom||null;o.date_to=bto||null}return o});
     rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
     db(sb.from("breaks").insert(rows));closeSheet();
   }
   else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;ui.setSecPicked=true;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
-  else if(act==="brk-open"){if(!canBreaks())return;var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg)openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
+  else if(act==="brk-open"){var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg&&canBrk(bg.rids))openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
   else if(act==="del-breaks"){
-    if(!canBreaks())return;
-    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     var dids=String(id).split(",").filter(function(z){return z});
+    var dr=state.breaks.filter(function(x){return dids.indexOf(x.id)>=0}).map(function(x){return x.rid});if(!canBrk(dr))return;
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return dids.indexOf(x.id)<0});
     dids.forEach(function(z){db(sb.from("breaks").delete().eq("id",z))});
     closeSheet();
   }
   else if(act==="del-break"){
-    if(!canBreaks())return;
+    var db1=state.breaks.filter(function(x){return x.id===id})[0];if(!db1||!canBrk([db1.rid]))return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
   }
