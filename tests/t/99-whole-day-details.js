@@ -22,13 +22,13 @@ module.exports = async () => {
       const evs = await p.evaluate(() => [...document.querySelectorAll("#cal .ev")].map((e) => {
         const er = e.getBoundingClientRect();
         const vis = [...e.children].filter((c) => getComputedStyle(c).display !== "none").map((c) => { const r = c.getBoundingClientRect(); return { t: c.textContent, inside: r.bottom <= er.bottom - 1 + 0.5 && r.right <= er.right + 0.5, oneLine: c.scrollWidth <= c.clientWidth + 1, fs: parseFloat(getComputedStyle(c).fontSize) }; });
-        return { name: e.firstElementChild.textContent, h: Math.round(er.height), vis };
+        return { name: [...e.firstElementChild.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), h: Math.round(er.height), vis };   /* the name without the ✅ marks (owner 18.11) */
       }));
       const by = (n) => evs.find((e) => e.name === n);
       const order = ["name", "phone", "agent"];
       for (const e of evs) {
         const want = [e.name, PH[e.name] || "0101111111", "Nurlana"];
-        const got = e.vis.map((v) => v.t);
+        const got = e.vis.map((v, i) => (i ? v.t : e.name));
         check(JSON.stringify(got) === JSON.stringify(want.slice(0, got.length)), w + " " + e.name + ": the lines in order, only whole steps (" + order.slice(0, got.length).join(", ") + "): " + JSON.stringify(got));
         check(e.vis.every((v) => v.inside), w + " " + e.name + ": every shown line is fully inside the block (" + e.h + " px): " + JSON.stringify(e.vis));
         const ph = e.vis[1];

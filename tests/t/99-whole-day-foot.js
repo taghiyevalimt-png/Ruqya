@@ -10,7 +10,9 @@ module.exports = async () => {
     for (const n of ["Logman", "Zeyd", "Rizvan", "Ruhanə", "Aqşin", "Təranə", "Dr. Günel", "Psixoloq"]) db.readers.push({ id: uuid(), name: n, price: 0, share: 0, archived: false, color: null, created_at: "2026-11-05T00:00:00Z" });
     const s = await open(OWNER, { db, viewport: { width: w, height: h } });
     try {
-      const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
+      const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 });
+      await p.evaluate(() => localStorage.setItem("ruqya.fit", "1")); await p.reload();   // «Bütün gün» chosen (default «Kiçik» since owner 18.11)
+      await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
       const geo = () => p.evaluate(() => {
         const cal = document.getElementById("cal"), cr = cal.getBoundingClientRect(), foot = cal.querySelector(".cal-foot");
         const cols = [...cal.querySelectorAll(".col")].map((c) => c.getBoundingClientRect());
