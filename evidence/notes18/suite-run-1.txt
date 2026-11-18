@@ -1,79 +1,73 @@
-# run 1 of 3 — commit 3d29c39c65fcd482612b78bb01354f7b8b4c08f2, tree 1 changed files — start 2026-11-18T09:13:21Z
+# run 1 of 3 — commit e601f5508f06ee4f8242336f9dd9a59dc6ed712d, tree 1 changed files — start 2026-11-18T09:38:38Z
 $ node tests/lint.js && node tests/run.js
-# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-18T09:13:23.401Z
-# messages: 39
-# by rule: {"no-unused-vars":9,"null":1,"security/detect-non-literal-fs-filename":20,"security/detect-object-injection":8,"security/detect-unsafe-regex":1}
-PASS 00-smoke.js 7.7s
-PASS 01-drafts.js 40.4s
-PASS 02-session.js 25.0s
-PASS 03-delete-fonts.js 8.8s
-PASS 04-excel.js 7.4s
-PASS 05-patients.js 12.6s
-PASS 06-anonymize.js 13.8s
-PASS 07-russian.js 8.0s
-PASS 08-sweep.js 165.0s
-PASS 09-features.js 43.2s
-    fuzz bad0 az 120 steps 17s
-    fuzz bad0 ru 120 steps 54s
-    fuzz 1111 az 120 steps 86s
-    fuzz 1111 ru 120 steps 113s
-    fuzz 2222 az 120 steps 139s
-    fuzz 2222 ru 120 steps 160s
-PASS 10-fuzz.js 160.3s
-FAIL 11-es5.js 
-    Error: inline script 5 is not ES5: Redefinition of property (837:0) … "Rol: ":"Роль: ",
-        at C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\11-es5.js:8:72
-        at Array.forEach (<anonymous>)
-PASS 12-list.js 10.0s
-PASS 13-followup.js 42.2s
-PASS 14-no-slots.js 7.4s
-PASS 15-keyboard.js 7.6s
-PASS 16-ios-scroll.js 6.8s
-PASS 17-cancel-contact.js 13.5s
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-18T09:38:41.965Z
+# messages: 399
+# by rule: {"no-unused-vars":95,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":229,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":8,"security/detect-non-literal-fs-filename":20}
+PASS 00-smoke.js 7.6s
+PASS 01-drafts.js 38.6s
+PASS 02-session.js 20.7s
+PASS 03-delete-fonts.js 8.3s
+PASS 04-excel.js 6.9s
+PASS 05-patients.js 12.2s
+PASS 06-anonymize.js 15.4s
+PASS 07-russian.js 7.7s
+PASS 08-sweep.js 152.5s
+PASS 09-features.js 42.8s
+    fuzz bad0 az 120 steps 21s
+    fuzz bad0 ru 120 steps 50s
+    fuzz 1111 az 120 steps 73s
+    fuzz 1111 ru 120 steps 97s
+    fuzz 2222 az 120 steps 124s
+    fuzz 2222 ru 120 steps 152s
+PASS 10-fuzz.js 153.0s
+PASS 11-es5.js 0.2s
+PASS 12-list.js 11.3s
+PASS 13-followup.js 44.2s
+PASS 14-no-slots.js 8.7s
+PASS 15-keyboard.js 9.5s
+PASS 16-ios-scroll.js 9.0s
+PASS 17-cancel-contact.js 14.0s
 PASS 18-faults.js 114.8s
-PASS 19-a11y.js 20.4s
-PASS 20-xss.js 11.5s
-PASS 21-access-matrix.js 10.8s
-PASS 22-attacks.js 12.1s
-PASS 23-excel-counts.js 8.2s
-PASS 24-aria.js 8.2s
-PASS 25-many-patients.js 10.4s
-PASS 26-draft-background.js 10.9s
-PASS 27-dialog-focus.js 6.6s
-PASS 28-publish-guard.js 6.7s
-PASS 29-rules-text.js 14.1s
-PASS 30-patient-search.js 11.0s
-PASS 31-patients-keyset.js 23.8s
-PASS 90-sql.js 16.6s
-PASS 91-schema.js 9.8s
-PASS 92-visits-access.js 9.5s
-PASS 93-restore-one.js 8.5s
-PASS 94-configured-copy.js 1.1s
-PASS 95-no-third-party.js 9.7s
-PASS 96-close-history.js 8.2s
-PASS 97-person-export-delete.js 7.1s
-PASS 98-ru-dictionary.js 0.0s
-PASS 99-agent-services.js 25.1s
-PASS 99-breaks-days.js 22.0s
-PASS 99-contacts.js 15.3s
-PASS 99-list-specialists-bar.js 7.7s
-PASS 99-mock-defaults.js 8.2s
-PASS 99-owner-notes-db.js 8.4s
-PASS 99-service-db.js 7.2s
-PASS 99-service-ui.js 15.8s
-PASS 99-short-window-iphone.js 7.7s
-PASS 99-short-window-keyboard.js 6.6s
-PASS 99-sold.js 17.5s
-PASS 99-stats-notes.js 12.8s
-PASS 99-uniform-view.js 14.5s
-PASS 99-whole-day-default.js 11.5s
-FAIL 99-whole-day-details.js 
-    Error: FAIL: 390: the 1-hour block shows more than the name: ["✅✅ Aysen"]
-        at check (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\lib.js:214:46)
-        at module.exports (C:\Users\taghi\AppData\Local\Claude-Data\claude_pzs8sxrjxfjjc\scratch-workspaces\98200018-3c84-441a-8374-4fb181b713fd\e30a7b3c-45d6-4576-bca6-b88a73cd867d\scratch-2026-11-16-970e3e\Ruqya\tests\t\99-whole-day-details.js:42:22)
-PASS 99-whole-day-foot.js 14.5s
-PASS 99-whole-day-names.js 12.3s
-PASS 99-whole-day.js 30.2s
-PASS 99-widget-color.js 13.0s
-2 failed of 60
-exit 1  end 2026-11-18T09:33:00Z
+PASS 19-a11y.js 34.6s
+PASS 20-xss.js 12.8s
+PASS 21-access-matrix.js 13.3s
+PASS 22-attacks.js 11.1s
+PASS 23-excel-counts.js 7.6s
+PASS 24-aria.js 10.8s
+PASS 25-many-patients.js 11.1s
+PASS 26-draft-background.js 13.4s
+PASS 27-dialog-focus.js 9.3s
+PASS 28-publish-guard.js 6.5s
+PASS 29-rules-text.js 23.7s
+PASS 30-patient-search.js 13.1s
+PASS 31-patients-keyset.js 25.9s
+PASS 90-sql.js 32.6s
+PASS 91-schema.js 13.9s
+PASS 92-visits-access.js 18.7s
+PASS 93-restore-one.js 15.1s
+PASS 94-configured-copy.js 1.5s
+PASS 95-no-third-party.js 13.3s
+PASS 96-close-history.js 9.4s
+PASS 97-person-export-delete.js 11.2s
+PASS 98-ru-dictionary.js 0.1s
+PASS 99-agent-services.js 28.6s
+PASS 99-breaks-days.js 27.1s
+PASS 99-contacts.js 18.5s
+PASS 99-list-specialists-bar.js 9.1s
+PASS 99-mock-defaults.js 9.8s
+PASS 99-owner-notes-db.js 11.3s
+PASS 99-service-db.js 13.1s
+PASS 99-service-ui.js 22.0s
+PASS 99-short-window-iphone.js 11.9s
+PASS 99-short-window-keyboard.js 10.9s
+PASS 99-sold.js 23.7s
+PASS 99-stats-notes.js 17.5s
+PASS 99-uniform-view.js 15.3s
+PASS 99-whole-day-default.js 12.3s
+PASS 99-whole-day-details.js 14.9s
+PASS 99-whole-day-foot.js 16.1s
+PASS 99-whole-day-names.js 14.3s
+PASS 99-whole-day.js 30.5s
+PASS 99-widget-color.js 13.2s
+all 60 passed
+exit 0  end 2026-11-18T10:00:28Z

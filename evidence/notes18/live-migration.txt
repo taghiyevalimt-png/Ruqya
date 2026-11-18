@@ -1,0 +1,7 @@
+# live migration sql/2026-11-owner-notes.sql — 2026-11-18 ≈10:40–10:44 UTC
+before: backup run 44287258929 (success, restore checked by the workflow); live ruqya_staff_guard text compared with the repo copy (same apart from whitespace)
+apply_migration ruqya_2026_11_owner_notes -> success: breaks.days/date_from/date_to, checks breaks_days_ok/breaks_dates_ok, policy ruqya_breaks_specialist, staff.hide_stats, new ruqya_staff_guard
+check: new columns 4, policy 1, checks 2, hide_stats rows 0, breaks rows 0
+INCIDENT (found by this check, fixed in ~2 min): the tool sending the SQL turned \u00a0… into characters (1st apply: same meaning) and then, on a re-apply meant to restore the exact text, sent a doubled backslash; with it the name clean-up of ruqya_staff_guard would have replaced the letters «u», «a», digits and «\» in a NEW or CHANGED worker name with spaces.
+fix: apply_migration ruqya_2026_11_owner_notes_guard_fix with E'[[:space:]\u00a0…]' (= one backslash when run); expression test: E'Aysel\u00a0  Quliyeva\u2003x u0a1' -> 'Aysel Quliyeva x u0a1' (correct)
+damage check: audit_log — 0 changes of table staff in the last 30 minutes (no worker name was written while the wrong version was live)

@@ -33,7 +33,7 @@ language plpgsql security definer set search_path to 'public' as $function$
 declare owner uuid := 'bad097d4-5edc-402b-ad59-f633252c35d9'::uuid; adm boolean;
 begin
   if new.name is not null and (tg_op = 'INSERT' or new.name is distinct from old.name) then
-    new.name := btrim(regexp_replace(normalize(new.name, NFC), '[[:space:]  ᠎ -‏ -  -⁤　﻿]+', ' ', 'g'));
+    new.name := btrim(regexp_replace(normalize(new.name, NFC), '[[:space:]\u00a0\u1680\u180e\u2000-\u200f\u2028-\u202f\u205f-\u2064\u3000\ufeff]+', ' ', 'g'));
     if new.name = '' then raise exception 'Adi yazin' using errcode = '23514'; end if;
   end if;
   if auth.uid() is null or auth.uid() = owner then return new; end if;
