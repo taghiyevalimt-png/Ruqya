@@ -1,0 +1,4 @@
+# F-13 red — no current week/month statistics (owner 18.11) — 2026-11-18T12:51:31Z — commit 1d7c31c
+FAIL 99-current-period.js 
+    Error: FAIL: sections: the current and the finished week and month: ["today=Bu gün","day=Gündəlik","week=Həftəlik","month=Aylıq","rules=Qaydalar","terms=Terminlər"]
+1 failed of 1
