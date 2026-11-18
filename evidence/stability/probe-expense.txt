@@ -1,0 +1,3 @@
+after failed save — message: ["Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin."] | shown in list: true | db rows: 0
+network back — db rows: 0 | shown: true
+after reload — shown: false | db rows: 0 | errors []
