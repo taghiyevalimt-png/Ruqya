@@ -1,0 +1,4 @@
+# F-12 red — admin cannot keep himself out of the statistics (owner 18.11) — 2026-11-18T11:55:43Z — commit d4ef2aa
+FAIL 99-hide-admin.js 
+    Error: FAIL: the admin's own row has «Statistikada göstərmə»
+1 failed of 1
