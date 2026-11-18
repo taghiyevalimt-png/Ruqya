@@ -1,0 +1,4 @@
+# G-05 red — no contacts import (owner 18.11 notes) — 2026-11-18T09:12:17Z — commit 08948a8
+FAIL 99-contacts.js 
+    Error: FAIL: app: the button over the patients' list is there
+1 failed of 1

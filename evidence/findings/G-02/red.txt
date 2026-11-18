@@ -1,0 +1,4 @@
+# G-02 red — DB before sql/2026-11-owner-notes.sql — 2026-11-18T08:58:23Z — commit 1b364a0
+FAIL 99-owner-notes-db.js 
+    Error: FAIL: specialist adds a break to his own column: new row violates row-level security policy for table "breaks"
+1 failed of 1

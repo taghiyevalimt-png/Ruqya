@@ -21,7 +21,7 @@ module.exports = async () => {
         const cols = [...cal.querySelectorAll(".col")].map((c) => c.getBoundingClientRect());
         const onScreen = cols.filter((c) => c.left >= cr.left - 1 && c.right <= cr.right + 1).length;
         const evs = [...cal.querySelectorAll(".ev")].map((e) => { const b = e.firstElementChild, bs = getComputedStyle(b), fs = parseFloat(bs.fontSize), lh = parseFloat(bs.lineHeight) || fs;
-          return { text: e.textContent, children: e.children.length, bText: b.textContent, fs, lines: Math.round(b.scrollHeight / lh), clipped: b.scrollHeight > e.clientHeight - 2 || b.scrollWidth > b.clientWidth + 1 || b.getBoundingClientRect().bottom > e.getBoundingClientRect().bottom + 1, ell: bs.textOverflow }; });
+          return { text: e.textContent, children: e.children.length, bText: [...b.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), fs, lines: Math.round((b.scrollHeight - (b.querySelector("i.ok") && getComputedStyle(b.querySelector("i.ok")).position !== "absolute" ? b.querySelector("i.ok").offsetHeight + 1 : 0)) / lh),   /* the ✅ line not counted (owner 18.11) */ clipped: b.scrollHeight > e.clientHeight - 2 || b.scrollWidth > b.clientWidth + 1 || b.getBoundingClientRect().bottom > e.getBoundingClientRect().bottom + 1, ell: bs.textOverflow }; });
         const pills = [...cal.querySelectorAll(".cal-foot .fn span")].filter((x) => x.getBoundingClientRect().right <= cr.right + 1).map((x) => ({ t: x.textContent, cut: x.scrollWidth > x.clientWidth + 1 }));
         return { pills, hour: getComputedStyle(cal.querySelector(".col")).backgroundSize, n: cols.length, onScreen, colW: Math.round(cols[0].width), sideways: cal.scrollWidth > cal.clientWidth + 1, evs };
       });
@@ -33,7 +33,7 @@ module.exports = async () => {
       check(ours.length === 5, w + ": our 5 blocks drawn with whole names: " + m.evs.map((e) => e.bText).join(" | "));
       for (const e of m.evs) {
         // owner 18.11: under the name, the time, phone and who wrote it where there is room (test 99-whole-day-details)
-        check(e.text.startsWith(e.bText), w + ": the name comes first in the block: " + JSON.stringify(e.text));
+        check(e.text.replace(/^[✅✓✗\s]+/, "").startsWith(e.bText), w + ": the name comes first in the block: " + JSON.stringify(e.text));
         check(!e.clipped && e.ell !== "ellipsis", w + ": the name is fully visible inside its block: " + JSON.stringify(e));
       }
       // owner 18.11: the name a little bigger, a 7-letter name still on one line (was 8 px at 390 px wide)

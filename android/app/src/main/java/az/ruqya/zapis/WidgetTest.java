@@ -18,6 +18,24 @@ public class WidgetTest extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent intent) {
         String a = intent.getAction();
+        if ("az.ruqya.zapis.CONTACTS_TEST".equals(a)) {
+            // owner 18.11 check: the same import the app runs (permissions granted by adb), result into a file
+            String out;
+            try {
+                String json = new String(android.util.Base64.decode(intent.getStringExtra("b64"), android.util.Base64.DEFAULT), "UTF-8");
+                int[] r = Contacts.importAll(ctx, new org.json.JSONArray(json));
+                out = "added=" + r[0] + " skipped=" + r[1];
+            } catch (Throwable t) {
+                out = "error " + t;
+            }
+            try {
+                java.io.PrintWriter pw = new java.io.PrintWriter(new File(ctx.getFilesDir(), "contacts_test.txt"));
+                pw.println(out);
+                pw.close();
+            } catch (Exception ignored) {
+            }
+            return;
+        }
         if (MonthWidget.ACTION_BIND_TEST.equals(a)) {
             MonthWidget.bindTest(ctx, intent);
             return;

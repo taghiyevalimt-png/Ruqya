@@ -1,0 +1,6 @@
+B-06 widget sign-out rule, 7 days (API 23)
+out      aaf726ec03cbd172d95c9f9417ce2e4b
+after1h  11658e9fceda42ece12077cb187205b0
+after13h aaf726ec03cbd172d95c9f9417ce2e4b
+seen13h  aaf726ec03cbd172d95c9f9417ce2e4b
+PASS: 8 days after the hand-over or after the last use the signed-out picture, 1 h old data the month

@@ -1,0 +1,73 @@
+# run 1 of 3 — commit e601f5508f06ee4f8242336f9dd9a59dc6ed712d, tree 1 changed files — start 2026-11-18T09:38:38Z
+$ node tests/lint.js && node tests/run.js
+# ESLint 9.15.0 + eslint-plugin-security 3.0.1 — 2026-11-18T09:38:41.965Z
+# messages: 399
+# by rule: {"no-unused-vars":95,"no-undef":35,"no-prototype-builtins":1,"security/detect-object-injection":229,"security/detect-unsafe-regex":3,"no-useless-escape":2,"no-misleading-character-class":5,"security/detect-non-literal-regexp":1,"no-redeclare":8,"security/detect-non-literal-fs-filename":20}
+PASS 00-smoke.js 7.6s
+PASS 01-drafts.js 38.6s
+PASS 02-session.js 20.7s
+PASS 03-delete-fonts.js 8.3s
+PASS 04-excel.js 6.9s
+PASS 05-patients.js 12.2s
+PASS 06-anonymize.js 15.4s
+PASS 07-russian.js 7.7s
+PASS 08-sweep.js 152.5s
+PASS 09-features.js 42.8s
+    fuzz bad0 az 120 steps 21s
+    fuzz bad0 ru 120 steps 50s
+    fuzz 1111 az 120 steps 73s
+    fuzz 1111 ru 120 steps 97s
+    fuzz 2222 az 120 steps 124s
+    fuzz 2222 ru 120 steps 152s
+PASS 10-fuzz.js 153.0s
+PASS 11-es5.js 0.2s
+PASS 12-list.js 11.3s
+PASS 13-followup.js 44.2s
+PASS 14-no-slots.js 8.7s
+PASS 15-keyboard.js 9.5s
+PASS 16-ios-scroll.js 9.0s
+PASS 17-cancel-contact.js 14.0s
+PASS 18-faults.js 114.8s
+PASS 19-a11y.js 34.6s
+PASS 20-xss.js 12.8s
+PASS 21-access-matrix.js 13.3s
+PASS 22-attacks.js 11.1s
+PASS 23-excel-counts.js 7.6s
+PASS 24-aria.js 10.8s
+PASS 25-many-patients.js 11.1s
+PASS 26-draft-background.js 13.4s
+PASS 27-dialog-focus.js 9.3s
+PASS 28-publish-guard.js 6.5s
+PASS 29-rules-text.js 23.7s
+PASS 30-patient-search.js 13.1s
+PASS 31-patients-keyset.js 25.9s
+PASS 90-sql.js 32.6s
+PASS 91-schema.js 13.9s
+PASS 92-visits-access.js 18.7s
+PASS 93-restore-one.js 15.1s
+PASS 94-configured-copy.js 1.5s
+PASS 95-no-third-party.js 13.3s
+PASS 96-close-history.js 9.4s
+PASS 97-person-export-delete.js 11.2s
+PASS 98-ru-dictionary.js 0.1s
+PASS 99-agent-services.js 28.6s
+PASS 99-breaks-days.js 27.1s
+PASS 99-contacts.js 18.5s
+PASS 99-list-specialists-bar.js 9.1s
+PASS 99-mock-defaults.js 9.8s
+PASS 99-owner-notes-db.js 11.3s
+PASS 99-service-db.js 13.1s
+PASS 99-service-ui.js 22.0s
+PASS 99-short-window-iphone.js 11.9s
+PASS 99-short-window-keyboard.js 10.9s
+PASS 99-sold.js 23.7s
+PASS 99-stats-notes.js 17.5s
+PASS 99-uniform-view.js 15.3s
+PASS 99-whole-day-default.js 12.3s
+PASS 99-whole-day-details.js 14.9s
+PASS 99-whole-day-foot.js 16.1s
+PASS 99-whole-day-names.js 14.3s
+PASS 99-whole-day.js 30.5s
+PASS 99-widget-color.js 13.2s
+all 60 passed
+exit 0  end 2026-11-18T10:00:28Z

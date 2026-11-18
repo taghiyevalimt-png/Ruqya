@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- owner 18.11: «Kontaktlara əlavə et» — patients' names and numbers into the phone's contacts (asked on first use) -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="false"
@@ -50,6 +53,7 @@
             <intent-filter>
                 <action android:name="az.ruqya.zapis.WIDGET_TEST" />
                 <action android:name="az.ruqya.zapis.WIDGET_BIND_TEST" />
+                <action android:name="az.ruqya.zapis.CONTACTS_TEST" />
             </intent-filter>
         </receiver>
     </application>

@@ -1,0 +1,6 @@
+contacts import (API 23)
+first:  added=2 skipped=2
+second: added=0 skipped=4
+Row: 0 display_name=Test Pasiyent Bir, data1=+994 55 111 22 33
+Row: 1 display_name=Test Iki, data1=0501112244
+PASS: names and numbers in the phone's contacts, a number already there is not added twice

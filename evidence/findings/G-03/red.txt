@@ -1,0 +1,4 @@
+# G-03 red — places, Excel, hidden agents, admin renaming (owner 18.11 notes) — 2026-11-18T09:02:10Z — commit 1b364a0
+FAIL 99-stats-notes.js 
+    Error: FAIL: statistics show the places: null
+1 failed of 1

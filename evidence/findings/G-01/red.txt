@@ -1,0 +1,4 @@
+# G-01 red — default «Bütün gün», names at the bottom only there, time/«Yazdı:» in other modes, no ✅ in «Bütün gün» (owner 18.11 notes) — 2026-11-18T08:50:16Z — commit c1def50
+FAIL 99-uniform-view.js 
+    Error: FAIL: default after the update: «Kiçik» (45 px an hour), not «Bütün gün»: {"fit":true,"hour":39}
+1 failed of 1
