@@ -1,0 +1,76 @@
+# full suite after F-15 — attempt 1 — 2026-11-18T13:50:44Z — commit ef18373 + F-15
+lint exit 0
+PASS 00-smoke.js 8.4s
+PASS 01-drafts.js 38.5s
+PASS 02-session.js 20.9s
+PASS 03-delete-fonts.js 8.3s
+PASS 04-excel.js 6.8s
+PASS 05-patients.js 12.1s
+PASS 06-anonymize.js 13.3s
+PASS 07-russian.js 7.6s
+PASS 08-sweep.js 156.6s
+PASS 09-features.js 42.9s
+    fuzz bad0 az 120 steps 27s
+    fuzz bad0 ru 120 steps 50s
+    fuzz 1111 az 120 steps 72s
+    fuzz 1111 ru 120 steps 95s
+    fuzz 2222 az 120 steps 116s
+    fuzz 2222 ru 120 steps 144s
+PASS 10-fuzz.js 144.4s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 9.6s
+PASS 13-followup.js 41.3s
+PASS 14-no-slots.js 7.2s
+PASS 15-keyboard.js 7.4s
+PASS 16-ios-scroll.js 6.6s
+PASS 17-cancel-contact.js 12.8s
+PASS 18-faults.js 104.6s
+PASS 19-a11y.js 19.7s
+PASS 20-xss.js 11.1s
+PASS 21-access-matrix.js 8.9s
+PASS 22-attacks.js 8.6s
+PASS 23-excel-counts.js 6.7s
+PASS 24-aria.js 7.8s
+PASS 25-many-patients.js 10.2s
+PASS 26-draft-background.js 10.8s
+PASS 27-dialog-focus.js 6.3s
+PASS 28-publish-guard.js 3.9s
+PASS 29-rules-text.js 12.7s
+PASS 30-patient-search.js 10.8s
+PASS 31-patients-keyset.js 23.1s
+PASS 90-sql.js 16.4s
+PASS 91-schema.js 11.1s
+PASS 92-visits-access.js 7.3s
+PASS 93-restore-one.js 7.6s
+PASS 94-configured-copy.js 0.7s
+PASS 95-no-third-party.js 9.5s
+PASS 96-close-history.js 8.3s
+PASS 97-person-export-delete.js 8.6s
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-agent-services.js 24.9s
+PASS 99-breaks-days.js 22.1s
+PASS 99-contacts-agent.js 19.9s
+PASS 99-contacts.js 29.5s
+PASS 99-current-period.js 15.3s
+PASS 99-hide-admin.js 8.4s
+PASS 99-list-specialists-bar.js 7.6s
+PASS 99-mock-defaults.js 8.3s
+PASS 99-my-contacts-db.js 7.3s
+PASS 99-new-presets.js 10.5s
+PASS 99-owner-notes-db.js 7.6s
+PASS 99-paid-online-db.js 7.1s
+PASS 99-paid-online.js 9.0s
+PASS 99-service-db.js 7.6s
+PASS 99-service-ui.js 15.8s
+PASS 99-short-window-iphone.js 7.7s
+PASS 99-short-window-keyboard.js 6.7s
+PASS 99-sold.js 17.5s
+PASS 99-stats-notes.js 13.2s
+PASS 99-uniform-view.js 13.7s
+PASS 99-whole-day-default.js 10.9s
+PASS 99-whole-day-details.js 11.4s
+PASS 99-whole-day-foot.js 14.1s
+PASS 99-whole-day-names.js 12.0s
+PASS 99-whole-day.js 30.1s
+PASS 99-widget-color.js 13.1s
+all 67 passed
