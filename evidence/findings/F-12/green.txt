@@ -1,0 +1,5 @@
+# F-12 green — 2026-11-18T11:56:14Z — commit d4ef2aa + F-12
+PASS 99-hide-admin.js 9.5s
+all 1 passed
+all 1 passed
+all 1 passed
