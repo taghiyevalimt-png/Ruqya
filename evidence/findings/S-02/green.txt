@@ -1,0 +1,5 @@
+# S-02 green — 2026-11-18T14:24:20Z — commit 014acdf + S-02
+PASS 99-cache-bad.js 10.7s
+all 1 passed
+all 1 passed
+all 1 passed
