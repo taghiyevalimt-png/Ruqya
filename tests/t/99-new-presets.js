@@ -34,8 +34,14 @@ module.exports = async () => {
       await p.click('[data-act="close"]').catch(() => {}); await p.waitForTimeout(300); }
     // an existing booking: changing the service leaves price and length
     await p.click('[data-act="view"][data-id="list"]'); await p.waitForTimeout(300);
-    await p.click('[data-act="goto"][data-d="' + bakuToday(1) + '"]').catch(() => {}); await p.waitForTimeout(400);
-    await p.click('[data-act="edit-appt"] >> nth=0'); await p.locator("#f-reader").waitFor();
+    // tomorrow: on a Sunday it is in the next week's strip, so step one day forward when it is not shown (T6-01)
+    if (await p.locator('[data-act="goto"][data-d="' + bakuToday(1) + '"]').count()) await p.click('[data-act="goto"][data-d="' + bakuToday(1) + '"]');
+    else await p.click('[data-act="shift"][data-n="1"]');
+    await p.waitForTimeout(400);
+    // audit 6 (T6-01): the seeded booking by its id, with every specialist shown — since 22.11 the list follows the
+    // specialist chosen in the calendar, so «the first in the list» was the new İlkin booking (120/120 = its own values)
+    await p.click('[data-act="filter"][data-id="all"]').catch(() => {}); await p.waitForTimeout(300);
+    await p.click('[data-act="edit-appt"][data-id="' + db.appts[0].id + '"]'); await p.locator("#f-reader").waitFor();
     v = await svc("Masaj"); check(v.price === "130" && v.dur === "90", "editing an existing booking: Masaj does not change 130 / 1 h 30 min: " + JSON.stringify(v));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }

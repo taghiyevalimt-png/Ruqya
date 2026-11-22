@@ -1,0 +1,5 @@
+PASS 99-new-helpers.js 7.1s
+FAIL 99-new-presets.js 
+    Error: FAIL: editing an existing booking: Masaj does not change 130 / 1 h 30 min: {"dur":"120","price":"120"}
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/99-new-presets.js:39:29)
