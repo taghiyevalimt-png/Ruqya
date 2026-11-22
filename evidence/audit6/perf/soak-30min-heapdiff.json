@@ -1,0 +1,212 @@
+[
+ {
+  "k": "code:system / InstructionStream",
+  "dn": 165,
+  "dbytes": 207936,
+  "n": 742,
+  "bytes": 918784
+ },
+ {
+  "k": "native:blink::NetworkResourcesData::ResourceData",
+  "dn": 444,
+  "dbytes": 127872,
+  "n": 536,
+  "bytes": 154368
+ },
+ {
+  "k": "code:system / TrustedByteArray",
+  "dn": 118,
+  "dbytes": 45820,
+  "n": 2145,
+  "bytes": 231040
+ },
+ {
+  "k": "native:blink::GridSizingTrackCollection",
+  "dn": 26,
+  "dbytes": 45344,
+  "n": 30,
+  "bytes": 52320
+ },
+ {
+  "k": "native:blink::MediaQueryFeatureExpNode",
+  "dn": 528,
+  "dbytes": 42240,
+  "n": 598,
+  "bytes": 47840
+ },
+ {
+  "k": "native:blink::HeapHashTableBacking<blink::HashTable<blink::FontCach",
+  "dn": 0,
+  "dbytes": 35840,
+  "n": 32,
+  "bytes": 156160
+ },
+ {
+  "k": "native:blink::HeapHashTableBacking<blink::HashTable<blink::String, ",
+  "dn": 0,
+  "dbytes": 28672,
+  "n": 10,
+  "bytes": 35536
+ },
+ {
+  "k": "native:system / WeakArrayList",
+  "dn": 220,
+  "dbytes": 26176,
+  "n": 471,
+  "bytes": 41872
+ },
+ {
+  "k": "code:system / ProtectedFixedArray",
+  "dn": 108,
+  "dbytes": 25200,
+  "n": 170,
+  "bytes": 44536
+ },
+ {
+  "k": "(string)",
+  "dn": 16,
+  "dbytes": 24508,
+  "n": 16336,
+  "bytes": 891316
+ },
+ {
+  "k": "native:PerformanceResourceTiming",
+  "dn": 161,
+  "dbytes": 21896,
+  "n": 250,
+  "bytes": 34000
+ },
+ {
+  "k": "native:blink::HeapHashTableBacking<blink::HashTable<blink::FontDesc",
+  "dn": 0,
+  "dbytes": 20480,
+  "n": 3,
+  "bytes": 43544
+ },
+ {
+  "k": "native:blink::HeapVectorBacking<blink::FragmentItem>",
+  "dn": 48,
+  "dbytes": 18864,
+  "n": 107,
+  "bytes": 27120
+ },
+ {
+  "k": "native:blink::MediaQuery",
+  "dn": 528,
+  "dbytes": 16896,
+  "n": 599,
+  "bytes": 19168
+ },
+ {
+  "k": "native:blink::PhysicalBoxFragment",
+  "dn": 139,
+  "dbytes": 13040,
+  "n": 304,
+  "bytes": 28600
+ },
+ {
+  "k": "native:blink::MediaQuerySet",
+  "dn": 528,
+  "dbytes": 12672,
+  "n": 599,
+  "bytes": 14376
+ },
+ {
+  "k": "native:blink::HeapVectorBacking<cppgc::internal::BasicMember<const ",
+  "dn": 525,
+  "dbytes": 12456,
+  "n": 775,
+  "bytes": 21504
+ },
+ {
+  "k": "code:system / Code",
+  "dn": 165,
+  "dbytes": 11880,
+  "n": 742,
+  "bytes": 53424
+ },
+ {
+  "k": "native:blink::LayoutBlockFlow",
+  "dn": 78,
+  "dbytes": 11856,
+  "n": 176,
+  "bytes": 26752
+ },
+ {
+  "k": "native:blink::ClipPaintPropertyNode",
+  "dn": 59,
+  "dbytes": 11800,
+  "n": 98,
+  "bytes": 19600
+ },
+ {
+  "k": "native:blink::HeapVectorBacking<blink::PaintChunk>",
+  "dn": 0,
+  "dbytes": 11776,
+  "n": 3,
+  "bytes": 24856
+ },
+ {
+  "k": "native:blink::ShapeResultView",
+  "dn": 163,
+  "dbytes": 11736,
+  "n": 232,
+  "bytes": 16704
+ },
+ {
+  "k": "native:blink::LayoutResult",
+  "dn": 136,
+  "dbytes": 10880,
+  "n": 298,
+  "bytes": 23840
+ },
+ {
+  "k": "native:blink::PaintLayerScrollableArea",
+  "dn": 24,
+  "dbytes": 8832,
+  "n": 45,
+  "bytes": 16560
+ },
+ {
+  "k": "native:blink::HeapVectorBacking<blink::GeometryMapperClipCache::Cli",
+  "dn": 56,
+  "dbytes": 8512,
+  "n": 89,
+  "bytes": 13528
+ },
+ {
+  "k": "code:system / FeedbackVector",
+  "dn": 51,
+  "dbytes": 7972,
+  "n": 537,
+  "bytes": 82196
+ },
+ {
+  "k": "native:blink::InterpolableColor",
+  "dn": 90,
+  "dbytes": 7920,
+  "n": 150,
+  "bytes": 13200
+ },
+ {
+  "k": "native:blink::PhysicalLineBoxFragment",
+  "dn": 161,
+  "dbytes": 7728,
+  "n": 227,
+  "bytes": 10896
+ },
+ {
+  "k": "native:blink::HitTestData",
+  "dn": 91,
+  "dbytes": 7280,
+  "n": 184,
+  "bytes": 14720
+ },
+ {
+  "k": "native:blink::ComputedStyle",
+  "dn": 98,
+  "dbytes": 7056,
+  "n": 914,
+  "bytes": 65808
+ }
+]
