@@ -1,0 +1,150 @@
+Sun Nov 22 17:11:24 UTC 2026
+full suite run 2 at c027846
+PASS 00-smoke.js 6.3s
+PASS 01-drafts.js 38.2s
+PASS 02-session.js 8.4s
+PASS 03-delete-fonts.js 7.3s
+PASS 04-excel.js 5.5s
+PASS 05-patients.js 10.5s
+PASS 06-anonymize.js 13.1s
+PASS 07-russian.js 8.0s
+PASS 08-sweep.js 131.6s
+PASS 09-features.js 77.6s
+    fuzz bad0 az 120 steps 28s
+    fuzz bad0 ru 120 steps 49s
+    fuzz 1111 az 120 steps 67s
+    fuzz 1111 ru 120 steps 87s
+    fuzz 2222 az 120 steps 109s
+    fuzz 2222 ru 120 steps 122s
+PASS 10-fuzz.js 122.3s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 7.6s
+PASS 13-followup.js 42.4s
+PASS 14-no-slots.js 6.4s
+PASS 15-keyboard.js 6.0s
+PASS 16-ios-scroll.js 5.4s
+PASS 17-cancel-contact.js 14.6s
+PASS 18-faults.js 93.0s
+PASS 19-a11y.js 16.6s
+PASS 20-xss.js 40.1s
+FAIL 21-access-matrix.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+FAIL 22-attacks.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 23-excel-counts.js 5.6s
+FAIL 24-aria.js 
+    Error: Cannot find module 'axe-core/axe.min.js'
+    Require stack:
+    - /home/claude/wt/tests/t/24-aria.js
+PASS 25-many-patients.js 8.9s
+PASS 26-draft-background.js 10.2s
+PASS 27-dialog-focus.js 4.8s
+PASS 28-publish-guard.js 0.3s
+PASS 29-rules-text.js 10.3s
+PASS 30-patient-search.js 9.4s
+PASS 31-patients-keyset.js 20.0s
+FAIL 90-sql.js 
+    Error: Cannot find module '@electric-sql/pglite'
+    Require stack:
+    - /home/claude/wt/tests/sql-anonymize.js
+FAIL 91-schema.js 
+    Error: Command failed: /opt/node22/bin/node /home/claude/wt/tools/schema_check.js /home/claude/wt/db/structure_live_20261117.tsv 54351
+    node:internal/modules/cjs/loader:1433
+      throw err;
+FAIL 92-visits-access.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+FAIL 93-restore-one.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 94-configured-copy.js 0.2s
+PASS 95-no-third-party.js 8.8s
+PASS 96-close-history.js 8.0s
+FAIL 97-person-export-delete.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-a5-02-zero.js 3.6s
+PASS 99-a5-03-retry-no-dup.js 17.7s
+PASS 99-a5-05-zero-rows.js 7.0s
+PASS 99-a5-06-soft-fail.js 22.6s
+PASS 99-a5-07-retry-changed.js 10.6s
+PASS 99-a5-09-hist-fail.js 29.2s
+PASS 99-a5-11-st3-reopen.js 19.3s
+PASS 99-a5-12-quota.js 6.8s
+PASS 99-a5-14-sale-retry.js 17.1s
+PASS 99-a5-k1-chaos.js 446.9s
+PASS 99-a5-k1-sale-date.js 6.6s
+PASS 99-a5-k2-search.js 26.4s
+PASS 99-a5-k3-patients.js 3.8s
+PASS 99-a5-week-bounds.js 15.2s
+PASS 99-agent-services.js 18.7s
+FAIL 99-app-errors-db.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 99-app-errors.js 27.7s
+PASS 99-breaks-days.js 23.3s
+PASS 99-breaks-delete-one-request.js 7.1s
+PASS 99-breaks-gcal.js 17.2s
+PASS 99-cache-bad.js 8.4s
+PASS 99-cash-save-fail.js 12.3s
+PASS 99-contacts-agent.js 20.6s
+PASS 99-contacts.js 25.1s
+PASS 99-current-period.js 13.8s
+PASS 99-errors-visible.js 6.1s
+PASS 99-excel-sync.js 8.2s
+PASS 99-hide-admin.js 8.0s
+PASS 99-list-specialists-bar.js 6.3s
+PASS 99-mock-defaults.js 7.6s
+PASS 99-money-services.js 9.5s
+FAIL 99-my-contacts-db.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 99-new-helpers.js 7.0s
+FAIL 99-new-presets.js 
+    Error: FAIL: editing an existing booking: Masaj does not change 130 / 1 h 30 min: {"dur":"120","price":"120"}
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/99-new-presets.js:39:29)
+FAIL 99-owner-notes-db.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+FAIL 99-paid-online-db.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 99-paid-online.js 7.9s
+PASS 99-product-shares.js 20.3s
+PASS 99-products-buttons.js 18.0s
+FAIL 99-service-db.js 
+    Error: Cannot find module 'pg'
+    Require stack:
+    - /home/claude/wt/tests/localpg.js
+PASS 99-service-ui.js 15.5s
+PASS 99-short-window-iphone.js 6.7s
+PASS 99-short-window-keyboard.js 5.8s
+PASS 99-show-zeros.js 8.8s
+PASS 99-sold.js 19.5s
+PASS 99-stats-merged.js 9.9s
+PASS 99-stats-notes.js 13.9s
+PASS 99-time-whole-hour.js 3.3s
+PASS 99-uniform-view.js 12.5s
+PASS 99-whatsapp-copy.js 4.7s
+PASS 99-whole-day-default.js 9.8s
+PASS 99-whole-day-details.js 8.4s
+PASS 99-whole-day-foot.js 11.0s
+PASS 99-whole-day-names.js 9.2s
+PASS 99-whole-day.js 27.6s
+PASS 99-widget-color.js 12.0s
+PASS 99-widget-filter.js 9.1s
+14 failed of 98
+Sun Nov 22 17:43:16 UTC 2026

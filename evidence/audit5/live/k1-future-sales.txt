@@ -11,3 +11,6 @@ a07ba848-d5be-4088-8134-2cb21536eec6  2026-11-24  2026-11-22  +2     35
 #   update product_sales set date = (created_at at time zone 'Asia/Baku')::date
 #    where id in ('65011963-1e5e-4ce2-b318-1c326c96531f','de71e651-6535-4fa0-829c-c09db9f56705','a07ba848-d5be-4088-8134-2cb21536eec6')
 #      and date > (created_at at time zone 'Asia/Baku')::date;
+# 2026-11-22T16:40:29Z: owner confirmed the exact statement (second question in the audit); executed on the live DB:
+#   3 rows updated: 65011963… → 2026-11-15, de71e651… → 2026-11-18, a07ba848… → 2026-11-22
+# check: product sales dated after entry = 0; audit_log rows for product_sales UPDATE in the last 10 min = 3 (old dates kept there)
