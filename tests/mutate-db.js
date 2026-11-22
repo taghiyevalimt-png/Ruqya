@@ -3,21 +3,22 @@
 //   node tests/mutate-db.js <out.txt>
 const fs = require("fs");
 const { start } = require("./localpg"), { build, as } = require("./dbcopy"), { ROLES, M } = require("./access-matrix"), { ATTACKS } = require("./attacks");
+// audit 6: names follow sql/2026-11-a6-private-helpers.sql (helpers in schema private) and 2026-11-a6-one-policy.sql (one policy per action)
 const MUT = [
-  ["M-01 bookings readable by everyone signed in", "drop policy ruqya_appts_read on public.appts; create policy ruqya_appts_read on public.appts for select to authenticated using (true);"],
-  ["M-02 every signed-in user is admin", "create or replace function public.ruqya_is_admin() returns boolean language sql stable security definer set search_path=public as $$ select true $$;"],
+  ["M-01 bookings readable by everyone signed in", "drop policy ruqya_appts_select on public.appts; create policy ruqya_appts_select on public.appts for select to authenticated using (true);"],
+  ["M-02 every signed-in user is admin", "create or replace function private.ruqya_is_admin() returns boolean language sql stable security definer set search_path=public as $$ select true $$;"],
   ["M-03 owner/writer check removed from bookings", "drop trigger ruqya_appt_owner on public.appts;"],
   ["M-04 journal readable by everyone", "drop policy ruqya_audit_owner on public.audit_log; create policy ruqya_audit_owner on public.audit_log for select to authenticated using (true);"],
-  ["M-05 expenses of others visible to agents", "drop policy ruqya_expenses_staff on public.expenses; create policy ruqya_expenses_staff on public.expenses to authenticated using (public.ruqya_sees_all()) with check (public.ruqya_sees_all());"],
+  ["M-05 expenses of others visible to agents", "drop policy ruqya_expenses_staff on public.expenses; create policy ruqya_expenses_staff on public.expenses to authenticated using (private.ruqya_sees_all()) with check (private.ruqya_sees_all());"],
   ["M-06 role guard removed (self-promotion)", "drop trigger ruqya_staff_guard on public.staff;"],
   ["M-07 writer stamp removed (fake author)", "drop trigger ruqya_stamp on public.appts;"],
-  ["M-08 specialists see every column", "create or replace function public.ruqya_sees_all() returns boolean language sql stable security definer set search_path=public as $$ select true $$;"],
+  ["M-08 specialists see every column", "create or replace function private.ruqya_sees_all() returns boolean language sql stable security definer set search_path=public as $$ select true $$;"],
   ["M-09 price/share columns opened", "grant select on public.readers to authenticated;"],
   ["M-10 restore without admin check", "create or replace function public.ruqya_restore(aid bigint) returns text language plpgsql security definer set search_path=public as $$ begin return 'ok'; end $$;"],
   ["M-11 RLS switched off on product sales", "alter table public.product_sales disable row level security;"],
   ["M-12 rate limit removed", "drop trigger ruqya_zthrottle on public.appts;"],
   ["M-13 journal writable by signed-in users", "grant insert, update, delete on public.audit_log to authenticated; create policy x on public.audit_log for all to authenticated using (true) with check (true);"],
-  ["M-14 statistics corrections of others writable", "drop policy ruqya_stat_edits_write on public.stat_edits; create policy ruqya_stat_edits_write on public.stat_edits for all to authenticated using (true) with check (true);"],
+  ["M-14 statistics corrections of others writable", "drop policy ruqya_stat_edits_select on public.stat_edits; drop policy ruqya_stat_edits_insert on public.stat_edits; drop policy ruqya_stat_edits_update on public.stat_edits; drop policy ruqya_stat_edits_delete on public.stat_edits; create policy ruqya_stat_edits_write on public.stat_edits for all to authenticated using (true) with check (true);"],
 ];
 async function checks(c) {
   let fail = 0;
