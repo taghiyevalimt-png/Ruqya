@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8bN6Dx+7nv1/vlJmoY5qLy/Zl4NlAKMgxh7Jzg7WPIo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2D0BNzNB8Hhxc85uJuQldJGufcODy1NVJsJmfWy9Zaw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,8 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Faiz və ya məbləğ":"Процент или сумма",
+var RUD=LANG==="ru"?{"Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
+"Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
 "faiz və ya bir ədədə görə məbləğ; boş — yoxdur":"процент или сумма за штуку; пусто — нет",
 "Faizi (0–100) və ya məbləği düzgün yazın: {n}":"Укажите правильно процент (0–100) или сумму: {n}",
@@ -3823,12 +3824,14 @@ function sellForm(){
   h+='<div class="pgrid">'+list.map(function(c){var n=cnt[c.id]||0;
     return '<div class="pbtnw"><button type="button" class="pbtn'+(n?' on':'')+'" data-act="sell-add" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name+", "+money(c.price)+(n?", "+n:""))+'"><b>'+esc(c.name)+'</b><span class="num">'+money(c.price)+'</span>'+(n?'<i class="num">'+n+'</i>':'')+'</button>'+
       (n?'<button type="button" class="pminus" data-act="sell-sub" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Bir az çıx")+": "+c.name)+'">−</button>':'')+'</div>'}).join("")+'</div>';
-  h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||(ui.tab==="cash"?ui.date:today))+'"></div><div></div></div>';
+  h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||today)+'"></div><div></div></div>'+notToday(x.date||today);
   h+='<div class="ptotal big"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div>';
   h+='<p class="hint">'+L("Satan avtomatik qeyd olunur: ")+esc(state.staff[auth.user.id]||L("siz"))+'.</p>';
   h+='<p class="err" role="alert" id="sl-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="sell-save"'+(qn?'':' disabled')+'>'+L("Yadda saxla")+'</button>'+(qn?'<button class="ghost" data-act="sell-clear">'+L("Sıfırla")+'</button>':'')+'</div>';
   return h;
 }
+/* A5-K1 (owner 22.11): a new sale or expense is dated today; a date that is not today is pointed out in red */
+function notToday(d){return d&&d!==today?'<p class="err nottoday" role="status">'+tf(L("Diqqət: tarix bu gün deyil — {d}."),{d:fmtDay(d,"w")})+'</p>':''}
 /* changing one saved line: how many pieces (or delete it) */
 function sellEdit(){
   var x=prodRow(sheet.id);if(!x)return '<h2>'+L("Məhsul satışı")+CLOSE+'</h2><p class="hint">'+L("Bu satış artıq silinib.")+'</p>';
@@ -3934,7 +3937,7 @@ function prodAllSheet(){var x=null;for(var i=0;i<state.products.length;i++)if(st
 }
 function prodRow(id){for(var i=0;i<state.products.length;i++)if(state.products[i].id===id)return state.products[i];return null}
 function productForm(){
-  var x=sheet.id?prodRow(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
+  var x=sheet.id?prodRow(sheet.id):null,dd=x?x.date:today;   /* A5-K1: a new sale is dated today (owner 22.11) */
   return '<h2>'+(x?L("Məhsul satışını dəyiş"):L("Məhsul satışı"))+CLOSE+'</h2>'+
     (state.hasPriv?'<div class="field"><label for="pr-names">'+L("Məhsulların adları")+' <span class="opt">('+L("istəyə görə")+')</span></label><textarea id="pr-names" rows="4" maxlength="2000" placeholder="'+esc(L("Hər məhsulu yeni sətirdən və ya vergüllə yazın"))+'">'+(x?esc(prodItems(x.names).join("\n")):'')+'</textarea></div>'
       :'<p class="hint">'+L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).")+'</p>')+
@@ -3944,7 +3947,7 @@ function productForm(){
     L('<p class="err" role="alert" id="pr-err" hidden></p><div class="btns"><button class="primary" data-act="save-prod">Yadda saxla</button></div>');
 }
 function expenseForm(){
-  var x=sheet.id?expense(sheet.id):null,dd=x?x.date:(ui.tab==="cash"?ui.date:today);
+  var x=sheet.id?expense(sheet.id):null,dd=x?x.date:today;   /* A5-K1: the same for a new expense */
   return '<h2>'+(x?L("Xərci dəyiş"):L("Yeni xərc"))+CLOSE+'</h2>'+
     L('<div class="field"><label for="x-title">Xərc nəyə görədir</label><input id="x-title" type="text" maxlength="120" autocomplete="off" placeholder="Məsələn: icarə, su, təmizlik" value="')+esc(x?x.title:"")+'"></div>'+
     L('<div class="two"><div class="field"><label for="x-amount">Məbləğ, ')+CUR+'</label><input id="x-amount" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(x?x.amount:"")+'"></div>'+
@@ -4805,6 +4808,7 @@ document.addEventListener("click",function(e){
     var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k];return {id:uuid(),date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
     srows.forEach(function(o){state.products.push(mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
     var keepS={cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt},sids=srows.map(function(o){return o.id});
+    if(ui.tab==="cash")ui.date=sdt;   /* A5-K1: Kassa shows the day the sale went to, so it is never «gone» */
     db(sb.from("product_sales").insert(srows),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date})},0)});
     closeSheet();
   }
@@ -4855,7 +4859,10 @@ document.addEventListener("click",function(e){
   else if(act==="prod-all"){openSheet({type:"prodall",id:id});return}
   else if(act==="save-prod"){
     if(!sheet||sheet.type!=="prod")return;   /* a second tap after the form closed adds nothing */
-    var pa2=amount("pr-amount"),pd=val("pr-date"),pn=byId("pr-names")?prodItems(byId("pr-names").value).join("\n"):null;
+    /* A5-01: the names are kept as typed (they were re-joined line by line, so «Zeytun yağı, 1 litr» became two lines
+       on every save, even when only the amount was changed) */
+    var pa2=amount("pr-amount"),pd=val("pr-date"),pn=byId("pr-names")?byId("pr-names").value.replace(/\r\n?/g,"\n").replace(/^\s+|\s+$/g,""):null,ex0=sheet.id?prodRow(sheet.id):null;
+    if(ex0&&pn!==null&&pn===prodItems(ex0.names).join("\n"))pn=ex0.names||"";
     if(pn&&pn.length>2000)return fail("pr-err",L("Məhsul adları çox uzundur."));
     if(!(pa2>0)||pa2>MAXSUM)return fail("pr-err",L("Qiyməti düzgün yazın."));
     if(!okDate(pd))return fail("pr-err",L("Tarixi düzgün seçin."));
@@ -4870,6 +4877,7 @@ document.addEventListener("click",function(e){
     var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
     state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
     db(sb.from("product_sales").insert(prow),function(){state.products=state.products.filter(function(e){return e.id!==pid});render();reopenForm({type:"prod"},{"pr-names":pn||"","pr-amount":String(pa2),"pr-date":pd})});closeSheet();
+    if(ui.tab==="cash")ui.date=pd;   /* A5-K1: Kassa shows the day the sale went to */
     }
   }
   else if(act==="del-prod"){
@@ -5171,6 +5179,7 @@ document.addEventListener("change",function(e){
   }
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
   if((t==="f-reader"||t==="f-dur")&&sheet&&sheet.type==="appt"&&sheet.freeOn&&!freeSkip)freeShow();
+  if(sheet&&sheet.type==="sell"&&t==="sl-date"){sheet.date=e.target.value;var y1=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y1}
   if(sheet&&sheet.type==="brk"&&(t==="b-rep"||t==="b-date")){if(t==="b-date"&&sheet.b){var od=sheet.b.date;brkKeep();var nd=sheet.b.date;if(od!==nd&&sheet.b.rep!=="custom"){sheet.b.days={};sheet.b.days[wdOf(nd)]=1}}brkRedraw()}
 });
 /* owner 22.11: an empty time field opens its clock (Android's round dial, iPhone's wheel) on the whole hour of now —

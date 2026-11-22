@@ -1,0 +1,7 @@
+Sun Nov 22 14:28:30 UTC 2026
+43bcf49
+FAIL 99-a5-k1-sale-date.js 
+    Error: FAIL: the new sale's date is today, not the day looked at: 2026-11-19
+        at check (/home/claude/ruqya/tests/lib.js:218:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-k1-sale-date.js:15:5)
+1 failed of 1
