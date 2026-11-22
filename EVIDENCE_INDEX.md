@@ -4,6 +4,60 @@
 
 | Файл | Байт | SHA-256 | Первая строка |
 |---|---|---|---|
+| `evidence/audit5/A5-03/green.txt` | 84 | 8d7232280d538705 | Sun Nov 22 15:02:23 UTC 2026 |
+| `evidence/audit5/A5-03/red.txt` | 307 | cb2f87bc45dd6ea5 | Sun Nov 22 14:59:54 UTC 2026 |
+| `evidence/audit5/A5-05/green.txt` | 80 | 76daad3ae46232f2 | Sun Nov 22 15:06:36 UTC 2026 |
+| `evidence/audit5/A5-05/red.txt` | 263 | 0e697c55ecde5b50 | Sun Nov 22 15:06:08 UTC 2026 |
+| `evidence/audit5/A5-06/green.txt` | 81 | 322ae011303e7bc8 | Sun Nov 22 15:10:15 UTC 2026 |
+| `evidence/audit5/A5-06/red.txt` | 506 | 48e9b507cae651ee | Sun Nov 22 15:09:59 UTC 2026 |
+| `evidence/audit5/A5-07/green.txt` | 85 | 962b9b272266bf01 | Sun Nov 22 15:12:13 UTC 2026 |
+| `evidence/audit5/A5-07/red.txt` | 298 | edb9321f9c5a85cf | Sun Nov 22 15:12:06 UTC 2026 |
+| `evidence/audit5/A5-09/green.txt` | 81 | 7c259244c9e0edbb | Sun Nov 22 15:16:34 UTC 2026 |
+| `evidence/audit5/A5-09/red.txt` | 511 | f3108832845d42db | Sun Nov 22 15:16:22 UTC 2026 |
+| `evidence/audit5/A5-11/green.txt` | 82 | f0063dbc0d9f9524 | Sun Nov 22 15:18:38 UTC 2026 |
+| `evidence/audit5/A5-11/red.txt` | 300 | e111ff51c0403cf5 | Sun Nov 22 15:18:29 UTC 2026 |
+| `evidence/audit5/A5-12/green.txt` | 76 | 4c325f4f7a3c9830 | Sun Nov 22 15:22:29 UTC 2026 |
+| `evidence/audit5/A5-12/red.txt` | 296 | 6dfac3d203f6bcf1 | Sun Nov 22 15:22:14 UTC 2026 |
+| `evidence/audit5/A5-14/green.txt` | 82 | c33bdea70ca3125f | Sun Nov 22 15:51:05 UTC 2026 |
+| `evidence/audit5/A5-14/red-part2.txt` | 340 | 93538a52355ffbe2 | Sun Nov 22 15:51:28 UTC 2026 |
+| `evidence/audit5/A5-14/red.txt` | 272 | e8e664958c9a90c1 | Sun Nov 22 15:50:58 UTC 2026 |
+| `evidence/audit5/A5-19/red-full-run-aborted.txt` | 1368 | 2ce9da811317f6e7 | Sun Nov 22 15:55:31 UTC 2026 |
+| `evidence/audit5/A5-20/green.txt` | 106 | 703f13aedf919b79 | Sun Nov 22 16:37:20 UTC 2026 |
+| `evidence/audit5/A5-20/red-full-run.txt` | 347 | 401c4c9b925e9cf1 | PASS 99-contacts-agent.js 20.4s |
+| `evidence/audit5/G7/created-window-fix.txt` | 2328 | 9ed185b707021810 | Timing is on. |
+| `evidence/audit5/G7/plans-copy.txt` | 4886 | e0ec7a7558d57075 | Timing is on. |
+| `evidence/audit5/K1/chaos-1.txt` | 138 | c401e66992ff82d7 | Sun Nov 22 14:30:12 UTC 2026 |
+| `evidence/audit5/K1/chaos-2-final.txt` | 197 | b38dc6fdc763fa29 | # K1 chaos re-run inside full suite run 1 at c027846 (after A5-03/04/14/19/20), Sun Nov 22 17:11:53 UTC 2026 |
+| `evidence/audit5/K1/green.txt` | 74 | f1c163d1174f7561 | Sun Nov 22 14:28:50 UTC 2026 |
+| `evidence/audit5/K1/red.txt` | 300 | f9086e2ed29f08f1 | Sun Nov 22 14:28:30 UTC 2026 |
+| `evidence/audit5/K2/green.txt` | 429 | a6a7694e8c069b61 | Sun Nov 22 14:42:32 UTC 2026 |
+| `evidence/audit5/K2/queries.txt` | 5677 | 103e3935210d0e80 | ok   all "memmedova" → ["Aysel Məmmədova"] |
+| `evidence/audit5/K2/red.txt` | 624 | c87be15c230d18d9 | Sun Nov 22 14:41:19 UTC 2026 |
+| `evidence/audit5/K3/eqv.js` | 2043 | a7fc442f1c994fb2 | // A5-K3: the app's pkey() and the database's ruqya_pkey() give the same key for the same booking (2 000 tricky names) |
+| `evidence/audit5/K3/green.txt` | 73 | 639263db41951466 | Sun Nov 22 14:39:51 UTC 2026 |
+| `evidence/audit5/K3/js-equals-db.txt` | 223 | fe595c2ba647e752 | Sun Nov 22 14:40:21 UTC 2026 |
+| `evidence/audit5/K3/migration-copy-final.txt` | 320 | a0e616556cca96a5 | Sun Nov 22 16:33:58 UTC 2026 |
+| `evidence/audit5/K3/migration-copy.txt` | 494 | 76442b275cc1b8b4 | Sun Nov 22 14:43:45 UTC 2026 |
+| `evidence/audit5/K3/red.txt` | 384 | 42e41bd95cfc9bfd | Sun Nov 22 14:38:46 UTC 2026 |
+| `evidence/audit5/K3/ui-count.txt` | 789 | ebb8d8c28bc2e8da | # A5-K3 acceptance on the 10-year synthetic set (50 000 patients), UI count vs independent SQL count |
+| `evidence/audit5/K4/green-ui.txt` | 84 | 0176617a1a87b9af | Sun Nov 22 15:25:34 UTC 2026 |
+| `evidence/audit5/K4/green.txt` | 6505 | 95c59f7503d69135 | Sun Nov 22 14:57:20 UTC 2026 |
+| `evidence/audit5/K4/red-ui.txt` | 382 | a42b4fd7e5a6cbca | Sun Nov 22 15:25:28 UTC 2026 |
+| `evidence/audit5/K4/red.txt` | 6771 | 04301c5dd1dc7035 | Sun Nov 22 14:55:20 UTC 2026 |
+| `evidence/audit5/K4/stats-ref.js` | 11296 | dbc307135d9f6cb9 | // A5-K4 acceptance: every number of «Ümumi cədvəl» (Yazdı, Uğurlu, Ləğv per person; sessions per service and place; the |
+| `evidence/audit5/S0/capabilities.txt` | 1374 | c29d10a032acf8a4 | # A5 stage 0 — what I can really do (2026-11-22T14:27:23Z) |
+| `evidence/audit5/S0/schema-compare.txt` | 72 | 8cdc20d1c4e8478c | functions: live 26, copy 26, differences: none (names + argument lists) |
+| `evidence/audit5/S2/silent-grep.txt` | 11731 | d186572324ec1dfa | # command: grep -n 'soft(\/catch(e){}\/catch(e){ *}\/\.then(function(){})' index.html |
+| `evidence/audit5/S4/full-a5-1.txt` | 4689 | 3fe2d6b9992602bc | Sun Nov 22 16:39:46 UTC 2026 |
+| `evidence/audit5/S4/full-a5-2.txt` | 4690 | f9b57fa9a26c0688 | Sun Nov 22 17:11:24 UTC 2026 |
+| `evidence/audit5/baseline/live-aggregates.sql` | 1401 | 62397f5bcff89bad | with k as (select ruqya_pkey(phone,name) pk, lower(btrim(name)) nm from appts) |
+| `evidence/audit5/baseline/live-aggregates.txt` | 899 | 483f557a3023398f | # A5 baseline — live database, aggregates only (no names, no phones). 2026-11-22T14:27:23Z, commit ab2860b |
+| `evidence/audit5/baseline/ui-suite.txt` | 2633 | 8ffe5369f7dba8ad | # A5 baseline — UI test suite (tests/t, Chrome, fake Supabase) on commit 402eec6 (before audit 5), run 2026-11-22 ~14:05 UTC in 3 parallel p |
+| `evidence/audit5/live/aggregates-before-publish.txt` | 417 | 50b7b2d1cac0145b | # Live DB aggregates repeated before publication (no names, no phones). 2026-11-22T15:55:52Z, branch audit5 42bee4e (not yet published) |
+| `evidence/audit5/live/k1-future-sales.txt` | 1536 | 6ba5d6ac2ec545ae | # A5-L1: product sales dated after the day they were entered (consequence of A5-K1). Live DB, read-only, 2026-11-22T15:42Z. |
+| `evidence/audit5/mut-M5-11.txt` | 473 | 0fef150b877110db | Sun Nov 22 15:30:17 UTC 2026 |
+| `evidence/audit5/mutations-a5-run1.txt` | 1319 | af549e3d5fcfc456 | # audit 5 mutations — 2026-11-22T15:29:08.442Z |
+| `evidence/audit5/mutations-a5-run2-changed.txt` | 489 | 80a5f2ca676c942f | # audit 5 mutations — 2026-11-22T16:39:43.719Z |
 | `evidence/findings/A-01/green-backup-run.txt` | 2391 | eb0ccd1a6bd279e5 | # A-01 GREEN: backup.yml run 43919849130 — 2026-11-16T17:48:15Z — commit abda94d |
 | `evidence/findings/A-01/red-backup-run.txt` | 5730 | 442ff040387ad3a9 | # A-01 RED: backup.yml run 43918407863 (main 4fb4418) — 2026-11-16T17:34:23Z |
 | `evidence/findings/B-01/green.txt` | 42 | 40adb4b930e6bba7 | PASS 23-excel-counts.js 7.4s |
@@ -49,12 +103,85 @@
 | `evidence/findings/B-21/green-list.txt` | 72 | db959d1dbed272de | # L() literal calls: 660, dictionary keys: 789, without translation: 0 |
 | `evidence/findings/B-21/green.txt` | 122 | cb701eff548d4f6a | # green |
 | `evidence/findings/B-21/red.txt` | 236 | a3be44cc653487a1 | # L() literal calls: 660, dictionary keys: 789, without translation: 1 |
+| `evidence/findings/B-22/green.txt` | 256 | 8e2a91c58839e102 | # B-22 green — the short window rises above the iPhone keyboard — 2026-11-17T09:52:05Z — commit 7f27ce4 + index.html liftSheet |
+| `evidence/findings/B-22/red.txt` | 401 | dcb7c0976dbaa389 | # B-22 red — iPhone keyboard covers «Yeni mütəxəssis» (owner screen recording 17.11 13:42) — 2026-11-17T09:51:39Z — commit 7f27ce4 |
+| `evidence/findings/B-22/suite.txt` | 1736 | bf47cfee53f889f4 | # full suite after B-22 — 2026-11-17T09:52:31Z — commit 7f27ce4 + B-22 |
+| `evidence/findings/B-24/green.txt` | 103 | 26ddbd1d4374ba72 | # B-24 green — 2026-11-18T10:54:46Z — commit 90cd7cb + B-24 |
+| `evidence/findings/B-24/red.txt` | 311 | 8e1e0b26672234be | # B-24 red — iPhone «Telefon kontaktlarına əlavə et» does nothing (owner screenshot 18.11 14:49) — 2026-11-18T10:50:54Z — commit 90cd7cb |
+| `evidence/findings/B-24/suite.txt` | 1989 | de48430807b4505a | # full suite after B-24 — attempt 1 — 2026-11-18T10:55:38Z — commit 90cd7cb + B-24 |
+| `evidence/findings/F-01/green-suite.txt` | 1471 | 10170ad51db1e096 | # F-01 green + full suite — «Bütün gün» — 2026-11-17T10:14:03Z — commit 7558723 + F-01 |
+| `evidence/findings/F-01/red.txt` | 220 | 9230d1679bab224c | # F-01 red — no «Bütün gün» size yet (owner request 17.11) — 2026-11-17T10:12:06Z — commit 7558723 |
+| `evidence/findings/F-02/emulator/crash-33.txt` | 0 | e3b0c44298fc1c14 |  |
+| `evidence/findings/F-02/emulator/idle-33.txt` | 313 | 1f692a2f6ebf3988 | B-06 widget sign-out rule, 7 days (API 33) |
+| `evidence/findings/F-02/emulator/theme-33.txt` | 411 | 01516098d065cf2f | F-02 widget colour (API 33) |
+| `evidence/findings/F-02/green.txt` | 107 | 1cf917aa4a325204 | # F-02 green — 2026-11-17T10:34:45Z — commit 41e4e86 + F-02 |
+| `evidence/findings/F-02/red.txt` | 216 | 7f278e2c1097ad95 | # F-02 red — widget colour choice missing (owner 17.11) — 2026-11-17T10:34:37Z — commit 41e4e86 |
+| `evidence/findings/F-02/suite.txt` | 1431 | 602a9bdbc6a5d505 | # full suite after F-02 — 2026-11-17T10:36:02Z — commit 2948ae2 |
+| `evidence/findings/F-03/green.txt` | 137 | 949524a487f22d86 | # F-03 green — 2026-11-17T11:06:31Z — commit 0bbebb0 + F-03 |
+| `evidence/findings/F-03/red.txt` | 264 | 46a8a4704d143080 | # F-03 red — «Bütün gün»: 10 columns on screen, blocks cut (owner screenshot 17.11 14:33) — 2026-11-17T10:58:12Z — commit 0bbebb0 |
+| `evidence/findings/F-03/suite.txt` | 1485 | a523be5dd255abb8 | # F-03 green + full suite (final) — 2026-11-17T11:25:54Z — commit 0bbebb0 + F-03 |
+| `evidence/findings/F-04/green.txt` | 114 | 393c27a23cf19ab0 | # F-04 green — 2026-11-17T11:51:35Z — commit ddecfce + F-04 |
+| `evidence/findings/F-04/red-final.txt` | 338 | 05685861bedd7898 | # F-05 red (final test) — 2026-11-17T11:51:11Z — commit ddecfce |
+| `evidence/findings/F-04/red.txt` | 242 | 1891029c659ee1da | # F-04 red — specialists' names over the list, «Hamısı» disappears (owner 18.11) — 2026-11-17T11:47:03Z — commit ddecfce |
+| `evidence/findings/F-05/green.txt` | 109 | cfbdb849ab1596f5 | # F-05 green — 2026-11-17T11:50:33Z — commit ddecfce + F-05 |
+| `evidence/findings/F-05/red.txt` | 338 | 05685861bedd7898 | # F-05 red (final test) — 2026-11-17T11:51:11Z — commit ddecfce |
+| `evidence/findings/F-05/suite.txt` | 1552 | 0c77a1308bcea2f8 | # full suite after F-04, F-05 — 2026-11-17T11:52:54Z — commit ddecfce + F-04, F-05 |
+| `evidence/findings/F-06/green.txt` | 207 | 78f870b1cdf54ca0 | # F-06 green — 2026-11-17T12:15:06Z — commit 79c08a8 + F-06 |
+| `evidence/findings/F-06/red.txt` | 331 | a5d0f499263d7af7 | # F-06 red — «Bütün gün» blocks only the name; not the default (owner 18.11) — 2026-11-17T12:11:33Z — commit 79c08a8 |
+| `evidence/findings/F-06/suite.txt` | 1799 | 21254a3410b8e617 | # full suite after F-06 — 2026-11-17T12:16:32Z — commit 79c08a8 + F-06 |
+| `evidence/findings/F-07/green.txt` | 239 | b30de03767d90567 | # F-07 green — 2026-11-17T12:41:59Z — commit ecefa3a + F-07 |
+| `evidence/findings/F-07/red.txt` | 204 | f983d68e95251871 | # F-07 red — names over the calendar (owner 18.11) — 2026-11-17T12:38:39Z — commit ecefa3a |
+| `evidence/findings/F-07/suite.txt` | 1923 | 3a18885284494357 | # full suite after F-07 — 2026-11-17T12:47:25Z — commit ecefa3a + F-07 (second start: the first stopped at once, browser closed before the f |
+| `evidence/findings/F-08/green.txt` | 239 | 42e66ae685e017dd | # F-08 green — 2026-11-17T13:21:22Z — commit 885ff13 + F-08 |
+| `evidence/findings/F-08/red.txt` | 311 | acb5dcf2f727e729 | # F-08 red — time and «Yazdı:» in «Bütün gün» blocks (owner 18.11 17:19) — 2026-11-17T13:21:02Z — commit 885ff13 |
+| `evidence/findings/F-08/suite.txt` | 1832 | ae2bfc38e3eda871 | # full suite after F-08 — 2026-11-17T13:23:05Z — commit 885ff13 + F-08 |
+| `evidence/findings/F-09/green.txt` | 239 | 12e316a4a7b9b328 | # F-09 green — 2026-11-17T13:49:02Z — commit cd99cf5 + F-09 |
+| `evidence/findings/F-09/red.txt` | 228 | 4ef46b6cd428d200 | # F-09 red — name in «Bütün gün» blocks too small (owner 18.11) — 2026-11-17T13:45:27Z — commit cd99cf5 |
+| `evidence/findings/F-09/suite.txt` | 1934 | 8512ac162625616a | # full suite after F-09 — attempt 1 — 2026-11-17T13:52:43Z — commit cd99cf5 + F-09 (earlier attempts stopped: test browser closed — low free |
+| `evidence/findings/F-10/green.txt` | 274 | 36e5c7690c514934 | # F-10 green (owner confirmed the sample 18.11) — 2026-11-17T14:23:18Z — commit 08392f0 + F-10 |
+| `evidence/findings/F-10/red.txt` | 250 | 646e452485da6c20 | # F-10 red — phone/agent small in «Bütün gün» (owner 18.11 18:15) — 2026-11-17T14:16:35Z — commit 08392f0 |
+| `evidence/findings/F-10/suite.txt` | 1845 | 426d0c3d27527fca | # full suite after F-10 — attempt 1 — 2026-11-17T14:24:39Z — commit 08392f0 + F-10 |
+| `evidence/findings/F-11/green.txt` | 180 | 1f3436f533aca970 | # F-11 green — 2026-11-18T11:24:43Z — commit b5fb91b + F-11 (+ sql/2026-11-my-contacts.sql) |
+| `evidence/findings/F-11/red.txt` | 313 | 4f1a05fdd4e3a905 | # F-11 red — agents add every patient to contacts (owner 18.11) — 2026-11-18T11:21:51Z — commit b5fb91b |
+| `evidence/findings/F-11/suite.txt` | 2052 | 0b40ca35ea68baf4 | # full suite after F-11 — attempt 1 — 2026-11-18T11:26:09Z — commit b5fb91b + F-11 |
+| `evidence/findings/F-12/green.txt` | 130 | 5de84dced4f58b2f | # F-12 green — 2026-11-18T11:56:14Z — commit d4ef2aa + F-12 |
+| `evidence/findings/F-12/red.txt` | 228 | 9d5b5c3f60529f88 | # F-12 red — admin cannot keep himself out of the statistics (owner 18.11) — 2026-11-18T11:55:43Z — commit d4ef2aa |
+| `evidence/findings/F-12/suite.txt` | 2079 | 5c827cdb1d3cd92f | # full suite after F-12 — attempt 1 — 2026-11-18T11:56:59Z — commit d4ef2aa + F-12 |
+| `evidence/findings/F-13/green.txt` | 161 | 366e7a64d34fd1ea | # F-13 green — 2026-11-18T12:54:35Z — commit 1d7c31c + F-13 |
+| `evidence/findings/F-13/red.txt` | 323 | 98e927a1e49d0534 | # F-13 red — no current week/month statistics (owner 18.11) — 2026-11-18T12:51:31Z — commit 1d7c31c |
+| `evidence/findings/F-13/suite.txt` | 2111 | 88a13c0100a4949c | # full suite after F-13 — attempt 1 — 2026-11-18T12:56:17Z — commit 1d7c31c + F-13 |
+| `evidence/findings/F-14/db.txt` | 148 | d4d26bc694e0da11 | # F-14 DB (red before the migration, green after, rollback) — 2026-11-18T13:19:19Z — commit 43c9c78 |
+| `evidence/findings/F-14/green.txt` | 137 | 36215cbc21797225 | # F-14 green — 2026-11-18T13:22:25Z — commit 43c9c78 + F-14 |
+| `evidence/findings/F-14/red.txt` | 301 | f73b9d2268ff706e | # F-14 red — no «Ödəniş edib» (owner 18.11) — 2026-11-18T13:19:50Z — commit 43c9c78 |
+| `evidence/findings/F-14/suite.txt` | 2171 | 9ef7b8d53e020f72 | # full suite after F-14 — attempt 1 — 2026-11-18T13:23:36Z — commit 43c9c78 + F-14 |
+| `evidence/findings/F-15/green.txt` | 106 | 7ebaf8c8366a9cc4 | # F-15 green — 2026-11-18T13:50:14Z — commit ef18373 + F-15 |
+| `evidence/findings/F-15/red.txt` | 216 | 9384671d60e015dd | # F-15 red — no defaults for Masaj/Hicama/Kombo/İlkin (owner 18.11) — 2026-11-18T13:47:10Z — commit ef18373 |
+| `evidence/findings/F-15/suite.txt` | 2200 | d412f7257caaa750 | # full suite after F-15 — attempt 1 — 2026-11-18T13:50:44Z — commit ef18373 + F-15 |
 | `evidence/findings/F-READER/green.txt` | 98 | 41c8e5b001fc3eaf | # green |
 | `evidence/findings/F-READER/red.txt` | 236 | be02339f43ef0004 | # red: 7fdffc7a8aa39942a429a0f5d1708f210f16ae86 — 2026-11-17T05:46:49Z |
 | `evidence/findings/F-SERVICE/green.txt` | 75 | cff6b177bce4710d | # green |
 | `evidence/findings/F-SERVICE/red.txt` | 156 | 93cd127ca206dceb | # red: index.html of 65173aecd53ef2e9b2e7384ec2398f52a285361a — 2026-11-17T05:45:26Z |
 | `evidence/findings/F-SOLD/green.txt` | 57 | 086331a663616f1f | # green: + sold logic |
 | `evidence/findings/F-SOLD/red.txt` | 159 | b763bf559b3a5049 | # red: index.html of bd0f67351810b63eb134775f20c5ab1b8b8ff6fc — 2026-11-17T05:33:42Z |
+| `evidence/findings/G-01/green.txt` | 107 | 93de596622c1aeb5 | # G-01 green — 2026-11-18T08:50:24Z — commit c1def50 + G-01 |
+| `evidence/findings/G-01/red.txt` | 352 | 464528740955a73e | # G-01 red — default «Bütün gün», names at the bottom only there, time/«Yazdı:» in other modes, no ✅ in «Bütün gün» (owner 18.11 notes) — 20 |
+| `evidence/findings/G-02/green.txt` | 131 | 53f94a29482cfe40 | # G-02 green — 2026-11-18T08:58:43Z — commit 1b364a0 + sql/2026-11-owner-notes.sql |
+| `evidence/findings/G-02/red.txt` | 260 | 981cb85bd6394c77 | # G-02 red — DB before sql/2026-11-owner-notes.sql — 2026-11-18T08:58:23Z — commit 1b364a0 |
+| `evidence/findings/G-03/green.txt` | 106 | bc403bf3822ef7f4 | # G-03 green — 2026-11-18T09:02:18Z — commit 1b364a0 + G-03 |
+| `evidence/findings/G-03/red.txt` | 212 | d43f4f7380bb8027 | # G-03 red — places, Excel, hidden agents, admin renaming (owner 18.11 notes) — 2026-11-18T09:02:10Z — commit 1b364a0 |
+| `evidence/findings/G-04/green.txt` | 106 | e3e293506c333020 | # G-04 green — 2026-11-18T09:08:12Z — commit fb9176f + G-04 |
+| `evidence/findings/G-04/red.txt` | 292 | fcd73af73eafcc21 | # G-04 red — breaks every day only, specialists cannot add (owner 18.11 notes) — 2026-11-18T09:06:53Z — commit fb9176f |
+| `evidence/findings/G-05/emulator-23/contacts-23.txt` | 278 | 78474098acc92645 | contacts import (API 23) |
+| `evidence/findings/G-05/emulator-23/crash-23.txt` | 0 | e3b0c44298fc1c14 |  |
+| `evidence/findings/G-05/emulator-23/idle-23.txt` | 313 | a897bf666a7e43db | B-06 widget sign-out rule, 7 days (API 23) |
+| `evidence/findings/G-05/emulator-23/theme-23.txt` | 411 | df5b98ca6d4d5701 | F-02 widget colour (API 23) |
+| `evidence/findings/G-05/emulator-33/contacts-33.txt` | 278 | 27a416d1480ddfec | contacts import (API 33) |
+| `evidence/findings/G-05/emulator-33/crash-33.txt` | 0 | e3b0c44298fc1c14 |  |
+| `evidence/findings/G-05/emulator-33/idle-33.txt` | 313 | ceb7000190da7e33 | B-06 widget sign-out rule, 7 days (API 33) |
+| `evidence/findings/G-05/emulator-33/theme-33.txt` | 411 | 23ebf3313040f9dd | F-02 widget colour (API 33) |
+| `evidence/findings/G-05/emulator-run1/contacts-33.txt` | 482 | 1af74681db8cf9e1 | contacts import (API 33) |
+| `evidence/findings/G-05/green.txt` | 103 | 04a5ec5c467fd5b4 | # G-05 green — 2026-11-18T09:12:26Z — commit 08948a8 + G-05 |
+| `evidence/findings/G-05/red.txt` | 199 | 3d7661a9ea02628e | # G-05 red — no contacts import (owner 18.11 notes) — 2026-11-18T09:12:17Z — commit 08948a8 |
 | `evidence/findings/P-02/attempt-splash-1.5s.json` | 9561 | af662ead1ced8234 | { |
 | `evidence/findings/P-02/attempt-splash-1.5s.txt` | 879 | 09a0ec71401ef7ac | # ПОПЫТКА (отменена): заставка 1,5 с вместо 2 с — LCP не изменился, причина в другом (см. lcp-breakdown-*.txt) |
 | `evidence/findings/P-02/green.json` | 9117 | fb3b55097d31fba1 | { |
@@ -104,8 +231,21 @@
 | `evidence/findings/R2-7/green.txt` | 684 | 0bce4c4228f6a0bd | # green: widget-check run 44008309902 on db846ca (fix) — 2026-11-17T03:32:30Z |
 | `evidence/findings/R2-7/red.txt` | 498 | 1b6cb61321446aa6 | # red: widget-check run 44007789543 on 822d70b (test only) — 2026-11-17T03:10:32Z |
 | `evidence/findings/S-01/deploy-check.txt` | 6608 | 8dee58c9ccbfff1c | # deploy-check run 43989546222 on audit4 c659aa83af0801c5a10d298f60c04311c4961465 — 2026-11-17T00:41:35Z |
+| `evidence/findings/S-01/green.txt` | 134 | 5699ac27a5736b39 | # S-01 green — 2026-11-18T14:23:20Z — commit 80cd6fc + S-01 |
+| `evidence/findings/S-01/red.txt` | 159 | 91d0e28b476ffbc1 | # S-01 red — 2026-11-18T14:19:49Z — commit 80cd6fc |
+| `evidence/findings/S-01/render-guard-probe.txt` | 244 | 2f5cd1792c0336c1 | cache key ruqya.cache.v1 |
+| `evidence/findings/S-02/green.txt` | 130 | 03e35ee025faf8fe | # S-02 green — 2026-11-18T14:24:20Z — commit 014acdf + S-02 |
+| `evidence/findings/S-02/red.txt` | 226 | d2937f95ff60b929 | # S-02 red — 2026-11-18T14:23:58Z — commit 014acdf |
+| `evidence/findings/S-03/green.txt` | 148 | 54e8674d47d12fcc | # S-03 green — 2026-11-18T14:26:12Z — commit 2e8a4bb + S-03 |
+| `evidence/findings/S-03/red.txt` | 166 | dcec1e096d0608dc | # S-03 red — 2026-11-18T14:26:02Z — commit 2e8a4bb |
 | `evidence/findings/S-04/green.txt` | 34 | 35273984f3954110 | PASS 90-sql.js 17.8s |
 | `evidence/findings/S-04/red.txt` | 844 | 2edeadd8334455cb | FAIL 90-sql.js  |
+| `evidence/findings/S-05/green.txt` | 109 | 9daad965cf64a0f0 | # S-05 green — 2026-11-18T14:19:00Z — commit b2510c5 + S-05 |
+| `evidence/findings/S-05/red.txt` | 171 | 416843173a4c0d63 | # S-05 red — 2026-11-18T14:18:36Z — commit b2510c5 |
+| `evidence/findings/S-06/db-green.txt` | 84 | 4e76e3f9712db762 | # S-06 DB green — 2026-11-18T15:05:01Z |
+| `evidence/findings/S-06/db-red.txt` | 209 | 3a9db67e1992ab8f | # S-06 DB red (before the migration) — 2026-11-18T15:04:52Z — commit cda6801 |
+| `evidence/findings/S-06/ui-green.txt` | 82 | 2dc138e25387891a | # S-06 UI green — 2026-11-18T15:09:52Z |
+| `evidence/findings/S-06/ui-red.txt` | 158 | 19115a99516adda7 | # S-06 UI red (app without sending) — 2026-11-18T15:09:39Z |
 | `evidence/findings/S-07/attacks.tsv` | 3478 | b2384525fbdc8b92 | # attacks on copy — 2026-11-17T02:37:20.665Z |
 | `evidence/findings/S-07/green.txt` | 236 | 95711217dc2277b8 | # green: 4ae9e2326ede97132d2159e753e134d0d5bc3691 + helper filters like the read policy — 2026-11-17T02:36:48Z |
 | `evidence/findings/S-07/red.txt` | 406 | ee522d2459d28f08 | # red: 4ae9e2326ede97132d2159e753e134d0d5bc3691 + X-33/X-34 — 2026-11-17T02:36:25Z |
@@ -118,6 +258,15 @@
 | `evidence/findings/V-01/red.txt` | 677 | 63bbacbdf396448c | FAIL 24-aria.js  |
 | `evidence/findings/V-03/green.txt` | 42 | cec2812c94fa0a5a | PASS 27-dialog-focus.js 7.1s |
 | `evidence/findings/V-03/red.txt` | 573 | 14221d98ced2426a | FAIL 27-dialog-focus.js  |
+| `evidence/notes18/live-migration.txt` | 1226 | d8197c9b4a90eb87 | # live migration sql/2026-11-owner-notes.sql — 2026-11-18 ≈10:40–10:44 UTC |
+| `evidence/notes18/suite-run-1.txt` | 2488 | 38fdd12016ea479e | # run 1 of 3 — commit e601f5508f06ee4f8242336f9dd9a59dc6ed712d, tree 1 changed files — start 2026-11-18T09:38:38Z |
+| `evidence/notes18/suite-run-2.txt` | 2474 | f16499a822a19870 | # run 2 of 3 — commit e601f5508f06ee4f8242336f9dd9a59dc6ed712d, tree 2 changed files — start 2026-11-18T10:00:29Z |
+| `evidence/notes18/suite-run-3.txt` | 2477 | 9417b8efa25ca7e2 | # run 3 of 3 — commit e601f5508f06ee4f8242336f9dd9a59dc6ed712d, tree 3 changed files — start 2026-11-18T10:18:41Z |
+| `evidence/stability/baseline-console.txt` | 157 | c346b40e8ccd3783 | # baseline console on main screens (mock server) — 2026-11-18T14:13:16Z — commit a946445 |
+| `evidence/stability/live-network.json` | 1636 | acb877a5e7352819 | { |
+| `evidence/stability/probe-cache.txt` | 286 | 79528c4c7b71d8b8 | cache key ruqya.cache.v1 |
+| `evidence/stability/probe-expense.txt` | 268 | a7862b73c4123be1 | after failed save — message: ["Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin."] / shown in list |
+| `evidence/stability/suite.txt` | 2330 | 21520a98c08b4890 | # full suite after S-01…S-05 — attempt 1 — 2026-11-18T14:27:22Z — commit ec63e25 |
 | `evidence/stage0/backup/README.txt` | 548 | 68930dba3f322b7d | # DR export run 43919463263 (GitHub Actions) — 2026-11-16T17:33:52Z — commit 42e61502963e69745eb227907baa1e47f915d110 |
 | `evidence/stage0/backup/SHA256SUMS` | 313 | 524eb32db87450c0 | 17ce84d7c60472c75e70418488a54dcc88da5bb49e10e8708032759369e92dc0  data.sql.enc |
 | `evidence/stage0/backup/dr-restore-local.txt` | 910 | 01ec3b5ac0e16598 | # DR restore — 2026-11-16T17:33:38.941Z — artifact C:\Users\taghi\AppData\Local\Temp\ruqya-dr\run-43919463263\dr-export-43919463263 |
@@ -215,12 +364,25 @@
 | `evidence/stage8/vitals.json` | 8609 | f1392cc0ac2decf6 | { |
 | `evidence/stage8/vitals.txt` | 739 | 947a899d81290a20 | # T-15 web vitals ×5 on final code (index.html = release b1c38b2 without the version stamp) — 2026-11-17T09:39:23Z — commit 02f5e6d |
 | `evidence/stage8/widget-7days.txt` | 714 | 93e4ebde66e6bb4e | # widget-check run 44026732176 on 51bb71d (7-day rule + WhatsApp Business build) — 2026-11-17T06:07:41Z |
+| `evidence/stage9-package-scan.txt` | 1107 | b4a3e848de3dbd09 | # package scan before SHA256SUMS — 2026-11-17T09:41:34Z — commit 44b178c |
 
 ## Снимки экранов
 
 | Папка | Снимков |
 |---|---|
+| `evidence/findings/F-01` | 2 |
+| `evidence/findings/F-02/emulator` | 13 |
+| `evidence/findings/F-03` | 1 |
+| `evidence/findings/F-04` | 1 |
+| `evidence/findings/F-05` | 1 |
+| `evidence/findings/F-06` | 1 |
+| `evidence/findings/F-07` | 1 |
+| `evidence/findings/F-09` | 1 |
+| `evidence/findings/F-10` | 2 |
+| `evidence/findings/F-13` | 1 |
+| `evidence/findings/F-14` | 1 |
 | `evidence/findings/F-READER` | 4 |
+| `evidence/findings/G-01` | 2 |
 | `evidence/stage0/baseline/ui/1280-dark` | 24 |
 | `evidence/stage0/baseline/ui/1280-light` | 79 |
 | `evidence/stage0/baseline/ui/1920-dark` | 24 |
