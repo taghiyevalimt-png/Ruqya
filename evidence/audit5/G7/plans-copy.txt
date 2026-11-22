@@ -1,0 +1,100 @@
+Timing is on.
+                                                   QUERY PLAN                                                   
+----------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.152..0.713 rows=1000 loops=1)
+   Buffers: shared hit=53
+   ->  Incremental Sort (actual time=0.152..0.647 rows=1000 loops=1)
+         Sort Key: date DESC, id
+         Presorted Key: date
+         Full-sort Groups: 5  Sort Method: quicksort  Average Memory: 41kB  Peak Memory: 41kB
+         Pre-sorted Groups: 5  Sort Methods: top-N heapsort, quicksort  Average Memory: 69kB  Peak Memory: 73kB
+         Buffers: shared hit=53
+         ->  Index Scan Backward using appts_date on appts (actual time=0.031..0.252 rows=1241 loops=1)
+               Index Cond: (date >= (CURRENT_DATE - 60))
+               Buffers: shared hit=44
+ Planning:
+   Buffers: shared hit=238 read=1
+ Planning Time: 0.616 ms
+ Execution Time: 0.795 ms
+(15 rows)
+
+Time: 4.959 ms
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Limit (actual time=5415.779..5415.780 rows=0 loops=1)
+   Buffers: shared hit=702856 read=302079
+   ->  Index Scan using appts_pkey on appts (actual time=5415.777..5415.778 rows=0 loops=1)
+         Filter: ((created_at >= (now() - '60 days'::interval)) AND (date < (CURRENT_DATE - 60)))
+         Rows Removed by Filter: 1000000
+         Buffers: shared hit=702856 read=302079
+ Planning:
+   Buffers: shared hit=11
+ Planning Time: 0.109 ms
+ Execution Time: 5415.792 ms
+(10 rows)
+
+Time: 5416.479 ms (00:05.416)
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.149..0.676 rows=1000 loops=1)
+   Buffers: shared hit=985 read=44
+   ->  Incremental Sort (actual time=0.148..0.582 rows=1000 loops=1)
+         Sort Key: date DESC, id
+         Presorted Key: date
+         Full-sort Groups: 19  Sort Method: quicksort  Average Memory: 32kB  Peak Memory: 32kB
+         Buffers: shared hit=985 read=44
+         ->  Index Scan Backward using product_sales_date on product_sales (actual time=0.030..0.340 rows=1027 loops=1)
+               Index Cond: (date >= (CURRENT_DATE - 60))
+               Buffers: shared hit=985 read=44
+ Planning:
+   Buffers: shared hit=49 read=19 dirtied=5
+ Planning Time: 0.284 ms
+ Execution Time: 0.727 ms
+(14 rows)
+
+Time: 1.503 ms
+                                         QUERY PLAN                                         
+--------------------------------------------------------------------------------------------
+ Function Scan on ruqya_hist_patients_page (actual time=203.288..203.332 rows=1000 loops=1)
+   Buffers: shared hit=3198 read=1063
+ Planning Time: 0.020 ms
+ Execution Time: 203.383 ms
+(4 rows)
+
+Time: 230.799 ms
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Index Scan using appts_pkey_date on appts (actual time=0.406..0.419 rows=4 loops=1)
+   Index Cond: ((ruqya_pkey(phone, name) = $0) AND (date >= (CURRENT_DATE - 730)) AND (date < (CURRENT_DATE - 60)))
+   Buffers: shared hit=5 read=3
+   InitPlan 1 (returns $0)
+     ->  Limit (actual time=0.344..0.344 rows=1 loops=1)
+           Buffers: shared hit=1
+           ->  Seq Scan on appts appts_1 (actual time=0.342..0.342 rows=1 loops=1)
+                 Buffers: shared hit=1
+ Planning Time: 0.224 ms
+ Execution Time: 0.451 ms
+(10 rows)
+
+Time: 27.304 ms
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate (actual time=234.017..234.119 rows=1 loops=1)
+   Buffers: shared hit=3 read=785
+   ->  Gather (actual time=234.000..234.108 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=3 read=785
+         ->  Partial Aggregate (actual time=179.626..179.627 rows=1 loops=3)
+               Buffers: shared hit=3 read=785
+               ->  Parallel Index Only Scan using appts_updated on appts (actual time=0.034..101.594 rows=333333 loops=3)
+                     Index Cond: (updated_at > (now() - '01:00:00'::interval))
+                     Heap Fetches: 0
+                     Buffers: shared hit=3 read=785
+ Planning:
+   Buffers: shared hit=5 read=1
+ Planning Time: 0.172 ms
+ Execution Time: 234.151 ms
+(16 rows)
+
+Time: 234.841 ms

@@ -1,0 +1,53 @@
+Timing is on.
+                                            QUERY PLAN                                             
+---------------------------------------------------------------------------------------------------
+ Limit (actual time=143.910..143.911 rows=0 loops=1)
+   Buffers: shared hit=34840 read=9150 dirtied=13627 written=500
+   ->  Incremental Sort (actual time=143.908..143.909 rows=0 loops=1)
+         Sort Key: created_at, id
+         Presorted Key: created_at
+         Full-sort Groups: 1  Sort Method: quicksort  Average Memory: 25kB  Peak Memory: 25kB
+         Buffers: shared hit=34840 read=9150 dirtied=13627 written=500
+         ->  Index Scan using appts_created on appts (actual time=143.814..143.815 rows=0 loops=1)
+               Index Cond: (created_at >= (now() - '60 days'::interval))
+               Filter: (date < (CURRENT_DATE - 60))
+               Rows Removed by Filter: 311200
+               Buffers: shared hit=34831 read=9150 dirtied=13627 written=500
+ Planning:
+   Buffers: shared hit=207 read=43 dirtied=10
+ Planning Time: 0.803 ms
+ Execution Time: 144.066 ms
+(16 rows)
+
+Time: 146.718 ms
+BEGIN
+Time: 0.051 ms
+UPDATE 294400
+Time: 64349.120 ms (01:04.349)
+ANALYZE
+Time: 1087.117 ms (00:01.087)
+                                           QUERY PLAN                                            
+-------------------------------------------------------------------------------------------------
+ Limit (actual time=86.801..86.803 rows=0 loops=1)
+   Buffers: shared hit=42702 read=1189 written=412
+   ->  Incremental Sort (actual time=86.800..86.801 rows=0 loops=1)
+         Sort Key: created_at, id
+         Presorted Key: created_at
+         Full-sort Groups: 1  Sort Method: quicksort  Average Memory: 25kB  Peak Memory: 25kB
+         Buffers: shared hit=42702 read=1189 written=412
+         ->  Index Scan using appts_created on appts (actual time=86.791..86.792 rows=0 loops=1)
+               Index Cond: (created_at >= (now() - '60 days'::interval))
+               Filter: (date < (CURRENT_DATE - 60))
+               Rows Removed by Filter: 311200
+               Buffers: shared hit=42702 read=1189 written=412
+ Planning:
+   Buffers: shared hit=101 read=6
+ Planning Time: 0.309 ms
+ Execution Time: 86.826 ms
+(16 rows)
+
+Time: 87.684 ms
+ROLLBACK
+Time: 0.253 ms
+ANALYZE
+Time: 1091.697 ms (00:01.092)

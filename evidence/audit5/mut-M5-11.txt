@@ -1,0 +1,7 @@
+Sun Nov 22 15:30:17 UTC 2026
+M5-11 week boundary mutation (Saturday–Friday) with the new test
+FAIL 99-a5-week-bounds.js 
+    Error: FAIL: 2026-11-22T08:00:00Z: «Bu həftə» is 20 noyabr – 26 noyabr 2026: Bu həftə‹21 noyabr – 27 noyabr 2026cümə – cümə axşamı, həftə hələ bitməyib›Kim neçə seans 
+        at check (/home/claude/wt3/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt3/tests/t/99-a5-week-bounds.js:18:7)
+1 failed of 1

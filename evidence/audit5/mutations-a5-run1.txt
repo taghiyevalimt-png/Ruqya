@@ -1,0 +1,16 @@
+# audit 5 mutations — 2026-11-22T15:29:08.442Z
+M5-01	CAUGHT by 99-a5-k1-sale-date	A5-K1 back: the sale date comes from the day open in Kassa
+M5-02	CAUGHT by 99-cash-save-fail	error check removed in db() (server error looks saved)
+M5-03	CAUGHT by 99-a5-05-zero-rows	A5-05 back: 0 changed rows looks saved
+M5-04	CAUGHT by 99-a5-06-soft-fail	A5-06 back: a passing load error = «no table» (0 sales)
+M5-05	CAUGHT by 99-a5-k3-patients	A5-K3 back: a patient = the phone only (relatives glued)
+M5-06	CAUGHT by 99-a5-k2-search	A5-K2 back: ə no longer folded to e in search
+M5-07	CAUGHT by 99-a5-03-retry-no-dup	A5-03 back: a retried booking gets a new id (duplicate)
+M5-08	CAUGHT by 99-a5-03-retry-no-dup	A5-03 back: a retried sale gets new ids (duplicate)
+M5-09	CAUGHT by 99-a5-03-retry-no-dup	A5-04 back: the unsaved sale is not kept on the phone
+M5-10	CAUGHT by 99-a5-07-retry-changed	A5-07 back: a retried expense is a second row
+M5-11	SURVIVED (99-current-period,99-stats-merged passed)	week boundary moved (Saturday–Friday instead of Friday–Thursday)
+M5-12	CAUGHT by 99-a5-02-zero	A5-02 back: an admin with nothing written shows «·»
+M5-13	CAUGHT by 99-a5-12-quota	A5-12 back: a full storage loses the draft
+M5-14	CAUGHT by 99-a5-09-hist-fail	A5-09 back: a failed load of old patients is silent
+caught 13 of 14

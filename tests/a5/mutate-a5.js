@@ -15,7 +15,7 @@ const M = [
   ["M5-08", "A5-03 back: a retried sale gets new ids (duplicate)", "id:o&&o.q===q&&o.d===sdt?o.id:uuid()", "id:uuid()", ["99-a5-03-retry-no-dup"]],
   ["M5-09", "A5-04 back: the unsaved sale is not kept on the phone", "sellDraft(keepS);sellPend++;", "sellPend++;", ["99-a5-03-retry-no-dup"]],
   ["M5-10", "A5-07 back: a retried expense is a second row", "var xid=sheet.nid||uuid();", "var xid=uuid();", ["99-a5-07-retry-changed"]],
-  ["M5-11", "week boundary moved (Saturday–Friday instead of Friday–Thursday)", "function friOf(d){return addDays(d,-((parse(d).getDay()-5+7)%7))}", "function friOf(d){return addDays(d,-((parse(d).getDay()-6+7)%7))}", ["99-current-period", "99-stats-merged"]],
+  ["M5-11", "week boundary moved (Saturday–Friday instead of Friday–Thursday)", "function friOf(d){return addDays(d,-((parse(d).getDay()-5+7)%7))}", "function friOf(d){return addDays(d,-((parse(d).getDay()-6+7)%7))}", ["99-current-period", "99-stats-merged", "99-a5-week-bounds"]],
   ["M5-12", "A5-02 back: an admin with nothing written shows «·»", "isSpec(k)?null:{k:k,a:0,b:0,d:0,w:null,s:null,t:null}", "null", ["99-a5-02-zero"], true],
   ["M5-13", "A5-12 back: a full storage loses the draft", 'catch(e){try{localStorage.removeItem(CK);lastCacheJs="";localStorage.setItem(k,v)}catch(e2){}}', "catch(e){}", ["99-a5-12-quota"]],
   ["M5-14", "A5-09 back: a failed load of old patients is silent", "if(my===seq){render();setTimeout(ensureHist,20500)}", "if(false){}", ["99-a5-09-hist-fail"]],
