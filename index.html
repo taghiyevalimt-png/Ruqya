@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-wSIuPbVhjABrLwYyZht5d37VNp0ZejrWipIw9OtsixQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-hjoT8de0b60Yv5f9/kttpuJ8wlNcUkMf0GjLLwT9x7c='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2280,7 +2280,7 @@ function brkCheck(b,btn){
   return rids;
 }
 /* local copy first, then the server (one request per kind of change) */
-function brkPut(rows){if(!rows.length)return;rows.forEach(function(o){upsertBy(state.breaks,mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").insert(rows))}
+function brkPut(rows,onFail){if(!rows.length)return;rows.forEach(function(o){upsertBy(state.breaks,mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").upsert(rows,{onConflict:"id"}),onFail&&function(){rows.forEach(function(o){removeBy(state.breaks,o.id)});render();onFail(rows)})}
 function brkUpd(ids,up){if(!ids.length)return;ids.forEach(function(id){var o=brkById(id);if(!o)return;var row={id:o.id,title:o.title,start_time:o.start,end_time:o.end,reader_id:o.rid||null,days:o.days,date_from:o.from||null,date_to:o.to||null,skip:o.skip,mday:o.mday};
   Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids).select("id"))}
 /* a series cut short or with days left out that has no day left is deleted instead of kept empty */
@@ -2293,7 +2293,9 @@ function brkSave(scope,btn){
   var x=sheet,b=x.b;brkKeep();
   var rids=brkCheck(b,btn);if(rids===undefined||rids===false)return;if(!Array.isArray(rids))return;
   var R=brkRowOf(b);
-  if(!x.edit){brkPut(brkNewRows(R,rids));closeSheet();return}
+  /* ST-3 / A5-11: a new break that did not reach the server opens again as it was typed, with the same ids */
+  if(!x.edit){var nrows=x.nrows&&JSON.stringify(x.nrowsR)===JSON.stringify([R,rids])?x.nrows:brkNewRows(R,rids);
+    brkPut(nrows,function(){setTimeout(function(){if(sheet)return;x.nrows=nrows;x.nrowsR=[R,rids];x.ask=null;openSheet(x)},0)});closeSheet();return}
   var o=brkById(x.edit);if(!o){closeSheet();flash(L("Bu fasilə artıq silinib."));return}
   var sib=brkSiblings(o),rec=brkRep(o)!=="none"&&!x.whole;
   if(rec&&!scope){x.ask="save";brkRedraw();return}
@@ -4691,12 +4693,12 @@ function saveReader(){
   if(activeReaders().some(function(x){return x.id!==sheet.id&&low(x.name)===low(name)}))return fail("r-err",L("Bu adda mütəxəssis artıq var. Fərqli ad yazın (məsələn, soyadı ilə)."));
   if(sheet.id){
     var r=reader(sheet.id);
-    if(r)r.name=name;
-    db(sb.from("readers").update({name:name}).eq("id",sheet.id).select("id"));
+    var rold=r?r.name:"",rid0=sheet.id;if(r)r.name=name;
+    db(sb.from("readers").update({name:name}).eq("id",sheet.id).select("id"),function(){if(r)r.name=rold;render();reopenForm({type:"reader",id:rid0},{"r-name":name})});   /* ST-3 / A5-11 */
   }else{
-    var id=uuid();
-    state.readers.push({id:id,name:name,price:0,share:0,archived:false});
-    db(sb.from("readers").insert({id:id,name:name,price:0,share:0}));
+    var id=sheet.nid||uuid();   /* A5-11: a retry after a lost answer is the same specialist, not a second one */
+    upsertBy(state.readers,{id:id,name:name,price:0,share:0,archived:false});
+    db(sb.from("readers").upsert({id:id,name:name,price:0,share:0},{onConflict:"id"}),function(){removeBy(state.readers,id);render();reopenForm({type:"reader",id:null,nid:id},{"r-name":name})});
   }
   closeSheet();render();
 }
@@ -4794,9 +4796,11 @@ document.addEventListener("click",function(e){
     var sv=val("se-v").replace(/\s/g,"");
     if(!/^\d{1,6}$/.test(sv)||+sv>100000)return fail("se-err",L("Rəqəmi düzgün yazın: 0 və ya müsbət tam ədəd."));
     var nv=+sv;
-    if(ex){if(ex.v!==nv){ex.v=nv;db(sb.from("stat_edits").update({value:nv}).eq("id",ex.id).select("id"))}}
-    else{var nid=uuid();state.statEdits.push({id:nid,kind:"sales",per:se.per,s:se.s,k:se.k,col:se.col,v:nv,by:auth.user.id});
-      db(sb.from("stat_edits").insert({id:nid,kind:"sales",per:se.per,period_start:se.s,agent_id:se.k,col:se.col,value:nv}))}
+    /* ST-3 / A5-11: a failed save opens the window again with the number typed; a retry is the same row */
+    var seBack=function(){reopenForm({type:"stedit",k:se.k,col:se.col,per:se.per,s:se.s,nid:se.nid||nid},{"se-v":sv})};
+    if(ex){if(ex.v!==nv){var eold=ex.v;ex.v=nv;db(sb.from("stat_edits").update({value:nv}).eq("id",ex.id).select("id"),function(){ex.v=eold;render();seBack()})}}
+    else{var nid=se.nid||uuid();upsertBy(state.statEdits,{id:nid,kind:"sales",per:se.per,s:se.s,k:se.k,col:se.col,v:nv,by:auth.user.id});
+      db(sb.from("stat_edits").upsert({id:nid,kind:"sales",per:se.per,period_start:se.s,agent_id:se.k,col:se.col,value:nv},{onConflict:"id"}),function(){removeBy(state.statEdits,nid);render();seBack()})}
     closeSheet();return;
   }
   else if(act==="st-copy-t"){
