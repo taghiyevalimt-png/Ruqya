@@ -1,0 +1,7 @@
+Sun Nov 22 19:21:16 UTC 2026
+red, 194cbbe
+FAIL 99-a6-06-break-skip.js 
+    Error: FAIL: the list of left-out days stays within the database limit of 400: 401
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-06-break-skip.js:17:5)
+1 failed of 1

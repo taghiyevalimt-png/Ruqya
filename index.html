@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-VALEL4GR/tE1AUeSug2/3Vl3KhBR5izzF9YWY+EFE8I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Hq/WGp6n7fhqmgKK7o8AoXqczV1jjeqJiUDarhLJGTw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2291,6 +2291,9 @@ function brkCheck(b,btn){
 function brkPut(rows,onFail){if(!rows.length)return;rows.forEach(function(o){upsertBy(state.breaks,mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").upsert(rows,{onConflict:"id"}),onFail&&function(){rows.forEach(function(o){removeBy(state.breaks,o.id)});render();onFail(rows)})}
 function brkUpd(ids,up){if(!ids.length)return;ids.forEach(function(id){var o=brkById(id);if(!o)return;var row={id:o.id,title:o.title,start_time:o.start,end_time:o.end,reader_id:o.rid||null,days:o.days,date_from:o.from||null,date_to:o.to||null,skip:o.skip,mday:o.mday};
   Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids).select("id"))}
+/* A6-06: a day left out of a repeating break; the database keeps at most 400 such days (CHECK ruqya_breaks_skip), so
+   days more than a year back (they no longer matter for work) are dropped and the newest 400 kept */
+function skipAdd(l,d){var lim=addDays(today,-365),seen={};return (l||[]).concat([d]).filter(function(x){if(seen[x]||x<lim)return false;seen[x]=1;return true}).sort().slice(-400)}
 /* a series cut short or with days left out that has no day left is deleted instead of kept empty */
 function brkLeft(b){if(!b.to)return true;var d=b.from&&b.from>"2020-01-01"?b.from:today;if(d<addDays(b.to,-400))d=addDays(b.to,-400);for(;d<=b.to;d=addDays(d,1))if(brkOn(b,d))return true;return false}
 function brkCut(ids,up){var o=brkById(ids[0]);if(!o)return;var t={};Object.keys(o).forEach(function(k){t[k]=o[k]});if("skip" in up)t.skip=up.skip;if("date_to" in up)t.to=up.date_to;
@@ -2310,7 +2313,7 @@ function brkSave(scope,btn){
   if(!rec||!scope)scope="all";
   if(scope==="next"&&o.from&&x.occ<=o.from)scope="all";
   if(scope==="one"){
-    brkCut(sib.map(function(y){return y.id}),{skip:(o.skip||[]).concat([x.occ]).sort()});
+    brkCut(sib.map(function(y){return y.id}),{skip:skipAdd(o.skip,x.occ)});
     R.days=null;R.date_from=b.date;R.date_to=b.date;if(state.hasBrkSkip)R.mday=null;
     brkPut(brkNewRows(R,rids));closeSheet();return;
   }
@@ -2330,7 +2333,7 @@ function brkDelete(scope,btn){
   var rec=brkRep(o)!=="none"&&!x.whole;
   if(rec&&!scope){x.ask="del";brkRedraw();return}
   if(!rec&&!x.sure){x.sure=1;if(btn)btn.textContent=L("Bir də basın");return}
-  if(scope==="one"&&state.hasBrkSkip)brkCut(ids,{skip:(o.skip||[]).concat([x.occ]).sort()});
+  if(scope==="one"&&state.hasBrkSkip)brkCut(ids,{skip:skipAdd(o.skip,x.occ)});
   else if(scope==="next"&&!(o.from&&x.occ<=o.from))brkCut(ids,{date_to:addDays(x.occ,-1)});
   else brkDrop(ids);
   closeSheet();
