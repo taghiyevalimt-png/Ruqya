@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-o+3Pslehwz4JNNKZmptVQOGQn0uVOQvVPmN2gDSPrUU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-NsHnya2M5YOAWtHfpAtEG3ZM3EZqZge8d9CJRIfwlBs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1857,7 +1857,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122141153";
+var APP_VERSION="20261122141551";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3473,8 +3473,8 @@ function statsMain(){
   if(sec==="money"||sec==="prod"){
     var pr=perRange(ui.stPer);
     h+=perSeg()+perHead(ui.stPer,pr);
-    if(sec==="money")return h+(isAdmin()?moneyTable(pr,ui.stPer)+sessTable(pr,ui.stPer):"");
-    return h+prodStats(pr,ui.stPer)+sessTable(pr,ui.stPer);
+    if(sec==="money")return h+(isAdmin()?moneyTable(pr,ui.stPer):"");
+    return h+prodStats(pr,ui.stPer);
   }
   if(sec==="today"){
     /* owner 22.11: only today — the same one table for today, and today's sessions */
@@ -3482,12 +3482,12 @@ function statsMain(){
     state.appts.forEach(function(a){if(a.date!==today||stHidden(a.by)||(on&&a.by!==on))return;if(gone(a))c.x++;else{c.n++;if(done(a))c.u++}});
     return statNav("st-cur",td,L("Bu gün"),L("gün hələ bitməyib — rəqəmlər artır"))+
       '<div class="pay todaysum"><div><b class="num">'+c.n+'</b><span>'+L("Seans")+'</span></div><div><b class="num">'+c.u+'</b><span>'+L("Uğurlu")+'</span></div><div><b class="num">'+c.x+'</b><span>'+L("Ləğv")+'</span></div></div>'+
-      bigTable(td,"day")+sessTable(td,"day")+(canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"");
+      sessTable(td,"day")+bigTable(td,"day")+(canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"");
   }
   var r=perRange(sec);
   h+=perHead(sec,r);
   var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
-  return h+bigTable(r,sec)+edHint+sessTable(r,sec)+rulesBox();   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
+  return h+sessTable(r,sec)+bigTable(r,sec)+edHint+rulesBox();   /* owner 22.11: «Kim neçə seans yazıb» first */   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
 /* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
@@ -3710,9 +3710,9 @@ function xlsSheets(all){
   state.appts=all.appts;state.products=all.products;pcache=null;edIdx=null;
   try{
     var P=xlsPers(),sh=[];
-    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(bigTable(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}]})});
-    sh.push({name:L("Pul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(moneyTable(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}})});
-    if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}})});
+    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(sessTable(p.r,p.k)+bigTable(p.r,p.k))}]})});
+    sh.push({name:L("Pul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(moneyTable(p.r,p.k)).map(function(t){t.title="";return t})}})});
+    if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k)).map(function(t){t.title="";return t})}})});
     return sh.map(function(x){var b=xBuild(x.b);b.name=x.name;return b});
   }finally{state.appts=keep.appts;state.products=keep.products;pcache=null;edIdx=null}
 }
