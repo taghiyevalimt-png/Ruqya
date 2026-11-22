@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-E0CtNT2hNnL3KVZiNuqd5u/vjvo2UVFC2RYYtbvLLoY='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tqdDewPcc6wuPMq71u9EY2Ru/RIOOjFZOE4hjgb91eg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -356,6 +356,7 @@ h2.kindh .kindsw button{font-size:15px;padding:9px 8px}
 details.rulesbox summary{cursor:pointer;list-style:none}details.rulesbox summary::-webkit-details-marker{display:none}
 details.rulesbox summary::after{content:" ▾";color:var(--muted)}details.rulesbox[open] summary::after{content:" ▴"}
 .stper{margin-bottom:6px}
+.pay.todaysum{flex-direction:row;justify-content:space-around;text-align:center}.todaysum div{display:flex;flex-direction:column;gap:2px}.todaysum b{font-size:26px}.todaysum span{font-size:13px;color:var(--muted)}
 /* owner 22.11: confirm / didn't return lists, free-time finder */
 .psec .badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:var(--bad);color:#fff;font-size:12px;line-height:20px;font-weight:700;margin-left:4px}
 .card.confd{opacity:.7}
@@ -741,7 +742,8 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Qayıtmayanlar":"Не вернулись",
+var RUD=LANG==="ru"?{"gün hələ bitməyib — rəqəmlər artır":"день ещё не закончился — числа растут",
+"Qayıtmayanlar":"Не вернулись",
 "Bu gün və sabah üçün təsdiq gözləyən qəbul yoxdur.":"На сегодня и завтра нет записей, ждущих подтверждения.",
 "sabah":"завтра",
 "{a} qəbuldan {b}-i təsdiqlənib. «Təsdiq» WhatsApp-da hazır mesajı açır; cavab gələndə «Təsdiq aldı» basın.":"Подтверждено {b} из {a}. «Подтверждение» открывает готовое сообщение в WhatsApp; когда пациент ответит, нажмите «Получил подтверждение».",
@@ -1736,7 +1738,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122125503";
+var APP_VERSION="20261122130739";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1857,7 +1859,7 @@ var today=bk().d;
 var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0,stAOff:0,stSec:"cweek",stPer:"cweek"};
 ui.psec="all";try{var ps0=localStorage.getItem("ruqya.psec");if(/^(cancel|conf|lost)$/.test(ps0||""))ui.psec=ps0}catch(e){}
 ui.setSec="spec";try{var se0=localStorage.getItem("ruqya.setsec");if(/^(spec|breaks|staff|view|acc)$/.test(se0||""))ui.setSec=se0}catch(e){}
-try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(week|month|cweek|cmonth|money|prod)$/.test(ss0||""))ui.stSec=ss0;var sp0=localStorage.getItem("ruqya.stper");if(/^(week|month|cweek|cmonth)$/.test(sp0||""))ui.stPer=sp0}catch(e){}
+try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(today|week|month|cweek|cmonth|money|prod)$/.test(ss0||""))ui.stSec=ss0;var sp0=localStorage.getItem("ruqya.stper");if(/^(week|month|cweek|cmonth)$/.test(sp0||""))ui.stPer=sp0}catch(e){}
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
@@ -3248,7 +3250,8 @@ function statNav(act,r,title,small){
 /* owner 22.11: four periods only — this week, last week, this month, last month — with everything inside them;
    money and products stay apart (money: admins; products: admins and sales agents) */
 var ST_PERS=[["cweek","Bu həftə"],["week","Keçən həftə"],["cmonth","Bu ay"],["month","Keçən ay"]];
-function stSecs(){var x=ST_PERS.slice();if(isAdmin())x.push(["money","Pul"]);if(state.hasProducts&&(isAdmin()||canStats()))x.push(["prod","Məhsul"]);return x}
+function stSecs(){var x=[["today","Bu gün"]].concat(ST_PERS);   /* owner 22.11: «Bu gün» first — only today, on the screen (not in Excel) */
+  if(isAdmin())x.push(["money","Pul"]);if(state.hasProducts&&(isAdmin()||canStats()))x.push(["prod","Məhsul"]);return x}
 function statSecBar(){
   var ss=stSecs();if(!ss.some(function(x){return x[0]===ui.stSec}))ui.stSec="cweek";
   return '<div class="chips stsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
@@ -3306,25 +3309,6 @@ function bigTable(r,per){
     '<p class="hint">'+L("Müraciət, Yazdı, Uğurlu, Ləğv — satış agentlərinin rəqəmləri (· — mütəxəssisin özünün yazdığı). Xidmətlər və Yer — dövrün günlərindəki seanslar, kim yazıbsa onun sətrində.")+'</p></div>';
   return h;
 }
-/* day by day inside the period: who wrote how many bookings each day, and the day's sessions (replaces «Bu gün» and «Gündəlik») */
-function daysTable(r,per){
-  var onlyMe=onlyMeSt(),S=statData("sales",r,per),ks=S.rows.map(function(x){return x.k}),last=r.end<today?r.end:today,days=[],d;
-  for(d=last;d>=r.s;d=addDays(d,-1))days.push(d);
-  if(!days.length)return "";
-  var cnt={};days.forEach(function(x){cnt[x]={w:{},n:0,s:0,u:0,c:0}});
-  state.appts.forEach(function(a){
-    if(onlyMe&&a.by!==onlyMe)return;
-    if(!gone(a)&&cnt[a.created]&&!isSpec(a.by)&&!stHidden(a.by)){var k=a.by&&state.staff[a.by]!=null?a.by:"-",c=cnt[a.created];c.w[k]=(c.w[k]||0)+1;c.n++}
-    if(cnt[a.date]&&!stHidden(a.by)){var e=cnt[a.date];if(gone(a))e.c++;else{e.s++;if(done(a))e.u++}}
-  });
-  var h='<div class="pay big" data-st="days-'+per+'"><div class="head"><b>'+L("Günlər üzrə")+'</b></div><div class="hscroll"><table class="stt wide big days"><thead><tr><th>'+L("Gün")+'</th>'+
-    S.rows.map(function(x){return vth(x.name)}).join("")+vth(L("Yazdı"),"g2")+vth(L("Seans"),"g3")+vth(L("Uğurlu"),"g3")+vth(L("Ləğv"),"g3")+'</tr></thead><tbody>';
-  days.forEach(function(x){var c=cnt[x];
-    h+='<tr'+(x===today?' class="today"':'')+'><td>'+esc(WD[wdOf(x)-1]+", "+fmtDayShort(x))+(x===today?' <small>'+L("bu gün")+'</small>':'')+'</td>'+
-      ks.map(function(k){return '<td class="num">'+(c.w[k]||0)+'</td>'}).join("")+'<td class="num sum">'+c.n+'</td><td class="num g3">'+c.s+'</td><td class="num g3">'+c.u+'</td><td class="num g3">'+c.c+'</td></tr>'});
-  h+='</tbody></table></div><p class="hint">'+L("Yazdı — həmin gün yazılan qəbullar (hansı günə yazılmasından asılı olmayaraq). Seans, Uğurlu, Ləğv — həmin günün seansları.")+'</p></div>';
-  return h;
-}
 function rulesBox(){
   var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
   return '<details class="pay explain rulesbox"><summary><b>'+L("Qaydalar və terminlər")+'</b></summary><ol class="rules">'+
@@ -3348,10 +3332,18 @@ function statsMain(){
     if(sec==="money")return h+(isAdmin()?statTable("money",pr,ui.stPer):"");
     return h+prodStats(pr,ui.stPer);
   }
+  if(sec==="today"){
+    /* owner 22.11: only today — the same one table for today, and today's sessions */
+    var td={s:today,e:today,end:today,full:false,canBack:false,canFwd:false,label:fmtDay(today,"w")},c={n:0,u:0,x:0},on=onlyMeSt();
+    state.appts.forEach(function(a){if(a.date!==today||stHidden(a.by)||(on&&a.by!==on))return;if(gone(a))c.x++;else{c.n++;if(done(a))c.u++}});
+    return statNav("st-cur",td,L("Bu gün"),L("gün hələ bitməyib — rəqəmlər artır"))+
+      '<div class="pay todaysum"><div><b class="num">'+c.n+'</b><span>'+L("Seans")+'</span></div><div><b class="num">'+c.u+'</b><span>'+L("Uğurlu")+'</span></div><div><b class="num">'+c.x+'</b><span>'+L("Ləğv")+'</span></div></div>'+
+      bigTable(td,"day")+(canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"");
+  }
   var r=perRange(sec);
   h+=perHead(sec,r);
   var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
-  return h+bigTable(r,sec)+edHint+daysTable(r,sec)+rulesBox();
+  return h+bigTable(r,sec)+edHint+rulesBox();   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
 /* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
@@ -4468,7 +4460,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="today"){ui.date=today}
   else if(act==="st-week"){ui.stOff=Math.max(0,(ui.stOff|0)-(+b.dataset.n||0))}
-  else if(act==="st-sec"){if(/^(week|month|cweek|cmonth|money|prod)$/.test(id)){ui.stSec=id;try{localStorage.setItem("ruqya.stsec",id)}catch(err){}var mm2=byId("main");if(mm2)mm2.scrollTop=0}}
+  else if(act==="st-sec"){if(/^(today|week|month|cweek|cmonth|money|prod)$/.test(id)){ui.stSec=id;try{localStorage.setItem("ruqya.stsec",id)}catch(err){}var mm2=byId("main");if(mm2)mm2.scrollTop=0}}
   else if(act==="st-per"){if(/^(week|month|cweek|cmonth)$/.test(id)){ui.stPer=id;try{localStorage.setItem("ruqya.stper",id)}catch(err){}}}
   else if(act==="st-all"){ui.stAOff=Math.max(0,(ui.stAOff|0)-(+b.dataset.n||0));dayAllRange()}
   else if(act==="st-day"){ui.stDOff=Math.max(0,Math.min(ST_DAYS-1,(ui.stDOff|0)-(+b.dataset.n||0)))}

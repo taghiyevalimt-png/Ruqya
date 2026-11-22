@@ -16,14 +16,14 @@ module.exports = async () => {
       return p.evaluate(() => { const t = document.querySelector('[data-st="big-week"]'), d = document.querySelector('[data-st="days-week"]');
         return [t ? [...t.querySelectorAll("tbody tr")].map((tr) => tr.children[0].textContent.trim()) : [], d ? [...d.querySelectorAll("thead th.v span")].map((x) => x.textContent.trim()) : []]; }); };
     const before = await rows();
-    check(before[0].includes("Admin") && before[1].includes("Admin"), "before: the admin's bookings are in the statistics: " + JSON.stringify(before));
+    check(before[0].includes("Admin"), "before: the admin's bookings are in the statistics: " + JSON.stringify(before));
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="staff"]'); await p.waitForTimeout(300);
     await p.click('[data-act="edit-staff"][data-id="' + OWNER + '"]');
     check(await p.locator("#s-hide").count() === 1, "the admin's own row has «Statistikada göstərmə»");
     await p.locator("#s-hide").check(); await p.click('[data-act="save-staff"]'); await p.waitForTimeout(600);
     check(s.db.staff.find((x) => x.id === OWNER).hide_stats === true, "saved: hide_stats for the admin");
     const after = await rows();
-    check(!after[0].includes("Admin") && !after[1].includes("Admin") && after[0].includes("Nurlana"), "after: the admin is out of the statistics, the agent stays: " + JSON.stringify(after));
+    check(!after[0].includes("Admin") && after[0].includes("Nurlana"), "after: the admin is out of the statistics, the agent stays: " + JSON.stringify(after));
     // a specialist's row does not offer it
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="staff"]'); await p.waitForTimeout(300);
     await p.click('[data-act="edit-staff"][data-id="' + SPEC + '"]');

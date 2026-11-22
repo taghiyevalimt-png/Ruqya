@@ -10,14 +10,20 @@ module.exports = async () => {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(400);
     const secs = await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id));
-    check(JSON.stringify(secs) === JSON.stringify(["cweek", "week", "cmonth", "month", "money", "prod"]), "four periods, then money and products apart: " + secs);
-    check(await p.locator(".pay.big table.big").count() === 2, "this week: one merged table and the day-by-day table");
+    check(JSON.stringify(secs) === JSON.stringify(["today", "cweek", "week", "cmonth", "month", "money", "prod"]), "«Bu gün» first, four periods, then money and products apart: " + secs);
+    check(await p.locator(".pay.big table.big").count() === 1, "this week: one merged table (no day-by-day table)");
     const head = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] th.v span')].map((x) => x.textContent));
     check(["WP", "Yazdı", "Ruqya", "Hicama", "Ofis", "Onlayn"].every((x) => head.includes(x)), "requests, bookings, services and places in one table: " + head);
     check(await p.evaluate(() => getComputedStyle(document.querySelector("th.v span")).writingMode) === "vertical-rl", "column names written upwards");
     const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] tbody tr')].map((r) => r.textContent.replace(/\s+/g, " ").trim()));
     check(rows.some((r) => /^Nurlana/.test(r)) && rows.some((r) => /^Əli/.test(r)), "agent and the specialist who wrote are rows: " + JSON.stringify(rows));
-    check(await p.locator('[data-st^="days-"] tr.today').count() === 1, "today is a row of the day-by-day table");
+    // «Bu gün»: only today — sessions today and the same merged table for today
+    await p.click('[data-act="st-sec"][data-id="today"]'); await p.waitForTimeout(300);
+    check(await p.locator('[data-st="big-day"]').count() === 1 && await p.locator(".todaysum").count() === 1, "«Bu gün»: today's table and today's sessions");
+    check(/^3/.test((await p.textContent(".todaysum")).trim()), "today: 3 sessions: " + await p.textContent(".todaysum"));
+    const trow = await p.evaluate(() => [...document.querySelectorAll('[data-st="big-day"] tbody tr')].map((r) => r.textContent.replace(/\s+/g, " ").trim()));
+    check(trow.some((r) => /^Nurlana/.test(r)), "today's rows: " + JSON.stringify(trow));
+    await p.click('[data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(200);
     check(await p.locator("details.rulesbox").count() === 1, "rules and terms folded inside");
     for (const id of ["week", "cmonth", "month"]) { await p.click('[data-act="st-sec"][data-id="' + id + '"]'); await p.waitForTimeout(200); check(await p.locator('[data-st^="big-"]').count() === 1, id + ": the merged table"); }
     await p.click('[data-act="st-sec"][data-id="money"]'); await p.waitForTimeout(200);
