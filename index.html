@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-bdrrofbQ1Y4SIuJ/cRrES+yYk1xVtMIidhKyjxi1eMw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-rbVZ7OZUylUDHDlzMIkta5of0rlZUlAiT6xJqN9YhUc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -4676,7 +4676,7 @@ function saveAppt(){
     if(service)ins.service=service;
     if(state.hasDur)ins.duration=dur;
     if(state.hasPlace){ins.place=place;appt(id).place=place}
-    db(sb.from("appts").upsert(ins,{onConflict:"id",ignoreDuplicates:true}),undo(id));
+    db(sb.from("appts").upsert(ins,{onConflict:"id"}),undo(id));   /* A5-07: a retry with changed fields updates the same row */
   }
   if(!a||sheet.from!=="np"){ui.date=date;ui.tab="day"}
   if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
@@ -4818,7 +4818,7 @@ document.addEventListener("click",function(e){
     var old2=JSON.parse(JSON.stringify(state.svcPct)),rb2=function(){state.svcPct=old2;render()};
     ups2.forEach(function(u){(state.svcPct[u.reader_id]=state.svcPct[u.reader_id]||{})[u.service]=ruleOf(u)});dels2.forEach(function(d){if(state.svcPct[d.r])delete state.svcPct[d.r][d.s]});
     if(ups2.length)db(sb.from("service_shares").upsert(ups2,{onConflict:"reader_id,service"}),rb2);
-    dels2.forEach(function(d){db(sb.from("service_shares").delete().eq("reader_id",d.r).eq("service",d.s).select("id"),rb2)});
+    dels2.forEach(function(d){db(sb.from("service_shares").delete().eq("reader_id",d.r).eq("service",d.s).select("reader_id"),rb2)});
     closeSheet();
   }
   else if(act==="st-copy"){
@@ -4876,7 +4876,7 @@ document.addEventListener("click",function(e){
     if(ce){var cold={name:ce.name,price:ce.price};if(cold.name!==cnm||cold.price!==cpr){ce.name=cnm;ce.price=cpr;db(sb.from("products").update({name:cnm,price:cpr}).eq("id",ce.id).select("id"),function(){ce.name=cold.name;ce.price=cold.price;render()})}
       var cur=state.shares[ce.id]||{},ups=[],dels=[];Object.keys(pcts).forEach(function(k){var v=pcts[k],o=cur[k]||{p:0,a:0};if(v.p===(o.p||0)&&v.a===(o.a||0))return;if(ruleSet(v)){var u=ruleRow(v);u.product_id=ce.id;u.staff_id=k;ups.push(u)}else if(ruleSet(o))dels.push(k)});
       if(ups.length||dels.length){var t0=JSON.parse(JSON.stringify(cur)),rb=function(){state.shares[ce.id]=t0;render()};state.shares[ce.id]=cur;ups.forEach(function(u){cur[u.staff_id]=ruleOf(u)});dels.forEach(function(k){delete cur[k]});
-        if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels).select("id"),rb)}}
+        if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels).select("product_id"),rb)}}
     else{var cid=uuid(),srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
       /* the percents go after the product is saved (they point to it) */
       var nups=Object.keys(pcts).filter(function(k){return ruleSet(pcts[k])}).map(function(k){var u=ruleRow(pcts[k]);u.product_id=cid;u.staff_id=k;return u});
@@ -4916,9 +4916,9 @@ document.addEventListener("click",function(e){
       if(Object.keys(pup).length)db(sb.from("product_sales").update(pup).eq("id",ex.id).select("id"),function(){ex.date=pold.date;ex.amount=pold.amount;ex.names=pold.names;render()});
       closeSheet();
     }else{
-    var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
-    state.products.push({id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
-    db(sb.from("product_sales").insert(prow),function(){state.products=state.products.filter(function(e){return e.id!==pid});render();reopenForm({type:"prod"},{"pr-names":pn||"","pr-amount":String(pa2),"pr-date":pd})});closeSheet();
+    var pid=sheet.nid||uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;   /* A5-07: a retry is the same row */
+    upsertBy(state.products,{id:pid,date:pd,amount:pa2,by:auth.user.id,names:pn||""});
+    db(sb.from("product_sales").upsert(prow,{onConflict:"id"}),function(){state.products=state.products.filter(function(e){return e.id!==pid});render();reopenForm({type:"prod",nid:pid},{"pr-names":pn||"","pr-amount":String(pa2),"pr-date":pd})});closeSheet();
     if(ui.tab==="cash")ui.date=pd;   /* A5-K1: Kassa shows the day the sale went to */
     }
   }
@@ -4940,8 +4940,8 @@ document.addEventListener("click",function(e){
     var xv={"x-title":xt,"x-amount":String(xa),"x-date":xd};
     if(xo){var xold={title:xo.title,amount:xo.amount,date:xo.date};xo.title=xt;xo.amount=xa;xo.date=xd;
       db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id).select("id"),function(){xo.title=xold.title;xo.amount=xold.amount;xo.date=xold.date;render();reopenForm({type:"expense",id:xo.id},xv)})}
-    else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});
-      db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}),function(){state.expenses=state.expenses.filter(function(e){return e.id!==xid});render();reopenForm({type:"expense",id:null},xv)})}
+    else{var xid=sheet.nid||uuid();upsertBy(state.expenses,{id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});   /* A5-07: a retry after a lost answer is the same row, not a second expense */
+      db(sb.from("expenses").upsert({id:xid,date:xd,title:xt,amount:xa},{onConflict:"id"}),function(){state.expenses=state.expenses.filter(function(e){return e.id!==xid});render();reopenForm({type:"expense",id:null,nid:xid},xv)})}
     closeSheet();
   }
   else if(act==="del-expense"){

@@ -169,10 +169,13 @@ async function attach(context, db, ctl) {
       // ignoreDuplicates (Prefer: resolution=ignore-duplicates) keeps the stored row and skips the new one
       const oc = url.searchParams.get("on_conflict"), ign = /ignore-duplicates/.test(req.headers()["prefer"] || "");
       if (oc) { const ks = oc.split(","), same = (x, r) => ks.every((k) => String(x[k]) === String(r[k])); if (ign) b = b.filter((r) => !db[t].some((x) => same(x, r))); else db[t] = db[t].filter((x) => !b.some((r) => same(x, r))); }
-      for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
+      const noId = t === "product_shares" || t === "service_shares";   // composite primary key, no id column (as live)
+      for (const r of b) db[t].push(noId ? { ...r } : { id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
       return send(route, 201);
     }
     function rep() { return /return=representation/.test(req.headers()["prefer"] || ""); }
+    // like PostgREST: a column asked for with .select() that the table does not have is a 400 (42703)
+    if ((m === "PATCH" || m === "DELETE") && rep() && url.searchParams.get("select") && db[t].length && pick(db[t][0], url.searchParams.get("select")) === null) return send(route, 400, { code: "42703", message: "column does not exist" });
     if (m === "PATCH") {
       const b = JSON.parse(req.postData() || "{}");
       const hit = db[t].filter((r) => fl.every((f) => test(r, f))); hit.forEach((r) => Object.assign(r, b, { updated_at: new Date().toISOString() }));
