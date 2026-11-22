@@ -1,0 +1,6 @@
+# audit 5 mutations — 2026-11-22T16:39:43.719Z
+M5-08	CAUGHT by 99-a5-03-retry-no-dup,99-a5-14-sale-retry	A5-03 back: a retried sale gets new ids (duplicate)
+M5-09	CAUGHT by 99-a5-03-retry-no-dup,99-a5-14-sale-retry	A5-04 back: the unsaved sale is not kept on the phone
+M5-11	CAUGHT by 99-a5-week-bounds	week boundary moved (Saturday–Friday instead of Friday–Thursday)
+M5-15	CAUGHT by 99-a5-14-sale-retry	A5-14 back: one draft slot (a second sale overwrites the first)
+caught 4 of 15
