@@ -42,7 +42,7 @@ module.exports = async () => {
       if (!r) continue;
       check(r.title === "Ümumi cədvəl", sec + ": title: " + r.title);
       const svc = r.head.filter((x) => ["Ruqya", "Hicama", "Masaj", "Kombo", "Dr.Günel", "Psixoloq"].includes(x));
-      check(JSON.stringify(svc) === JSON.stringify(["Ruqya", "Hicama", "Masaj"]), sec + ": service columns are the services written in the period: " + JSON.stringify(r.head));
+      check(JSON.stringify(svc) === JSON.stringify(["Ruqya", "Hicama", "Kombo", "Masaj", "Dr.Günel", "Psixoloq"]), sec + ": owner 22.11: every service is a column, also with zero: " + JSON.stringify(r.head));
       check(cell(r, "Nurlana", "Ruqya") === "3" && cell(r, "Nurlana", "Hicama") === "1" && cell(r, "Nurlana", "Masaj") === "0", sec + ": Nurlana 3 Ruqya, 1 Hicama (cancelled not counted): " + JSON.stringify(r.rows));
       check(cell(r, "Asiya", "Ruqya") === "2" && cell(r, "Asiya", "Masaj") === "2", sec + ": Asiya 2 Ruqya, 2 Masaj: " + JSON.stringify(r.rows));
       check(cell(r, "Cəmi", "Ruqya") === "5" && cell(r, "Cəmi", "Masaj") === "2", sec + ": totals row: " + JSON.stringify(r.rows));

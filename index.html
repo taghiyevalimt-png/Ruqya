@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-dXYrANQogP9SAHwreV43eEVAgZhnrvz7+WLKfO1mH4E='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-E8HPuO4msO2ALTMK3AxFmYwcyao7/PnZGvOer62/Zxk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1736,7 +1736,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122124251";
+var APP_VERSION="20261122125331";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2779,7 +2779,7 @@ function renderScreen(){
   if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
   byId("tabs").hidden=gate;
   /* specialists: no statistics and no Kassa; a person still waiting for a role: only Qəbullar (a notice) and Ayarlar */
-  var noTab={stats:specMe()||pendingMe(),cash:pendingMe()||(specMe()&&!state.hasCatalog),patients:pendingMe()};   /* owner 22.11: specialists sell products too */
+  var noTab={stats:specMe()||pendingMe(),cash:pendingMe()||(specMe()&&!state.hasProducts),patients:pendingMe()};   /* owner 22.11: specialists sell products too */
   if(!gate&&noTab[ui.tab])ui.tab="day";
   var tb0=document.querySelectorAll("#tabs button");for(var ti=0;ti<tb0.length;ti++){var hid=!!noTab[tb0[ti].dataset.tab];if(tb0[ti].hidden!==hid)tb0[ti].hidden=hid}
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length||pendingMe();
@@ -3270,7 +3270,8 @@ function writerData(r){
     var k=a.by&&state.staff[a.by]!=null?a.by:"-",sv=svcName(a.service),pl=a.place==="onlayn"||a.place==="unvan"?a.place:"ofis",ok=done(a);
     var w=by[k]||(by[k]={svc:{},pl:{},n:0,u:0});w.svc[sv]=(w.svc[sv]||0)+1;w.pl[pl]=(w.pl[pl]||0)+1;w.n++;used[sv]=1;
     T.svc[sv]=(T.svc[sv]||0)+1;T.pl[pl]=(T.pl[pl]||0)+1;T.n++;if(ok){w.u++;T.u++;T.svcU[sv]=(T.svcU[sv]||0)+1;T.plU[pl]=(T.plU[pl]||0)+1}});
-  var cols=SERVICES.filter(function(k){return used[k]}).concat(Object.keys(used).filter(function(k){return SERVICES.indexOf(k)<0}));
+  /* owner 22.11: every service is a column, also with nothing written yet (plus any older service names in use) */
+  var cols=SERVICES.slice().concat(Object.keys(used).filter(function(k){return SERVICES.indexOf(k)<0}));
   return {by:by,cols:cols,T:T};
 }
 function vth(t,cls){return '<th class="v'+(cls?' '+cls:'')+'"><span>'+esc(t)+'</span></th>'}
@@ -3280,6 +3281,8 @@ function bigTable(r,per){
   var S=statData("sales",r,per),W=writerData(r),pl=state.hasPlace?PLACES.map(function(x){return x[0]}):[];
   var rows=S.rows.map(function(x){return {k:x.k,name:x.name,x:x}}),seen={};rows.forEach(function(y){seen[y.k]=1});
   Object.keys(W.by).filter(function(k){return !seen[k]}).sort(function(a,b){return W.by[b].n-W.by[a].n}).forEach(function(k){rows.push({k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),x:null})});
+  /* owner 22.11: every worker with a role is a row, also with nothing written yet (an agent still sees only himself) */
+  if(!onlyMeSt())Object.keys(state.staff).filter(function(k){return !seen[k]&&!W.by[k]&&state.roleSet[k]&&!stHidden(k)}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))}).forEach(function(k){rows.push({k:k,name:state.staff[k]||L("Adsız"),x:null})});
   var eper=per==="cweek"?"week":per==="cmonth"?"month":per,editable=state.hasStatEdits&&canStats();
   var n=function(v){return v==null?"—":String(v)};
   var cell=function(y,col,v,label){
@@ -3653,7 +3656,9 @@ function prodStats(r,per){
     return '<div class="pay"><div class="head"><b>'+title+'</b></div><table class="stt"><thead><tr><th>'+head+'</th><th class="num">'+L("Satış")+'</th><th class="num">'+L("Məbləğ")+'</th></tr></thead><tbody>'+
       (keys.length?keys.map(function(k){var y=obj[k];return '<tr><td>'+esc(y.name)+'</td><td class="num">'+y.q+'</td><td class="num">'+money(y.m)+'</td></tr>'}).join(""):'<tr><td colspan="3" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>')+
       '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+T.q+'</td><td class="num">'+money(T.m)+'</td></tr></tfoot></table></div>'};
-  ord.sort(function(a,b){return byP[b].m-byP[a].m});
+  state.catalog.forEach(function(c){if(!byP[c.id]&&!c.archived){byP[c.id]={name:c.name,q:0,m:0};ord.push(c.id)}});   /* owner 22.11: zeros shown too */
+  if(!onlyMe)Object.keys(state.staff).forEach(function(k){if((isAgent(k)||state.roles[k]==="specialist")&&!stHidden(k)&&!byS[k])byS[k]={name:state.staff[k]||L("Adsız"),q:0,m:0}});
+  ord.sort(function(a,b){return byP[b].m-byP[a].m||byP[b].q-byP[a].q});
   var sk=Object.keys(byS).sort(function(a,b){return byS[b].m-byS[a].m});
   return tbl(L("Məhsullar üzrə"),L("Məhsul"),byP,ord)+tbl(L("Satanlar üzrə"),L("Satan"),byS,sk);
 }
