@@ -1,0 +1,18 @@
+Sun Nov 22 15:54:13 UTC 2026
+commit cf067e4
+== rollback
+time 5.480330457 s
+distinct keys: 48001
+== migration (final file)
+time 28.518657240 s
+distinct keys: 50000
+== history page, first page and a page in the middle
+  1000
+Time: 185.137 ms
+  1000
+Time: 133.692 ms
+  1000
+Time: 142.003 ms
+  1000
+Time: 133.055 ms
+# supersedes migration-copy.txt (that run measured the earlier SQL-language page function: 10.5 s; the final file has the PL/pgSQL version)
