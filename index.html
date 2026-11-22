@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-nsyvFKUdEOjTx2wywDf3pSbwWod5ttM3Ga1BfWZfwdk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tNNODdHvj4NmDeHx7GlxpTbW2ueV8cPH+in/oQqkMSw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -750,7 +750,11 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Məhsullar (ədəd)":"Товары (шт.)",
+var RUD=LANG==="ru"?{"Kim neçə seans yazıb":"Кто сколько сеансов записал",
+"Vəzifə":"Роль",
+"Dövrdə yazılan və ləğv olunmayan qəbullar (seansın hansı günə yazılmasından asılı olmayaraq).":"Записи, сделанные за период и не отменённые (на какой бы день ни был сеанс).",
+"Rəqəmlər {t} vəziyyətinə görədir; statistikada nə dəyişsə, fayl dərhal yenidən hazırlanır. Yüklənmiş fayl öz-özünə dəyişmir — yeni rəqəmlər üçün yenidən yükləyin.":"Цифры на {t}; если в статистике что-то меняется, файл сразу готовится заново. Уже скачанный файл сам не меняется — для новых цифр скачайте снова.",
+"Məhsullar (ədəd)":"Товары (шт.)",
 "Faizlər":"Проценты",
 "Seanslar":"Сеансы",
 "Qazanc xidmətlər üzrə":"Заработок по услугам",
@@ -1764,7 +1768,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122133425";
+var APP_VERSION="20261122134013";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2329,6 +2333,9 @@ function redrawCard(){
   if(sheet.type==="brkview"){byId("sheet").innerHTML=brkSheet();return}
   if(sheet.type==="brkone"){byId("sheet").innerHTML=brkOneSheet();return}   /* a break deleted or added on another phone */
   if(sheet.type==="appt"){slotGrid();return}
+  /* owner 22.11: the Excel file follows the statistics at once — a change (a typed WP number, a booking…) while the
+     window is open makes the file again, so the file to download is never older than the screen */
+  if(sheet.type==="xls"&&(sheet.url||sheet.err)&&!sheet.busy){clearTimeout(xlsT);xlsT=setTimeout(function(){if(sheet&&sheet.type==="xls")startXls()},800);return}
   var f={view:viewSheet,patient:patientSheet}[sheet.type];
   if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
 }
@@ -3365,8 +3372,8 @@ function statsMain(){
   if(sec==="money"||sec==="prod"){
     var pr=perRange(ui.stPer);
     h+=perSeg()+perHead(ui.stPer,pr);
-    if(sec==="money")return h+(isAdmin()?moneyTable(pr,ui.stPer):"");
-    return h+prodStats(pr,ui.stPer);
+    if(sec==="money")return h+(isAdmin()?moneyTable(pr,ui.stPer)+sessTable(pr,ui.stPer):"");
+    return h+prodStats(pr,ui.stPer)+sessTable(pr,ui.stPer);
   }
   if(sec==="today"){
     /* owner 22.11: only today — the same one table for today, and today's sessions */
@@ -3374,12 +3381,12 @@ function statsMain(){
     state.appts.forEach(function(a){if(a.date!==today||stHidden(a.by)||(on&&a.by!==on))return;if(gone(a))c.x++;else{c.n++;if(done(a))c.u++}});
     return statNav("st-cur",td,L("Bu gün"),L("gün hələ bitməyib — rəqəmlər artır"))+
       '<div class="pay todaysum"><div><b class="num">'+c.n+'</b><span>'+L("Seans")+'</span></div><div><b class="num">'+c.u+'</b><span>'+L("Uğurlu")+'</span></div><div><b class="num">'+c.x+'</b><span>'+L("Ləğv")+'</span></div></div>'+
-      bigTable(td,"day")+(canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"");
+      bigTable(td,"day")+sessTable(td,"day")+(canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"");
   }
   var r=perRange(sec);
   h+=perHead(sec,r);
   var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
-  return h+bigTable(r,sec)+edHint+rulesBox();   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
+  return h+bigTable(r,sec)+edHint+sessTable(r,sec)+rulesBox();   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
 /* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
@@ -3602,9 +3609,9 @@ function xlsSheets(all){
   state.appts=all.appts;state.products=all.products;pcache=null;edIdx=null;
   try{
     var P=xlsPers(),sh=[];
-    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(bigTable(p.r,p.k)).map(function(t){t.title="";return t})}]})});
-    sh.push({name:L("Pul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(moneyTable(p.r,p.k)).map(function(t){t.title="";return t})}})});
-    if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k)).map(function(t){t.title="";return t})}})});
+    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(bigTable(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}]})});
+    sh.push({name:L("Pul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(moneyTable(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}})});
+    if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k)+sessTable(p.r,p.k)).map(function(t,i){if(!i)t.title="";return t})}})});
     return sh.map(function(x){var b=xBuild(x.b);b.name=x.name;return b});
   }finally{state.appts=keep.appts;state.products=keep.products;pcache=null;edIdx=null}
 }
@@ -3622,24 +3629,26 @@ function xlsSheet(){
   var x=sheet,h='<h2>Excel'+CLOSE+'</h2>';
   if(x.err)return h+'<p class="err" role="alert">'+L("Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.")+'</p><button class="primary" data-act="xls">'+L("Yenidən cəhd et")+'</button>';
   if(!x.url)return h+'<p class="hint">'+L("Dövrün məlumatları yüklənir və fayl hazırlanır…")+'</p>';
-  h+='<p class="hint">'+L("Faylda Statistikadakı cədvəllər var: Bu həftə, Keçən həftə, Bu ay, Keçən ay, Pul, Məhsul.")+'</p>';
+  h+='<p class="hint">'+L("Faylda Statistikadakı cədvəllər var: Bu həftə, Keçən həftə, Bu ay, Keçən ay, Pul, Məhsul.")+'</p>'+
+    '<p class="hint small">'+tf(L("Rəqəmlər {t} vəziyyətinə görədir; statistikada nə dəyişsə, fayl dərhal yenidən hazırlanır. Yüklənmiş fayl öz-özünə dəyişmir — yeni rəqəmlər üçün yenidən yükləyin."),{t:x.at?hhmm(x.at.m):""})+'</p>';
   if(NATIVE&&typeof NATIVE.saveFile==="function")return h+'<button class="primary" data-act="xls-save">'+L("Telefona yüklə")+'</button>';
   if(NATIVE)return h+'<p class="hint">'+L("Bu tətbiq versiyası faylı yükləyə bilmir. Yeni versiyanı quraşdırın və ya proqramı brauzerdə açın.")+'</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">'+L("Yeni versiyanı yüklə")+'</a>';
   return h+'<a class="primary" href="'+esc(x.url)+'" download="'+esc(x.fname)+'">'+L("Faylı yüklə")+'</a>'+
     '<p class="hint">'+L("iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.")+'</p>';
 }
+var xlsT=null;
 function dropXlsUrl(x){if(x&&x.url&&x.url!=="#"){try{URL.revokeObjectURL(x.url)}catch(e){}x.url=""}}
 function startXls(){
   if(!isAdmin())return;
   if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
-  var s={type:"xls",per:"stat"},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};
+  var s={type:"xls",per:"stat",busy:1},fail0=function(){s.busy=0;if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};
   if(sheet&&sheet.type==="xls"){sheet=s;byId("sheet").innerHTML=xlsSheet()}else openSheet(s);
   xlsFetch().then(function(all){
     if(sheet!==s)return;
     var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
     return xlsxBlob(sh).then(function(blob){
       if(sheet!==s)return;
-      s.blob=blob;s.url=URL.createObjectURL(blob);byId("sheet").innerHTML=xlsSheet();
+      s.blob=blob;s.url=URL.createObjectURL(blob);s.busy=0;s.at=bk();byId("sheet").innerHTML=xlsSheet();
     });
   }).then(null,fail0);
 }
@@ -3717,6 +3726,22 @@ function catalogSheet(){
   return h;
 }
 /* «Məhsul» in Statistika: by product and by seller */
+/* owner 22.11: at the end of every statistics — every sales agent and specialist (and admin): how many sessions he
+   wrote in the period (bookings written on its days, not cancelled; the same table in Excel). An agent or a specialist
+   sees his own line. */
+function sessTable(r,per){
+  var onlyMe=isAdmin()||statAll?null:auth.user.id,by={},T=0;
+  var add=function(k){if(!by[k])by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),n:0}};
+  state.appts.forEach(function(a){if(gone(a)||!a.created||a.created<r.s||a.created>r.end||stHidden(a.by))return;if(onlyMe&&a.by!==onlyMe)return;
+    var k=a.by&&state.staff[a.by]!=null?a.by:"-";add(k);by[k].n++;T++});
+  if(onlyMe)add(onlyMe);else Object.keys(state.staff).forEach(function(k){if(state.roleSet[k]&&!stHidden(k))add(k)});
+  var rows=Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return b.n-a.n||String(a.name).localeCompare(String(b.name))});
+  var role=function(k){var r0=state.roles[k];return k==="-"?"":r0==="agent"?L("Satış agenti"):r0==="specialist"?L("Mütəxəssis"):r0==="admin"||k===ADMIN?L("Admin"):""};
+  return '<div class="pay" data-st="sess-'+per+'"><div class="head"><b>'+L("Kim neçə seans yazıb")+'</b>'+copyB()+'</div><table class="stt"><thead><tr><th>'+L("Kim")+'</th><th>'+L("Vəzifə")+'</th><th class="num">'+L("Seans")+'</th></tr></thead><tbody>'+
+    rows.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(role(x.k))+'</td><td class="num">'+x.n+'</td></tr>'}).join("")+
+    '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td></td><td class="num">'+T+'</td></tr></tfoot></table>'+
+    '<p class="hint">'+L("Dövrdə yazılan və ləğv olunmayan qəbullar (seansın hansı günə yazılmasından asılı olmayaraq).")+'</p></div>';
+}
 /* a copy button that copies the table it stands over, exactly as shown (owner 22.11: screen, copy and Excel the same) */
 function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+L("Kopyala")+'</button>'}
 /* owner 22.11: «Məhsul» is ONE table — sellers as rows, every product as a column (pieces), then pieces, sum and the
