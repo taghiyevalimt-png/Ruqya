@@ -30,9 +30,10 @@ module.exports = async () => {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     const table = (st) => p.evaluate((st) => { const t = document.querySelector('[data-st="' + st + '"]'); return t ? [...t.querySelectorAll("tr")].map((tr) => [...tr.children].map((c) => c.textContent.trim())) : null; }, st);
     await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="week"]'); await p.waitForTimeout(400);
-    const pl = await table("place");
-    check(pl && JSON.stringify(pl.slice(1)) === JSON.stringify([["Ofis", "2", "2"], ["Onlayn", "2", "2"], ["Ünvan", "1", "1"], ["Cəmi", "5", "5"]]), "statistics show the places: " + JSON.stringify(pl));
-    const sales0 = await table("sales-week");
+    // owner 22.11: the places are columns of the week's one table (totals row and «Uğurlu seans» row)
+    const big = await table("big-week"), pl = big && big.slice(-2).map((r) => r.slice(-3));
+    check(pl && JSON.stringify(pl) === JSON.stringify([["2", "2", "1"], ["2", "2", "1"]]), "statistics show the places (Ofis, Onlayn, Ünvan): " + JSON.stringify(pl));
+    const sales0 = big;
     check(sales0 && sales0.some((r) => r[0] === "Asiya"), "Asiya is in the sales table before hiding");
     // Excel: services, places, agents × services; the service column of every booking
     const xls = async () => {
@@ -60,9 +61,8 @@ module.exports = async () => {
     await p.click('[data-act="edit-staff"][data-id="' + A2 + '"]'); await p.locator("#s-hide").check(); await p.click('[data-act="save-staff"]'); await p.waitForTimeout(600);
     check(s.db.staff.find((x) => x.id === A2).hide_stats === true, "saved in the database: hide_stats");
     await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="week"]'); await p.waitForTimeout(400);
-    const sales1 = await table("sales-week"), as1 = await table("svc-agents");
-    check(sales1 && !sales1.some((r) => r[0] === "Asiya"), "Asiya is no longer in the sales table: " + JSON.stringify(sales1));
-    check(as1 && !as1.some((r) => r[0] === "Asiya") && as1.some((r) => r[0] === "Nurlana"), "nor in «Agentlər üzrə xidmətlər»: " + JSON.stringify(as1));
+    const sales1 = await table("big-week");
+    check(sales1 && !sales1.some((r) => r[0] === "Asiya") && sales1.some((r) => r[0] === "Nurlana"), "Asiya is no longer in the statistics: " + JSON.stringify(sales1));
     X = await xls();
     check(!X.rows("Həftəlik — satış").some((r) => r[1] === "Asiya") && !X.rows("Həftəlik — agent×xidmət").some((r) => r[1] === "Asiya"), "nor in Excel");
     // names: the admin's own and another worker's

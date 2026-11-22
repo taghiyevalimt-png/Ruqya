@@ -1,9 +1,10 @@
 // Stability audit S-05: an expense or a product sale whose write did not reach the database (no network, server
 // error) must not stay in the list as if saved — it disappeared after a reload, so the user never typed it again.
 // Now: the line is taken back, the form opens again with what was typed, and the message says so; nothing in the DB.
-const { open, check, OWNER } = require("../lib");
+const { open, check, OWNER, seed } = require("../lib");
 module.exports = async () => {
-  const s = await open(OWNER, { viewport: { width: 390, height: 844 } });
+  const db = seed(); db.products = [{ id: "cccccccc-0000-4000-8000-000000000001", name: "Zeytun yağı", price: 25, archived: false, sort: 1, created_at: "2026-11-01T00:00:00Z" }];
+  const s = await open(OWNER, { db, viewport: { width: 390, height: 844 } });
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     await p.route("**/rest/v1/expenses*", (r) => (r.request().method() === "POST" ? r.abort("internetdisconnected") : r.fallback()));
@@ -18,14 +19,13 @@ module.exports = async () => {
     check(form && form[0] === "Kirayə" && form[1] === "300", "expense: the form is open again with what was typed: " + JSON.stringify(form));
     check(!(s.db.expenses || []).length, "expense: nothing in the database");
     await p.click('[data-act="close"]').catch(() => {}); await p.waitForTimeout(400);
-    // product sale (server answers 500)
-    await p.click('[data-act="new-prod"]'); await p.locator("#pr-amount").waitFor();
-    await p.fill("#pr-names", "Zeytun yağı"); await p.fill("#pr-amount", "25");
-    await p.click('[data-act="save-prod"]'); await p.waitForTimeout(2500);
-    const pForm = await p.evaluate(() => { const a = document.getElementById("pr-amount"), n = document.getElementById("pr-names"); return a && !document.getElementById("overlay").hidden ? [n ? n.value : "", a.value] : null; });
+    // product sale (server answers 500) — owner 22.11: tapped from the product buttons
+    await p.click('[data-act="new-prod"]'); await p.locator(".pbtn").first().waitFor();
+    await p.click(".pbtn"); await p.click('[data-act="sell-save"]'); await p.waitForTimeout(2500);
+    const pForm = await p.evaluate(() => { const b = document.querySelector(".pbtn.on"), t = document.querySelector("#sheet .ptotal"); return b && !document.getElementById("overlay").hidden ? [b.textContent, (t.textContent.match(/\d+/g) || []).pop()] : null; });
     const pList = await p.evaluate(() => [...document.querySelectorAll("#main *")].some((e) => e.children.length === 0 && /Zeytun/.test(e.textContent)));
     check(!pList, "product: the failed sale is not left in the list");
-    check(pForm && /Zeytun/.test(pForm[0]) && pForm[1] === "25", "product: the form is open again with what was typed: " + JSON.stringify(pForm));
+    check(pForm && /Zeytun/.test(pForm[0]) && pForm[1] === "25", "product: the window is open again with the tapped products: " + JSON.stringify(pForm));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

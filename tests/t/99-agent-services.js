@@ -23,29 +23,30 @@ module.exports = async () => {
   // Nurlana: 3 Ruqya + 1 Hicama (+ 1 cancelled Ruqya, not counted); Asiya: 2 Ruqya + 2 Masaj
   mk(AGENT, "Ruqya", "09:00"); mk(AGENT, "Ruqya", "10:00"); mk(AGENT, "Ruqya", "11:00"); mk(AGENT, "Hicama", "12:00"); mk(AGENT, "Ruqya", "13:00", "cancel");
   mk(A2, "Ruqya", "09:00", "wait", R2); mk(A2, "Ruqya", "10:00", "wait", R2); mk(A2, "Masaj", "11:00", "wait", R2); mk(A2, "Masaj", "12:00", "wait", R2);
+  // owner 22.11: the counts are columns of the period's one table («Ümumi cədvəl»); the head is the upright names
   const read = (p) => p.evaluate(() => {
-    const t = document.querySelector('[data-st="svc-agents"]'); if (!t) return null;
-    const head = [...t.querySelectorAll("thead th")].map((x) => x.textContent.trim());
-    const rows = [...t.querySelectorAll("tbody tr, tfoot tr")].map((tr) => [...tr.children].map((x) => x.textContent.trim()));
-    return { title: t.querySelector(".head b").textContent.trim(), head, rows, wide: t.scrollWidth - t.clientWidth };
+    const t = document.querySelector('[data-st^="big-"]'); if (!t) return null;
+    const head = [t.querySelector("thead th").textContent.trim()].concat([...t.querySelectorAll("thead th.v span")].map((x) => x.textContent.trim()));
+    const rows = [...t.querySelectorAll("tbody tr, tfoot tr:first-child")].map((tr) => [...tr.children].map((x) => x.textContent.trim()));
+    return { title: t.querySelector(".head b").textContent.trim(), head, rows, wide: document.getElementById("main").scrollWidth - document.getElementById("main").clientWidth };
   });
   const cell = (r, who, col) => { const row = r.rows.find((x) => x[0] === who); const i = r.head.indexOf(col); return row && i >= 0 ? row[i] : undefined; };
   let s = await open(OWNER, { db, viewport: { width: 390, height: 844 } });
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     await p.click('#tabs [data-tab="stats"]');
-    for (const sec of ["day", "week", "month"]) {
+    for (const sec of ["week", "month"]) {
       await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(400);
-      if (sec === "day") for (let k = 0; k < back; k++) { await p.click('[data-act="st-all"][data-n="-1"]'); await p.waitForTimeout(250); }
       const r = await read(p);
-      check(r, sec + ": the table «Agentlər üzrə xidmətlər» is shown");
+      check(r, sec + ": the table «Ümumi cədvəl» is shown");
       if (!r) continue;
-      check(r.title === "Agentlər üzrə xidmətlər", sec + ": title: " + r.title);
-      check(JSON.stringify(r.head) === JSON.stringify(["Agent", "Ruqya", "Hicama", "Masaj", "Cəmi"]), sec + ": columns are the services written in the period: " + JSON.stringify(r.head));
-      check(cell(r, "Nurlana", "Ruqya") === "3" && cell(r, "Nurlana", "Hicama") === "1" && cell(r, "Nurlana", "Masaj") === "0" && cell(r, "Nurlana", "Cəmi") === "4", sec + ": Nurlana 3 Ruqya, 1 Hicama, total 4 (cancelled not counted): " + JSON.stringify(r.rows));
-      check(cell(r, "Asiya", "Ruqya") === "2" && cell(r, "Asiya", "Masaj") === "2" && cell(r, "Asiya", "Cəmi") === "4", sec + ": Asiya 2 Ruqya, 2 Masaj: " + JSON.stringify(r.rows));
-      check(cell(r, "Cəmi", "Ruqya") === "5" && cell(r, "Cəmi", "Cəmi") === "8", sec + ": totals row: " + JSON.stringify(r.rows));
-      check(r.wide <= 1, sec + ": fits the phone width (390 px)");
+      check(r.title === "Ümumi cədvəl", sec + ": title: " + r.title);
+      const svc = r.head.filter((x) => ["Ruqya", "Hicama", "Masaj", "Kombo", "Dr.Günel", "Psixoloq"].includes(x));
+      check(JSON.stringify(svc) === JSON.stringify(["Ruqya", "Hicama", "Masaj"]), sec + ": service columns are the services written in the period: " + JSON.stringify(r.head));
+      check(cell(r, "Nurlana", "Ruqya") === "3" && cell(r, "Nurlana", "Hicama") === "1" && cell(r, "Nurlana", "Masaj") === "0", sec + ": Nurlana 3 Ruqya, 1 Hicama (cancelled not counted): " + JSON.stringify(r.rows));
+      check(cell(r, "Asiya", "Ruqya") === "2" && cell(r, "Asiya", "Masaj") === "2", sec + ": Asiya 2 Ruqya, 2 Masaj: " + JSON.stringify(r.rows));
+      check(cell(r, "Cəmi", "Ruqya") === "5" && cell(r, "Cəmi", "Masaj") === "2", sec + ": totals row: " + JSON.stringify(r.rows));
+      check(r.wide <= 1, sec + ": the page itself does not scroll sideways (the table scrolls in its box)");
     }
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
@@ -59,7 +60,7 @@ module.exports = async () => {
     await p.evaluate(() => localStorage.setItem("ruqya.lang", "ru")); await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="week"]'); await p.waitForTimeout(400);
     const ru = await read(p);
-    check(ru && ru.title === "Услуги по агентам" && ru.head[0] === "Агент" && ru.head[ru.head.length - 1] === "Итого", "Russian labels: " + JSON.stringify(ru && [ru.title, ru.head]));
+    check(ru && ru.title === "Общая таблица" && ru.head[0] === "Кто", "Russian labels: " + JSON.stringify(ru && [ru.title, ru.head]));
     check(!s.errors.length, "agent: no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

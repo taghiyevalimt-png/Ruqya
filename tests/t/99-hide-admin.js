@@ -12,7 +12,9 @@ module.exports = async () => {
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     const rows = async () => { await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="week"]'); await p.waitForTimeout(400);
-      return p.evaluate(() => ["sales-week", "svc-agents"].map((st) => { const t = document.querySelector('[data-st="' + st + '"]'); return t ? [...t.querySelectorAll("tbody tr")].map((tr) => tr.children[0].textContent.trim()) : []; })); };
+      // owner 22.11: sales and «who wrote which service» are one table now (big-week); the day-by-day table has the people as columns
+      return p.evaluate(() => { const t = document.querySelector('[data-st="big-week"]'), d = document.querySelector('[data-st="days-week"]');
+        return [t ? [...t.querySelectorAll("tbody tr")].map((tr) => tr.children[0].textContent.trim()) : [], d ? [...d.querySelectorAll("thead th.v span")].map((x) => x.textContent.trim()) : []]; }); };
     const before = await rows();
     check(before[0].includes("Admin") && before[1].includes("Admin"), "before: the admin's bookings are in the statistics: " + JSON.stringify(before));
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="staff"]'); await p.waitForTimeout(300);

@@ -11,7 +11,9 @@ module.exports = async () => {
       const p = s.page; await p.waitForSelector("#tabs:not([hidden])", { timeout: 15000 }); await p.waitForTimeout(3300);
       await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(300);
       let text = "";
-      for (const sec of ["rules", "terms"]) { await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(300); text += (await p.textContent("#main")) + "\n"; }
+      // owner 22.11: the rules and terms are folded inside every period («Qaydalar və terminlər»)
+      await p.click('#top [data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(300);
+      await p.click("details.rulesbox summary"); await p.waitForTimeout(200); text += await p.textContent("details.rulesbox");
       for (const re of OLD[lang]) check(!re.test(text), lang + ": rules/terms no longer say no-shows are deleted (" + re + ")");
       for (const re of NEW[lang]) check(re.test(text), lang + ": rules/terms explain cancelling (" + re + ")");
       check(!s.errors.length, "no page errors: " + s.errors.join("; "));

@@ -34,10 +34,12 @@ module.exports = async () => {
     check(s.db.appts.find((a) => a.name === "Köhnə Xidmət").service === "Köhnə növ", "nothing was saved");
     await p.click('[data-act="close"]'); await p.click('[data-act="draft-drop"]', { timeout: 500 }).catch(() => {});
     // statistics: every service listed
-    await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="day"]');   // today (the week section shows the last finished week) await p.waitForTimeout(400);
-    const t = await p.$eval('[data-st="svc"]', (e) => e.textContent.replace(/\s+/g, " ")).catch(() => "");
-    for (const v of ["Ruqya", "Hicama", "Kombo", "Masaj", "Dr.Günel", "Psixoloq"]) check(t.includes(v), "statistics list " + v + ": " + t.slice(0, 160));
-    check(/Psixoloq ?1 ?0/.test(t), "the Psixoloq session is counted (1 session, 0 successful yet): " + t);
+    // owner 22.11: one merged table per period; its service columns are the services written in the period
+    await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(400);
+    const st = await p.evaluate(() => { const t = document.querySelector('[data-st^="big-"]'), h = [...t.querySelectorAll("th.v span")].map((x) => x.textContent.trim()), f = [...t.querySelectorAll("tfoot tr")].map((r) => [...r.children].map((c) => c.textContent.trim()));
+      const i = h.indexOf("Psixoloq"); return { h, tot: i >= 0 ? f[0][1 + i] : null, ok: i >= 0 ? f[1][i - 4] : null }; });
+    check(st.h.includes("Psixoloq") && st.h.includes("Köhnə növ"), "statistics list the services written: " + st.h);
+    check(st.tot === "1" && st.ok === "0", "the Psixoloq session is counted (1 session, 0 successful yet): " + JSON.stringify(st));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

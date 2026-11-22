@@ -46,8 +46,11 @@ module.exports = async () => {
     await p.click('[data-act="close"]'); await p.click('[data-act="draft-drop"]').catch(() => {});
     // 4. product sale can be changed
     await p.click('#tabs [data-tab="cash"]');
-    await p.click('[data-act="new-prod"]'); await p.fill("#pr-names", "Zeytun yağı"); await p.fill("#pr-amount", "20");
-    await p.click('[data-act="save-prod"]'); await p.waitForTimeout(800);
+    // owner 22.11: new sales are tapped from product buttons (99-products-buttons); a sale written by hand earlier
+    // (names + amount) still opens in the old form
+    s.db.product_sales.push({ id: uuid(), date: bakuToday(), amount: 20, names: "Zeytun yağı", created_by: AGENT, created_at: new Date().toISOString() });
+    await p.click('#tabs [data-tab="day"]'); await p.waitForTimeout(200); await p.reload(); await ready(p);
+    await p.click('#tabs [data-tab="cash"]'); await p.waitForTimeout(300);
     await p.click('[data-act="edit-prod"]');
     check((await p.inputValue("#pr-amount")) === "20" && /Zeytun/.test(await p.inputValue("#pr-names")), "form opens with the sale");
     await p.fill("#pr-amount", "25"); await p.fill("#pr-names", "Zeytun yağı\nQara çörək otu");

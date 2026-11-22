@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-eezVu2M/2XHTKj+I9kORWTOZhUYAbyZtf/AFSYDiXjM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-dXYrANQogP9SAHwreV43eEVAgZhnrvz7+WLKfO1mH4E='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -325,8 +325,54 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 .ev.noshow{opacity:.6;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 5px,transparent 5px,transparent 10px)}
 .ev.cancel{background:#000!important;color:#f2f2f2!important;border:1px solid #3a3a3a;box-shadow:none}
 .ev.cancel b,.ev.cancel span{color:#f2f2f2!important}
-.brk{position:absolute;left:0;right:0;z-index:1;pointer-events:none;font-size:11px;color:var(--muted);padding:2px 6px;
+.brk{position:absolute;left:0;right:0;z-index:1;font-size:11px;color:var(--muted);padding:2px 6px;width:auto;min-height:0;border-radius:0;border-left:0;border-right:0;text-align:left;display:block;font-weight:600;line-height:1.2;overflow:hidden;cursor:pointer;
   background:repeating-linear-gradient(135deg,var(--hatch) 0,var(--hatch) 6px,transparent 6px,transparent 12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* owner 22.11: «Qəbul | Fasilə» on top of the new-booking window; Google-Calendar-like break form */
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h2.kindh{display:flex;align-items:center;gap:10px}h2.kindh .kindsw{flex:1;grid-template-columns:1fr 1fr;max-width:320px}
+h2.kindh .kindsw button{font-size:15px;padding:9px 8px}
+.field input.gtitle{font-size:20px;font-weight:600;border-width:0 0 2px;border-radius:0;background:transparent;padding:0 2px}
+.field input.gtitle:focus{border-bottom-color:var(--accent);outline:none}
+.tog{display:flex;align-items:center;gap:10px;height:48px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:0 12px;font-size:15px;color:var(--ink);width:100%}
+.tog i{position:relative;width:38px;height:22px;border-radius:11px;background:var(--line);flex:none;transition:background .15s}
+.tog i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.tog[aria-checked="true"] i{background:var(--accent)}.tog[aria-checked="true"] i::after{left:19px}
+.pay.scope{display:flex;flex-direction:column;gap:8px;padding:12px}.pay.scope p{margin:0 0 2px}
+.card.brkrow{border-style:dashed;background:repeating-linear-gradient(135deg,var(--hatch) 0,var(--hatch) 6px,transparent 6px,transparent 12px)}
+.card.brkrow .who b{font-weight:600}
+/* owner 22.11: the period's one table — column names written upwards */
+.hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -6px;padding:0 6px}
+.stt.big{width:auto;min-width:100%}
+.stt.big th.v{vertical-align:bottom;text-align:center;padding:4px 2px 6px;text-transform:none;letter-spacing:0;font-size:12px}
+.stt.big th.v span{display:inline-block;writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;max-height:140px;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
+.stt.big td.num{padding-left:4px;padding-right:4px;text-align:center}
+.stt.big td:first-child{white-space:nowrap;max-width:none;position:sticky;left:0;background:var(--surface);z-index:1;padding-right:8px}
+.stt.big th[rowspan],.stt.big thead th:first-child{position:sticky;left:0;background:var(--surface);z-index:2}
+.stt.big .g2{background:rgba(127,127,127,.06)}.stt.big .g4{background:rgba(127,127,127,.06)}
+.stt.big td.dim{color:var(--muted)}
+.stt.big tr.ok2 td{font-weight:600;border-top:0;color:var(--muted)}
+.stt.big tr.today td{font-weight:700}.stt.big tr.today td small{color:var(--accent);font-weight:600}
+.stt.days td:first-child small{font-size:11px}
+details.rulesbox summary{cursor:pointer;list-style:none}details.rulesbox summary::-webkit-details-marker{display:none}
+details.rulesbox summary::after{content:" ▾";color:var(--muted)}details.rulesbox[open] summary::after{content:" ▴"}
+.stper{margin-bottom:6px}
+/* owner 22.11: confirm / didn't return lists, free-time finder */
+.psec .badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:var(--bad);color:#fff;font-size:12px;line-height:20px;font-weight:700;margin-left:4px}
+.card.confd{opacity:.7}
+.freebox{margin-top:-4px}.freebox .link{padding:4px 0}.freebox .chips{margin-top:6px}
+/* owner 22.11: product buttons */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.pbtnw{position:relative}
+.pbtn{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;width:100%;min-height:78px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);text-align:left;font-size:15px;line-height:1.2}
+.pbtn b{font-weight:700;overflow-wrap:anywhere}.pbtn span{color:var(--muted);font-size:14px}
+.pbtn.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.pbtn i{position:absolute;top:-8px;right:-8px;min-width:28px;height:28px;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-style:normal;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 6px;font-size:15px}
+.pminus{position:absolute;bottom:6px;right:6px;width:34px;height:34px;min-height:0;border-radius:17px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;line-height:1;padding:0}
+.ptotal{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-top:8px;border-top:2px solid var(--line);font-size:15px}
+.ptotal b{font-size:18px}.ptotal.big b{font-size:24px;color:var(--accent)}
+.pline .qty{color:var(--muted);font-weight:600}
+.stepper{display:flex;align-items:center;justify-content:center;gap:24px;padding:8px 0}.stepper b{font-size:32px;min-width:48px;text-align:center}
+.visit.arch span{opacity:.6}
 .nowline{position:absolute;left:0;right:0;height:2px;background:#d93025;z-index:2;pointer-events:none}
 .nowline::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:#d93025}
 .detail .row2{display:flex;gap:6px 10px;align-items:center;font-size:14px;flex-wrap:wrap}.detail .row2 b.num{white-space:nowrap}
@@ -695,7 +741,97 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Gözlənilir":"Ожидается",
+var RUD=LANG==="ru"?{"Qayıtmayanlar":"Не вернулись",
+"Bu gün və sabah üçün təsdiq gözləyən qəbul yoxdur.":"На сегодня и завтра нет записей, ждущих подтверждения.",
+"sabah":"завтра",
+"{a} qəbuldan {b}-i təsdiqlənib. «Təsdiq» WhatsApp-da hazır mesajı açır; cavab gələndə «Təsdiq aldı» basın.":"Подтверждено {b} из {a}. «Подтверждение» открывает готовое сообщение в WhatsApp; когда пациент ответит, нажмите «Получил подтверждение».",
+"Təsdiqləyənlər":"Подтвердили",
+"14–90 gün əvvəl gəlib, sonra yazılmayan pasiyent yoxdur.":"Нет пациентов, которые были 14–90 дней назад и больше не записались.",
+"{n} pasiyent 14–90 gün əvvəl gəlib və heç yerə yazılmayıb.":"{n} пациентов были 14–90 дней назад и больше не записаны.",
+"gün":"дн.",
+"Son gəliş: ":"Последний визит: ",
+"{n} dəfə gəlib":"был(а) {n} раз",
+"Wp: dəvət":"Wp: пригласить",
+"Ən yaxın boş vaxtlar":"Ближайшее свободное время",
+"Yaxın 3 həftədə boş vaxt tapılmadı.":"В ближайшие 3 недели свободного времени нет.",
+"Seçildi: ":"Выбрано: ",
+"Hər ay, {n} tarixində":"Каждый месяц, {n} числа",
+"Hər həftə: {d}":"Каждую неделю: {d}",
+"{d} tarixindən":"с {d}",
+"{d} tarixinədək":"по {d}",
+"{n} gün çıxarılıb":"исключено дней: {n}",
+"Təkrarlanmır":"Не повторяется",
+"Həftə içi hər gün (B.e – C)":"По будням (Пн – Пт)",
+"Xüsusi…":"Настроить…",
+"Nə yazılır?":"Что записываем?",
+"Yeni fasilə":"Новый перерыв",
+"Fasiləni dəyiş":"Изменить перерыв",
+"Adı":"Название",
+"Fasilənin adı, məsələn: Namaz":"Название перерыва, например: Намаз",
+"Xeyr":"Нет",
+"Başlayır":"Начало",
+"Təkrar":"Повтор",
+"Son tarix":"Последний день",
+"boş qoyulsa, həmişə":"если пусто — всегда",
+"Kim üçün?":"Для кого?",
+"Fasilə vaxtı təqvimdə zolaqlı görünür və o vaxta qəbul yazmaq olmur.":"Перерыв виден в календаре полосками, и на это время нельзя записать.",
+"Əlavə et":"Добавить",
+"Yalnız bu gün ({d})":"Только этот день ({d})",
+"Bu və sonrakı günlər":"Этот и следующие дни",
+"Bütün günlər":"Все дни",
+"Təkrarlanan fasiləni sil":"Удалить повторяющийся перерыв",
+"Təkrarlanan fasiləni dəyiş":"Изменить повторяющийся перерыв",
+"İmtina":"Отмена",
+"Vaxt":"Время",
+"Bu fasiləni yalnız admin, satış agenti və öz mütəxəssisi dəyişə bilər.":"Этот перерыв может изменить только админ, агент продаж или сам специалист.",
+"Yenə də yadda saxla":"Всё равно сохранить",
+"Keçən həftə":"Прошлая неделя",
+"Keçən ay":"Прошлый месяц",
+"Pul":"Деньги",
+"Məhsul":"Товары",
+"Ümumi cədvəl":"Общая таблица",
+"Kim":"Кто",
+"Uğurlu seans":"Успешные сеансы",
+"Müraciət, Yazdı, Uğurlu, Ləğv — satış agentlərinin rəqəmləri (· — mütəxəssisin özünün yazdığı). Xidmətlər və Yer — dövrün günlərindəki seanslar, kim yazıbsa onun sətrində.":"Обращения, Записал, Успешные, Отмена — цифры агентов продаж (· — записал сам специалист). Услуги и Место — сеансы в дни периода, в строке того, кто записал.",
+"Günlər üzrə":"По дням",
+"Yazdı — həmin gün yazılan qəbullar (hansı günə yazılmasından asılı olmayaraq). Seans, Uğurlu, Ləğv — həmin günün seansları.":"Записал — записи, сделанные в этот день (на любой день). Сеансы, Успешные, Отмена — сеансы этого дня.",
+"«Bu həftə» — indiki həftə, hələ bitməyib. «Keçən həftə» — son bitmiş həftə: indi {a}. ‹ ilə daha əvvəlki həftələrə baxmaq olar.":"«Эта неделя» — текущая, ещё не закончилась. «Прошлая неделя» — последняя законченная: сейчас {a}. Кнопкой ‹ можно смотреть более ранние недели.",
+"Ay ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl bitir (4 və ya 5 həftə). «Keçən ay» — son bitmiş ay: indi {m}.":"Месяц начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего (4 или 5 недель). «Прошлый месяц» — последний законченный: сейчас {m}.",
+"<li><b>Müraciət WP / SŞ</b> — WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlər; işçilər rəqəmə toxunub özləri yazır. <b>ümumi</b> = WP + SŞ.</li>":"<li><b>Обращения WP / СС</b> — обращения из WhatsApp и соцсетей; сотрудники вписывают число сами, нажав на него. <b>всего</b> = WP + СС.</li>",
+"<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı qəbullar (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>":"<li><b>Записал</b> — записи, сделанные агентом за период (по дню записи). <b>Успешные</b> — неотменённые сеансы в дни периода. <b>Отмена</b> — сеансы в дни периода, у которых нажали «Отменить».</li>",
+"<li>Seansın vaxtı bitəndə ləğv olunmayan hər qəbul uğurlu sayılır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>":"<li>Когда время сеанса прошло, каждая неотменённая запись считается успешной. Запись, сделанная по ошибке, удаляется кнопкой «Удалить совсем» и нигде не считается.</li>",
+"<li>Satış rəqəmlərinə yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür; mütəxəssisin özünün yazdığı qəbul «·» ilə göstərilir, amma Xidmətlər, Yer və Pul cədvəllərində sayılır.</li>":"<li>В цифры продаж попадают только записи агентов и админов; запись, сделанная самим специалистом, показана «·», но считается в услугах, месте и деньгах.</li>",
+"<li>Satış agenti yalnız öz sətrini görür. Pul statistikasını yalnız adminlər görür.</li>":"<li>Агент продаж видит только свою строку. Денежную статистику видят только админы.</li>",
+"<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır.</li>":"<li>«Копировать» копирует таблицу текстом для WhatsApp.</li>",
+"Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.":"Число обращений, «Записал» и «Успешные» можно исправить, нажав на него. Рядом с исправленным числом стоит точка.",
+"Xidmətlər və yer (seans)":"Услуги и место (сеансы)",
+"Cəmi: {n} məhsul":"Итого: {n} шт.",
+"Bu tarixdə məhsul satılmayıb.":"В этот день товары не продавались.",
+"Hələ məhsul yoxdur. Əvvəlcə məhsulları əlavə edin.":"Товаров пока нет. Сначала добавьте товары.",
+"Hələ məhsul yoxdur. Admin məhsulları əlavə etməlidir.":"Товаров пока нет. Админ должен добавить товары.",
+"Məhsul əlavə et":"Добавить товар",
+"Bir az çıx":"Убрать одну штуку",
+"Məhsulun üstünə basın":"Нажмите на товар",
+"Məhsulun üstünə basın.":"Нажмите на товар.",
+"Satan avtomatik qeyd olunur: ":"Продавец отмечается сам: ",
+"Sıfırla":"Сбросить",
+"Bu məhsullar «Məhsul satışı» pəncərəsində düymə kimi görünür.":"Эти товары видны кнопками в окне «Продажа товаров».",
+"gizlədilib":"скрыт",
+"Hələ məhsul yoxdur.":"Товаров пока нет.",
+"Məhsulu dəyiş":"Изменить товар",
+"Yeni məhsul":"Новый товар",
+"Qiymət, ":"Цена, ",
+"Yenidən göstər":"Показать снова",
+"Gizlət":"Скрыть",
+"Məhsulu sil":"Удалить товар",
+"Başqa (əl ilə yazılıb)":"Другое (вписано вручную)",
+"Məhsullar üzrə":"По товарам",
+"Satanlar üzrə":"По продавцам",
+"Satış yazıldı: {m}":"Продажа записана: {m}",
+"Məhsulun adını yazın.":"Впишите название товара.",
+"Bu adda məhsul artıq var.":"Товар с таким названием уже есть.",
+"Silinəcək (satışlar qalır) — bir də basın":"Будет удалён (продажи останутся) — нажмите ещё раз",
+"Gözlənilir":"Ожидается",
 "Gəldi və ödədi":"Пришёл и оплатил",
 "Ləğv etdi":"Отменил",
 "Gəlmədi":"Не пришёл",
@@ -1600,7 +1736,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261118153257";
+var APP_VERSION="20261122124251";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -1652,7 +1788,7 @@ function stPill(a){var k=stOf(a);return k==="wait"?'<span class="tag">'+stLabel(
 function noPrice(a){return done(a)&&!a.lite&&!(a.price>0)}
 /* Bookings whose session is over but whose price was never written: the cash total misses them. */
 function npSheet(){
-  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)&&canEdit(a)}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
+  var np=state.appts.filter(function(a){return noPrice(a)&&shown(a.readerId)&&canEdit(a)}).sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)});
   var h=L('<h2>Qiyməti yazılmayıb')+CLOSE+'</h2>';
   if(!np.length)return h+L('<p class="hint">Hamısının qiyməti yazılıb ✓</p>');
   h+=L('<p class="hint">Qəbula toxunun, qiyməti yazıb yadda saxlayın.</p>')+'<div class="pay">';
@@ -1661,7 +1797,7 @@ function npSheet(){
   return h+'</div>';
 }
 function noPriceBox(){
-  var np=state.appts.filter(function(a){return noPrice(a)&&mineOnly(a.readerId)&&canEdit(a)});if(!np.length)return "";
+  var np=state.appts.filter(function(a){return noPrice(a)&&shown(a.readerId)&&canEdit(a)});if(!np.length)return "";
   return L('<div class="note warnbox" role="status"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
@@ -1718,10 +1854,10 @@ function fail(id,msg){var e=byId(id);if(e){e.textContent=msg;e.hidden=false}}
 
 /* ---------- state ---------- */
 var today=bk().d;
-var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0,stAOff:0,stSec:"today"};
-ui.psec="all";try{if(localStorage.getItem("ruqya.psec")==="cancel")ui.psec="cancel"}catch(e){}
+var ui={tab:"day",date:today,sel:[],q:"",view:"grid",stOff:0,stMOff:0,stDOff:0,stAOff:0,stSec:"cweek",stPer:"cweek"};
+ui.psec="all";try{var ps0=localStorage.getItem("ruqya.psec");if(/^(cancel|conf|lost)$/.test(ps0||""))ui.psec=ps0}catch(e){}
 ui.setSec="spec";try{var se0=localStorage.getItem("ruqya.setsec");if(/^(spec|breaks|staff|view|acc)$/.test(se0||""))ui.setSec=se0}catch(e){}
-try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(today|day|week|month|cweek|cmonth|rules|terms)$/.test(ss0||""))ui.stSec=ss0}catch(e){}
+try{var ss0=localStorage.getItem("ruqya.stsec");if(/^(week|month|cweek|cmonth|money|prod)$/.test(ss0||""))ui.stSec=ss0;var sp0=localStorage.getItem("ruqya.stper");if(/^(week|month|cweek|cmonth)$/.test(sp0||""))ui.stPer=sp0}catch(e){}
 try{var pv=localStorage.getItem("ruqya.view");if(pv==="list"||pv==="grid")ui.view=pv}catch(e){}
 /* Specialists picked at the top of the calendar (none picked = all); several can be picked, kept on this phone. */
 try{var ps=JSON.parse(localStorage.getItem("ruqya.sel")||"[]");if(ps&&ps.length)ui.sel=ps.filter(function(x){return typeof x==="string"}).slice(0,50)}catch(e){}
@@ -1808,7 +1944,7 @@ function tfetch(u,o){
   return fetch(u,o).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
-function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],v2:false,hasDur:false,hasProducts:false}}
+function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,v2:false,hasDur:false,hasProducts:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -1856,24 +1992,220 @@ function findEdit(kind,per,s,k,col){var E=state.statEdits;
 /* Sales agents and admins may correct the sales statistics. */
 function canStats(){return isAdmin()||!!(auth.user&&state.roleSet[auth.user.id]&&state.roles[auth.user.id]==="agent")}
 function mapBreak(x){return{id:x.id,title:x.title||"",start:String(x.start_time||"").slice(0,5),end:String(x.end_time||"").slice(0,5),rid:x.reader_id||"",
-  days:Array.isArray(x.days)&&x.days.length?x.days.map(Number).sort():null,from:x.date_from||"",to:x.date_to||""}}
+  days:Array.isArray(x.days)&&x.days.length?x.days.map(Number).sort():null,from:x.date_from||"",to:x.date_to||"",
+  /* owner 22.11 (Google Calendar): days left out of a repeating break, and «every month on day N» */
+  skip:Array.isArray(x.skip)&&x.skip.length?x.skip.map(function(d){return String(d).slice(0,10)}).sort():null,mday:+x.mday>0?+x.mday:null}}
 /* owner 18.11: a break on chosen days of the week (1 = Monday … 7 = Sunday) and/or between two dates; none = every day */
 function wdOf(d){return (parse(d).getDay()+6)%7+1}
-function brkOn(b,d){if(!d)return true;if(b.from&&d<b.from)return false;if(b.to&&d>b.to)return false;return !b.days||b.days.indexOf(wdOf(d))>=0}
+function brkOn(b,d){if(!d)return true;if(b.from&&d<b.from)return false;if(b.to&&d>b.to)return false;
+  if(b.skip&&b.skip.indexOf(d)>=0)return false;if(b.mday&&parse(d).getDate()!==b.mday)return false;return !b.days||b.days.indexOf(wdOf(d))>=0}
 var WDN=["B.e","Ç.a","Ç","C.a","C","Ş","B"];
+/* how a break repeats, in words: «22 noyabr», «Hər gün», «Hər həftə: cümə · 4 dekabr tarixinədək» */
 function brkWhen(b){
-  var t=[];if(b.days)t.push(b.days.map(function(n){return L(WDN[n-1])}).join(", "));
-  if(b.from&&b.to&&b.from===b.to)t.push(fmtDay(b.from));else if(b.from||b.to)t.push((b.from?fmtDay(b.from):"…")+" – "+(b.to?fmtDay(b.to):"…"));
-  return t.join(" · ");
+  var rp=brkRep(b),t;
+  if(rp==="none")return fmtDay(b.from,"w");
+  if(rp==="month")t=tf(L("Hər ay, {n} tarixində"),{n:b.mday});
+  else if(rp==="week")t=tf(L("Hər həftə: {d}"),{d:WDM[b.days[0]-1]});
+  else if(rp==="custom")t=tf(L("Hər həftə: {d}"),{d:b.days.map(function(n){return L(WDN[n-1])}).join(", ")});
+  else t=brkRepText(rp,b.from||today);
+  if(b.from&&b.from>today)t+=" · "+tf(L("{d} tarixindən"),{d:fmtDay(b.from)});
+  if(b.to)t+=" · "+tf(L("{d} tarixinədək"),{d:fmtDay(b.to)});
+  if(b.skip)t+=" · "+tf(L("{n} gün çıxarılıb"),{n:b.skip.length});
+  return t;
 }
-function brkSched(b){return (b.days||[]).join(",")+"~"+(b.from||"")+"~"+(b.to||"")}
+function brkSched(b){return (b.days||[]).join(",")+"~"+(b.from||"")+"~"+(b.to||"")+"~"+(b.mday||"")+"~"+(b.skip||[]).join(",")}
+/* ---------- Breaks, like Google Calendar (owner 22.11) ----------
+   A break is made in the new-booking window («Qəbul | Fasilə» at the top) or in Ayarlar → Fasilələr. A new break is
+   for ONE day — the day on screen — unless «Təkrar» says otherwise: every day, every week on that day, every weekday,
+   every month on that date, or on chosen week days, with an optional last date. «Bütün gün» closes the whole day.
+   A break in the calendar opens with a tap; a repeating one is changed or deleted «only this one», «this and the
+   following ones» or «all of them», as in Google Calendar. One row per specialist (as before); rows made together
+   (same name, time and days) are one break. */
+var WDM=RU?["понедельник","вторник","среда","четверг","пятница","суббота","воскресенье"]:["bazar ertəsi","çərşənbə axşamı","çərşənbə","cümə axşamı","cümə","şənbə","bazar"];   /* Monday first (WDF is Sunday first) */
+var ALL0="00:00",ALL1="23:59";
+function brkAll(b){return b.start===ALL0&&b.end===ALL1}
+function brkTime(b){return brkAll(b)?L("Bütün gün"):b.start+"–"+b.end}
+function brkRep(b){
+  if(b.mday)return "month";
+  if(!b.days)return b.from&&b.to&&b.from===b.to?"none":"day";
+  if(b.days.join(",")==="1,2,3,4,5")return "wdays";
+  if(b.days.length===1&&(!b.from||wdOf(b.from)===b.days[0]))return "week";
+  return "custom";
+}
+function brkRepText(rp,d,days){
+  if(rp==="none")return L("Təkrarlanmır");
+  if(rp==="day")return L("Hər gün");
+  if(rp==="week")return tf(L("Hər həftə: {d}"),{d:WDM[wdOf(d)-1]});
+  if(rp==="wdays")return L("Həftə içi hər gün (B.e – C)");
+  if(rp==="month")return tf(L("Hər ay, {n} tarixində"),{n:parse(d).getDate()});
+  var ks=Object.keys(days||{}).map(Number).sort();
+  return ks.length>0&&ks.length<7?tf(L("Hər həftə: {d}"),{d:ks.map(function(n){return L(WDN[n-1])}).join(", ")}):L("Xüsusi…");
+}
+function brkById(id){for(var i=0;i<state.breaks.length;i++)if(state.breaks[i].id===id)return state.breaks[i];return null}
+function brkSiblings(b){var sg=brkSched(b);return state.breaks.filter(function(x){return x.title===b.title&&x.start===b.start&&x.end===b.end&&brkSched(x)===sg})}
+function brkWho(list){
+  if(list.some(function(x){return !x.rid}))return L("Hamısı");
+  return list.map(function(x){var r=reader(x.rid);return r?r.name:L("silinmiş mütəxəssis")}).join(", ");
+}
+/* the form's starting values: the day, time and specialist of the booking window (or of the calendar on screen) */
+function brkInit(o){
+  o=o||{};
+  var d=okDate(o.date||"")?o.date:ui.date,t=/^\d{2}:\d{2}$/.test(o.time||"")?o.time:hhmm(Math.max(8,Math.min(22,Math.floor(bk().m/60)))*60);
+  var rids={},days={};days[wdOf(d)]=1;
+  if(o.reader&&reader(o.reader)&&canBrk([o.reader]))rids[o.reader]=1;
+  else if(!canBreaks())activeReaders().forEach(function(r){rids[r.id]=1});
+  else ui.sel.forEach(function(r){if(reader(r))rids[r]=1});
+  return {title:"",date:d,all:false,start:t,end:hhmm(Math.min(mins(t)+60,23*60+55)),rep:"none",days:days,until:"",rids:rids};
+}
+function brkFromRow(b,occ){
+  var sib=brkSiblings(b),rids={},days={},all=brkAll(b);
+  if(!sib.some(function(x){return !x.rid}))sib.forEach(function(x){rids[x.rid]=1});
+  (b.days||[wdOf(occ)]).forEach(function(n){days[n]=1});
+  var rp=brkRep(b);
+  return {title:b.title,date:occ,all:all,start:all?"09:00":b.start,end:all?"10:00":b.end,rep:rp,days:days,until:rp!=="none"&&b.to?b.to:"",rids:rids};
+}
+/* what is typed goes into sheet.b before the form is drawn again */
+function brkKeep(){
+  var b=sheet&&sheet.b;if(!b)return;
+  var g=function(i){var e=byId(i);return e?e.value:null};
+  if(g("b-title")!=null)b.title=g("b-title").trim();
+  if(g("b-date")!=null&&okDate(g("b-date")))b.date=g("b-date");
+  if(g("b-start")!=null&&/^\d{2}:\d{2}/.test(g("b-start")))b.start=g("b-start").slice(0,5);
+  if(g("b-end")!=null&&/^\d{2}:\d{2}/.test(g("b-end")))b.end=g("b-end").slice(0,5);
+  if(g("b-until")!=null)b.until=g("b-until");
+  if(g("b-rep")!=null)b.rep=g("b-rep");
+}
+function brkRedraw(){brkKeep();var y=byId("sheet").scrollTop;byId("sheet").innerHTML=sheet.type==="brkone"?brkOneSheet():breakForm();byId("sheet").scrollTop=y}
+function kindSw(on){
+  return '<div class="seg kindsw" role="group" aria-label="'+esc(L("Nə yazılır?"))+'"><button type="button" data-act="kind" data-id="appt" aria-pressed="'+(on==="appt")+'">'+L("Qəbul")+'</button><button type="button" data-act="kind" data-id="brk" aria-pressed="'+(on==="brk")+'">'+L("Fasilə")+'</button></div>';
+}
+function breakForm(){
+  var x=sheet,b=x.b||(x.b=brkInit({})),ed=x.edit?brkById(x.edit):null,cb=canBreaks();
+  if(x.edit&&!ed)return '<h2>'+L("Fasilə")+CLOSE+'</h2><p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
+  var rs=cb?activeReaders():activeReaders().filter(function(r){return canBrk([r.id])}),all=!Object.keys(b.rids).length;
+  var h=x.kinds?'<h2 class="kindh"><span class="vh">'+L("Yeni fasilə")+'</span>'+kindSw("brk")+CLOSE+'</h2>':'<h2>'+(ed?L("Fasiləni dəyiş"):L("Yeni fasilə"))+CLOSE+'</h2>';
+  h+='<div class="field"><input id="b-title" class="gtitle" type="text" maxlength="40" autocomplete="off" aria-label="'+esc(L("Adı"))+'" placeholder="'+esc(L("Fasilənin adı, məsələn: Namaz"))+'" value="'+esc(b.title)+'"></div>';
+  h+='<div class="two"><div class="field"><label for="b-date">'+L("Tarix")+'</label><input id="b-date" type="date" value="'+esc(b.date)+'"></div>'+
+    '<div class="field"><span class="lbl">'+L("Bütün gün")+'</span><button type="button" class="tog" role="switch" data-act="b-all" aria-checked="'+!!b.all+'"><i></i><span>'+(b.all?L("Bəli"):L("Xeyr"))+'</span></button></div></div>';
+  if(!b.all)h+='<div class="two"><div class="field"><label for="b-start">'+L("Başlayır")+'</label><input id="b-start" type="time" step="300" value="'+esc(b.start)+'"></div>'+
+    '<div class="field"><label for="b-end">'+L("Bitir")+'</label><input id="b-end" type="time" step="300" value="'+esc(b.end)+'"></div></div>';
+  if(state.hasBrkDays){
+    var reps=["none","day","week","wdays"].concat(state.hasBrkSkip?["month"]:[]).concat(["custom"]);
+    if(reps.indexOf(b.rep)<0)b.rep="none";
+    h+='<div class="field"><label for="b-rep">'+L("Təkrar")+'</label><select id="b-rep">'+reps.map(function(k){return '<option value="'+k+'"'+(k===b.rep?' selected':'')+'>'+esc(brkRepText(k,b.date,k==="custom"?b.days:null))+'</option>'}).join("")+'</select></div>';
+    if(b.rep==="custom")h+='<div class="chips wdays" style="flex-wrap:wrap;margin-top:-4px" role="group" aria-label="'+esc(L("Həftənin günləri"))+'">'+WDN.map(function(n,i){return '<button type="button" class="chip" data-act="b-day" data-id="'+(i+1)+'" aria-pressed="'+!!b.days[i+1]+'">'+L(n)+'</button>'}).join("")+'</div>';
+    if(b.rep!=="none")h+='<div class="field"><label for="b-until">'+L("Son tarix")+' <span class="opt">('+L("boş qoyulsa, həmişə")+')</span></label><input id="b-until" type="date" value="'+esc(b.until)+'"></div>';
+  }
+  if(state.hasBrkReader&&rs.length)h+='<div class="field"><span class="lbl">'+L("Kim üçün?")+'</span><div class="chips" style="flex-wrap:wrap">'+
+    (cb?'<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+'">'+L("Hamısı")+'</button>':'')+
+    rs.map(function(r){return '<button type="button" class="chip" data-act="b-who" data-id="'+esc(r.id)+'" aria-pressed="'+!!b.rids[r.id]+'">'+esc(r.name)+'</button>'}).join("")+'</div></div>';
+  h+='<p class="hint">'+L("Fasilə vaxtı təqvimdə zolaqlı görünür və o vaxta qəbul yazmaq olmur.")+'</p>';
+  h+='<p class="err" role="alert" id="b-err" hidden></p>';
+  if(x.ask)h+=brkAsk();
+  else h+='<div class="btns sticky-save"><button class="primary" data-act="save-break">'+(ed?L("Yadda saxla"):L("Əlavə et"))+'</button>'+(ed?'<button class="danger" data-act="brk-del">'+L("Sil")+'</button>':'')+'</div>';
+  return h;
+}
+/* «Only this one / this and the following / all» — asked when a repeating break is changed or deleted */
+function brkAsk(){
+  var k=sheet.ask,ed=brkById(sheet.edit||sheet.id),opts=[["one",tf(L("Yalnız bu gün ({d})"),{d:fmtDay(sheet.occ)})],["next",L("Bu və sonrakı günlər")],["all",L("Bütün günlər")]];
+  if(!state.hasBrkSkip)opts=opts.slice(1);
+  if(ed&&ed.from&&sheet.occ<=ed.from)opts=opts.filter(function(o){return o[0]!=="next"});
+  return '<div class="pay scope" role="group" aria-label="'+esc(k==="del"?L("Təkrarlanan fasiləni sil"):L("Təkrarlanan fasiləni dəyiş"))+'"><p><b>'+(k==="del"?L("Təkrarlanan fasiləni sil"):L("Təkrarlanan fasiləni dəyiş"))+'</b></p>'+
+    opts.map(function(o){return '<button type="button" class="'+(k==="del"?'danger':'primary')+'" data-act="brk-scope" data-id="'+o[0]+'">'+esc(o[1])+'</button>'}).join("")+
+    '<button type="button" class="ghost" data-act="brk-ask-no">'+L("İmtina")+'</button></div>';
+}
+/* a break tapped in the calendar */
+function brkOneSheet(){
+  var b=brkById(sheet.id);if(!b)return '<h2>'+L("Fasilə")+CLOSE+'</h2><p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
+  var sib=brkSiblings(b),can=canBrk(sib.map(function(x){return x.rid}));
+  return '<div class="detail" style="display:flex;flex-direction:column;gap:12px"><h2>'+esc(b.title||L("Fasilə"))+CLOSE+'</h2>'+
+    '<div class="row2"><span>'+L("Vaxt")+'</span><b class="num">'+esc(fmtDay(sheet.occ,"w"))+', '+esc(brkTime(b))+'</b></div>'+
+    '<div class="row2"><span>'+L("Təkrar")+'</span><b>'+esc(brkWhen(b))+'</b></div>'+
+    (state.hasBrkReader?'<div class="row2"><span>'+L("Kim üçün?")+'</span><b>'+esc(brkWho(sib))+'</b></div>':'')+
+    (can?(sheet.ask?brkAsk():'<div class="btns"><button class="primary" data-act="brk-edit">'+L("Dəyiş")+'</button><button class="danger" data-act="brk-del">'+L("Sil")+'</button></div>')
+      :'<p class="hint">'+L("Bu fasiləni yalnız admin, satış agenti və öz mütəxəssisi dəyişə bilər.")+'</p>')+'</div>';
+}
+/* the database row of the form (without id and specialist) */
+function brkRowOf(b){
+  var d=b.date,r={title:b.title||L("Fasilə"),start_time:b.all?ALL0:b.start,end_time:b.all?ALL1:b.end};
+  if(state.hasBrkDays){r.days=null;r.date_from=d;r.date_to=b.rep==="none"?d:(b.until||null);
+    if(b.rep==="week")r.days=[wdOf(d)];else if(b.rep==="wdays")r.days=[1,2,3,4,5];else if(b.rep==="custom")r.days=Object.keys(b.days).map(Number).sort();
+    if(r.days&&r.days.length===7)r.days=null}
+  if(state.hasBrkSkip){r.mday=b.rep==="month"?parse(d).getDate():null;r.skip=null}
+  return r;
+}
+function brkCheck(b,btn){
+  if(!b.all&&(!/^\d{2}:\d{2}$/.test(b.start)||!/^\d{2}:\d{2}$/.test(b.end)))return fail("b-err",L("Başlama və bitmə saatını seçin."));
+  if(!b.all&&mins(b.end)<=mins(b.start))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
+  if(!okDate(b.date))return fail("b-err",L("Tarixi seçin."));
+  if(b.rep==="custom"&&!Object.keys(b.days).length)return fail("b-err",L("Həftənin günlərini seçin."));
+  if(b.rep!=="none"&&b.until&&(!okDate(b.until)||b.until<b.date))return fail("b-err",L("Son tarix başlanğıcdan sonra olmalıdır."));
+  var rids=state.hasBrkReader?Object.keys(b.rids).filter(function(r){return !!reader(r)}):[];
+  if(!canBreaks()&&(!rids.length||!canBrk(rids)))return fail("b-err",L("Öz sütununuzu seçin."));
+  var tmp=mapBreak(brkRowOf(b)),ex=sheet.edit?brkSiblings(brkById(sheet.edit)||{}).map(function(x){return x.id}):[];
+  var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a)||!brkOn(tmp,a.date))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(tmp.end)&&mins(tmp.start)<e1}).length;
+  if(hit&&!sheet.sure){sheet.sure=1;if(btn)btn.textContent=L("Yenə də yadda saxla");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
+  return rids;
+}
+/* local copy first, then the server (one request per kind of change) */
+function brkPut(rows){if(!rows.length)return;rows.forEach(function(o){upsertBy(state.breaks,mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").insert(rows))}
+function brkUpd(ids,up){if(!ids.length)return;ids.forEach(function(id){var o=brkById(id);if(!o)return;var row={id:o.id,title:o.title,start_time:o.start,end_time:o.end,reader_id:o.rid||null,days:o.days,date_from:o.from||null,date_to:o.to||null,skip:o.skip,mday:o.mday};
+  Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids))}
+/* a series cut short or with days left out that has no day left is deleted instead of kept empty */
+function brkLeft(b){if(!b.to)return true;var d=b.from&&b.from>"2020-01-01"?b.from:today;if(d<addDays(b.to,-400))d=addDays(b.to,-400);for(;d<=b.to;d=addDays(d,1))if(brkOn(b,d))return true;return false}
+function brkCut(ids,up){var o=brkById(ids[0]);if(!o)return;var t={};Object.keys(o).forEach(function(k){t[k]=o[k]});if("skip" in up)t.skip=up.skip;if("date_to" in up)t.to=up.date_to;
+  if(brkLeft(t))brkUpd(ids,up);else brkDrop(ids)}
+function brkDrop(ids){if(!ids.length)return;state.breaks=state.breaks.filter(function(x){return ids.indexOf(x.id)<0});db(sb.from("breaks").delete().in("id",ids))}
+function brkNewRows(R,rids){return (rids.length?rids:[""]).map(function(r){var o={id:uuid()};Object.keys(R).forEach(function(k){o[k]=R[k]});if(r)o.reader_id=r;return o})}
+function brkSave(scope,btn){
+  var x=sheet,b=x.b;brkKeep();
+  var rids=brkCheck(b,btn);if(rids===undefined||rids===false)return;if(!Array.isArray(rids))return;
+  var R=brkRowOf(b);
+  if(!x.edit){brkPut(brkNewRows(R,rids));closeSheet();return}
+  var o=brkById(x.edit);if(!o){closeSheet();flash(L("Bu fasilə artıq silinib."));return}
+  var sib=brkSiblings(o),rec=brkRep(o)!=="none"&&!x.whole;
+  if(rec&&!scope){x.ask="save";brkRedraw();return}
+  if(!rec||!scope)scope="all";
+  if(scope==="next"&&o.from&&x.occ<=o.from)scope="all";
+  if(scope==="one"){
+    brkCut(sib.map(function(y){return y.id}),{skip:(o.skip||[]).concat([x.occ]).sort()});
+    R.days=null;R.date_from=b.date;R.date_to=b.date;if(state.hasBrkSkip)R.mday=null;
+    brkPut(brkNewRows(R,rids));closeSheet();return;
+  }
+  if(scope==="next"){brkCut(sib.map(function(y){return y.id}),{date_to:addDays(x.occ,-1)});brkPut(brkNewRows(R,rids));closeSheet();return}
+  /* all: the series keeps its first day and its left-out days; the specialists may change */
+  if(b.rep!=="none"&&brkRep(o)!=="none"&&o.from&&state.hasBrkDays)R.date_from=o.from<b.date?o.from:b.date;
+  if(state.hasBrkSkip&&b.rep!=="none")R.skip=o.skip;
+  var want=rids.length?rids:[""],keep=[],drop=[],have=[];
+  sib.forEach(function(y){var k=y.rid||"";if(want.indexOf(k)>=0&&have.indexOf(k)<0){keep.push(y.id);have.push(k)}else drop.push(y.id)});
+  var miss=want.filter(function(k){return have.indexOf(k)<0});
+  brkUpd(keep,R);brkDrop(drop);if(miss.length)brkPut(brkNewRows(R,miss));
+  closeSheet();
+}
+function brkDelete(scope,btn){
+  var x=sheet,o=brkById(x.edit||x.id);if(!o){closeSheet();return}
+  var sib=brkSiblings(o),ids=sib.map(function(y){return y.id});if(!canBrk(sib.map(function(y){return y.rid})))return;
+  var rec=brkRep(o)!=="none"&&!x.whole;
+  if(rec&&!scope){x.ask="del";brkRedraw();return}
+  if(!rec&&!x.sure){x.sure=1;if(btn)btn.textContent=L("Bir də basın");return}
+  if(scope==="one"&&state.hasBrkSkip)brkCut(ids,{skip:(o.skip||[]).concat([x.occ]).sort()});
+  else if(scope==="next"&&!(o.from&&x.occ<=o.from))brkCut(ids,{date_to:addDays(x.occ,-1)});
+  else brkDrop(ids);
+  closeSheet();
+}
 /* who may add or change these breaks: admins and agents all of them; a specialist only his own column (owner 18.11) */
 function canBrk(rids){if(canBreaks())return true;if(!specMe()||!state.hasBrkDays||!rids||!rids.length)return false;var mine=activeReaders().map(function(r){return r.id});return rids.every(function(r){return r&&mine.indexOf(r)>=0})}
 function canAddBrk(){return canBreaks()||(specMe()&&!!state.hasBrkDays&&activeReaders().length>0)}
 /* A break with no specialist is for everyone; otherwise only for that specialist. */
 function brkFor(b,rid){return !b.rid||b.rid===rid}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
-function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||""}}
+function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||"",pid:x.product_id||"",qty:+x.qty>0?+x.qty:1,price:+x.price||0}}
+/* owner 22.11: the admin's list of products (buttons in «Məhsul satışı») */
+function mapCat(x){return{id:x.id,name:x.name||"",price:+x.price||0,archived:!!x.archived,sort:+x.sort||0,created:x.created_at||""}}
+function sortCat(){state.catalog.sort(function(a,b){return (a.sort-b.sort)||String(a.created).localeCompare(String(b.created))||String(a.name).localeCompare(String(b.name))})}
+function catItem(id){for(var i=0;i<state.catalog.length;i++)if(state.catalog[i].id===id)return state.catalog[i];return null}
+/* a specialist sees only his own sales (the server holds the same rule); agents and admins see all of them */
+function myProds(){return specMe()?state.products.filter(function(x){return x.by===auth.user.id}):state.products}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
 function upsertBy(list,row){edIdx=null;for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
 function removeBy(list,id){edIdx=null;for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
@@ -1910,8 +2242,12 @@ function refresh(){
     probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})}),
     probe("appts.place",function(){return soft(function(){return sb.from("appts").select("place").limit(1)})}),
     probe("appts.follow",function(){return soft(function(){return sb.from("appts").select("follow").limit(1)})}),
+    soft(function(){return sb.from("products").select("*").order("sort").order("created_at")}),
+    probe("breaks.skip",function(){return soft(function(){return sb.from("breaks").select("skip,mday").limit(1)})}),
     probe("breaks.days",function(){return soft(function(){return sb.from("breaks").select("days").limit(1)})})
   ]).then(function(res){
+    state.hasBrkSkip=!!res[res.length-2]||(state.hasBrkSkip&&res[res.length-2]===null);
+    var cat0=res[res.length-3];if(cat0){state.catalog=cat0.map(mapCat);sortCat()}state.hasCatalog=!!cat0;
     state.hasBrkDays=!!res[res.length-1]||(state.hasBrkDays&&res[res.length-1]===null);
     if(my!==seq||!auth.user)return;
     /* A change made on this phone while the load was on its way must not be wiped by the older copy: load again. */
@@ -1955,7 +2291,8 @@ function refresh(){
 function redrawCard(){
   pcache=null;
   if(!sheet)return;
-  if(sheet.type==="brkview"){byId("sheet").innerHTML=brkSheet();return}   /* a break deleted or added on another phone */
+  if(sheet.type==="brkview"){byId("sheet").innerHTML=brkSheet();return}
+  if(sheet.type==="brkone"){byId("sheet").innerHTML=brkOneSheet();return}   /* a break deleted or added on another phone */
   if(sheet.type==="appt"){slotGrid();return}
   var f={view:viewSheet,patient:patientSheet}[sheet.type];
   if(f){var el=byId("sheet"),y=el.scrollTop;el.innerHTML=f();el.scrollTop=y}
@@ -2045,7 +2382,8 @@ function pushWidget(){
     /* days from the loaded start (or the saved copy's start), but never further back than the widget can show (24 months) */
     var from=state.loadedFrom||state.cacheFrom||today,by={},n={},wmin=(function(){var t=parse(today);return ymd(t.getFullYear(),t.getMonth()-24,1)})();
     if(from<wmin)from=wmin;
-    state.appts.forEach(function(a){if(a.date<from||a.status==="cancel"||!mineOnly(a.readerId))return;(by[a.date]=by[a.date]||[]).push(a)});
+    /* owner 22.11: the widget shows the same specialists as the calendar — the ones picked at the top (none picked = all) */
+    state.appts.forEach(function(a){if(a.date<from||a.status==="cancel"||!shown(a.readerId))return;(by[a.date]=by[a.date]||[]).push(a)});
     var d={};
     Object.keys(by).forEach(function(k){
       var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
@@ -2217,6 +2555,7 @@ function onChange(pl){
   if(t==="appts"){if(del){removeBy(state.appts,row.id);removeBy(state.hist||[],row.id)}else upsertBy(state.appts,mapAppt(row))}
   else if(t==="expenses"){if(del)removeBy(state.expenses,row.id);else upsertBy(state.expenses,mapExp(row))}
   else if(t==="product_sales"){if(del)removeBy(state.products,row.id);else upsertBy(state.products,mapProd(row))}
+  else if(t==="products"){if(del)removeBy(state.catalog,row.id);else if(row.name!=null)upsertBy(state.catalog,mapCat(row));sortCat()}
   else if(t==="readers"&&!del&&row.name!=null){upsertBy(state.readers,mapReader(row))}
   else if(t==="breaks"&&!del&&row.start_time!=null){upsertBy(state.breaks,mapBreak(row));state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)})}
   else if(t==="breaks"&&del){removeBy(state.breaks,row.id)}
@@ -2238,12 +2577,12 @@ function startSync(){
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
-var CFIELDS=["hide","hasHide","hasBrkDays","hasFollow","hasPlace","readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
+var CFIELDS=["catalog","hasCatalog","hide","hasHide","hasBrkDays","hasBrkSkip","hasFollow","hasPlace","readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
   /* a specialist's phone keeps only his own sessions; a person without a role keeps none, and no money lists */
-  if(specMe()||pendingMe()){o.s.appts=pendingMe()?[]:state.appts.filter(function(a){return mineOnly(a.readerId)});o.s.expenses=[];o.s.products=[];o.s.statEdits=[]}
+  if(specMe()||pendingMe()){o.s.appts=pendingMe()?[]:state.appts.filter(function(a){return mineOnly(a.readerId)});o.s.expenses=[];o.s.products=pendingMe()?[]:myProds();o.s.statEdits=[]}
   var js=JSON.stringify(o.s);if(js===lastCacheJs&&lastFull-lastCacheT<864e5)return;   /* nothing changed: no write (refreshed once a day) */
   try{localStorage.setItem(CK,JSON.stringify(o));lastCacheJs=js;lastCacheT=lastFull}catch(e){lastCacheJs="";try{localStorage.removeItem(CK)}catch(e2){}}
 }
@@ -2440,7 +2779,7 @@ function renderScreen(){
   if(document.documentElement.classList.contains("gate")!==gate){if(gate)document.documentElement.classList.add("gate");else document.documentElement.classList.remove("gate")}
   byId("tabs").hidden=gate;
   /* specialists: no statistics and no Kassa; a person still waiting for a role: only Qəbullar (a notice) and Ayarlar */
-  var noTab={stats:specMe()||pendingMe(),cash:specMe()||pendingMe(),patients:pendingMe()};
+  var noTab={stats:specMe()||pendingMe(),cash:pendingMe()||(specMe()&&!state.hasCatalog),patients:pendingMe()};   /* owner 22.11: specialists sell products too */
   if(!gate&&noTab[ui.tab])ui.tab="day";
   var tb0=document.querySelectorAll("#tabs button");for(var ti=0;ti<tb0.length;ti++){var hid=!!noTab[tb0[ti].dataset.tab];if(tb0[ti].hidden!==hid)tb0[ti].hidden=hid}
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length||pendingMe();
@@ -2465,8 +2804,9 @@ function renderScreen(){
   var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';
-    main.innerHTML=banner+'<div class="chips stsec psec" role="group">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].map(function(x){return '<button class="chip" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'+
-      '<div id="plist">'+(ui.psec==="cancel"?cancelList():patientsList())+'</div>';
+    var nc=confNeed().filter(function(a){return !a.conf}).length;
+    main.innerHTML=banner+'<div class="chips stsec psec" role="group">'+[["all","Pasiyentlər"],["cancel","Ləğv olunanlar"]].concat(state.hasConf?[["conf","Təsdiq"]]:[]).concat([["lost","Qayıtmayanlar"]]).map(function(x){return '<button class="chip" data-act="p-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.psec===x[0])+'">'+L(x[1])+(x[0]==="conf"&&nc?' <span class="badge num">'+nc+'</span>':'')+'</button>'}).join("")+'</div>'+
+      '<div id="plist">'+plistHtml()+'</div>';
     return;
   }
   var cal=byId("cal"),keep=cal?{t:cal.scrollTop,l:cal.scrollLeft,d:cal.dataset.d}:null;
@@ -2585,7 +2925,7 @@ function gridMain(){
   rs.forEach(function(r){
     h+='<div class="col" data-act="newat" data-id="'+esc(r.id)+'" style="background-size:100% '+hEff+'px,100% '+hEff+'px;background-position:0 0,0 '+(hEff/2)+'px">';
     state.breaks.forEach(function(b){if(!brkFor(b,r.id)||!brkOn(b,ui.date))return;var s1=Math.max(mins(b.start),DAY0),e1=Math.min(mins(b.end),DAY1);if(e1<=s1)return;
-      h+='<div class="brk" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</div>'});
+      h+='<button type="button" class="brk" data-act="brk-one" data-id="'+esc(b.id)+'" style="top:'+((s1-DAY0)*PXM)+'px;height:'+((e1-s1)*PXM)+'px">'+esc(b.title)+'</button>'});
     var evs=day.filter(function(a){return a.readerId===r.id}).sort(function(a,b){return (a.status==="cancel")-(b.status==="cancel")||mins(a.time)-mins(b.time)});
     var lanes=[];evs.forEach(function(a){
       var s1=mins(a.time),e1=s1+(a.dur||90),LN=0;
@@ -2663,28 +3003,6 @@ function viewSheet(){
       '<button class="link danger-t" data-act="del-appt">'+L("Səhvən yazılıb — tamamilə sil")+'</button>':paidBtn(a,"ghost conf")+'<p class="hint">'+L("Bu qəbulu yalnız onu yazan və admin dəyişə bilər.")+'</p>')+
     '<p class="hint">'+(function(){var c=/^\d{4}-\d{2}-\d{2}$/.test(a.created)?fmtDay(a.created):"";return who?L('Yazdı: ')+esc(who)+(c?', '+c:''):(c?L('Yazılıb: ')+c:'')})()+'</p></div>';
 }
-function breakForm(){
-  var sel=sheet.sel||{},all=!Object.keys(sel).length,cb=canBreaks(),rs=cb?activeReaders():activeReaders().filter(function(r){return canBrk([r.id])});
-  var who=state.hasBrkReader&&rs.length?L('<div class="field"><label>Kim üçün?</label><div class="chips" style="flex-wrap:wrap">')+
-      (cb?'<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+L('">Hamısı</button>'):'')+
-      rs.map(function(r){return '<button type="button" class="chip" data-act="b-who" data-id="'+esc(r.id)+'" aria-pressed="'+!!sel[r.id]+'">'+esc(r.name)+'</button>'}).join("")+'</div></div>':"";
-  /* owner 18.11: on chosen days, like a calendar — every day, days of the week (with an optional date range), dates */
-  var rep=sheet.rep||"all",days=sheet.days||{},when="";
-  if(state.hasBrkDays){
-    when=L('<div class="field"><label>Hansı günlər?</label><div class="seg" style="grid-template-columns:repeat(3,1fr)">')+
-      [["all","Hər gün"],["wd","Həftənin günləri"],["dates","Tarixlər"]].map(function(x){return '<button type="button" data-act="b-rep" data-id="'+x[0]+'" aria-pressed="'+(rep===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div></div>';
-    if(rep==="wd")when+='<div class="chips wdays" style="flex-wrap:wrap;margin-top:-4px">'+WDN.map(function(n,i){return '<button type="button" class="chip" data-act="b-day" data-id="'+(i+1)+'" aria-pressed="'+!!days[i+1]+'">'+L(n)+'</button>'}).join("")+'</div>';
-    if(rep!=="all")when+='<div class="two"><div class="field"><label for="b-from">'+(rep==="dates"?L("Tarixdən"):L("Tarixdən (istəyə görə)"))+'</label><input id="b-from" type="date"></div>'+
-      '<div class="field"><label for="b-to">'+(rep==="dates"?L("Tarixədək (bir gün üçün boş qoyun)"):L("Tarixədək (istəyə görə)"))+'</label><input id="b-to" type="date"></div></div>';
-  }
-  return L('<h2>Yeni fasilə')+CLOSE+'</h2>'+
-    L('<div class="field"><label for="b-title">Adı</label><input id="b-title" type="text" maxlength="40" autocomplete="off" placeholder="Məsələn: Namaz"></div>')+
-    L('<div class="two"><div class="field"><label for="b-start">Başlayır</label><input id="b-start" type="time" step="300"></div>')+
-    L('<div class="field"><label for="b-end">Bitir</label><input id="b-end" type="time" step="300"></div></div>')+who+when+
-    (state.hasBrkReader?L('<p class="hint">Fasilə seçilən günlərdə seçilən mütəxəssislərin təqvimində göstərilir və bu vaxta onlara qəbul yazmaq olmur. «Hamısı» — bütün mütəxəssislər üçün.</p>'):
-      L('<p class="hint">Fasilə hər gün bütün mütəxəssislər üçün təqvimdə göstərilir və bu vaxta qəbul yazmaq olmur.</p>'))+
-    L('<p class="err" role="alert" id="b-err" hidden></p><div class="btns"><button class="primary" data-act="save-break">Əlavə et</button></div>');
-}
 /* the list view's specialists at the bottom (F-04): fixed order, «Hamısı» always there, so nothing moves on a tap */
 function spBar(show){
   var el=byId("spbar");if(!el)return;
@@ -2709,9 +3027,19 @@ function dayMain(){
   h+='<div class="lsw"><div class="viewsw"><button type="button" data-act="view" data-id="grid" aria-pressed="false">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="true">'+L("Siyahı")+'</button></div></div>';
   var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
-  if(!list.length)return h+L('<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>');
+  /* owner 22.11: the day's breaks in the list too (one row for a break shared by several specialists); a tap opens it */
+  var bg={},bl=[];
+  state.breaks.forEach(function(b){if(!brkOn(b,ui.date)||(b.rid&&(!shown(b.rid)||!reader(b.rid))))return;var k=b.title+"|"+b.start+"|"+b.end+"|"+brkSched(b);if(!bg[k]){bg[k]=[];bl.push(bg[k])}bg[k].push(b)});
+  if(!list.length&&!bl.length)return h+L('<div class="empty">Bu günə qəbul yoxdur. Pasiyent yazmaq üçün «Yaz» düyməsini basın.</div>');
   var pm=patients();
-  list.forEach(function(a){
+  var items=list.map(function(a){return{t:a.time,a:a}}).concat(bl.map(function(g){return{t:g[0].start,g:g}}))
+    .sort(function(x,y){return x.t<y.t?-1:x.t>y.t?1:(x.g?-1:1)});
+  items.forEach(function(it){
+    if(it.g){var b0=it.g[0],ad=brkAll(b0);
+      h+='<div class="card compact brkrow"><div class="row"><div class="time num">'+(ad?'—':esc(b0.start)+'<small>'+esc(b0.end)+'</small>')+'</div>'+
+        '<button class="who" data-act="brk-one" data-id="'+esc(b0.id)+'"><b>'+esc(b0.title||L("Fasilə"))+'</b><span>'+esc((ad?L("Bütün gün")+" · ":"")+brkWho(it.g))+'</span></button></div></div>';
+      return}
+    var a=it.a;
     var r=reader(a.readerId),p=pm[pkey(a)];
     var was=p.paid-(done(a)?1:0),miss=p.noshow-(a.status==="noshow"?1:0),tags="";
     if(noPrice(a))tags+=L('<span class="tag warn">Qiymət yazılmayıb</span>');
@@ -2812,7 +3140,7 @@ function statData(kind,r,per){
   if(kind==="money")activeReaders().forEach(function(x){row(x.id,x.name)});
   else Object.keys(state.staff).filter(function(k){return isAgent(k)&&!stHidden(k)&&(!onlyMe||k===onlyMe)}).sort(function(x,y){return String(who(x)).localeCompare(String(who(y)))}).forEach(function(k){row(k,who(k))});
   if(kind==="prod"){
-    state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(uk(x.by),who(x.by));w.a++;w.c+=x.amount;T.a++;T.c+=x.amount});
+    state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var w=row(uk(x.by),who(x.by)),q=x.qty||1;w.a+=q;w.c+=x.amount;T.a+=q;T.c+=x.amount});
   }else state.appts.forEach(function(a){
     if(onlyMe&&a.by!==onlyMe)return;
     if((kind==="sales"||kind==="today")&&stHidden(a.by))return;
@@ -2917,89 +3245,110 @@ function statNav(act,r,title,small){
     '<button class="icon-btn" data-act="'+act+'" data-n="1" aria-label="'+L("İrəli")+'"'+(r.canFwd?'':' disabled')+'>›</button></div></div>';
 }
 /* Buttons on top of Statistika: one section at a time. */
-var ST_SECS=[["today","Bu gün"],["day","Gündəlik"],["week","Həftəlik"],["month","Aylıq"],["cweek","Bu həftə"],["cmonth","Bu ay"],["rules","Qaydalar"],["terms","Terminlər"]];
+/* owner 22.11: four periods only — this week, last week, this month, last month — with everything inside them;
+   money and products stay apart (money: admins; products: admins and sales agents) */
+var ST_PERS=[["cweek","Bu həftə"],["week","Keçən həftə"],["cmonth","Bu ay"],["month","Keçən ay"]];
+function stSecs(){var x=ST_PERS.slice();if(isAdmin())x.push(["money","Pul"]);if(state.hasProducts&&(isAdmin()||canStats()))x.push(["prod","Məhsul"]);return x}
 function statSecBar(){
-  return '<div class="chips stsec" role="group">'+ST_SECS.map(function(x){return '<button class="chip" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
+  var ss=stSecs();if(!ss.some(function(x){return x[0]===ui.stSec}))ui.stSec="cweek";
+  return '<div class="chips stsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="st-sec" data-id="'+x[0]+'" aria-pressed="'+(ui.stSec===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
 }
 function dayWord(off){return off===0?L("bu gün"):off===1?L("dünən"):tf(L("{n} gün əvvəl"),{n:off})}
+function perRange(per){return per==="week"?weekRange():per==="month"?monthRange():per==="cmonth"?curMonthRange():curWeekRange()}
+function perHead(per,r){
+  if(per==="week")return statNav("st-week",r,L("Keçən həftə"),r.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
+  if(per==="month")return statNav("st-month",r,L("Keçən ay")+" — "+r.name,tf(L("{w} həftə ({d} gün), cümə – cümə axşamı"),{w:r.weeks,d:r.weeks*7}));
+  if(per==="cmonth")return statNav("st-cur",r,L("Bu ay")+" — "+r.name,tf(L("{w} həftə ({d} gün), ay hələ bitməyib"),{w:r.weeks,d:r.weeks*7}));
+  return statNav("st-cur",r,L("Bu həftə"),L("cümə – cümə axşamı, həftə hələ bitməyib"));
+}
+/* the period chips inside «Pul» and «Məhsul» */
+function perSeg(){return '<div class="seg seg4 stper" role="group" style="grid-template-columns:repeat(4,1fr)">'+ST_PERS.map(function(x){return '<button type="button" data-act="st-per" data-id="'+x[0]+'" aria-pressed="'+(ui.stPer===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
+/* who wrote what in the period: services and places (sessions on the days of the period, not cancelled) */
+function writerData(r){
+  var onlyMe=onlyMeSt(),by={},used={},T={svc:{},svcU:{},pl:{},plU:{},n:0,u:0};
+  state.appts.forEach(function(a){if(onlyMe&&a.by!==onlyMe)return;if(a.date<r.s||a.date>r.end||gone(a)||stHidden(a.by))return;
+    var k=a.by&&state.staff[a.by]!=null?a.by:"-",sv=svcName(a.service),pl=a.place==="onlayn"||a.place==="unvan"?a.place:"ofis",ok=done(a);
+    var w=by[k]||(by[k]={svc:{},pl:{},n:0,u:0});w.svc[sv]=(w.svc[sv]||0)+1;w.pl[pl]=(w.pl[pl]||0)+1;w.n++;used[sv]=1;
+    T.svc[sv]=(T.svc[sv]||0)+1;T.pl[pl]=(T.pl[pl]||0)+1;T.n++;if(ok){w.u++;T.u++;T.svcU[sv]=(T.svcU[sv]||0)+1;T.plU[pl]=(T.plU[pl]||0)+1}});
+  var cols=SERVICES.filter(function(k){return used[k]}).concat(Object.keys(used).filter(function(k){return SERVICES.indexOf(k)<0}));
+  return {by:by,cols:cols,T:T};
+}
+function vth(t,cls){return '<th class="v'+(cls?' '+cls:'')+'"><span>'+esc(t)+'</span></th>'}
+/* ONE table for the period (owner 22.11): every person a row; requests, bookings, services and places as columns,
+   the column names written upwards so many columns fit a phone */
+function bigTable(r,per){
+  var S=statData("sales",r,per),W=writerData(r),pl=state.hasPlace?PLACES.map(function(x){return x[0]}):[];
+  var rows=S.rows.map(function(x){return {k:x.k,name:x.name,x:x}}),seen={};rows.forEach(function(y){seen[y.k]=1});
+  Object.keys(W.by).filter(function(k){return !seen[k]}).sort(function(a,b){return W.by[b].n-W.by[a].n}).forEach(function(k){rows.push({k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),x:null})});
+  var eper=per==="cweek"?"week":per==="cmonth"?"month":per,editable=state.hasStatEdits&&canStats();
+  var n=function(v){return v==null?"—":String(v)};
+  var cell=function(y,col,v,label){
+    if(y.x&&editable&&(isAdmin()||y.k===auth.user.id))return '<td class="num"><button type="button" class="cellb'+(y.x["e"+col]&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(y.k)+'" data-col="'+col+'" data-p="'+eper+'" data-s="'+esc(r.s)+'" aria-label="'+esc(y.name+" — "+label+": "+v)+'">'+esc(v)+'</button></td>';
+    return '<td class="num">'+(y.x&&y.x["e"+col]?'<span class="edited">'+esc(v)+'</span>':esc(v))+'</td>'};
+  var h='<div class="pay big" data-st="big-'+per+'"><div class="head"><b>'+L("Ümumi cədvəl")+'</b><button class="ghost copyb" data-act="st-copy" data-id="all" data-p="'+per+'">⧉ '+L("Kopyala")+'</button></div><div class="hscroll"><table class="stt wide big"><thead><tr>'+
+    '<th rowspan="2">'+L("Kim")+'</th><th colspan="3" class="grp">'+L("Müraciət")+'</th><th colspan="3" class="grp g2">'+L("Qəbullar")+'</th>'+
+    (W.cols.length?'<th colspan="'+W.cols.length+'" class="grp g3">'+L("Xidmətlər")+'</th>':'')+(pl.length?'<th colspan="'+pl.length+'" class="grp g4">'+L("Yer")+'</th>':'')+'</tr><tr class="sub">'+
+    vth("WP")+vth(L("SŞ"))+vth(L("ümumi"))+vth(L("Yazdı"),"g2")+vth(L("Uğurlu"),"g2")+vth(L("Ləğv"),"g2")+
+    W.cols.map(function(k){return vth(L(k),"g3")}).join("")+pl.map(function(k){return vth(placeName(k),"g4")}).join("")+'</tr></thead><tbody>';
+  if(!rows.length)h+='<tr><td colspan="'+(7+W.cols.length+pl.length)+'" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>';
+  rows.forEach(function(y){var x=y.x,w=W.by[y.k]||{svc:{},pl:{}};
+    h+='<tr><td>'+esc(y.name)+'</td>'+
+      (x?cell(y,"w",n(x.w),"WP")+cell(y,"s",n(x.s),L("SŞ"))+'<td class="num sum">'+esc(n(x.t))+'</td>'+cell(y,"a",String(x.a),L("Yazdı"))+cell(y,"b",String(x.b),L("Uğurlu"))+'<td class="num">'+(x.d||0)+'</td>'
+        :'<td class="num dim">·</td><td class="num dim">·</td><td class="num dim">·</td><td class="num dim">·</td><td class="num dim">·</td><td class="num dim">·</td>')+
+      W.cols.map(function(k){return '<td class="num g3">'+(w.svc[k]||0)+'</td>'}).join("")+pl.map(function(k){return '<td class="num g4">'+(w.pl[k]||0)+'</td>'}).join("")+'</tr>'});
+  var T=S.T;
+  h+='</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+n(T.w)+'</td><td class="num">'+n(T.s)+'</td><td class="num">'+n(T.t)+'</td><td class="num">'+T.a+'</td><td class="num">'+T.b+'</td><td class="num">'+(T.d||0)+'</td>'+
+    W.cols.map(function(k){return '<td class="num">'+(W.T.svc[k]||0)+'</td>'}).join("")+pl.map(function(k){return '<td class="num">'+(W.T.pl[k]||0)+'</td>'}).join("")+'</tr>'+
+    '<tr class="ok2"><td>'+L("Uğurlu seans")+'</td><td colspan="6"></td>'+W.cols.map(function(k){return '<td class="num">'+(W.T.svcU[k]||0)+'</td>'}).join("")+pl.map(function(k){return '<td class="num">'+(W.T.plU[k]||0)+'</td>'}).join("")+'</tr></tfoot></table></div>'+
+    '<p class="hint">'+L("Müraciət, Yazdı, Uğurlu, Ləğv — satış agentlərinin rəqəmləri (· — mütəxəssisin özünün yazdığı). Xidmətlər və Yer — dövrün günlərindəki seanslar, kim yazıbsa onun sətrində.")+'</p></div>';
+  return h;
+}
+/* day by day inside the period: who wrote how many bookings each day, and the day's sessions (replaces «Bu gün» and «Gündəlik») */
+function daysTable(r,per){
+  var onlyMe=onlyMeSt(),S=statData("sales",r,per),ks=S.rows.map(function(x){return x.k}),last=r.end<today?r.end:today,days=[],d;
+  for(d=last;d>=r.s;d=addDays(d,-1))days.push(d);
+  if(!days.length)return "";
+  var cnt={};days.forEach(function(x){cnt[x]={w:{},n:0,s:0,u:0,c:0}});
+  state.appts.forEach(function(a){
+    if(onlyMe&&a.by!==onlyMe)return;
+    if(!gone(a)&&cnt[a.created]&&!isSpec(a.by)&&!stHidden(a.by)){var k=a.by&&state.staff[a.by]!=null?a.by:"-",c=cnt[a.created];c.w[k]=(c.w[k]||0)+1;c.n++}
+    if(cnt[a.date]&&!stHidden(a.by)){var e=cnt[a.date];if(gone(a))e.c++;else{e.s++;if(done(a))e.u++}}
+  });
+  var h='<div class="pay big" data-st="days-'+per+'"><div class="head"><b>'+L("Günlər üzrə")+'</b></div><div class="hscroll"><table class="stt wide big days"><thead><tr><th>'+L("Gün")+'</th>'+
+    S.rows.map(function(x){return vth(x.name)}).join("")+vth(L("Yazdı"),"g2")+vth(L("Seans"),"g3")+vth(L("Uğurlu"),"g3")+vth(L("Ləğv"),"g3")+'</tr></thead><tbody>';
+  days.forEach(function(x){var c=cnt[x];
+    h+='<tr'+(x===today?' class="today"':'')+'><td>'+esc(WD[wdOf(x)-1]+", "+fmtDayShort(x))+(x===today?' <small>'+L("bu gün")+'</small>':'')+'</td>'+
+      ks.map(function(k){return '<td class="num">'+(c.w[k]||0)+'</td>'}).join("")+'<td class="num sum">'+c.n+'</td><td class="num g3">'+c.s+'</td><td class="num g3">'+c.u+'</td><td class="num g3">'+c.c+'</td></tr>'});
+  h+='</tbody></table></div><p class="hint">'+L("Yazdı — həmin gün yazılan qəbullar (hansı günə yazılmasından asılı olmayaraq). Seans, Uğurlu, Ləğv — həmin günün seansları.")+'</p></div>';
+  return h;
+}
+function rulesBox(){
+  var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
+  return '<details class="pay explain rulesbox"><summary><b>'+L("Qaydalar və terminlər")+'</b></summary><ol class="rules">'+
+    L("<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>")+
+    '<li>'+tf(L("«Bu həftə» — indiki həftə, hələ bitməyib. «Keçən həftə» — son bitmiş həftə: indi {a}. ‹ ilə daha əvvəlki həftələrə baxmaq olar."),{a:rg(wl.s,wl.e)})+'</li>'+
+    '<li>'+tf(L("Ay ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl bitir (4 və ya 5 həftə). «Keçən ay» — son bitmiş ay: indi {m}."),{m:ml.name+" ("+rg(ml.s,ml.e)+")"})+'</li>'+
+    L("<li><b>Müraciət WP / SŞ</b> — WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlər; işçilər rəqəmə toxunub özləri yazır. <b>ümumi</b> = WP + SŞ.</li>")+
+    L("<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı qəbullar (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>")+
+    L("<li>Seansın vaxtı bitəndə ləğv olunmayan hər qəbul uğurlu sayılır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>")+
+    L("<li>Satış rəqəmlərinə yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür; mütəxəssisin özünün yazdığı qəbul «·» ilə göstərilir, amma Xidmətlər, Yer və Pul cədvəllərində sayılır.</li>")+
+    L("<li>Satış agenti yalnız öz sətrini görür. Pul statistikasını yalnız adminlər görür.</li>")+
+    L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır.</li>")+
+    '</ol></details>';
+}
 function statsMain(){
   if(!auth.loaded)return "";
-  var sec=ui.stSec,w=weekRange(),m=monthRange(),h="",ex=function(d){return fmtDay(d)};
-  if(sec==="today"){
-    var dr=dayRange();
-    return statNav("st-day",dr,L("Yazılan qəbullar"),dayWord(dr.off))+statTable("today",dr,"today")+
-      '<p class="hint">'+L("Seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. ‹ ilə son 14 günə baxmaq olar.")+'</p>';
+  var sec=ui.stSec,h="";
+  if(sec==="money"||sec==="prod"){
+    var pr=perRange(ui.stPer);
+    h+=perSeg()+perHead(ui.stPer,pr);
+    if(sec==="money")return h+(isAdmin()?statTable("money",pr,ui.stPer):"");
+    return h+prodStats(pr,ui.stPer);
   }
-  var edHint=canStats()?(state.hasStatEdits?'<p class="hint">'+L("Satış cədvəlində rəqəmə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':(isAdmin()?'<p class="hint">'+L("Satış rəqəmlərini əl ilə düzəltmək üçün bazada 2026-11-stat-edits.sql faylını bir dəfə işə salın.")+'</p>':"")):"";
-  if(sec==="day"){
-    var da=dayAllRange();
-    return statNav("st-all",da,L("Gündəlik statistika"),dayWord(da.off)+(da.off===0?L(" — gün hələ bitməyib"):""))+
-      L('<button class="ghost" data-act="st-copy" data-id="all" data-p="day">⧉ Bütün gündəlik statistikanı kopyala</button>')+
-      statTable("sales",da,"day")+edHint+svcTable(da)+placeTable(da)+agentSvcTable(da)+moneyTables(da,"day");
-  }
-  if(sec==="week"){
-    h+=statNav("st-week",w,L("Həftəlik statistika (7 gün)"),w.full?L("cümə – cümə axşamı, həftə bitib"):L("həftə hələ bitməyib"));
-    h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="week">⧉ Bütün həftəlik statistikanı kopyala</button>');
-    return h+statTable("sales",w,"week")+edHint+svcTable(w)+placeTable(w)+agentSvcTable(w)+moneyTables(w,"week");
-  }
-  if(sec==="cweek"){
-    var cw=curWeekRange();
-    h+=statNav("st-cur",cw,L("Bu həftənin statistikası"),L("cümə – cümə axşamı, həftə hələ bitməyib"));
-    h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="cweek">⧉ Bu həftənin statistikasını kopyala</button>');
-    return h+statTable("sales",cw,"cweek")+edHint+svcTable(cw)+placeTable(cw)+agentSvcTable(cw)+moneyTables(cw,"cweek");
-  }
-  if(sec==="cmonth"){
-    var cm=curMonthRange();
-    h+=statNav("st-cur",cm,L("Bu ayın statistikası")+" — "+cm.name,tf(L("{w} həftə ({d} gün), ay hələ bitməyib"),{w:cm.weeks,d:cm.weeks*7}));
-    h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="cmonth">⧉ Bu ayın statistikasını kopyala</button>');
-    return h+statTable("sales",cm,"cmonth")+edHint+svcTable(cm)+placeTable(cm)+agentSvcTable(cm)+moneyTables(cm,"cmonth");
-  }
-  if(sec==="month"){
-    h+=statNav("st-month",m,L("Aylıq statistika")+" — "+m.name,tf(L("{w} həftə ({d} gün), cümə – cümə axşamı"),{w:m.weeks,d:m.weeks*7}));
-    h+=L('<button class="ghost" data-act="st-copy" data-id="all" data-p="month">⧉ Bütün aylıq statistikanı kopyala</button>');
-    return h+statTable("sales",m,"month")+edHint+svcTable(m)+placeTable(m)+agentSvcTable(m)+moneyTables(m,"month");
-  }
-  /* The rules, written out so anyone can read them; the examples use the dates on screen. */
-  var wl=weekRange(0),ml=monthRange(0),rg=function(a,b){return fmtDay(a)+" – "+fmtDay(b)};
-  var lw=function(d){var t=fmtDay(d,"w");return t.charAt(0).toLowerCase()+t.slice(1)};
-  if(sec==="rules"){
-  h+='<div class="pay explain"><ol class="rules">'+
-    L("<li><b>Gündəlik statistika</b> seçilən bir günün satış, pul və məhsul cədvəlləridir. Bu gün də görünür (gün bitməyib, rəqəmlər artır); ‹ ilə əvvəlki günlərə baxmaq olar.</li>")+
-    L("<li><b>Müraciət</b> sütununu işçilər özləri doldurur: rəqəmə toxunub yazırlar. Yazılmayıbsa «—» görünür. Gündəlik, həftəlik və aylıq cədvəllərdə ayrı-ayrı yazılır.</li>")+
-    L("<li><b>Həftə</b> cümə günü başlayır, cümə axşamı bitir (7 gün).</li>")+
-    L("<li><b>Həftəlik statistika</b> həmişə son <b>bitmiş</b> həftəni göstərir. Yeni həftə cümə axşamı gecə 23:59-dan sonra görünür. Beləcə cümə səhər açıb kopyalayıb rəhbərliyə göndərə bilərsiniz.</li>")+
-    '<li>'+(wl.full
-      ?tf(L("İndi ekranda {a} həftəsi görünür. O, {b} gecə 23:59-a qədər qalır, sonra {c} həftəsi görünəcək."),{a:rg(wl.s,wl.e),b:lw(addDays(wl.e,7)),c:rg(addDays(wl.s,7),addDays(wl.e,7))})
-      :tf(L("İlk həftə ({a}) hələ bitməyib — indiyə qədər bitmiş günlər göstərilir. Həftə {b} gecə 23:59-da bitəndən sonra tam olacaq və {c} gecə 23:59-a qədər ekranda qalacaq."),{a:rg(wl.s,wl.e),b:lw(wl.e),c:lw(addDays(wl.e,7))}))+'</li>'+
-    L("<li><b>Aylıq statistika</b> ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl (cümə axşamı gecə 23:59-da) bitir. Ayda 4 cümə varsa 4 həftə, 5 cümə varsa 5 həftə olur — heç bir gün itmir. Ekranda son bitmiş ay görünür.</li>")+
-    '<li>'+(function(){var b2=ml.nextB,b3=monthBlock(b2.y,b2.m+1);
-      return tf(L("Məsələn: {m1} — {r1}, {m2} — {r2}, {m3} — {r3}."),{m1:ml.name,r1:rg(ml.s,ml.e),m2:b2.name,r2:rg(b2.s,b2.e),m3:b3.name,r3:rg(b3.s,b3.e)})+' '+
-        tf(L("İndi ekranda {m1} görünür; o, {b} gecə 23:59-a qədər qalır, sonra {m2} görünəcək."),{m1:ml.name,b:lw(b2.e),m2:b2.name})})()+'</li>'+
-    L("<li>Bu günün məlumatı həftəlik və aylıq cədvələ gecə 23:59-dan sonra düşür. «Bu gün yazılan qəbullar» isə hər yeni qəbulda dərhal yenilənir. Gecə 00:00-da yeni gün başlayır, keçmiş günlər isə silinmir: «Bu gün» bölməsində ‹ düyməsi ilə son 14 günün hər birinə baxmaq və kopyalamaq olar.</li>")+
-    L("<li>Pasiyent gəlməyibsə və ya ləğv edibsə, qəbulda «Ləğv et» basılır: qəbul «Ləğv olunanlar»a düşür və «Ləğv» sütununda sayılır. Seansın vaxtı bitəndə (ən gec gecə 23:59-da) ləğv olunmayan hər qəbul uğurlu sayılır. Keçmiş günə yazılan qəbul dərhal uğurlu sayılır.</li>")+
-    L("<li>Ləğv olunan qəbul «Yazdı», «Uğurlu» və «Qazanc»da sayılmır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>")+
-    L("<li>Qəbul yazıldığı günə görə sayılır, hansı günə yazılmasından asılı olmayaraq: 11 noyabrda 22 noyabra yazılıbsa, 11 noyabrın həftəsinə düşür.</li>")+
-    L("<li>Satış statistikasına yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür. Mütəxəssislərin özlərinin yazdığı qəbullar oraya düşmür, amma Pul statistikasında sayılır.</li>")+
-    L("<li>Hər qəbulda qiymət yazmaq vacibdir (yeni qəbulda 130 hazır durur). Məhsulu kim Kassada yazıbsa, satan o sayılır.</li>")+
-    L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır; yapışdıranda cədvəl sütunlarla görünür. «Bütün … kopyala» hər üç cədvəli birlikdə kopyalayır. ‹ › düymələri ilə əvvəlki həftələrə və aylara baxmaq olar.</li>")+
-    L("<li>Pul və məhsul statistikasını (kim nə qədər qazanıb) yalnız adminlər görür. Mütəxəssislər yalnız öz seanslarını görür.</li>")+
-    '</ol></div>';
-  return h}
-  h+='<div class="pay explain"><dl class="terms">'+
-    L("<dt>Bu gün (yazılan qəbullar)</dt><dd>seçilən gün kim həmin günə və sonrakı günlərə neçə qəbul yazıb. Keçmiş günlərə yazılanlar burada sayılmır. Son 14 gün saxlanılır.</dd>")+
-    L("<dt>Gündəlik statistika</dt><dd>bir günün satış, pul və məhsul cədvəlləri.</dd>")+
-    L("<dt>Müraciət WP / Müraciət SŞ</dt><dd>WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlərin sayı; işçilər özləri yazır.</dd>")+L("<dt>Müraciət ümumi</dt><dd>WP və SŞ-nin cəmi, özü hesablanır.</dd>")+
-    L("<dt>Yazdı</dt><dd>satış agentinin həmin günlərdə yazdığı pasiyentlərin sayı.</dd>")+
-    L("<dt>Yazılıb</dt><dd>həmin günlərdə bu mütəxəssisə yazılan pasiyentlərin sayı.</dd>")+
-    L("<dt>Uğurlu</dt><dd>həmin günlərdə seansı olan və ləğv olunmayan pasiyentlərin sayı.</dd>")+
-    L("<dt>Ləğv</dt><dd>həmin günlərdə seansı olan, amma «Ləğv et» ilə ləğv olunan pasiyentlərin sayı (gəlməyənlər).</dd>")+
-    L("<dt>Qazanc</dt><dd>uğurlu seansların qiymətlərinin cəmi (manatla).</dd>")+
-    L("<dt>Satan</dt><dd>məhsul satışını Kassada yazan işçi (satış agenti və ya admin).</dd>")+
-    L("<dt>Satış</dt><dd>neçə dəfə məhsul satılıb.</dd>")+
-    L("<dt>Məbləğ</dt><dd>neçə manatlıq məhsul satılıb.</dd>")+
-    L("<dt>Cəmi</dt><dd>cədvəldəki bütün sətirlərin toplamı.</dd>")+
-    '</dl></div>';
-  return h;
+  var r=perRange(sec);
+  h+=perHead(sec,r);
+  var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
+  return h+bigTable(r,sec)+edHint+daysTable(r,sec)+rulesBox();
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
 /* One table as text for WhatsApp: a monospaced block keeps the columns straight, like a small Excel sheet. */
@@ -3018,8 +3367,26 @@ function statText(kind,r,per){
 function statCopyText(kind,per){
   if(per==="today")return statText("today",dayRange(),"today");
   var r=per==="day"?dayAllRange():per==="month"?monthRange():per==="cweek"?curWeekRange():per==="cmonth"?curMonthRange():weekRange();
-  var ks=kind==="all"?["sales"].concat(isAdmin()?["money"].concat(state.hasProducts?["prod"]:[]):[]):[kind];if(!isAdmin())ks=ks.filter(function(k){return k!=="money"&&k!=="prod"});
+  /* owner 22.11: «all» = the period's one table: sales numbers, then services and places by person */
+  if(kind==="all")return statText("sales",r,per)+"\n\n"+writerText(r);
+  var ks=[kind];if(!isAdmin())ks=ks.filter(function(k){return k!=="money"&&k!=="prod"});
   return ks.map(function(k){return statText(k,r,per)}).join("\n\n");
+}
+function txtTable(title,rows){
+  var w=rows[0].map(function(_,i){return rows.reduce(function(m,x){return Math.max(m,clen(x[i]))},0)});
+  var pad=function(s,n,right){var k=n-clen(s),sp=k>0?new Array(k+1).join(" "):"";return right?sp+s:s+sp};
+  var line=function(x){return x.map(function(c,i){return pad(c,w[i],i>0)}).join(" | ")};
+  var sep=w.map(function(n){return new Array(n+1).join("-")}).join("-+-");
+  var out=[title,"```",line(rows[0]),sep];rows.slice(1,-1).forEach(function(x){out.push(line(x))});out.push(sep,line(rows[rows.length-1]),"```");
+  return out.join("\n");
+}
+function writerText(r){
+  var W=writerData(r),pl=state.hasPlace?PLACES.map(function(x){return x[0]}):[];
+  var head=[L("Kim")].concat(W.cols.map(function(k){return L(k)})).concat(pl.map(placeName));
+  var rows=[head];Object.keys(W.by).sort(function(a,b){return W.by[b].n-W.by[a].n}).forEach(function(k){var w=W.by[k];
+    rows.push([k==="-"?L("Adsız"):(state.staff[k]||L("Adsız"))].concat(W.cols.map(function(c){return String(w.svc[c]||0)})).concat(pl.map(function(c){return String(w.pl[c]||0)})))});
+  rows.push([L("Cəmi")].concat(W.cols.map(function(c){return String(W.T.svc[c]||0)})).concat(pl.map(function(c){return String(W.T.pl[c]||0)})));
+  return txtTable(L("Xidmətlər və yer (seans)")+"\n"+rangeLabel(r),rows);
 }
 function statEditSheet(){
   var x=sheet,isW=x.per==="week",isD=x.per==="day",r=isD?{s:x.s,end:x.s}:isW?weekRangeOf(x.s):monthRangeOf(x.s);
@@ -3213,24 +3580,82 @@ function cashMain(){
   if(!auth.loaded)return "";
   var h="";
   if(state.hasProducts){
-    var pr=state.products.filter(function(x){return x.date===ui.date});
-    h+=L('<h3 class="sec">Məhsul satışları</h3>')+L('<button class="primary" data-act="new-prod">+ Məhsul satışı</button>');
+    var pr=myProds().filter(function(x){return x.date===ui.date}).sort(function(a,b){return String(a.id).localeCompare(String(b.id))}),tot=0,qn=0;
+    pr.forEach(function(x){tot+=x.amount;qn+=x.qty});
+    h+='<div class="sthead"><h3 class="sec">'+L("Məhsul satışları")+'</h3>'+(isAdmin()&&state.hasCatalog?'<button class="ghost copyb" data-act="catalog">⚙ '+L("Məhsullar")+'</button>':'')+'</div>'+
+      '<button class="primary" data-act="new-prod">+ '+L("Məhsul satışı")+'</button>';
     h+='<div class="pay">'+(pr.length?pr.map(function(x){
-      var it=prodItems(x.names),more=it.length>10;
-      return '<div class="psale"><div class="pnames">'+(it.length?'<ul>'+it.slice(0,10).map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul>'+
-          (more?'<button class="link more" data-act="prod-all" data-id="'+esc(x.id)+'" aria-label="'+esc(L("Hamısını göstər"))+'">… '+tf(L("daha {n}"),{n:it.length-10})+'</button>':'')
-        :'<span class="noname">'+L("Adsız satış")+'</span>')+'</div>'+
-        '<div class="pside"><b class="num">'+money(x.amount)+'</b><span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>'+
-        '<span class="pbtns"><button class="link" data-act="edit-prod" data-id="'+esc(x.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></span></div></div>'}).join("")
-      :L('<div class="foot">Bu tarixdə məhsul satılmayıb.</div>'))+'</div>';
+      var mine=isAdmin()||x.by===auth.user.id,ci=x.pid?catItem(x.pid):null,it=x.pid?[]:prodItems(x.names),more=it.length>10;
+      var nm=x.pid?'<span class="pline"><b>'+esc(ci?ci.name:(x.names||L("Məhsul")))+'</b>'+(x.qty>1?' <span class="qty num">× '+x.qty+'</span>':'')+'</span>'
+        :(it.length?'<ul>'+it.slice(0,10).map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul>'+(more?'<button class="link more" data-act="prod-all" data-id="'+esc(x.id)+'" aria-label="'+esc(L("Hamısını göstər"))+'">… '+tf(L("daha {n}"),{n:it.length-10})+'</button>':''):'<span class="noname">'+L("Adsız satış")+'</span>');
+      return '<div class="psale"><div class="pnames">'+nm+'</div>'+
+        '<div class="pside"><b class="num">'+money(x.amount)+'</b>'+(specMe()?'':'<span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>')+
+        (mine?'<span class="pbtns"><button class="link" data-act="edit-prod" data-id="'+esc(x.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></span>':'')+'</div></div>'}).join("")+
+        '<div class="ptotal"><span>'+tf(L("Cəmi: {n} məhsul"),{n:qn})+'</span><b class="num">'+money(tot)+'</b></div>'
+      :'<div class="foot">'+L("Bu tarixdə məhsul satılmayıb.")+'</div>')+'</div>';
   }else h+=L('<div class="note"><p>Məhsul satışı üçün baza yenilənməlidir. Bunu admin bir dəfə edir.</p></div>');
-  if(state.v2){
+  if(state.v2&&!specMe()){
     var ex=state.expenses.filter(function(x){return x.date===ui.date});
     h+=L('<h3 class="sec">Xərclər</h3>')+'<div class="pay">'+(ex.length?ex.map(function(x){
       return '<div class="visit"><span>'+esc(x.title)+'</span><b class="num">'+money(x.amount)+'</b><button class="link" data-act="edit-expense" data-id="'+esc(x.id)+L('">Dəyiş</button></div>')}).join("")
       :L('<div class="foot">Bu tarixdə xərc yoxdur.</div>'))+L('<button class="ghost" data-act="new-expense">Xərc əlavə et</button>')+'</div>';
   }
   return h;
+}
+/* owner 22.11: «Məhsul satışı» — the admin's products as buttons with name and price; one tap = one piece,
+   two taps = two; the sum is counted at the bottom. Saved as one line per product (qty × price). */
+function sellForm(){
+  var x=sheet,cnt=x.cnt||(x.cnt={}),list=state.catalog.filter(function(c){return !c.archived||cnt[c.id]}),tot=0,qn=0;
+  list.forEach(function(c){var n=cnt[c.id]||0;tot+=n*c.price;qn+=n});
+  var h='<h2>'+L("Məhsul satışı")+CLOSE+'</h2>';
+  if(!list.length)return h+'<p class="hint">'+(isAdmin()?L("Hələ məhsul yoxdur. Əvvəlcə məhsulları əlavə edin."):L("Hələ məhsul yoxdur. Admin məhsulları əlavə etməlidir."))+'</p>'+(isAdmin()?'<button class="primary" data-act="catalog">'+L("Məhsul əlavə et")+'</button>':'');
+  h+='<div class="pgrid">'+list.map(function(c){var n=cnt[c.id]||0;
+    return '<div class="pbtnw"><button type="button" class="pbtn'+(n?' on':'')+'" data-act="sell-add" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name+", "+money(c.price)+(n?", "+n:""))+'"><b>'+esc(c.name)+'</b><span class="num">'+money(c.price)+'</span>'+(n?'<i class="num">'+n+'</i>':'')+'</button>'+
+      (n?'<button type="button" class="pminus" data-act="sell-sub" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Bir az çıx")+": "+c.name)+'">−</button>':'')+'</div>'}).join("")+'</div>';
+  h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||(ui.tab==="cash"?ui.date:today))+'"></div><div></div></div>';
+  h+='<div class="ptotal big"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div>';
+  h+='<p class="hint">'+L("Satan avtomatik qeyd olunur: ")+esc(state.staff[auth.user.id]||L("siz"))+'.</p>';
+  h+='<p class="err" role="alert" id="sl-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="sell-save"'+(qn?'':' disabled')+'>'+L("Yadda saxla")+'</button>'+(qn?'<button class="ghost" data-act="sell-clear">'+L("Sıfırla")+'</button>':'')+'</div>';
+  return h;
+}
+/* changing one saved line: how many pieces (or delete it) */
+function sellEdit(){
+  var x=prodRow(sheet.id);if(!x)return '<h2>'+L("Məhsul satışı")+CLOSE+'</h2><p class="hint">'+L("Bu satış artıq silinib.")+'</p>';
+  var c=catItem(x.pid),q=sheet.q==null?x.qty:sheet.q,pr=x.price||(c?c.price:0)||(x.qty?x.amount/x.qty:0);
+  return '<h2>'+esc(c?c.name:(x.names||L("Məhsul")))+CLOSE+'</h2><p class="hint">'+esc(fmtDay(x.date))+' · '+money(pr)+' · '+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</p>'+
+    '<div class="stepper"><button type="button" class="icon-btn" data-act="sell-q" data-n="-1" aria-label="−"'+(q>1?'':' disabled')+'>−</button><b class="num">'+q+'</b><button type="button" class="icon-btn" data-act="sell-q" data-n="1" aria-label="+">+</button></div>'+
+    '<div class="ptotal big"><span>'+L("Məbləğ")+'</span><b class="num">'+money(q*pr)+'</b></div>'+
+    '<p class="err" role="alert" id="sl-err" hidden></p><div class="btns"><button class="primary" data-act="sell-upd">'+L("Yadda saxla")+'</button><button class="danger" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></div>';
+}
+/* the admin's product list */
+function catalogSheet(){
+  var e=sheet.eid?catItem(sheet.eid):null;
+  var h='<h2>'+L("Məhsullar")+CLOSE+'</h2><p class="hint">'+L("Bu məhsullar «Məhsul satışı» pəncərəsində düymə kimi görünür.")+'</p>';
+  h+='<div class="pay">'+(state.catalog.length?state.catalog.map(function(c){
+    return '<div class="visit'+(c.archived?' arch':'')+'"><span>'+esc(c.name)+(c.archived?' <small>('+L("gizlədilib")+')</small>':'')+'</span><b class="num">'+money(c.price)+'</b><button class="link" data-act="cat-edit" data-id="'+esc(c.id)+'">'+L("Dəyiş")+'</button></div>'}).join("")
+    :'<div class="foot">'+L("Hələ məhsul yoxdur.")+'</div>')+'</div>';
+  h+='<h3 class="sec">'+(e?L("Məhsulu dəyiş"):L("Yeni məhsul"))+'</h3>'+
+    '<div class="two"><div class="field"><label for="c-name">'+L("Adı")+'</label><input id="c-name" type="text" maxlength="60" autocomplete="off" value="'+esc(e?e.name:"")+'"></div>'+
+    '<div class="field"><label for="c-price">'+L("Qiymət, ")+CUR+'</label><input id="c-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(e?e.price:"")+'"></div></div>'+
+    '<p class="err" role="alert" id="c-err" hidden></p><div class="btns"><button class="primary" data-act="cat-save">'+(e?L("Yadda saxla"):L("Əlavə et"))+'</button>'+
+    (e?'<button class="ghost" data-act="cat-hide">'+(e.archived?L("Yenidən göstər"):L("Gizlət"))+'</button><button class="ghost" data-act="cat-new">'+L("Yeni məhsul")+'</button>':'')+'</div>'+
+    (e?'<button class="link danger-t" data-act="cat-del">'+L("Məhsulu sil")+'</button>':'');
+  return h;
+}
+/* «Məhsul» in Statistika: by product and by seller */
+function prodStats(r,per){
+  var onlyMe=specMe()?auth.user.id:null,byP={},byS={},T={q:0,m:0},ord=[];
+  myProds().forEach(function(x){if(x.date<r.s||x.date>r.end)return;if(onlyMe&&x.by!==onlyMe)return;
+    var c=x.pid?catItem(x.pid):null,k=c?c.id:(x.pid?"p:"+(x.names||""):"-"),nm=c?c.name:(x.pid?(x.names||L("Məhsul")):L("Başqa (əl ilə yazılıb)"));
+    if(!byP[k]){byP[k]={name:nm,q:0,m:0};ord.push(k)}byP[k].q+=x.qty;byP[k].m+=x.amount;
+    var sk=x.by||"-";if(!byS[sk])byS[sk]={name:state.staff[sk]||L("Adsız"),q:0,m:0};byS[sk].q+=x.qty;byS[sk].m+=x.amount;T.q+=x.qty;T.m+=x.amount});
+  var tbl=function(title,head,obj,keys){
+    return '<div class="pay"><div class="head"><b>'+title+'</b></div><table class="stt"><thead><tr><th>'+head+'</th><th class="num">'+L("Satış")+'</th><th class="num">'+L("Məbləğ")+'</th></tr></thead><tbody>'+
+      (keys.length?keys.map(function(k){var y=obj[k];return '<tr><td>'+esc(y.name)+'</td><td class="num">'+y.q+'</td><td class="num">'+money(y.m)+'</td></tr>'}).join(""):'<tr><td colspan="3" style="color:var(--muted)">'+L("Hələ heç nə yoxdur.")+'</td></tr>')+
+      '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+T.q+'</td><td class="num">'+money(T.m)+'</td></tr></tfoot></table></div>'};
+  ord.sort(function(a,b){return byP[b].m-byP[a].m});
+  var sk=Object.keys(byS).sort(function(a,b){return byS[b].m-byS[a].m});
+  return tbl(L("Məhsullar üzrə"),L("Məhsul"),byP,ord)+tbl(L("Satanlar üzrə"),L("Satan"),byS,sk);
 }
 /* the product names are typed by hand, one per line or separated by commas */
 function prodItems(t){return String(t||"").split(/\n|;|,(?!\d)/).map(function(z){return z.replace(/\s+/g," ").trim()}).filter(function(z){return z})}
@@ -3277,6 +3702,52 @@ function folBtns(a){
   return '<div class="folbtns">'+FOLLOW.map(function(x){var on=(a.fol||0)>=x[0];return '<button class="'+(on?"primary":"ghost")+'" data-act="follow" data-id="'+esc(a.id)+'" data-n="'+x[0]+'" aria-pressed="'+on+'">'+(on?new Array(x[0]+1).join(OLDAND?"+":"\u2705")+" ":"")+L(x[1])+'</button>'}).join("")+'</div>';
 }
 /* «Ləğv olunanlar»: bookings the patient did not come to (cancelled from the calendar), newest first */
+function plistHtml(){return ui.psec==="cancel"?cancelList():ui.psec==="conf"&&state.hasConf?confList():ui.psec==="lost"?lostList():patientsList()}
+/* ---------- owner 22.11: new helpers ----------
+   «Təsdiq»: today's (not yet over) and tomorrow's bookings, the ones not confirmed first — the WhatsApp message with
+   the time is one tap («Təsdiq»), «Təsdiq aldı» marks the answer. Only 11% of bookings were marked confirmed. */
+function confNeed(){var tm=addDays(today,1);return state.appts.filter(function(a){return (a.date===today||a.date===tm)&&a.status==="wait"&&!ended(a)&&!a.sold&&mineOnly(a.readerId)})
+  .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})}
+function confList(){
+  var q=low(ui.q.trim()),qd=qDigits(q),all=confNeed().filter(function(a){return !q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0)});
+  if(!all.length)return '<div class="empty">'+L("Bu gün və sabah üçün təsdiq gözləyən qəbul yoxdur.")+'</div>';
+  var no=all.filter(function(a){return !a.conf}),yes=all.filter(function(a){return a.conf});
+  var card=function(a){var r=reader(a.readerId);
+    return '<div class="card compact'+(a.conf?' confd':'')+'"><div class="row"><div class="time num">'+esc(a.time)+'<small>'+(a.date===today?L("bu gün"):L("sabah"))+'</small></div>'+
+      '<button class="who" data-act="view-appt" data-id="'+esc(a.id)+'"><b>'+mark(a)+esc(a.name)+'</b><span class="num">'+[a.phone,r?r.name:""].filter(function(x){return x}).map(esc).join(" · ")+'</span></button></div>'+
+      '<div class="links">'+phoneLinks(a.phone,a)+'<span class="spacer"></span>'+confBtn(a,"link")+'</div></div>'};
+  return '<p class="hint small">'+tf(L("{a} qəbuldan {b}-i təsdiqlənib. «Təsdiq» WhatsApp-da hazır mesajı açır; cavab gələndə «Təsdiq aldı» basın."),{a:all.length,b:yes.length})+'</p>'+
+    no.map(card).join("")+(yes.length?'<h3 class="sec">'+L("Təsdiqləyənlər")+'</h3>'+yes.map(card).join(""):"");
+}
+/* «Qayıtmayanlar»: came at least once, the last visit 14–90 days ago, nothing booked ahead — a call or a WhatsApp
+   «we are waiting for you» brings them back (91% of patients came only once) */
+function backText(p){return LANG==="ru"?"Здравствуйте, доброго вам времени!\nДавно вас не видели. Если хотите продолжить сеансы, напишите — подберём удобное время.":"Salam, hər vaxtınız xeyir!\nÇoxdandır sizi görmürük. Seanslara davam etmək istəsəniz, yazın — sizə uyğun vaxt tapaq."}
+function lostList(){
+  var q=low(ui.q.trim()),qd=qDigits(q),m=patients(),from=addDays(today,-90),to=addDays(today,-14),arr=[];
+  Object.keys(m).forEach(function(k){var p=m[k],lastOk="",ahead=false;
+    p.list.forEach(function(a){if(done(a)&&a.date>lastOk)lastOk=a.date;if(a.date>=today&&!gone(a)&&!done(a))ahead=true});
+    if(ahead||!lastOk||lastOk<from||lastOk>to||p.wait)return;
+    if(q&&low(p.name).indexOf(q)<0&&!(qd&&phoneCore(p.phone).indexOf(qd)>=0))return;
+    arr.push({p:p,last:lastOk})});
+  arr.sort(function(a,b){return b.last.localeCompare(a.last)});
+  if(!arr.length)return '<div class="empty">'+L("14–90 gün əvvəl gəlib, sonra yazılmayan pasiyent yoxdur.")+'</div>';
+  return '<p class="hint small">'+tf(L("{n} pasiyent 14–90 gün əvvəl gəlib və heç yerə yazılmayıb."),{n:arr.length})+'</p>'+arr.slice(0,300).map(function(x){var p=x.p,tel=String(p.phone||"").replace(/[^\d+]/g,""),wa=waLink(p.phone,backText(p));
+    return '<div class="card compact"><div class="row"><div class="time num">'+dDiff(x.last,today)+'<small>'+L("gün")+'</small></div>'+
+      '<button class="who" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc([p.phone,L("Son gəliş: ")+fmtDay(x.last),tf(L("{n} dəfə gəlib"),{n:p.paid})].filter(function(z){return z}).join(" · "))+'</span></button></div>'+
+      '<div class="links">'+(tel.replace(/\D/g,"").length>=5?'<a class="link" href="tel:'+esc(tel)+'">'+L("Zəng")+'</a>':'')+(wa?'<a class="link" href="'+esc(wa)+'" target="_blank" rel="noopener">'+L("Wp: dəvət")+'</a>':'')+
+      '<span class="spacer"></span><button class="link" data-act="repeat" data-id="'+esc(p.key)+'">'+L("Yeni qəbul yaz")+'</button></div></div>'}).join("");
+}
+/* «Ən yaxın boş vaxtlar» in the booking window: the first free times from now on, for the chosen specialist (or
+   everyone), for the chosen length; a tap fills specialist, date and time */
+function freeSlots(){
+  var rid=val("f-reader"),dur=state.hasDur?(+val("f-dur")||90):90,rs=rid?[reader(rid)].filter(Boolean):activeReaders(),out=[],nowM=bk().m;
+  for(var i=0;i<21&&out.length<8;i++){var d=addDays(today,i),perDay=0;
+    for(var m=9*60;m+dur<=21*60+30&&out.length<8&&perDay<(rid?4:3);m+=30){
+      if(d===today&&m<nowM+30)continue;
+      for(var j=0;j<rs.length;j++){var r=rs[j],tm=hhmm(m);if(!overlap(r.id,d,tm,dur,sheet&&sheet.id)&&!inBreak(tm,dur,r.id,d)){out.push({r:r,d:d,t:tm});perDay++;break}}
+    }}
+  return out;
+}
 function cancelList(){
   var q=low(ui.q.trim()),qd=qDigits(q);
   var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
@@ -3459,7 +3930,7 @@ function readersMain(){
 function brkSig(list){return JSON.stringify(list.map(function(b){return [b.start,b.end,b.title]}).sort())}
 function breakGroups(cb){
   var h="",byR={},groups=[],gi={};
-  state.breaks.forEach(function(b){(byR[b.rid||""]||(byR[b.rid||""]=[])).push(b)});
+  state.breaks.forEach(function(b){if(b.to&&b.to<today)return;(byR[b.rid||""]||(byR[b.rid||""]=[])).push(b)});   /* owner 22.11: finished ones are not listed */
   var shared=byR[""]||[];
   if(shared.length)groups.push({names:[L("Hamısı üçün")],rids:[""],list:shared});
   var rows=(specMe()?activeReaders():state.readers).slice().sort(function(x,y){return (x.archived?1:0)-(y.archived?1:0)});
@@ -3478,7 +3949,7 @@ function breakGroups(cb){
     if(!chips.length)h+='<p class="hint" style="margin:6px 0 0">'+(shared.length?L("Ayrıca fasilə yoxdur — yalnız «Hamısı üçün» fasilələri."):L("Fasilə yoxdur — istənilən saata yazmaq olar."))+'</p>';
     else h+='<div class="bchips">'+chips.map(function(b){
       var w=brkWhen(b);
-      return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(brkSched(b)+"|"+b.start+"|"+b.end+"|"+b.title)+'"'+(canBrk(g.rids)?'':' disabled')+'><b class="num">'+esc(b.start)+'–'+esc(b.end)+'</b><span>'+esc(b.title)+'</span>'+(w?'<small class="bwhen">'+esc(w)+'</small>':'')+'</button>'}).join("")+'</div>';
+      return '<button class="bchip" data-act="brk-open" data-id="'+ix+'|'+esc(brkSched(b)+"|"+b.start+"|"+b.end+"|"+b.title)+'"'+(canBrk(g.rids)?'':' disabled')+'><b class="num">'+esc(brkTime(b))+'</b><span>'+esc(b.title)+'</span>'+(w?'<small class="bwhen">'+esc(w)+'</small>':'')+'</button>'}).join("")+'</div>';
     h+='</div>';
   });
   brkGroupsCache=groups;
@@ -3490,8 +3961,9 @@ function brkSheet(){
   /* read live, so a change by someone else meanwhile is shown correctly */
   var items=state.breaks.filter(function(b){return x.rids.indexOf(b.rid||"")>=0&&brkSched(b)===sc&&b.start===p[0]&&b.end===p[1]&&b.title===p.slice(2).join("|")});
   var w0=items[0]?brkWhen(items[0]):"";
-  var h='<h2>'+esc(p.slice(2).join("|"))+CLOSE+'</h2><p class="hint num" style="font-size:16px;color:var(--ink)">'+esc(p[0])+'–'+esc(p[1])+'</p><p class="hint">'+esc(w0||L("Hər gün"))+'</p>';
+  var h='<h2>'+esc(p.slice(2).join("|"))+CLOSE+'</h2><p class="hint num" style="font-size:16px;color:var(--ink)">'+esc(brkTime({start:p[0],end:p[1]}))+'</p><p class="hint">'+esc(w0||L("Hər gün"))+'</p>';
   if(!items.length)return h+'<p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
+  h+='<button class="primary" data-act="brk-edit-all" data-id="'+esc(items[0].id)+'">'+L("Dəyiş")+'</button>';
   if(items.length>1)h+='<button class="danger" data-act="del-breaks" data-id="'+esc(items.map(function(b){return b.id}).join(","))+'">'+tf(L("Hamısından sil ({n})"),{n:items.length})+'</button>';
   h+='<div class="pay">'+items.map(function(b){var r=reader(b.rid);
     return '<div class="visit"><span>'+esc(b.rid?(r?r.name:L("silinmiş mütəxəssis")):L("Hamısı üçün"))+'</span><button class="link" style="color:var(--bad)" data-act="del-breaks" data-id="'+esc(b.id)+'">'+L("Sil")+'</button></div>'}).join("")+'</div>';
@@ -3697,7 +4169,7 @@ function openSheet(s){
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={place:oa.place||"ofis",readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,xls:xlsSheet,expense:expenseForm}[s.type];
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("sheet").classList.toggle("tall",s.type==="appt");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt"&&s.vals){var dv=s.vals;
     ["reader","date","time","name","phone","price","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
@@ -3805,7 +4277,8 @@ function apptForm(){
   var opts=(def?'':'<option value="" disabled selected>'+L("— seçin —")+'</option>')+rs.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===def?" selected":"")+'>'+esc(r.name)+'</option>'}).join("");
   /* Kept short so «Yaz» is visible without scrolling: two fields per row, small time buttons, and the button
      itself stays at the bottom of the window. */
-  return '<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>'+
+  /* owner 22.11: a new booking or a break from the same window, like Google Calendar («Qəbul | Fasilə») */
+  return (!a&&state.hasBreaks&&canAddBrk()?'<h2 class="kindh"><span class="vh">'+L("Yeni qəbul")+'</span>'+kindSw("appt")+CLOSE+'</h2>':'<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>')+
     L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis *</label><select id="f-reader">')+opts+'</select></div>'+
     (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
@@ -3815,6 +4288,7 @@ function apptForm(){
     (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
     L('<div class="field"><label for="f-time">Saat *</label><input id="f-time" type="time" step="300" value="')+esc(a?a.time:(pre.time||""))+'"></div></div>'+
+    '<div class="freebox"><button type="button" class="link" data-act="free-find">'+L("Ən yaxın boş vaxtlar")+'</button><div id="f-free" class="chips" style="flex-wrap:wrap"></div></div>'+
     '<div class="field"><span class="lbl">'+L("Xidmət *")+'</span><div class="seg svc" role="radiogroup">'+SERVICES.map(function(x){var cur=a?svcName(a.service):(pre.service||"Ruqya");return '<label class="segb"><input type="radio" name="f-service" value="'+esc(x)+'"'+(x===cur?" checked":"")+'><span>'+esc(L(x))+'</span></label>'}).join("")+'</div></div>'+
     '<p class="err" role="alert" id="f-err" hidden></p>'+
     '<div class="btns sticky-save"><button class="primary" data-act="save-appt">'+(a?L("Yadda saxla"):L("Yaz"))+'</button></div>';
@@ -3985,7 +4459,8 @@ document.addEventListener("click",function(e){
   }
   else if(act==="today"){ui.date=today}
   else if(act==="st-week"){ui.stOff=Math.max(0,(ui.stOff|0)-(+b.dataset.n||0))}
-  else if(act==="st-sec"){if(/^(today|day|week|month|cweek|cmonth|rules|terms)$/.test(id)){ui.stSec=id;try{localStorage.setItem("ruqya.stsec",id)}catch(err){}var mm2=byId("main");if(mm2)mm2.scrollTop=0}}
+  else if(act==="st-sec"){if(/^(week|month|cweek|cmonth|money|prod)$/.test(id)){ui.stSec=id;try{localStorage.setItem("ruqya.stsec",id)}catch(err){}var mm2=byId("main");if(mm2)mm2.scrollTop=0}}
+  else if(act==="st-per"){if(/^(week|month|cweek|cmonth)$/.test(id)){ui.stPer=id;try{localStorage.setItem("ruqya.stper",id)}catch(err){}}}
   else if(act==="st-all"){ui.stAOff=Math.max(0,(ui.stAOff|0)-(+b.dataset.n||0));dayAllRange()}
   else if(act==="st-day"){ui.stDOff=Math.max(0,Math.min(ST_DAYS-1,(ui.stDOff|0)-(+b.dataset.n||0)))}
   else if(act==="st-month"){ui.stMOff=Math.max(0,(ui.stMOff|0)-(+b.dataset.n||0))}
@@ -4015,8 +4490,48 @@ document.addEventListener("click",function(e){
       function(){openSheet({type:"stcopy",text:stt})});
     return;
   }
-  else if(act==="new-prod"){openSheet({type:"prod"});return}
-  else if(act==="edit-prod"){var px=prodRow(id);if(px&&(isAdmin()||px.by===auth.user.id))openSheet({type:"prod",id:id});return}
+  else if(act==="new-prod"){openSheet(state.hasCatalog?{type:"sell",cnt:{}}:{type:"prod"});return}
+  else if(act==="edit-prod"){var px=prodRow(id);if(px&&(isAdmin()||px.by===auth.user.id))openSheet(px.pid&&state.hasCatalog?{type:"selledit",id:id}:{type:"prod",id:id});return}
+  else if(act==="sell-add"||act==="sell-sub"){if(!sheet||sheet.type!=="sell"||!catItem(id))return;var sd=byId("sl-date");if(sd)sheet.date=sd.value;
+    var cn=sheet.cnt;cn[id]=Math.max(0,Math.min(1000,(cn[id]||0)+(act==="sell-add"?1:-1)));if(!cn[id])delete cn[id];
+    var y0=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y0;return}
+  else if(act==="sell-clear"){if(sheet&&sheet.type==="sell"){var sd2=byId("sl-date");if(sd2)sheet.date=sd2.value;sheet.cnt={};byId("sheet").innerHTML=sellForm()}return}
+  else if(act==="sell-save"){
+    if(!sheet||sheet.type!=="sell")return;   /* a second tap after the window closed adds nothing */
+    var sdt=val("sl-date");if(!okDate(sdt))return fail("sl-err",L("Tarixi düzgün seçin."));
+    var lines=Object.keys(sheet.cnt).filter(function(k){return catItem(k)&&sheet.cnt[k]>0});if(!lines.length)return fail("sl-err",L("Məhsulun üstünə basın."));
+    var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k];return {id:uuid(),date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
+    srows.forEach(function(o){state.products.push(mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
+    var keepS={cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt},sids=srows.map(function(o){return o.id});
+    db(sb.from("product_sales").insert(srows),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date})},0)});
+    closeSheet();
+  }
+  else if(act==="sell-q"){if(!sheet||sheet.type!=="selledit")return;var sx=prodRow(sheet.id);if(!sx)return;sheet.q=Math.max(1,Math.min(1000,(sheet.q==null?sx.qty:sheet.q)+(+b.dataset.n||0)));byId("sheet").innerHTML=sellEdit();return}
+  else if(act==="sell-upd"){
+    if(!sheet||sheet.type!=="selledit")return;var ux=prodRow(sheet.id);if(!ux){closeSheet();return}if(!(isAdmin()||ux.by===auth.user.id))return;
+    var nq=sheet.q==null?ux.qty:sheet.q,uc=catItem(ux.pid),up1=ux.price||(uc?uc.price:0)||(ux.qty?ux.amount/ux.qty:0),old1={qty:ux.qty,amount:ux.amount};
+    if(nq!==ux.qty){ux.qty=nq;ux.amount=Math.round(nq*up1*100)/100;db(sb.from("product_sales").update({qty:nq,amount:ux.amount}).eq("id",ux.id),function(){ux.qty=old1.qty;ux.amount=old1.amount;render()})}
+    closeSheet();
+  }
+  else if(act==="catalog"){if(isAdmin())openSheet({type:"catalog"});return}
+  else if(act==="cat-edit"){if(sheet&&sheet.type==="catalog"){sheet.eid=id;byId("sheet").innerHTML=catalogSheet();var cn1=byId("c-name");if(cn1)cn1.focus()}return}
+  else if(act==="cat-new"){if(sheet&&sheet.type==="catalog"){sheet.eid="";byId("sheet").innerHTML=catalogSheet()}return}
+  else if(act==="cat-save"){
+    if(!sheet||sheet.type!=="catalog"||!isAdmin())return;
+    var cnm=val("c-name"),cpr=amount("c-price");
+    if(!cnm)return fail("c-err",L("Məhsulun adını yazın."));
+    if(cpr===""||isNaN(cpr)||cpr<0||cpr>MAXSUM)return fail("c-err",L("Qiyməti düzgün yazın."));
+    var ce=sheet.eid?catItem(sheet.eid):null;
+    if(state.catalog.some(function(c){return c!==ce&&!c.archived&&low(c.name.trim())===low(cnm)}))return fail("c-err",L("Bu adda məhsul artıq var."));
+    if(ce){var cold={name:ce.name,price:ce.price};ce.name=cnm;ce.price=cpr;db(sb.from("products").update({name:cnm,price:cpr}).eq("id",ce.id),function(){ce.name=cold.name;ce.price=cold.price;render()})}
+    else{var cid=uuid(),srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
+      db(sb.from("products").insert({id:cid,name:cnm,price:cpr,sort:srt}),function(){removeBy(state.catalog,cid);render()})}
+    sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return;
+  }
+  else if(act==="cat-hide"){if(!sheet||!isAdmin())return;var ch1=catItem(sheet.eid);if(!ch1)return;ch1.archived=!ch1.archived;db(sb.from("products").update({archived:ch1.archived}).eq("id",ch1.id));byId("sheet").innerHTML=catalogSheet();render();return}
+  else if(act==="cat-del"){if(!sheet||!isAdmin())return;var cd1=catItem(sheet.eid);if(!cd1)return;
+    if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Silinəcək (satışlar qalır) — bir də basın");return}
+    removeBy(state.catalog,cd1.id);db(sb.from("products").delete().eq("id",cd1.id));sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return}
   else if(act==="xls"){startXls(sheet&&sheet.type==="xls"&&sheet.err?sheet.per:"");return}
   else if(act==="xls-per"){startXls(id);return}
   else if(act==="xls-save"){
@@ -4050,6 +4565,7 @@ document.addEventListener("click",function(e){
   else if(act==="del-prod"){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
+    if(sheet&&sheet.type==="selledit")closeSheet();
   }
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
   else if(act==="edit-expense"){if(expense(id))openSheet({type:"expense",id:id});return}
@@ -4186,6 +4702,10 @@ document.addEventListener("click",function(e){
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
+  else if(act==="free-find"){var fb=byId("f-free");if(!fb)return;var fs=freeSlots();
+    fb.innerHTML=fs.length?fs.map(function(x){return '<button type="button" class="chip" data-act="free-pick" data-r="'+esc(x.r.id)+'" data-d="'+x.d+'" data-t="'+x.t+'">'+esc((val("f-reader")?"":x.r.name+" · ")+(x.d===today?L("bu gün"):x.d===addDays(today,1)?L("sabah"):fmtDayShort(x.d))+", "+x.t)+'</button>'}).join(""):'<p class="hint">'+L("Yaxın 3 həftədə boş vaxt tapılmadı.")+'</p>';return}
+  else if(act==="free-pick"){var fr=byId("f-reader");if(!fr)return;if(fr.value!==b.dataset.r){fr.value=b.dataset.r;fr.dispatchEvent(new Event("change",{bubbles:true}))}
+    byId("f-date").value=b.dataset.d;byId("f-time").value=b.dataset.t;slotGrid();var ff=byId("f-free");if(ff)ff.innerHTML='<p class="hint">'+esc(L("Seçildi: ")+(reader(b.dataset.r)||{}).name+", "+fmtDay(b.dataset.d,"w")+", "+b.dataset.t)+'</p>';return}
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
   else if(act==="view-appt"){if(appt(id))afterPaint(function(){if(appt(id))openSheet({type:"view",id:id})});return}
   else if(act==="newat"){
@@ -4206,41 +4726,28 @@ document.addEventListener("click",function(e){
     importContacts(cr);b.dataset.sure="";b.textContent=tf(L("Hamısını telefon kontaktlarına əlavə et ({n})"),{n:cr.length});return;
   }
   else if(act==="contact-one"){importContacts(contactRows([id]));return}
-  else if(act==="new-break"){if(canAddBrk()){var s0={};if(!canBreaks())activeReaders().forEach(function(r){s0[r.id]=1});openSheet({type:"brk",sel:s0,rep:"all",days:{}})}return}
-  else if(act==="b-rep"||act==="b-day"){
-    if(!sheet||sheet.type!=="brk")return;
-    var keep2={t:val("b-title"),s:val("b-start"),e:val("b-end"),f:byId("b-from")?val("b-from"):"",u:byId("b-to")?val("b-to"):""};
-    if(act==="b-rep")sheet.rep=id;else{sheet.days=sheet.days||{};if(sheet.days[id])delete sheet.days[id];else sheet.days[id]=1}
-    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep2.t;byId("b-start").value=keep2.s;byId("b-end").value=keep2.e;if(byId("b-from"))byId("b-from").value=keep2.f;if(byId("b-to"))byId("b-to").value=keep2.u;return;
-  }
+  else if(act==="new-break"){if(canAddBrk())openSheet({type:"brk",b:brkInit({date:today})});return}
+  else if(act==="b-day"){if(!sheet||!sheet.b)return;brkKeep();if(sheet.b.days[id])delete sheet.b.days[id];else sheet.b.days[id]=1;brkRedraw();return}
+  else if(act==="b-all"){if(!sheet||!sheet.b)return;brkKeep();sheet.b.all=!sheet.b.all;brkRedraw();return}
   else if(act==="b-who"){
-    if(!sheet||sheet.type!=="brk")return;
-    var keep={t:val("b-title"),s:val("b-start"),e:val("b-end"),f:byId("b-from")?val("b-from"):"",u:byId("b-to")?val("b-to"):""};
-    if(!id){if(!canBreaks())return;sheet.sel={}}else{sheet.sel=sheet.sel||{};if(sheet.sel[id])delete sheet.sel[id];else sheet.sel[id]=1}
-    byId("sheet").innerHTML=breakForm();byId("b-title").value=keep.t;byId("b-start").value=keep.s;byId("b-end").value=keep.e;if(byId("b-from"))byId("b-from").value=keep.f;if(byId("b-to"))byId("b-to").value=keep.u;return;
+    if(!sheet||!sheet.b)return;brkKeep();
+    if(!id){if(!canBreaks())return;sheet.b.rids={}}else{if(sheet.b.rids[id])delete sheet.b.rids[id];else sheet.b.rids[id]=1}
+    brkRedraw();return;
   }
-  else if(act==="save-break"){
-    if(!sheet||sheet.type!=="brk"||!canAddBrk())return;   /* a second tap after the form closed adds nothing */
-    var bt=val("b-title"),bs=val("b-start").slice(0,5),be=val("b-end").slice(0,5);
-    if(!bt)return fail("b-err",L("Fasilənin adını yazın."));
-    if(!/^\d{2}:\d{2}$/.test(bs)||!/^\d{2}:\d{2}$/.test(be))return fail("b-err",L("Başlama və bitmə saatını seçin."));
-    if(mins(be)<=mins(bs))return fail("b-err",L("Bitmə saatı başlamadan sonra olmalıdır."));
-    var rids=state.hasBrkReader?Object.keys(sheet.sel||{}).filter(function(r){return !!reader(r)}):[];
-    if(!canBreaks()&&(!rids.length||!canBrk(rids)))return fail("b-err",L("Öz sütununuzu seçin."));
-    /* days and dates (owner 18.11) */
-    var brep=state.hasBrkDays?sheet.rep||"all":"all",bdays=null,bfrom="",bto="";
-    if(brep==="wd"){bdays=Object.keys(sheet.days||{}).map(Number).sort();if(!bdays.length)return fail("b-err",L("Həftənin günlərini seçin."))}
-    if(brep!=="all"){bfrom=val("b-from");bto=val("b-to");if(brep==="dates"&&!bfrom)return fail("b-err",L("Tarixi seçin."));if(brep==="dates"&&!bto)bto=bfrom;
-      if(bfrom&&bto&&bto<bfrom)return fail("b-err",L("Son tarix başlanğıcdan sonra olmalıdır."))}
-    var tmp={days:bdays,from:bfrom,to:bto};
-    var hit=state.appts.filter(function(a){if(a.date<today||a.status!=="wait"||ended(a)||!brkOn(tmp,a.date))return false;if(rids.length&&rids.indexOf(a.readerId)<0)return false;var s1=mins(a.time),e1=s1+(a.dur||90);return s1<mins(be)&&mins(bs)<e1}).length;
-    if(hit&&!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Yenə də əlavə et");return fail("b-err",L("Bu vaxta artıq ")+hit+L(" qəbul yazılıb. Onlar yerində qalacaq, sadəcə yeni qəbul yazmaq olmayacaq."))}
-    var rows=(rids.length?rids:[""]).map(function(r){var o={id:uuid(),title:bt,start_time:bs,end_time:be};if(r)o.reader_id=r;
-      if(state.hasBrkDays){o.days=bdays;o.date_from=bfrom||null;o.date_to=bto||null}return o});
-    rows.forEach(function(o){state.breaks.push(mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});
-    db(sb.from("breaks").insert(rows));closeSheet();
+  else if(act==="save-break"){if(!sheet||sheet.type!=="brk"||!canAddBrk())return;brkSave("",b);render();return}   /* a second tap after the form closed adds nothing */
+  else if(act==="brk-scope"){if(!sheet||!sheet.ask)return;var bk1=sheet.ask;sheet.ask="";if(bk1==="del")brkDelete(id,b);else brkSave(id,b);render();return}
+  else if(act==="brk-ask-no"){if(sheet){sheet.ask="";brkRedraw()}return}
+  else if(act==="brk-del"){if(!sheet)return;if(sheet.type==="brk")brkKeep();brkDelete("",b);render();return}
+  else if(act==="brk-one"){if(brkById(id))afterPaint(function(){if(brkById(id))openSheet({type:"brkone",id:id,occ:ui.date})});return}
+  else if(act==="brk-edit"){var be1=sheet&&brkById(sheet.id);if(be1&&canBrk(brkSiblings(be1).map(function(y){return y.rid})))openSheet({type:"brk",edit:be1.id,occ:sheet.occ,whole:sheet.whole,b:brkFromRow(be1,sheet.occ)});return}
+  else if(act==="kind"){
+    if(!sheet)return;
+    if(id==="brk"&&sheet.type==="appt"&&!sheet.id&&canAddBrk()){var av=formVals();openSheet({type:"brk",kinds:1,av:av,b:brkInit({date:av.date,time:av.time,reader:av.readerId})});return}
+    if(id==="appt"&&sheet.type==="brk"&&sheet.kinds){brkKeep();var bb2=sheet.b,r1=Object.keys(bb2.rids)[0];openSheet({type:"appt",id:null,vals:sheet.av,pre:{date:bb2.date,time:bb2.all?"":bb2.start,reader:r1||(sheet.av&&sheet.av.readerId)||""}});return}
+    return;
   }
   else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;ui.setSecPicked=true;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
+  else if(act==="brk-edit-all"){var ba=brkById(id);if(ba&&canBrk(brkSiblings(ba).map(function(y){return y.rid}))){var oc=ba.from&&ba.from>today?ba.from:today;openSheet({type:"brk",edit:ba.id,occ:oc,whole:1,b:brkFromRow(ba,oc)})}return}
   else if(act==="brk-open"){var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg&&canBrk(bg.rids))openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
   else if(act==="del-breaks"){
     var dids=String(id).split(",").filter(function(z){return z});
@@ -4273,7 +4780,7 @@ document.addEventListener("click",function(e){
   else if(act==="edit-reader"){if(isAdmin()&&reader(id))openSheet({type:"reader",id:id});return}
   else if(act==="close"){closeSheet();return}
   else if(act==="draft-open"){openDraft();return}
-  else if(act==="p-sec"){ui.psec=id==="cancel"?"cancel":"all";try{localStorage.setItem("ruqya.psec",ui.psec)}catch(e){}}
+  else if(act==="p-sec"){ui.psec=/^(cancel|conf|lost)$/.test(id)?id:"all";try{localStorage.setItem("ruqya.psec",ui.psec)}catch(e){}}
   else if(act==="draft-drop"){dropDraft();render();return}
   else if(act==="follow"){
     var fa=appt(id),fn=+b.dataset.n;if(!fa||!(gone(fa)||fa.sold)||!state.hasFollow||!(fn>=1&&fn<=3))return;
@@ -4339,7 +4846,7 @@ document.addEventListener("click",function(e){
   render();
 });
 document.addEventListener("input",function(e){
-  if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=patientsList()},120)}
+  if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=plistHtml()},120)}
 });
 document.addEventListener("change",function(e){
   var t=e.target.id;
@@ -4349,7 +4856,19 @@ document.addEventListener("change",function(e){
     if(t==="f-reader")putPreset(readerPreset(e.target.value));
   }
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
+  if(sheet&&sheet.type==="brk"&&(t==="b-rep"||t==="b-date")){if(t==="b-date"&&sheet.b){var od=sheet.b.date;brkKeep();var nd=sheet.b.date;if(od!==nd&&sheet.b.rep!=="custom"){sheet.b.days={};sheet.b.days[wdOf(nd)]=1}}brkRedraw()}
 });
+/* owner 22.11: an empty time field opens its clock (Android's round dial, iPhone's wheel) on the whole hour of now —
+   19:00, not 19:48. The value is put in just before the clock opens (first touch, mouse press or focus). An end time
+   of a break opens one hour after its start, as in Google Calendar. */
+function timeDefault(el){
+  if(!el||el.tagName!=="INPUT"||el.type!=="time"||el.value||el.readOnly||el.disabled)return;
+  var st=el.id==="b-end"?byId("b-start"):null;
+  if(st&&/^\d{2}:\d{2}/.test(st.value)){el.value=hhmm(Math.min(mins(st.value)+60,23*60+55));return}
+  var h=Math.floor(bk().m/60);el.value=hhmm(Math.max(8,Math.min(23,h))*60);
+  if(el.id==="f-time")slotGrid();
+}
+["touchstart","mousedown","focusin"].forEach(function(t){document.addEventListener(t,function(e){timeDefault(e.target)},true)});
 document.addEventListener("keydown",function(e){
   if(e.key==="Enter"&&(e.target.id==="l-mail"||e.target.id==="l-pass")){var lb=document.querySelector('[data-act="login"]');if(lb)lb.click()}
   if(e.key==="Escape"&&sheet)closeSheet();
