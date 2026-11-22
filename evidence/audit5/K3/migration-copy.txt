@@ -1,0 +1,33 @@
+Sun Nov 22 14:43:45 UTC 2026
+== before
+48001
+== sql/2026-11-a5-patient-key.sql
+ result 
+--------
+ OK
+(1 row)
+
+time: 30.365653373 s
+50000
+== sql/rollback-2026-11-a5-patient-key.sql
+ result 
+--------
+ OK
+(1 row)
+
+time: 3.794411225 s
+48001
+== sql/2026-11-a5-patient-key.sql
+ result 
+--------
+ OK
+(1 row)
+
+time: 32.010286847 s
+50000
+== independent count: distinct (last 9 digits, folded name) — written without ruqya_pkey
+50000
+== history page (index use)
+ Execution Time: 10571.137 ms
+(3 rows)
+

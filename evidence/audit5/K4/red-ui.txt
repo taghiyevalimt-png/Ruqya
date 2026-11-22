@@ -1,0 +1,7 @@
+Sun Nov 22 15:25:28 UTC 2026
+red, test run on 42602af (before A5-02)
+FAIL 99-a5-02-zero.js 
+    Error: FAIL: the admin with nothing written shows 0, not «·»: ["Admin","·","·","·","·","·","·","0","0","0","0","0","0","0","0","0"]
+        at check (/home/claude/wt2/tests/lib.js:221:46)
+        at module.exports (/home/claude/wt2/tests/t/99-a5-02-zero.js:12:5)
+1 failed of 1
