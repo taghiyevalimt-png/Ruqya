@@ -1,0 +1,4 @@
+FAIL 99-sold.js 
+    Error: FAIL: before: the cancelled booking is black on the calendar: null
+        at check (/home/claude/wt/tests/lib.js:231:46)
+        at module.exports (/home/claude/wt/tests/t/99-sold.js:18:5)
