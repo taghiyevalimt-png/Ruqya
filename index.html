@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Hq/WGp6n7fhqmgKK7o8AoXqczV1jjeqJiUDarhLJGTw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qX+7aALA0OQ6CTHBZvENtI7qnTrQJ3mh/4kGFdR8zvc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -5069,13 +5069,15 @@ document.addEventListener("click",function(e){
     state.staff[sk]=sn;state.roles[sk]=sr;state.roleSet[sk]=1;
     var sup={name:sn,role:sr};if(state.hasHide){sup.hide_stats=sr!=="specialist"&&!!shide;state.hide=state.hide||{};if(sup.hide_stats)state.hide[sk]=1;else delete state.hide[sk]}
     pending++;writes++;
+    /* A6-10 (ST-3, the staff form): a change that did not reach the server opens the form again as it was typed */
+    var stBack=function(){setTimeout(function(){if(!sheet&&isAdmin()&&sk in state.staff)openSheet({type:"staff",id:sk,name:sn,role:sr,hide:shide})},0)};
     sb.from("staff").update(sup).eq("id",sk).select().then(function(r){
       pending--;
-      if(r.error&&r.status===0){unsaved();return}
-      if(r.error&&r.error.code){flash(dbMsg(r.error),true);refresh()}
-      else if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh()}
+      if(r.error&&r.status===0){unsaved();stBack();return}
+      if(r.error&&r.error.code){flash(dbMsg(r.error),true);refresh();stBack()}
+      else if(r.error||!r.data||!r.data.length){flash(L("Dəyişmək alınmadı. Bunun üçün baza yenilənməlidir."));refresh();stBack()}
       else if((r.data[0].role||"agent")!==sr){flash(L("Admin rolunu dəyişmək üçün bazada 2026-11-admins.sql faylını bir dəfə işə salın."));refresh()}
-    },function(){pending--;unsaved();refresh()});
+    },function(){pending--;unsaved();refresh();stBack()});
     closeSheet();
   }
   else if(act==="me-role"){if(sheet&&sheet.type==="me"){var keepName=byId("m-name")?val("m-name"):"";sheet.role=id;byId("sheet").innerHTML=meForm();if(keepName&&byId("m-name"))byId("m-name").value=keepName}return}
