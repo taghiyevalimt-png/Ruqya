@@ -16,9 +16,9 @@ const ATTACKS = [
   ["X-07", "account without role gives itself a role", "pending", `update public.staff set role='agent' where id='a0000000-0000-4000-8000-0000000000d1'`, (r) => !r.ok || r.rowCount === 0],
   ["X-08", "account without role reads the bookings", "pending", `select id from public.appts`, (r) => r.ok && r.rowCount === 0],
   ["X-09", "agent reads specialists' price and share", "agentA", `select price, share from public.readers`, (r) => !r.ok],
-  ["X-10", "agent restores a deleted booking from the journal", "agentA", `select public.ruqya_restore((select max(id) from public.audit_log))`, (r) => !r.ok],
-  ["X-11", "agent wipes a patient's data", "agentA", `select public.ruqya_anonymize('p000000001')`, (r) => !r.ok],
-  ["X-12", "agent changes a specialist's colour", "agentA", `select public.ruqya_set_color(${ALI},'#000000')`, (r) => !r.ok],
+  ["X-10", "agent restores a deleted booking from the journal", "agentA", `select public.ruqya_restore((select max(id) from public.audit_log))`, (r) => !r.ok && r.code === "42501"],
+  ["X-11", "agent wipes a patient's data", "agentA", `select public.ruqya_anonymize(public.ruqya_pkey('050 000 00 01', 'Pasiyent B-Əli'))`, (r) => !r.ok && r.code === "42501"],
+  ["X-12", "agent changes a specialist's colour", "agentA", `select public.ruqya_set_color(${ALI},'#000000')`, (r) => !r.ok && r.code === "42501"],
   ["X-13", "anonymous calls a database function", "anon", `select public.ruqya_sees_all()`, (r) => !r.ok],
   ["X-14", "anonymous reads bookings", "anon", `select id from public.appts`, (r) => !r.ok || r.rowCount === 0],
   ["X-15", "agent records a statistics number for another agent", "agentA", `insert into public.stat_edits (kind,per,period_start,agent_id,col,value) values ('sales','week',current_date+14,'a0000000-0000-4000-8000-0000000000ab','a',99)`, (r) => !r.ok],
@@ -39,11 +39,11 @@ const ATTACKS = [
   ["X-28", "anonymous visitor calls the internal visit-id helper", "anon", `select private.ruqya_visit_ids('n test', current_date + 1, current_date - 700)`, (r) => !r.ok],
   ["X-29", "anonymous visitor reads the patient list page", "anon", `select * from public.ruqya_hist_patients_page(current_date + 1, current_date - 700, '', 1000)`, (r) => !r.ok || r.rowCount === 0],
   ["X-30", "account without a role reads the patient list page", "pending", `select * from public.ruqya_hist_patients_page(current_date + 1, current_date - 700, '', 1000)`, (r) => !r.ok || r.rowCount === 0],
-  ["X-31", "account without a role reads a patient's visits", "pending", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
-  ["X-32", "specialist of column Əli reads the visits of a patient of column İlkin (helper finds the id, RLS must hide the row)", "spec", `select * from public.ruqya_hist_visits('p500000002', current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
+  ["X-31", "account without a role reads a patient's visits", "pending", `select * from public.ruqya_hist_visits(public.ruqya_pkey('050 000 00 02', 'Pasiyent B-İlkin'), current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
+  ["X-32", "specialist of column Əli reads the visits of a patient of column İlkin (helper finds the id, RLS must hide the row)", "spec", `select * from public.ruqya_hist_visits(public.ruqya_pkey('050 000 00 02', 'Pasiyent B-İlkin'), current_date + 5, current_date - 700)`, (r) => !r.ok || r.rowCount === 0],
   // stage 7 pentest F-1: the helper itself must not hand out ids of rows the caller may not read (defence in depth,
   // the schema is not exposed by the API)
-  ["X-33", "specialist of column Əli asks the helper for the ids of an İlkin patient (direct SQL)", "spec", `select x from unnest(private.ruqya_visit_ids('p500000002', current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
-  ["X-34", "account without a role asks the helper for ids (direct SQL)", "pending", `select x from unnest(private.ruqya_visit_ids('p500000002', current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
+  ["X-33", "specialist of column Əli asks the helper for the ids of an İlkin patient (direct SQL)", "spec", `select x from unnest(private.ruqya_visit_ids(public.ruqya_pkey('050 000 00 02', 'Pasiyent B-İlkin'), current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
+  ["X-34", "account without a role asks the helper for ids (direct SQL)", "pending", `select x from unnest(private.ruqya_visit_ids(public.ruqya_pkey('050 000 00 02', 'Pasiyent B-İlkin'), current_date + 5, current_date - 700)) x`, (r) => !r.ok || r.rowCount === 0],
 ];
 module.exports = { ATTACKS };

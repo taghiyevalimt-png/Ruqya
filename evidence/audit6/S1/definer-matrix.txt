@@ -1,0 +1,41 @@
+# SECURITY DEFINER functions × roles on the copy — 2026-11-22T19:23:04.732Z
+anon	ruqya_is_admin	refused 42501
+anon	ruqya_has_role	refused 42501
+anon	ruqya_sees_all	refused 42501
+anon	ruqya_can_stats	refused 42501
+anon	ruqya_can_breaks	refused 42501
+anon	ruqya_err_ok	refused 42501
+anon	ruqya_my_readers	refused 42501
+anon	ruqya_anonymize	refused 42501
+anon	ruqya_restore	refused 42501
+anon	ruqya_set_color	refused 42501
+pending	ruqya_is_admin	false
+pending	ruqya_has_role	false
+pending	ruqya_sees_all	false
+pending	ruqya_can_stats	false
+pending	ruqya_can_breaks	false
+pending	ruqya_err_ok	true
+pending	ruqya_my_readers	null
+pending	ruqya_anonymize	refused 42501
+pending	ruqya_restore	refused 42501
+pending	ruqya_set_color	refused 42501
+spec	ruqya_is_admin	false
+spec	ruqya_has_role	true
+spec	ruqya_sees_all	false
+spec	ruqya_can_stats	false
+spec	ruqya_can_breaks	false
+spec	ruqya_err_ok	true
+spec	ruqya_my_readers	["b0000000-0000-4000-8000-000000000001"]
+spec	ruqya_anonymize	refused 42501
+spec	ruqya_restore	refused 42501
+spec	ruqya_set_color	refused 42501
+agentA	ruqya_is_admin	false
+agentA	ruqya_has_role	true
+agentA	ruqya_sees_all	true
+agentA	ruqya_can_stats	true
+agentA	ruqya_can_breaks	true
+agentA	ruqya_err_ok	true
+agentA	ruqya_my_readers	null
+agentA	ruqya_anonymize	refused 42501
+agentA	ruqya_restore	refused 42501
+agentA	ruqya_set_color	refused 42501
