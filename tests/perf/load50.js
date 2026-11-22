@@ -9,7 +9,7 @@
 // not part of this measurement — it covers the database under concurrent load.)
 const fs = require("fs"), path = require("path");
 const { start } = require("../localpg"), { build, U, R } = require("../dbcopy");
-const pgmod = require("pg");
+let pgmod; try { pgmod = require("pg"); } catch (e) { pgmod = require("../pg-wire"); }   // audit 6: the small client when npm pg is missing
 (async () => {
   const out = process.argv[2], users = +process.argv[3] || 50, secs = +process.argv[4] || 120, pause = process.argv[5] != null ? +process.argv[5] : 200;
   const pg = await start(54336), c = await build(pg, "load");
@@ -30,7 +30,7 @@ const pgmod = require("pg");
   const t0 = Date.now(), until = t0 + secs * 1000;
   const who = [U.agentA, U.agentB, U.owner, U.admin2, U.spec];
   await Promise.all(Array.from({ length: users }, async (_, u) => {
-    const cl = new pgmod.Client({ host: "127.0.0.1", port: 54336, user: "postgres", database: "load" }); cl.on("error", () => {}); await cl.connect();
+    const cl = new pgmod.Client({ host: "127.0.0.1", port: pg.port, user: "postgres", database: "load" }); cl.on("error", () => {}); await cl.connect();
     const sub = who[u % who.length];
     const run = async (k, sql, args) => {
       const s = Date.now();
