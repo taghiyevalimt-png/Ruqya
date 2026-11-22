@@ -23,7 +23,7 @@ const M = [
 ];
 const orig = fs.readFileSync(FILE), lines = [];
 try {
-  for (const [id, what, from, to, tests, all] of M) {
+  for (const [id, what, from, to, tests, all] of M.filter((m) => !process.env.ONLY || process.env.ONLY.split(",").includes(m[0]))) {
     const s = orig.toString("utf8"), n = s.split(from).length - 1;
     if (n < 1 || (n > 1 && !all)) { lines.push([id, "NOT APPLIED (code found " + n + " times)", what].join("\t")); console.log(lines[lines.length - 1]); continue; }
     fs.writeFileSync(FILE, s.split(from).join(to));

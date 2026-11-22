@@ -134,7 +134,7 @@ async function attach(context, db, ctl) {
         return send(route, 200, all.slice(off, off + lim));
       }
       // owner 18.11: the caller's own patients (name, phone), two years, latest name per patient
-      if (fn === "ruqya_my_contacts") { const g = {}; db.appts.filter((r) => r.created_by === uid && r.date >= a.since && String(r.phone || "").trim()).sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => { const k = pkey(r); if (!g[k]) g[k] = { name: r.name, phone: r.phone }; }); return send(route, 200, Object.values(g)); }
+      if (fn === "ruqya_my_contacts") { const g = {}; db.appts.filter((r) => r.created_by === uid && r.date >= a.since && String(r.phone || "").trim()).sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => { const k = String(r.phone).replace(/\D/g, "").slice(-9); /* one contact per number (audit 5: not per patient key) */ if (!g[k]) g[k] = { name: r.name, phone: r.phone }; }); return send(route, 200, Object.values(g)); }
       if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));
       if (fn === "ruqya_anonymize") {
         if (uid !== OWNER) return send(route, 403, { code: "42501", message: "Yalniz admin anonimlesdirir" });

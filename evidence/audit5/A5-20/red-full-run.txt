@@ -1,0 +1,6 @@
+PASS 99-contacts-agent.js 20.4s
+FAIL 99-contacts.js 
+    Error: FAIL: only names and numbers, the latest name of a number: ["Leyla Məmmədova / +994 55 111 22 33","Orxan; Əliyev / 050 222 33 44"]
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at flow (/home/claude/wt/tests/t/99-contacts.js:31:9)
+PASS 99-current-period.js 13.8s

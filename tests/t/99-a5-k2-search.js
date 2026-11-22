@@ -47,7 +47,7 @@ module.exports = async () => {
     await p.click('[data-act="p-sec"][data-id="all"]');
     for (const ch of "sukurov") await p.type("#q", ch, { delay: 15 });
     await p.waitForTimeout(250); const last = await shown('#plist [data-act="patient"] b');
-    require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "a5-k2-search.txt"), log.join("\n") + "\n");
+    require("fs").mkdirSync(require("path").join(__dirname, "..", "out"), { recursive: true }); require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "a5-k2-search.txt"), log.join("\n") + "\n");
     check(!bad.length, bad.length + " of " + (Q.length * 2) + " queries wrong: " + bad.slice(0, 6).join(" | "));
     check(JSON.stringify(last) === JSON.stringify(["Rəşad Şükürov"]), "fast typing: the list is for the last query: " + JSON.stringify(last));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));

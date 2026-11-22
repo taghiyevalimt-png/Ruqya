@@ -45,4 +45,19 @@ select public.ruqya_pkey(a.phone, a.name),
    order by public.ruqya_pkey(a.phone, a.name)
    limit least(greatest(coalesce(lim, 1000), 1), 1000);
 end $f$;
+-- phone contacts stay one per NUMBER (owner 18.11: «the same number twice is one contact», the latest name); with the
+-- name in the patient key they would come twice for relatives sharing a phone
+create or replace function public.ruqya_my_contacts(since date)
+returns table(name text, phone text)
+language sql stable security invoker set search_path = public as $$
+  select x.name, x.phone from (
+    select distinct on (right(regexp_replace(a.phone, '\D', '', 'g'), 9)) a.name, a.phone, a.date
+      from public.appts a
+     where a.created_by = auth.uid()
+       and a.date >= greatest(since, current_date - 800)
+       and coalesce(btrim(a.phone), '') <> ''
+     order by right(regexp_replace(a.phone, '\D', '', 'g'), 9), a.date desc, a.id
+  ) x
+  order by x.name
+  limit 5000 $$;
 select 'OK' as result;

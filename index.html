@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-X9JEn4ngYC7/BCA77En9wOaSkAYmOSsjXDGlx4egxLQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-HPRCf3P3FqhUUKFmeXeyu/cHFZ96JznQUU6WZH4Wj4g='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -4098,7 +4098,9 @@ function myContact(p0){if(!agentMe())return true;if((p0.list||[]).some(function(
   var c=phoneCore(p0.phone);return !!(myC&&c&&myC.some(function(x){return phoneCore(x.phone)===c}))}
 function contactRows(keys){
   var m=patients(),seen={},out=[];
-  (keys||Object.keys(m)).forEach(function(k){var p0=m[k];if(!p0||!p0.phone||!myContact(p0))return;var c=phoneCore(p0.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(p0.name||"").trim()||p0.phone,String(p0.phone).trim()])});
+  /* audit 5 (patient = phone + name): one contact per NUMBER with its latest name — relatives sharing a phone come in
+     the list as separate patients, the most recent one names the contact */
+  (keys||Object.keys(m).sort(function(x,y){var a1=m[x].last||"",b1=m[y].last||"";return a1<b1?1:a1>b1?-1:0})).forEach(function(k){var p0=m[k];if(!p0||!p0.phone||!myContact(p0))return;var c=phoneCore(p0.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(p0.name||"").trim()||p0.phone,String(p0.phone).trim()])});
   if(!keys&&agentMe()&&myC)myC.forEach(function(x){var c=phoneCore(x.phone);if(c.length<5||seen[c])return;seen[c]=1;out.push([String(x.name||"").trim()||x.phone,String(x.phone).trim()])});
   return out;
 }

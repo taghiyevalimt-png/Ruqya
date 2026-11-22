@@ -29,5 +29,19 @@ AS $function$
    limit least(greatest(coalesce(lim, 1000), 1), 1000) $function$;
 grant execute on function public.ruqya_hist_patients_page(date, date, text, integer) to authenticated, service_role;
 revoke execute on function public.ruqya_hist_patients_page(date, date, text, integer) from public, anon;
+-- contacts back to the 18.11 definition (by the patient key, which is phone-only again after this rollback)
+create or replace function public.ruqya_my_contacts(since date)
+returns table(name text, phone text)
+language sql stable security invoker set search_path = public as $$
+  select x.name, x.phone from (
+    select distinct on (public.ruqya_pkey(a.phone, a.name)) a.name, a.phone, a.date
+      from public.appts a
+     where a.created_by = auth.uid()
+       and a.date >= greatest(since, current_date - 800)
+       and coalesce(btrim(a.phone), '') <> ''
+     order by public.ruqya_pkey(a.phone, a.name), a.date desc, a.id
+  ) x
+  order by x.name
+  limit 5000 $$;
 drop function if exists public.ruqya_pnorm(text);
 select 'OK' as result;

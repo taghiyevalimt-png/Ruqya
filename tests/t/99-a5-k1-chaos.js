@@ -44,7 +44,7 @@ module.exports = async () => {
     const W = cnt(want), G = cnt(got), lost = [], extra = [];
     Object.keys(W).forEach((k) => { if ((G[k] || 0) < W[k]) lost.push(k + " ×" + (W[k] - (G[k] || 0))); });
     Object.keys(G).forEach((k) => { if ((W[k] || 0) < G[k]) extra.push(k + " ×" + (G[k] - (W[k] || 0))); });
-    require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "a5-k1-chaos.json"), JSON.stringify({ sales: want.length, rows: got.length, lost, extra }, null, 1));
+    require("fs").mkdirSync(require("path").join(__dirname, "..", "out"), { recursive: true }); require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "a5-k1-chaos.json"), JSON.stringify({ sales: want.length, rows: got.length, lost, extra }, null, 1));
     check(!lost.length, "0 lost sales / names: " + lost.slice(0, 5).join("; "));
     check(!extra.length, "0 duplicates: " + extra.slice(0, 5).join("; "));
     check(db.product_sales.every((x) => x.date === T), "every sale dated today");
