@@ -1,0 +1,7 @@
+Sun Nov 22 19:26:21 UTC 2026
+red: copy without sql/2026-11-a6-one-policy.sql, 1333e73
+FAIL 99-a6-09-policies-db.js 
+    Error: FAIL: one permissive policy per table and action: appts:r breaks:a breaks:d breaks:r breaks:w product_sales:r product_shares:r products:r readers:r services:r staff:w stat_edits:r
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-09-policies-db.js:17:5)
+1 failed of 1

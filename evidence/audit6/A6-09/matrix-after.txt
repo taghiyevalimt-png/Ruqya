@@ -1,0 +1,290 @@
+# access matrix on copy — 2026-11-22T19:25:56.744Z
+# cells: 288, checked: 288, mismatches: 0
+appts	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table appts
+appts	SELECT	pending	expected DENY	got DENY	OK	rows 0
+appts	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+appts	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+appts	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+appts	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+appts	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table appts
+appts	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "appts"
+appts	INSERT	spec	expected ALLOW	got ALLOW	OK	rows 1
+appts	INSERT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+appts	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+appts	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+appts	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table appts
+appts	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+appts	UPDATE	spec	expected DENY	got DENY	OK	error 42501 Yalniz yazan ve admin deyisir
+appts	UPDATE	agentA	expected DENY	got DENY	OK	error 42501 Yalniz yazan ve admin deyisir
+appts	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+appts	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+appts	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table appts
+appts	DELETE	pending	expected DENY	got DENY	OK	rows 0
+appts	DELETE	spec	expected DENY	got DENY	OK	error 42501 Yalniz yazan ve admin silir
+appts	DELETE	agentA	expected DENY	got DENY	OK	error 42501 Yalniz yazan ve admin silir
+appts	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+appts	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+readers	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table readers
+readers	SELECT	pending	expected ALLOW	got ALLOW	OK	rows 1
+readers	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+readers	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+readers	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+readers	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+readers	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table readers
+readers	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "readers"
+readers	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "readers"
+readers	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "readers"
+readers	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+readers	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+readers	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table readers
+readers	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+readers	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+readers	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+readers	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+readers	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+readers	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table readers
+readers	DELETE	pending	expected DENY	got DENY	OK	rows 0
+readers	DELETE	spec	expected DENY	got DENY	OK	rows 0
+readers	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+readers	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+readers	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+staff	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table staff
+staff	SELECT	pending	expected DENY	got DENY	OK	rows 0
+staff	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+staff	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+staff	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+staff	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+staff	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table staff
+staff	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "staff"
+staff	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "staff"
+staff	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "staff"
+staff	INSERT	admin2	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "staff"
+staff	INSERT	owner	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "staff"
+staff	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table staff
+staff	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+staff	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+staff	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+staff	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+staff	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+staff	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table staff
+staff	DELETE	pending	expected DENY	got DENY	OK	rows 0
+staff	DELETE	spec	expected DENY	got DENY	OK	rows 0
+staff	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+staff	DELETE	admin2	expected DENY	got DENY	OK	rows 0
+staff	DELETE	owner	expected DENY	got DENY	OK	rows 0
+breaks	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table breaks
+breaks	SELECT	pending	expected DENY	got DENY	OK	rows 0
+breaks	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+breaks	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+breaks	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+breaks	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+breaks	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table breaks
+breaks	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "breaks"
+breaks	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "breaks"
+breaks	INSERT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+breaks	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+breaks	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+breaks	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table breaks
+breaks	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+breaks	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+breaks	UPDATE	agentA	expected ALLOW	got ALLOW	OK	rows 1
+breaks	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+breaks	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+breaks	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table breaks
+breaks	DELETE	pending	expected DENY	got DENY	OK	rows 0
+breaks	DELETE	spec	expected DENY	got DENY	OK	rows 0
+breaks	DELETE	agentA	expected ALLOW	got ALLOW	OK	rows 1
+breaks	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+breaks	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+expenses	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table expenses
+expenses	SELECT	pending	expected DENY	got DENY	OK	rows 0
+expenses	SELECT	spec	expected DENY	got DENY	OK	rows 0
+expenses	SELECT	agentA	expected DENY	got DENY	OK	rows 0
+expenses	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+expenses	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+expenses	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table expenses
+expenses	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "expenses"
+expenses	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "expenses"
+expenses	INSERT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+expenses	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+expenses	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+expenses	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table expenses
+expenses	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+expenses	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+expenses	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+expenses	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+expenses	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+expenses	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table expenses
+expenses	DELETE	pending	expected DENY	got DENY	OK	rows 0
+expenses	DELETE	spec	expected DENY	got DENY	OK	rows 0
+expenses	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+expenses	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+expenses	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_sales
+product_sales	SELECT	pending	expected DENY	got DENY	OK	rows 0
+product_sales	SELECT	spec	expected DENY	got DENY	OK	rows 0
+product_sales	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_sales
+product_sales	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "product_sales"
+product_sales	INSERT	spec	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	INSERT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_sales
+product_sales	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+product_sales	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+product_sales	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+product_sales	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_sales
+product_sales	DELETE	pending	expected DENY	got DENY	OK	rows 0
+product_sales	DELETE	spec	expected DENY	got DENY	OK	rows 0
+product_sales	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+product_sales	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_sales	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table stat_edits
+stat_edits	SELECT	pending	expected DENY	got DENY	OK	rows 0
+stat_edits	SELECT	spec	expected DENY	got DENY	OK	rows 0
+stat_edits	SELECT	agentA	expected DENY	got DENY	OK	rows 0
+stat_edits	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table stat_edits
+stat_edits	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "stat_edits"
+stat_edits	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "stat_edits"
+stat_edits	INSERT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table stat_edits
+stat_edits	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+stat_edits	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+stat_edits	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+stat_edits	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table stat_edits
+stat_edits	DELETE	pending	expected DENY	got DENY	OK	rows 0
+stat_edits	DELETE	spec	expected DENY	got DENY	OK	rows 0
+stat_edits	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+stat_edits	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+stat_edits	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+services	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table services
+services	SELECT	pending	expected ALLOW	got ALLOW	OK	rows 1
+services	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+services	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+services	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+services	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+services	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table services
+services	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "services"
+services	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "services"
+services	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "services"
+services	INSERT	admin2	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "services"
+services	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+services	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table services
+services	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+services	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+services	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+services	UPDATE	admin2	expected DENY	got DENY	OK	rows 0
+services	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+services	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table services
+services	DELETE	pending	expected DENY	got DENY	OK	rows 0
+services	DELETE	spec	expected DENY	got DENY	OK	rows 0
+services	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+services	DELETE	admin2	expected DENY	got DENY	OK	rows 0
+services	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+products	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table products
+products	SELECT	pending	expected DENY	got DENY	OK	rows 0
+products	SELECT	spec	expected ALLOW	got ALLOW	OK	rows 1
+products	SELECT	agentA	expected ALLOW	got ALLOW	OK	rows 1
+products	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+products	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+products	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table products
+products	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "products"
+products	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "products"
+products	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "products"
+products	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+products	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+products	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table products
+products	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+products	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+products	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+products	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+products	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+products	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table products
+products	DELETE	pending	expected DENY	got DENY	OK	rows 0
+products	DELETE	spec	expected DENY	got DENY	OK	rows 0
+products	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+products	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+products	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_shares
+product_shares	SELECT	pending	expected DENY	got DENY	OK	rows 0
+product_shares	SELECT	spec	expected DENY	got DENY	OK	rows 0
+product_shares	SELECT	agentA	expected DENY	got DENY	OK	rows 0
+product_shares	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_shares
+product_shares	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "product_shares"
+product_shares	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "product_shares"
+product_shares	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "product_shares"
+product_shares	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_shares
+product_shares	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+product_shares	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+product_shares	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+product_shares	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table product_shares
+product_shares	DELETE	pending	expected DENY	got DENY	OK	rows 0
+product_shares	DELETE	spec	expected DENY	got DENY	OK	rows 0
+product_shares	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+product_shares	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+product_shares	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table service_shares
+service_shares	SELECT	pending	expected DENY	got DENY	OK	rows 0
+service_shares	SELECT	spec	expected DENY	got DENY	OK	rows 0
+service_shares	SELECT	agentA	expected DENY	got DENY	OK	rows 0
+service_shares	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table service_shares
+service_shares	INSERT	pending	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "service_shares"
+service_shares	INSERT	spec	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "service_shares"
+service_shares	INSERT	agentA	expected DENY	got DENY	OK	error 42501 new row violates row-level security policy for table "service_shares"
+service_shares	INSERT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	INSERT	owner	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table service_shares
+service_shares	UPDATE	pending	expected DENY	got DENY	OK	rows 0
+service_shares	UPDATE	spec	expected DENY	got DENY	OK	rows 0
+service_shares	UPDATE	agentA	expected DENY	got DENY	OK	rows 0
+service_shares	UPDATE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	UPDATE	owner	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table service_shares
+service_shares	DELETE	pending	expected DENY	got DENY	OK	rows 0
+service_shares	DELETE	spec	expected DENY	got DENY	OK	rows 0
+service_shares	DELETE	agentA	expected DENY	got DENY	OK	rows 0
+service_shares	DELETE	admin2	expected ALLOW	got ALLOW	OK	rows 1
+service_shares	DELETE	owner	expected ALLOW	got ALLOW	OK	rows 1
+audit_log	SELECT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	SELECT	pending	expected DENY	got DENY	OK	rows 0
+audit_log	SELECT	spec	expected DENY	got DENY	OK	rows 0
+audit_log	SELECT	agentA	expected DENY	got DENY	OK	rows 0
+audit_log	SELECT	admin2	expected ALLOW	got ALLOW	OK	rows 1
+audit_log	SELECT	owner	expected ALLOW	got ALLOW	OK	rows 1
+audit_log	INSERT	anon	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	INSERT	pending	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	INSERT	spec	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	INSERT	agentA	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	INSERT	admin2	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	INSERT	owner	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	pending	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	spec	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	agentA	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	admin2	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	UPDATE	owner	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	anon	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	pending	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	spec	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	agentA	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	admin2	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
+audit_log	DELETE	owner	expected DENY	got DENY	OK	error 42501 permission denied for table audit_log
