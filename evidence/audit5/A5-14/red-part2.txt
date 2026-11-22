@@ -1,0 +1,7 @@
+Sun Nov 22 15:51:28 UTC 2026
+red part 2 only (draft overwritten), df65e1f
+FAIL 99-a5-14b-part2-only.js 
+    Error: FAIL: the failed sale A (3 pieces) is still offered after the reload
+        at check (/home/claude/ruqya/tests/lib.js:229:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-14b-part2-only.js:23:5)
+1 failed of 1

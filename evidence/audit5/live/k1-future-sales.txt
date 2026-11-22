@@ -1,0 +1,13 @@
+# A5-L1: product sales dated after the day they were entered (consequence of A5-K1). Live DB, read-only, 2026-11-22T15:42Z.
+# Only ids, dates and amounts — no names. Query:
+#   select id, date, (created_at at time zone 'Asia/Baku')::date entered, date-(created_at at time zone 'Asia/Baku')::date shift, amount
+#   from product_sales where date > (created_at at time zone 'Asia/Baku')::date order by created_at;
+id                                    date        entered     shift  amount
+65011963-1e5e-4ce2-b318-1c326c96531f  2026-12-02  2026-11-15  +17    27
+de71e651-6535-4fa0-829c-c09db9f56705  2026-11-22  2026-11-18  +4     10
+a07ba848-d5be-4088-8134-2cb21536eec6  2026-11-24  2026-11-22  +2     35
+# Owner's decision 22.11 (question in the audit): move them to the day they were entered.
+# Prepared change (runs only after the owner confirms the exact statement; the audit_log trigger records it):
+#   update product_sales set date = (created_at at time zone 'Asia/Baku')::date
+#    where id in ('65011963-1e5e-4ce2-b318-1c326c96531f','de71e651-6535-4fa0-829c-c09db9f56705','a07ba848-d5be-4088-8134-2cb21536eec6')
+#      and date > (created_at at time zone 'Asia/Baku')::date;

@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-GoV9iNFD6ls6nWHGcpORgn+UbRo/LJLSeO7FB9vtxrQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+mpcS+eOGDAjQdaKawZRQBnoN/xL1xBoKyY6QETjTaE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
@@ -2631,7 +2631,7 @@ function sameName(n,except,role){
 }
 /* S-05 (stability audit 18.11): a cash line whose write failed is taken back and its form opens again with what was
    typed (when no other window is open), so nothing looks saved when it is not and nothing typed is lost */
-function reopenForm(sh,vals){setTimeout(function(){if(sheet)return;openSheet(sh);afterPaint(function(){Object.keys(vals).forEach(function(k){var e=byId(k);if(e&&vals[k]!=null)e.value=vals[k]})})},0)}
+function reopenForm(sh,vals){setTimeout(function(){if(sheet){flash(L("Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin."),true);return}openSheet(sh);afterPaint(function(){Object.keys(vals).forEach(function(k){var e=byId(k);if(e&&vals[k]!=null)e.value=vals[k]})})},0)}
 function db(q,onFail){
   /* The local copy is already updated; realtime confirms the change on every phone.
      onFail (bookings) puts the local copy back and keeps what was typed as a draft, so nothing looks saved
@@ -3862,13 +3862,20 @@ function sellForm(){
 /* A5-K1 (owner 22.11): a new sale or expense is dated today; a date that is not today is pointed out in red */
 var SK="ruqya.selldraft.v1",sellPend=0;
 /* A5-04: a sale not yet confirmed by the server is kept on the phone (taps, date, ids) until it is; Kassa offers it again */
-function sellDraft(v){try{if(v===undefined){var d=JSON.parse(localStorage.getItem(SK)||"null");return d&&auth.user&&d.u===auth.user.id&&d.cnt&&Date.now()-d.t<7*864e5?d:null}
-  if(v===null)localStorage.removeItem(SK);else lsPut(SK,JSON.stringify({u:auth.user.id,t:Date.now(),cnt:v.cnt,date:v.date,ids:v.ids}))}catch(e){}return null}
-function sellDraftBox(){var d=sellDraft();if(!d||(sheet&&sheet.type==="sell"))return "";
-  /* lines the server already has are not offered again */
-  var left=Object.keys(d.cnt).filter(function(k){var o=d.ids&&d.ids[k];return !(o&&prodRow(o.id))&&catItem(k)});
-  if(!left.length){if(!sellPend)sellDraft(null);return ""}   /* while the save is on its way the lines are shown optimistically — the draft stays */
-  var n=left.reduce(function(m,k){return m+d.cnt[k]},0);
+/* A5-04: a sale not yet confirmed by the server is kept on the phone (taps, date, ids) until it is; Kassa offers it again.
+   Review of audit 5: one entry per sale (key dk), so a second sale saved meanwhile does not overwrite the first one. */
+function sellDrafts(){try{var d=JSON.parse(localStorage.getItem(SK)||"null");if(!d||!auth.user||d.u!==auth.user.id||!Array.isArray(d.list))return [];
+  return d.list.filter(function(e){return e&&e.k&&e.cnt&&Date.now()-e.t<7*864e5})}catch(e){return []}}
+function sellDraftSet(list){try{if(!list.length)localStorage.removeItem(SK);else lsPut(SK,JSON.stringify({u:auth.user.id,list:list}))}catch(e){}}
+function sellDraftPut(e){var l=sellDrafts().filter(function(x){return x.k!==e.k});e.t=Date.now();l.push(e);sellDraftSet(l)}
+function sellDraftDel(k){sellDraftSet(sellDrafts().filter(function(x){return x.k!==k}))}
+/* the lines of a kept sale that the server does not have yet */
+function sellLeft(e){return Object.keys(e.cnt).filter(function(k){var o=e.ids&&e.ids[k];return !(o&&prodRow(o.id))&&catItem(k)})}
+function sellDraftBox(){if(sheet&&sheet.type==="sell")return "";
+  var l=sellDrafts(),keep=l.filter(function(e){return sellLeft(e).length});
+  if(!sellPend&&keep.length!==l.length)sellDraftSet(keep);   /* while a save is on its way its lines are shown optimistically — kept */
+  if(!keep.length)return "";
+  var n=keep.reduce(function(m,e){return m+sellLeft(e).reduce(function(m2,k){return m2+e.cnt[k]},0)},0);
   return '<div class="note warnbox draftbox" role="status"><p>'+tf(L("Yadda saxlanmayan satış: {n} məhsul"),{n:n})+'</p><div class="btns"><button class="primary" data-act="sell-draft-open">'+L("Geri aç")+'</button><button class="ghost" data-act="sell-draft-drop">'+L("Sil")+'</button></div></div>';
 }
 function notToday(d){return d&&d!==today?'<p class="err nottoday" role="status">'+tf(L("Diqqət: tarix bu gün deyil — {d}."),{d:fmtDay(d,"w")})+'</p>':''}
@@ -4841,8 +4848,8 @@ document.addEventListener("click",function(e){
   else if(act==="sell-add"||act==="sell-sub"){if(!sheet||sheet.type!=="sell"||!catItem(id))return;var sd=byId("sl-date");if(sd)sheet.date=sd.value;
     var cn=sheet.cnt;cn[id]=Math.max(0,Math.min(1000,(cn[id]||0)+(act==="sell-add"?1:-1)));if(!cn[id])delete cn[id];
     var y0=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y0;return}
-  else if(act==="sell-draft-open"){var sd0=sellDraft();if(sd0){var c0={};Object.keys(sd0.cnt).forEach(function(k){var o=sd0.ids&&sd0.ids[k];if(!(o&&prodRow(o.id))&&catItem(k))c0[k]=sd0.cnt[k]});openSheet({type:"sell",cnt:c0,date:sd0.date,ids:sd0.ids})}return}
-  else if(act==="sell-draft-drop"){if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}sellDraft(null)}
+  else if(act==="sell-draft-open"){var sd0=sellDrafts().filter(function(e){return sellLeft(e).length})[0];if(sd0){var c0={};sellLeft(sd0).forEach(function(k){c0[k]=sd0.cnt[k]});openSheet({type:"sell",cnt:c0,date:sd0.date,ids:sd0.ids,dk:sd0.k})}return}
+  else if(act==="sell-draft-drop"){if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}var sd1=sellDrafts().filter(function(e){return sellLeft(e).length})[0];if(sd1)sellDraftDel(sd1.k)}
   else if(act==="sell-clear"){if(sheet&&sheet.type==="sell"){var sd2=byId("sl-date");if(sd2)sheet.date=sd2.value;sheet.cnt={};byId("sheet").innerHTML=sellForm()}return}
   else if(act==="sell-save"){
     if(!sheet||sheet.type!=="sell")return;   /* a second tap after the window closed adds nothing */
@@ -4851,15 +4858,19 @@ document.addEventListener("click",function(e){
     /* A5-03: a line keeps its id while the same sale is tried again (the server may have stored it although the answer
        was lost) — the retry is the same row, not a second one; A5-04: until it is saved, the sale is also kept on the
        phone, so a reload or a closed app does not lose it */
-    var ids0=sheet.ids||{},ids={};
-    var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k],o=ids0[k];ids[k]={id:o&&o.q===q&&o.d===sdt?o.id:uuid(),q:q,d:sdt};
+    /* review of audit 5: a retry with another quantity or date is the same row too (upsert updates it); a product taken
+       out of the sale since the failed try is deleted, in case the server had stored it */
+    var ids0=sheet.ids||{},ids={},dk=sheet.dk||uuid();
+    var gone=Object.keys(ids0).filter(function(k){return lines.indexOf(k)<0&&ids0[k]&&ids0[k].id}).map(function(k){return ids0[k].id});
+    var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k],o=ids0[k];ids[k]={id:o&&o.id?o.id:uuid(),q:q,d:sdt};
       return {id:ids[k].id,date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
     srows.forEach(function(o){upsertBy(state.products,mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
-    var keepS={cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids},sids=srows.map(function(o){return o.id});
-    sellDraft(keepS);sellPend++;
+    var keepS={k:dk,cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids},sids=srows.map(function(o){return o.id});
+    sellDraftPut(keepS);sellPend++;
+    if(gone.length){gone.forEach(function(id){removeBy(state.products,id)});db(sb.from("product_sales").delete().in("id",gone))}
     if(ui.tab==="cash")ui.date=sdt;   /* A5-K1: Kassa shows the day the sale went to, so it is never «gone» */
-    db(sb.from("product_sales").upsert(srows,{onConflict:"id",ignoreDuplicates:true}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids})},0)}).then(function(){sellPend--;
-      var d=sellDraft();if(d&&!dirty&&sids.every(function(id){return prodRow(id)}))sellDraft(null)});
+    db(sb.from("product_sales").upsert(srows,{onConflict:"id"}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids,dk:dk})},0)}).then(function(){sellPend--;
+      if(!dirty&&sids.every(function(id){return prodRow(id)}))sellDraftDel(dk)});
     closeSheet();
   }
   else if(act==="sell-q"){if(!sheet||sheet.type!=="selledit")return;var sx=prodRow(sheet.id);if(!sx)return;sheet.q=Math.max(1,Math.min(1000,(sheet.q==null?sx.qty:sheet.q)+(+b.dataset.n||0)));byId("sheet").innerHTML=sellEdit();return}

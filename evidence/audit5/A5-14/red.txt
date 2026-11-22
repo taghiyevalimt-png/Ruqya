@@ -1,0 +1,7 @@
+Sun Nov 22 15:50:58 UTC 2026
+red, df65e1f
+FAIL 99-a5-14-sale-retry.js 
+    Error: FAIL: one row with 2 pieces: [1,2]
+        at check (/home/claude/ruqya/tests/lib.js:229:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-14-sale-retry.js:21:5)
+1 failed of 1
