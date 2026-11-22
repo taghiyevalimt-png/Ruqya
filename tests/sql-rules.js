@@ -1,5 +1,5 @@
 // sql/2026-11-rules.sql: the form's rules hold in the database too, old rows stay editable in other fields.
-const { PGlite } = require("@electric-sql/pglite");
+let PGlite; try { ({ PGlite } = require("@electric-sql/pglite")); } catch (e) { ({ PGlite } = require("./pglite-pg")); }   // audit 6: stand-in when npm is not available
 const fs = require("fs"), path = require("path");
 module.exports = async () => {
   const db = new PGlite();

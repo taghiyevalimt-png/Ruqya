@@ -1,5 +1,5 @@
 // sql/2026-11-follow.sql: any staff member marks a cancelled booking 1-3; other fields of others' bookings stay closed.
-const { PGlite } = require("@electric-sql/pglite");
+let PGlite; try { ({ PGlite } = require("@electric-sql/pglite")); } catch (e) { ({ PGlite } = require("./pglite-pg")); }   // audit 6: stand-in when npm is not available
 const fs = require("fs"), path = require("path");
 const rd = (f) => fs.readFileSync(path.join(__dirname, "../sql", f), "utf8");
 module.exports = async () => {

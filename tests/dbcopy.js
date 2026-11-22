@@ -23,7 +23,9 @@ const ROLES = ["anon", "authenticated", "service_role", "authenticator", "supaba
 async function build(pg, name, opts = {}) {
   const admin = await pg.conn("postgres");
   await admin.query("drop database if exists " + name);
-  await admin.query("create database " + name);
+  // character rules like the live database (UTF-8: lower('Ə') = 'ə'); a server without that locale gets the plain database
+  try { await admin.query("create database " + name + " template template0 encoding 'UTF8' lc_collate 'C' lc_ctype 'C.UTF-8'"); }
+  catch (e) { await admin.query("create database " + name); }
   for (const r of ROLES) await admin.query(`do $$ begin if not exists (select 1 from pg_roles where rolname='${r}') then create role ${r} nologin; end if; end $$`);
   await admin.end();
   const c = await pg.conn(name);

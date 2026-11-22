@@ -1,5 +1,5 @@
 // Runs sql/2026-11-patients.sql on a real PostgreSQL (PGlite) and checks that its patient key equals the app's.
-const { PGlite } = require("@electric-sql/pglite");
+let PGlite; try { ({ PGlite } = require("@electric-sql/pglite")); } catch (e) { ({ PGlite } = require("./pglite-pg")); }   // audit 6: stand-in when npm is not available
 const fs = require("fs"), path = require("path");
 const jsKey = (phone, name) => { const d = String(phone || "").replace(/\D/g, ""); return d.length >= 7 ? "p" + d.slice(-9) : "n" + String(name || "").trim().toLowerCase().replace(/̇/g, "").replace(/ı/g, "i"); };
 module.exports = async () => {
