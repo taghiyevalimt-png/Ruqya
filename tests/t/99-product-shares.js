@@ -18,8 +18,8 @@ module.exports = async () => {
     const sh = s.db.product_shares.map((x) => x.staff_id.slice(0, 4) + "=" + x.pct).sort().join(",");
     check(sh === "1111=10,2222=50", "saved: Əli 50%, Nurlana 10%: " + sh);
     await p.click('[data-act="close"]'); await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
-    const rows = await p.evaluate(() => [...document.querySelectorAll(".pay")].filter((x) => /Satanlar/.test(x.textContent)).map((x) => [...x.querySelectorAll("tbody tr")].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")))[0]);
-    check(rows.some((r) => /^Əli\|1\|20.*\|10/.test(r)) && rows.some((r) => /^Nurlana\|2\|40.*\|4/.test(r)), "admin: every seller's part: " + JSON.stringify(rows));
+    const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")));   // owner 22.11: one table, products as columns
+    check(rows.some((r) => /^Əli\|1\|1\|20.*\|10/.test(r)) && rows.some((r) => /^Nurlana\|2\|2\|40.*\|4/.test(r)), "admin: every seller's part: " + JSON.stringify(rows));
     // changing back to empty deletes the percent
     await p.click('#tabs [data-tab="cash"]'); await p.click('[data-act="catalog"]'); await p.click('[data-act="cat-edit"]'); await p.locator("#c-pct-" + AGENT).waitFor();
     await p.fill("#c-pct-" + AGENT, ""); await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
@@ -43,7 +43,8 @@ module.exports = async () => {
       if (who === SPEC) check(JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))) === '["prod"]', "the specialist sees only «Məhsul»: " + JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))));
       await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
       const txt = await p.textContent("#main");
-      check(new RegExp("Sizin payınız").test(txt) && new RegExp(mine + "[,.]?0* ?₼[\\s\\S]*Sizin payınız").test(await p.textContent(".todaysum")), name + ": his own part " + mine + ": " + (await p.textContent(".todaysum")));
+      const own = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim())));
+      check(own.length === 1 && own[0][0] === name && new RegExp("^" + mine + "[,.]?0* ?₼").test(own[0][own[0].length - 1]), name + ": only his own row with his part " + mine + ": " + JSON.stringify(own));
       check(!txt.includes(other) && !/Satanlar üzrə/.test(txt), name + ": nobody else's sales or part");
       check(!s.errors.length, name + ": no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }
