@@ -4,7 +4,7 @@ const { open, check, AGENT, R1, bakuToday, seed, uuid } = require("../lib");
 module.exports = async () => {
   const db = seed(), now = new Date().toISOString();
   db.appts.push({ id: uuid(), reader_id: R1, date: bakuToday(0), time: "19:00", duration: 60, name: "Köhnə Xidmət", phone: "050 1", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Köhnə növ", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now });
-  const s = await open(AGENT, { db });
+  const s = await open(AGENT, { db, clock: new Date(bakuToday(0) + "T08:00:00Z") });   // audit 5 T5-02: 12:00 in Baku — after ~22:00 the 21:00 session was already over (successful) and the check failed
   try {
     const p = s.page; p.setDefaultTimeout(5000); await p.locator("#cal .ev").first().waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     await p.click("#fab"); await p.locator("#f-reader").waitFor();

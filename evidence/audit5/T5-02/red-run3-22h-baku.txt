@@ -1,0 +1,4 @@
+FAIL 99-service-ui.js 
+    Error: FAIL: the Psixoloq session is counted (1 session, 0 successful yet): {"h":["WP","SŞ","ümumi","Yazdı","Uğurlu","Ləğv","Ruqya","Hicama","Kombo","Masaj","Dr.Günel","Psixoloq","Köhnə növ","Ofis","Onlayn","Ünvan"],"tot":"1","ok":"1"}
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/99-service-ui.js:42:5)

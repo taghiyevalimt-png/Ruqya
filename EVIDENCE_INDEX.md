@@ -50,6 +50,9 @@
 | `evidence/audit5/S2/silent-grep.txt` | 11731 | d186572324ec1dfa | # command: grep -n 'soft(\/catch(e){}\/catch(e){ *}\/\.then(function(){})' index.html |
 | `evidence/audit5/S4/full-a5-1.txt` | 4689 | 3fe2d6b9992602bc | Sun Nov 22 16:39:46 UTC 2026 |
 | `evidence/audit5/S4/full-a5-2.txt` | 4690 | f9b57fa9a26c0688 | Sun Nov 22 17:11:24 UTC 2026 |
+| `evidence/audit5/S4/full-a5-3.txt` | 5064 | 83fa51938a2a15dc | Sun Nov 22 17:43:16 UTC 2026 |
+| `evidence/audit5/T5-02/green.txt` | 120 | 390a383bbbf6fe6e | Sun Nov 22 18:13:04 UTC 2026 |
+| `evidence/audit5/T5-02/red-run3-22h-baku.txt` | 403 | 7d9e5de6e3283ec9 | FAIL 99-service-ui.js  |
 | `evidence/audit5/baseline/live-aggregates.sql` | 1401 | 62397f5bcff89bad | with k as (select ruqya_pkey(phone,name) pk, lower(btrim(name)) nm from appts) |
 | `evidence/audit5/baseline/live-aggregates.txt` | 899 | 483f557a3023398f | # A5 baseline — live database, aggregates only (no names, no phones). 2026-11-22T14:27:23Z, commit ab2860b |
 | `evidence/audit5/baseline/ui-suite.txt` | 2633 | 8ffe5369f7dba8ad | # A5 baseline — UI test suite (tests/t, Chrome, fake Supabase) on commit 402eec6 (before audit 5), run 2026-11-22 ~14:05 UTC in 3 parallel p |
