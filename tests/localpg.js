@@ -2,7 +2,8 @@
 // start() initialises a fresh data directory in tests/out/pg-<port>, starts the server and returns a "pg" pool
 // factory; stop() shuts it down and removes the directory. The live database is never touched.
 const fs = require("fs"), path = require("path"), os = require("os"), { spawn, execFileSync } = require("child_process");
-const { Client } = require("pg");
+// "pg" from npm when installed; otherwise the small wire-protocol client in tests/pg-wire.js (audit 6: no npm here)
+let Client; try { ({ Client } = require("pg")); } catch (e) { ({ Client } = require("./pg-wire")); }
 
 function binDir() {
   const plat = { win32: "windows", linux: "linux", darwin: "darwin" }[process.platform], arch = process.arch === "arm64" ? "arm64" : "x64";
@@ -30,7 +31,16 @@ async function waitReady(port, ms) {
   throw new Error("PostgreSQL did not start on port " + port);
 }
 
+// RUQYA_PG_PORT=<port>: use a PostgreSQL that is already running on 127.0.0.1 (trust authentication, user postgres)
+// instead of the embedded one — for machines where the embedded binaries cannot be installed or initdb cannot run
+// (e.g. as root). Each test still works in its own databases, which it creates and drops.
+async function external(port) {
+  await waitReady(port, 10000);
+  const conn = (db) => { const c = new Client({ host: "127.0.0.1", port, user: "postgres", database: db || "postgres" }); c.on("error", () => {}); return c.connect().then(() => c); };
+  return { port, conn, external: true, stop: async () => {} };
+}
 async function start(port = 54330) {
+  if (process.env.RUQYA_PG_PORT) return external(+process.env.RUQYA_PG_PORT);
   const dir = path.join(os.tmpdir(), "ruqya-pg-" + port);   // short path: initdb fails on very long Windows paths
   fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(path.dirname(dir), { recursive: true });
   const pw = path.join(os.tmpdir(), "pgpw-" + port); fs.writeFileSync(pw, "test\n");

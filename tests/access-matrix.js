@@ -36,8 +36,10 @@ const M = {
     DELETE: ["delete from public.expenses where id='e0000000-0000-4000-8000-000000000002'", [0, 0, 0, 0, 1, 1]],
   },
   product_sales: {
-    SELECT: ["select id from public.product_sales where id='f0000000-0000-4000-8000-000000000002'", [0, 0, 0, 0, 1, 1]],
-    INSERT: ["insert into public.product_sales (date, amount, names) values (current_date, 15, 'Su')", [0, 0, 0, 1, 1, 1]],
+    // owner 22.11: agents and admins see every sale, a specialist sells too and sees only his own (audit 6: matrix
+    // brought up to that decision — it still had the earlier «admins only see sales, specialists do not sell»)
+    SELECT: ["select id from public.product_sales where id='f0000000-0000-4000-8000-000000000002'", [0, 0, 0, 1, 1, 1]],
+    INSERT: ["insert into public.product_sales (date, amount, names) values (current_date, 15, 'Su')", [0, 0, 1, 1, 1, 1]],
     UPDATE: ["update public.product_sales set amount=99 where id='f0000000-0000-4000-8000-000000000002'", [0, 0, 0, 0, 1, 1]],
     DELETE: ["delete from public.product_sales where id='f0000000-0000-4000-8000-000000000002'", [0, 0, 0, 0, 1, 1]],
   },
@@ -52,6 +54,24 @@ const M = {
     INSERT: ["insert into public.services (name) values ('Yeni')", [0, 0, 0, 0, 0, 1]],
     UPDATE: ["update public.services set name='Ruqya 2' where id='a2000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 0, 1]],
     DELETE: ["delete from public.services where id='a2000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 0, 1]],
+  },
+  products: {
+    SELECT: ["select id from public.products where id='a3000000-0000-4000-8000-000000000001'", [0, 0, 1, 1, 1, 1]],
+    INSERT: ["insert into public.products (name, price) values ('Yeni məhsul', 5)", [0, 0, 0, 0, 1, 1]],
+    UPDATE: ["update public.products set price=4 where id='a3000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 1, 1]],
+    DELETE: ["delete from public.products where id='a3000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 1, 1]],
+  },
+  product_shares: {   // agentB's share: another agent and a specialist do not see it
+    SELECT: ["select pct from public.product_shares where staff_id='a0000000-0000-4000-8000-0000000000ab'", [0, 0, 0, 0, 1, 1]],
+    INSERT: ["insert into public.product_shares (product_id, staff_id, pct) values ('a3000000-0000-4000-8000-000000000001',(select auth.uid()),50)", [0, 0, 0, 0, 1, 1]],
+    UPDATE: ["update public.product_shares set pct=90 where staff_id='a0000000-0000-4000-8000-0000000000ab'", [0, 0, 0, 0, 1, 1]],
+    DELETE: ["delete from public.product_shares where staff_id='a0000000-0000-4000-8000-0000000000ab'", [0, 0, 0, 0, 1, 1]],
+  },
+  service_shares: {
+    SELECT: ["select pct from public.service_shares where reader_id='b0000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 1, 1]],
+    INSERT: ["insert into public.service_shares (reader_id, service, pct) values ('b0000000-0000-4000-8000-000000000001','Hicama',90)", [0, 0, 0, 0, 1, 1]],
+    UPDATE: ["update public.service_shares set pct=90 where reader_id='b0000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 1, 1]],
+    DELETE: ["delete from public.service_shares where reader_id='b0000000-0000-4000-8000-000000000001'", [0, 0, 0, 0, 1, 1]],
   },
   audit_log: {
     SELECT: ["select id from public.audit_log where op='DELETE'", [0, 0, 0, 0, 1, 1]],

@@ -8,7 +8,9 @@ const fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const SCHEMA = path.join(ROOT, "db", "schema_live_20261116.sql");
 const BASE = ["2026-11-realtime.sql"];   // part of the install, not carried by the dump (B-17): Realtime publication membership
-const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "2026-11-patients-scale.sql", "2026-11-service.sql", "2026-11-owner-notes.sql", "2026-11-my-contacts.sql", "2026-11-paid-online.sql", "2026-11-app-errors.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
+const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "2026-11-patients-scale.sql", "2026-11-service.sql", "2026-11-owner-notes.sql", "2026-11-my-contacts.sql", "2026-11-paid-online.sql", "2026-11-app-errors.sql",
+  // 22.11 (owner notes, products, shares; audit 5) — added in audit 6: the copy lacked them, so the new tables were not in the matrix
+  "2026-11-breaks-gcal.sql", "2026-11-products.sql", "2026-11-product-shares.sql", "2026-11-service-shares.sql", "2026-11-share-amounts.sql", "2026-11-a5-patient-key.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
 const U = {
   owner: "bad097d4-5edc-402b-ad59-f633252c35d9", admin2: "a0000000-0000-4000-8000-0000000000a2",
   agentA: "a0000000-0000-4000-8000-0000000000aa", agentB: "a0000000-0000-4000-8000-0000000000ab",
@@ -26,10 +28,16 @@ async function build(pg, name, opts = {}) {
   await admin.end();
   const c = await pg.conn(name);
   await c.query("drop schema public cascade; create schema extensions; create extension pgcrypto with schema extensions; create extension \"uuid-ossp\" with schema extensions;");
-  await c.query(fs.readFileSync(SCHEMA, "utf8").split("\n").filter((l) => !/^\\/.test(l)).join("\n"));
+  // the dump comes from PostgreSQL 17; on an older server (RUQYA_PG_PORT, tests/localpg.js) the MAINTAIN privilege
+  // (new in 17) is left out of the GRANT lines and the 17-only settings are skipped
+  const v17 = +(await c.query("show server_version_num")).rows[0].server_version_num >= 170000;
+  let dump = fs.readFileSync(SCHEMA, "utf8").split("\n").filter((l) => !/^\\/.test(l));
+  if (!v17) dump = dump.filter((l) => !/^SET transaction_timeout/.test(l)).map((l) => /^(GRANT|REVOKE|ALTER DEFAULT PRIVILEGES) /.test(l) ? l.replace(/,MAINTAIN\b|\bMAINTAIN,/g, "").replace(/^(GRANT|REVOKE) MAINTAIN ON .*$/, "") : l);
+  await c.query(dump.join("\n"));
   await c.query("reset all");   // the dump sets row_security = off etc. for its own session
   for (const f of BASE) await c.query(fs.readFileSync(path.join(ROOT, "sql", f), "utf8"));
-  for (const f of (opts.after || AFTER)) await c.query(fs.readFileSync(path.join(ROOT, "sql", f), "utf8"));
+  const sqlOf = (f) => { const t = fs.readFileSync(path.join(ROOT, "sql", f), "utf8"); return v17 ? t : t.replace(/'revoke maintain on public\.%I from authenticated'/gi, "'select 1 where %L is not null'"); };
+  for (const f of (opts.after || AFTER)) await c.query(sqlOf(f));
   await seed(c);
   return c;
 }
@@ -51,6 +59,12 @@ async function seed(c) {
   await c.query("insert into public.breaks (id, title, start_time, end_time) values ('d0000000-0000-4000-8000-000000000001','Namaz','13:00','13:30')");
   await c.query("insert into public.stat_edits (id, kind, per, period_start, agent_id, col, value, updated_by) values ('a1000000-0000-4000-8000-000000000001','sales','week',current_date,$1::text,'a',5,$1::uuid)", [U.agentB]);
   await c.query("insert into public.audit_log (uid, tbl, op, row_id, old) values ($1,'appts','DELETE','c0000000-0000-4000-8000-000000000099','{\"name\":\"Silinmiş\"}')", [U.agentB]);
+  // 22.11 tables (audit 6): a product, agentB's share in it, column Əli's share for Ruqya
+  if ((await c.query("select to_regclass('public.product_shares') t")).rows[0].t) {   // only when the copy has those migrations
+    await c.query("insert into public.products (id, name, price) values ('a3000000-0000-4000-8000-000000000001','Misvak',3)");
+    await c.query("insert into public.product_shares (product_id, staff_id, pct) values ('a3000000-0000-4000-8000-000000000001',$1,10)", [U.agentB]);
+    await c.query("insert into public.service_shares (reader_id, service, pct) values ($1,'Ruqya',50)", [R.ali]);
+  }
   await c.query("set session_replication_role = origin");
 }
 

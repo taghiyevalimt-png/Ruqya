@@ -1,0 +1,26 @@
+# repository schema (db/schema_live_*.sql + BASE install files) vs live — 2026-11-22T18:24:58.453Z
+SAME  	tables
+SAME  	columns
+SAME  	constraints
+SAME  	indexes
+SAME  	functions
+SAME  	function_grants
+SAME  	triggers
+SAME  	rls
+SAME  	policies
+DIFFER	table_grants	repo=e03d3eb2f207cedf78059c4396e7e29f	live=1a3e90b9fb0933b486dbe8ef9bf17b75
+SAME  	column_grants
+SAME  	realtime
+# what the pending migrations change (tests/dbcopy.js AFTER):
+CHANGED	tables
+CHANGED	columns
+CHANGED	constraints
+CHANGED	indexes
+CHANGED	functions
+CHANGED	function_grants
+CHANGED	triggers
+CHANGED	rls
+CHANGED	policies
+CHANGED	table_grants
+CHANGED	realtime
+НЕ ПРОЙДЕНО: 1 parts differ

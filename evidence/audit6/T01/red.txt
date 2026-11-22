@@ -1,0 +1,5 @@
+Sun Nov 22 18:25:07 UTC 2026
+red: tests/dbcopy.js without the 22.11 migrations -> after adding them (A6-T01) on commit 1ac735f, before matrix update
+21-access-matrix: 2 mismatches (product_sales SELECT agentA, INSERT spec — matrix older than the owner's 22.11 decision)
+92-visits-access: FAIL agentA sees 0 visits (key literal phone-only, K3 made it phone+name)
+97-person-export-delete: FAIL export 0 bookings (same)

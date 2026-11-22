@@ -4,11 +4,12 @@
 // PERSON_OUT=<file> writes the export (made-up data only).
 const fs = require("fs");
 const { start } = require("../localpg"), { build, U, R } = require("../dbcopy"), { check } = require("../lib");
-const NAME = "Zərifə Testova", PHONE = "055 777 66 55", KEY = "p557776655", NOTE = "baş ağrısı (test)";
+const NAME = "Zərifə Testova", PHONE = "055 777 66 55", KEY0 = "p557776655", NOTE = "baş ağrısı (test)";
+let KEY = KEY0;   // audit 6: since A5-K3 the key is phone + name; read from the database after build()
 module.exports = async () => {
   const pg = await start(54354); let c;
   try {
-    c = await build(pg, "person");
+    c = await build(pg, "person"); KEY = (await c.query("select public.ruqya_pkey($1, $2) k", [PHONE, NAME])).rows[0].k;
     const owner = async (sql, args) => { await c.query("begin"); await c.query("set local role authenticated"); await c.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub: U.owner, role: "authenticated" })]); try { const r = await c.query(sql, args); await c.query("commit"); return r; } catch (e) { await c.query("rollback"); throw e; } };
     const ins = "insert into public.appts (id, reader_id, date, time, duration, name, phone, price, share, status, note, created_by) values ($1,$2,current_date-$3::int,$4,60,$5,$6,130,0,'wait',$7,$8)";
     await owner(ins, ["d0000000-0000-4000-8000-000000000001", R.ali, 30, "11:00", NAME, PHONE, NOTE, U.owner]);
