@@ -9,14 +9,18 @@ module.exports = async () => {
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
     const state = () => p.evaluate(() => ({ tabs: !document.getElementById("tabs").hidden, kept: Object.keys(localStorage).some((k) => /^sb-.*-auth-token$/.test(k)) }));
-    // (1) the library renews the sign-in (as it does by itself before the hour runs out) and the server answers 500
-    s.ctl.auth500 = 1;
-    // (a second client of the same library on the same stored session — as the app's own does every hour)
+    // (1) the app's own client renews an expired sign-in when the app starts, and the sign-in server answers 500,
+    //     501 or 522 (a proxy error): the session must stay
+    for (const code of [500, 501, 522]) {
+      s.ctl.auth500 = 1; s.ctl.auth5xx = code;
+      await p.evaluate((k) => { const t = JSON.parse(localStorage.getItem(k)); t.expires_at = Math.floor(Date.now() / 1000) - 60; localStorage.setItem(k, JSON.stringify(t)); }, Object.keys(await p.evaluate(() => ({ ...localStorage }))).find((k) => /^sb-.*-auth-token$/.test(k)));
+      await p.reload(); await p.waitForTimeout(3500);
+      const t1 = await state();
+      check(t1.kept && t1.tabs, code + " on renewal at start: still signed in, the session kept: " + JSON.stringify(t1));
+    }
+    s.ctl.auth5xx = 0;
+    // (a second client of the library, without the app's fetch — only to renew / to check 400 below)
     const renew = () => p.evaluate(() => window.supabase.createClient("https://ldkhdeehrrajvgrtieal.supabase.co", "sb_publishable_x", { auth: { autoRefreshToken: false } }).auth.refreshSession().then((x) => ({ err: x.error ? x.error.status || x.error.name : null, sess: !!(x.data && x.data.session) })));
-    const r1 = await renew();
-    await p.waitForTimeout(800);
-    const t1 = await state();
-    check(t1.kept && t1.tabs, "library renewal answered 500: still signed in, the session kept: " + JSON.stringify([r1, t1]));
     // (2) the app's own path (a save answered 401 → renew) and the server answers 500
     s.ctl.auth500 = 1;
     s.ctl.failWrite = { status: 401, body: { code: "PGRST301", message: "JWT expired" } };
@@ -25,6 +29,7 @@ module.exports = async () => {
     const t2 = await state();
     check(t2.kept && t2.tabs, "app renewal answered 500: not signed out: " + JSON.stringify(t2));
     // (3) the server is back: renewing works
+    s.ctl.auth500 = 0;
     const r3 = await renew();
     check(r3.sess, "the next renewal works: " + JSON.stringify(r3));
     // a really invalid token (400 invalid_grant) still signs out

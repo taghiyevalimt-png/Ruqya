@@ -1,10 +1,10 @@
 {
  "bomFormat": "CycloneDX",
  "specVersion": "1.5",
- "serialNumber": "urn:uuid:30711ef7-3f10-41fc-8a9e-a0c481bf3653",
+ "serialNumber": "urn:uuid:6aed499a-2c4e-403a-bbf9-566f01ffa72e",
  "version": 1,
  "metadata": {
-  "timestamp": "2026-11-22T19:03:43.122Z",
+  "timestamp": "2026-11-22T20:03:13.074Z",
   "component": {
    "type": "application",
    "name": "Mərkəz (Ruqya)",
@@ -33,7 +33,7 @@
    "hashes": [
     {
      "alg": "SHA-256",
-     "content": "53e8bf0274a944979071302b0523a2063c2015f3cb3afbb9234bce0317d9c2e0"
+     "content": "8596965fe918e656600a1b568d3a168f5c0d3d22a600886bb6f44a6555db01e7"
     }
    ],
    "description": "bundled UMD build in vendor/; contains @supabase/auth-js 2.65.0, realtime-js 2.10.2, storage-js 2.7.0, postgrest-js, functions-js",

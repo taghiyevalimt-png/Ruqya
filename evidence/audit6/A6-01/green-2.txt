@@ -1,0 +1,4 @@
+Sun Nov 22 20:04:17 UTC 2026
+green: fix in index.html (authFix), vendor/ unchanged
+PASS 99-a6-01-auth500.js 18.4s
+all 1 passed

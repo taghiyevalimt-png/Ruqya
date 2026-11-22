@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-7T9Q9tpRFuytzg2r5mVyNDs3DpBBAtP6KDIbo94VRW8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-J9hh4SKKq5/TBtUZBWts+4oyAENx4gKCqAb+inR2gW8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2075,10 +2075,18 @@ function inBreak(start,dur,rid,date){
 }
 var sheet=null;
 /* A request that hangs on a bad mobile connection is cut off after 25 s, so the app never waits on it forever. */
+/* A6-01: a fault of the sign-in server (any 5xx: 500, 501, 520–524 from the proxy…) is not «the sign-in ran out».
+   supabase-js keeps the session only on 502/503/504 and removes it on every other error, so such an answer of the
+   sign-in server is handed to it as 503: the session stays and is renewed on the next try. (Kept here, not as a
+   change inside vendor/, so that re-fetching the library — .github/workflows/vendor.yml — cannot undo it.) */
+function authFix(u,r){
+  if(!r||r.status<500||r.status===502||r.status===503||r.status===504||!/\/auth\/v1\//.test(String(u&&u.url||u)))return r;
+  try{return r.text().then(function(b){return new Response(b,{status:503,statusText:"Service Unavailable",headers:r.headers})},function(){return r})}catch(e){return r}
+}
 function tfetch(u,o){
-  o=o||{};if(!window.AbortController||o.signal)return fetch(u,o);
+  o=o||{};if(!window.AbortController||o.signal)return fetch(u,o).then(function(r){return authFix(u,r)});
   var c=new AbortController(),t=setTimeout(function(){c.abort()},25000);o.signal=c.signal;
-  return fetch(u,o).then(function(r){clearTimeout(t);return r},function(e){clearTimeout(t);throw e});
+  return fetch(u,o).then(function(r){clearTimeout(t);return authFix(u,r)},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
 function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,shares:{},hasShares:false,svcPct:{},hasSvcPct:false,v2:false,hasDur:false,hasProducts:false}}

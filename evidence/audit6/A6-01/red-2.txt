@@ -1,0 +1,7 @@
+Sun Nov 22 20:04:06 UTC 2026
+red (index.html and vendor of audit6-start; the app's own client), new test
+FAIL 99-a6-01-auth500.js 
+    Error: FAIL: 501 on renewal at start: still signed in, the session kept: {"tabs":false,"kept":false}
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-01-auth500.js:19:7)
+1 failed of 1

@@ -107,7 +107,7 @@ async function attach(context, db, ctl) {
     if (p === "/auth/v1/token") {
       if (ctl.authDown) return send(route, 400, { error: "invalid_grant", error_description: "Invalid Refresh Token" });
       // the sign-in server itself failing (seen live 22.11: «error finding refresh token: timeout», «unexpected EOF»)
-      if (ctl.auth500 && !JSON.parse(req.postData() || "{}").email) { ctl.auth500--; return send(route, 500, { code: 500, error_code: "unexpected_failure", msg: "500: error finding refresh token: timeout: context canceled" }); }
+      if (ctl.auth500 && !JSON.parse(req.postData() || "{}").email) { ctl.auth500--; return send(route, ctl.auth5xx || 500, { code: 500, error_code: "unexpected_failure", msg: "500: error finding refresh token: timeout: context canceled" }); }
       const body = JSON.parse(req.postData() || "{}");
       const id = body.email ? (body.email.startsWith("agent") ? AGENT : body.email.startsWith("spec") ? SPEC : OWNER) : uid;
       ctl.uid = id; ctl.expired = false;
