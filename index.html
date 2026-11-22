@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Ek0W71q2Sxu6VrKz/mBUbgFGJ+OH+K1Crd35IQQaoz4='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Gf49KO2J3NNMth3X+zyP+3c3w7q3wLloQY+gC561W0U='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,8 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
+var RUD=LANG==="ru"?{"Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+"Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
 "faiz və ya bir ədədə görə məbləğ; boş — yoxdur":"процент или сумма за штуку; пусто — нет",
@@ -2657,7 +2658,7 @@ var DK="ruqya.draft.v1";
 function placeVal(){var e=document.querySelector('input[name="f-place"]:checked');return e?e.value:""}
 function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
   return{place:placeVal(),service:svcVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
-function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,v:v}))}catch(e){}}
+function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,nid:sh.nid||null,v:v}))}catch(e){}}
 function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
 function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
 /* The phone may close the app while it is in the background (e.g. the user went to WhatsApp): the typing of an open
@@ -2684,7 +2685,7 @@ function draftBox(){
 function openDraft(){
   var d=getDraft();if(!d)return;
   var a=d.id?appt(d.id):null;
-  openSheet({type:"appt",id:a?d.id:null,orig:a?d.orig:null,vals:d.v});
+  openSheet({type:"appt",id:a?d.id:null,orig:a?d.orig:null,nid:a?null:(typeof d.nid==="string"&&/^[0-9a-f-]{36}$/.test(d.nid)?d.nid:null),vals:d.v});
 }
 var retryT=null;
 function UNSAVED_MSG(){return L("Serverlə əlaqə yoxdur, son dəyişiklik yadda saxlanmadı. İnternet bərpa olanda yenidən edin.")}
@@ -3805,6 +3806,7 @@ function cashTop(){return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün
 function cashMain(){
   if(!auth.loaded)return "";
   var h="";
+  h+=sellDraftBox();
   if(state.hasProducts){
     var pr=myProds().filter(function(x){return x.date===ui.date}).sort(function(a,b){return String(a.id).localeCompare(String(b.id))}),tot=0,qn=0;
     pr.forEach(function(x){tot+=x.amount;qn+=x.qty});
@@ -3812,7 +3814,7 @@ function cashMain(){
       '<button class="primary" data-act="new-prod">+ '+L("Məhsul satışı")+'</button>';
     h+='<div class="pay">'+(pr.length?pr.map(function(x){
       var mine=isAdmin()||x.by===auth.user.id,ci=x.pid?catItem(x.pid):null,it=x.pid?[]:prodItems(x.names),more=it.length>10;
-      var nm=x.pid?'<span class="pline"><b>'+esc(ci?ci.name:(x.names||L("Məhsul")))+'</b>'+(x.qty>1?' <span class="qty num">× '+x.qty+'</span>':'')+'</span>'
+      var nm=x.pid?'<span class="pline"><b>'+esc(x.names||(ci?ci.name:L("Məhsul")))+'</b>'+(x.qty>1?' <span class="qty num">× '+x.qty+'</span>':'')+'</span>'
         :(it.length?'<ul>'+it.slice(0,10).map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul>'+(more?'<button class="link more" data-act="prod-all" data-id="'+esc(x.id)+'" aria-label="'+esc(L("Hamısını göstər"))+'">… '+tf(L("daha {n}"),{n:it.length-10})+'</button>':''):'<span class="noname">'+L("Adsız satış")+'</span>');
       return '<div class="psale"><div class="pnames">'+nm+'</div>'+
         '<div class="pside"><b class="num">'+money(x.amount)+'</b>'+(specMe()?'':'<span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>')+
@@ -3846,6 +3848,17 @@ function sellForm(){
   return h;
 }
 /* A5-K1 (owner 22.11): a new sale or expense is dated today; a date that is not today is pointed out in red */
+var SK="ruqya.selldraft.v1",sellPend=0;
+/* A5-04: a sale not yet confirmed by the server is kept on the phone (taps, date, ids) until it is; Kassa offers it again */
+function sellDraft(v){try{if(v===undefined){var d=JSON.parse(localStorage.getItem(SK)||"null");return d&&auth.user&&d.u===auth.user.id&&d.cnt&&Date.now()-d.t<7*864e5?d:null}
+  if(v===null)localStorage.removeItem(SK);else localStorage.setItem(SK,JSON.stringify({u:auth.user.id,t:Date.now(),cnt:v.cnt,date:v.date,ids:v.ids}))}catch(e){}return null}
+function sellDraftBox(){var d=sellDraft();if(!d||(sheet&&sheet.type==="sell"))return "";
+  /* lines the server already has are not offered again */
+  var left=Object.keys(d.cnt).filter(function(k){var o=d.ids&&d.ids[k];return !(o&&prodRow(o.id))&&catItem(k)});
+  if(!left.length){if(!sellPend)sellDraft(null);return ""}   /* while the save is on its way the lines are shown optimistically — the draft stays */
+  var n=left.reduce(function(m,k){return m+d.cnt[k]},0);
+  return '<div class="note warnbox draftbox" role="status"><p>'+tf(L("Yadda saxlanmayan satış: {n} məhsul"),{n:n})+'</p><div class="btns"><button class="primary" data-act="sell-draft-open">'+L("Geri aç")+'</button><button class="ghost" data-act="sell-draft-drop">'+L("Sil")+'</button></div></div>';
+}
 function notToday(d){return d&&d!==today?'<p class="err nottoday" role="status">'+tf(L("Diqqət: tarix bu gün deyil — {d}."),{d:fmtDay(d,"w")})+'</p>':''}
 /* changing one saved line: how many pieces (or delete it) */
 function sellEdit(){
@@ -4626,12 +4639,12 @@ function saveAppt(){
      even if a break was added later or the booking was made before the overlap rule. */
   var o=a&&sheet.orig||a;
   var moved=!a||o.readerId!==rid||o.date!==date||o.time!==time||(o.dur||90)!==dur||(a.status==="cancel"&&status&&status!=="cancel");
-  var clash=status==="cancel"||!moved||(a&&gone(a))?null:overlap(rid,date,time,dur,sheet.id);
+  var clash=status==="cancel"||!moved||(a&&gone(a))?null:overlap(rid,date,time,dur,sheet.id||sheet.nid);
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
   var br=status==="cancel"||!moved||(a&&gone(a))?null:inBreak(time,dur,rid,date);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
   /* If the server does not take it, the screen goes back to what the server has and the typing is kept as a draft. */
-  var dsh={id:sheet.id,orig:sheet.orig},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
+  var dsh={id:sheet.id,orig:sheet.orig,nid:sheet.nid},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
   var undo=function(newId){return function(){
     if(before)upsertBy(state.appts,before);else removeBy(state.appts,newId);
     keepDraft(dsh,dv);render();toast(L("Qəbul yadda saxlanmadı. Yazdıqlarınız itməyib: «Geri aç» basın."));
@@ -4649,13 +4662,15 @@ function saveAppt(){
     if(svcName(o.service)!==service){a.service=service;up.service=service}
     if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id),undo());
   }else{
-    var id=uuid();
-    state.appts.push({id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id,dur:dur,created:bk().d});
+    /* A5-03: a new booking keeps one id while it is retried (the server may have stored it although its answer was
+       lost): the second try is the same row and is not written twice */
+    var id=sheet.nid||uuid();dsh.nid=id;
+    upsertBy(state.appts,{id:id,readerId:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note,settled:false,service:service||"Ruqya",by:auth.user.id,dur:dur,created:bk().d});
     var ins={id:id,reader_id:rid,date:date,time:time,name:name,phone:phone,price:price,share:0,status:"wait",note:note};
     if(service)ins.service=service;
     if(state.hasDur)ins.duration=dur;
-    if(state.hasPlace){ins.place=place;state.appts[state.appts.length-1].place=place}
-    db(sb.from("appts").insert(ins),undo(id));
+    if(state.hasPlace){ins.place=place;appt(id).place=place}
+    db(sb.from("appts").upsert(ins,{onConflict:"id",ignoreDuplicates:true}),undo(id));
   }
   if(!a||sheet.from!=="np"){ui.date=date;ui.tab="day"}
   if(!shown(rid)){ui.sel.push(rid);if(ui.sel.length>=activeReaders().length)ui.sel=[];saveSel()}
@@ -4812,16 +4827,25 @@ document.addEventListener("click",function(e){
   else if(act==="sell-add"||act==="sell-sub"){if(!sheet||sheet.type!=="sell"||!catItem(id))return;var sd=byId("sl-date");if(sd)sheet.date=sd.value;
     var cn=sheet.cnt;cn[id]=Math.max(0,Math.min(1000,(cn[id]||0)+(act==="sell-add"?1:-1)));if(!cn[id])delete cn[id];
     var y0=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y0;return}
+  else if(act==="sell-draft-open"){var sd0=sellDraft();if(sd0){var c0={};Object.keys(sd0.cnt).forEach(function(k){var o=sd0.ids&&sd0.ids[k];if(!(o&&prodRow(o.id))&&catItem(k))c0[k]=sd0.cnt[k]});openSheet({type:"sell",cnt:c0,date:sd0.date,ids:sd0.ids})}return}
+  else if(act==="sell-draft-drop"){if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}sellDraft(null)}
   else if(act==="sell-clear"){if(sheet&&sheet.type==="sell"){var sd2=byId("sl-date");if(sd2)sheet.date=sd2.value;sheet.cnt={};byId("sheet").innerHTML=sellForm()}return}
   else if(act==="sell-save"){
     if(!sheet||sheet.type!=="sell")return;   /* a second tap after the window closed adds nothing */
     var sdt=val("sl-date");if(!okDate(sdt))return fail("sl-err",L("Tarixi düzgün seçin."));
     var lines=Object.keys(sheet.cnt).filter(function(k){return catItem(k)&&sheet.cnt[k]>0});if(!lines.length)return fail("sl-err",L("Məhsulun üstünə basın."));
-    var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k];return {id:uuid(),date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
-    srows.forEach(function(o){state.products.push(mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
-    var keepS={cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt},sids=srows.map(function(o){return o.id});
+    /* A5-03: a line keeps its id while the same sale is tried again (the server may have stored it although the answer
+       was lost) — the retry is the same row, not a second one; A5-04: until it is saved, the sale is also kept on the
+       phone, so a reload or a closed app does not lose it */
+    var ids0=sheet.ids||{},ids={};
+    var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k],o=ids0[k];ids[k]={id:o&&o.q===q&&o.d===sdt?o.id:uuid(),q:q,d:sdt};
+      return {id:ids[k].id,date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
+    srows.forEach(function(o){upsertBy(state.products,mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
+    var keepS={cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids},sids=srows.map(function(o){return o.id});
+    sellDraft(keepS);sellPend++;
     if(ui.tab==="cash")ui.date=sdt;   /* A5-K1: Kassa shows the day the sale went to, so it is never «gone» */
-    db(sb.from("product_sales").insert(srows),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date})},0)});
+    db(sb.from("product_sales").upsert(srows,{onConflict:"id",ignoreDuplicates:true}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids})},0)}).then(function(){sellPend--;
+      var d=sellDraft();if(d&&!dirty&&sids.every(function(id){return prodRow(id)}))sellDraft(null)});
     closeSheet();
   }
   else if(act==="sell-q"){if(!sheet||sheet.type!=="selledit")return;var sx=prodRow(sheet.id);if(!sx)return;sheet.q=Math.max(1,Math.min(1000,(sheet.q==null?sx.qty:sheet.q)+(+b.dataset.n||0)));byId("sheet").innerHTML=sellEdit();return}

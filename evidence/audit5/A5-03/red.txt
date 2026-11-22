@@ -1,0 +1,7 @@
+Sun Nov 22 14:59:54 UTC 2026
+red, commit 1d741e4
+FAIL 99-a5-03-retry-no-dup.js 
+    Error: FAIL: one sale in the database after the retry, not two: 2
+        at check (/home/claude/ruqya/tests/lib.js:221:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-03-retry-no-dup.js:22:5)
+1 failed of 1
