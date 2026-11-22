@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-aRQU1p1g9gE2VyZbZ6OYkATnpuBbrY+7Bxpgsglj4/U='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Ek0W71q2Sxu6VrKz/mBUbgFGJ+OH+K1Crd35IQQaoz4='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -3443,9 +3443,9 @@ function vth(t,cls){return '<th class="v'+(cls?' '+cls:'')+'"><span>'+esc(t)+'</
 function bigTable(r,per){
   var S=statData("sales",r,per),W=writerData(r),pl=state.hasPlace?PLACES.map(function(x){return x[0]}):[];
   var rows=S.rows.map(function(x){return {k:x.k,name:x.name,x:x}}),seen={};rows.forEach(function(y){seen[y.k]=1});
-  Object.keys(W.by).filter(function(k){return !seen[k]}).sort(function(a,b){return W.by[b].n-W.by[a].n}).forEach(function(k){rows.push({k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),x:null})});
+  Object.keys(W.by).filter(function(k){return !seen[k]}).sort(function(a,b){return W.by[b].n-W.by[a].n}).forEach(function(k){rows.push({k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),x:isSpec(k)?null:{k:k,a:0,b:0,d:0,w:null,s:null,t:null}})});
   /* owner 22.11: every worker with a role is a row, also with nothing written yet (an agent still sees only himself) */
-  if(!onlyMeSt())Object.keys(state.staff).filter(function(k){return !seen[k]&&!W.by[k]&&state.roleSet[k]&&!stHidden(k)}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))}).forEach(function(k){rows.push({k:k,name:state.staff[k]||L("Adsız"),x:null})});
+  if(!onlyMeSt())Object.keys(state.staff).filter(function(k){return !seen[k]&&!W.by[k]&&state.roleSet[k]&&!stHidden(k)}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))}).forEach(function(k){rows.push({k:k,name:state.staff[k]||L("Adsız"),x:isSpec(k)?null:{k:k,a:0,b:0,d:0,w:null,s:null,t:null}})});   /* A5-02: a sales agent or admin who wrote nothing has 0, not «·» */
   var eper=per==="cweek"?"week":per==="cmonth"?"month":per,editable=state.hasStatEdits&&canStats();
   var n=function(v){return v==null?"—":String(v)};
   var cell=function(y,col,v,label){
