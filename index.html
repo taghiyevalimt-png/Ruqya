@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-NaN+DXxtEN51keCz79nrY7OTQ3xanfAozWb6aj6kBKI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-bdrrofbQ1Y4SIuJ/cRrES+yYk1xVtMIidhKyjxi1eMw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2095,7 +2095,10 @@ function fetchAll(make){
   })}
   return next();
 }
-function soft(make){return fetchAll(make).then(function(d){return d},function(){return null})}
+/* A5-06: «none» (null) only when the table or column really is not there (an older database); any other failure
+   (network, 5xx, timeout) fails the whole load, so what was loaded stays on screen and the error is said */
+function noTable(e){e=e||{};return /^(42P01|42703|PGRST20[0245]|42501)$/.test(String(e.code||""))}
+function soft(make){return fetchAll(make).then(function(d){return d},function(e){if(noTable(e))return null;throw e})}
 /* Data sync, kept light on traffic: a full load on start and on return to the app,
    single-row updates from realtime in between, and older dates fetched only when opened. */
 var WINDOW=45,lastFull=0,hiddenAt=0,rtDown=false,loadingOlder=false,rtRender=null,maxUpd=0,pending=0,writes=0,olderFail=0,secWarn="",secDone=false;
