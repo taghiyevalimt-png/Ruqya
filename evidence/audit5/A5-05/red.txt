@@ -1,0 +1,7 @@
+Sun Nov 22 15:06:08 UTC 2026
+red, 5482a46 (mock now answers .select() after update/delete like PostgREST)
+FAIL 99-a5-05-zero-rows.js 
+    Error: FAIL: the user is told the change was not applied: «Pasiyentlər
+    Pasiyentlər
+    Ləğv olunanlar
+1 failed of 1

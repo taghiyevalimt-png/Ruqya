@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Gf49KO2J3NNMth3X+zyP+3c3w7q3wLloQY+gC561W0U='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-NaN+DXxtEN51keCz79nrY7OTQ3xanfAozWb6aj6kBKI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
@@ -2279,12 +2279,12 @@ function brkCheck(b,btn){
 /* local copy first, then the server (one request per kind of change) */
 function brkPut(rows){if(!rows.length)return;rows.forEach(function(o){upsertBy(state.breaks,mapBreak(o))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").insert(rows))}
 function brkUpd(ids,up){if(!ids.length)return;ids.forEach(function(id){var o=brkById(id);if(!o)return;var row={id:o.id,title:o.title,start_time:o.start,end_time:o.end,reader_id:o.rid||null,days:o.days,date_from:o.from||null,date_to:o.to||null,skip:o.skip,mday:o.mday};
-  Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids))}
+  Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids).select("id"))}
 /* a series cut short or with days left out that has no day left is deleted instead of kept empty */
 function brkLeft(b){if(!b.to)return true;var d=b.from&&b.from>"2020-01-01"?b.from:today;if(d<addDays(b.to,-400))d=addDays(b.to,-400);for(;d<=b.to;d=addDays(d,1))if(brkOn(b,d))return true;return false}
 function brkCut(ids,up){var o=brkById(ids[0]);if(!o)return;var t={};Object.keys(o).forEach(function(k){t[k]=o[k]});if("skip" in up)t.skip=up.skip;if("date_to" in up)t.to=up.date_to;
   if(brkLeft(t))brkUpd(ids,up);else brkDrop(ids)}
-function brkDrop(ids){if(!ids.length)return;state.breaks=state.breaks.filter(function(x){return ids.indexOf(x.id)<0});db(sb.from("breaks").delete().in("id",ids))}
+function brkDrop(ids){if(!ids.length)return;state.breaks=state.breaks.filter(function(x){return ids.indexOf(x.id)<0});db(sb.from("breaks").delete().in("id",ids).select("id"))}
 function brkNewRows(R,rids){return (rids.length?rids:[""]).map(function(r){var o={id:uuid()};Object.keys(R).forEach(function(k){o[k]=R[k]});if(r)o.reader_id=r;return o})}
 function brkSave(scope,btn){
   var x=sheet,b=x.b;brkKeep();
@@ -2638,6 +2638,9 @@ function db(q,onFail){
     if(r.error&&r.status===0){bad();unsaved();return}   /* no answer from the server (supabase-js reports it as status 0) */
     if(r.error&&authGone(r)){bad();return authLost()}
     if(r.error){bad();flash(dbMsg(r.error),true);return refresh()}
+    /* A5-05: a change asks for the touched row back; none = the row is gone (deleted on another phone) or this user
+       may not change it — not «saved»: say so and reload */
+    if(Array.isArray(r.data)&&!r.data.length){bad();flash(L("Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi."),true);return refresh()}
   },function(){pending--;bad();unsaved();return refresh()});
 }
 /* The sign-in ran out (token expired and could not be renewed): the server refuses with 401 / PGRST301. */
@@ -4660,7 +4663,7 @@ function saveAppt(){
     if(up.reader_id||up.date||up.time||up.duration){up.reader_id=a.readerId=rid;up.date=a.date=date;up.time=a.time=time;if(state.hasDur){up.duration=dur;a.dur=dur}}
     if(ST[status]){a.status=status;up.status=status}
     if(svcName(o.service)!==service){a.service=service;up.service=service}
-    if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id),undo());
+    if(Object.keys(up).length)db(sb.from("appts").update(up).eq("id",a.id).select("id"),undo());
   }else{
     /* A5-03: a new booking keeps one id while it is retried (the server may have stored it although its answer was
        lost): the second try is the same row and is not written twice */
@@ -4685,7 +4688,7 @@ function saveReader(){
   if(sheet.id){
     var r=reader(sheet.id);
     if(r)r.name=name;
-    db(sb.from("readers").update({name:name}).eq("id",sheet.id));
+    db(sb.from("readers").update({name:name}).eq("id",sheet.id).select("id"));
   }else{
     var id=uuid();
     state.readers.push({id:id,name:name,price:0,share:0,archived:false});
@@ -4783,11 +4786,11 @@ document.addEventListener("click",function(e){
   else if(act==="st-edit-save"||act==="st-edit-reset"){
     if(!sheet||sheet.type!=="stedit"||!canStats()||!(isAdmin()||sheet.k===auth.user.id))return;
     var se=sheet,ex=findEdit("sales",se.per,se.s,se.k,se.col);
-    if(act==="st-edit-reset"){if(ex){removeBy(state.statEdits,ex.id);db(sb.from("stat_edits").delete().eq("id",ex.id))}closeSheet();return}
+    if(act==="st-edit-reset"){if(ex){removeBy(state.statEdits,ex.id);db(sb.from("stat_edits").delete().eq("id",ex.id).select("id"))}closeSheet();return}
     var sv=val("se-v").replace(/\s/g,"");
     if(!/^\d{1,6}$/.test(sv)||+sv>100000)return fail("se-err",L("Rəqəmi düzgün yazın: 0 və ya müsbət tam ədəd."));
     var nv=+sv;
-    if(ex){if(ex.v!==nv){ex.v=nv;db(sb.from("stat_edits").update({value:nv}).eq("id",ex.id))}}
+    if(ex){if(ex.v!==nv){ex.v=nv;db(sb.from("stat_edits").update({value:nv}).eq("id",ex.id).select("id"))}}
     else{var nid=uuid();state.statEdits.push({id:nid,kind:"sales",per:se.per,s:se.s,k:se.k,col:se.col,v:nv,by:auth.user.id});
       db(sb.from("stat_edits").insert({id:nid,kind:"sales",per:se.per,period_start:se.s,agent_id:se.k,col:se.col,value:nv}))}
     closeSheet();return;
@@ -4812,7 +4815,7 @@ document.addEventListener("click",function(e){
     var old2=JSON.parse(JSON.stringify(state.svcPct)),rb2=function(){state.svcPct=old2;render()};
     ups2.forEach(function(u){(state.svcPct[u.reader_id]=state.svcPct[u.reader_id]||{})[u.service]=ruleOf(u)});dels2.forEach(function(d){if(state.svcPct[d.r])delete state.svcPct[d.r][d.s]});
     if(ups2.length)db(sb.from("service_shares").upsert(ups2,{onConflict:"reader_id,service"}),rb2);
-    dels2.forEach(function(d){db(sb.from("service_shares").delete().eq("reader_id",d.r).eq("service",d.s),rb2)});
+    dels2.forEach(function(d){db(sb.from("service_shares").delete().eq("reader_id",d.r).eq("service",d.s).select("id"),rb2)});
     closeSheet();
   }
   else if(act==="st-copy"){
@@ -4852,7 +4855,7 @@ document.addEventListener("click",function(e){
   else if(act==="sell-upd"){
     if(!sheet||sheet.type!=="selledit")return;var ux=prodRow(sheet.id);if(!ux){closeSheet();return}if(!(isAdmin()||ux.by===auth.user.id))return;
     var nq=sheet.q==null?ux.qty:sheet.q,uc=catItem(ux.pid),up1=ux.price||(uc?uc.price:0)||(ux.qty?ux.amount/ux.qty:0),old1={qty:ux.qty,amount:ux.amount};
-    if(nq!==ux.qty){ux.qty=nq;ux.amount=Math.round(nq*up1*100)/100;db(sb.from("product_sales").update({qty:nq,amount:ux.amount}).eq("id",ux.id),function(){ux.qty=old1.qty;ux.amount=old1.amount;render()})}
+    if(nq!==ux.qty){ux.qty=nq;ux.amount=Math.round(nq*up1*100)/100;db(sb.from("product_sales").update({qty:nq,amount:ux.amount}).eq("id",ux.id).select("id"),function(){ux.qty=old1.qty;ux.amount=old1.amount;render()})}
     closeSheet();
   }
   else if(act==="catalog"){if(isAdmin())openSheet({type:"catalog"});return}
@@ -4867,10 +4870,10 @@ document.addEventListener("click",function(e){
     if(state.catalog.some(function(c){return c!==ce&&!c.archived&&low(c.name.trim())===low(cnm)}))return fail("c-err",L("Bu adda məhsul artıq var."));
     var pcts={},pbad="";[].forEach.call(document.querySelectorAll("#sheet input[data-pct]"),function(inp){var r=ruleRead(inp);if(!r)pbad=state.staff[inp.dataset.pct]||"?";else pcts[inp.dataset.pct]=r});
     if(pbad)return fail("c-err",tf(L("Faizi (0–100) və ya məbləği düzgün yazın: {n}"),{n:pbad}));
-    if(ce){var cold={name:ce.name,price:ce.price};if(cold.name!==cnm||cold.price!==cpr){ce.name=cnm;ce.price=cpr;db(sb.from("products").update({name:cnm,price:cpr}).eq("id",ce.id),function(){ce.name=cold.name;ce.price=cold.price;render()})}
+    if(ce){var cold={name:ce.name,price:ce.price};if(cold.name!==cnm||cold.price!==cpr){ce.name=cnm;ce.price=cpr;db(sb.from("products").update({name:cnm,price:cpr}).eq("id",ce.id).select("id"),function(){ce.name=cold.name;ce.price=cold.price;render()})}
       var cur=state.shares[ce.id]||{},ups=[],dels=[];Object.keys(pcts).forEach(function(k){var v=pcts[k],o=cur[k]||{p:0,a:0};if(v.p===(o.p||0)&&v.a===(o.a||0))return;if(ruleSet(v)){var u=ruleRow(v);u.product_id=ce.id;u.staff_id=k;ups.push(u)}else if(ruleSet(o))dels.push(k)});
       if(ups.length||dels.length){var t0=JSON.parse(JSON.stringify(cur)),rb=function(){state.shares[ce.id]=t0;render()};state.shares[ce.id]=cur;ups.forEach(function(u){cur[u.staff_id]=ruleOf(u)});dels.forEach(function(k){delete cur[k]});
-        if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels),rb)}}
+        if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels).select("id"),rb)}}
     else{var cid=uuid(),srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
       /* the percents go after the product is saved (they point to it) */
       var nups=Object.keys(pcts).filter(function(k){return ruleSet(pcts[k])}).map(function(k){var u=ruleRow(pcts[k]);u.product_id=cid;u.staff_id=k;return u});
@@ -4879,10 +4882,10 @@ document.addEventListener("click",function(e){
         if(nups.length&&catItem(cid))db(sb.from("product_shares").upsert(nups,{onConflict:"product_id,staff_id"}),function(){delete state.shares[cid];render()})})}
     sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return;
   }
-  else if(act==="cat-hide"){if(!sheet||!isAdmin())return;var ch1=catItem(sheet.eid);if(!ch1)return;ch1.archived=!ch1.archived;db(sb.from("products").update({archived:ch1.archived}).eq("id",ch1.id));byId("sheet").innerHTML=catalogSheet();render();return}
+  else if(act==="cat-hide"){if(!sheet||!isAdmin())return;var ch1=catItem(sheet.eid);if(!ch1)return;ch1.archived=!ch1.archived;db(sb.from("products").update({archived:ch1.archived}).eq("id",ch1.id).select("id"));byId("sheet").innerHTML=catalogSheet();render();return}
   else if(act==="cat-del"){if(!sheet||!isAdmin())return;var cd1=catItem(sheet.eid);if(!cd1)return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Silinəcək (satışlar qalır) — bir də basın");return}
-    removeBy(state.catalog,cd1.id);db(sb.from("products").delete().eq("id",cd1.id));sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return}
+    removeBy(state.catalog,cd1.id);db(sb.from("products").delete().eq("id",cd1.id).select("id"));sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return}
   else if(act==="xls"){startXls();return}
   else if(act==="xls-save"){
     if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
@@ -4907,7 +4910,7 @@ document.addEventListener("click",function(e){
       var pup={},pold={date:ex.date,amount:ex.amount,names:ex.names};
       if(ex.date!==pd){pup.date=pd;ex.date=pd}if(+ex.amount!==pa2){pup.amount=pa2;ex.amount=pa2}
       if(pn!==null&&(ex.names||"")!==pn){pup.names=pn;ex.names=pn}
-      if(Object.keys(pup).length)db(sb.from("product_sales").update(pup).eq("id",ex.id),function(){ex.date=pold.date;ex.amount=pold.amount;ex.names=pold.names;render()});
+      if(Object.keys(pup).length)db(sb.from("product_sales").update(pup).eq("id",ex.id).select("id"),function(){ex.date=pold.date;ex.amount=pold.amount;ex.names=pold.names;render()});
       closeSheet();
     }else{
     var pid=uuid(),prow={id:pid,date:pd,amount:pa2};if(pn)prow.names=pn;
@@ -4918,7 +4921,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-prod"){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
-    state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id));
+    state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id).select("id"));
     if(sheet&&sheet.type==="selledit")closeSheet();
   }
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
@@ -4933,7 +4936,7 @@ document.addEventListener("click",function(e){
     if(sheet.id&&!xo){closeSheet();flash(L("Bu xərc artıq silinib."));return}
     var xv={"x-title":xt,"x-amount":String(xa),"x-date":xd};
     if(xo){var xold={title:xo.title,amount:xo.amount,date:xo.date};xo.title=xt;xo.amount=xa;xo.date=xd;
-      db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id),function(){xo.title=xold.title;xo.amount=xold.amount;xo.date=xold.date;render();reopenForm({type:"expense",id:xo.id},xv)})}
+      db(sb.from("expenses").update({title:xt,amount:xa,date:xd}).eq("id",xo.id).select("id"),function(){xo.title=xold.title;xo.amount=xold.amount;xo.date=xold.date;render();reopenForm({type:"expense",id:xo.id},xv)})}
     else{var xid=uuid();state.expenses.push({id:xid,date:xd,title:xt,amount:xa,by:auth.user.id});
       db(sb.from("expenses").insert({id:xid,date:xd,title:xt,amount:xa}),function(){state.expenses=state.expenses.filter(function(e){return e.id!==xid});render();reopenForm({type:"expense",id:null},xv)})}
     closeSheet();
@@ -4941,7 +4944,7 @@ document.addEventListener("click",function(e){
   else if(act==="del-expense"){
     if(!sheet)return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
-    var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs));closeSheet();
+    var xs=sheet.id;state.expenses=state.expenses.filter(function(x){return x.id!==xs});db(sb.from("expenses").delete().eq("id",xs).select("id"));closeSheet();
   }
 
   else if(act==="only"){ui.sel=ui.sel.length===1&&ui.sel[0]===id?[]:[id];saveSel()}
@@ -4964,7 +4967,7 @@ document.addEventListener("click",function(e){
     }
     if(a&&ST[st]&&a.status!==st){
       a.status=st;
-      db(sb.from("appts").update({status:st}).eq("id",a.id));
+      db(sb.from("appts").update({status:st}).eq("id",a.id).select("id"));
     }
   }
   else if(act==="me"){openSheet({type:"me"});return}
@@ -5071,7 +5074,7 @@ document.addEventListener("click",function(e){
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Tamamilə silinəcək — bir də basın");return}
-    state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id));
+    state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id).select("id"));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
   else if(act==="contacts-all"){
@@ -5109,25 +5112,25 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
     state.breaks=state.breaks.filter(function(x){return dids.indexOf(x.id)<0});
     /* S-03: one request for all of them — a broken connection cannot leave half of a group deleted */
-    if(dids.length)db(sb.from("breaks").delete().in("id",dids));
+    if(dids.length)db(sb.from("breaks").delete().in("id",dids).select("id"));
     closeSheet();
   }
   else if(act==="del-break"){
     var db1=state.breaks.filter(function(x){return x.id===id})[0];if(!db1||!canBrk([db1.rid]))return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
-    state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id));
+    state.breaks=state.breaks.filter(function(x){return x.id!==id});db(sb.from("breaks").delete().eq("id",id).select("id"));
   }
   else if(act==="new-appt"){if(activeReaders().length)afterPaint(function(){openSheet({type:"appt",id:null})});return}
   else if(act==="edit-appt"){if(appt(id)&&canEdit(appt(id)))afterPaint(function(){if(appt(id))openSheet({type:"appt",id:id})});return}
   else if(act==="paid"){
     var pa=appt(id);if(!pa||pa.place!=="onlayn"||gone(pa))return;
-    pa.settled=!pa.settled;db(sb.from("appts").update({settled:pa.settled}).eq("id",id));
+    pa.settled=!pa.settled;db(sb.from("appts").update({settled:pa.settled}).eq("id",id).select("id"));
     if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
   }
   else if(act==="conf"){
     /* the patient confirmed (or the tick is taken back): anybody who sees the session */
     var ca=appt(id);if(!ca||!state.hasConf||gone(ca)||done(ca))return;
-    ca.conf=!ca.conf;db(sb.from("appts").update({confirmed:ca.conf}).eq("id",id));
+    ca.conf=!ca.conf;db(sb.from("appts").update({confirmed:ca.conf}).eq("id",id).select("id"));
     if(sheet&&sheet.type==="view")setTimeout(function(){if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet()},0);
   }
   else if(act==="new-reader"){if(!isAdmin())return;openSheet({type:"reader",id:null});return}
@@ -5140,7 +5143,7 @@ document.addEventListener("click",function(e){
     var fa=appt(id),fn=+b.dataset.n;if(!fa||!(gone(fa)||fa.sold)||!state.hasFollow||!(fn>=1&&fn<=3))return;
     var fprev=fa.fol||0,fnew=fprev===fn?fn-1:fn,sprev=fa.status,soprev=!!fa.sold;fa.fol=fnew;
     if(fa.status==="cancel"||fa.sold){fa.sold=fnew>=3;fa.status=fa.sold?"wait":"cancel"}   /* «Satış edildi»: successful; pressed again: cancelled again */
-    db(sb.from("appts").update({follow:fnew}).eq("id",fa.id),function(){fa.fol=fprev;fa.status=sprev;fa.sold=soprev;render();redrawCard()});
+    db(sb.from("appts").update({follow:fnew}).eq("id",fa.id).select("id"),function(){fa.fol=fprev;fa.status=sprev;fa.sold=soprev;render();redrawCard()});
     render();
     if(sheet&&sheet.type==="view")byId("sheet").innerHTML=viewSheet();
   }
@@ -5150,7 +5153,7 @@ document.addEventListener("click",function(e){
     var wasSold=!!ca.sold,fol0=ca.fol||0;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Ləğv olunanlara düşəcək — bir də basın");return}
     var cprev=ca.status;ca.status="cancel";if(wasSold){ca.sold=false;ca.fol=0}
-    db(sb.from("appts").update(wasSold?{status:"cancel",follow:0}:{status:"cancel"}).eq("id",ca.id),function(){ca.status=cprev;if(wasSold){ca.sold=true;ca.fol=fol0}render()});
+    db(sb.from("appts").update(wasSold?{status:"cancel",follow:0}:{status:"cancel"}).eq("id",ca.id).select("id"),function(){ca.status=cprev;if(wasSold){ca.sold=true;ca.fol=fol0}render()});
     if(sheet&&sheet.type==="view")closeSheet();else if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
     toast(L("Qəbul ləğv olundu. «Pasiyentlər → Ləğv olunanlar» bölməsində görünür."));
   }
@@ -5173,12 +5176,12 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0?L("Tamamilə silinəcək — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"&&!canEdit(appt(sid)))return;
-    if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid))}
+    if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid).select("id"))}
     else{
       /* Never erased: old sessions and the cash history of this specialist must stay. */
       if(!isAdmin())return;
       var rr=reader(sid);
-      if(rr)rr.archived=true;db(sb.from("readers").update({archived:true}).eq("id",sid));
+      if(rr)rr.archived=true;db(sb.from("readers").update({archived:true}).eq("id",sid).select("id"));
       cleanSel();
     }
     closeSheet();

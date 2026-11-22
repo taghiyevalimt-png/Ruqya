@@ -166,16 +166,21 @@ async function attach(context, db, ctl) {
       const def = t === "appts" ? { phone: "", note: "", status: "wait", settled: false, service: "Ruqya", duration: 90, confirmed: false, place: "ofis", follow: 0 }
         : t === "breaks" ? { reader_id: null, days: null, date_from: null, date_to: null } : t === "app_errors" ? { at: now, uid } : {};
       // upsert (on_conflict=a,b): a row with the same key is replaced, like PostgREST with merge-duplicates
-      const oc = url.searchParams.get("on_conflict"); if (oc) { const ks = oc.split(","); db[t] = db[t].filter((x) => !b.some((r) => ks.every((k) => String(x[k]) === String(r[k])))); }
+      // ignoreDuplicates (Prefer: resolution=ignore-duplicates) keeps the stored row and skips the new one
+      const oc = url.searchParams.get("on_conflict"), ign = /ignore-duplicates/.test(req.headers()["prefer"] || "");
+      if (oc) { const ks = oc.split(","), same = (x, r) => ks.every((k) => String(x[k]) === String(r[k])); if (ign) b = b.filter((r) => !db[t].some((x) => same(x, r))); else db[t] = db[t].filter((x) => !b.some((r) => same(x, r))); }
       for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
       return send(route, 201);
     }
+    function rep() { return /return=representation/.test(req.headers()["prefer"] || ""); }
     if (m === "PATCH") {
       const b = JSON.parse(req.postData() || "{}");
-      db[t].filter((r) => fl.every((f) => test(r, f))).forEach((r) => Object.assign(r, b, { updated_at: new Date().toISOString() }));
-      return send(route, 204);
+      const hit = db[t].filter((r) => fl.every((f) => test(r, f))); hit.forEach((r) => Object.assign(r, b, { updated_at: new Date().toISOString() }));
+      return rep() ? send(route, 200, hit.map((r) => pick(r, url.searchParams.get("select")))) : send(route, 204);
     }
-    if (m === "DELETE") { db[t] = db[t].filter((r) => !fl.every((f) => test(r, f))); return send(route, 204); }
+    // like PostgREST: .select() after update/delete (Prefer: return=representation) answers with the rows it touched —
+    // none when the row is gone or row-level security hides it
+    if (m === "DELETE") { const hit = db[t].filter((r) => fl.every((f) => test(r, f))); db[t] = db[t].filter((r) => hit.indexOf(r) < 0); return rep() ? send(route, 200, hit.map((r) => pick(r, url.searchParams.get("select")))) : send(route, 204); }
     return send(route, 405);
   });
 }
