@@ -1,0 +1,10 @@
+Sun Nov 22 19:19:19 UTC 2026
+copy: 1 000 000 appts, 3 000 000 audit_log rows (synthetic), PostgreSQL 16
+anonymize before: 20 Time: 8574.827 ms (00:08.575) 
+migration: 10.125410976 s
+anonymize after: 20 Time: 246.734 ms 
+anonymize after (2): 20 Time: 213.257 ms 
+rollback: .102720012 s
+anonymize after rollback: 20 Time: 7944.148 ms (00:07.944) 
+migration again: 9.079200378 s
+2152 kB|135 MB|1031 MB

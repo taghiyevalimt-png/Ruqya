@@ -1,0 +1,7 @@
+Sun Nov 22 19:20:09 UTC 2026
+red (copy without the new migration), 1ecafaf
+FAIL 99-a6-04-anon-index-db.js 
+    Error: FAIL: the deleted bookings of a patient are found by index: Bitmap Heap Scan on audit_log  (cost=4.16..10.02 rows=1 width=32) |   Recheck Cond: (op = 'DELETE'::text) |   Filter: ((tbl = 'appts'::text) AND (ruqya_pkey((old ->> 'phone'::text), (old ->> 'name'::text)) = 'p500000001|x'::text)) |   ->  Bitmap Index Scan on audit_log_del  (cost=0.00..4.15 rows=2 width=0)
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-04-anon-index-db.js:13:5)
+1 failed of 1

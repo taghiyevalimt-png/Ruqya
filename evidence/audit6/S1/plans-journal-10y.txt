@@ -1,0 +1,102 @@
+Timing is on.
+BEGIN
+Time: 0.131 ms
+                              set_config                               
+-----------------------------------------------------------------------
+ {"sub":"bad097d4-5edc-402b-ad59-f633252c35d9","role":"authenticated"}
+(1 row)
+
+Time: 0.348 ms
+SET
+Time: 0.108 ms
+                                        QUERY PLAN                                        
+------------------------------------------------------------------------------------------
+ Limit (actual rows=300 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result (actual rows=1 loops=1)
+   InitPlan 2 (returns $1)
+     ->  Result (actual rows=1 loops=1)
+   ->  Index Scan Backward using audit_log_pkey on audit_log (actual rows=300 loops=1)
+         Filter: ($1 AND (NOT COALESCE((($0 ->> 'is_anonymous'::text))::boolean, false)))
+ Planning Time: 0.884 ms
+ Execution Time: 1.256 ms
+(9 rows)
+
+Time: 2.854 ms
+                                        QUERY PLAN                                        
+------------------------------------------------------------------------------------------
+ Limit (actual rows=500 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result (actual rows=1 loops=1)
+   InitPlan 2 (returns $1)
+     ->  Result (actual rows=1 loops=1)
+   ->  Index Scan Backward using audit_log_del on audit_log (actual rows=500 loops=1)
+         Filter: ($1 AND (NOT COALESCE((($0 ->> 'is_anonymous'::text))::boolean, false)))
+ Planning Time: 0.242 ms
+ Execution Time: 0.732 ms
+(9 rows)
+
+Time: 1.186 ms
+                                                        QUERY PLAN                                                        
+--------------------------------------------------------------------------------------------------------------------------
+ Limit (actual rows=10 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Result (actual rows=1 loops=1)
+   InitPlan 2 (returns $1)
+     ->  Result (actual rows=1 loops=1)
+   ->  Hash Semi Join (actual rows=10 loops=1)
+         Hash Cond: (audit_log.row_id = ((md5((g.g)::text))::uuid)::text)
+         ->  Seq Scan on audit_log (actual rows=600000 loops=1)
+               Filter: ($1 AND (op = 'INSERT'::text) AND (NOT COALESCE((($0 ->> 'is_anonymous'::text))::boolean, false)))
+               Rows Removed by Filter: 2400000
+         ->  Hash (actual rows=50 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 10kB
+               ->  Function Scan on generate_series g (actual rows=50 loops=1)
+ Planning Time: 0.245 ms
+ Execution Time: 461.020 ms
+(15 rows)
+
+Time: 461.671 ms
+                              QUERY PLAN                              
+----------------------------------------------------------------------
+ Function Scan on ruqya_hist_patients_page (actual rows=1000 loops=1)
+ Planning Time: 0.064 ms
+ Execution Time: 1490.382 ms
+(3 rows)
+
+Time: 1491.641 ms (00:01.492)
+RESET
+Time: 0.096 ms
+                       QUERY PLAN                        
+---------------------------------------------------------
+ Result (actual rows=1 loops=1)
+   InitPlan 1 (returns $0)
+     ->  Limit (actual rows=1 loops=1)
+           ->  Seq Scan on appts (actual rows=1 loops=1)
+                 Filter: (date < (CURRENT_DATE - 100))
+ Planning Time: 0.129 ms
+ Execution Time: 14795.848 ms
+(7 rows)
+
+Time: 14796.298 ms (00:14.796)
+                                                    QUERY PLAN                                                     
+-------------------------------------------------------------------------------------------------------------------
+ Delete on audit_log (actual rows=0 loops=1)
+   ->  Nested Loop (actual rows=2000 loops=1)
+         ->  HashAggregate (actual rows=2000 loops=1)
+               Group Key: "ANY_subquery".id
+               Batches: 1  Memory Usage: 369kB
+               ->  Subquery Scan on "ANY_subquery" (actual rows=2000 loops=1)
+                     ->  Limit (actual rows=2000 loops=1)
+                           ->  Index Scan using audit_log_pkey on audit_log audit_log_1 (actual rows=2000 loops=1)
+                                 Filter: (at < (now() - '730 days'::interval))
+                                 Rows Removed by Filter: 729
+         ->  Index Scan using audit_log_pkey on audit_log (actual rows=1 loops=2000)
+               Index Cond: (id = "ANY_subquery".id)
+ Planning Time: 0.262 ms
+ Execution Time: 4.112 ms
+(14 rows)
+
+Time: 4.711 ms
+ROLLBACK
+Time: 0.358 ms
