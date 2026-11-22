@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-wAJWnDbEypBFyw32QMypZZEerZYKZzNOZ/itsUjpkAg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-7T9Q9tpRFuytzg2r5mVyNDs3DpBBAtP6KDIbo94VRW8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -245,9 +245,9 @@ button.wa:disabled{opacity:.4}
 .wd[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
 .wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b,.wd[aria-pressed="true"] i{color:var(--accent-ink)}
 .slots{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
-.sheet:has(#f-slots){gap:10px}
+
 .sheet .hint.small{font-size:12px;margin:-2px 0 0}
-#f-slots .slot{padding:5px 0;font-size:12px;border-radius:8px}
+
 .sticky-save{position:sticky;bottom:-22px;margin:0 -16px -22px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line);z-index:2}
 .slot{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:7px 0;font-size:13px;font-variant-numeric:tabular-nums}
 .slot:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
@@ -550,7 +550,7 @@ h3.sec{font-family:var(--font-body);font-size:11.5px;font-weight:700;letter-spac
 .viewsw{border-radius:12px;padding:3px;background:var(--surface2)}
 .viewsw button{border-radius:9px}
 .slot{border-radius:10px;background:var(--surface2);color:var(--ink)}
-#f-slots .slot{border-radius:9px;padding:6px 0}
+
 .slot:disabled{opacity:.28}
 
 /* Form fields */
@@ -1952,7 +1952,7 @@ var SVC_PRESET={"Masaj":[60,80],"Hicama":[60,40],"Kombo":[60,100]},READER_PRESET
 function readerPreset(rid){var r=reader(rid);return r?READER_PRESET[low(String(r.name).trim()).replace(/̇/g,"")]:null}
 function putPreset(ps){if(!ps)return;var de=byId("f-dur"),pe=byId("f-price");
   if(de){if(!de.querySelector('option[value="'+ps[0]+'"]')){var o=document.createElement("option");o.value=String(ps[0]);o.textContent=ps[0]+"";de.appendChild(o)}de.value=String(ps[0])}
-  if(pe)pe.value=String(ps[1]);if(de)slotGrid()}
+  if(pe)pe.value=String(ps[1])}
 function uuid(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   if(window.crypto&&crypto.getRandomValues){var b=new Uint8Array(16),h="";crypto.getRandomValues(b);b[6]=b[6]&15|64;b[8]=b[8]&63|128;
@@ -2457,7 +2457,7 @@ function redrawCard(){
   if(!sheet)return;
   if(sheet.type==="brkview"){byId("sheet").innerHTML=brkSheet();return}
   if(sheet.type==="brkone"){byId("sheet").innerHTML=brkOneSheet();return}   /* a break deleted or added on another phone */
-  if(sheet.type==="appt"){slotGrid();return}
+  if(sheet.type==="appt")return;   /* a booking form being typed in is left alone */
   /* owner 22.11: the Excel file follows the statistics at once — a change (a typed WP number, a booking…) while the
      window is open makes the file again, so the file to download is never older than the screen */
   if(sheet.type==="xls"&&(sheet.url||sheet.err)&&!sheet.busy){clearTimeout(xlsT);xlsT=setTimeout(function(){if(sheet&&sheet.type==="xls")startXls()},800);return}
@@ -4521,7 +4521,6 @@ function openSheet(s){
     if(dv.price===""&&byId("f-price"))byId("f-price").value="";
     dropDraft();
   }
-  if(s.type==="appt")slotGrid();
   /* owner 22.11: the fields come in one by one only when the window opens, not on every redraw */
   (function(){var d=byId("sheet");d.classList.add("opening");clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},700)})();
   unpinSheet();
@@ -4604,20 +4603,7 @@ function closeSheet(){
   hideSheet();
   if(drop)afterPaint(function(){try{if(history.state&&history.state.sheet)history.back()}catch(e){}setTimeout(function(){backing=false},1500)});
 }
-function slotGrid(){
-  var el=byId("f-busy"),box=byId("f-slots");if(!el||!box||!sheet)return;
-  var rid=val("f-reader"),date=val("f-date"),cur=val("f-time"),dur=state.hasDur?+val("f-dur"):90;
-  if(!rid||!(dur>0)){box.innerHTML="";el.textContent=L("Boş saatları görmək üçün mütəxəssisi və müddəti seçin.");return}
-  var taken=state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&x.status!=="cancel"&&x.id!==sheet.id})
-    .sort(function(a,b){return mins(a.time)-mins(b.time)}).map(function(x){return x.time+"–"+endOf(x)});
-  var h="";
-  for(var m=DAY0;m+dur<=DAY1;m+=30){
-    var tm=hhmm(m),busy=!!overlap(rid,date,tm,dur,sheet.id)||!!inBreak(tm,dur,rid,date);
-    h+='<button type="button" class="slot" data-act="slot" data-t="'+tm+'"'+(busy?" disabled":"")+' aria-pressed="'+(tm===cur)+'">'+tm+'</button>';
-  }
-  box.innerHTML=h;
-  el.textContent="";   /* busy and break times are already struck out on the buttons */
-}
+/* B-13 (audit 6): slotGrid() — the old grid of free half-hours — is removed; the form shows «Ən yaxın boş vaxtlar» */
 function apptForm(){
   var a=sheet.id?appt(sheet.id):null;
   var rs=activeReaders(),pr0=sheet.pre||{},def=a?a.readerId:(pr0.reader&&reader(pr0.reader)?pr0.reader:"");   /* tapping a specialist's column picks that specialist (can be changed) */
@@ -5105,10 +5091,9 @@ document.addEventListener("click",function(e){
     if(!activeReaders().length){closeSheet();ui.tab="readers";byId("top").innerHTML="";render();return}
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
   }
-  else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
   else if(act==="free-find"){if(sheet)sheet.freeOn=1;freeShow();return}
   else if(act==="free-pick"){var fr=byId("f-reader");if(!fr)return;if(fr.value!==b.dataset.r){fr.value=b.dataset.r;freeSkip=1;fr.dispatchEvent(new Event("change",{bubbles:true}));freeSkip=0}
-    byId("f-date").value=b.dataset.d;byId("f-time").value=b.dataset.t;slotGrid();var ff=byId("f-free");if(ff)ff.innerHTML='<p class="hint">'+esc(L("Seçildi: ")+(reader(b.dataset.r)||{}).name+", "+fmtDay(b.dataset.d,"w")+", "+b.dataset.t)+'</p>';return}
+    byId("f-date").value=b.dataset.d;byId("f-time").value=b.dataset.t;var ff=byId("f-free");if(ff)ff.innerHTML='<p class="hint">'+esc(L("Seçildi: ")+(reader(b.dataset.r)||{}).name+", "+fmtDay(b.dataset.d,"w")+", "+b.dataset.t)+'</p>';return}
 
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
   else if(act==="view-appt"){if(appt(id))afterPaint(function(){if(appt(id))openSheet({type:"view",id:id})});return}
@@ -5263,7 +5248,6 @@ document.addEventListener("change",function(e){
     if(e.target.name==="f-service")putPreset(SVC_PRESET[e.target.value]);
     if(t==="f-reader")putPreset(readerPreset(e.target.value));
   }
-  if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
   if((t==="f-reader"||t==="f-dur")&&sheet&&sheet.type==="appt"&&sheet.freeOn&&!freeSkip)freeShow();
   if(sheet&&sheet.type==="sell"&&t==="sl-date"){sheet.date=e.target.value;var y1=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y1}
   if(sheet&&sheet.type==="brk"&&(t==="b-rep"||t==="b-date")){if(t==="b-date"&&sheet.b){var od=sheet.b.date;brkKeep();var nd=sheet.b.date;if(od!==nd&&sheet.b.rep!=="custom"){sheet.b.days={};sheet.b.days[wdOf(nd)]=1}}brkRedraw()}
@@ -5276,7 +5260,6 @@ function timeDefault(el){
   var st=el.id==="b-end"?byId("b-start"):null;
   if(st&&/^\d{2}:\d{2}/.test(st.value)){el.value=hhmm(Math.min(mins(st.value)+60,23*60+55));return}
   var h=Math.floor(bk().m/60);el.value=hhmm(Math.max(8,Math.min(23,h))*60);
-  if(el.id==="f-time")slotGrid();
 }
 ["touchstart","mousedown","focusin"].forEach(function(t){document.addEventListener(t,function(e){timeDefault(e.target)},true)});
 document.addEventListener("keydown",function(e){
@@ -5357,7 +5340,7 @@ function rollDay(){
   var t=bk().d;if(t===today)return false;
   if(ui.date===today)ui.date=t;
   /* a new booking form opened before midnight and still on that day: it moves to the new day with the calendar */
-  if(sheet&&sheet.type==="appt"&&!sheet.id){var fd0=byId("f-date");if(fd0&&fd0.value===today){fd0.value=t;slotGrid()}}
+  if(sheet&&sheet.type==="appt"&&!sheet.id){var fd0=byId("f-date");if(fd0&&fd0.value===today){fd0.value=t}}
   today=t;return true;
 }
 /* How many bookings are already counted: when a session ends, totals and ✓ marks change without anyone touching the app. */
