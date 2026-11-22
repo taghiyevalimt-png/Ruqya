@@ -37,25 +37,22 @@ module.exports = async () => {
     check(sales0 && sales0.some((r) => r[0] === "Asiya"), "Asiya is in the sales table before hiding");
     // Excel: services, places, agents × services; the service column of every booking
     const xls = async () => {
-      await p.click('[data-act="xls"]'); await p.click('[data-act="xls-per"][data-id="m3"]'); await p.waitForSelector("a[download]", { timeout: 20000 });
+      await p.click('[data-act="xls"]'); await p.waitForSelector("a[download]", { timeout: 20000 });
       const [dl] = await Promise.all([p.waitForEvent("download"), p.click("a[download]")]);
       const x = unzip(require("fs").readFileSync(await dl.path()));
       const names = [...x["xl/workbook.xml"].matchAll(/name="([^"]+)"/g)].map((m) => m[1]);
       const shared = x["xl/sharedStrings.xml"] ? [...x["xl/sharedStrings.xml"].matchAll(/<t[^>]*>([^<]*)<\/t>/g)].map((m) => m[1]) : [];
-      const rows = (n) => { const xml = x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || ""; return [...xml.matchAll(/<row[^>]*>(.*?)<\/row>/g)].map((r) => [...r[1].matchAll(/<c [^>]*?(?:t="(s|inlineStr|str)")?[^>]*>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>/g)].map((m) => (m[1] === "s" ? shared[+m[2]] : m[2] !== undefined ? m[2] : m[3]))); };
+      const rows = (n) => [...(x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "").matchAll(/<row [^>]*>(.*?)<\/row>/g)].map((r) => [...r[1].matchAll(/<c [^>]*?(?:\/>|>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>)/g)].map((m) => m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : ""));
       await p.click('[data-act="close"]').catch(() => {}); await p.waitForTimeout(300);
       return { names, rows };
     };
+    // owner 22.11: Excel = the screen's sections; the last finished week is the sheet «Keçən həftə»
     let X = await xls();
-    for (const n of ["Həftəlik — xidmət", "Həftəlik — yer", "Həftəlik — agent×xidmət", "Aylıq — xidmət", "Günlük — xidmət"]) check(X.names.includes(n), "Excel has the sheet «" + n + "»: " + X.names.join(" | "));
-    const sv = X.rows("Həftəlik — xidmət").filter((r) => r[1] === "Masaj" || r[1] === "Hicama" || r[1] === "Cəmi").map((r) => r.slice(1));
-    check(JSON.stringify(sv) === JSON.stringify([["Hicama", "1", "1"], ["Masaj", "2", "2"], ["Cəmi", "5", "5"]]), "Excel services per week match the screen: " + JSON.stringify(sv));
-    const yr = X.rows("Həftəlik — yer").filter((r) => r[1] === "Ünvan" || r[1] === "Cəmi").map((r) => r.slice(1));
-    check(JSON.stringify(yr) === JSON.stringify([["Ünvan", "1", "1"], ["Cəmi", "5", "5"]]), "Excel places per week: " + JSON.stringify(yr));
-    const ag = X.rows("Həftəlik — agent×xidmət");
-    check(ag[0] && ag[0].join("|") === "Dövr|Agent|Ruqya|Hicama|Kombo|Masaj|Dr.Günel|Psixoloq|Cəmi" && ag.some((r) => r[1] === "Asiya" && r[5] === "2" && r[8] === "2"), "Excel agents × services: " + JSON.stringify(ag.slice(0, 3)));
-    const all = X.rows("Bütün qəbullar"), hi = all[0].indexOf("Xidmət");
-    check(hi > 0 && all.slice(1).map((r) => r[hi]).sort().join(",") === "Hicama,Masaj,Masaj,Ruqya,Ruqya", "«Bütün qəbullar» has each booking's real service: " + all.slice(1).map((r) => r[hi]).join(","));
+    check(JSON.stringify(X.names) === JSON.stringify(["Bu həftə", "Keçən həftə", "Bu ay", "Keçən ay", "Pul", "Məhsul"]), "Excel sheets are the sections: " + X.names.join(" | "));
+    const kw = X.rows("Keçən həftə"), hd = kw.find((r) => r.includes("WP")), tot = kw.find((r) => r[0] === "Cəmi");
+    const at = (n) => tot[hd.indexOf(n)];
+    check(hd && tot && at("Masaj") === "2" && at("Hicama") === "1" && at("Ruqya") === "2" && at("Ünvan") === "1" && at("Onlayn") === "2", "Excel: services and places of the week like the screen: " + JSON.stringify([hd, tot]));
+    check(kw.some((r) => r[0] === "Asiya" && r[hd.indexOf("Masaj")] === "2"), "Excel: Asiya's row with her 2 Masaj");
     // hide Asiya from the statistics
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="staff"]'); await p.waitForTimeout(300);
     await p.click('[data-act="edit-staff"][data-id="' + A2 + '"]'); await p.locator("#s-hide").check(); await p.click('[data-act="save-staff"]'); await p.waitForTimeout(600);
@@ -64,7 +61,7 @@ module.exports = async () => {
     const sales1 = await table("big-week");
     check(sales1 && !sales1.some((r) => r[0] === "Asiya") && sales1.some((r) => r[0] === "Nurlana"), "Asiya is no longer in the statistics: " + JSON.stringify(sales1));
     X = await xls();
-    check(!X.rows("Həftəlik — satış").some((r) => r[1] === "Asiya") && !X.rows("Həftəlik — agent×xidmət").some((r) => r[1] === "Asiya"), "nor in Excel");
+    check(!X.rows("Keçən həftə").some((r) => r[0] === "Asiya"), "nor in Excel");
     // names: the admin's own and another worker's
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="staff"]'); await p.waitForTimeout(300);
     check(await p.locator('[data-act="edit-staff"][data-id="' + OWNER + '"]').count() === 1, "the admin's own row has «Dəyiş»");

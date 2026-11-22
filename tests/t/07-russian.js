@@ -10,8 +10,8 @@ module.exports = async () => {
     check(/Несохранённая запись/.test(d) && /Открыть снова/.test(d), "draft notice in Russian: " + d);
     await p.click('[data-act="draft-drop"]');
     await p.click('#tabs [data-tab="stats"]'); await p.click('[data-act="xls"]');
-    const x = await p.textContent("#sheet");
-    check(/За какой период/.test(x) && /Этот месяц/.test(x) && !/Bu ay|Hamısı/.test(x), "Excel periods in Russian: " + x);
+    await p.waitForSelector("#sheet a[download]", { timeout: 15000 }); const x = await p.textContent("#sheet");
+    check(/В файле таблицы из статистики/.test(x) && /Эта неделя/.test(x) && !/Bu həftə|Hamısı/.test(x), "Excel window in Russian: " + x);
     await p.click('[data-act="close"]');
     await p.click('#tabs [data-tab="patients"]'); await p.click("#plist >> text=Test Pasiyent"); await p.waitForSelector(".pvisit");
     check(/Удалить данные пациента/.test(await p.textContent("#sheet")), "wipe button in Russian");

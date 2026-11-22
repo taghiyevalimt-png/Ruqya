@@ -21,14 +21,14 @@ module.exports = async () => {
   try {
     const p = s.page; await p.waitForSelector("#tabs:not([hidden])"); await p.waitForTimeout(3300);
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(400);
-    await p.click('[data-act="xls"]'); await p.click('[data-act="xls-per"][data-id="m3"]'); await p.waitForSelector("a[download]", { timeout: 20000 });
+    await p.click('[data-act="xls"]'); await p.waitForSelector("a[download]", { timeout: 20000 });
     const [dl] = await Promise.all([p.waitForEvent("download"), p.click("a[download]")]);
     const x = unzip(require("fs").readFileSync(await dl.path()));
     const wb = x["xl/workbook.xml"], names = [...wb.matchAll(/name="([^"]+)"/g)].map((m) => m[1]);
     const shared = x["xl/sharedStrings.xml"] ? [...x["xl/sharedStrings.xml"].matchAll(/<t[^>]*>([^<]*)<\/t>/g)].map((m) => m[1]) : [];
     const sheet = (n) => x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "";
     const cells = (xml) => [...xml.matchAll(/<c [^>]*?(t="(s|inlineStr|str)")?[^>]*>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>/g)].map((m) => (m[2] === "s" ? shared[+m[3]] : m[3] !== undefined ? m[3] : m[4]));
-    const money = cells(sheet("Həftəlik — pul")), sales = cells(sheet("Həftəlik — satış"));
+    const money = cells(sheet("Pul")), sales = cells(sheet("Keçən həftə"));   // owner 22.11: the sheets are the screen's sections
     const nums = (arr) => arr.filter((v) => /^\d+(\.\d+)?$/.test(v)).map(Number);
     check(!nums(money).includes(260), "weekly money sheet: 130 ₼ booking counted once, not 260: " + money.join(" | "));
     check(nums(money).includes(130), "weekly money sheet shows 130: " + money.join(" | "));

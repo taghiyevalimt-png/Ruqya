@@ -1,5 +1,5 @@
 // Owner 22.11: «merge the statistics, not a hundred separate ones; write the column names vertically if there are
-// many; only weekly and monthly, last week and last month — everything else inside them; money and products apart».
+// many [owner 22.11 later: no, across]; only weekly and monthly, last week and last month — everything else inside them; money and products apart».
 const { open, check, OWNER, AGENT, SPEC, seed, R1, R2, bakuToday, uuid } = require("../lib");
 module.exports = async () => {
   const db = seed(), t = bakuToday(), now = new Date().toISOString();
@@ -14,7 +14,7 @@ module.exports = async () => {
     check(await p.locator(".pay.big table.big").count() === 1, "this week: one merged table (no day-by-day table)");
     const head = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] th.v span')].map((x) => x.textContent));
     check(["WP", "Yazdı", "Ruqya", "Hicama", "Ofis", "Onlayn"].every((x) => head.includes(x)), "requests, bookings, services and places in one table: " + head);
-    check(await p.evaluate(() => getComputedStyle(document.querySelector("th.v span")).writingMode) === "vertical-rl", "column names written upwards");
+    check(await p.evaluate(() => getComputedStyle(document.querySelector("th.v span")).writingMode) === "horizontal-tb", "owner 22.11: column names written across again (the table scrolls sideways)");
     const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] tbody tr')].map((r) => r.textContent.replace(/\s+/g, " ").trim()));
     check(rows.some((r) => /^Nurlana/.test(r)) && rows.some((r) => /^Əli/.test(r)), "agent and the specialist who wrote are rows: " + JSON.stringify(rows));
     // «Bu gün»: only today — sessions today and the same merged table for today

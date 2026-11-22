@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-STzZAiMIfXS5dQNFzyu5pRs1Kp0Mc+rJb7ch9zkmFYM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8yZEG3tfzE9xBzinosG7VEn1kW3bAyy2qw+MWU+CSn8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -343,9 +343,9 @@ h2.kindh .kindsw button{font-size:15px;padding:9px 8px}
 /* owner 22.11: the period's one table — column names written upwards */
 .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -6px;padding:0 6px}
 .stt.big{width:auto;min-width:100%}
-.stt.big th.v{vertical-align:bottom;text-align:center;padding:4px 2px 6px;text-transform:none;letter-spacing:0;font-size:12px}
-.stt.big th.v span{display:inline-block;writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;max-height:140px;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
-.stt.big td.num{padding-left:4px;padding-right:4px;text-align:center}
+.stt.big th.v{vertical-align:bottom;text-align:center;padding:4px 6px 6px;text-transform:none;letter-spacing:0;font-size:12px}
+.stt.big th.v span{display:inline-block;white-space:nowrap;line-height:1.2}   /* owner 22.11: written across again */
+.stt.big td.num{padding-left:6px;padding-right:6px;text-align:center}
 .stt.big td:first-child{white-space:nowrap;max-width:none;position:sticky;left:0;background:var(--surface);z-index:1;padding-right:8px}
 .stt.big th[rowspan],.stt.big thead th:first-child{position:sticky;left:0;background:var(--surface);z-index:2}
 .stt.big .g2{background:rgba(127,127,127,.06)}.stt.big .g4{background:rgba(127,127,127,.06)}
@@ -746,7 +746,9 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Payı":"Доля",
+var RUD=LANG==="ru"?{"Dövr hələ bitməyib — rəqəmlər artır.":"Период ещё не закончился — числа растут.",
+"Faylda Statistikadakı cədvəllər var: Bu həftə, Keçən həftə, Bu ay, Keçən ay, Pul, Məhsul.":"В файле таблицы из статистики: Эта неделя, Прошлая неделя, Этот месяц, Прошлый месяц, Деньги, Товары.",
+"Payı":"Доля",
 "Sizin payınız":"Ваша доля",
 "«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faizi yazır).":"«Доля» — часть от проданных вами товаров, которая остаётся вам (процент для каждого товара задаёт админ).",
 "«Payı» — satana qalan hissə: Kassa → ⚙ Məhsullar → məhsul → «Satanın faizi».":"«Доля» — часть, которая остаётся продавцу: Касса → ⚙ Товары → товар → «Процент продавца».",
@@ -1749,7 +1751,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122131721";
+var APP_VERSION="20261122132807";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3296,8 +3298,8 @@ function writerData(r){
   return {by:by,cols:cols,T:T};
 }
 function vth(t,cls){return '<th class="v'+(cls?' '+cls:'')+'"><span>'+esc(t)+'</span></th>'}
-/* ONE table for the period (owner 22.11): every person a row; requests, bookings, services and places as columns,
-   the column names written upwards so many columns fit a phone */
+/* ONE table for the period (owner 22.11): every person a row; requests, bookings, services and places as columns
+   (the table scrolls sideways on a phone) */
 function bigTable(r,per){
   var S=statData("sales",r,per),W=writerData(r),pl=state.hasPlace?PLACES.map(function(x){return x[0]}):[];
   var rows=S.rows.map(function(x){return {k:x.k,name:x.name,x:x}}),seen={};rows.forEach(function(y){seen[y.k]=1});
@@ -3486,100 +3488,138 @@ function xlsxBlob(sheets){
     {n:"xl/workbook.xml",d:wb+'</sheets></workbook>'},{n:"xl/_rels/workbook.xml.rels",d:wr},
     {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="dd.mm.yyyy"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'}].concat(files));
 }
-/* All periods the statistics know, from the first one to the latest finished one. */
-function allPeriods(per,from){
-  var out=[],seen={},i,r,f0=from&&from>ST_START?from:ST_START;
-  if(per==="day"){for(var d=f0;d<=today;d=addDays(d,1))out.push({s:d,end:d,label:{dt:d}});return out}
-  for(i=0;i<2000;i++){r=per==="week"?weekRange(i):monthRange(i);if(seen[r.s])break;seen[r.s]=1;if(r.end<f0)break;r.label=per==="week"?rangeLabel(r):r.name+" ("+rangeLabel(r)+")";out.push(r);if(!r.canBack)break}
-  return out.reverse();
+/* ---------- Excel (owner 22.11): exactly what Statistika shows, except «Bu gün» ----------
+   Six sheets: Bu həftə, Keçən həftə, Bu ay, Keçən ay (each the period's «Ümumi cədvəl»), Pul and Məhsul (the four
+   periods one under the other). The weeks and months are the ones on the screen (‹ › included). The tables are made
+   by the same code as the screen and read back cell by cell, so the file cannot differ from the app. Font 12,
+   bold headers on grey, borders, merged group headers, amounts as numbers in ₼. */
+function xlsPers(){return ST_PERS.map(function(x){var r=perRange(x[0]);return {k:x[0],name:L(x[1]),r:r,label:x[0]==="month"||x[0]==="cmonth"?r.name+" ("+rangeLabel(r)+")":rangeLabel(r)}})}
+function xlsFrom(){var f=today;xlsPers().forEach(function(p){if(p.r.s<f)f=p.r.s});return f}
+/* a screen table → rows of cells {v, s(style), cs, rs}; numbers and amounts become numbers */
+function xCells(tb){
+  var out=[];
+  [["thead","h"],["tbody","b"],["tfoot","f"]].forEach(function(g){var sec=tb.querySelector(g[0]);if(!sec)return;
+    [].forEach.call(sec.rows,function(tr){out.push({g:g[1],c:[].map.call(tr.cells,function(td,ci){
+      var t=String(td.textContent||"").replace(/\s+/g," ").trim(),v=t,m=null;
+      if(g[1]!=="h"&&ci>0){var z=t.replace(/[\s  ]/g,"");
+        if(z.slice(-CUR.length)===CUR&&/^-?[\d.,]+$/.test(z.slice(0,-CUR.length))){v=+z.slice(0,-CUR.length).replace(/,/g,".").replace(/\.(?=.*\.)/g,"");m=1}
+        else if(/^-?\d+([.,]\d+)?$/.test(z))v=+z.replace(",",".")}
+      return {v:v,m:m,cs:td.colSpan||1,rs:td.rowSpan||1,first:ci===0}})})})});
+  return out;
 }
-/* Excel covers a chosen period; the first day it needs (whole weeks and months are kept whole). */
-var XLS_PER={m1:"Bu ay",m3:"Son 3 ay",y:"Bu il",all:"Hamısı (2 il)"};
-function xlsFrom(per){
-  var t=parse(today),f=per==="m1"?ymd(t.getFullYear(),t.getMonth(),1):per==="m3"?ymd(t.getFullYear(),t.getMonth()-2,1):per==="y"?ymd(t.getFullYear(),0,1):addDays(today,-HIST_DAYS);
-  /* back to the Friday that starts its week and to the start of its statistics month */
-  var d=parse(f),mb=monthBlock(d.getFullYear(),d.getMonth());if(f<mb.s)mb=monthBlock(d.getFullYear(),d.getMonth()-1);
-  var w=friOf(f);return mb.s<w?mb.s:w;
+/* one sheet from blocks [{title, sub, tables:[{title, el}]}] */
+function xBuild(blocks){
+  var rows=[],merges=[],w=[];
+  var put=function(r,c,cell){(rows[r]=rows[r]||[])[c]=cell;var l=cell.v==null?0:String(cell.v).length;if(cell.cs===1&&!cell.title)w[c]=Math.max(w[c]||9,Math.min(48,l+3))};
+  blocks.forEach(function(bl){
+    var r=rows.length;
+    put(r,0,{v:bl.title,s:7,cs:1,title:1});if(bl.sub)put(r+1,0,{v:bl.sub,s:11,cs:1,title:1});r=rows.length+1;
+    bl.tables.forEach(function(t){
+      if(t.title){put(r,0,{v:t.title,s:12,cs:1,title:1});r++}
+      var cells=xCells(t.el),busy={};
+      cells.forEach(function(row,ri){var c=0;
+        row.c.forEach(function(x){while(busy[(r+ri)+":"+c])c++;
+          var st=row.g==="h"?1:row.g==="f"?(x.first?5:x.m?9:6):(x.first?3:x.m?8:4);
+          put(r+ri,c,{v:x.v,s:st,cs:x.cs});
+          for(var a=0;a<x.rs;a++)for(var b=0;b<x.cs;b++){busy[(r+ri+a)+":"+(c+b)]=1;if(a||b)put(r+ri+a,c+b,{v:null,s:st,cs:2})}
+          if(x.cs>1||x.rs>1)merges.push(xCol(c)+(r+ri+1)+":"+xCol(c+x.cs-1)+(r+ri+x.rs));
+          c+=x.cs})});
+      r+=cells.length+1});
+    rows[r]=rows[r]||[];
+  });
+  return {rows:rows,merges:merges,w:w};
 }
+function xSheet(sh){
+  var out=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" zoomScale="110"/></sheetViews><sheetFormatPr defaultRowHeight="18"/><cols>'];
+  for(var i=0;i<sh.w.length;i++)out.push('<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+(i===0?Math.max(22,sh.w[i]||9):Math.max(11,sh.w[i]||9))+'" customWidth="1"/>');
+  out.push('</cols><sheetData>');
+  sh.rows.forEach(function(r,ri){if(!r)r=[];out.push('<row r="'+(ri+1)+'"'+(r[0]&&r[0].s===7?' ht="24" customHeight="1"':'')+'>');
+    r.forEach(function(x,ci){if(!x)return;var ref=xCol(ci)+(ri+1),st=' s="'+(x.s||0)+'"';
+      if(x.v==null||x.v==="")out.push('<c r="'+ref+'"'+st+'/>');
+      else if(typeof x.v==="number"&&isFinite(x.v))out.push('<c r="'+ref+'"'+st+'><v>'+x.v+'</v></c>');
+      else out.push('<c r="'+ref+'" t="inlineStr"'+st+'><is><t xml:space="preserve">'+xEsc(x.v)+'</t></is></c>')});
+    out.push('</row>')});
+  out.push('</sheetData>');
+  if(sh.merges.length)out.push('<mergeCells count="'+sh.merges.length+'">'+sh.merges.map(function(m){return '<mergeCell ref="'+m+'"/>'}).join("")+'</mergeCells>');
+  out.push('<pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>');return out.join("");
+}
+var X_STYLES='<numFmts count="1"><numFmt numFmtId="165" formatCode="#,##0.00&quot; ₼&quot;"/></numFmts>'+
+  '<fonts count="4"><font><sz val="12"/><name val="Calibri"/></font><font><b/><sz val="12"/><name val="Calibri"/></font><font><b/><sz val="16"/><name val="Calibri"/></font><font><i/><sz val="12"/><color rgb="FF666666"/><name val="Calibri"/></font></fonts>'+
+  '<fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8E4DA"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5F3EE"/><bgColor indexed="64"/></patternFill></fill></fills>'+
+  '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFB7B2A6"/></left><right style="thin"><color rgb="FFB7B2A6"/></right><top style="thin"><color rgb="FFB7B2A6"/></top><bottom style="thin"><color rgb="FFB7B2A6"/></bottom><diagonal/></border></borders>'+
+  '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="13">'+
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+                                                                        /* 0 */
+  '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>'+   /* 1 header */
+  '<xf numFmtId="14" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1"/>'+                                      /* 2 date */
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>'+          /* 3 name */
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>'+   /* 4 number */
+  '<xf numFmtId="0" fontId="1" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>'+   /* 5 total label */
+  '<xf numFmtId="0" fontId="1" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>'+   /* 6 total */
+  '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+                                                             /* 7 title */
+  '<xf numFmtId="165" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="center"/></xf>'+   /* 8 money */
+  '<xf numFmtId="165" fontId="1" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="center"/></xf>'+   /* 9 total money */
+  '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+                                                                        /* 10 */
+  '<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+                                                             /* 11 note */
+  '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>'+                                                             /* 12 table title */
+  '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>';
+function xlsxBlob(sheets){
+  var M='http://schemas.openxmlformats.org/',ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="'+M+'package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>',
+    wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="'+M+'spreadsheetml/2006/main" xmlns:r="'+M+'officeDocument/2006/relationships"><sheets>',
+    wr='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+M+'package/2006/relationships">',files=[],used={};
+  sheets.forEach(function(sh,i){var n=String(sh.name).replace(/[\[\]:*?\/\\]/g," ").slice(0,31),k=n,j=2;while(used[low(k)])k=n.slice(0,28)+" "+(j++);used[low(k)]=1;
+    ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+    wb+='<sheet name="'+xEsc(k)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
+    wr+='<Relationship Id="rId'+(i+1)+'" Type="'+M+'officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
+    files.push({n:"xl/worksheets/sheet"+(i+1)+".xml",d:xSheet(sh)})});
+  wr+='<Relationship Id="rId'+(sheets.length+1)+'" Type="'+M+'officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+  return zipBlob([{n:"[Content_Types].xml",d:ct+'</Types>'},
+    {n:"_rels/.rels",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="'+M+'package/2006/relationships"><Relationship Id="rId1" Type="'+M+'officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+    {n:"xl/workbook.xml",d:wb+'</sheets></workbook>'},{n:"xl/_rels/workbook.xml.rels",d:wr},
+    {n:"xl/styles.xml",d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="'+M+'spreadsheetml/2006/main">'+X_STYLES+'</styleSheet>'}].concat(files));
+}
+/* the screen's tables of one kind, as elements (made by the same functions as Statistika) */
+function xTables(html){var d=document.createElement("div");d.innerHTML=html;
+  return [].map.call(d.querySelectorAll("table"),function(t){var p=t.closest(".pay"),h=p&&p.querySelector(".head b");return {title:h?h.textContent.trim():"",el:t}})}
 function xlsSheets(all){
-  var sh=[],nz=function(v){return v==null?"":v};
-  var A=all.appts,keep={appts:state.appts,products:state.products,expenses:state.expenses};
-  /* every period only looks at its own days (fast even with years of data) */
-  var byD={},byC={},prD={},put=function(m,k,x){if(k)(m[k]||(m[k]=[])).push(x)};
-  A.forEach(function(a){put(byD,a.date,a);if(a.created&&a.created!==a.date)put(byC,a.created,a)});
-  all.products.forEach(function(x){put(prD,x.date,x)});
-  /* a booking written on one day of the period for another day of it is in both lists: take it once (B-01) */
-  var slice=function(r){var ap=[],pr=[],had={},add=function(x){if(!had[x.id]){had[x.id]=1;ap.push(x)}};
-    for(var d=r.s,g=0;d<=r.end&&g<400;d=addDays(d,1),g++){if(byD[d])byD[d].forEach(add);if(byC[d])byC[d].forEach(add);if(prD[d])pr=pr.concat(prD[d])}
-    state.appts=ap;state.products=pr;pcache=null};
-  state.expenses=all.expenses;statAll=true;pcache=null;edIdx=null;
+  var keep={appts:state.appts,products:state.products};
+  state.appts=all.appts;state.products=all.products;pcache=null;edIdx=null;
   try{
-    [["day",L("Günlük")],["week",L("Həftəlik")],["month",L("Aylıq")]].forEach(function(p){
-      var ps=allPeriods(p[0],all.from),S=[[L("Dövr"),L("Satış agenti"),L("Müraciət WP"),L("Müraciət SŞ"),L("Müraciət ümumi"),L("Yazdı"),L("Uğurlu"),L("Ləğv")]],
-        Mo=[[L("Dövr"),L("Mütəxəssis"),L("Yazılıb"),L("Uğurlu"),L("Ləğv"),L("Qazanc")]],Pr=[[L("Dövr"),L("Satan"),L("Satış"),L("Məbləğ")]],
-        Sv=[[L("Dövr"),L("Xidmət"),L("Seans"),L("Uğurlu")]],Pl=[[L("Dövr"),L("Yer"),L("Seans"),L("Uğurlu")]],Ag=[[L("Dövr"),L("Agent")].concat(SERVICES.map(function(k){return L(k)})).concat([L("Cəmi")])];
-      ps.forEach(function(r){slice(r);
-        statData("sales",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.d||x.w!=null||x.s!=null||x.t!=null)S.push([r.label,x.name,nz(x.w),nz(x.s),nz(x.t),x.a,x.b,x.d])});
-        statData("money",r,p[0]).rows.forEach(function(x){if(x.a||x.b||x.c||x.d)Mo.push([r.label,x.name,x.a,x.b,x.d,x.c])});
-        if(state.hasProducts)statData("prod",r,p[0]).rows.forEach(function(x){if(x.a||x.c)Pr.push([r.label,x.name,x.a,x.c])});
-        /* owner 18.11: everything the statistics screen shows is in Excel too */
-        var sv=svcData(r);if(sv.T.a){sv.rows.forEach(function(x){Sv.push([r.label,x.name,x.a,x.b])});Sv.push([r.label,L("Cəmi"),sv.T.a,sv.T.b])}
-        var pl=placeData(r);if(state.hasPlace&&pl.T.a){pl.rows.forEach(function(x){Pl.push([r.label,x.name,x.a,x.b])});Pl.push([r.label,L("Cəmi"),pl.T.a,pl.T.b])}
-        var ag=agentSvcData(r);ag.rows.forEach(function(x){Ag.push([r.label,x.name].concat(SERVICES.map(function(k){var i=ag.cols.indexOf(k);return i<0?0:x.v[i]})).concat([x.n]))});
-      });
-      sh.push({name:p[1]+" — "+L("satış"),rows:S},{name:p[1]+" — "+L("pul"),rows:Mo},{name:p[1]+" — "+L("xidmət"),rows:Sv},{name:p[1]+" — "+L("agent×xidmət"),rows:Ag});
-      if(state.hasPlace)sh.push({name:p[1]+" — "+L("yer"),rows:Pl});
-      if(state.hasProducts)sh.push({name:p[1]+" — "+L("məhsul"),rows:Pr});
-    });
-    var T=[[L("Tarix"),L("Kim yazıb"),L("Qəbul")]];
-    allPeriods("day",all.from).forEach(function(r){slice(r);statData("today",r,"today").rows.forEach(function(x){if(x.a)T.push([r.label,x.name,x.a])})});
-    sh.push({name:L("Gün ərzində yazılanlar"),rows:T});
-  }finally{state.appts=keep.appts;state.products=keep.products;state.expenses=keep.expenses;statAll=false;pcache=null;edIdx=null}
-  var rn=function(id){var r=reader(id);return r?r.name:""},sn=function(id){return state.staff[id]||(id?L("Adsız istifadəçi"):"")};
-  var Q=[[L("Tarix"),L("Saat"),L("Bitir"),L("Müddət, dəq"),L("Mütəxəssis"),L("Pasiyent"),L("Telefon"),L("Yer"),L("Xidmət"),L("Qiymət"),L("Vəziyyət"),L("Təsdiqlənib"),L("Yazdı"),L("Yazılıb"),L("Qeyd")]];
-  A.slice().sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)}).forEach(function(a){
-    Q.push([{dt:a.date},a.time,endOf(a),a.dur||90,rn(a.readerId),a.name,a.phone,placeName(a.place),L(svcName(a.service)),a.price||0,done(a)?L("Uğurlu"):gone(a)?ST[a.status]:L("Gözlənilir"),a.conf?L("Bəli"):"",sn(a.by),a.created?{dt:a.created}:"",a.note||""])});
-  sh.push({name:L("Bütün qəbullar"),rows:Q});
-  if(state.hasProducts){var P=[[L("Tarix"),L("Satan"),L("Məhsulların adları"),L("Məbləğ")]];
-    all.products.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){P.push([{dt:x.date},sn(x.by),prodItems(x.names).join(", "),x.amount])});
-    sh.push({name:L("Məhsul satışları"),rows:P})}
-  if(state.v2){var E=[[L("Tarix"),L("Xərc"),L("Məbləğ")]];
-    all.expenses.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(x){E.push([{dt:x.date},x.title,x.amount])});
-    sh.push({name:L("Xərclər"),rows:E})}
-  return sh;
+    var P=xlsPers(),sh=[];
+    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(bigTable(p.r,p.k)).map(function(t){t.title="";return t})}]})});
+    sh.push({name:L("Pul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(statTable("money",p.r,p.k)).map(function(t){t.title="";return t})}})});
+    if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k))}})});
+    return sh.map(function(x){var b=xBuild(x.b);b.name=x.name;return b});
+  }finally{state.appts=keep.appts;state.products=keep.products;pcache=null;edIdx=null}
 }
 var XLS_COLS="id,reader_id,date,time,duration,name,phone,price,status,note,confirmed,created_by,created_at,place,service,follow";
-function xlsFetch(per){
-  var from=xlsFrom(per),cols=state.hasConf?XLS_COLS:XLS_COLS.replace(",confirmed","");if(!state.hasPlace)cols=cols.replace(",place","");if(!state.hasDur)cols=cols.replace(",duration","");if(!state.hasFollow)cols=cols.replace(",follow","");
+function xlsFetch(){
+  var from=xlsFrom(),cols=state.hasConf?XLS_COLS:XLS_COLS.replace(",confirmed","");if(!state.hasPlace)cols=cols.replace(",place","");if(!state.hasDur)cols=cols.replace(",duration","");if(!state.hasFollow)cols=cols.replace(",follow","");
   return Promise.all([
     fetchAll(function(){return sb.from("appts").select(cols).gte("date",from).order("date").order("id")}),
-    /* written inside the period for an earlier day: the "written" counts need them */
+    /* written inside the periods for an earlier day: the "written" counts need them */
     soft(function(){return sb.from("appts").select(cols).gte("created_at",bakuStart(from)).lt("date",from).order("id")}),
-    state.hasProducts?fetchAll(function(){return sb.from("product_sales").select("*").gte("date",from).order("date").order("id")}):Promise.resolve([]),
-    state.v2?fetchAll(function(){return sb.from("expenses").select("*").gte("date",from).order("date").order("id")}):Promise.resolve([])
-  ]).then(function(r){return{from:from,appts:uniq(r[0].concat(r[1]||[])).map(mapAppt),products:r[2].map(mapProd),expenses:r[3].map(mapExp)}});
+    state.hasProducts?fetchAll(function(){return sb.from("product_sales").select("*").gte("date",from).order("date").order("id")}):Promise.resolve([])
+  ]).then(function(r){return{from:from,appts:uniq(r[0].concat(r[1]||[])).map(mapAppt),products:r[2].map(mapProd)}});
 }
 function xlsSheet(){
   var x=sheet,h='<h2>Excel'+CLOSE+'</h2>';
-  if(!x.per)return h+'<p class="hint">'+L("Hansı dövr üçün?")+'</p><div class="btns xlsper">'+Object.keys(XLS_PER).map(function(k){return '<button class="'+(k==="m1"?"primary":"ghost")+'" data-act="xls-per" data-id="'+k+'">'+L(XLS_PER[k])+'</button>'}).join("")+'</div><p class="hint small">'+L("Dövr qısa olanda fayl tez hazırlanır və az internet işlədir.")+'</p>';
   if(x.err)return h+'<p class="err" role="alert">'+L("Faylı hazırlamaq olmadı. İnterneti yoxlayın və yenidən cəhd edin.")+'</p><button class="primary" data-act="xls">'+L("Yenidən cəhd et")+'</button>';
   if(!x.url)return h+'<p class="hint">'+L("Dövrün məlumatları yüklənir və fayl hazırlanır…")+'</p>';
-  h+='<p class="hint">'+tf(L("Fayl hazırdır: {n} vərəq, {q} qəbul."),{n:x.n,q:x.q})+'</p>';
+  h+='<p class="hint">'+L("Faylda Statistikadakı cədvəllər var: Bu həftə, Keçən həftə, Bu ay, Keçən ay, Pul, Məhsul.")+'</p>';
   if(NATIVE&&typeof NATIVE.saveFile==="function")return h+'<button class="primary" data-act="xls-save">'+L("Telefona yüklə")+'</button>';
   if(NATIVE)return h+'<p class="hint">'+L("Bu tətbiq versiyası faylı yükləyə bilmir. Yeni versiyanı quraşdırın və ya proqramı brauzerdə açın.")+'</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">'+L("Yeni versiyanı yüklə")+'</a>';
   return h+'<a class="primary" href="'+esc(x.url)+'" download="'+esc(x.fname)+'">'+L("Faylı yüklə")+'</a>'+
     '<p class="hint">'+L("iPhone-da: «Yüklə» basın, sonra faylı «Fayllar» və ya Excel ilə açın.")+'</p>';
 }
 function dropXlsUrl(x){if(x&&x.url&&x.url!=="#"){try{URL.revokeObjectURL(x.url)}catch(e){}x.url=""}}
-function startXls(per){
+function startXls(){
   if(!isAdmin())return;
-  if(sheet&&sheet.type==="xls"){dropXlsUrl(sheet);if(!per)per=sheet.per}
-  var s={type:"xls",per:per&&XLS_PER[per]?per:""},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};
+  if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
+  var s={type:"xls",per:"stat"},fail0=function(){if(sheet!==s)return;s.err=true;byId("sheet").innerHTML=xlsSheet()};
   if(sheet&&sheet.type==="xls"){sheet=s;byId("sheet").innerHTML=xlsSheet()}else openSheet(s);
-  if(!s.per)return;
-  xlsFetch(s.per).then(function(all){
+  xlsFetch().then(function(all){
     if(sheet!==s)return;
-    var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+(s.per==="all"?"":s.per+"-")+today+".xlsx";
+    var sh=xlsSheets(all);s.n=sh.length;s.q=all.appts.length;s.fname="Merkez-statistika-"+today+".xlsx";
     return xlsxBlob(sh).then(function(blob){
       if(sheet!==s)return;
       s.blob=blob;s.url=URL.createObjectURL(blob);byId("sheet").innerHTML=xlsSheet();
@@ -4568,8 +4608,7 @@ document.addEventListener("click",function(e){
   else if(act==="cat-del"){if(!sheet||!isAdmin())return;var cd1=catItem(sheet.eid);if(!cd1)return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Silinəcək (satışlar qalır) — bir də basın");return}
     removeBy(state.catalog,cd1.id);db(sb.from("products").delete().eq("id",cd1.id));sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return}
-  else if(act==="xls"){startXls(sheet&&sheet.type==="xls"&&sheet.err?sheet.per:"");return}
-  else if(act==="xls-per"){startXls(id);return}
+  else if(act==="xls"){startXls();return}
   else if(act==="xls-save"){
     if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
     var xs=sheet,fr=new FileReader();xs.saving=true;
