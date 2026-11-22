@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-rbVZ7OZUylUDHDlzMIkta5of0rlZUlAiT6xJqN9YhUc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-wSIuPbVhjABrLwYyZht5d37VNp0ZejrWipIw9OtsixQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
@@ -2514,7 +2514,7 @@ function ensureHist(){
   grouped.then(function(x){
     histLoading=false;if(my!==seq||!auth.user)return;
     state.hist=x.rows?x.rows.map(mapLite):[];state.histP=x.groups?x.groups.map(mapHistP):[];state.histLoaded=true;render();redrawCard();
-  },function(){histLoading=false;histFail=Date.now()});
+  },function(){histLoading=false;histFail=Date.now();if(my===seq){render();setTimeout(ensureHist,20500)}});   /* A5-09: said, and tried again by itself */
 }
 /* the old visits of one patient, for the card */
 function loadOldVisits(sh,p){
@@ -2969,6 +2969,7 @@ function renderScreen(){
   var note=offline?L("İnternet yoxdur. Dəyişikliklər yadda saxlanmayacaq."):auth.msg;
   if(!note&&loadingOlder)note=L("Köhnə məlumatlar yüklənir…");
   if(!note&&histLoading&&ui.tab==="patients")note=L("Köhnə pasiyentlər yüklənir…");
+  if(!note&&!histLoading&&histFail&&!state.histLoaded&&ui.tab==="patients")note=L("Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…");
   var banner=(note?'<div class="note warnbox" role="status"><p>'+esc(note)+'</p></div>':(!auth.loaded?L('<div class="note" role="status"><p>Qəbullar yüklənir…</p></div>'):""))+(auth.loaded&&!pendingMe()?draftBox():"");
   if(ui.tab==="patients"){
     if(!byId("q"))top.innerHTML=L('<h1>Pasiyentlər</h1><input class="search" id="q" type="search" aria-label="Ad və ya telefon ilə axtar" placeholder="Ad və ya telefon ilə axtar" value="')+esc(ui.q)+'">';

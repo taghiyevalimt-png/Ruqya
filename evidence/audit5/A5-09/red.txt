@@ -1,0 +1,7 @@
+Sun Nov 22 15:16:22 UTC 2026
+red, 4cf0193
+FAIL 99-a5-09-hist-fail.js 
+    Error: FAIL: the list says it is incomplete: Pasiyentlər | Pasiyentlər | Ləğv olunanlar | Təsdiq | Qayıtmayanlar | Hamısını telefon kontaktlarına əlavə et (1) | Təzə Sınaq | 0501110008 · 1 dəfə gəlib | Yaz | Qəbullar | Statistika | Kassa | Pasiyentlər | Ayarlar
+        at check (/home/claude/ruqya/tests/lib.js:229:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-09-hist-fail.js:18:5)
+1 failed of 1
