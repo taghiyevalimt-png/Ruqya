@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-NsHnya2M5YOAWtHfpAtEG3ZM3EZqZge8d9CJRIfwlBs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8bN6Dx+7nv1/vlJmoY5qLy/Zl4NlAKMgxh7Jzg7WPIo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1857,7 +1857,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122141551";
+var APP_VERSION="20261122142125";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3435,7 +3435,7 @@ function bigTable(r,per){
   var cell=function(y,col,v,label){
     if(y.x&&editable&&(isAdmin()||y.k===auth.user.id))return '<td class="num"><button type="button" class="cellb'+(y.x["e"+col]&&(col==="a"||col==="b")?' edited':'')+'" data-act="st-edit" data-id="'+esc(y.k)+'" data-col="'+col+'" data-p="'+eper+'" data-s="'+esc(r.s)+'" aria-label="'+esc(y.name+" — "+label+": "+v)+'">'+esc(v)+'</button></td>';
     return '<td class="num">'+(y.x&&y.x["e"+col]?'<span class="edited">'+esc(v)+'</span>':esc(v))+'</td>'};
-  var h='<div class="pay big" data-st="big-'+per+'"><div class="head"><b>'+L("Ümumi cədvəl")+'</b><button class="ghost copyb" data-act="st-copy" data-id="all" data-p="'+per+'">⧉ '+L("Kopyala")+'</button></div><div class="hscroll"><table class="stt wide big"><thead><tr>'+
+  var h='<div class="pay big" data-st="big-'+per+'"><div class="head"><b>'+L("Ümumi cədvəl")+'</b>'+copyB()+'</div><div class="hscroll"><table class="stt wide big"><thead><tr>'+
     '<th rowspan="2">'+L("Kim")+'</th><th colspan="3" class="grp">'+L("Müraciət")+'</th><th colspan="3" class="grp g2">'+L("Qəbullar")+'</th>'+
     (W.cols.length?'<th colspan="'+W.cols.length+'" class="grp g3">'+L("Xidmətlər")+'</th>':'')+(pl.length?'<th colspan="'+pl.length+'" class="grp g4">'+L("Yer")+'</th>':'')+'</tr><tr class="sub">'+
     vth("WP")+vth(L("SŞ"))+vth(L("ümumi"))+vth(L("Yazdı"),"g2")+vth(L("Uğurlu"),"g2")+vth(L("Ləğv"),"g2")+
@@ -3510,6 +3510,36 @@ function statCopyText(kind,per){
   if(kind==="all")return statText("sales",r,per)+"\n\n"+writerText(r);
   var ks=[kind];if(!isAdmin())ks=ks.filter(function(k){return k!=="money"&&k!=="prod"});
   return ks.map(function(k){return statText(k,r,per)}).join("\n\n");
+}
+/* owner 22.11: a table for WhatsApp — not a wide grid (a phone breaks its lines), but one short block per person:
+   his name in bold, then each group of the table on its own line («Qəbullar: Yazdı 118 · Uğurlu 69 · Ləğv 11»);
+   «—» and «·» are left out, and in long groups (services, products) the zeros too. Made from the table on the screen,
+   so it says the same. */
+function waText(tb,title,period){
+  var txt=function(td){var c=td.cloneNode(true);[].forEach.call(c.querySelectorAll("small.pct,.rpw"),function(z){z.parentNode.removeChild(z)});return String(c.textContent||"").replace(/\s+/g," ").trim()};
+  var hr=tb.tHead?[].slice.call(tb.tHead.rows):[],labels=[],groups=[],gsize={};
+  if(hr.length>1){var c0=1;[].forEach.call(hr[0].cells,function(td,k){if(k===0&&td.rowSpan>1)return;for(var q=0;q<td.colSpan;q++)groups[c0+q]=txt(td);gsize[txt(td)]=td.colSpan;c0+=td.colSpan});
+    labels=[txt(hr[0].cells[0])].concat([].map.call(hr[1].cells,txt))}
+  else if(hr.length)labels=[].map.call(hr[0].cells,txt);
+  var vals=function(tr){var o=[];[].forEach.call(tr.cells,function(td){o.push(txt(td));for(var q=1;q<td.colSpan;q++)o.push("")});return o};
+  var empty=function(v){return v===""||v==="—"||v==="·"};
+  var zero=function(v){return /^0([.,]0+)?( ?₼)?$/.test(v.replace(/\s/g," ").replace(/\u00a0|\u202f/g," "))||v==="0 "+CUR};
+  var block=function(v,bold){
+    if(!groups.length){   /* a short table: one line per person — «▪️ *Nərmin* (Satış agenti): *17*» */
+      var mid=v.slice(1,-1).filter(function(x){return !empty(x)}),last=v[v.length-1];
+      return "▪️ *"+v[0]+"*"+(mid.length?" ("+mid.join(", ")+")":"")+(labels.length>2&&!empty(last)?": *"+last+"*":"");
+    }
+    var lines=[(bold?"🔸 *":"▪️ *")+v[0]+"*"],cur=null,part=[];
+    var flush=function(){if(part.length)lines.push("   "+(cur?cur+": ":"")+part.join(" · "));part=[]};
+    for(var k=1;k<v.length;k++){var g=groups[k]||"";if(g!==cur){flush();cur=g}
+      var x=v[k];if(empty(x))continue;if(zero(x)&&gsize[g]>3)continue;part.push(labels[k]+" "+x)}
+    flush();
+    return lines.length>1?lines.join("\n"):lines[0]+"\n   —";
+  };
+  var out=["📊 *"+title+"*"];if(period)out.push("_"+period+"_");out.push("");
+  [].forEach.call(tb.tBodies[0]?tb.tBodies[0].rows:[],function(tr){var v=vals(tr);if(v.length>1||!groups.length){out.push(block(v,false));if(groups.length)out.push("")}});
+  if(tb.tFoot)[].forEach.call(tb.tFoot.rows,function(tr){out.push("");out.push(block(vals(tr),true))});
+  return out.join(groups.length?"\n":"\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 function txtTable(title,rows){
   var w=rows[0].map(function(_,i){return rows.reduce(function(m,x){return Math.max(m,clen(x[i]))},0)});
@@ -4735,10 +4765,9 @@ document.addEventListener("click",function(e){
   else if(act==="st-copy-t"){
     var tb2=b.closest(".pay")&&b.closest(".pay").querySelector("table");if(!tb2)return;
     var hd2=b.closest(".pay").querySelector(".head b"),lab=document.querySelector("#main .daynav .label");
-    var gr=xBuild([{title:"",tables:[{title:"",el:tb2}]}]).rows.filter(function(r){return r&&r.some(function(c){return c&&c.s!==7&&c.s!==11&&c.s!==12})});
-    var wd=Math.max.apply(null,gr.map(function(r){return r.length}));
-    var rws=gr.map(function(r){var o=[];for(var q=0;q<wd;q++){var c=r[q];o.push(!c||c.v==null?"":typeof c.v==="number"?(c.s===8||c.s===9?money(c.v):String(c.v)):String(c.v))}return o});
-    var ctx=txtTable((hd2?hd2.textContent:"")+(lab?"\n"+[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean).join(" · "):""),rws);
+    var sec0=document.querySelector('#top [data-act="st-sec"][aria-pressed="true"]');
+    var st0=sec0?sec0.textContent.trim():"",ht0=hd2?hd2.textContent.trim():"";
+    var ctx=waText(tb2,st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");
     copyText(ctx,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},function(){openSheet({type:"stcopy",text:ctx})});
     return;
   }
