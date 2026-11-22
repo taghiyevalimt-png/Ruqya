@@ -1,0 +1,7 @@
+Sun Nov 22 15:22:14 UTC 2026
+red, 1532a8d
+FAIL 99-a5-12-quota.js 
+    Error: FAIL: the draft is kept on the phone although the storage was full: 
+        at check (/home/claude/ruqya/tests/lib.js:229:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-12-quota.js:19:5)
+1 failed of 1

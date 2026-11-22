@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-hjoT8de0b60Yv5f9/kttpuJ8wlNcUkMf0GjLLwT9x7c='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-AfUC0AyMR52ugmu5T3rKoMhs2HJTrD6RXDDPjD5bRJo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2663,10 +2663,13 @@ function authLost(){
 /* ---------- drafts: a booking form whose data did not reach the server ----------
    Kept on this phone for the signed-in person only (2 days at most), shown as a notice with «Geri aç». */
 var DK="ruqya.draft.v1";
+/* A5-12: what was typed comes before the offline copy — when the storage is full, the copy (it can always be loaded
+   again) is dropped and the draft written */
+function lsPut(k,v){try{localStorage.setItem(k,v)}catch(e){try{localStorage.removeItem(CK);lastCacheJs="";localStorage.setItem(k,v)}catch(e2){}}}
 function placeVal(){var e=document.querySelector('input[name="f-place"]:checked');return e?e.value:""}
 function formVals(){var g=function(i){var e=byId(i);return e?e.value:""};
   return{place:placeVal(),service:svcVal(),readerId:g("f-reader"),dur:g("f-dur"),date:g("f-date"),time:g("f-time"),name:g("f-name"),phone:g("f-phone"),price:g("f-price"),note:g("f-note")}}
-function keepDraft(sh,v){if(!auth.user)return;try{localStorage.setItem(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,nid:sh.nid||null,v:v}))}catch(e){}}
+function keepDraft(sh,v){if(!auth.user)return;lsPut(DK,JSON.stringify({u:auth.user.id,t:Date.now(),id:sh.id||null,orig:sh.orig||null,nid:sh.nid||null,v:v}))}
 function getDraft(){try{var d=JSON.parse(localStorage.getItem(DK)||"null");if(d&&d.v&&auth.user&&d.u===auth.user.id&&Date.now()-d.t<2*864e5)return d}catch(e){}return null}
 function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
 /* The phone may close the app while it is in the background (e.g. the user went to WhatsApp): the typing of an open
@@ -3860,7 +3863,7 @@ function sellForm(){
 var SK="ruqya.selldraft.v1",sellPend=0;
 /* A5-04: a sale not yet confirmed by the server is kept on the phone (taps, date, ids) until it is; Kassa offers it again */
 function sellDraft(v){try{if(v===undefined){var d=JSON.parse(localStorage.getItem(SK)||"null");return d&&auth.user&&d.u===auth.user.id&&d.cnt&&Date.now()-d.t<7*864e5?d:null}
-  if(v===null)localStorage.removeItem(SK);else localStorage.setItem(SK,JSON.stringify({u:auth.user.id,t:Date.now(),cnt:v.cnt,date:v.date,ids:v.ids}))}catch(e){}return null}
+  if(v===null)localStorage.removeItem(SK);else lsPut(SK,JSON.stringify({u:auth.user.id,t:Date.now(),cnt:v.cnt,date:v.date,ids:v.ids}))}catch(e){}return null}
 function sellDraftBox(){var d=sellDraft();if(!d||(sheet&&sheet.type==="sell"))return "";
   /* lines the server already has are not offered again */
   var left=Object.keys(d.cnt).filter(function(k){var o=d.ids&&d.ids[k];return !(o&&prodRow(o.id))&&catItem(k)});
