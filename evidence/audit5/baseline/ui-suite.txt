@@ -1,0 +1,81 @@
+# A5 baseline — UI test suite (tests/t, Chrome, fake Supabase) on commit 402eec6 (before audit 5), run 2026-11-22 ~14:05 UTC in 3 parallel parts
+# not runnable here (missing npm packages): 21-access-matrix 22-attacks 24-aria 90-sql 91-schema 92-visits-access 93-restore-one 97-person-export-delete 99-*-db
+PASS 00-smoke.js 7.0
+PASS 01-drafts.js 40.1
+PASS 02-session.js 11.1
+PASS 03-delete-fonts.js 7.9
+PASS 04-excel.js 5.9
+PASS 05-patients.js 10.8
+PASS 06-anonymize.js 14.4
+PASS 07-russian.js 9.0
+PASS 08-sweep.js 163.1
+PASS 09-features.js 78.3
+    fuzz bad0 az 120 steps 24s
+    fuzz bad0 ru 120 steps 58s
+    fuzz 1111 az 120 steps 73s
+    fuzz 1111 ru 120 steps 92s
+    fuzz 2222 az 120 steps 110s
+    fuzz 2222 ru 120 steps 124s
+PASS 10-fuzz.js 123.6
+PASS 11-es5.js 0.1
+PASS 12-list.js 7.7
+PASS 13-followup.js 42.4
+PASS 14-no-slots.js 6.5
+PASS 15-keyboard.js 6.1
+PASS 16-ios-scroll.js 5.6
+PASS 17-cancel-contact.js 14.3
+PASS 18-faults.js 93.0
+PASS 19-a11y.js 15.7
+PASS 20-xss.js 39.9
+PASS 23-excel-counts.js 5.6
+PASS 25-many-patients.js 8.9
+PASS 26-draft-background.js 10.2
+PASS 27-dialog-focus.js 5.0
+PASS 28-publish-guard.js 0.3
+PASS 29-rules-text.js 10.6
+PASS 30-patient-search.js 9.5
+failed 0
+PASS 31-patients-keyset.js 23.3
+PASS 94-configured-copy.js 0.8
+PASS 95-no-third-party.js 9.5
+PASS 96-close-history.js 8.7
+PASS 98-ru-dictionary.js 0.0
+PASS 99-agent-services.js 20.9
+PASS 99-app-errors.js 28.4
+PASS 99-breaks-days.js 24.8
+PASS 99-breaks-delete-one-request.js 8.1
+PASS 99-breaks-gcal.js 18.0
+PASS 99-cache-bad.js 8.8
+PASS 99-cash-save-fail.js 12.9
+PASS 99-contacts-agent.js 22.4
+PASS 99-contacts.js 27.7
+PASS 99-current-period.js 14.7
+PASS 99-errors-visible.js 6.7
+PASS 99-excel-sync.js 8.9
+PASS 99-hide-admin.js 9.1
+PASS 99-list-specialists-bar.js 7.5
+PASS 99-mock-defaults.js 8.6
+PASS 99-money-services.js 9.5
+failed 0
+PASS 99-new-helpers.js 10.0
+FAIL 99-new-presets.js Error: FAIL: editing an existing booking: Masaj does not change 130 / 1 h 30 min: {"dur":"120","price":"120"} |     at check (/home/claude/ruqya/tests/lib.js:218:46)
+PASS 99-paid-online.js 8.8
+PASS 99-product-shares.js 23.4
+PASS 99-products-buttons.js 19.5
+PASS 99-service-ui.js 16.7
+PASS 99-short-window-iphone.js 7.9
+PASS 99-short-window-keyboard.js 6.2
+PASS 99-show-zeros.js 10.1
+PASS 99-sold.js 21.1
+PASS 99-stats-merged.js 11.4
+PASS 99-stats-notes.js 15.2
+PASS 99-time-whole-hour.js 4.2
+PASS 99-uniform-view.js 13.8
+PASS 99-whole-day-default.js 11.0
+PASS 99-whole-day-details.js 9.1
+PASS 99-whole-day-foot.js 12.5
+PASS 99-whole-day-names.js 10.7
+PASS 99-whole-day.js 27.6
+PASS 99-widget-color.js 12.2
+PASS 99-widget-filter.js 9.2
+failed 1

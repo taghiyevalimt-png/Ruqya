@@ -1,0 +1,7 @@
+# A5 baseline — live database, aggregates only (no names, no phones). 2026-11-22T14:27:23Z, commit ab2860b
+# Query: tools are the Supabase MCP execute_sql (read-only select); the exact query is in evidence/audit5/baseline/live-aggregates.sql
+appts=428  pkeys(phone-or-name keys)=379  distinct(pkey,name)=403  pkeys_with_several_names=23  short_phone_rows(<7 digits)=12
+sales=12  sales_date_after_entry=3 (shift +2, +4, +17 days)  sales_date_before_entry=0  sales_no_names=6  sales_with_product_id=0
+audit_log: appts INSERT 473 / UPDATE 255 / DELETE 45; product_sales INSERT 17 / DELETE 5; products INSERT 29; breaks INSERT 26 / DELETE 22; staff INSERT 14 / UPDATE 15; readers INSERT 4 / UPDATE 9; stat_edits INSERT 1 / DELETE 1
+integrity: appts with missing reader=0, appts with unknown author=0, two active bookings on one slot=0
+app_errors (last 10, text only): 3 × "A network error occurred."

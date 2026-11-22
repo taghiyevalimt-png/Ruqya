@@ -1,0 +1,13 @@
+# A5 stage 0 — what I can really do (2026-11-22T14:27:23Z)
+- git clone/push: yes (branch audit5 pushed); pushing the tag audit5-start failed twice through the proxy (local tag exists)
+- Node 22 + Chrome (playwright-core from /opt/node-tools): yes, tests/run.js runs
+- npm ci in tests/: NO (network for package installs is off). Missing: pg, @electric-sql/pglite, embedded-postgres, axe-core, eslint.
+  → the SQL tests (21, 22, 24, 90–93, 97, 99-*-db) cannot run here: NOT VERIFIED by them.
+  → replacement: a local PostgreSQL 16.15 (Ubuntu package) on 127.0.0.1:54330, database "copy", driven with psql.
+- Copy structure: db/schema_live_20261116.sql (PG17 dump; MAINTAIN privileges removed for PG16) + sql migrations in the dbcopy.js order + 5 migrations of 22.11.
+  Function signatures compared with the live database: identical (26 = 26), see S0/schema-compare.txt.
+- Supabase live: read-only aggregate SQL via MCP; migrations via MCP apply_migration. Branches / test project: not used (cost).
+- GitHub Actions: cannot trigger (gh CLI token rejected). Last backup run: 2026-11-22T11:54:25Z success (public API).
+  → a fresh backup right before publication: NOT POSSIBLE from here (owner: Actions > Database backup > Run workflow).
+- Network throttling / time travel in the browser: yes (Playwright routes, page.clock).
+- Separate agents: available (Agent tool).

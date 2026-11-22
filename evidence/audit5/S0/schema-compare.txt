@@ -1,0 +1,1 @@
+functions: live 26, copy 26, differences: none (names + argument lists)
