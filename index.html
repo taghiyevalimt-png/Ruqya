@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qX+7aALA0OQ6CTHBZvENtI7qnTrQJ3mh/4kGFdR8zvc='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-wAJWnDbEypBFyw32QMypZZEerZYKZzNOZ/itsUjpkAg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -831,7 +831,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "Satana qalan":"Остаётся продавцу",
@@ -2786,7 +2786,11 @@ function loadCache(uid){
 }
 /* A phone left on a desk overnight must not keep showing patients: after 12 hours without a touch the
    session and every copy of data on this device are removed (counted across tabs and app restarts). */
-var IDLE_MS=7*24*3600e3,   /* owner 17.11: sign out after 7 days without use (was 12 hours; RISK_REGISTER S-09) */
+/* S-09 (audit 6): IDLE_12H = true signs out after 12 hours without use (ASVS L2 V3.3.2 — a government customer's
+   requirement). Off by the owner's decision of 17.11 (7 days). Switching it on: this one line, plus IDLE_MS in
+   android/…/MonthWidget.java (the widget hides names after the same time) and a new APK. Test 99-a6-11. */
+var IDLE_12H=false;
+var IDLE_MS=(IDLE_12H?12:7*24)*3600e3,   /* owner 17.11: sign out after 7 days without use (was 12 hours; RISK_REGISTER S-09) */
 SEEN="ruqya.seen",seenW=0,idled=false;
 function touchSeen(){var t=Date.now();if(t-seenW<60000)return;seenW=t;try{localStorage.setItem(SEEN,String(t))}catch(e){}}
 function idleOut(){
@@ -2798,7 +2802,7 @@ function idleOut(){
   if(sb){try{sb.auth.signOut({scope:"local"}).then(null,function(){})}catch(e){}}
   idled=true;clearTimeout(msgTimer);
   if(auth.user)signedOut();
-  auth.msg=L("7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
+  auth.msg=IDLE_12H?L("12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun."):L("7 gün istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.");render();
   return true;
 }
 ["pointerdown","keydown","touchstart"].forEach(function(ev){document.addEventListener(ev,touchSeen,{passive:true,capture:true})});
