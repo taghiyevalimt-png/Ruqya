@@ -131,8 +131,8 @@ jobs:
             sleep 20
           done
           q -F $'\t' -f "$GITHUB_WORKSPACE/scripts/backup-structure.sql" > manifest-structure-source.txt
-          # second, standard-format copy (pg_restore), schemas public, auth and storage
-          pg_dump "$SUPABASE_DB_URL" -Fc -n public -n auth -n storage -f public-auth-storage.dump
+          # second, standard-format copy (pg_restore), schemas public, private, auth and storage
+          pg_dump "$SUPABASE_DB_URL" -Fc -n public -n private -n auth -n storage -f public-auth-storage.dump   # audit 6: + private (the RLS helpers)
           pg_restore -l public-auth-storage.dump > /dev/null
           for f in schema.sql post-schema.sql auth-columns.sql data.sql public-auth-storage.dump; do
             [ -s "$f" ] || { echo "::error::$f is empty"; exit 1; }

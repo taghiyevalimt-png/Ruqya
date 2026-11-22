@@ -1,0 +1,8 @@
+# A6-12 (from the acceptance review): restoring a backup must give «authenticated» schema private and its functions, or every RLS policy fails after A6-08
+Sun Nov 22 20:07:24 UTC 2026
+copy DB: privileges on schema private and its functions removed, then post-schema.sql from scripts/backup-post-schema-gen.sql applied
+broken: false false
+restored: true true anon: false
+before the change the generator covered schema public only: the same check ends «false false» (red) — the private lines come from the new part
+backup.yml: the second copy (pg_dump) now includes -n private
+НЕ ПРОВЕРЕНО here: a run of backup.yml (needs GitHub)

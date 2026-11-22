@@ -1,5 +1,6 @@
 -- Writes post-schema.sql, applied right after schema.sql when restoring:
---  1. the exact privileges of the source's tables, sequences, views and functions in schema public;
+--  1. the exact privileges of the source's tables, sequences, views and functions in schema public (and of schema
+--     private and its functions — audit 6);
 --  2. the source's realtime publication membership (supabase_realtime), which the app needs for live updates.
 -- Why: a new Supabase project (or local stack) has default privileges that give anon / authenticated /
 -- service_role access to every new table and function, and a schema dump only adds GRANTs. Restoring a dump
@@ -18,7 +19,7 @@ with rel as (
   select p.oid, p.proacl, p.proowner, p.prokind,
          format('%I.%I(%s)', n.nspname, p.proname, pg_get_function_identity_arguments(p.oid)) qn
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-  where n.nspname = 'public' and p.prokind in ('f', 'p')
+  where n.nspname in ('public', 'private') and p.prokind in ('f', 'p')   -- audit 6: the RLS helpers live in schema private
     and not exists (select 1 from pg_depend d where d.objid = p.oid and d.deptype = 'e')   -- not extension members
 ), cols as (
   select r.qn, a.attname, a.attnum, x.grantee, x.privilege_type
@@ -52,6 +53,12 @@ with rel as (
          format('do $$ begin if not exists (select 1 from pg_publication_tables where pubname = ''supabase_realtime'' and schemaname = %L and tablename = %L) then alter publication supabase_realtime add table %I.%I; end if; end $$;',
                 schemaname, tablename, schemaname, tablename)
   from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public'
+  union all
+  -- audit 6 (A6-08): every RLS policy calls the helpers in schema private, so «authenticated» must be able to use it
+  select 0, 'private', 0, 'revoke all on schema private from public, anon;' where exists (select 1 from pg_namespace where nspname = 'private')
+  union all
+  select 0, 'private', 1, format('grant usage on schema private to %s;', quote_ident(pg_get_userbyid(x.grantee)))
+  from pg_namespace n, aclexplode(n.nspacl) x where n.nspname = 'private' and x.privilege_type = 'USAGE' and x.grantee <> n.nspowner
 )
 select l from (select '-- privileges and realtime membership of schema public as in the source; apply after schema.sql' l, 0 o, '' k, 0 s
                union all select l, o, k, s from lines) z
