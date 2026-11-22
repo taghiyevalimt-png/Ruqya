@@ -1,5 +1,6 @@
 -- Undo of 2026-11-a6-private-helpers.sql: the seven helpers go back to schema public and every function that calls
 -- them is restored to its previous text (taken from the database before the migration).
+-- Order: roll back 2026-11-a6-one-policy.sql FIRST (its policies call private.*), then this file.
 do $$ declare f text; begin
   foreach f in array array['ruqya_is_admin()','ruqya_has_role()','ruqya_sees_all()','ruqya_my_readers()','ruqya_can_stats()','ruqya_can_breaks()','ruqya_err_ok()'] loop
     if to_regprocedure('private.' || f) is not null then execute 'alter function private.' || f || ' set schema public'; end if;
@@ -238,4 +239,7 @@ AS $function$
 
 alter policy ruqya_err_insert on public.app_errors with check
   ((uid = auth.uid()) and (coalesce((((select auth.jwt()) ->> 'is_anonymous'))::boolean, false) = false) and (select public.ruqya_err_ok()));
+-- the schema stays (private.ruqya_visit_ids of 2026-11-patients-scale.sql lives there); signed-in users no longer
+-- need to use it directly, as before this migration
+revoke usage on schema private from authenticated, service_role;
 select 'OK' as result;

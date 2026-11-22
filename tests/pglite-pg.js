@@ -8,7 +8,7 @@ class PGlite {
   async init() {
     const port = +process.env.RUQYA_PG_PORT; if (!port) throw new Error("PGlite stand-in needs RUQYA_PG_PORT");
     const a = new Client({ host: "127.0.0.1", port, user: "postgres", database: "postgres" }); await a.connect();
-    await a.query("drop database if exists " + this.name); try { await a.query("create database " + this.name + " template template0 encoding 'UTF8' lc_collate 'C' lc_ctype 'C.UTF-8'"); } catch (e) { await a.query("create database " + this.name); }   // PGlite has UTF-8 character rules await a.end();
+    await a.query("drop database if exists " + this.name); try { await a.query("create database " + this.name + " template template0 encoding 'UTF8' lc_collate 'C' lc_ctype 'C.UTF-8'"); } catch (e) { await a.query("create database " + this.name); }   /* PGlite has UTF-8 character rules */ await a.end();
     this.c = new Client({ host: "127.0.0.1", port, user: "postgres", database: this.name }); this.c.on("error", () => {}); await this.c.connect();
     this.port = port;
   }

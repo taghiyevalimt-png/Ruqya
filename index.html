@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-J9hh4SKKq5/TBtUZBWts+4oyAENx4gKCqAb+inR2gW8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Io5QPy9DyHfak9v00mu69ql43+JCT8/EGAudyDXtIEM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2301,7 +2301,7 @@ function brkUpd(ids,up){if(!ids.length)return;ids.forEach(function(id){var o=brk
   Object.keys(up).forEach(function(k){row[k]=up[k]});upsertBy(state.breaks,mapBreak(row))});state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)});db(sb.from("breaks").update(up).in("id",ids).select("id"))}
 /* A6-06: a day left out of a repeating break; the database keeps at most 400 such days (CHECK ruqya_breaks_skip), so
    days more than a year back (they no longer matter for work) are dropped and the newest 400 kept */
-function skipAdd(l,d){var lim=addDays(today,-365),seen={};return (l||[]).concat([d]).filter(function(x){if(seen[x]||x<lim)return false;seen[x]=1;return true}).sort().slice(-400)}
+function skipAdd(l,d){var lim=addDays(today,-365),seen={};return (l||[]).concat([d]).filter(function(x){if(seen[x]||(x<lim&&x!==d))return false;seen[x]=1;return true}).sort().slice(-400)}   /* the day being left out always stays (review of audit 6) */
 /* a series cut short or with days left out that has no day left is deleted instead of kept empty */
 function brkLeft(b){if(!b.to)return true;var d=b.from&&b.from>"2020-01-01"?b.from:today;if(d<addDays(b.to,-400))d=addDays(b.to,-400);for(;d<=b.to;d=addDays(d,1))if(brkOn(b,d))return true;return false}
 function brkCut(ids,up){var o=brkById(ids[0]);if(!o)return;var t={};Object.keys(o).forEach(function(k){t[k]=o[k]});if("skip" in up)t.skip=up.skip;if("date_to" in up)t.to=up.date_to;

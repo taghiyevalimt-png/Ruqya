@@ -19,7 +19,7 @@ const ATTACKS = [
   ["X-10", "agent restores a deleted booking from the journal", "agentA", `select public.ruqya_restore((select max(id) from public.audit_log))`, (r) => !r.ok && r.code === "42501"],
   ["X-11", "agent wipes a patient's data", "agentA", `select public.ruqya_anonymize(public.ruqya_pkey('050 000 00 01', 'Pasiyent B-Əli'))`, (r) => !r.ok && r.code === "42501"],
   ["X-12", "agent changes a specialist's colour", "agentA", `select public.ruqya_set_color(${ALI},'#000000')`, (r) => !r.ok && r.code === "42501"],
-  ["X-13", "anonymous calls a database function", "anon", `select public.ruqya_sees_all()`, (r) => !r.ok],
+  ["X-13", "anonymous calls a database function (the RLS helpers live in schema private since audit 6)", "anon", `select private.ruqya_sees_all()`, (r) => !r.ok && r.code === "42501"],
   ["X-14", "anonymous reads bookings", "anon", `select id from public.appts`, (r) => !r.ok || r.rowCount === 0],
   ["X-15", "agent records a statistics number for another agent", "agentA", `insert into public.stat_edits (kind,per,period_start,agent_id,col,value) values ('sales','week',current_date+14,'a0000000-0000-4000-8000-0000000000ab','a',99)`, (r) => !r.ok],
   ["X-16", "agent lists other agents' expenses (enumeration)", "agentA", `select created_by from public.expenses`, (r) => r.ok && r.rows.every((x) => x.created_by === "a0000000-0000-4000-8000-0000000000aa")],
