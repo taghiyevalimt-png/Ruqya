@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-E8HPuO4msO2ALTMK3AxFmYwcyao7/PnZGvOer62/Zxk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-E0CtNT2hNnL3KVZiNuqd5u/vjvo2UVFC2RYYtbvLLoY='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1736,7 +1736,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122125331";
+var APP_VERSION="20261122125503";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3753,6 +3753,10 @@ function freeSlots(){
     }}
   return out;
 }
+/* owner 22.11: once opened, the free times follow the chosen specialist and length at once (no second tap) */
+var freeSkip=0;
+function freeShow(){var fb=byId("f-free");if(!fb)return;var fs=freeSlots();
+  fb.innerHTML=fs.length?fs.map(function(x){return '<button type="button" class="chip" data-act="free-pick" data-r="'+esc(x.r.id)+'" data-d="'+x.d+'" data-t="'+x.t+'">'+esc((val("f-reader")?"":x.r.name+" · ")+(x.d===today?L("bu gün"):x.d===addDays(today,1)?L("sabah"):fmtDayShort(x.d))+", "+x.t)+'</button>'}).join(""):'<p class="hint">'+L("Yaxın 3 həftədə boş vaxt tapılmadı.")+'</p>'}
 function cancelList(){
   var q=low(ui.q.trim()),qd=qDigits(q);
   var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
@@ -4707,10 +4711,10 @@ document.addEventListener("click",function(e){
     openSheet({type:"appt",id:null,pre:pp?{name:pp.name,phone:pp.phone}:{}});return;
   }
   else if(act==="slot"){byId("f-time").value=b.dataset.t;slotGrid();return}
-  else if(act==="free-find"){var fb=byId("f-free");if(!fb)return;var fs=freeSlots();
-    fb.innerHTML=fs.length?fs.map(function(x){return '<button type="button" class="chip" data-act="free-pick" data-r="'+esc(x.r.id)+'" data-d="'+x.d+'" data-t="'+x.t+'">'+esc((val("f-reader")?"":x.r.name+" · ")+(x.d===today?L("bu gün"):x.d===addDays(today,1)?L("sabah"):fmtDayShort(x.d))+", "+x.t)+'</button>'}).join(""):'<p class="hint">'+L("Yaxın 3 həftədə boş vaxt tapılmadı.")+'</p>';return}
-  else if(act==="free-pick"){var fr=byId("f-reader");if(!fr)return;if(fr.value!==b.dataset.r){fr.value=b.dataset.r;fr.dispatchEvent(new Event("change",{bubbles:true}))}
+  else if(act==="free-find"){if(sheet)sheet.freeOn=1;freeShow();return}
+  else if(act==="free-pick"){var fr=byId("f-reader");if(!fr)return;if(fr.value!==b.dataset.r){fr.value=b.dataset.r;freeSkip=1;fr.dispatchEvent(new Event("change",{bubbles:true}));freeSkip=0}
     byId("f-date").value=b.dataset.d;byId("f-time").value=b.dataset.t;slotGrid();var ff=byId("f-free");if(ff)ff.innerHTML='<p class="hint">'+esc(L("Seçildi: ")+(reader(b.dataset.r)||{}).name+", "+fmtDay(b.dataset.d,"w")+", "+b.dataset.t)+'</p>';return}
+
   else if(act==="view"){ui.view=id;try{localStorage.setItem("ruqya.view",id)}catch(err){}}
   else if(act==="view-appt"){if(appt(id))afterPaint(function(){if(appt(id))openSheet({type:"view",id:id})});return}
   else if(act==="newat"){
@@ -4861,6 +4865,7 @@ document.addEventListener("change",function(e){
     if(t==="f-reader")putPreset(readerPreset(e.target.value));
   }
   if(t==="f-reader"||t==="f-date"||t==="f-time"||t==="f-dur")slotGrid();
+  if((t==="f-reader"||t==="f-dur")&&sheet&&sheet.type==="appt"&&sheet.freeOn&&!freeSkip)freeShow();
   if(sheet&&sheet.type==="brk"&&(t==="b-rep"||t==="b-date")){if(t==="b-date"&&sheet.b){var od=sheet.b.date;brkKeep();var nd=sheet.b.date;if(od!==nd&&sheet.b.rep!=="custom"){sheet.b.days={};sheet.b.days[wdOf(nd)]=1}}brkRedraw()}
 });
 /* owner 22.11: an empty time field opens its clock (Android's round dial, iPhone's wheel) on the whole hour of now —

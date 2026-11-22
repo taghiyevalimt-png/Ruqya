@@ -26,6 +26,10 @@ module.exports = async () => {
     await p.selectOption("#f-reader", R2); await p.click('[data-act="free-find"]'); await p.waitForTimeout(200);
     const n = await p.locator('#f-free [data-act="free-pick"]').count();
     check(n >= 3, "free times are offered: " + n);
+    // owner 22.11: changing the specialist changes the list at once, without a second tap
+    await p.selectOption("#f-reader", R1); await p.waitForTimeout(200);
+    const r1 = await p.evaluate(() => [...document.querySelectorAll('#f-free [data-act="free-pick"]')].map((b) => b.dataset.r));
+    check(r1.length >= 3 && r1.every((r) => r === "aaaaaaaa-0000-4000-8000-000000000001"), "the list follows the new specialist at once: " + r1);
     const first = p.locator('#f-free [data-act="free-pick"]').first(), d = await first.getAttribute("data-d"), t = await first.getAttribute("data-t");
     await first.click();
     check(await p.inputValue("#f-date") === d && await p.inputValue("#f-time") === t, "a tap fills date and time");
