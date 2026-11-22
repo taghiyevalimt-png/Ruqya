@@ -1,4 +1,4 @@
-// Audit 6, Advisors «SECURITY DEFINER function executable by signed-in users» (10 functions): for each of them and
+// Audit 6 (A6-08), Advisors «SECURITY DEFINER function executable by signed-in users» (10 functions): for each of them and
 // each role that is not an admin (anon, account without role, specialist, sales agent) — nothing is changed and
 // nothing beyond the caller's own yes/no is learned. The three that change data (anonymize, restore, set_color)
 // refuse with 42501 «no rights» (not with «no such patient»), and the data is checked unchanged afterwards.
@@ -15,14 +15,14 @@ module.exports = async () => {
     for (const who of ["anon", "pending", "spec", "agentA"]) {
       // the predicates: only true/false about the caller, no argument to ask about someone else
       for (const f of ["ruqya_is_admin", "ruqya_has_role", "ruqya_sees_all", "ruqya_can_stats", "ruqya_can_breaks", "ruqya_err_ok"]) {
-        const r = await as(c, who, "select public." + f + "() x");
+        const r = await as(c, who, "select private." + f + "() x");   // moved out of the API (sql/2026-11-a6-private-helpers.sql)
         const want = { ruqya_is_admin: false, ruqya_has_role: who === "spec" || who === "agentA", ruqya_sees_all: who === "agentA", ruqya_can_stats: who === "agentA", ruqya_can_breaks: who === "agentA" }[f];
         if (who === "anon") check(!r.ok && r.code === "42501", who + " " + f + ": anonymous may not call it: " + JSON.stringify(r));
         else if (f === "ruqya_err_ok") check(r.ok && typeof r.rows[0].x === "boolean", who + " " + f + ": only yes/no about the caller's own error count");
         else check(r.ok && r.rows[0].x === want, who + " " + f + " = " + want + ": " + JSON.stringify(r.rows || r.error));
         lines.push(who + "\t" + f + "\t" + (r.ok ? JSON.stringify(r.rows[0].x) : "refused " + r.code));
       }
-      const mr = await as(c, who, "select array_agg(x) a from public.ruqya_my_readers() x");
+      const mr = await as(c, who, "select array_agg(x) a from private.ruqya_my_readers() x");
       const wantR = who === "spec" ? JSON.stringify([R.ali]) : "null";
       if (who === "anon") check(!mr.ok, "anon: ruqya_my_readers refused");
       else check(mr.ok && JSON.stringify(mr.rows[0].a) === wantR, who + ": ruqya_my_readers gives only the caller's own column(s): " + JSON.stringify(mr.rows || mr.error));
@@ -34,6 +34,9 @@ module.exports = async () => {
         lines.push(who + "\t" + f + "\t" + (r.ok ? "ALLOWED" : "refused " + r.code));
       }
     }
+    // the seven helpers are no longer in schema public, which the API publishes as /rest/v1/rpc/…
+    const pub = (await c.query("select count(*) n from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' and p.proname in ('ruqya_is_admin','ruqya_has_role','ruqya_sees_all','ruqya_my_readers','ruqya_can_stats','ruqya_can_breaks','ruqya_err_ok')")).rows[0].n;
+    check(+pub === 0, "no helper left in the API schema: " + pub);
     check(await snap() === before, "appointments, colours and the journal are unchanged after all attempts");
     // an admin can (the functions still do their job)
     const ok = await as(c, "admin2", "select public.ruqya_set_color($1, '#123456') x", [R.ali]);

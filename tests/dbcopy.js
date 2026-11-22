@@ -11,7 +11,7 @@ const BASE = ["2026-11-realtime.sql"];   // part of the install, not carried by 
 const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "2026-11-patients-scale.sql", "2026-11-service.sql", "2026-11-owner-notes.sql", "2026-11-my-contacts.sql", "2026-11-paid-online.sql", "2026-11-app-errors.sql",
   // 22.11 (owner notes, products, shares; audit 5) — added in audit 6: the copy lacked them, so the new tables were not in the matrix
   "2026-11-breaks-gcal.sql", "2026-11-products.sql", "2026-11-product-shares.sql", "2026-11-service-shares.sql", "2026-11-share-amounts.sql", "2026-11-a5-patient-key.sql",
-  "2026-11-a6-journal-index.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
+  "2026-11-a6-journal-index.sql", "2026-11-a6-private-helpers.sql"];   // migrations applied on top of the dump, in order (audit 4 fixes)
 const U = {
   owner: "bad097d4-5edc-402b-ad59-f633252c35d9", admin2: "a0000000-0000-4000-8000-0000000000a2",
   agentA: "a0000000-0000-4000-8000-0000000000aa", agentB: "a0000000-0000-4000-8000-0000000000ab",
@@ -82,4 +82,7 @@ async function as(c, who, sql, params) {
   } catch (e) { return { ok: false, error: e.message, code: e.code }; }
   finally { await c.query("rollback"); }
 }
-module.exports = { build, as, U, R, SCHEMA };
+// for tests that rehearse the rollback of an older migration: rollbacks run newest first, so the copy is built only
+// up to (and including) that migration
+const upTo = (f) => AFTER.slice(0, AFTER.indexOf(f) + 1);
+module.exports = { build, as, U, R, SCHEMA, AFTER, upTo };

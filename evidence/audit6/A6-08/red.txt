@@ -1,0 +1,7 @@
+Sun Nov 22 19:24:43 UTC 2026
+red: copy without sql/2026-11-a6-private-helpers.sql, b92a822
+FAIL 99-a6-07-definer-db.js 
+    Error: FAIL: pending ruqya_is_admin = false: "function private.ruqya_is_admin() does not exist"
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-07-definer-db.js:22:14)
+1 failed of 1

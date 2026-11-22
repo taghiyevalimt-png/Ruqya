@@ -1,11 +1,11 @@
 // P-04: a patient's old visits come through the index helper, the rows still through the caller's rights (RLS):
 // the visit of a patient of column İlkin is seen by an agent and the owner, not by the specialist of column Əli
 // (the attack side, no access for anonymous / role-less accounts, is X-28…X-32 in tests/attacks.js).
-const fs = require("fs"), path = require("path"), { start } = require("../localpg"), { build, as } = require("../dbcopy"), { check } = require("../lib");
+const fs = require("fs"), path = require("path"), { start } = require("../localpg"), { build, upTo, as } = require("../dbcopy"), { check } = require("../lib");
 module.exports = async () => {
   const pg = await start(54352); let c;
   try {
-    c = await build(pg, "visits");
+    c = await build(pg, "visits", { after: upTo("2026-11-patients-scale.sql") })   /* audit 6: its rollback is rehearsed below — newer migrations are not on top */;
     const q = "select id from public.ruqya_hist_visits(public.ruqya_pkey('050 000 00 02', 'Pasiyent B-İlkin'), current_date + 5, current_date - 700)";
     for (const [who, want] of [["agentA", 1], ["owner", 1], ["spec", 0], ["pending", 0]]) {
       const r = await as(c, who, q);

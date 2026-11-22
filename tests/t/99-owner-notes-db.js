@@ -4,11 +4,11 @@
 //  - only an admin can keep an agent out of the statistics (hide_stats), the agent cannot change it for himself;
 //  - the rollback brings the earlier rules back.
 const fs = require("fs"), path = require("path");
-const { start } = require("../localpg"), { build, as, R } = require("../dbcopy"), { check } = require("../lib");
+const { start } = require("../localpg"), { build, upTo, as, R } = require("../dbcopy"), { check } = require("../lib");
 module.exports = async () => {
   const pg = await start(54371); let c;
   try {
-    c = await build(pg, "ownernotes");
+    c = await build(pg, "ownernotes", { after: upTo("2026-11-owner-notes.sql") })   /* audit 6: its rollback is rehearsed below — newer migrations are not on top */;
     const brk = (rid, extra = "") => "insert into public.breaks (title, start_time, end_time, reader_id" + (extra ? ", days, date_from, date_to" : "") + ") values ('Namaz', '13:00', '13:30', " + (rid ? "'" + rid + "'" : "null") + (extra ? ", " + extra : "") + ") returning id";
     // specialist (column «Əli») — own column yes, other column and shared no
     let r = await as(c, "spec", brk(R.ali)); check(r.ok && r.rowCount === 1, "specialist adds a break to his own column: " + (r.ok ? "ok" : r.error));

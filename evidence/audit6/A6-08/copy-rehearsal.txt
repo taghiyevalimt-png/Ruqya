@@ -1,0 +1,11 @@
+Sun Nov 22 19:25:17 UTC 2026
+10-year copy (PostgreSQL 16): migration, rollback, migration (with the app_errors policy)
+before: private|7 
+psql:/tmp/a6p.sql:9: NOTICE:  schema "private" already exists, skipping
+a6p.sql: .051950567 s, helpers: private|7 
+a6pr.sql: .047834871 s, helpers: public|7 
+psql:/tmp/a6p.sql:9: NOTICE:  schema "private" already exists, skipping
+a6p.sql: .051321426 s, helpers: private|7 
+{"sub":"bad097d4-5edc-402b-ad59-f633252c35d9","role":"authenticated"}
+owner sees appts: 5
+hist page rows: 1000
