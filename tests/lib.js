@@ -52,7 +52,7 @@ function seed() {
     appts: [
       { id: uuid(), reader_id: R1, date: t, time: "10:00", duration: 90, name: "Test Pasiyent", phone: "050 111 22 33", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now },
     ],
-    breaks: [], expenses: [], product_sales: [], products: [], stat_edits: [], services: [], audit_log: [{ id: 1 }], app_errors: [],
+    breaks: [], expenses: [], product_sales: [], products: [], product_shares: [], stat_edits: [], services: [], audit_log: [{ id: 1 }], app_errors: [],
   };
 }
 
@@ -165,6 +165,8 @@ async function attach(context, db, ctl) {
       // like on the server (T-03)
       const def = t === "appts" ? { phone: "", note: "", status: "wait", settled: false, service: "Ruqya", duration: 90, confirmed: false, place: "ofis", follow: 0 }
         : t === "breaks" ? { reader_id: null, days: null, date_from: null, date_to: null } : t === "app_errors" ? { at: now, uid } : {};
+      // upsert (on_conflict=a,b): a row with the same key is replaced, like PostgREST with merge-duplicates
+      const oc = url.searchParams.get("on_conflict"); if (oc) { const ks = oc.split(","); db[t] = db[t].filter((x) => !b.some((r) => ks.every((k) => String(x[k]) === String(r[k])))); }
       for (const r of b) db[t].push({ id: uuid(), created_at: now, updated_at: now, created_by: uid, ...def, ...r });
       return send(route, 201);
     }
