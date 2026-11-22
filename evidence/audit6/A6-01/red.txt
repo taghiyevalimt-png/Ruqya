@@ -1,0 +1,7 @@
+Sun Nov 22 19:03:12 UTC 2026
+red, da45839
+FAIL 99-a6-01-auth500.js 
+    Error: FAIL: library renewal answered 500: still signed in, the session kept: [{"err":500,"sess":false},{"tabs":false,"kept":false}]
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-01-auth500.js:19:5)
+1 failed of 1

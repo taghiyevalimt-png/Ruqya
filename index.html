@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-PJjRBMbN7J9xEeN8uvHKkxEgvrrm8Swq2DHjI/XbUxM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-oNzckXx5saehK9hY/08H8zxRXkBgI9Vuiz2g33xW9dU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -2654,7 +2654,8 @@ function authLost(){
   if(!sb)return;
   return sb.auth.refreshSession().then(function(x){
     if(x&&!x.error&&x.data&&x.data.session){flash(dbMsg({}),true);return refresh()}
-    var net=x&&x.error&&(x.error.name==="AuthRetryableFetchError"||!x.error.status);
+    /* A6-01: a fault of the sign-in server (5xx) is not «the sign-in ran out»: keep the session, try again later */
+    var net=x&&x.error&&(x.error.name==="AuthRetryableFetchError"||!x.error.status||x.error.status>=500);
     if(net){unsaved();return}
     try{localStorage.removeItem(SB_TOKEN)}catch(e){}
     signedOut();auth.msg=L("Girişin vaxtı bitib. Yenidən daxil olun — yazdığınız qəbul itməyib.");render();

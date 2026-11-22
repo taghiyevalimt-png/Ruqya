@@ -1,14 +1,14 @@
 {
  "bomFormat": "CycloneDX",
  "specVersion": "1.5",
- "serialNumber": "urn:uuid:6799aa08-c256-4ad1-8a4b-2ab2c90b1409",
+ "serialNumber": "urn:uuid:30711ef7-3f10-41fc-8a9e-a0c481bf3653",
  "version": 1,
  "metadata": {
-  "timestamp": "2026-11-16T18:10:50.464Z",
+  "timestamp": "2026-11-22T19:03:43.122Z",
   "component": {
    "type": "application",
    "name": "Mərkəz (Ruqya)",
-   "version": "20261116165045"
+   "version": "20261122174545"
   },
   "tools": [
    {
@@ -33,7 +33,7 @@
    "hashes": [
     {
      "alg": "SHA-256",
-     "content": "8596965fe918e656600a1b568d3a168f5c0d3d22a600886bb6f44a6555db01e7"
+     "content": "53e8bf0274a944979071302b0523a2063c2015f3cb3afbb9234bce0317d9c2e0"
     }
    ],
    "description": "bundled UMD build in vendor/; contains @supabase/auth-js 2.65.0, realtime-js 2.10.2, storage-js 2.7.0, postgrest-js, functions-js",
@@ -332,10 +332,10 @@
   },
   {
    "type": "library",
-   "name": "acorn",
-   "version": "8.14.0",
+   "name": "@eslint-community/eslint-utils",
+   "version": "4.10.1",
    "scope": "excluded",
-   "purl": "pkg:npm/acorn@8.14.0",
+   "purl": "pkg:npm/%40eslint-community/eslint-utils@4.10.1",
    "licenses": [
     {
      "expression": "MIT"
@@ -345,7 +345,425 @@
    "hashes": [
     {
      "alg": "SHA-512",
-     "content": "725ebaf670894d906c2fdece178914426e60e610b6ba2864d0dc58dd610d002d1361d20b5640321f29809ed8311a497b2beb7471722b1f9b22cb94b85e417270"
+     "content": "72e69d73154513cb032ba89625bb3c4a7d1abf636b8764121908559415bd01a007a87c235ac6474fc2c9e211463e1ec048157675e15d33b1ff0cf8ee96687cae"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "eslint-visitor-keys",
+   "version": "3.4.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/eslint-visitor-keys@3.4.3",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "c2973e2d77a2ca28acc4f944914cd4eacbf24b57eb20edcc8318f57ddcbb3e6f1883382e6b1d8ddc56bf0ff6a0d56a9b3a9add23eb98eb031497cfdad86fa26a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint-community/regexpp",
+   "version": "4.12.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint-community/regexpp@4.12.3",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "47be9429bbeca88ebc0c92554d5caa14aa94f7c08de3e07e69cc4d7c40362056ab4b33f44a3b4a7ffdfe7c5897cd3cafe458f73f12e41877b6c2755658cc686d"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/config-array",
+   "version": "0.19.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/config-array@0.19.2",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "18d2aac5f1c6db24a624e0521e0ecbc5e531e31a6e0a816369c9a50a861611b68f5cbc2f7c88e2c51235db109065e50b92c41bdb7ba203c178d30e53a23a55ef"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/core",
+   "version": "0.9.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/core@0.9.1",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "1ae51daa4cb2cd023944c21690786f4d62c2c8ba358cd2b7bf3912c9a1311f99073c31dcb8bd953a91e398c63ecb7f8d0baf6a00a4e806a95d4c181878b4abf5"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/eslintrc",
+   "version": "3.3.7",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/eslintrc@3.3.7",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "178da0f3d41de68016b69d24d279d2ae3ce200acdaef0f12553e264ad735f0b64c6916f82751d00072c26a512d0c2c6b4ee92cc7b354f6ab2678bc2939f3ea5b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "globals",
+   "version": "14.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/globals@14.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a1a846bee3064253f0fe2bc86018d54ab5807d62c17a4bb9b693c4d9f38f2e2f961df7c859bba1dad0a38724214c13cc7f913d8c3107e053a64d8818c1b2b0b5"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/js",
+   "version": "9.15.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/js@9.15.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "b4c4eaad8f84cdb5e62894794e823c971bbb8da37911d9ab045269424e499929722ecc7aa38b76eebf3cdcae71b0bb82602a5f281086b30312597b0cfa307b96"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/object-schema",
+   "version": "2.1.7",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/object-schema@2.1.7",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "56d00e6b299655f65c9996e9e84da6ca6a43207bf28d7b3fd762ea5988d5c3aaa3adf17e54af9fc86df7902873de79caf92539fcd7873aaad31074bcb173b738"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/plugin-kit",
+   "version": "0.2.8",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/plugin-kit@0.2.8",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "640a00e34acd30fc129be01e1e90aaf124e2340c3358b26e3fc5efe021c873dc2ffcf4ae1318ccae68df60d8faf36bd6d0e3a26751cac73be342bf576488ac40"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@eslint/core",
+   "version": "0.13.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40eslint/core@0.13.0",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "c9f9200f0d4a47aeab913e40f1c8b88abcc3cac37b151a6adedb49a2547cf0ea908a4016ab003c8f9559c9ab3ebe3c81345209ecc7f26c9f6994c20b23652b0b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@humanfs/core",
+   "version": "0.19.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40humanfs/core@0.19.2",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5215cd9be08531671b0a15f2c05c249a1aa3b373d10a67126bf85f0602c86fba10e4735bd704b489c5ac1ad48050d81e7c7788f9e06b03c2357f199b1ec19dbc"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@humanfs/node",
+   "version": "0.16.8",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40humanfs/node@0.16.8",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "804d5e40d67747efa44f3154a5d1a5a66cbc903643fcc2f21ea0f0aa3915408d0931d2350f9d6ccb51fde7c3cd5d890cdab01a73b7b9fc29c8299ac7b4f87705"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@humanfs/types",
+   "version": "0.15.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40humanfs/types@0.15.0",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "659d70d1aa10930b94b82ed87feeec75e68d7ea42288b71245b7c8d3ca00c6a2eda5742bf402155fb032ec72c3ba22d801a14fbbca0160dabf4088bd5111c9dd"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@humanwhocodes/module-importer",
+   "version": "1.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40humanwhocodes/module-importer@1.0.1",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "6f1bde57857cbf961be277054d3deb3d281904ea429237cad32e28555549c08b8354144c0d7acfc9744bf7cf22e5aa7d9bd6e7c8412359f9b95a4066b5f7cb7c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@humanwhocodes/retry",
+   "version": "0.4.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40humanwhocodes/retry@0.4.3",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "6d5d13828f4ae217cf09e93e68c027f35469a452afdb248341e328499baf4c04b2c0d4e7549080ac2644d855aaa6f21ab4abbb54c44b5a547511acef5610f285"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@types/estree",
+   "version": "1.0.10",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40types/estree@1.0.10",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "953c8e32739c991073742bfaff8cd4642ac4855d31aea422519059b5571b98b1c15ca2e737cabcf6fff029117f4341dbc15b2a6c81b7a391c3a0597db1db8cfa"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "@types/json-schema",
+   "version": "7.0.15",
+   "scope": "excluded",
+   "purl": "pkg:npm/%40types/json-schema@7.0.15",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e7e7cff0ff0c14d0be0326420f1ac1da991914f1b3a90594ce949ebae54bbe6f1531ca2b3586af06aa057312bc6d0cf842c6e7e2850411e9b8c032df732b061c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "acorn",
+   "version": "8.19.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/acorn@8.19.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a09940dd78919bb0b293aa850f6267f1a93d07b8d2cb4ab2d340033b7fbc7694f42d28c58a1418bf80b4d8b142498255dd0dfbc58c30472e66f88a48894cea5b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "acorn-jsx",
+   "version": "5.3.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/acorn-jsx@5.3.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "aeaf6cf893617f4202863b435f196527b838d68664e52957b69d0b1f0c80e5c7a3c27eef2a62a9e293eb8ba60478fbf63d4eb9b00b1e81b5ed2229e60c50d781"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "ajv",
+   "version": "6.15.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/ajv@6.15.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "7e0171ec77e8abad32b4ad9cec386717c8c8bf362038cc5fba08cb3923078cb20f81e9ea6bb4bba1a6a001352af7d995e8862f376b51982d309d3617ea23db33"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "ansi-styles",
+   "version": "4.3.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/ansi-styles@4.3.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "cdb07dac22404f5adb8e25436f686a2851cd60bc60b64f0d511c59dc86700f717a36dc5b5d94029e74a2d4b931f880e885d3e5169db6db05402c885e64941212"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "argparse",
+   "version": "2.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/argparse@2.0.1",
+   "licenses": [
+    {
+     "expression": "Python-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "f3ef56a9e6db173a57f4e47e59ae8edbd6ac22881e44ccdc1ad00835da4c1c7c80835d1fd3969215505b704a867ff3d7c35123019faadbf6c4060dc3beeacadd"
     }
    ]
   },
@@ -370,6 +788,196 @@
   },
   {
    "type": "library",
+   "name": "balanced-match",
+   "version": "1.0.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/balanced-match@1.0.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "de849e50ed13315ebb84dd4099b5ec2b8c9aa94eed8e21e56f144364ea47d0a5bdf82797e1b440697d009f1b74b71d8cae94695b041a3f02252121098585393f"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "brace-expansion",
+   "version": "1.1.22",
+   "scope": "excluded",
+   "purl": "pkg:npm/brace-expansion@1.1.22",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "08a2c34ee4ac374fabd5384cd16933cc123b7673c8eb11067dafc99d56082bd24d040d4dd4dc8fc17547a2bfff34a0ffcb7b03c69efae2c65d2e114aee91fc5d"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "callsites",
+   "version": "3.1.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/callsites@3.1.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "3fc06302c5ef652f95203508d7584709012fef8613ebb6148b924914d588a8bdb7e6c0668d7e3eab1f4cbaf96ce62bf234435cb71e3ac502d0dda4ee13bb2c69"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "chalk",
+   "version": "4.1.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/chalk@4.1.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a0a9db845c91217a54b9ecfc881326c846b89db8f820e432ba173fc32f6463bfd654f73020ef5503aebc3eef1190eefed06efa48b44e7b2c3d0a9434eb58b898"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "color-convert",
+   "version": "2.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/color-convert@2.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "4511023ec8fb8aeff16f9a0a61cb051d2a6914d9ec8ffe763954d129be333f9a275f0545df3566993a0d70e7c60be0910e97cafd4e7ce1f320dfc64709a12529"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "color-name",
+   "version": "1.1.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/color-name@1.1.4",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "74ecbedc0b96ddadb035b64722e319a537208c6b8b53fb812ffb9b71917d3976c3a3c7dfe0ef32569e417f479f4bcb84a18a39ab8171edd63d3a04065e002c40"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "concat-map",
+   "version": "0.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/concat-map@0.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "fd2aefe1db30c903417e8846a73f68e986f71b3dd2ad40ea047e6b4ee84647b6a1b656d82a7571c366c214c4658da03b1171da5d9f30b07768745bdb9212a6aa"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "cross-spawn",
+   "version": "7.0.6",
+   "scope": "excluded",
+   "purl": "pkg:npm/cross-spawn@7.0.6",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "b95d903963f69d6ceccb668ca7c69189b862f5d9731791e0879487681f4e893184c834e2249cb1d2ecb9d505ddc966ed00736e6b85c9cd429c6b73b3294777bc"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "debug",
+   "version": "4.4.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/debug@4.4.3",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "446c305a7c10be455f6af295b76d8518bc3ec5849dcc04709b4aeee83853540dee994e6165cdbc57790ee2cb6062bcab4e52e9baf808f468a28e5b408cd6dca8"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "deep-is",
+   "version": "0.1.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/deep-is@0.1.4",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a083f392c993838fccae289a6063bea245c34fbced9ffc37129b6fffe81221d31d2ac268d2ee027d834524fcbee1228cb82a86c36c319c0f9444c837b7c6bf6d"
+    }
+   ]
+  },
+  {
+   "type": "library",
    "name": "embedded-postgres",
    "version": "17.11.0-beta.19",
    "scope": "excluded",
@@ -389,6 +997,196 @@
   },
   {
    "type": "library",
+   "name": "escape-string-regexp",
+   "version": "4.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/escape-string-regexp@4.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "4eda5c349dd7033c771aaf2c591cc96956a346cd2e57103660091d6f58e6d9890fcf81ba7a05050320379f9bed10865e7cf93959ae145db2ae4b97ca90959d80"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "eslint",
+   "version": "9.15.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/eslint@9.15.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "ec2ad6c9298889b0a04f53acdbc95453aba906c859f86c726cb3ab991ce2d3c912f0c06e3bc400ee95c4818818e56f2f2b77bbe31bf49698e8f436da194f5193"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "eslint-plugin-security",
+   "version": "3.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/eslint-plugin-security@3.0.1",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5e3546061b436497f2ba12319d0fd6326dfce516d7dc306eec7d49ec734d866076b671b131ea954a762fefda008fdf766b2bc8059821b329b0918152e9c187e1"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "eslint-scope",
+   "version": "8.4.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/eslint-scope@8.4.0",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "b0d5ce7ca0a7ef8aedf1120228cbc94bb5ca57f5e4f6403b0f226bf262629374bb0b0832dea964926c92dae401de388983a54d75977fa43049bb49ef1b63654e"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "eslint-visitor-keys",
+   "version": "4.2.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/eslint-visitor-keys@4.2.1",
+   "licenses": [
+    {
+     "expression": "Apache-2.0"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "521764e6c7ea71e7bff47feb08e262918cfaee8d1ad93c3684644f386d98d51d9d83b6eb45ed6e1b4c9a3500c7bbe4cefee40f17fe5e09aa6f612987523b7b25"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "espree",
+   "version": "10.4.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/espree@10.4.0",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "8fa3c0436b94afbf4f6610633f90b97e197c7b7f459919ce8ec0f99469d6ac553c8b61bbefab412bbfa73fc2ae4144d3c80654c1f42a5c082b547e4c6c7f4261"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "esquery",
+   "version": "1.7.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/esquery@1.7.0",
+   "licenses": [
+    {
+     "expression": "BSD-3-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "029e86d16430714fcb1ecbcbc0e3757c0417f59a7403663a63f709065f6bfc96d6f74672838ff36c6eb3cca6b639300b10b6ab60798abb41a1a4ce443beed3d2"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "esrecurse",
+   "version": "4.3.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/esrecurse@4.3.0",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "2a67ca2f76fa1be457bcff0dd6faf74ead642ffa021609f63585c4b6a3fcfcbde929aa540381bc70555aa05dd2537db7083e17ca947f7df8a81e692d8bafd36a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "estraverse",
+   "version": "5.3.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/estraverse@5.3.0",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "30c74046e54443388d4de243f0380caa6870475d41450fdc04ffa92ed61d4939dfdcc20ef1f15e8883446d7dfa65d3657d4ffb03d7f7814c38f41de842cbf004"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "esutils",
+   "version": "2.0.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/esutils@2.0.3",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "915b1ca97938382a7af126747648042958baffc8a3df4d0a0564c9ab7d8ffdd61e5934b02b8d56c93c5a94dd5e46603967d514fcb5fd0fb1564a657d480631ea"
+    }
+   ]
+  },
+  {
+   "type": "library",
    "name": "exit-hook",
    "version": "5.1.0",
    "scope": "excluded",
@@ -403,6 +1201,633 @@
     {
      "alg": "SHA-512",
      "content": "20d8ebdb1cb11e8edb840a9fe689e0fbe1993cf9e972e05c69750ab74df27fb1627bdc960fb15aa4be2d78e534f9ac106b31ace6e70187bc56b3f003fba9e1a2"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "fast-deep-equal",
+   "version": "3.1.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/fast-deep-equal@3.1.3",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "7f7a90f68432f63d808417bf1fd542f75c0b98a042094fe00ce9ca340606e61b303bb04b2a3d3d1dce4760dcfd70623efb19690c22200da8ad56cd3701347ce1"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "fast-json-stable-stringify",
+   "version": "2.1.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/fast-json-stable-stringify@2.1.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "96177fc05f8b93df076684c2b6556b687b5f8795d88a32236a55dc93bb1a52db9a9d20f22ccc671e149710326a1f10fb9ac47c0f4b829aa964c23095f31bf01f"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "fast-levenshtein",
+   "version": "2.0.6",
+   "scope": "excluded",
+   "purl": "pkg:npm/fast-levenshtein@2.0.6",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "0c25eee887e1a9c92ced364a6371f1a77cbaaa9858e522599ab58c0eb29c11148e5d641d32153d220fcf62bcf2c3fba5f63388ca1d0de0cd2d6c2e61a1d83c77"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "file-entry-cache",
+   "version": "8.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/file-entry-cache@8.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5d74d4c02be2b1ae6869c34644ff527cdb5804d00c8be44fc011666e564417b37bb301d8412ebf65f93b491c31e03e63dc21f6d7560d45ca350c430d55f6429d"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "find-up",
+   "version": "5.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/find-up@5.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "efcfcf5d3d7094b2c3813cc3b3bb23abd873cf4bd70fece7fbbc32a447b87d74310a6766a9f1ac10f4319a2092408dda8c557dd5b552b2f36dac94625ba9c69e"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "flat-cache",
+   "version": "4.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/flat-cache@4.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "7fb71c14f2b7497147a71d795081b2449fc525072db8a674cd5b8dddfac1a381e72b771acbd5445b447ac8f6051c2d0082a86e90fcca8eadb6b790e6032a86cb"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "flatted",
+   "version": "3.4.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/flatted@3.4.4",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e7ec9b841640344271687dd7e5ebc015ab54c4b7c41d2afb9fa91827ed50774994aabe1ebbd8087fa1836d61dff112628c7ae38cef06fa56b5e1294bd92792d5"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "glob-parent",
+   "version": "6.0.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/glob-parent@6.0.2",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5f1c08f043a1550816a7a8832feddbd2bf3a7f877a017eb3494e791df078c9d084b972d773915c61e3aefa79c67ed4b84c48eeff5d6bb782893d33206df9afe0"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "globals",
+   "version": "15.12.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/globals@15.12.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "d7e80b12b96324585b395c9a7ad730262278f9e2dee394b613b3f952267dc467deab701341fe433aff46ecc1f78066ca40b93398d8760f17d9c0b770fa3ea84d"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "has-flag",
+   "version": "4.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/has-flag@4.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "1329094ff4352a34d672da698080207d23b4b4a56e6548e180caf5ee4a93ba6325e807efdc421295e53ba99533a170c54c01d30c2e0d3a81bf67153712f94c3d"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "ignore",
+   "version": "5.3.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/ignore@5.3.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "86c053354a904c3c245ad71d608da2d3a63f9d4044b0d10324a8d676280bbde832f240ee2404bcb91969924710a721172f467fa630f2e4706632344227682afa"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "import-fresh",
+   "version": "3.3.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/import-fresh@3.3.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "4d1dca7eb4d94d82cf07a8d48dfc7a305f56716ac72fdb2ee5339b2b866462005d58a3ce1684a8408744b93b91f36a66b711f6b29586f61e9eb707ebd692c1a9"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "imurmurhash",
+   "version": "0.1.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/imurmurhash@0.1.4",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "2665cc67ac2ebc398b88712697dca4cea3ba97015ba1fd061b822470668435d0910c398c5679f2eece47b0880709b6aad30d8cc8f843aa48535204b62d4d8f1c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "is-extglob",
+   "version": "2.1.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/is-extglob@2.1.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "49b29b00d90deb4dd58b88c466fe3d2de549327e321b0b1bcd9c28ac4a32122badb0dde725875b3b7eb37e1189e90103a4e6481640ed9eae494719af9778eca1"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "is-glob",
+   "version": "4.0.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/is-glob@4.0.3",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "c5e9526b21c7dfa66013b6568658bba56df884d6cd97c3a3bf92959a4243e2105d0f7b61f137e4f6f61ab0b33e99758e6611648197f184b4a7af046be1e9524a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "isexe",
+   "version": "2.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/isexe@2.0.0",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "447c4c2e9f659ca1c61d19e0f5016144231b600715a67ebdb2648672addfdfac638155564e18f8aaa2db4cb96aed2b23f01f9f210d44b8210623694ab3241e23"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "js-yaml",
+   "version": "4.3.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/js-yaml@4.3.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "48534ebd227e0e07fff409fdd38631f828129483c2908a5aa38aa8e7596979edb94c845e8dd1f7ae1478119306a0dc77fd33f73bec335ae893165e2ca9b96dcc"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "json-buffer",
+   "version": "3.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/json-buffer@3.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e1b57905f4769aa7d04c99be579b4f3dd7fe669ba1888bd3b8007983c91cad7399a534ff430c15456072c17d68cebea512e3dd6c7c70689966f46ea6236b1f49"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "json-schema-traverse",
+   "version": "0.4.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/json-schema-traverse@0.4.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "c5b6c21f9742614e53f0b704861ba1ec727cf075ee5b7aac237634cce64529f6441dca5688753f271ce4eb6f41aec69bfe63221d0b62f7030ffbce3944f7b756"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "json-stable-stringify-without-jsonify",
+   "version": "1.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/json-stable-stringify-without-jsonify@1.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "05d6e8cbe97bb40dce196e858f21475a43f92ee0728f54e4df72e3caad1ac72cdd93dfff2528b6bb77cfd504a677528dc2ae9538a606940bbcec28ac562afa3f"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "keyv",
+   "version": "4.5.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/keyv@4.5.4",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a3154790747f1097f608d5e75b144b5ba9a0ec9c82094706d03b441a62f672d528d4f3538a7d4f52297eafffb8af93295600bf7e7d648ecc7b9a34ae8caa88a7"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "levn",
+   "version": "0.4.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/levn@0.4.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "f9b4f6b87e04e4b184ee1fe7ddebdc4bfb109495c2a48a7aca6f0e589e5e57afbaec3b2a97f2da693eea24102ddabcdfa1aff94011818710e2c7574cb7691029"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "locate-path",
+   "version": "6.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/locate-path@6.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "88f64ae9e6236f146edee078fd667712c10830914ca80a28a65dd1fb3baad148dc026fcc3ba282c1e0e03df3f77a54f3b6828fdcab67547c539f63470520d553"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "lodash.merge",
+   "version": "4.6.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/lodash.merge@4.6.2",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "d0aa63a97455beb6320ac5f5b3047f5d32b4bdae9542440ce8c368ecfa96efb0728c086801103c11facfd4de3e2a52a3f184b46540ad453fd852e872603ba321"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "minimatch",
+   "version": "3.1.5",
+   "scope": "excluded",
+   "purl": "pkg:npm/minimatch@3.1.5",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5608d652c9e74fa9fe35493a799abbef37857695b62d60f33facc51ab09b1d789836e9790f3aa4d871d0e6e147d83356e576e9f3e8d5cda78db7de2cb04125e3"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "ms",
+   "version": "2.1.3",
+   "scope": "excluded",
+   "purl": "pkg:npm/ms@2.1.3",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e85973b9b4cb646dc9d9afcd542025784863ceae68c601f268253dc985ef70bb2fa1568726afece715c8ebf5d73fab73ed1f7100eb479d23bfb57b45dd645394"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "natural-compare",
+   "version": "1.4.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/natural-compare@1.4.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "396343f1e8b756d342f61ed5eb4a9f7f7495a1b1ebf7de824f0831b9b832418129836f7487d2746eec8408d3497b19059b9b0e6a38791b5d7a45803573c64c4b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "optionator",
+   "version": "0.9.4",
+   "scope": "excluded",
+   "purl": "pkg:npm/optionator@0.9.4",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e88a50ee6294c5171934b20e6d1d21cfb971b1aa5248860d649c173c6785d264d5a862852178f50d070ca13db64b744e70bc98febcf43d669667d6b25a669df6"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "p-limit",
+   "version": "3.1.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/p-limit@3.1.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "4d839a9ccdf01b0346b193767154d83c0af0e39e319d78f9aa6585d5b12801ce3e714fe897b19587ba1d7af8e9d4534776e1dcdca64c70576ec54e5773ab8945"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "p-locate",
+   "version": "5.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/p-locate@5.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "2da363b51594058fbecc1e6713f37071aa0cca548f93e4be647341d53cdd6cc24c9f2e9dca7a401aded7fed97f418ab74c8784ea7c47a696e8d8b1b29ab1b93f"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "parent-module",
+   "version": "1.0.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/parent-module@1.0.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "190d84591a5057cfe8f80c3c62ab5f6593df3515996246e2744f64e6ba65fe10b7bed1c705f1a6d887e2eaa595f9ca031a4ad42990311372e8b7991cb11961fa"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "path-exists",
+   "version": "4.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/path-exists@4.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "6a4f50cb943b8d86f65b071ecb9169be0d8aa0073f64884b48b392066466ca03ec1b091556dd1f65ad2aaed333fa6ead2530077d943c167981e0c1b82d6cbbff"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "path-key",
+   "version": "3.1.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/path-key@3.1.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a2399e374a9dfb2d23b3312da18e3caf43deab97703049089423aee90e5fe3595f92cc17b8ab58ae18284e92e7c887079b6e1486ac7ee53aa6d889d2c0b844e9"
     }
    ]
   },
@@ -655,6 +2080,139 @@
   },
   {
    "type": "library",
+   "name": "prelude-ls",
+   "version": "1.2.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/prelude-ls@1.2.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "be47033eb459a354192db9f944b18fa60fd698843ae6aa165a170629ffdbe5ea659246ab5f49bdcfca6909ab789a53aa52c5a9c8db9880edd5472ad81d2cd7e6"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "punycode",
+   "version": "2.3.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/punycode@2.3.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "bd8b7b503d54f5683ad77f2c84bb4b3af740bbef03b02fe2945b44547707fb0c9d712a4d136d007d239db9fe8c91115a84be4563b5f5a14ee7295645b5fabc16"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "regexp-tree",
+   "version": "0.1.27",
+   "scope": "excluded",
+   "purl": "pkg:npm/regexp-tree@0.1.27",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "8844f1a632ba628456246e68ea15cbc2f8d80285be144667f68b343c3fdbe803fac50c2c6bf63b942560222c416d43cc7e1bbe8b62ed75e02a5538069506ab7c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "resolve-from",
+   "version": "4.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/resolve-from@4.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "a5bfcc6265ecb40932b11171f2988d235b4614d408140def904dc6ab812e035745ea01e9ffebe066ab021896a9bf2f0ddd0fb8a3b170beab8f25c9d9ed1632e2"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "safe-regex",
+   "version": "2.1.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/safe-regex@2.1.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "af1fb1f0033329be50e6543de59a22e996c9ab008b92a8b75ee257a793f7ad3f0e11ceac642246e40139754de5b2046bfc5e01b37d634a554dfa3e4aaec1aef4"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "shebang-command",
+   "version": "2.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/shebang-command@2.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "907c6bdb366962d766acdd6a0e3aeb5ff675ad1d641bc0f1fa09292b51b87979af5ecc26704d614d6056614ce5ada630d7fc99a7a62e0d8efb62dbdb3747660c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "shebang-regex",
+   "version": "3.0.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/shebang-regex@3.0.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "efef9d161b5cc77df9dee05aabc0c347836ec417ad0730bb6503a19934089c711de9b4ab5dd884cb30af1b4ed9e3851874b4a1594c97b7933fca1cfc7a471bd4"
+    }
+   ]
+  },
+  {
+   "type": "library",
    "name": "split2",
    "version": "4.2.0",
    "scope": "excluded",
@@ -674,6 +2232,120 @@
   },
   {
    "type": "library",
+   "name": "strip-json-comments",
+   "version": "3.1.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/strip-json-comments@3.1.1",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "e9f3dcf91e22870a8fe8dfda22fd9fd60307f25395b56407a2a0b8c8aea8483555a1cba602c7c2aa39179ea89832198cc12fe61072e9ed57a196ddea97a9448a"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "supports-color",
+   "version": "7.2.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/supports-color@7.2.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "aa9080bd197db2db8e1ef78ab27ec79dc251befe74d6a21a70acd094effe2f0c5cf7ed2adb02f2bf80dfbedf34fc33e7da9a8e06c25d0e2a205c647df8ebf047"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "type-check",
+   "version": "0.4.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/type-check@0.4.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "5e5794a1cf6ec065ea8d6c176944d9026ccc705679f39f10036befc7552be7121c8b15c83fef0b9c50e0469954df4bacead7aa765b2415fbbe69ee0aefd3a87b"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "uri-js",
+   "version": "4.4.1",
+   "scope": "excluded",
+   "purl": "pkg:npm/uri-js@4.4.1",
+   "licenses": [
+    {
+     "expression": "BSD-2-Clause"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "eeb294cb2df7435c9cf7ca50d430262edc17d74f45ed321f5a55b561da3c5a5d628b549e1e279e8741c77cf78bd9f3172bacf4b3c79c2acf5fac2b8b26f9dd06"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "which",
+   "version": "2.0.2",
+   "scope": "excluded",
+   "purl": "pkg:npm/which@2.0.2",
+   "licenses": [
+    {
+     "expression": "ISC"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "04b2374e5d535b73ef97bd25df2ab763ae22f9ac29c17aac181616924a8cb676d782b303fb28fbae15b492e103c7325a6171a3116e6881aa4a34c10a34c8e26c"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "word-wrap",
+   "version": "1.2.5",
+   "scope": "excluded",
+   "purl": "pkg:npm/word-wrap@1.2.5",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "04ddb607979a30c23d50cb63ac677983978260fa423c3532d052576d8b1a4f9cd8c6314e7244b9dd2403137a56915a16a475d56f706b61c10de13c1ae7907970"
+    }
+   ]
+  },
+  {
+   "type": "library",
    "name": "xtend",
    "version": "4.0.2",
    "scope": "excluded",
@@ -688,6 +2360,25 @@
     {
      "alg": "SHA-512",
      "content": "2ca614d620172575200179fd5118e2bbe3168725171ecbdfa7b99cb989bd75250a2b4fc28edad4c050310fcdbf98259bb4bb068c521a774c08b28778ceb4c011"
+    }
+   ]
+  },
+  {
+   "type": "library",
+   "name": "yocto-queue",
+   "version": "0.1.0",
+   "scope": "excluded",
+   "purl": "pkg:npm/yocto-queue@0.1.0",
+   "licenses": [
+    {
+     "expression": "MIT"
+    }
+   ],
+   "description": "tests only (dev)",
+   "hashes": [
+    {
+     "alg": "SHA-512",
+     "content": "ad592cbec9cd09d27fa2119ceb180fc3237c7a1782c6c88b33c9b1b84fedfe6395a897b03ee3b59a22e94c74224604ca08b7b12f831e00555a82db3b1e6359d9"
     }
    ]
   },

@@ -1,0 +1,9 @@
+# Supabase Advisors, live project, 2026-11-22T18:26:47Z (read-only), before audit 6 changes
+security (WARN): 11
+  10 × authenticated_security_definer_function_executable: ruqya_anonymize(key), ruqya_can_breaks(), ruqya_can_stats(), ruqya_err_ok(), ruqya_has_role(), ruqya_is_admin(), ruqya_my_readers(), ruqya_restore(aid), ruqya_sees_all(), ruqya_set_color(rid,c)
+   1 × auth_leaked_password_protection (panel setting)
+performance: WARN 13, INFO 5
+   1 × auth_rls_initplan: app_errors.ruqya_err_insert
+  12 × multiple_permissive_policies: appts SELECT; breaks DELETE/INSERT/SELECT/UPDATE; product_sales SELECT; product_shares SELECT; products SELECT; readers SELECT; services SELECT; staff UPDATE; stat_edits SELECT
+   5 × unused_index (INFO): breaks_reader_id, audit_log_row_ins, audit_log_at_brin, product_sales_date, product_sales_product
+   (appts_pkey_date from the starting list is no longer unused: used by the patient key since A5-K3)
