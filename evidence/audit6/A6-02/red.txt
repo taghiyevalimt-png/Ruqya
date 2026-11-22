@@ -1,0 +1,7 @@
+Sun Nov 22 19:06:41 UTC 2026
+red, e613c99
+FAIL 99-a6-02-net-errors.js 
+    Error: FAIL: a cut connection is not shown as a program error
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-02-net-errors.js:16:5)
+1 failed of 1
