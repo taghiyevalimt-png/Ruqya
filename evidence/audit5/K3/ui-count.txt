@@ -1,0 +1,6 @@
+# A5-K3 acceptance on the 10-year synthetic set (50 000 patients), UI count vs independent SQL count
+# run 14:58:29Z–15:38:29Z (timeout 2400 s), mock Supabase in the browser serving 1 000 000 synthetic rows
+owner patients on screen (total in the hint): 50000  load to stable: 1189176 ms  search answer: 353 ms (incl. 120 ms typing pause)  page errors: 0
+SQL reference (copy, independent of ruqya_pkey): owner 50000, specialist 46764
+specialist run: not finished inside the 2400 s timeout (the mock needed ~20 min to serve the rows) — НЕ ПРОВЕРЕНО в этом прогоне, повтор после полного набора
+note: «load to stable» is the time of the test mock serving 1M rows through the browser's request interception, not a measure of the real server
