@@ -1,0 +1,46 @@
+{
+ "at": "2026-11-22T19:47:44.568Z",
+ "users": 50,
+ "seconds": 120,
+ "pauseMs": 3000,
+ "ops": 6980,
+ "errorCodes": {},
+ "perQuery": {
+  "window": {
+   "n": 1675,
+   "median": 45,
+   "p95": 423,
+   "max": 1197,
+   "errors": 0
+  },
+  "poll": {
+   "n": 1675,
+   "median": 51,
+   "p95": 402,
+   "max": 736,
+   "errors": 0
+  },
+  "patients": {
+   "n": 1675,
+   "median": 262,
+   "p95": 1123,
+   "max": 2034,
+   "errors": 0
+  },
+  "visits": {
+   "n": 1675,
+   "median": 20,
+   "p95": 254,
+   "max": 768,
+   "errors": 0
+  },
+  "write": {
+   "n": 280,
+   "median": 30,
+   "p95": 176,
+   "max": 472,
+   "errors": 0
+  }
+ },
+ "verdict": "НЕ ПРОЙДЕНО (p95 > 500 ms: patients)"
+}

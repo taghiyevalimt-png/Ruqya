@@ -1,0 +1,48 @@
+Sun Nov 22 19:43:44 UTC 2026
+10-year copy (1 000 000 bookings): old key vs new key, migration, rollback, migration
+Time: 28027.314 ms (00:28.027)
+Time: 1.748 ms
+Time: 5790.551 ms (00:05.791)
+Time: 1700.585 ms (00:01.701)
+ result 
+--------
+ OK
+(1 row)
+
+Time: 0.366 ms
+ differences 
+-------------
+           0
+(1 row)
+
+Time: 9783.335 ms (00:09.783)
+ rows_checked 
+--------------
+      1000000
+(1 row)
+
+Time: 58.031 ms
+Time: 1.622 ms
+Time: 26208.344 ms (00:26.208)
+Time: 7547.588 ms (00:07.548)
+ result 
+--------
+ OK
+(1 row)
+
+Time: 0.325 ms
+ differences_after_rollback 
+----------------------------
+                          0
+(1 row)
+
+Time: 24982.744 ms (00:24.983)
+Time: 2.158 ms
+Time: 4640.782 ms (00:04.641)
+Time: 1333.926 ms (00:01.334)
+ result 
+--------
+ OK
+(1 row)
+
+Time: 0.348 ms
