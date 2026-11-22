@@ -1,0 +1,7 @@
+Sun Nov 22 19:12:13 UTC 2026
+red, 2a0c6b4
+FAIL 99-a6-03-timezone.js 
+    Error: FAIL: with summer time in the time-zone database the app follows it: Mərkəz ‹ Cümə axşamı, 26 noyabr▼ Bu gün › B.e 23 Ç.a 24 Ç 25
+        at check (/home/claude/ruqya/tests/lib.js:231:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a6-03-timezone.js:28:5)
+1 failed of 1

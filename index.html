@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-aeQqImeiJsFnQ+1ZdJB4BBnmea+GpURQMne0tqJIZ9Y='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-VALEL4GR/tE1AUeSug2/3Vl3KhBR5izzF9YWY+EFE8I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1924,9 +1924,17 @@ function noPriceBox(){
   return L('<div class="note warnbox" role="status"><p>Seansı bitib, amma qiyməti yazılmayıb: ')+np.length+L('. Qiyməti yazmasanız, pul statistikasında görünməyəcək.</p>')+
     L('<button class="ghost" data-act="np-list">Göstər</button>')+'</div>';
 }
-/* The centre works on Baku time (UTC+4, no summer time). "Today", the red now-line and the day a booking
+/* The centre works on Baku time (Asia/Baku: UTC+4 now, no summer time since 2016). "Today", the red now-line and the day a booking
    was made are taken from it, so a phone set to another time zone shows the same thing as everyone else. */
-var TZ=4*3600000,skew=0;
+var TZ=4*3600000,skew=0,TZF=null,tzC={},tzN=0;
+/* A6-03: the offset is read from the phone's time-zone database for «Asia/Baku» (the same zone the database rules and
+   the Android widget use): if summer time or another offset ever comes back by law, every place follows it. +4 only
+   when the browser cannot tell. Cached per hour. */
+function tzAt(t){var h=Math.floor(t/3600000);if(tzC[h]!=null)return tzC[h];var o=TZ;
+  try{if(TZF===null)TZF=typeof Intl!=="undefined"&&Intl.DateTimeFormat?new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Baku",hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):false;
+    if(TZF){var m=String(TZF.format(new Date(t))).match(/(\d+)\/(\d+)\/(\d+),?\s+(\d+):(\d+)/);
+      if(m){var x=Date.UTC(+m[3],+m[1]-1,+m[2],+m[4]%24,+m[5])-Math.floor(t/60000)*60000;x=Math.round(x/900000)*900000;if(Math.abs(x)<=14*3600000)o=x}}}catch(e){TZF=false}
+  if(++tzN>5000){tzC={};tzN=0}tzC[h]=o;return o}
 /* Old phones often have a wrong clock. The difference from the server's clock is measured when the app
    checks for updates, and "today" and the now-line are corrected by it. */
 function setSkew(h){
@@ -1934,7 +1942,7 @@ function setSkew(h){
   var d=t-Date.now();d=Math.abs(d)>90000?d:0;
   if(d!==skew){skew=d;if(rollDay())render()}
 }
-function bk(t){var d=new Date((t==null?Date.now()+skew:t)+TZ);
+function bk(t){var ms=t==null?Date.now()+skew:t,d=new Date(ms+tzAt(ms));
   return{d:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0"),m:d.getUTCHours()*60+d.getUTCMinutes()}}
 function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&d>="2020-01-01"&&d<="2099-12-31"&&iso(parse(d))===d}
 var MAXSUM=1000000;
@@ -2578,7 +2586,7 @@ function neededFrom(){
 /* Full data is kept on the phone from a week before the 1st of last month, so this month's and last month's
    totals (and their weeks) are always complete; anything older is fetched when someone goes back to it. */
 /* 00:00 of a day in Baku, as a UTC moment (Baku is UTC+4 all year). */
-function bakuStart(d){return addDays(d,-1)+"T20:00:00Z"}
+function bakuStart(d){var p=String(d).split("-"),u=Date.UTC(+p[0],+p[1]-1,+p[2]);return new Date(u-tzAt(u-TZ)).toISOString().replace(".000Z","Z")}   /* A6-03: midnight in Baku */
 function winFrom(){var t=parse(today),a=addDays(ymd(t.getFullYear(),t.getMonth()-1,1),-7),b=addDays(today,-WINDOW);return a<b?a:b}
 function ensureLoaded(){
   var need=neededFrom();
