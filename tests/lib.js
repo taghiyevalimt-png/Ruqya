@@ -180,7 +180,10 @@ async function attach(context, db, ctl) {
   });
 }
 // same key as the app's pkey() and the database's ruqya_pkey()
-function pkey(r) { const d = String(r.phone || "").replace(/\D/g, ""); return d.length >= 7 ? "p" + d.slice(-9) : "n" + String(r.name || "").trim().toLowerCase().replace(/̇/g, "").replace(/ı/g, "i"); }
+// A5-K3: phone + name, names folded like ruqya_pnorm() (sql/2026-11-a5-patient-key.sql)
+const FOLD = { "ə": "e", "ç": "c", "ş": "s", "ğ": "g", "ö": "o", "ü": "u", "ı": "i", "ё": "е" };
+function pnorm(x) { return String(x || "").normalize("NFC").replace(/[\u200b\u200c\u200d\u2060\ufeff]/g, "").toLowerCase().replace(/\u0307/g, "").replace(/[əçşğöüıё]/g, (c) => FOLD[c]).replace(/[\t\n\r \u00a0]+/g, " ").trim(); }
+function pkey(r) { const d = String(r.phone || "").replace(/\D/g, ""); return d.length >= 7 ? "p" + d.slice(-9) + "|" + pnorm(r.name) : "n" + pnorm(r.name); }
 function user(id) { return { id, aud: "authenticated", role: "authenticated", email: id.slice(0, 4) + "@ruqya.az", app_metadata: {}, user_metadata: {}, created_at: "2026-11-01T00:00:00Z" }; }
 function session(id, expiresIn = 3600) {
   return { access_token: "tok-" + id, token_type: "bearer", expires_in: expiresIn, expires_at: Math.floor(Date.now() / 1000) + expiresIn, refresh_token: "ref-" + id, user: user(id) };

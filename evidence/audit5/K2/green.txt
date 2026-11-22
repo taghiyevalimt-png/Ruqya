@@ -1,0 +1,6 @@
+Sun Nov 22 14:42:32 UTC 2026
+PASS 99-a5-k2-search.js 27.0s
+all 1 passed
+# Note (honesty): one expectation was corrected after the first green run: «99900» → [] was wrong in the written list —
+# AYSEL ƏLİYEVA's number 050 999 00 11 does contain 99900. The app's rule for numbers was changed in the same step
+# («050» typed with its beginning matches from the beginning), the other written expectations were not touched.

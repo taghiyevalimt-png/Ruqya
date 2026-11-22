@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2D0BNzNB8Hhxc85uJuQldJGufcODy1NVJsJmfWy9Zaw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-aRQU1p1g9gE2VyZbZ6OYkATnpuBbrY+7Bxpgsglj4/U='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -1967,6 +1967,12 @@ function fmtDay(s,mode){
 }
 /* Search that ignores Azerbaijani case quirks: "İlkin" and "ilkin", "ISMAYIL" and "ismayıl" match. */
 function low(x){return String(x||"").toLowerCase().replace(/\u0307/g,"").replace(/\u0131/g,"i")}
+/* A5-K2/K3 (owner 22.11): names are compared without case, extra or invisible spaces and Azerbaijani letters
+   (ə=e, ç=c, ş=s, ğ=g, ö=o, ü=u, ı=i; ё=е) — «Memmedova» finds «Məmmədova». The database's ruqya_pnorm() is the
+   same rule (sql/2026-11-a5-patient-key.sql), so the patient lists of the app and of the database agree. */
+var FOLD={"\u0259":"e","\u00e7":"c","\u015f":"s","\u011f":"g","\u00f6":"o","\u00fc":"u","\u0131":"i","\u0451":"\u0435"};
+function fold(x){var s0=String(x==null?"":x);try{if(s0.normalize)s0=s0.normalize("NFC")}catch(e){}
+  return low(s0.replace(/[\u200b\u200c\u200d\u2060\ufeff]/g,"")).replace(/[\u0259\u00e7\u015f\u011f\u00f6\u00fc\u0131\u0451]/g,function(c){return FOLD[c]}).replace(/[\t\n\r \u00a0]+/g," ").replace(/^ | $/g,"")}
 function digits(p){var d=String(p||"").replace(/\D/g,"");return d.length>=9?d.slice(-9):d}
 function byId(id){return document.getElementById(id)}
 /* An amount as typed on any keyboard: "150", "12,5", "1 200". Empty gives "", anything else unreadable gives NaN. */
@@ -2797,7 +2803,9 @@ function specMe(){return !!(auth.user&&!isAdmin()&&state.roleSet[auth.user.id]&&
 function pendingMe(){return !!(state.hasPriv&&auth.user&&auth.loaded&&!isAdmin()&&!state.roles[auth.user.id])}
 function activeReaders(){var a=allReaders();if(!specMe())return a;var nm=low(String(state.staff[auth.user.id]||"").trim());
   return a.filter(function(r){return low(String(r.name||"").trim())===nm})}
-function pkey(a){var d=digits(a.phone);return d.length>=7?"p"+d:"n"+low(String(a.name).trim())}
+/* A5-K3 (owner 22.11): one patient = the phone number + the name (relatives with one number are separate patients);
+   without a number (fewer than 7 digits) the name alone. The same as ruqya_pkey() in the database. */
+function pkey(a){var d=digits(a.phone),n=fold(a.name);return d.length>=7?"p"+d+"|"+n:"n"+n}
 /* Grouping a year of visits by patient is the heaviest step; it is reused until the next redraw. */
 var pcache=null;
 function patients(){
@@ -2824,6 +2832,13 @@ function patients(){
 /* Digits of a phone without the country / trunk prefix, so "+994 50 …", "050 …" and "0050 …" match each other. */
 // B-15: only a query of digits and phone signs looks in phones; with letters it is a name
 function qDigits(q){return /^[\d\s+()\-.]+$/.test(q)?phoneCore(q):""}
+/* A5-K2: one search rule for every list (owner 22.11): letters — every word of the query is in the name, compared by
+   fold() (no case, no Azerbaijani letters, no extra spaces; word order free); digits — part of the number in any
+   form (+994, 0, 00, spaces, brackets, dashes) */
+function qPrep(raw){var f=fold(raw),t=String(raw||"").replace(/^\s+|\s+$/g,"");return {f:f,w:f?f.split(" "):[],d:qDigits(t),a:/^(\+|0|994)/.test(t)}}
+/* a number typed with its beginning (0…, +994…, 00…) matches from the beginning; a piece of it («111 22») anywhere */
+function qMatch(Q,name,phone){if(!Q.f)return true;if(Q.d){var c=phoneCore(phone),i=c.indexOf(Q.d);if(Q.a?i===0:i>=0)return true}
+  var n=fold(name);for(var i=0;i<Q.w.length;i++)if(n.indexOf(Q.w[i])<0)return false;return Q.w.length>0}
 function phoneCore(v){return String(v||"").replace(/\D/g,"").replace(/^00/,"").replace(/^994/,"").replace(/^0/,"")}
 /* Call, plain WhatsApp chat, and «Təsdiq» = WhatsApp with the reminder asking the patient to confirm (only for a session still ahead). */
 function phoneLinks(phone,a,cls){
@@ -3979,7 +3994,7 @@ function plistHtml(){return ui.psec==="cancel"?cancelList():ui.psec==="conf"&&st
 function confNeed(){var tm=addDays(today,1);return state.appts.filter(function(a){return (a.date===today||a.date===tm)&&a.status==="wait"&&!ended(a)&&!a.sold&&mineOnly(a.readerId)})
   .sort(function(a,b){return (a.date+a.time).localeCompare(b.date+b.time)})}
 function confList(){
-  var q=low(ui.q.trim()),qd=qDigits(q),all=confNeed().filter(function(a){return !q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0)});
+  var Q=qPrep(ui.q),all=confNeed().filter(function(a){return qMatch(Q,a.name,a.phone)});
   if(!all.length)return '<div class="empty">'+L("Bu gün və sabah üçün təsdiq gözləyən qəbul yoxdur.")+'</div>';
   var no=all.filter(function(a){return !a.conf}),yes=all.filter(function(a){return a.conf});
   var card=function(a){var r=reader(a.readerId);
@@ -3993,11 +4008,11 @@ function confList(){
    «we are waiting for you» brings them back (91% of patients came only once) */
 function backText(p){return LANG==="ru"?"Здравствуйте, доброго вам времени!\nДавно вас не видели. Если хотите продолжить сеансы, напишите — подберём удобное время.":"Salam, hər vaxtınız xeyir!\nÇoxdandır sizi görmürük. Seanslara davam etmək istəsəniz, yazın — sizə uyğun vaxt tapaq."}
 function lostList(){
-  var q=low(ui.q.trim()),qd=qDigits(q),m=patients(),from=addDays(today,-90),to=addDays(today,-14),arr=[];
+  var Q=qPrep(ui.q),m=patients(),from=addDays(today,-90),to=addDays(today,-14),arr=[];
   Object.keys(m).forEach(function(k){var p=m[k],lastOk="",ahead=false;
     p.list.forEach(function(a){if(done(a)&&a.date>lastOk)lastOk=a.date;if(a.date>=today&&!gone(a)&&!done(a))ahead=true});
     if(ahead||!lastOk||lastOk<from||lastOk>to||p.wait)return;
-    if(q&&low(p.name).indexOf(q)<0&&!(qd&&phoneCore(p.phone).indexOf(qd)>=0))return;
+    if(!qMatch(Q,p.name,p.phone))return;
     arr.push({p:p,last:lastOk})});
   arr.sort(function(a,b){return b.last.localeCompare(a.last)});
   if(!arr.length)return '<div class="empty">'+L("14–90 gün əvvəl gəlib, sonra yazılmayan pasiyent yoxdur.")+'</div>';
@@ -4023,8 +4038,8 @@ var freeSkip=0;
 function freeShow(){var fb=byId("f-free");if(!fb)return;var fs=freeSlots();
   fb.innerHTML=fs.length?fs.map(function(x){return '<button type="button" class="chip" data-act="free-pick" data-r="'+esc(x.r.id)+'" data-d="'+x.d+'" data-t="'+x.t+'">'+esc((val("f-reader")?"":x.r.name+" · ")+(x.d===today?L("bu gün"):x.d===addDays(today,1)?L("sabah"):fmtDayShort(x.d))+", "+x.t)+'</button>'}).join(""):'<p class="hint">'+L("Yaxın 3 həftədə boş vaxt tapılmadı.")+'</p>'}
 function cancelList(){
-  var q=low(ui.q.trim()),qd=qDigits(q);
-  var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&(!q||low(a.name).indexOf(q)>=0||(qd&&phoneCore(a.phone).indexOf(qd)>=0))})
+  var Q=qPrep(ui.q);
+  var arr=state.appts.filter(function(a){return gone(a)&&mineOnly(a.readerId)&&qMatch(Q,a.name,a.phone)})
     .sort(function(a,b){return (b.date+b.time).localeCompare(a.date+a.time)}).slice(0,300);
   if(!arr.length)return '<div class="empty">'+L("Son iki ayda ləğv olunan qəbul yoxdur.")+'</div>';
   return '<p class="hint small">'+L("Son iki ayın ləğv olunan qəbulları göstərilir.")+'</p>'+arr.map(function(a){
@@ -4079,11 +4094,8 @@ function importContacts(rows){
   flash(L("Kontakt faylı yükləndi — açın və «Hamısını əlavə et» seçin."));
 }
 function patientsList(){
-  var m=patients(),q=low(ui.q.trim()),qd=qDigits(q);
-  var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){
-    if(!q)return true;
-    return low(p.name).indexOf(q)>=0||(qd&&phoneCore(p.phone).indexOf(qd)>=0);
-  }).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
+  var m=patients(),Q=qPrep(ui.q),q=Q.f;
+  var arr=Object.keys(m).map(function(k){return m[k]}).filter(function(p){return qMatch(Q,p.name,p.phone)}).sort(function(a,b){return a.last<b.last?1:a.last>b.last?-1:0}),total=arr.length;
   arr=arr.slice(0,200);
   if(!arr.length)return auth.loaded?'<div class="empty">'+(q?L("Heç kim tapılmadı. Adı və ya nömrəni yoxlayın."):L("Pasiyentlər ilk qəbuldan sonra burada görünəcək."))+'</div>':"";
   loadMyContacts();var nc=q?0:contactRows().length;

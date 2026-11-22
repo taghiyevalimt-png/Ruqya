@@ -1,0 +1,7 @@
+Sun Nov 22 14:38:46 UTC 2026
+cc6fc68
+FAIL 99-a5-k3-patients.js 
+    Error: FAIL: 4 patients: Aysel (2 visits, 3 spellings of one number and name), Orxan (same number), Leyla (no number), Nigar: ["aysel  memmedova","Leyla","Nigar"]
+        at check (/home/claude/ruqya/tests/lib.js:218:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-k3-patients.js:16:5)
+1 failed of 1

@@ -1,0 +1,7 @@
+Sun Nov 22 14:41:19 UTC 2026
+red run on commit cc6fc68 (the search before the fix)
+FAIL 99-a5-k2-search.js 
+    Error: FAIL: 30 of 120 queries wrong: all "memmedova" want ["Aysel Məmmədova"] got [] | all "memmedova aysel" want ["Aysel Məmmədova"] got [] | all "Aysel  Məmmədova" want ["Aysel Məmmədova"] got [] | all "sukurov" want ["Rəşad Şükürov"] got [] | all "resad" want ["Rəşad Şükürov"] got [] | all "celebiyev" want ["İlqar Çələbiyev"] got []
+        at check (/home/claude/ruqya/tests/lib.js:218:46)
+        at module.exports (/home/claude/ruqya/tests/t/99-a5-k2-search.js:50:5)
+1 failed of 1
