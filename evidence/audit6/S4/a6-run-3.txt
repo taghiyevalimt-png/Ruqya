@@ -1,0 +1,125 @@
+# run 3 of 3 — commit 944370c — start 2026-11-22T22:12:12Z, RUQYA_PG_PORT=54330
+PASS 00-smoke.js 6.4s
+PASS 01-drafts.js 37.6s
+PASS 02-session.js 13.9s
+PASS 03-delete-fonts.js 7.1s
+PASS 04-excel.js 5.4s
+PASS 05-patients.js 10.2s
+PASS 06-anonymize.js 13.0s
+PASS 07-russian.js 7.4s
+PASS 08-sweep.js 133.7s
+PASS 09-features.js 77.6s
+    fuzz bad0 az 120 steps 21s
+    fuzz bad0 ru 120 steps 37s
+    fuzz 1111 az 120 steps 61s
+    fuzz 1111 ru 120 steps 81s
+    fuzz 2222 az 120 steps 105s
+    fuzz 2222 ru 120 steps 124s
+PASS 10-fuzz.js 124.3s
+PASS 11-es5.js 0.1s
+PASS 12-list.js 7.5s
+PASS 13-followup.js 42.4s
+PASS 14-no-slots.js 6.5s
+PASS 15-keyboard.js 6.0s
+PASS 16-ios-scroll.js 5.5s
+PASS 17-cancel-contact.js 13.7s
+PASS 18-faults.js 86.3s
+PASS 19-a11y.js 15.7s
+PASS 20-xss.js 40.0s
+PASS 21-access-matrix.js 0.7s
+PASS 22-attacks.js 0.8s
+PASS 23-excel-counts.js 5.7s
+FAIL 24-aria.js 
+    Error: Cannot find module 'axe-core/axe.min.js'
+    Require stack:
+    - /home/claude/wt/tests/t/24-aria.js
+PASS 25-many-patients.js 8.9s
+PASS 26-draft-background.js 10.3s
+PASS 27-dialog-focus.js 4.9s
+PASS 28-publish-guard.js 0.2s
+PASS 29-rules-text.js 10.1s
+PASS 30-patient-search.js 9.4s
+PASS 31-patients-keyset.js 20.3s
+    sql-privileges: server < 17, MAINTAIN not checked (НЕ ПРОВЕРЕНО here)
+PASS 90-sql.js 0.9s
+FAIL 91-schema.js 
+    Error: Command failed: /opt/node22/bin/node /home/claude/wt/tools/schema_check.js /home/claude/wt/db/structure_live_20261117.tsv 54351
+        at genericNodeError (node:internal/errors:983:15)
+        at wrappedFn (node:internal/errors:537:14)
+PASS 92-visits-access.js 0.4s
+PASS 93-restore-one.js 0.4s
+PASS 94-configured-copy.js 0.2s
+PASS 95-no-third-party.js 8.6s
+PASS 96-close-history.js 8.0s
+PASS 97-person-export-delete.js 0.6s
+PASS 98-ru-dictionary.js 0.0s
+PASS 99-a5-02-zero.js 3.9s
+PASS 99-a5-03-retry-no-dup.js 18.0s
+PASS 99-a5-05-zero-rows.js 7.2s
+PASS 99-a5-06-soft-fail.js 22.5s
+PASS 99-a5-07-retry-changed.js 10.7s
+PASS 99-a5-09-hist-fail.js 29.4s
+PASS 99-a5-11-st3-reopen.js 19.6s
+PASS 99-a5-12-quota.js 7.0s
+PASS 99-a5-14-sale-retry.js 17.1s
+PASS 99-a5-k1-chaos.js 447.7s
+PASS 99-a5-k1-sale-date.js 6.7s
+PASS 99-a5-k2-search.js 26.6s
+PASS 99-a5-k3-patients.js 4.2s
+PASS 99-a5-week-bounds.js 15.3s
+PASS 99-a6-01-auth500.js 18.1s
+PASS 99-a6-02-net-errors.js 12.8s
+PASS 99-a6-03-timezone.js 14.8s
+PASS 99-a6-04-anon-index-db.js 0.4s
+PASS 99-a6-05-future-clock.js 18.8s
+PASS 99-a6-06-break-skip.js 5.9s
+PASS 99-a6-07-definer-db.js 0.6s
+PASS 99-a6-09-policies-db.js 1.2s
+PASS 99-a6-10-staff-reopen.js 8.8s
+PASS 99-a6-11-idle-12h.js 13.3s
+PASS 99-a6-12-paused.js 30.9s
+PASS 99-agent-services.js 18.7s
+PASS 99-app-errors-db.js 0.5s
+PASS 99-app-errors.js 27.2s
+PASS 99-breaks-days.js 23.2s
+PASS 99-breaks-delete-one-request.js 7.3s
+PASS 99-breaks-gcal.js 18.8s
+PASS 99-cache-bad.js 8.2s
+PASS 99-cash-save-fail.js 12.2s
+PASS 99-contacts-agent.js 20.8s
+PASS 99-contacts.js 24.7s
+PASS 99-current-period.js 14.1s
+PASS 99-errors-visible.js 6.0s
+PASS 99-excel-sync.js 8.3s
+PASS 99-hide-admin.js 8.0s
+PASS 99-list-specialists-bar.js 6.3s
+PASS 99-mock-defaults.js 7.6s
+PASS 99-money-services.js 9.7s
+PASS 99-my-contacts-db.js 0.5s
+PASS 99-new-helpers.js 7.2s
+PASS 99-new-presets.js 11.1s
+PASS 99-owner-notes-db.js 0.5s
+PASS 99-paid-online-db.js 0.5s
+PASS 99-paid-online.js 8.0s
+PASS 99-product-shares.js 20.5s
+PASS 99-products-buttons.js 18.0s
+PASS 99-service-db.js 0.4s
+PASS 99-service-ui.js 15.6s
+PASS 99-short-window-iphone.js 6.9s
+PASS 99-short-window-keyboard.js 5.9s
+PASS 99-show-zeros.js 8.8s
+PASS 99-sold.js 110.3s
+PASS 99-stats-merged.js 10.0s
+PASS 99-stats-notes.js 14.1s
+PASS 99-time-whole-hour.js 3.3s
+PASS 99-uniform-view.js 12.6s
+PASS 99-whatsapp-copy.js 4.7s
+PASS 99-whole-day-default.js 9.6s
+PASS 99-whole-day-details.js 8.4s
+PASS 99-whole-day-foot.js 11.2s
+PASS 99-whole-day-names.js 9.2s
+PASS 99-whole-day.js 27.3s
+PASS 99-widget-color.js 12.0s
+PASS 99-widget-filter.js 9.2s
+2 failed of 109
+end 2026-11-22T22:46:53Z

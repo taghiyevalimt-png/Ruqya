@@ -9,7 +9,7 @@ const M = [
   ["A-01", "output escaping removed (names, notes shown as HTML)", 'function esc(s){return String(s==null?"":s).replace(', 'function esc(s){return String(s==null?"":s);String(s).replace(', ["20-xss"]],
   ["A-02", "B-15 back: a search with letters also matches phones", 'function qDigits(q){return /^[\\d\\s+()\\-.]+$/.test(q)?phoneCore(q):""}', 'function qDigits(q){return phoneCore(q)}', ["30-patient-search"]],
   ["A-03", "B-01 back: Excel counts a booking twice", 'add=function(x){if(!had[x.id]){had[x.id]=1;ap.push(x)}};', 'add=function(x){ap.push(x)};', ["23-excel-counts"]],
-  ["A-04", "sign-out after 8 days instead of 7", "var IDLE_MS=7*24*3600e3,", "var IDLE_MS=8*24*3600e3,", ["02-session"]],
+  ["A-04", "sign-out after 8 days instead of 7", "var IDLE_MS=(IDLE_12H?12:7*24)*3600e3,", "var IDLE_MS=(IDLE_12H?12:8*24)*3600e3,"   /* audit 6: the line has the S-09 switch now */, ["02-session"]],
   ["A-05", "«Satış edildi» ignored (stays cancelled)", 'function soldRow(x){return x.status==="cancel"&&(+x.follow||0)>=3}', "function soldRow(x){return false}", ["99-sold"]],
   ["A-06", "service no longer required", 'if(!service)return fail("f-err",L("Xidmət növünü seçmək vacibdir."));', "if(!service)service=\"\";", ["99-service-ui"]],
   ["A-07", "closing a window leaves its history entry (Back reopens nothing / closes twice)", "if(drop)afterPaint(function(){try{if(history.state&&history.state.sheet)history.back()}", "if(drop)afterPaint(function(){try{if(0)history.back()}", ["96-close-history"]],

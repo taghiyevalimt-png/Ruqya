@@ -1,0 +1,8 @@
+# audit 6 mutations — 2026-11-22T22:49:45.798Z
+M6-01	CAUGHT by 99-a6-01-auth500	A6-01 back: a 5xx of the sign-in server signs out
+M6-02	CAUGHT by 99-a6-02-net-errors	A6-02 back: a cut connection shown as a program error and sent
+M6-03	CAUGHT by 99-a6-03-timezone	A6-03 back: Baku = fixed +4
+M6-04	CAUGHT by 99-a6-06-break-skip	A6-06 back: left-out days grow without limit
+M6-05	CAUGHT by 99-a6-10-staff-reopen	A6-10 back: the staff form is lost on a failed save
+M6-06	CAUGHT by 99-a6-11-idle-12h	S-09 switch ignored: 12 hours does nothing
+caught 6 of 6
