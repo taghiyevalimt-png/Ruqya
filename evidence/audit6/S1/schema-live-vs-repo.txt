@@ -1,0 +1,77 @@
+# live structure fingerprint (scripts/backup-structure.sql, read-only, 2026-11-22T19:12Z) vs repository copy (db/schema_live_20261116.sql + BASE + AFTER in tests/dbcopy.js) on local PostgreSQL 16
+## copy
+tables	13
+columns	ff70f6a04399bb477936a94d9ed2ed9f
+constraints	59 af64b80b017242f5e0f22ec6b3e2ed86
+indexes	29 6fdeaae96fba2eb602991bfb5cf8e7bf
+functions	27 18b19c500a63bcf9d24325b36a6eb433
+function_grants	490b011ba0cf5157143291809396172d
+triggers	28 9f3af1fa00e4f247537e5963e8ba5d6c
+rls	app_errors=true/false,appts=true/false,audit_log=true/false,breaks=true/false,expenses=true/false,product_sales=true
+policies	39 e0abbb7a9fc108589d4ed7fb2a382396
+table_grants	812719740f1e8c00ea5bcab30de32f0e
+column_grants	ed0e68429935c3679b64cd3773959cca
+realtime	appts,breaks,expenses,product_sales,product_shares,products,readers,service_shares,services,staff,stat_edits
+private_functions	1 b14c132004a799fcc93585b194573d76
+## result
+tables, columns, constraints, indexes, function_grants, triggers, rls, policies, column_grants, realtime: SAME
+functions: 2 of 28 differ in text only — private.ruqya_visit_ids (comment lines absent live: the live copy was applied without comments) and ruqya_staff_guard (live E'…\\u00a0…' vs repo '…\u00a0…', the same characters in the regular expression). No difference in behaviour (read both definitions).
+table_grants: НЕ ПРОВЕРЕНО here — PostgreSQL 16 has no MAINTAIN privilege, so the copy's grants differ by construction; needs PostgreSQL 17
+## per-function hashes live
+private.private.ruqya_visit_ids(text,date,date) 2cbb641daa7828909d0f5fd9c438c685
+public.rls_auto_enable() 846ec2fbff751d24b890656d63c3a9bf
+public.ruqya_anonymize(text) a67e6aa85561fc866d3c30b1afde49d4
+public.ruqya_appt_owner() 5451a627a12c0313f7379c78df9b1f65
+public.ruqya_appt_rules() 60757602e21d02779b2395852f6e289a
+public.ruqya_audit() 30d90eaac6c90c6c42e3f760c1c7067d
+public.ruqya_can_breaks() 53b760c382aa55155209356638b627d6
+public.ruqya_can_stats() ca0e8f21d6b7de242d160e899d97d32e
+public.ruqya_err_ok() f682946e140b9a4b593447ca8b53f036
+public.ruqya_has_role() 7dea0b7120d35d580e5becd21d77de76
+public.ruqya_hist_patients_page(date,date,text,integer) 8cf936aebf3cf24b65593918607c5068
+public.ruqya_hist_visits(text,date,date) 01a4424af33d3d7878c4f87b3e86bcb5
+public.ruqya_is_admin() b1e5a04882d01e50b389e86759a842d3
+public.ruqya_min(text) 75b0e85250764fc8730950295b2d4d8e
+public.ruqya_my_contacts(date) ed7ec157a13e2ae312f3aca9b0285d75
+public.ruqya_my_readers() 5448ec37624a647fa7cd7d97d8a30e13
+public.ruqya_no_overlap() b0d1390fe9643df33484bd181820dddb
+public.ruqya_pkey(text,text) 49e4eabdc0e0c30e61bc202469025b4c
+public.ruqya_pnorm(text) 14f6539ca65f7bb01d38dabfde23ee7b
+public.ruqya_restore(bigint) 4b59eb90b06bbe62eaf77a651c0cf9b8
+public.ruqya_scrub(jsonb) a8510534f3480f41b5725769c0706517
+public.ruqya_sees_all() bc75a5746fe704d8b4e6fc988bb7d9c4
+public.ruqya_set_color(uuid,text) 3d8325c258554711ca80af3c4c5f0fd8
+public.ruqya_skip_noop() 654b894082f907c6b0efc9983e059921
+public.ruqya_staff_guard() b88b19c2dbf71bcb544874d1167c4e41
+public.ruqya_stamp() 1eb42b15d2c954d6b1f61f4b79ff24b8
+public.ruqya_stat_stamp() fcfa86affc0c487002266e8074a74a81
+public.ruqya_throttle() c9f442564eba1ada0e2a62a5e884e8b6
+## per-function hashes copy
+private.private.ruqya_visit_ids(text,date,date) b14c132004a799fcc93585b194573d76
+public.rls_auto_enable() 846ec2fbff751d24b890656d63c3a9bf
+public.ruqya_anonymize(text) a67e6aa85561fc866d3c30b1afde49d4
+public.ruqya_appt_owner() 5451a627a12c0313f7379c78df9b1f65
+public.ruqya_appt_rules() 60757602e21d02779b2395852f6e289a
+public.ruqya_audit() 30d90eaac6c90c6c42e3f760c1c7067d
+public.ruqya_can_breaks() 53b760c382aa55155209356638b627d6
+public.ruqya_can_stats() ca0e8f21d6b7de242d160e899d97d32e
+public.ruqya_err_ok() f682946e140b9a4b593447ca8b53f036
+public.ruqya_has_role() 7dea0b7120d35d580e5becd21d77de76
+public.ruqya_hist_patients_page(date,date,text,integer) 8cf936aebf3cf24b65593918607c5068
+public.ruqya_hist_visits(text,date,date) 01a4424af33d3d7878c4f87b3e86bcb5
+public.ruqya_is_admin() b1e5a04882d01e50b389e86759a842d3
+public.ruqya_min(text) 75b0e85250764fc8730950295b2d4d8e
+public.ruqya_my_contacts(date) ed7ec157a13e2ae312f3aca9b0285d75
+public.ruqya_my_readers() 5448ec37624a647fa7cd7d97d8a30e13
+public.ruqya_no_overlap() b0d1390fe9643df33484bd181820dddb
+public.ruqya_pkey(text,text) 49e4eabdc0e0c30e61bc202469025b4c
+public.ruqya_pnorm(text) 14f6539ca65f7bb01d38dabfde23ee7b
+public.ruqya_restore(bigint) 4b59eb90b06bbe62eaf77a651c0cf9b8
+public.ruqya_scrub(jsonb) a8510534f3480f41b5725769c0706517
+public.ruqya_sees_all() bc75a5746fe704d8b4e6fc988bb7d9c4
+public.ruqya_set_color(uuid,text) 3d8325c258554711ca80af3c4c5f0fd8
+public.ruqya_skip_noop() 654b894082f907c6b0efc9983e059921
+public.ruqya_staff_guard() 68e93f23b39a41692c0a1958ba1c255d
+public.ruqya_stamp() 1eb42b15d2c954d6b1f61f4b79ff24b8
+public.ruqya_stat_stamp() fcfa86affc0c487002266e8074a74a81
+public.ruqya_throttle() c9f442564eba1ada0e2a62a5e884e8b6

@@ -1,0 +1,8 @@
+# GitHub Actions history, public page https://github.com/taghiyevalimt-png/Ruqya/actions read 2026-11-22T19:10Z (gh CLI token invalid here)
+# page 1 of 330 runs, all shown completed successfully
+Database backup: #29 (Nov 18) … #36 (Nov 22), scheduled twice a day, all green on page 1
+Keep database awake: #6 (Nov 19) green
+pages-build-deployment: #203–#218 green
+Workflows: APK release signing check, Audit probe, Build APK, Database backup, Deploy kit check, DR export, Keep database awake, pages-build-deployment, Vendor fonts, Vendor libraries, Widget check
+No notice about disabled workflows on the page.
+НЕ ПРОВЕРЕНО: runs older than page 1 (30 days), per-run logs, dr-export runs — need gh with a valid token
