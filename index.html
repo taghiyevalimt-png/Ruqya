@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Y88hmd5IEHqfmTzUcUHChZDZDqGSzyEeNMYQ8vEkqi0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-o+3Pslehwz4JNNKZmptVQOGQn0uVOQvVPmN2gDSPrUU='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -710,6 +710,84 @@ button.ch .x{font-size:10px;opacity:.8}
    than 360 px the section names are a little smaller (the longest, «Mütəxəssislər» / «Специалисты», then fits) */
 .stsec.psec{grid-template-columns:repeat(2,1fr)}
 @media (max-width:359px){.stsec .chip{font-size:12.5px;padding:8px 2px}}
+
+/* ============ Polish v2 (owner 22.11: «a nice animation for every touch, the whole look 10× nicer») ============
+   Every tap: a soft ripple from the finger and a springy press; windows glide up and fade away; tab switch and
+   sections come in one after another; deeper cards, softer light, gold glow in the dark. Motion is switched off
+   for people who ask the phone for less motion. */
+:root{--spring:cubic-bezier(.34,1.56,.64,1);--out:cubic-bezier(.22,1,.36,1);--lift:0 1px 1px rgba(0,0,0,.03),0 6px 16px -8px rgba(0,0,0,.14),0 18px 40px -28px rgba(0,0,0,.22);--rip:rgba(0,0,0,.10)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--lift:inset 0 1px 0 rgba(255,236,190,.05),0 10px 28px -16px rgba(0,0,0,.9),0 0 0 1px rgba(214,178,94,.04);--rip:rgba(240,214,150,.16)}}
+:root[data-theme="dark"]{--lift:inset 0 1px 0 rgba(255,236,190,.05),0 10px 28px -16px rgba(0,0,0,.9),0 0 0 1px rgba(214,178,94,.04);--rip:rgba(240,214,150,.16)}
+body{background:radial-gradient(120% 60% at 50% -10%,var(--accent-soft) 0%,transparent 55%) fixed,var(--bg)}
+.top{background:transparent}
+/* ripple */
+.rph{position:relative}
+.rpw{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden;border-radius:inherit;pointer-events:none;z-index:0}
+.rpw i{position:absolute;border-radius:50%;background:var(--rip);transform:scale(0);animation:rip .6s var(--out) forwards;pointer-events:none}
+.primary .rpw i,.fab .rpw i,.chip[aria-pressed="true"] .rpw i,.seg button[aria-pressed="true"] .rpw i{background:rgba(255,255,255,.28)}
+@keyframes rip{0%{transform:scale(0);opacity:1}70%{opacity:.7}100%{transform:scale(1);opacity:0}}
+/* springy press */
+button,a.wa,.chip,.card,.pbtn,.bchip,label.segb span{transition:transform .32s var(--spring),background-color .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease),box-shadow .25s var(--ease),opacity .22s var(--ease)}
+button:active:not(:disabled),a.wa:active,.chip:active{transform:scale(.955);transition-duration:.08s}
+.primary:active:not(:disabled),.fab:active{transform:scale(.97);box-shadow:none}
+.card:has(.who:active){transform:scale(.985);transition-duration:.08s}
+.pbtn:active{transform:scale(.93)}
+.tabs button:active{transform:scale(.88)}
+/* cards and panels: softer, deeper */
+.card,.pay,.tile,.bgrp,.pvisit{box-shadow:var(--lift);border-radius:18px}
+.card{border-color:var(--line-soft)}
+.pay{border-color:var(--line-soft)}
+.icon-btn{box-shadow:var(--lift);border-color:var(--line-soft)}
+.ghost{box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.chip{box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);border-color:transparent;box-shadow:var(--glow)}
+/* main buttons: a light sheen that crosses now and then */
+.fab,.primary{position:relative;overflow:hidden}
+.fab::after{content:"";position:absolute;top:0;bottom:0;left:0;width:45%;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.22) 50%,transparent 100%);transform:translateX(-160%);animation:sheen 6.5s var(--ease) 2.5s infinite;pointer-events:none}
+@keyframes sheen{0%{transform:translateX(-160%)}18%,100%{transform:translateX(330%)}}
+/* bottom tabs: a soft pill behind the chosen one, the icon pops */
+.tabs{background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);box-shadow:0 -10px 30px -22px rgba(0,0,0,.35)}
+.tabs button::after{content:"";position:absolute;top:6px;left:50%;width:56px;height:30px;margin-left:-28px;border-radius:15px;background:var(--accent-soft);transform:scale(.4);opacity:0;transition:transform .38s var(--spring),opacity .2s var(--ease);z-index:-1}
+.tabs button{z-index:0;isolation:isolate}
+.tabs button[aria-current="page"]::after{transform:none;opacity:1}
+.tabs button[aria-current="page"] svg{animation:pop .45s var(--spring)}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:none}}
+/* windows: glide up with a spring, fields follow one by one; closing slides away */
+.overlay{-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet{animation:up2 .46s var(--out)}
+@keyframes up2{from{transform:translateY(100%)}to{transform:none}}
+.sheet::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:-8px auto -4px;flex:none}
+.sheet.opening>*{animation:rise .42s var(--out) both}
+.sheet.opening>*:nth-child(2){animation-delay:.03s}.sheet.opening>*:nth-child(3){animation-delay:.06s}.sheet.opening>*:nth-child(4){animation-delay:.09s}.sheet.opening>*:nth-child(5){animation-delay:.12s}.sheet.opening>*:nth-child(6){animation-delay:.15s}.sheet.opening>*:nth-child(n+7){animation-delay:.18s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ghostout{position:fixed;top:0;right:0;bottom:0;left:0;z-index:11;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);animation:fadeaway .26s var(--ease) forwards}
+.ghostout .sheet{animation:down .26s var(--ease) forwards}.ghostout .sheet>*{animation:none}
+@keyframes fadeaway{to{background:transparent}}
+@keyframes down{to{transform:translateY(60%);opacity:0}}
+/* a new tab: the blocks come in one after another */
+main.enter>*{animation:rise .45s var(--out) both}
+main.enter>*:nth-child(2){animation-delay:.04s}main.enter>*:nth-child(3){animation-delay:.08s}main.enter>*:nth-child(4){animation-delay:.12s}main.enter>*:nth-child(5){animation-delay:.16s}main.enter>*:nth-child(n+6){animation-delay:.2s}
+main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
+/* inputs: a gold/black ring when typing */
+.field input:focus,.field select:focus,.field textarea:focus,.search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+/* switches, the «now» line, toasts */
+.tog i{transition:background .25s var(--ease)}.tog i::after{transition:left .35s var(--spring);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.nowline::before{animation:nowp 2.4s ease-in-out infinite}
+@keyframes nowp{0%,100%{box-shadow:0 0 0 0 rgba(217,48,37,.45)}50%{box-shadow:0 0 0 6px rgba(217,48,37,0)}}
+#toast{border-radius:14px;box-shadow:0 14px 34px -14px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+/* calendar blocks: a gentle light from above */
+#cal .ev{background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%)!important;border-radius:10px}
+#cal .ev.cancel{background-image:none!important}
+/* tables: calm rows */
+.stt tbody tr{transition:background-color .2s var(--ease)}.stt tbody tr:active{background:var(--accent-soft)}
+.pbtn{box-shadow:var(--lift);border-color:var(--line-soft)}
+.pbtn.on{background:linear-gradient(180deg,var(--accent-soft),var(--surface))}
+.todaysum b{background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (prefers-reduced-motion: reduce){
+  .rpw,.fab::after{display:none}
+  .sheet,.sheet>*,main.enter>*,.ghostout,.ghostout .sheet,.tabs button[aria-current="page"] svg,.nowline::before{animation:none!important}
+  button,.chip,.card,.pbtn{transition:none!important}
+}
 </style>
 </head>
 <body>
@@ -1779,7 +1857,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122135223";
+var APP_VERSION="20261122141153";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -4344,6 +4422,8 @@ function openSheet(s){
     dropDraft();
   }
   if(s.type==="appt")slotGrid();
+  /* owner 22.11: the fields come in one by one only when the window opens, not on every redraw */
+  (function(){var d=byId("sheet");d.classList.add("opening");clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},700)})();
   unpinSheet();
   (function(){var d=byId("sheet"),h=d.querySelector("h2");if(h){h.id="sheet-title";d.setAttribute("aria-labelledby","sheet-title")}else d.removeAttribute("aria-labelledby");
     d.setAttribute("tabindex","-1");if(s.type!=="stcopy"){try{d.focus({preventScroll:true})}catch(e){d.focus()}}})();   /* the window, not a field: no phone keyboard pops up */
@@ -4404,7 +4484,13 @@ function unscroll(){
 window.addEventListener("scroll",unscroll,{passive:true});
 if(window.visualViewport)window.visualViewport.addEventListener("scroll",unscroll);
 document.addEventListener("focusin",function(e){if(sheet&&textField(e.target)){setTimeout(unscroll,0);setTimeout(unscroll,120);setTimeout(unscroll,320)}});
-function hideSheet(){unpinSheet();
+/* owner 22.11: the window slides away — a picture of it (no ids, no buttons) plays the closing; the real one is
+   already gone, so nothing waits for the animation */
+function sheetGhost(){try{if(REDUCED)return;var ov=byId("overlay");if(!ov||ov.hidden)return;var g=ov.cloneNode(true);g.removeAttribute("id");g.removeAttribute("hidden");g.className="ghostout";
+  [].forEach.call(g.querySelectorAll("[id],[data-act],[name]"),function(x){x.removeAttribute("id");x.removeAttribute("data-act");x.removeAttribute("name")});
+  g.setAttribute("aria-hidden","true");var sh=g.querySelector(".sheet");if(sh){sh.removeAttribute("id");sh.scrollTop=0}document.body.appendChild(g);setTimeout(function(){if(g.parentNode)g.parentNode.removeChild(g)},300)}catch(e){}}
+var openT=null;
+function hideSheet(){unpinSheet();sheetGhost();
   var op=sheet&&sheet.opener;if(op&&op!==document.body&&document.contains(op)&&op.focus)setTimeout(function(){try{op.focus({preventScroll:true})}catch(e){}},0);if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
   if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
   sheet=null;byId("overlay").hidden=true}
@@ -4611,7 +4697,7 @@ document.addEventListener("click",function(e){
     if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";
       var tb1=document.querySelectorAll("#tabs button");for(var t1=0;t1<tb1.length;t1++){if(tb1[t1]===b)tb1[t1].setAttribute("aria-current","page");else tb1[t1].removeAttribute("aria-current")}
       byId("top").innerHTML="";var mm=byId("main");mm.innerHTML="";mm.scrollTop=0;mm.classList.remove("enter");
-      afterPaint(function(){mm.classList.add("enter");render()});return}
+      afterPaint(function(){mm.classList.add("enter");render();clearTimeout(enterT);enterT=setTimeout(function(){mm.classList.remove("enter")},800)});return}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
@@ -5089,6 +5175,21 @@ document.addEventListener("wheel",function(e){if(e.ctrlKey&&e.target.closest&&e.
 var sw=null,qTimer=null;
 /* A short note that floats above the page (does not move the calendar under the finger). */
 var toastT=null;
+/* owner 22.11: a ripple from the finger on every tap, and a very light tick on Android for the main buttons */
+var REDUCED=false,enterT=null;try{REDUCED=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)}catch(e){}
+document.addEventListener("pointerdown",function(e){
+  if(REDUCED||e.button>0)return;
+  var el=e.target.closest&&e.target.closest("button,a[href],label.segb,.chip,.pbtn");if(!el||el.disabled||el.closest(".ghostout"))return;
+  if(el.matches("label.segb")){el=el.querySelector("span")||el}
+  try{
+    if(getComputedStyle(el).position==="static")el.classList.add("rph");
+    var r=el.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,w=el.querySelector(":scope>.rpw");
+    if(!w){w=document.createElement("span");w.className="rpw";w.setAttribute("aria-hidden","true");el.appendChild(w)}
+    var c=document.createElement("i");c.style.width=c.style.height=d+"px";c.style.left=(e.clientX-r.left-d/2)+"px";c.style.top=(e.clientY-r.top-d/2)+"px";w.appendChild(c);
+    setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c)},650);
+    if(navigator.vibrate&&el.matches(".primary,.fab,#tabs button,.pbtn"))navigator.vibrate(6);
+  }catch(x){}
+},{passive:true,capture:true});
 function toast(m){var t=byId("toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");document.body.appendChild(t)}
   t.textContent=m;t.className="on";clearTimeout(toastT);toastT=setTimeout(function(){t.className=""},2200)}
 /* Press and hold a calendar block: the patient's number is copied (on release, which iOS accepts as a tap). */
