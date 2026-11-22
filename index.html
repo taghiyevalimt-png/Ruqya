@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-tNNODdHvj4NmDeHx7GlxpTbW2ueV8cPH+in/oQqkMSw='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Y88hmd5IEHqfmTzUcUHChZDZDqGSzyEeNMYQ8vEkqi0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -357,10 +357,13 @@ details.rulesbox summary{cursor:pointer;list-style:none}details.rulesbox summary
 details.rulesbox summary::after{content:" ▾";color:var(--muted)}details.rulesbox[open] summary::after{content:" ▴"}
 .stper{margin-bottom:6px}
 .pctbox{gap:8px}.pctgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.pctgrid label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)}
+.pctgrid .pcell{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)}
+select.unit{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;padding:0 4px;flex:none;width:44px;-webkit-appearance:none;appearance:none;text-align:center}
+.pctrow .pin{display:flex;align-items:center;gap:4px}
+.field .pin select.unit,.pin select.unit{background:var(--surface)!important;background-image:none!important;color:var(--ink)!important;height:40px!important;min-height:0!important;line-height:normal!important;padding:0 4px!important;width:44px!important;border:1px solid var(--line)!important;border-radius:10px!important;display:block}
 .pctgrid .pin{display:flex;align-items:center;gap:4px}.pctgrid input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:var(--ink);width:100%;min-width:0}
 .pctgrid i{font-style:normal}.stt small.pct{color:var(--muted);font-size:11px;font-weight:500}
-.pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 70px 14px 72px;align-items:center;gap:6px;font-size:15px}
+.pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 128px 72px;align-items:center;gap:6px;font-size:15px}
 .pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
 .pctrow i{font-style:normal;color:var(--muted)}.pctrow b{text-align:right;color:var(--accent)}
 .ptotal.mine{border-top:0;padding-top:0}.ptotal.mine b{color:var(--accent);font-size:16px}
@@ -750,7 +753,15 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"Kim neçə seans yazıb":"Кто сколько сеансов записал",
+var RUD=LANG==="ru"?{"Faiz və ya məbləğ":"Процент или сумма",
+"Satana qalan":"Остаётся продавцу",
+"faiz və ya bir ədədə görə məbləğ; boş — yoxdur":"процент или сумма за штуку; пусто — нет",
+"Faizi (0–100) və ya məbləği düzgün yazın: {n}":"Укажите правильно процент (0–100) или сумму: {n}",
+"Hər xidmətdən mütəxəssisə nə qalır: faiz (%) və ya hər uğurlu seansa görə məbləğ (₼). Boş və ya 0 — heç nə.":"Что остаётся специалисту с каждой услуги: процент (%) или сумма за каждый успешный сеанс (₼). Пусто или 0 — ничего.",
+"«Mütəxəssisə» — mütəxəssisə qalan pul (⚙ Faizlər: məsələn, İlkin — Ruqya 50% və ya hər seansa 40 ₼). «Mərkəzə» — qalan hissə.":"«Специалисту» — деньги, которые остаются специалисту (⚙ Проценты: например, İlkin — Ruqya 50% или 40 ₼ за сеанс). «Центру» — остаток.",
+"«Payı» — satana qalan hissə: Kassa → ⚙ Məhsullar → məhsul → «Satana qalan» (faiz və ya bir ədədə görə məbləğ).":"«Доля» — часть, которая остаётся продавцу: Касса → ⚙ Товары → товар → «Остаётся продавцу» (процент или сумма за штуку).",
+"«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faiz və ya məbləğ yazır).":"«Доля» — часть от проданных вами товаров, которая остаётся вам (процент или сумму для каждого товара задаёт админ).",
+"Kim neçə seans yazıb":"Кто сколько сеансов записал",
 "Vəzifə":"Роль",
 "Dövrdə yazılan və ləğv olunmayan qəbullar (seansın hansı günə yazılmasından asılı olmayaraq).":"Записи, сделанные за период и не отменённые (на какой бы день ни был сеанс).",
 "Rəqəmlər {t} vəziyyətinə görədir; statistikada nə dəyişsə, fayl dərhal yenidən hazırlanır. Yüklənmiş fayl öz-özünə dəyişmir — yeni rəqəmlər üçün yenidən yükləyin.":"Цифры на {t}; если в статистике что-то меняется, файл сразу готовится заново. Уже скачанный файл сам не меняется — для новых цифр скачайте снова.",
@@ -1768,7 +1779,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261122134013";
+var APP_VERSION="20261122135223";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2238,7 +2249,19 @@ function sortCat(){state.catalog.sort(function(a,b){return (a.sort-b.sort)||Stri
 function catItem(id){for(var i=0;i<state.catalog.length;i++)if(state.catalog[i].id===id)return state.catalog[i];return null}
 /* a specialist sees only his own sales (the server holds the same rule); agents and admins see all of them */
 /* owner 22.11: the seller's percent of a product («Loğman 50%»): his part of each sale he made (the current percent) */
-function shareOf(x){var t=x.pid&&state.shares[x.pid],p=t&&t[x.by]||0;return Math.round(x.amount*p)/100}
+/* owner 22.11: what stays with the specialist / seller is a percent OR a fixed amount (₼ per piece / per session):
+   a rule is {p: percent, a: amount}, only one of them set */
+function ruleOf(x){return {p:+x.pct||0,a:+x.amt||0}}
+function ruleSet(r){return !!(r&&(r.p||r.a))}
+function ruleText(r){return !ruleSet(r)?"":r.a?money(r.a):r.p+"%"}
+function rulePart(r,sum,qty){if(!ruleSet(r))return 0;return r.a?Math.round(r.a*(qty||1)*100)/100:Math.round(sum*r.p)/100}
+function ruleRow(r){return {pct:r.a?null:r.p,amt:r.a?r.a:null}}
+/* the number and its unit (%, ₼) typed in a form; null = wrong */
+function ruleRead(inp){var v=String(inp.value).replace(",",".").replace(/[%₼\s]/g,""),sel=inp.parentNode.querySelector("select"),u=sel?sel.value:"p";
+  if(v==="")return {p:0,a:0};var n=+v;if(isNaN(n)||n<0||(u==="p"&&n>100)||n>MAXSUM)return null;n=Math.round(n*100)/100;return u==="a"?{p:0,a:n}:{p:n,a:0}}
+function ruleInput(attrs,r){r=r||{p:0,a:0};var v=r.a||r.p||"";
+  return '<input '+attrs+' type="text" inputmode="decimal" maxlength="9" autocomplete="off" placeholder="0" value="'+v+'"><select class="unit" aria-label="'+esc(L("Faiz və ya məbləğ"))+'"><option value="p"'+(r.a?'':' selected')+'>%</option><option value="a"'+(r.a?' selected':'')+'>'+CUR+'</option></select>'}
+function shareOf(x){var t=x.pid&&state.shares[x.pid];return rulePart(t&&t[x.by],x.amount,x.qty)}
 function sellers(){return Object.keys(state.staff).filter(function(k){return state.roleSet[k]&&(state.roles[k]==="specialist"||state.roles[k]==="agent")}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))})}
 function myProds(){return specMe()?state.products.filter(function(x){return x.by===auth.user.id}):state.products}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
@@ -2277,15 +2300,15 @@ function refresh(){
     probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})}),
     probe("appts.place",function(){return soft(function(){return sb.from("appts").select("place").limit(1)})}),
     probe("appts.follow",function(){return soft(function(){return sb.from("appts").select("follow").limit(1)})}),
-    soft(function(){return sb.from("service_shares").select("reader_id,service,pct")}),
-    soft(function(){return sb.from("product_shares").select("product_id,staff_id,pct")}),
+    soft(function(){return sb.from("service_shares").select("*")}),
+    soft(function(){return sb.from("product_shares").select("*")}),
     soft(function(){return sb.from("products").select("*").order("sort").order("created_at")}),
     probe("breaks.skip",function(){return soft(function(){return sb.from("breaks").select("skip,mday").limit(1)})}),
     probe("breaks.days",function(){return soft(function(){return sb.from("breaks").select("days").limit(1)})})
   ]).then(function(res){
     state.hasBrkSkip=!!res[res.length-2]||(state.hasBrkSkip&&res[res.length-2]===null);
-    var sv0=res[res.length-5];state.hasSvcPct=!!sv0;if(sv0){state.svcPct={};sv0.forEach(function(x){(state.svcPct[x.reader_id]=state.svcPct[x.reader_id]||{})[x.service]=+x.pct||0})}
-    var sh0=res[res.length-4];state.hasShares=!!sh0;if(sh0){state.shares={};sh0.forEach(function(x){(state.shares[x.product_id]=state.shares[x.product_id]||{})[x.staff_id]=+x.pct||0})}
+    var sv0=res[res.length-5];state.hasSvcPct=!!sv0;if(sv0){state.svcPct={};sv0.forEach(function(x){(state.svcPct[x.reader_id]=state.svcPct[x.reader_id]||{})[x.service]=ruleOf(x)})}
+    var sh0=res[res.length-4];state.hasShares=!!sh0;if(sh0){state.shares={};sh0.forEach(function(x){(state.shares[x.product_id]=state.shares[x.product_id]||{})[x.staff_id]=ruleOf(x)})}
     var cat0=res[res.length-3];if(cat0){state.catalog=cat0.map(mapCat);sortCat()}state.hasCatalog=!!cat0;
     state.hasBrkDays=!!res[res.length-1]||(state.hasBrkDays&&res[res.length-1]===null);
     if(my!==seq||!auth.user)return;
@@ -2597,8 +2620,8 @@ function onChange(pl){
   if(t==="appts"){if(del){removeBy(state.appts,row.id);removeBy(state.hist||[],row.id)}else upsertBy(state.appts,mapAppt(row))}
   else if(t==="expenses"){if(del)removeBy(state.expenses,row.id);else upsertBy(state.expenses,mapExp(row))}
   else if(t==="product_sales"){if(del)removeBy(state.products,row.id);else upsertBy(state.products,mapProd(row))}
-  else if(t==="service_shares"){var vr=row.reader_id,vs=row.service;if(vr&&vs){if(del){if(state.svcPct[vr])delete state.svcPct[vr][vs]}else(state.svcPct[vr]=state.svcPct[vr]||{})[vs]=+row.pct||0}else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}}
-  else if(t==="product_shares"){var sp=row.product_id,su=row.staff_id;if(sp&&su){if(del){if(state.shares[sp])delete state.shares[sp][su]}else(state.shares[sp]=state.shares[sp]||{})[su]=+row.pct||0}else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}}
+  else if(t==="service_shares"){var vr=row.reader_id,vs=row.service;if(vr&&vs){if(del){if(state.svcPct[vr])delete state.svcPct[vr][vs]}else(state.svcPct[vr]=state.svcPct[vr]||{})[vs]=ruleOf(row)}else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}}
+  else if(t==="product_shares"){var sp=row.product_id,su=row.staff_id;if(sp&&su){if(del){if(state.shares[sp])delete state.shares[sp][su]}else(state.shares[sp]=state.shares[sp]||{})[su]=ruleOf(row)}else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}}
   else if(t==="products"){if(del)removeBy(state.catalog,row.id);else if(row.name!=null)upsertBy(state.catalog,mapCat(row));sortCat()}
   else if(t==="readers"&&!del&&row.name!=null){upsertBy(state.readers,mapReader(row))}
   else if(t==="breaks"&&!del&&row.start_time!=null){upsertBy(state.breaks,mapBreak(row));state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)})}
@@ -3718,8 +3741,8 @@ function catalogSheet(){
     '<div class="two"><div class="field"><label for="c-name">'+L("Adı")+'</label><input id="c-name" type="text" maxlength="60" autocomplete="off" value="'+esc(e?e.name:"")+'"></div>'+
     '<div class="field"><label for="c-price">'+L("Qiymət, ")+CUR+'</label><input id="c-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(e?e.price:"")+'"></div></div>'+
     (state.hasShares?(function(){var t=e&&state.shares[e.id]||{},ss=sellers();if(!ss.length)return "";
-      return '<div class="field"><span class="lbl">'+L("Satanın faizi")+' <span class="opt">('+L("boş və ya 0 — faiz yoxdur")+')</span></span><div class="pctlist">'+ss.map(function(k){var v=t[k]||"";
-        return '<label class="pctrow"><span>'+esc(state.staff[k]||L("Adsız"))+' <small>'+esc(roleLabel(k))+'</small></span><input id="c-pct-'+esc(k)+'" data-pct="'+esc(k)+'" type="text" inputmode="decimal" maxlength="6" autocomplete="off" placeholder="0" value="'+v+'"><i>%</i><b class="num" data-pv="'+esc(k)+'">'+(v&&e?money(Math.round(e.price*v)/100):'')+'</b></label>'}).join("")+'</div></div>'})():'')+
+      return '<div class="field"><span class="lbl">'+L("Satana qalan")+' <span class="opt">('+L("faiz və ya bir ədədə görə məbləğ; boş — yoxdur")+')</span></span><div class="pctlist">'+ss.map(function(k){var r=t[k];
+        return '<div class="pctrow"><span>'+esc(state.staff[k]||L("Adsız"))+' <small>'+esc(roleLabel(k))+'</small></span><span class="pin">'+ruleInput('id="c-pct-'+esc(k)+'" data-pct="'+esc(k)+'" aria-label="'+esc(state.staff[k]||"")+'"',r)+'</span><b class="num" data-pv="'+esc(k)+'">'+(ruleSet(r)&&e?money(rulePart(r,e.price,1)):'')+'</b></div>'}).join("")+'</div></div>'})():'')+
     '<p class="err" role="alert" id="c-err" hidden></p><div class="btns"><button class="primary" data-act="cat-save">'+(e?L("Yadda saxla"):L("Əlavə et"))+'</button>'+
     (e?'<button class="ghost" data-act="cat-hide">'+(e.archived?L("Yenidən göstər"):L("Gizlət"))+'</button><button class="ghost" data-act="cat-new">'+L("Yeni məhsul")+'</button>':'')+'</div>'+
     (e?'<button class="link danger-t" data-act="cat-del">'+L("Məhsulu sil")+'</button>':'');
@@ -3764,35 +3787,34 @@ function prodStats(r,per){
     '<td class="num">'+w.q+'</td><td class="num">'+money(w.m)+'</td>'+(sh?'<td class="num sum">'+money(w.sh)+'</td>':'')+'</tr>'});
   h+='</tbody><tfoot><tr><td>'+L("Cəmi")+'</td>'+cols.map(function(c){return '<td class="num">'+(T.pq[c.k]||0)+'</td>'}).join("")+'<td class="num">'+T.q+'</td><td class="num">'+money(T.m)+'</td>'+(sh?'<td class="num">'+money(T.sh)+'</td>':'')+'</tr>'+
     '<tr class="ok2"><td>'+L("Məbləğ")+'</td>'+cols.map(function(c){return '<td class="num">'+money(T.pm[c.k]||0)+'</td>'}).join("")+'<td></td><td class="num">'+money(T.m)+'</td>'+(sh?'<td></td>':'')+'</tr></tfoot></table></div>'+
-    (sh?'<p class="hint">'+(onlyMe?L("«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faizi yazır)."):L("«Payı» — satana qalan hissə: Kassa → ⚙ Məhsullar → məhsul → «Satanın faizi»."))+'</p>':'')+'</div>';
+    (sh?'<p class="hint">'+(onlyMe?L("«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faiz və ya məbləğ yazır)."):L("«Payı» — satana qalan hissə: Kassa → ⚙ Məhsullar → məhsul → «Satana qalan» (faiz və ya bir ədədə görə məbləğ)."))+'</p>':'')+'</div>';
   return h;
 }
 /* owner 22.11: «Pul» is ONE table — every specialist: sessions, what each service earned, the total, and (with the
    admin's percents «İlkin: Ruqya 50%») what stays with the specialist and with the centre */
-function svcPctOf(rid,svc){var t=state.svcPct[rid];return t&&t[svc]||0}
+function svcPctOf(rid,svc){var t=state.svcPct[rid];return t&&t[svc]||{p:0,a:0}}
 function moneyTable(r,per){
   var D=statData("money",r,per),sh=state.hasSvcPct,used={},by={},T={sv:{},m:0,sh:0};
   state.appts.forEach(function(a){if(a.date<r.s||a.date>r.end||!done(a))return;var k=svcName(a.service),w=by[a.readerId]||(by[a.readerId]={sv:{},sh:0});
-    w.sv[k]=(w.sv[k]||0)+a.price;T.sv[k]=(T.sv[k]||0)+a.price;used[k]=1;var pa=Math.round(a.price*svcPctOf(a.readerId,k))/100;w.sh+=pa;T.sh+=pa});
+    w.sv[k]=(w.sv[k]||0)+a.price;T.sv[k]=(T.sv[k]||0)+a.price;used[k]=1;var pa=rulePart(svcPctOf(a.readerId,k),a.price,1);w.sh+=pa;T.sh+=pa});
   var cols=SERVICES.slice().concat(Object.keys(used).filter(function(k){return SERVICES.indexOf(k)<0}));
   var h='<div class="pay big" data-st="money-'+per+'"><div class="head"><b>'+L("Pul statistikası")+'</b>'+copyB()+(isAdmin()&&sh?'<button class="ghost copyb" data-act="svc-pct">⚙ '+L("Faizlər")+'</button>':'')+'</div><div class="hscroll"><table class="stt wide big"><thead><tr>'+
     '<th rowspan="2">'+L("Mütəxəssis")+'</th><th colspan="3" class="grp">'+L("Seanslar")+'</th><th colspan="'+cols.length+'" class="grp g3">'+L("Qazanc xidmətlər üzrə")+'</th><th colspan="'+(sh?3:1)+'" class="grp g2">'+L("Cəmi")+'</th></tr><tr class="sub">'+
     vth(L("Yazılıb"))+vth(L("Uğurlu"))+vth(L("Ləğv"))+cols.map(function(k){return vth(L(k),"g3")}).join("")+vth(L("Qazanc"),"g2")+(sh?vth(L("Mütəxəssisə"),"g2")+vth(L("Mərkəzə"),"g2"):"")+'</tr></thead><tbody>';
   D.rows.forEach(function(x){var w=by[x.k]||{sv:{},sh:0};
-    h+='<tr><td>'+esc(x.name)+'</td><td class="num">'+x.a+'</td><td class="num">'+x.b+'</td><td class="num">'+(x.d||0)+'</td>'+cols.map(function(k){return '<td class="num g3">'+money(w.sv[k]||0)+(sh&&svcPctOf(x.k,k)?'<small class="pct"> '+svcPctOf(x.k,k)+'%</small>':'')+'</td>'}).join("")+
+    h+='<tr><td>'+esc(x.name)+'</td><td class="num">'+x.a+'</td><td class="num">'+x.b+'</td><td class="num">'+(x.d||0)+'</td>'+cols.map(function(k){return '<td class="num g3">'+money(w.sv[k]||0)+(sh&&ruleSet(svcPctOf(x.k,k))?'<small class="pct"> '+esc(ruleText(svcPctOf(x.k,k)))+'</small>':'')+'</td>'}).join("")+
       '<td class="num">'+money(x.c)+'</td>'+(sh?'<td class="num sum">'+money(w.sh)+'</td><td class="num">'+money(x.c-w.sh)+'</td>':'')+'</tr>'});
   h+='</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+D.T.a+'</td><td class="num">'+D.T.b+'</td><td class="num">'+(D.T.d||0)+'</td>'+cols.map(function(k){return '<td class="num">'+money(T.sv[k]||0)+'</td>'}).join("")+
     '<td class="num">'+money(D.T.c)+'</td>'+(sh?'<td class="num">'+money(T.sh)+'</td><td class="num">'+money(D.T.c-T.sh)+'</td>':'')+'</tr></tfoot></table></div>'+
-    (sh?'<p class="hint">'+L("«Mütəxəssisə» — mütəxəssisin faizinə görə ona qalan pul (⚙ Faizlər: məsələn, İlkin — Ruqya 50%). «Mərkəzə» — qalan hissə.")+'</p>':'')+'</div>';
+    (sh?'<p class="hint">'+L("«Mütəxəssisə» — mütəxəssisə qalan pul (⚙ Faizlər: məsələn, İlkin — Ruqya 50% və ya hər seansa 40 ₼). «Mərkəzə» — qalan hissə.")+'</p>':'')+'</div>';
   return h;
 }
 /* the admin's percents: every specialist × every service */
 function svcPctSheet(){
   var rs=activeReaders();
-  return '<h2>'+L("Mütəxəssislərin faizi")+CLOSE+'</h2><p class="hint">'+L("Hər xidmətdən mütəxəssisə neçə faiz qalır. Boş və ya 0 — faiz yoxdur.")+'</p>'+
-    rs.map(function(r){return '<div class="pay pctbox"><b>'+esc(r.name)+'</b><div class="pctgrid">'+SERVICES.map(function(k){var v=svcPctOf(r.id,k)||"";
-      return '<label><span>'+esc(L(k))+'</span><span class="pin"><input data-sp-r="'+esc(r.id)+'" data-sp-s="'+esc(k)+'" type="text" inputmode="decimal" maxlength="6" autocomplete="off" placeholder="0" value="'+v+'"><i>%</i></span></label>'}).join("")+'</div></div>'}).join("")+
-    '<p class="err" role="alert" id="sp-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="svc-pct-save">'+L("Yadda saxla")+'</button></div>';
+  return '<h2>'+L("Mütəxəssislərin faizi")+CLOSE+'</h2><p class="hint">'+L("Hər xidmətdən mütəxəssisə nə qalır: faiz (%) və ya hər uğurlu seansa görə məbləğ (₼). Boş və ya 0 — heç nə.")+'</p>'+
+    rs.map(function(r){return '<div class="pay pctbox"><b>'+esc(r.name)+'</b><div class="pctgrid">'+SERVICES.map(function(k){var rr=svcPctOf(r.id,k);
+      return '<div class="pcell"><span>'+esc(L(k))+'</span><span class="pin">'+ruleInput('data-sp-r="'+esc(r.id)+'" data-sp-s="'+esc(k)+'" aria-label="'+esc(r.name+" — "+L(k))+'"',rr)+'</span></div>'}).join("")+'</div></div>'}).join("")+    '<p class="err" role="alert" id="sp-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="svc-pct-save">'+L("Yadda saxla")+'</button></div>';
 }
 /* the product names are typed by hand, one per line or separated by commas */
 function prodItems(t){return String(t||"").split(/\n|;|,(?!\d)/).map(function(z){return z.replace(/\s+/g," ").trim()}).filter(function(z){return z})}
@@ -4638,12 +4660,12 @@ document.addEventListener("click",function(e){
   else if(act==="svc-pct-save"){
     if(!sheet||sheet.type!=="svcpct"||!isAdmin())return;
     var ups2=[],dels2=[],bad2="";
-    [].forEach.call(document.querySelectorAll("#sheet input[data-sp-r]"),function(inp){var rid=inp.dataset.spR,sv=inp.dataset.spS,v=String(inp.value).replace(",",".").replace("%","").trim(),n=v===""?0:+v;
-      if(isNaN(n)||n<0||n>100){bad2=(reader(rid)||{}).name+" — "+L(sv);return}n=Math.round(n*100)/100;var o=svcPctOf(rid,sv);if(n===o)return;
-      if(n>0)ups2.push({reader_id:rid,service:sv,pct:n});else dels2.push({r:rid,s:sv})});
-    if(bad2)return fail("sp-err",tf(L("Faizi düzgün yazın (0–100): {n}"),{n:bad2}));
+    [].forEach.call(document.querySelectorAll("#sheet input[data-sp-r]"),function(inp){var rid=inp.dataset.spR,sv=inp.dataset.spS,n=ruleRead(inp);
+      if(!n){bad2=(reader(rid)||{}).name+" — "+L(sv);return}var o=svcPctOf(rid,sv);if(n.p===(o.p||0)&&n.a===(o.a||0))return;
+      if(ruleSet(n)){var u=ruleRow(n);u.reader_id=rid;u.service=sv;ups2.push(u)}else dels2.push({r:rid,s:sv})});
+    if(bad2)return fail("sp-err",tf(L("Faizi (0–100) və ya məbləği düzgün yazın: {n}"),{n:bad2}));
     var old2=JSON.parse(JSON.stringify(state.svcPct)),rb2=function(){state.svcPct=old2;render()};
-    ups2.forEach(function(u){(state.svcPct[u.reader_id]=state.svcPct[u.reader_id]||{})[u.service]=u.pct});dels2.forEach(function(d){if(state.svcPct[d.r])delete state.svcPct[d.r][d.s]});
+    ups2.forEach(function(u){(state.svcPct[u.reader_id]=state.svcPct[u.reader_id]||{})[u.service]=ruleOf(u)});dels2.forEach(function(d){if(state.svcPct[d.r])delete state.svcPct[d.r][d.s]});
     if(ups2.length)db(sb.from("service_shares").upsert(ups2,{onConflict:"reader_id,service"}),rb2);
     dels2.forEach(function(d){db(sb.from("service_shares").delete().eq("reader_id",d.r).eq("service",d.s),rb2)});
     closeSheet();
@@ -4688,16 +4710,16 @@ document.addEventListener("click",function(e){
     if(cpr===""||isNaN(cpr)||cpr<0||cpr>MAXSUM)return fail("c-err",L("Qiyməti düzgün yazın."));
     var ce=sheet.eid?catItem(sheet.eid):null;
     if(state.catalog.some(function(c){return c!==ce&&!c.archived&&low(c.name.trim())===low(cnm)}))return fail("c-err",L("Bu adda məhsul artıq var."));
-    var pcts={},pbad="";[].forEach.call(document.querySelectorAll("#sheet input[data-pct]"),function(inp){var v=String(inp.value).replace(",",".").replace("%","").trim();if(v===""){pcts[inp.dataset.pct]=0;return}var n=+v;if(isNaN(n)||n<0||n>100)pbad=state.staff[inp.dataset.pct]||"?";else pcts[inp.dataset.pct]=Math.round(n*100)/100});
-    if(pbad)return fail("c-err",tf(L("Faizi düzgün yazın (0–100): {n}"),{n:pbad}));
+    var pcts={},pbad="";[].forEach.call(document.querySelectorAll("#sheet input[data-pct]"),function(inp){var r=ruleRead(inp);if(!r)pbad=state.staff[inp.dataset.pct]||"?";else pcts[inp.dataset.pct]=r});
+    if(pbad)return fail("c-err",tf(L("Faizi (0–100) və ya məbləği düzgün yazın: {n}"),{n:pbad}));
     if(ce){var cold={name:ce.name,price:ce.price};if(cold.name!==cnm||cold.price!==cpr){ce.name=cnm;ce.price=cpr;db(sb.from("products").update({name:cnm,price:cpr}).eq("id",ce.id),function(){ce.name=cold.name;ce.price=cold.price;render()})}
-      var cur=state.shares[ce.id]||{},ups=[],dels=[];Object.keys(pcts).forEach(function(k){var v=pcts[k],o=cur[k]||0;if(v===o)return;if(v>0)ups.push({product_id:ce.id,staff_id:k,pct:v});else dels.push(k)});
-      if(ups.length||dels.length){var t0=JSON.parse(JSON.stringify(cur)),rb=function(){state.shares[ce.id]=t0;render()};state.shares[ce.id]=cur;ups.forEach(function(u){cur[u.staff_id]=u.pct});dels.forEach(function(k){delete cur[k]});
+      var cur=state.shares[ce.id]||{},ups=[],dels=[];Object.keys(pcts).forEach(function(k){var v=pcts[k],o=cur[k]||{p:0,a:0};if(v.p===(o.p||0)&&v.a===(o.a||0))return;if(ruleSet(v)){var u=ruleRow(v);u.product_id=ce.id;u.staff_id=k;ups.push(u)}else if(ruleSet(o))dels.push(k)});
+      if(ups.length||dels.length){var t0=JSON.parse(JSON.stringify(cur)),rb=function(){state.shares[ce.id]=t0;render()};state.shares[ce.id]=cur;ups.forEach(function(u){cur[u.staff_id]=ruleOf(u)});dels.forEach(function(k){delete cur[k]});
         if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels),rb)}}
     else{var cid=uuid(),srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
       /* the percents go after the product is saved (they point to it) */
-      var nups=Object.keys(pcts).filter(function(k){return pcts[k]>0}).map(function(k){return {product_id:cid,staff_id:k,pct:pcts[k]}});
-      if(nups.length){state.shares[cid]={};nups.forEach(function(u){state.shares[cid][u.staff_id]=u.pct})}
+      var nups=Object.keys(pcts).filter(function(k){return ruleSet(pcts[k])}).map(function(k){var u=ruleRow(pcts[k]);u.product_id=cid;u.staff_id=k;return u});
+      if(nups.length){state.shares[cid]={};nups.forEach(function(u){state.shares[cid][u.staff_id]=ruleOf(u)})}
       db(sb.from("products").insert({id:cid,name:cnm,price:cpr,sort:srt}),function(){removeBy(state.catalog,cid);delete state.shares[cid];render()}).then(function(){
         if(nups.length&&catItem(cid))db(sb.from("product_shares").upsert(nups,{onConflict:"product_id,staff_id"}),function(){delete state.shares[cid];render()})})}
     sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return;
@@ -5022,8 +5044,10 @@ document.addEventListener("input",function(e){
   if(e.target.id==="q"){ui.q=e.target.value;clearTimeout(qTimer);qTimer=setTimeout(function(){var pl=byId("plist");if(pl)pl.innerHTML=plistHtml()},120)}
 });
 document.addEventListener("input",function(e){var k=e.target&&e.target.dataset&&e.target.dataset.pct;if(!k||!sheet||sheet.type!=="catalog")return;
-  var pr=amount("c-price"),v=+String(e.target.value).replace(",",".")||0,o=document.querySelector('[data-pv="'+k.replace(/"/g,"")+'"]');if(o)o.textContent=v>0&&v<=100&&pr>0?money(Math.round(pr*v)/100):""});
+  pvShow(k)});
+function pvShow(k){var inp=byId("c-pct-"+k),o=document.querySelector('[data-pv="'+String(k).replace(/"/g,"")+'"]');if(!inp||!o)return;var r=ruleRead(inp),pr=amount("c-price");o.textContent=r&&ruleSet(r)&&(r.a||pr>0)?money(rulePart(r,pr,1)):""}
 document.addEventListener("change",function(e){
+  if(e.target&&e.target.classList&&e.target.classList.contains("unit")){var pi=e.target.parentNode.querySelector("input[data-pct]");if(pi)pvShow(pi.dataset.pct)}
   var t=e.target.id;
   /* owner 18.11: usual length and price of a service / of İlkin — only in a new booking */
   if(sheet&&sheet.type==="appt"&&!sheet.id){

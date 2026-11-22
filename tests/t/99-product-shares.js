@@ -25,6 +25,13 @@ module.exports = async () => {
     await p.fill("#c-pct-" + AGENT, ""); await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
     check(s.db.product_shares.length === 1, "an emptied percent is removed");
     await p.click('[data-act="cat-edit"]'); await p.fill("#c-pct-" + AGENT, "10"); await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
+    // owner 22.11: a fixed amount per piece instead of a percent — Nurlana 3 ₼ for every piece
+    await p.click('[data-act="cat-edit"]'); await p.locator("#c-pct-" + AGENT).waitFor();
+    await p.fill("#c-pct-" + AGENT, "3"); await p.locator("#c-pct-" + AGENT).locator("xpath=following-sibling::select").selectOption("a");
+    check(/^3/.test((await p.textContent('[data-pv="' + AGENT + '"]')).trim()), "the preview shows 3 ₼ a piece");
+    await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
+    const na = s.db.product_shares.find((x) => x.staff_id === AGENT);
+    check(na && na.amt === 3 && na.pct == null, "saved as 3 ₼ a piece: " + JSON.stringify(na));
     // a new product gets its percents in the same form
     await p.fill("#c-name", "Bal"); await p.fill("#c-price", "10"); await p.fill("#c-pct-" + SPEC, "30");
     await p.click('[data-act="cat-save"]'); await p.waitForTimeout(700);
@@ -34,7 +41,7 @@ module.exports = async () => {
   } finally { await s.close(); }
   // the server gives everybody only his own percents (row security); the fake database does the same here
   const own = (id) => { const d = JSON.parse(JSON.stringify(db)); d.product_shares = d.product_shares.filter((x) => x.staff_id === id); d.product_sales = id === SPEC ? d.product_sales.filter((x) => x.created_by === SPEC) : d.product_sales; return d; };
-  for (const [who, name, mine, other] of [[SPEC, "Əli", "10", "Nurlana"], [AGENT, "Nurlana", "4", "Əli"]]) {
+  for (const [who, name, mine, other] of [[SPEC, "Əli", "10", "Nurlana"], [AGENT, "Nurlana", "6", "Əli"]]) {
     s = await open(who, { db: own(who) });
     try {
       const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
