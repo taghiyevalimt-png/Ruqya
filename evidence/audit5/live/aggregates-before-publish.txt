@@ -1,0 +1,5 @@
+# Live DB aggregates repeated before publication (no names, no phones). 2026-11-22T15:55:52Z, branch audit5 42bee4e (not yet published)
+appts=435 (+7 since 14:27, normal work)  pkeys=383  distinct(pkey,name)=409  pkeys_with_several_names=24
+sales=12  sales_date_after_entry=3 (unchanged, A5-L1)
+integrity: appts with missing reader=0, two active bookings on one slot=0
+app_errors since the audit start (14:24:23Z): 0

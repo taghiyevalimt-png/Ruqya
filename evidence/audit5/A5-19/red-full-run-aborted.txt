@@ -1,0 +1,35 @@
+Sun Nov 22 15:55:31 UTC 2026
+full suite run 1 at 42bee4e
+PASS 00-smoke.js 6.5s
+PASS 01-drafts.js 38.8s
+PASS 02-session.js 8.9s
+PASS 03-delete-fonts.js 7.4s
+PASS 04-excel.js 5.7s
+PASS 05-patients.js 10.7s
+PASS 06-anonymize.js 12.0s
+PASS 07-russian.js 9.0s
+PASS 08-sweep.js 133.9s
+FAIL 09-features.js 
+    Error: FAIL: booking kept as cancelled, not deleted
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/09-features.js:15:5)
+    fuzz bad0 az 120 steps 21s
+    fuzz bad0 ru 120 steps 39s
+FAIL 10-fuzz.js 
+    Error: FAIL: bad0 ru: page errors after 120 random steps: TypeError: gone is not a function; TypeError: gone is not a function
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at fuzz (/home/claude/wt/tests/t/10-fuzz.js:48:5)
+PASS 11-es5.js 0.1s
+FAIL 12-list.js 
+    Error: FAIL: list «Ləğv et» cancels
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/12-list.js:12:5)
+FAIL 13-followup.js 
+    Error: FAIL: cancelled booking is black on the calendar at once: ev paid
+        at check (/home/claude/wt/tests/lib.js:229:46)
+        at module.exports (/home/claude/wt/tests/t/13-followup.js:23:5)
+PASS 14-no-slots.js 6.6s
+PASS 15-keyboard.js 5.9s
+PASS 16-ios-scroll.js 5.4s
+PASS 17-cancel-contact.js 14.6s
+PASS 18-faults.js 92.6s

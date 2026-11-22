@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+mpcS+eOGDAjQdaKawZRQBnoN/xL1xBoKyY6QETjTaE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-X9JEn4ngYC7/BCA77En9wOaSkAYmOSsjXDGlx4egxLQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -4861,13 +4861,13 @@ document.addEventListener("click",function(e){
     /* review of audit 5: a retry with another quantity or date is the same row too (upsert updates it); a product taken
        out of the sale since the failed try is deleted, in case the server had stored it */
     var ids0=sheet.ids||{},ids={},dk=sheet.dk||uuid();
-    var gone=Object.keys(ids0).filter(function(k){return lines.indexOf(k)<0&&ids0[k]&&ids0[k].id}).map(function(k){return ids0[k].id});
+    var goneIds=Object.keys(ids0).filter(function(k){return lines.indexOf(k)<0&&ids0[k]&&ids0[k].id}).map(function(k){return ids0[k].id});
     var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k],o=ids0[k];ids[k]={id:o&&o.id?o.id:uuid(),q:q,d:sdt};
       return {id:ids[k].id,date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
     srows.forEach(function(o){upsertBy(state.products,mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
     var keepS={k:dk,cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids},sids=srows.map(function(o){return o.id});
     sellDraftPut(keepS);sellPend++;
-    if(gone.length){gone.forEach(function(id){removeBy(state.products,id)});db(sb.from("product_sales").delete().in("id",gone))}
+    if(goneIds.length){goneIds.forEach(function(id){removeBy(state.products,id)});db(sb.from("product_sales").delete().in("id",goneIds))}
     if(ui.tab==="cash")ui.date=sdt;   /* A5-K1: Kassa shows the day the sale went to, so it is never «gone» */
     db(sb.from("product_sales").upsert(srows,{onConflict:"id"}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids,dk:dk})},0)}).then(function(){sellPend--;
       if(!dirty&&sids.every(function(id){return prodRow(id)}))sellDraftDel(dk)});
