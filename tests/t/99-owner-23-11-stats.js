@@ -27,6 +27,8 @@ module.exports = async () => {
     check(hd.join("|") === "Satan|Satış|Məbləğ|Payı" || hd.join("|") === "Satan|Satış|Məbləğ", "first table has only Satış, Məbləğ, Payı: " + hd);
     check(/Bu gün/.test(await txt("#main .sthead")) && /Əli15 ₼/.test(await txt('[data-st^="prod-"]')) && /Nurlana00 ₼/.test(await txt('[data-st^="prod-"]')), "today: only today's sale: " + await txt("#main .sthead") + " / " + await txt('[data-st^="prod-"]'));
     check(/Məhsullar üzrə/.test(await txt('[data-st^="prodp-"]')) && /Misvak/.test(await txt('[data-st^="prodp-"]')), "second table: per product");
+    // owner 24.11: «Məhsullar üzrə» — only the pieces, no sum
+    check((await p.evaluate(() => [...document.querySelectorAll('[data-st^="prodp-"] thead th')].map((x) => x.textContent.trim()).join("|"))) === "Məhsul|Ədəd" && !/₼/.test(await txt('[data-st^="prodp-"] table')), "«Məhsullar üzrə»: Məhsul and Ədəd only");
     const back = '#main .sthead [data-act="st-tday"][data-n="-1"]', fwd = '#main .sthead [data-act="st-tday"][data-n="1"]';
     check(await p.locator(fwd).isDisabled(), "no going past today");
     await p.click(back); await p.waitForTimeout(200);

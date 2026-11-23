@@ -19,7 +19,7 @@ module.exports = async () => {
     check(!/\(4, 35/.test(a), "no unnamed numbers in brackets");
     await p.click('[data-st^="prodp-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const b = await p.evaluate(() => navigator.clipboard.readText());
-    check(b.split("\n").includes("Ruqyalı gül suyu - 4 ədəd, məbləğ 35 manat") && !/[*▪🔸📊₼]/u.test(b), "per product, plain: " + JSON.stringify(b));
+    check(b.split("\n").includes("Ruqyalı gül suyu - 4 ədəd") && !/məbləğ|manat/.test(b) && !/[*▪🔸📊₼]/u.test(b), "per product, plain: " + JSON.stringify(b));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

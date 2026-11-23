@@ -3,7 +3,7 @@
 //    before; the choice made afterwards in Ayarlar is kept;
 //  - the specialists' names at the bottom in every mode, not only «Bütün gün»;
 //  - in every mode a block shows the ✅ marks and the patient's name, the phone (a second line if needed) and only the
-//    agent's name — no time, no «Yazdı:»; the same as in «Bütün gün» (marks included there too).
+//    agent's name — no time, no «Yazdı:»; in «Bütün gün» only the name and the ✅ (owner 24.11, 99-1124-fit-names.js).
 const { open, check, OWNER, AGENT, seed, uuid, bakuToday, R1, R2 } = require("../lib");
 module.exports = async () => {
   const db = seed(), now = new Date().toISOString();
@@ -18,7 +18,7 @@ module.exports = async () => {
     await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     const cal = () => p.evaluate(() => {
       const c = document.getElementById("cal"), col = c.querySelector(".col"), foot = c.querySelector(".cal-foot");
-      const blocks = [...c.querySelectorAll(".ev")].map((e) => ({ name: [...e.firstElementChild.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), mark: (e.querySelector("b i.ok") || {}).textContent || "", lines: [...e.children].filter((x) => getComputedStyle(x).display !== "none").map((x) => x.textContent) }));
+      const blocks = [...c.querySelectorAll(".ev")].map((e) => ({ name: [...e.firstElementChild.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), mark: (e.querySelector("b i.ok, .okm") || {}).textContent || "", lines: [...e.children].filter((x) => getComputedStyle(x).display !== "none").map((x) => x.textContent) }));
       return { fit: c.classList.contains("fit"), hour: parseFloat(getComputedStyle(col).backgroundSize.split(" ")[1]), colW: Math.round((parseFloat(c.querySelector(".cal-in").style.minWidth) - 54) / c.querySelectorAll(".col").length), /* the chosen width (columns may grow to fill the screen) */ topNames: c.querySelectorAll(".cal-head .ch").length, foot: !!foot && foot.querySelectorAll('[data-act="filter"]').length, footBottom: foot && Math.round(foot.getBoundingClientRect().bottom - c.getBoundingClientRect().bottom), blocks };
     });
     const g = await cal();

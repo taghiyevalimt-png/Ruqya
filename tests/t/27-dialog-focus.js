@@ -5,7 +5,10 @@ module.exports = async () => {
   const s = await open(OWNER, { viewport: { width: 1280, height: 800 } });
   try {
     const p = s.page; await p.waitForSelector("#cal .ev"); await p.waitForTimeout(3300);
-    await p.focus("#fab"); await p.keyboard.press("Enter"); await p.waitForSelector("#f-reader"); await p.waitForTimeout(200);
+    await p.focus("#fab"); await p.keyboard.press("Enter"); await p.waitForSelector("#f-reader");
+    // 24.11: the focus comes after the glide (≈0.5 s), the button that opened it lets go at once
+    check(await p.evaluate(() => document.activeElement !== document.getElementById("fab")), "the opener lets the focus go at once");
+    await p.waitForFunction(() => document.getElementById("sheet").contains(document.activeElement), null, { timeout: 1500 }).catch(() => {});
     const st = await p.evaluate(() => { const a = document.activeElement, d = document.getElementById("sheet"); return { inside: d.contains(a), tag: a.tagName, name: d.getAttribute("aria-labelledby") && (document.getElementById(d.getAttribute("aria-labelledby")) || {}).textContent }; });
     check(st.inside, "focus moves into the window (now on " + st.tag + ")");
     check(st.tag !== "INPUT" && st.tag !== "SELECT", "no field is focused on open (the phone keyboard must not pop up)");

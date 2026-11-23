@@ -13,7 +13,7 @@
 //   a cancelled booking marked as «sold» (follow 3) counts as a normal booking;
 //   «Məhsul satışları»: per seller the pieces and the sum; «Payı» = what each person gets: an agent from his own sales, a
 //            specialist from sales to his patients (his own sales are always his patients'), a «Keçici» sale gives
-//            specialists nothing; «Məhsullar üzrə»: per product.
+//            specialists nothing; «Məhsullar üzrə»: pieces per product (no sum since 24.11).
 const { open, check, OWNER, AGENT, SPEC, uuid } = require("../lib");
 module.exports = async () => {
   let seedN = 20261123; const rnd = () => { seedN = (seedN * 1103515245 + 12345) % 2147483648; return seedN / 2147483648; };
@@ -177,7 +177,7 @@ module.exports = async () => {
         for (const k of Object.keys(R.P)) if (R.P[k].q || R.P[k].sh > 0) check(rows.some((r) => r[0] === name(k)), w + name(k) + " is missing");
         check(+ft[0][1] === R.PT.q && eq(num(ft[0][2]), R.PT.m) && eq(num(ft[0][3]), R.PT.sh), w + "Cəmi app " + ft[0].slice(1) + ", rules " + [R.PT.q, R.PT.m, R.PT.sh]);
         const pr = await read('[data-st^="prodp-"] tbody tr');
-        for (const c of prods) { const r = pr.find((x) => x[0] === c.name), v = R.PP[c.id] || { q: 0, m: 0 }; check(r && +r[1] === v.q && eq(num(r[2]), v.m), w + c.name + ": app " + (r && r.slice(1)) + ", rules " + [v.q, v.m]); }
+        for (const c of prods) { const r = pr.find((x) => x[0] === c.name), v = R.PP[c.id] || { q: 0, m: 0 }; check(r && r.length === 2 && +r[1] === v.q, w + c.name + ": app " + (r && r.slice(1)) + ", rules " + v.q + " (pieces only since 24.11)"); }
       }
       check(!s.errors.length, clock + ": no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }

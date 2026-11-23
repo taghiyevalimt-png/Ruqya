@@ -21,7 +21,7 @@ module.exports = async () => {
         const cols = [...cal.querySelectorAll(".col")].map((c) => c.getBoundingClientRect());
         const onScreen = cols.filter((c) => c.left >= cr.left - 1 && c.right <= cr.right + 1).length;
         const evs = [...cal.querySelectorAll(".ev")].map((e) => { const b = e.firstElementChild, bs = getComputedStyle(b), fs = parseFloat(bs.fontSize), lh = parseFloat(bs.lineHeight) || fs;
-          return { text: e.textContent, children: e.children.length, bText: [...b.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), fs, lines: Math.round((b.scrollHeight - (b.querySelector("i.ok") && getComputedStyle(b.querySelector("i.ok")).position !== "absolute" ? b.querySelector("i.ok").offsetHeight + 1 : 0)) / lh),   /* the ✅ line not counted (owner 18.11) */ clipped: b.scrollHeight > e.clientHeight - 2 || b.scrollWidth > b.clientWidth + 1 || b.getBoundingClientRect().bottom > e.getBoundingClientRect().bottom + 1, ell: bs.textOverflow }; });
+          return { text: e.textContent, children: e.children.length, bText: [...b.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(""), fs, lines: (() => { const rg = document.createRange(); rg.selectNodeContents(b); return Math.round(rg.getBoundingClientRect().height / (fs * 1.08)); })(),   /* the ✅ line not counted (owner 18.11) */ clipped: b.scrollHeight > e.clientHeight - 2 || b.scrollWidth > b.clientWidth + 1 || b.getBoundingClientRect().bottom > e.getBoundingClientRect().bottom + 1, ell: bs.textOverflow }; });
         const pills = [...cal.querySelectorAll(".cal-foot .fn span")].filter((x) => x.getBoundingClientRect().right <= cr.right + 1).map((x) => ({ t: x.textContent, cut: x.scrollWidth > x.clientWidth + 1 }));
         return { pills, hour: getComputedStyle(cal.querySelector(".col")).backgroundSize, n: cols.length, onScreen, colW: Math.round(cols[0].width), sideways: cal.scrollWidth > cal.clientWidth + 1, evs };
       });
@@ -44,7 +44,8 @@ module.exports = async () => {
       check(long && long.lines >= 2, w + ": a long name goes on line under line: " + JSON.stringify(long));
       // the 8 px letter of a 7-letter line can shrink a little where a long name must fit a short block (360×740: an hour is
       // 28 px; «Leyla Məmmədova» in 1 hour → 7.5 px); never below 7 px, except a 30-minute block
-      check(ours.every((e) => e.fs >= 7 || e.bText === names[3]), w + ": letters not smaller than 7 px (except a 30-minute block): " + m.evs.map((e) => e.bText + "=" + e.fs + "/" + e.lines).join(", ") + " hour " + m.hour);
+      // owner 24.11: words are never broken in the middle; a long surname in a one-hour block may go down to 6 px instead
+      check(ours.every((e) => e.fs >= 7 || e.bText === names[3] || (/\s/.test(e.bText) && e.fs >= 6)), w + ": letters not smaller than 7 px (6 px for a long two-word name, a 30-minute block apart): " + m.evs.map((e) => e.bText + "=" + e.fs + "/" + e.lines).join(", ") + " hour " + m.hour);
       // a tap on the block still opens the whole booking
       await p.click("#cal .ev:has-text(\"Leyla\")"); await p.locator("#sheet").waitFor(); await p.waitForTimeout(300);
       check(/050 000 00 1/.test(await p.textContent("#sheet")), w + ": the block opens the full booking (phone shown there)");
