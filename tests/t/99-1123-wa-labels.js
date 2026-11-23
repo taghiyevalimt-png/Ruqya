@@ -14,8 +14,8 @@ module.exports = async () => {
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(300); await p.click('[data-act="st-per"][data-id="today"]'); await p.waitForTimeout(300);
     await p.click('[data-st^="prod-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const a = await p.evaluate(() => navigator.clipboard.readText());
-    // since 23.11 evening the «Məhsul satışları» copy is one line per person: name, Satış, Məbləğ, Payı (99-1123-wa-products.js)
-    check(a.replace(/\u00a0|\u202f/g, " ").split("\n").includes("👤 *Əli* — Satış: 4 · Məbləğ: 35 ₼ · Payı: *11 ₼*"), "every number named: " + JSON.stringify(a));
+    // since 23.11 late evening the «Məhsul satışları» copy is plain: «Əli - 4 satış, ümumi 35 manat, mütəxəssisin payı 11 manat»
+    check(a.replace(/\u00a0|\u202f/g, " ").split("\n").includes("Əli - 4 satış, ümumi 35 manat, mütəxəssisin payı 11 manat"), "every number named: " + JSON.stringify(a));
     check(!/\(4, 35/.test(a), "no unnamed numbers in brackets");
     await p.click('[data-st^="prodp-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const b = await p.evaluate(() => navigator.clipboard.readText());

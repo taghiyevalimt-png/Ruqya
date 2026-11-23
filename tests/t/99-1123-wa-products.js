@@ -1,6 +1,6 @@
-// Owner 23.11 (evening, photo of the table): the WhatsApp copy of «Məhsul satışları» is one line per person — the name
-// first, then only the three columns «Satış», «Məbləğ», «Payı». No product lines, no totals; people with nothing are
-// left out. The screen is unchanged.
+// Owner 23.11 (late evening): «the stars and the rest confuse — it must be this simple:
+// Loğman - 4 satış, ümumi 63 manat, mütəxəssisin payı 17 manat». Plain text, one line per person, no products, no
+// totals, no stars or emoji; people with nothing are left out. The screen is unchanged.
 const { open, check, SPEC, AGENT, OWNER, seed, bakuToday, uuid } = require("../lib");
 const SPEC2 = "33333333-3333-4333-8333-333333333333";
 module.exports = async () => {
@@ -32,12 +32,11 @@ module.exports = async () => {
   const a = await copy(OWNER);
   require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "wa-products-admin.txt"), a);
   const lines = a.split("\n");
-  check(/^📊 \*Məhsul satışları\*\n_/.test(a), "title and day: " + JSON.stringify(a));
-  check(lines.includes("👤 *Loğman* — Satış: 3 · Məbləğ: 38 ₼ · Payı: *0 ₼*"), "Loğman: name, then the three numbers: " + JSON.stringify(a));
-  check(lines.includes("👤 *Nurlana* — Satış: 4 · Məbləğ: 79 ₼ · Payı: *0 ₼*"), "Nurlana: " + JSON.stringify(a));
-  check(lines.includes("👤 *Əli* — Satış: 2 · Məbləğ: 4 ₼ · Payı: *18,4 ₼*"), "Əli (with his part of the agent's sale to his patient): " + JSON.stringify(a));
-  check(lines.filter((x) => x.startsWith("👤")).length === 3 && !/Admin|▪️|×|Cəmi|Mərkəzə|Sizə|pasiyent|Keçici/.test(a), "only the people's lines — no products, no totals, nobody with nothing: " + JSON.stringify(a));
-  // the specialist Əli: himself and Nurlana's sale to his patient
+  check(/^Məhsul satışları, \S/.test(a) && !/[*_👤📊▪️💰🏢₼]/u.test(a), "plain text, no stars, emoji or ₼: " + JSON.stringify(a));
+  check(lines.includes("Loğman - 3 satış, ümumi 38 manat, mütəxəssisin payı 0 manat"), "Loğman: " + JSON.stringify(a));
+  check(lines.includes("Nurlana - 4 satış, ümumi 79 manat, mütəxəssisin payı 0 manat"), "Nurlana: " + JSON.stringify(a));
+  check(lines.includes("Əli - 2 satış, ümumi 4 manat, mütəxəssisin payı 18,4 manat"), "Əli (with his part of the agent's sale to his patient): " + JSON.stringify(a));
+  check(lines.filter((x) => / - \d+ satış/.test(x)).length === 3 && !/Admin|×|Cəmi|Mərkəzə|Keçici/.test(a), "only the people's lines: " + JSON.stringify(a));
   const b = await copy(SPEC), lb = b.split("\n");
-  check(lb.includes("👤 *Əli* — Satış: 2 · Məbləğ: 4 ₼ · Payı: *0,4 ₼*") && lb.includes("👤 *Nurlana* — Satış: 1 · Məbləğ: 25 ₼ · Payı: *18 ₼*") && lb.filter((x) => x.startsWith("👤")).length === 2 && !/Loğman|▪️|Cəmi|Mərkəzə/.test(b), "specialist: the same three numbers for his and his patients' sales: " + JSON.stringify(b));
+  check(lb.includes("Əli - 2 satış, ümumi 4 manat, mütəxəssisin payı 0,4 manat") && lb.includes("Nurlana - 1 satış, ümumi 25 manat, mütəxəssisin payı 18 manat") && lb.filter((x) => / - \d+ satış/.test(x)).length === 2 && !/Loğman|Cəmi|\*/.test(b), "specialist: " + JSON.stringify(b));
 };
