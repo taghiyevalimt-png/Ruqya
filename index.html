@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-kyQVyq6PO8EeOODxlKM3fIq1mTEekGZZh+aGvIkF93I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+CH1hoflm1VTtae83SwYuORFBSkXrt7jlsJNaCtEbs0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -819,6 +819,21 @@ main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
 .links{gap:6px 8px}.card.compact .links{gap:6px 7px}.card.compact .links .link{padding:5px 11px}
 .links .link:active,.pbtns .link:active{background:var(--accent-soft)}
 .pbtns{display:inline-flex;gap:6px}
+/* 24.11 look */
+.ava{flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em}
+.ava::before{content:attr(data-i)}
+.reader .ava{color:#fff;font-size:14px}
+.sw.swi{display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}.sw.swi::before{content:attr(data-i)}
+.reader.prow{gap:12px;padding:10px 12px}
+.herosum{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--line)}
+.herosum b{font-size:24px}
+.pertot{border:1px solid var(--line)}
+#cal:not(.fit) .ev{border-left:3px solid rgba(0,0,0,.2)}
+#cal:not(.fit) .ev b{letter-spacing:-.01em}
+.sthead .sec{letter-spacing:.14em}
+/* 24.11: the window built ahead (see parkBuild): laid out, invisible, untouchable, not moving until it is used */
+html .overlay.parked{visibility:hidden;pointer-events:none;animation:none!important}
+html .overlay.parked .sheet,html .overlay.parked .sheet>*{animation:none!important}
 @media (prefers-reduced-motion: reduce){
   .rpw,.fab::after{display:none}
   .sheet,.sheet>*,main.enter>*,.ghostout,.ghostout .sheet,.tabs button[aria-current="page"] svg,.nowline::before,.nowline::after{animation:none!important}
@@ -1933,7 +1948,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123224129";
+var APP_VERSION="20261123234547";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3064,7 +3079,7 @@ function loadAllErrs(){
     ui.errsAll=r&&!r.error&&Array.isArray(r.data)?r.data:"fail";render()},function(){ui.errsAll="fail";render()});
 }
 function render(){
-  try{renderScreen()}catch(e){
+  try{renderScreen();parkSoon()}catch(e){
     reportErr(e);try{dropCache()}catch(x){}   /* a saved copy that breaks the screen is not used again */
     var mm=byId("main");if(mm)mm.innerHTML='<div class="empty"><p><b>'+L("Ekranı göstərmək olmadı.")+'</b></p><p>'+L("Səhifəni yeniləyin. Təkrarlansa, adminə deyin.")+'</p><button class="primary" data-act="reload">'+L("Yenilə")+'</button></div>';
     var tb=byId("tabs");if(tb&&auth.user)tb.hidden=false;
@@ -3596,6 +3611,9 @@ function statsMain(){
   var r=perRange(sec);
   h+=perHead(sec,r);
   var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
+  /* 24.11 look: the period at a glance (the same totals as the «Cəmi» row of «Ümumi cədvəl») */
+  var PT=statData("sales",r,sec).T;
+  h+='<div class="pay todaysum pertot"><div><b class="num">'+PT.a+'</b><span>'+L("Yazdı")+'</span></div><div><b class="num">'+PT.b+'</b><span>'+L("Uğurlu")+'</span></div><div><b class="num">'+(PT.d||0)+'</b><span>'+L("Ləğv")+'</span></div></div>';
   return h+sessTable(r,sec)+bigTable(r,sec)+edHint+rulesBox();   /* owner 22.11: «Kim neçə seans yazıb» first */   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
@@ -3885,6 +3903,8 @@ function cashMain(){
   if(state.hasProducts){
     var pr=myProds().filter(function(x){return x.date===ui.date}).sort(function(a,b){return String(a.id).localeCompare(String(b.id))}),tot=0,qn=0;
     pr.forEach(function(x){tot+=x.amount;qn+=x.qty});
+    /* 24.11 look: the day at a glance — sum, pieces, sales */
+    h+='<div class="pay todaysum herosum"><div><b class="num">'+money(tot)+'</b><span>'+L("Məbləğ")+'</span></div><div><b class="num">'+qn+'</b><span>'+L("Ədəd")+'</span></div><div><b class="num">'+pr.length+'</b><span>'+L("Satış")+'</span></div></div>';
     h+='<div class="sthead"><h3 class="sec">'+L("Məhsul satışları")+'</h3>'+(isAdmin()&&state.hasCatalog?'<button class="ghost copyb" data-act="catalog">⚙ '+L("Məhsullar")+'</button>':'')+'</div>'+
       '<button class="primary" data-act="new-prod">+ '+L("Məhsul satışı")+'</button>';
     h+='<div class="pay">'+(pr.length?pr.map(function(x){
@@ -4229,10 +4249,14 @@ function patientsList(){
     var bits=[p.paid+L(" dəfə gəlib")];
     if(p.noshow)bits.push(L("gəlməyib: ")+p.noshow);
     if(p.cancel)bits.push(L("ləğv edib: ")+p.cancel);
-    return '<div class="reader"><button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||L("telefon yoxdur"))+' · '+bits.join(", ")+'</span></button>'+
+    return '<div class="reader prow">'+avaOf(p.name)+'<button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||L("telefon yoxdur"))+' · '+bits.join(", ")+'</span></button>'+
       '<button class="ghost" data-act="repeat" data-id="'+esc(p.key)+L('">Yaz</button></div>');
   }).join("")+(total>200?L('<p class="hint">Son 200 pasiyent göstərilir (cəmi ')+total+L('). Başqasını tapmaq üçün adı və ya nömrəni axtarın.</p>'):'');
 }
+/* 24.11 look: a round badge with the person's initials, a colour of his own (the same name → the same colour) */
+function avaOf(name){var n=String(name||"").trim(),w=n.split(/\s+/).filter(Boolean),ini=((w[0]||"?").charAt(0)+(w.length>1?w[w.length-1].charAt(0):"")).toUpperCase(),h=0;
+  for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;
+  return '<span class="ava" data-i="'+esc(ini)+'" style="background:hsl('+h+',42%,46%)" aria-hidden="true"></span>'}
 function patientSheet(){
   var p=patients()[sheet.id];if(!p)return L('<h2>Pasiyent')+CLOSE+L('</h2><p class="hint">Bu pasiyentin qəbulu qalmayıb.</p>');
   /* «Təsdiq» asks about the patient's next session still ahead, if there is one */
@@ -4279,7 +4303,8 @@ function readersMain(){
   if(sec==="spec"){
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
-    h+='<div class="reader">'+(!adm?'<span class="sw" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
+    var ini=esc(String(r.name||"?").trim().charAt(0).toUpperCase());   /* 24.11 look: the specialist's initial in his colour */
+    h+='<div class="reader">'+(!adm?'<span class="sw swi" data-i="'+ini+'" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw swi" data-i="'+ini+'" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
       (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
   });
   if(rs.length&&adm)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
@@ -4583,6 +4608,44 @@ function fontsSoon(){
   if(fontsAsked)return;fontsAsked=true;
   setTimeout(function(){try{if(document.fonts&&document.fonts.load){document.fonts.load('400 16px "Golos Text"',"Ж");document.fonts.load('600 16px "Onest"',"Ж")}}catch(e){}},1500);
 }
+function sheetFns(){return {month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}}
+/* 24.11 «windows without the wait» (owner: smooth even on the oldest Android). Building a window — its markup, styles
+   and layout — took about 0.1 s on a slow phone before it could start to move. The two windows opened most often
+   (a new booking, «Məhsul satışı») are now built ahead, while the phone is idle, in a second, invisible overlay
+   (visibility:hidden, so its styles and layout are already done). A tap compares the markup the window would get
+   with the ready one; when equal, the two overlays swap places (ids, field ids and radio names) and only the glide
+   remains. Anything different (another day, other specialists, a draft…) is built the usual way. The ready copy's
+   field ids, labels, radio names and buttons (data-act) carry «pk-» so they never clash with an open window. */
+var park={el:null,html:"",type:""},parkT=null;
+function pkHtml(h){return h.replace(/ (id|for|name|data-act)="/g,' $1="pk-')}
+function parkHost(){
+  if(park.el&&park.el.parentNode)return park.el;
+  var ro=byId("overlay");if(!ro||!ro.parentNode)return null;
+  var o=document.createElement("div");o.className="overlay parked";o.setAttribute("aria-hidden","true");o.innerHTML='<div class="sheet"></div>';
+  ro.parentNode.insertBefore(o,ro.nextSibling);park.el=o;park.html="";park.type="";return o}
+function parkBuild(s){
+  if(sheet||!byId("overlay"))return;var fn=sheetFns()[s.type];if(!fn)return;
+  var keep=sheet,h;sheet=s;try{h=fn()}catch(e){h=""}finally{sheet=keep}
+  if(!h||(h===park.html&&s.type===park.type&&park.el&&park.el.parentNode))return;
+  var o=parkHost();if(!o)return;var ps=o.firstChild;ps.innerHTML=pkHtml(h);ps.classList.toggle("tall",s.type==="appt");ps.classList.remove("wide");park.html=h;park.type=s.type}
+function parkSoon(){
+  clearTimeout(parkT);
+  parkT=setTimeout(function(){if(sheet||document.hidden||!auth.loaded||!auth.user)return;
+    var go=function(){if(sheet)return;try{
+      if(ui.tab==="day"&&activeReaders().length&&!pendingMe())parkBuild({type:"appt",id:null});
+      else if(ui.tab==="cash"&&state.hasCatalog&&(state.catalog||[]).length)parkBuild({type:"sell",cnt:{}})}catch(e){}};
+    if(window.requestIdleCallback)window.requestIdleCallback(go,{timeout:1500});else go()},700)}
+function unpark(type,html){
+  var po=park.el;if(!po||!po.parentNode||park.type!==type||park.html!==html)return false;
+  var ro=byId("overlay"),rs=byId("sheet"),ps=po.firstChild;if(!ro||!rs||!ps)return false;
+  ro.removeAttribute("id");rs.removeAttribute("id");rs.removeAttribute("role");rs.removeAttribute("aria-modal");rs.removeAttribute("aria-labelledby");
+  po.id="overlay";ps.id="sheet";ps.setAttribute("role","dialog");ps.setAttribute("aria-modal","true");po.removeAttribute("aria-hidden");
+  var pk=ps.querySelectorAll('[id^="pk-"],[for^="pk-"],[name^="pk-"],[data-act^="pk-"]'),AN=["id","for","name","data-act"];
+  for(var i=0;i<pk.length;i++){var e=pk[i];for(var j=0;j<4;j++){var v=e.getAttribute(AN[j]);if(v&&v.indexOf("pk-")===0)e.setAttribute(AN[j],v.slice(3))}}
+  po.hidden=false;po.classList.remove("parked");
+  /* the old overlay becomes the next ready copy's place */
+  rs.innerHTML="";rs.className="sheet";ro.hidden=false;ro.className="overlay parked";ro.setAttribute("aria-hidden","true");park.el=ro;park.html="";park.type="";
+  return true}
 function openSheet(s){
   /* keyboard and screen reader (V-03): remember what opened the window, to give the focus back on close */
   if(!s.opener)s.opener=sheet&&sheet.opener||document.activeElement;
@@ -4590,8 +4653,8 @@ function openSheet(s){
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={place:oa.place||"ofis",readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}[s.type];
-  byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("sheet").classList.toggle("tall",s.type==="appt");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
+  var f=sheetFns()[s.type],html=f();
+  if(!unpark(s.type,html))byId("sheet").innerHTML=html;byId("sheet").classList.remove("wide");byId("sheet").classList.toggle("tall",s.type==="appt");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt"&&s.vals){var dv=s.vals;
     ["reader","date","time","name","phone","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
       if(e&&x!=null&&x!==""&&(e.tagName!=="SELECT"||e.querySelector('option[value="'+String(x).replace(/["\\]/g,"")+'"]')))e.value=x});
@@ -4666,13 +4729,22 @@ if(window.visualViewport)window.visualViewport.addEventListener("scroll",unscrol
 document.addEventListener("focusin",function(e){if(sheet&&textField(e.target)){setTimeout(unscroll,0);setTimeout(unscroll,120);setTimeout(unscroll,320)}});
 /* owner 22.11: the window slides away — a picture of it (no ids, no buttons) plays the closing; the real one is
    already gone, so nothing waits for the animation */
-function sheetGhost(){try{if(REDUCED)return;var ov=byId("overlay");if(!ov||ov.hidden)return;var g=ov.cloneNode(true);g.removeAttribute("id");g.removeAttribute("hidden");g.className="ghostout";
-  [].forEach.call(g.querySelectorAll("[id],[data-act],[name]"),function(x){x.removeAttribute("id");x.removeAttribute("data-act");x.removeAttribute("name")});
-  g.setAttribute("aria-hidden","true");var sh=g.querySelector(".sheet");if(sh){sh.removeAttribute("id");sh.scrollTop=0}document.body.appendChild(g);setTimeout(function(){if(g.parentNode)g.parentNode.removeChild(g)},300)}catch(e){}}
+/* the closing glide: 24.11 the window itself slides away (it was copied first — a whole second window to build on a
+   slow phone); a fresh empty overlay takes its place and id at once */
+function sheetGhost(){try{if(REDUCED)return;var ov=byId("overlay"),sh=byId("sheet");if(!ov||ov.hidden||!sh||!ov.parentNode)return;
+  var n=document.createElement("div");n.className="overlay";n.id="overlay";n.hidden=true;n.innerHTML='<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>';
+  ov.parentNode.insertBefore(n,ov);
+  ov.removeAttribute("id");sh.removeAttribute("id");sh.removeAttribute("role");sh.removeAttribute("aria-modal");sh.removeAttribute("aria-labelledby");
+  var xs=ov.querySelectorAll("[id],[name]");for(var i=0;i<xs.length;i++){xs[i].removeAttribute("id");xs[i].removeAttribute("name")}
+  ov.className="ghostout";ov.setAttribute("aria-hidden","true");
+  setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov)},320)}catch(e){}}
 var openT=null;
-function hideSheet(){unpinSheet();sheetGhost();
+function hideSheet(){unpinSheet();
+  /* what was typed is read before the window slides away (its fields lose their ids then) */
+  var dv=null;if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched())dv=formVals()}catch(e){}}
+  sheetGhost();
   var op=sheet&&sheet.opener;if(op&&op!==document.body&&document.contains(op)&&op.focus)setTimeout(function(){try{op.focus({preventScroll:true})}catch(e){}},0);if(sheet&&sheet.type==="xls")dropXlsUrl(sheet);
-  if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user){try{if(formTouched()){keepDraft(sheet,formVals());setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}}catch(e){}}
+  if(dv){try{keepDraft(sheet,dv);setTimeout(function(){toast(L("Yazılanlar saxlanıldı. «Geri aç» ilə qaytarmaq olar."));render()},0)}catch(e){}}
   sheet=null;byId("overlay").hidden=true}
 var backing=false;
 function closeSheet(){
