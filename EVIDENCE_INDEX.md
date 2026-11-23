@@ -61,6 +61,62 @@
 | `evidence/audit5/mut-M5-11.txt` | 473 | 0fef150b877110db | Sun Nov 22 15:30:17 UTC 2026 |
 | `evidence/audit5/mutations-a5-run1.txt` | 1319 | af549e3d5fcfc456 | # audit 5 mutations — 2026-11-22T15:29:08.442Z |
 | `evidence/audit5/mutations-a5-run2-changed.txt` | 489 | 80a5f2ca676c942f | # audit 5 mutations — 2026-11-22T16:39:43.719Z |
+| `evidence/audit6/A6-01/green-2.txt` | 127 | e36ca10385fbdf9a | Sun Nov 22 20:04:17 UTC 2026 |
+| `evidence/audit6/A6-01/green.txt` | 78 | 1fcde1ed2d246af6 | Sun Nov 22 19:03:23 UTC 2026 |
+| `evidence/audit6/A6-01/red-2.txt` | 388 | 25680cefd87b01f6 | Sun Nov 22 20:04:06 UTC 2026 |
+| `evidence/audit6/A6-01/red.txt` | 357 | 30b090814851ac1b | Sun Nov 22 19:03:12 UTC 2026 |
+| `evidence/audit6/A6-02/green.txt` | 82 | e0ad3142347f066e | Sun Nov 22 19:06:56 UTC 2026 |
+| `evidence/audit6/A6-02/red.txt` | 292 | a252feb61039ff35 | Sun Nov 22 19:06:41 UTC 2026 |
+| `evidence/audit6/A6-03/green.txt` | 80 | 56ddb431130d0101 | Sun Nov 22 19:12:38 UTC 2026 |
+| `evidence/audit6/A6-03/red.txt` | 378 | 5a60a41d4ff9ed14 | Sun Nov 22 19:12:13 UTC 2026 |
+| `evidence/audit6/A6-04/copy-10y-timing.txt` | 399 | 2c50948272e31d50 | Sun Nov 22 19:19:19 UTC 2026 |
+| `evidence/audit6/A6-04/green.txt` | 84 | bf06b36fa25224a4 | Sun Nov 22 19:20:09 UTC 2026 |
+| `evidence/audit6/A6-04/red.txt` | 644 | e00d86925c0e4a4e | Sun Nov 22 19:20:09 UTC 2026 |
+| `evidence/audit6/A6-06/green.txt` | 81 | 272ca79ffe214cb4 | Sun Nov 22 19:21:28 UTC 2026 |
+| `evidence/audit6/A6-06/red.txt` | 313 | eab39a1dc8f48ade | Sun Nov 22 19:21:16 UTC 2026 |
+| `evidence/audit6/A6-08/copy-rehearsal.txt` | 522 | 03522cf341cdb049 | Sun Nov 22 19:25:17 UTC 2026 |
+| `evidence/audit6/A6-08/green.txt` | 81 | ca3acb307ef9494f | Sun Nov 22 19:24:44 UTC 2026 |
+| `evidence/audit6/A6-08/matrix-after.txt` | 21371 | ea358cb110d258ff | # access matrix on copy — 2026-11-22T19:25:19.073Z |
+| `evidence/audit6/A6-08/matrix-before.txt` | 21371 | accbfc233772ee4e | # access matrix on copy — 2026-11-22T19:23:58.770Z |
+| `evidence/audit6/A6-08/red.txt` | 376 | f918cdff6ed2ca97 | Sun Nov 22 19:24:43 UTC 2026 |
+| `evidence/audit6/A6-09/green.txt` | 82 | b40cc5b80e04a7fe | Sun Nov 22 19:26:25 UTC 2026 |
+| `evidence/audit6/A6-09/matrix-after.txt` | 21371 | 29ea6be67274b2b1 | # access matrix on copy — 2026-11-22T19:25:56.744Z |
+| `evidence/audit6/A6-09/red.txt` | 463 | 2d27b3234c081ed3 | Sun Nov 22 19:26:21 UTC 2026 |
+| `evidence/audit6/A6-10/green.txt` | 83 | 9f20944d6ca179ba | Sun Nov 22 19:27:08 UTC 2026 |
+| `evidence/audit6/A6-10/red.txt` | 302 | 16b3fc0933cfda77 | Sun Nov 22 19:26:59 UTC 2026 |
+| `evidence/audit6/A6-11/copy-equivalence.txt` | 785 | 25d27314fbe6142c | Sun Nov 22 19:43:44 UTC 2026 |
+| `evidence/audit6/A6-11/load50-3s-after.json` | 676 | f388c352cc5c0e06 | { |
+| `evidence/audit6/A6-11/load50-3s-before.json` | 701 | 2cc2979bef8df07d | { |
+| `evidence/audit6/A6-12/restore-privileges.txt` | 646 | e2428a7c62f319c3 | # A6-12 (from the acceptance review): restoring a backup must give «authenticated» schema private and its functions, or every RLS policy fai |
+| `evidence/audit6/S-09/green.txt` | 115 | 8d011425fabd3cb2 | Sun Nov 22 19:28:19 UTC 2026 |
+| `evidence/audit6/S0/baseline-suite.txt` | 3848 | b1720cbdf3c5ca23 | Sun Nov 22 19:01:17 UTC 2026 |
+| `evidence/audit6/S0/matrix-before.txt` | 15908 | 4c065b6bd508b7dd | # access matrix on copy — 2026-11-22T18:23:44.842Z |
+| `evidence/audit6/S0/schema-check-pg16.txt` | 673 | 9e85788072306cb8 | # repository schema (db/schema_live_*.sql + BASE install files) vs live — 2026-11-22T18:24:58.453Z |
+| `evidence/audit6/S1/a6-04-anonymize-copy.txt` | 399 | 2c50948272e31d50 | Sun Nov 22 19:19:19 UTC 2026 |
+| `evidence/audit6/S1/actions-history.txt` | 732 | b29f00e945b6c773 | # GitHub Actions history, public page https://github.com/taghiyevalimt-png/Ruqya/actions read 2026-11-22T19:10Z (gh CLI token invalid here) |
+| `evidence/audit6/S1/advisors-before.txt` | 949 | 1113a04f425153b9 | # Supabase Advisors, live project, 2026-11-22T18:26:47Z (read-only), before audit 6 changes |
+| `evidence/audit6/S1/definer-matrix.txt` | 1362 | 6faefa8c33cd832e | # SECURITY DEFINER functions × roles on the copy — 2026-11-22T19:23:04.732Z |
+| `evidence/audit6/S1/plans-journal-10y.txt` | 4372 | 145614f9badf19f1 | Timing is on. |
+| `evidence/audit6/S1/schema-live-vs-repo.txt` | 4981 | 8850e63de6733a7a | # live structure fingerprint (scripts/backup-structure.sql, read-only, 2026-11-22T19:12Z) vs repository copy (db/schema_live_20261116.sql +  |
+| `evidence/audit6/S1/secret-scan.txt` | 535 | 940521042f730832 | # secret scan — 2026-11-22T19:11:29.442Z — HEAD 308f68efd2083e46c2d9885daf7e8d731b513d5e |
+| `evidence/audit6/S4/a6-run-1.txt` | 3973 | 67153218f2e57e6d | # run 1 of 3 — commit 944370c — start 2026-11-22T21:03:14Z, RUQYA_PG_PORT=54330 |
+| `evidence/audit6/S4/a6-run-2.txt` | 3974 | 59feb445a36281c4 | # run 2 of 3 — commit 944370c — start 2026-11-22T21:37:38Z, RUQYA_PG_PORT=54330 |
+| `evidence/audit6/S4/a6-run-3.txt` | 3974 | 53e4dae85a71a2e4 | # run 3 of 3 — commit 944370c — start 2026-11-22T22:12:12Z, RUQYA_PG_PORT=54330 |
+| `evidence/audit6/S4/run1-f8e4fb2-99-sold-time.txt` | 4167 | cba3ab23136921a6 | # run 1 of 3 — commit f8e4fb2 — start 2026-11-22T20:21:57Z, RUQYA_PG_PORT=54330 |
+| `evidence/audit6/T01/green.txt` | 328 | 399673b047582d2c | Sun Nov 22 18:25:07 UTC 2026 |
+| `evidence/audit6/T01/matrix.txt` | 21371 | 409c24be3ee49581 | # access matrix on copy — 2026-11-22T18:25:17.452Z |
+| `evidence/audit6/T01/red.txt` | 419 | f3fdcb1c792ba984 | Sun Nov 22 18:25:07 UTC 2026 |
+| `evidence/audit6/T6-01/green.txt` | 77 | a230407b342f7a6f | Sun Nov 22 19:36:08 UTC 2026 |
+| `evidence/audit6/T6-01/red.txt` | 297 | 8869adeb1ea1040a | PASS 99-new-helpers.js 7.1s |
+| `evidence/audit6/T6-02/red-run1.txt` | 218 | 4ed3762ee4aac58c | FAIL 99-sold.js  |
+| `evidence/audit6/mutate-a6.txt` | 555 | 734de7893dae8362 | # audit 6 mutations — 2026-11-22T22:49:45.798Z |
+| `evidence/audit6/mutate-app.txt` | 1621 | bc90a6a5c7a81f13 | # app mutations — 2026-11-22T22:53:18.299Z |
+| `evidence/audit6/mutate-db.txt` | 1042 | a7bbf84612387619 | # DB test mutation check — 2026-11-22T20:08:35.746Z |
+| `evidence/audit6/perf/README.txt` | 906 | 335c5f89d9f3bdb8 | # audit 6 — load test on the copy (tests/perf/load50.js), 2026-11-22T19:4xZ, this sandbox: 2 CPU, PostgreSQL 16 local |
+| `evidence/audit6/perf/load50-3s.json` | 701 | 2cc2979bef8df07d | { |
+| `evidence/audit6/perf/load50.json` | 703 | 027bbf26ba36c30b | { |
+| `evidence/audit6/perf/soak-30min-heapdiff.json` | 3478 | c45d1125c4661348 | [ |
+| `evidence/audit6/perf/soak-30min.json` | 2020 | c37975acfc53bc7e | { |
 | `evidence/findings/A-01/green-backup-run.txt` | 2391 | eb0ccd1a6bd279e5 | # A-01 GREEN: backup.yml run 43919849130 — 2026-11-16T17:48:15Z — commit abda94d |
 | `evidence/findings/A-01/red-backup-run.txt` | 5730 | 442ff040387ad3a9 | # A-01 RED: backup.yml run 43918407863 (main 4fb4418) — 2026-11-16T17:34:23Z |
 | `evidence/findings/B-01/green.txt` | 42 | 40adb4b930e6bba7 | PASS 23-excel-counts.js 7.4s |
