@@ -55,7 +55,9 @@ done
   done
   cmp -s widget-week-$API.png widget-week-light-$API.png && { echo "light = dark"; ok=0; }
   for k in day week; do cat "bind-$k-$API.txt"; grep -q "^bound=true" "bind-$k-$API.txt" || ok=0; grep -q "FAIL" "bind-$k-$API.txt" && ok=0; [ "$(grep -c ': ok' "bind-$k-$API.txt")" = "9" ] || ok=0; done
-  if adb exec-out run-as $P cat files/widget_test.txt 2>/dev/null | grep -q .; then echo "drawing error:"; adb exec-out run-as $P cat files/widget_test.txt; ok=0; fi
+  # the drawing error file, if any (a missing file must not count: «cat: No such file» comes on the same output)
+  DE=$(adb shell "run-as $P sh -c 'cat files/widget_test.txt 2>/dev/null'" | tr -d '\r')
+  if [ -n "$DE" ]; then echo "drawing error:"; echo "$DE"; ok=0; fi
   [ $ok = 1 ] && echo "PASS: day and week widgets drawn (6 pictures), placed on a real home-screen slot at 6 sizes, ‹ › 300 times, signed out / broken / no data" || echo "FAIL"
 } > "agenda-$API.txt"
 cat "agenda-$API.txt"
