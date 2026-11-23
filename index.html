@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Pp9DbXB0TrGFhb5Kl5PsBrE60lRqnmazb4d/Q+QfV1Q='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8zm7uBNDZThLhGHY34sTTP2twznein3yIpR2gzG+mrA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -848,6 +848,10 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
+"satış yoxdur":"продаж нет",
+"pasiyent":"пациент",
+"öz pasiyentlərinə edilən satışlardan":"с продаж его пациентам",
+"Bu dövrdə məhsul satılmayıb.":"За этот период товары не продавались.",
 "Satılan məhsullar":"Проданные товары",
 "əd.":"шт.",
 "satdı: ":"продал(а): ",
@@ -1905,7 +1909,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123132932";
+var APP_VERSION="20261123142241";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -4080,17 +4084,25 @@ function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+
 /* owner 23.11: the copy of «Məhsul satışları» for WhatsApp also lists what was sold — each product, how many, its
    price — and ends with the total, what stays with the centre and what with the person copying (the screen is unchanged) */
 var prodSel={};
-function prodCopyExtra(per){var ps=prodSel[per];if(!ps||!ps.sel.length)return "";var me=ps.me,g={},order=[],tot=0,mine=0,all=0;
-  ps.sel.forEach(function(x){var c=x.pid?catItem(x.pid):null,nm=c?c.name:(x.names||L("Məhsul")),up=x.price||(x.qty?Math.round(x.amount/x.qty*100)/100:x.amount),
-      who=me&&x.by!==me?(state.staff[x.by]||""):"",k=nm+"|"+up+"|"+who;
-    if(!g[k]){g[k]={nm:nm,up:up,who:who,q:0,m:0};order.push(k)}g[k].q+=x.qty;g[k].m+=x.amount;tot+=x.amount;
-    if(me)mine+=shareTo(x,me);var t=x.pid&&state.shares[x.pid];if(t)Object.keys(t).forEach(function(k2){all+=shareTo(x,k2)})});
-  tot=Math.round(tot*100)/100;mine=Math.round(mine*100)/100;all=Math.round(all*100)/100;
-  var out=["","","📦 *"+L("Satılan məhsullar")+"*"];
-  order.forEach(function(k){var x=g[k];out.push("▪️ "+x.nm+" — "+x.q+" "+L("əd.")+" × "+money(x.up)+" = *"+money(x.m)+"*"+(x.who?" ("+L("satdı: ")+x.who+")":""))});
-  out.push("");out.push("💰 *"+L("Cəmi")+": "+money(tot)+"*");
-  if(me){out.push("👤 "+L("Sizə")+": *"+money(mine)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(Math.max(0,Math.round((tot-all)*100)/100))+"*")}
-  else{out.push("👥 "+L("Satıcılara və mütəxəssislərə")+": *"+money(all)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(Math.round((tot-all)*100)/100)+"*")}
+function prodCopyText(per,title,period){var ps=prodSel[per];if(!ps||!ps.rows)return "";var me=ps.me,R=function(v){return Math.round(v*100)/100};
+  /* owner 23.11: «every specialist — how many and which products he sold»: one block per person who sold something or
+     has a part, with his products (pieces × price = sum), his sum and his part; then the totals */
+  var bySeller={};ps.sel.forEach(function(x){var k=x.by||"-",c=x.pid?catItem(x.pid):null,nm=c?c.name:(x.names||L("Məhsul")),
+      up=x.price||(x.qty?R(x.amount/x.qty):x.amount),pat=state.roles[x.by]!=="specialist"&&x.pid&&state.hasPatOf?patOf(x):"",
+      key=nm+"|"+up+"|"+pat,g=bySeller[k]||(bySeller[k]={order:[],it:{}});
+    if(!g.it[key]){g.it[key]={nm:nm,up:up,pat:pat,q:0,m:0};g.order.push(key)}g.it[key].q+=x.qty;g.it[key].m+=x.amount});
+  var tot=0,all=0,mine=0,out=["📊 *"+title+"*"];if(period)out.push("_"+period+"_");
+  ps.sel.forEach(function(x){tot+=x.amount;if(me)mine+=shareTo(x,me);var t=x.pid&&state.shares[x.pid];if(t)Object.keys(t).forEach(function(k2){all+=shareTo(x,k2)})});
+  ps.rows.forEach(function(w){var g=bySeller[w.k];if(!w.q&&!(w.sh>0))return;
+    out.push("");out.push("👤 *"+w.name+"* — "+(w.q?w.q+" "+L("əd.")+", "+money(w.m):L("satış yoxdur"))+(state.hasShares?" · "+L("Payı")+" *"+money(w.sh)+"*":""));
+    if(g)g.order.forEach(function(k){var x=g.it[k];
+      out.push("   ▪️ "+x.nm+" — "+x.q+" × "+money(x.up)+" = "+money(x.m)+(x.pat&&(!me||x.pat!==me)?" ("+L("pasiyent")+": "+(state.staff[x.pat]||"")+")":(x.pat===""&&state.hasPatOf&&state.roles[w.k]==="agent"?" ("+L("Keçici")+")":"")))});
+    if(!w.q&&w.sh>0)out.push("   "+L("öz pasiyentlərinə edilən satışlardan"))});
+  if(out.length<=(period?3:2)){out.push("");out.push(L("Bu dövrdə məhsul satılmayıb."))}
+  tot=R(tot);all=R(all);mine=R(mine);
+  out.push("");out.push("💰 *"+L("Cəmi")+": "+R(ps.sel.reduce(function(a,x){return a+x.qty},0))+" "+L("əd.")+", "+money(tot)+"*");
+  if(me){out.push("👤 "+L("Sizə")+": *"+money(mine)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(Math.max(0,R(tot-all)))+"*")}
+  else{out.push("👥 "+L("Satıcılara və mütəxəssislərə")+": *"+money(all)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(R(tot-all))+"*")}
   return out.join("\n")}
 function prodStats(r,per){
   /* owner 23.11: a specialist sees the sales of his products by anyone (rows = who sold) and his part of each; an agent
@@ -4111,6 +4123,7 @@ function prodStats(r,per){
     Object.keys(state.shares[x.pid]).forEach(function(k){var v=shareTo(x,k);if(v>0&&state.staff[k]!=null&&!stHidden(k)){row(k).sh+=v;T.sh+=v}})});
   if(onlyMe)row(me);else Object.keys(state.staff).forEach(function(k){if((isAgent(k)||state.roles[k]==="specialist")&&!stHidden(k))row(k)});
   var rows=Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return (a.k===me&&onlyMe?-1:0)-(b.k===me&&onlyMe?-1:0)||b.m-a.m||String(a.name).localeCompare(String(b.name))});
+  prodSel[per].rows=rows;prodSel[per].T=T;
   /* owner 23.11: two tables again — 1) per seller: pieces, sum, part; 2) per product: pieces and sum */
   var h='<div class="pay big" data-st="prod-'+per+'"><div class="head"><b>'+L("Məhsul satışları")+'</b>'+copyB()+'</div><div class="hscroll"><table class="stt"><thead><tr>'+
     '<th>'+L("Satan")+'</th><th class="num">'+L("Satış")+'</th><th class="num">'+L("Məbləğ")+'</th>'+(sh?'<th class="num">'+L("Payı")+'</th>':'')+'</tr></thead><tbody>';
@@ -4993,7 +5006,7 @@ document.addEventListener("click",function(e){
     var sec0=document.querySelector('#top [data-act="st-sec"][aria-pressed="true"]');
     var st0=sec0?sec0.textContent.trim():"",ht0=hd2?hd2.textContent.trim():"";
     var ctx=waText(tb2,st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");
-    var dst=b.closest(".pay").getAttribute("data-st")||"";if(/^prod-/.test(dst))ctx+=prodCopyExtra(dst.slice(5));
+    var dst=b.closest(".pay").getAttribute("data-st")||"";if(/^prod-/.test(dst)){var pct=prodCopyText(dst.slice(5),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(pct)ctx=pct}
     copyText(ctx,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},function(){openSheet({type:"stcopy",text:ctx})});
     return;
   }
