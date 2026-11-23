@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-ONomq9NTsi7X/lVkWhXs/jqPvE5iYj7q4MN5pYtz8h8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-iEUu+WmJf+Xan8CTOtYMaz0R9etNigbOJ5dqj6TyuHA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -854,7 +854,7 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faiz və ya məbləğ yazır).":"«Доля» — часть от проданных вами товаров, которая остаётся вам (процент или сумму для каждого товара задаёт админ).",
 "Kim neçə seans yazıb":"Кто сколько сеансов записал",
 "Vəzifə":"Роль",
-"Dövrdə yazılan və ləğv olunmayan qəbullar (seansın hansı günə yazılmasından asılı olmayaraq).":"Записи, сделанные за период и не отменённые (на какой бы день ни был сеанс).",
+"Dövrdə yazılan bütün qəbullar, sonra ləğv olunanlar da daxil (seansın hansı günə yazılmasından asılı olmayaraq).":"Все записи, сделанные за период, включая потом отменённые (на какой бы день ни был сеанс).",
 "Rəqəmlər {t} vəziyyətinə görədir; statistikada nə dəyişsə, fayl dərhal yenidən hazırlanır. Yüklənmiş fayl öz-özünə dəyişmir — yeni rəqəmlər üçün yenidən yükləyin.":"Цифры на {t}; если в статистике что-то меняется, файл сразу готовится заново. Уже скачанный файл сам не меняется — для новых цифр скачайте снова.",
 "Məhsullar (ədəd)":"Товары (шт.)",
 "Faizlər":"Проценты",
@@ -932,7 +932,7 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "«Bu həftə» — indiki həftə, hələ bitməyib. «Keçən həftə» — son bitmiş həftə: indi {a}. ‹ ilə daha əvvəlki həftələrə baxmaq olar.":"«Эта неделя» — текущая, ещё не закончилась. «Прошлая неделя» — последняя законченная: сейчас {a}. Кнопкой ‹ можно смотреть более ранние недели.",
 "Ay ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl bitir (4 və ya 5 həftə). «Keçən ay» — son bitmiş ay: indi {m}.":"Месяц начинается с первой пятницы месяца и заканчивается за день до первой пятницы следующего (4 или 5 недель). «Прошлый месяц» — последний законченный: сейчас {m}.",
 "<li><b>Müraciət WP / SŞ</b> — WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlər; işçilər rəqəmə toxunub özləri yazır. <b>ümumi</b> = WP + SŞ.</li>":"<li><b>Обращения WP / СС</b> — обращения из WhatsApp и соцсетей; сотрудники вписывают число сами, нажав на него. <b>всего</b> = WP + СС.</li>",
-"<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı qəbullar (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>":"<li><b>Записал</b> — записи, сделанные агентом за период (по дню записи). <b>Успешные</b> — неотменённые сеансы в дни периода. <b>Отмена</b> — сеансы в дни периода, у которых нажали «Отменить».</li>",
+"<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı bütün qəbullar, sonra ləğv olunanlar da daxil (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>":"<li><b>Записал</b> — все записи, сделанные агентом за период, включая потом отменённые (по дню записи). <b>Успешные</b> — неотменённые сеансы в дни периода. <b>Отмена</b> — сеансы в дни периода, у которых нажали «Отменить».</li>",
 "<li>Seansın vaxtı bitəndə ləğv olunmayan hər qəbul uğurlu sayılır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>":"<li>Когда время сеанса прошло, каждая неотменённая запись считается успешной. Запись, сделанная по ошибке, удаляется кнопкой «Удалить совсем» и нигде не считается.</li>",
 "<li>Satış rəqəmlərinə yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür; mütəxəssisin özünün yazdığı qəbul «·» ilə göstərilir, amma Xidmətlər, Yer və Pul cədvəllərində sayılır.</li>":"<li>В цифры продаж попадают только записи агентов и админов; запись, сделанная самим специалистом, показана «·», но считается в услугах, месте и деньгах.</li>",
 "<li>Satış agenti yalnız öz sətrini görür. Pul statistikasını yalnız adminlər görür.</li>":"<li>Агент продаж видит только свою строку. Денежную статистику видят только админы.</li>",
@@ -1870,7 +1870,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123072602";
+var APP_VERSION="20261123080710";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3369,8 +3369,9 @@ function statData(kind,r,per){
   }else state.appts.forEach(function(a){
     if(onlyMe&&a.by!==onlyMe)return;
     if((kind==="sales"||kind==="today")&&stHidden(a.by))return;
-    if(kind==="today"){if(gone(a)||a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here */row(uk(a.by),who(a.by)).a++;T.a++;return}
-    var g0=gone(a),inB=!g0&&a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),inC=g0&&a.date>=r.s&&a.date<=r.end,x;
+    if(kind==="today"){if(a.created!==r.s||a.date<r.s||isSpec(a.by))return;   /* written that day for that day or later; bookings put into days already past are not counted here. Owner 23.11: cancelled ones count too — they were written */row(uk(a.by),who(a.by)).a++;T.a++;return}
+    /* owner 23.11: «Yazdı» = every booking written in the period, also the ones cancelled later (they were written) */
+    var g0=gone(a),inB=!!a.created&&a.created>=r.s&&a.created<=r.end,inS=a.date>=r.s&&a.date<=r.end&&done(a),inC=g0&&a.date>=r.s&&a.date<=r.end,x;
     if(!inB&&!inS&&!inC)return;
     if(kind==="sales"){if(isSpec(a.by))return;x=row(uk(a.by),who(a.by))}
     else{var rd=reader(a.readerId);x=row(a.readerId,rd?rd.name:"—")}
@@ -3544,7 +3545,7 @@ function rulesBox(){
     '<li>'+tf(L("«Bu həftə» — indiki həftə, hələ bitməyib. «Keçən həftə» — son bitmiş həftə: indi {a}. ‹ ilə daha əvvəlki həftələrə baxmaq olar."),{a:rg(wl.s,wl.e)})+'</li>'+
     '<li>'+tf(L("Ay ayın ilk cüməsindən başlayır və növbəti ayın ilk cüməsindən bir gün əvvəl bitir (4 və ya 5 həftə). «Keçən ay» — son bitmiş ay: indi {m}."),{m:ml.name+" ("+rg(ml.s,ml.e)+")"})+'</li>'+
     L("<li><b>Müraciət WP / SŞ</b> — WhatsApp-dan və sosial şəbəkələrdən gələn müraciətlər; işçilər rəqəmə toxunub özləri yazır. <b>ümumi</b> = WP + SŞ.</li>")+
-    L("<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı qəbullar (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>")+
+    L("<li><b>Yazdı</b> — agentin həmin dövrdə yazdığı bütün qəbullar, sonra ləğv olunanlar da daxil (yazıldığı günə görə). <b>Uğurlu</b> — dövrün günlərində olan və ləğv olunmayan seanslar. <b>Ləğv</b> — dövrün günlərində «Ləğv et» basılan seanslar.</li>")+
     L("<li>Seansın vaxtı bitəndə ləğv olunmayan hər qəbul uğurlu sayılır. Səhvən yazılmış qəbul «Tamamilə sil» ilə silinir və heç yerdə sayılmır.</li>")+
     L("<li>Satış rəqəmlərinə yalnız satış agentlərinin və adminlərin yazdığı qəbullar düşür; mütəxəssisin özünün yazdığı qəbul «·» ilə göstərilir, amma Xidmətlər, Yer və Pul cədvəllərində sayılır.</li>")+
     L("<li>Satış agenti yalnız öz sətrini görür. Pul statistikasını yalnız adminlər görür.</li>")+
@@ -3985,12 +3986,12 @@ function catalogSheet(){
 }
 /* «Məhsul» in Statistika: by product and by seller */
 /* owner 22.11: at the end of every statistics — every sales agent and specialist (and admin): how many sessions he
-   wrote in the period (bookings written on its days, not cancelled; the same table in Excel). An agent or a specialist
+   wrote in the period (bookings written on its days, cancelled ones too since 23.11; the same table in Excel). An agent or a specialist
    sees his own line. */
 function sessTable(r,per){
   var onlyMe=isAdmin()||statAll?null:auth.user.id,by={},T=0;
   var add=function(k){if(!by[k])by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),n:0}};
-  state.appts.forEach(function(a){if(gone(a)||!a.created||a.created<r.s||a.created>r.end||stHidden(a.by))return;if(onlyMe&&a.by!==onlyMe)return;
+  state.appts.forEach(function(a){if(!a.created||a.created<r.s||a.created>r.end||stHidden(a.by))return;if(onlyMe&&a.by!==onlyMe)return;   /* owner 23.11: cancelled ones count too */
     var k=a.by&&state.staff[a.by]!=null?a.by:"-";add(k);by[k].n++;T++});
   if(onlyMe)add(onlyMe);else Object.keys(state.staff).forEach(function(k){if(state.roleSet[k]&&!stHidden(k))add(k)});
   var rows=Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return b.n-a.n||String(a.name).localeCompare(String(b.name))});
@@ -3998,7 +3999,7 @@ function sessTable(r,per){
   return '<div class="pay" data-st="sess-'+per+'"><div class="head"><b>'+L("Kim neçə seans yazıb")+'</b>'+copyB()+'</div><table class="stt"><thead><tr><th>'+L("Kim")+'</th><th>'+L("Vəzifə")+'</th><th class="num">'+L("Seans")+'</th></tr></thead><tbody>'+
     rows.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(role(x.k))+'</td><td class="num">'+x.n+'</td></tr>'}).join("")+
     '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td></td><td class="num">'+T+'</td></tr></tfoot></table>'+
-    '<p class="hint">'+L("Dövrdə yazılan və ləğv olunmayan qəbullar (seansın hansı günə yazılmasından asılı olmayaraq).")+'</p></div>';
+    '<p class="hint">'+L("Dövrdə yazılan bütün qəbullar, sonra ləğv olunanlar da daxil (seansın hansı günə yazılmasından asılı olmayaraq).")+'</p></div>';
 }
 /* a copy button that copies the table it stands over, exactly as shown (owner 22.11: screen, copy and Excel the same) */
 function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+L("Kopyala")+'</button>'}
