@@ -1,0 +1,4 @@
+run 1: scroll-day 0, open-window 56, close-window 0, open-window-2 0, close-window-2 0, tab-stats 132, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 125, close-window 0, open-window-2 0, close-window-2 0, tab-stats 149, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 66, close-window 0, open-window-2 0, close-window-2 0 (other 53), tab-stats 149, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: open-window (3 frames in 3/3 runs, max 125 ms, during overlay:fadein,sheet-title:rise,sheet:up2,I:rip); tab-stats (3 frames in 3/3 runs, max 149 ms, during [object SVGAnimatedString]:pop,I:rip)

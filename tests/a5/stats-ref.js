@@ -1,11 +1,15 @@
 // A5-K4 acceptance: every number of «Ümumi cədvəl» (Yazdı, Uğurlu, Ləğv per person; sessions per service and place; the
 // totals) and of «Kim neçə seans yazıb» on the screen equals an independent SQL count — 20 combinations of period, offset,
 // role and «today» (year change, 29 February, Friday/Thursday borders, Baku midnight). The SQL is written from the rules
+// (owner 23.11: «Yazdı» and «Kim neçə seans yazıb» = every booking written in the period, cancelled ones too)
 // in HANDOFF.md §7 (not from the app's code); the periods are computed here from the same rules.
 // Needs psql and the local PostgreSQL of audit 5 (127.0.0.1:54330, database eqv). Run: cd tests && node a5/stats-ref.js
 const { execFileSync } = require("child_process");
 const { open, seed, OWNER, AGENT, SPEC, R1, R2, uuid } = require("../lib");
-const PSQL = (sql) => execFileSync("psql", ["-h", "127.0.0.1", "-p", "54330", "-U", "postgres", "-d", "eqv", "-tAq", "-v", "ON_ERROR_STOP=1", "-f", "-"], { input: sql, encoding: "utf8", maxBuffer: 1e8 });
+// 23.11: any running PostgreSQL — RUQYA_PG_PORT (as the other database tests); the database «eqv» is made if missing
+const PORT = process.env.RUQYA_PG_PORT || "54330";
+try { execFileSync("psql", ["-h", "127.0.0.1", "-p", PORT, "-U", "postgres", "-tAq", "-c", "create database eqv"], { stdio: "ignore" }); } catch (e) {}
+const PSQL = (sql) => execFileSync("psql", ["-h", "127.0.0.1", "-p", PORT, "-U", "postgres", "-d", "eqv", "-tAq", "-v", "ON_ERROR_STOP=1", "-f", "-"], { input: sql, encoding: "utf8", maxBuffer: 1e8 });
 const A2 = "33333333-3333-4333-8333-333333333333", A3 = "44444444-4444-4444-8444-444444444444";
 const day = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 const dow = (d) => new Date(d + "T12:00:00Z").getUTCDay();   // 0 Sunday … 5 Friday
@@ -78,12 +82,12 @@ module.exports.period = period;
     const only = who === OWNER ? "" : ` and created_by='${who}'`;
     const sales = JSON.parse(PSQL(`${base} select coalesce(json_object_agg(w, json_build_array(y,u,l)),'{}') from (
         select w, sum(y)::int y, sum(u)::int u, sum(l)::int l from (
-          select created_by::text w, (st not in ('cancel','noshow') and cd between '${P.s}' and '${P.e}')::int y,
+          select created_by::text w, (cd between '${P.s}' and '${P.e}')::int y,   -- owner 23.11: cancelled ones count too
                  (date between '${P.s}' and '${P.e}' and st not in ('cancel','noshow') and ended)::int u,
                  (date between '${P.s}' and '${P.e}' and st in ('cancel','noshow'))::int l
           from a where created_by <> '${SPEC}'${only}) x group by w) z`));
     const svc = JSON.parse(PSQL(`${base} select coalesce(json_object_agg(k, n),'{}') from (select service||'|'||coalesce(created_by::text,'') k, count(*)::int n from a where date between '${P.s}' and '${P.e}' and st not in ('cancel','noshow')${only} group by 1) x`));
-    const sess = JSON.parse(PSQL(`${base} select coalesce(json_object_agg(w, n),'{}') from (select created_by::text w, count(*)::int n from a where st not in ('cancel','noshow') and cd between '${P.s}' and '${P.e}'${only} group by 1) x`));
+    const sess = JSON.parse(PSQL(`${base} select coalesce(json_object_agg(w, n),'{}') from (select created_by::text w, count(*)::int n from a where cd between '${P.s}' and '${P.e}'${only} group by 1) x`));   // owner 23.11: cancelled ones count too
     const label = c.k + (c.off ? "-" + c.off : "") + " today " + c.today + " as " + (who === OWNER ? "admin" : "agent");
     if (!ui) { bad.push(label + ": no table"); continue; }
     const nameOf = (id) => names[id] || "Adsız";

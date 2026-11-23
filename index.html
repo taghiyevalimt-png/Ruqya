@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-SG1DypozdLToee802N+yPeKMrze/2DRZ5zWu+qKbASE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Pp9DbXB0TrGFhb5Kl5PsBrE60lRqnmazb4d/Q+QfV1Q='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -106,6 +106,8 @@ main{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 16px;display:flex;flex
    scrolls instead (a button with overflow:hidden was pressed flat under the next one). Blocks that fill the screen
    (calendar, list, Excel view) keep their own flex:1. */
 main>*{flex-shrink:0}
+/* 23.11 (owner, photo of a break): the blocks of a window are not squeezed either — the window scrolls */
+.sheet>*{flex-shrink:0}
 
 .tabs{display:flex;background:var(--surface);border-top:1px solid var(--line)}
 .tabs button{flex:1;background:none;border:0;padding:9px 4px 11px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--muted);font-weight:500}
@@ -339,8 +341,8 @@ h2.kindh .kindsw button{font-size:15px;padding:9px 8px}
 .field input.gtitle:focus{border-bottom-color:var(--accent);outline:none}
 .tog{display:flex;align-items:center;gap:10px;height:48px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:0 12px;font-size:15px;color:var(--ink);width:100%}
 .tog i{position:relative;width:38px;height:22px;border-radius:11px;background:var(--line);flex:none;transition:background .15s}
-.tog i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
-.tog[aria-checked="true"] i{background:var(--accent)}.tog[aria-checked="true"] i::after{left:19px}
+.tog i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.tog[aria-checked="true"] i{background:var(--accent)}.tog[aria-checked="true"] i::after{transform:translateX(16px)}
 .pay.scope{display:flex;flex-direction:column;gap:8px;padding:12px}.pay.scope p{margin:0 0 2px}
 .card.brkrow{border-style:dashed;background:repeating-linear-gradient(135deg,var(--hatch) 0,var(--hatch) 6px,transparent 6px,transparent 12px)}
 .card.brkrow .who b{font-weight:600}
@@ -370,6 +372,7 @@ select.unit{height:40px;border:1px solid var(--line);border-radius:10px;backgrou
 .pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 128px 72px;align-items:center;gap:6px;font-size:15px}
 /* owner 23.11: «Kimin pasiyentidir?» — every specialist visible (lines wrap), «Keçici» on its own full line */
 .chips.patch{flex-wrap:wrap;overflow:visible;white-space:normal}.chips.patch .chip{flex:0 0 auto;margin-bottom:0}.chips.patch .neutral{flex:1 1 100%;text-align:center}
+.sheet .ptop{margin:2px 0 -4px}
 .wbtns{display:flex;flex-direction:column;gap:8px}.nogap .wbtns>*+*{margin-top:8px}.psrow{grid-template-columns:1fr 136px 78px}.psrow select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 4px;font:inherit;font-size:14px;color:inherit;width:100%;min-width:0}.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
 .pctrow i{font-style:normal;color:var(--muted)}.pctrow b{text-align:right;color:var(--accent)}
 .ptotal.mine{border-top:0;padding-top:0}.ptotal.mine b{color:var(--accent);font-size:16px}
@@ -571,8 +574,8 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.65}
 /* Bottom tabs */
 .tabs{background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 .tabs button{position:relative;padding-top:10px;letter-spacing:.01em}
-.tabs button::before{content:"";position:absolute;top:0;left:50%;width:0;height:2px;border-radius:0 0 2px 2px;background:var(--accent);transition:width .28s var(--ease),left .28s var(--ease)}
-.tabs button[aria-current="page"]::before{width:28px;left:calc(50% - 14px)}
+.tabs button::before{content:"";position:absolute;top:0;left:calc(50% - 14px);width:28px;height:2px;border-radius:0 0 2px 2px;background:var(--accent);transform:scaleX(0);transition:transform .28s var(--ease)}
+.tabs button[aria-current="page"]::before{transform:scaleX(1)}
 .tabs button[aria-current="page"] svg{stroke-width:2}
 
 /* Bottom sheet: fades and glides in */
@@ -585,6 +588,9 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.65}
 @keyframes up{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 main.enter{animation:fadein .2s var(--ease)}
+.prep,.prep>*,.prep>*>*{animation-play-state:paused!important}
+/* 23.11 smoothness: statistics tables below the screen are laid out only when scrolled to */
+main>.pay.big{content-visibility:auto;contain-intrinsic-size:auto 420px}
 @media (prefers-reduced-motion: reduce){.overlay,.sheet,main.enter{animation:none}}
 
 /* Calendar */
@@ -755,23 +761,23 @@ button:active:not(:disabled),a.wa:active,.chip:active{transform:scale(.955);tran
 .fab::after{content:"";position:absolute;top:0;bottom:0;left:0;width:45%;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.22) 50%,transparent 100%);transform:translateX(-160%);animation:sheen 6.5s var(--ease) 2.5s infinite;pointer-events:none}
 @keyframes sheen{0%{transform:translateX(-160%)}18%,100%{transform:translateX(330%)}}
 /* bottom tabs: a soft pill behind the chosen one, the icon pops */
-.tabs{background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);box-shadow:0 -10px 30px -22px rgba(0,0,0,.35)}
+.tabs{background:color-mix(in srgb,var(--surface) 97%,transparent);box-shadow:0 -10px 30px -22px rgba(0,0,0,.35)}
 .tabs button::after{content:"";position:absolute;top:6px;left:50%;width:56px;height:30px;margin-left:-28px;border-radius:15px;background:var(--accent-soft);transform:scale(.4);opacity:0;transition:transform .38s var(--spring),opacity .2s var(--ease);z-index:-1}
 .tabs button{z-index:0;isolation:isolate}
 .tabs button[aria-current="page"]::after{transform:none;opacity:1}
 .tabs button[aria-current="page"] svg{animation:pop .45s var(--spring)}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:none}}
 /* windows: glide up with a spring, fields follow one by one; closing slides away */
-.overlay{-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.overlay{background:rgba(0,0,0,.6)}   /* 23.11 smoothness: no blur of the page behind (recomputed on every frame) */
 .sheet{animation:up2 .46s var(--out)}
 @keyframes up2{from{transform:translateY(100%)}to{transform:none}}
 .sheet::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:-8px auto -4px;flex:none}
-.sheet.opening>*{animation:rise .42s var(--out) both}
+.sheet.opening{will-change:transform}.sheet.opening>*{animation:rise .42s var(--out) both}.sheet.opening>*:nth-child(n+8){animation:none}
 .sheet.opening>*:nth-child(2){animation-delay:.03s}.sheet.opening>*:nth-child(3){animation-delay:.06s}.sheet.opening>*:nth-child(4){animation-delay:.09s}.sheet.opening>*:nth-child(5){animation-delay:.12s}.sheet.opening>*:nth-child(6){animation-delay:.15s}.sheet.opening>*:nth-child(n+7){animation-delay:.18s}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .ghostout{position:fixed;top:0;right:0;bottom:0;left:0;z-index:11;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);animation:fadeaway .26s var(--ease) forwards}
-.ghostout .sheet{animation:down .26s var(--ease) forwards}.ghostout .sheet>*{animation:none}
-@keyframes fadeaway{to{background:transparent}}
+.ghostout{will-change:opacity}.ghostout .sheet{will-change:transform;animation:down .26s var(--ease) forwards}.ghostout .sheet>*{animation:none}
+@keyframes fadeaway{to{opacity:0}}
 @keyframes down{to{transform:translateY(60%);opacity:0}}
 /* a new tab: the blocks come in one after another */
 main.enter>*{animation:rise .45s var(--out) both}
@@ -780,10 +786,10 @@ main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
 /* inputs: a gold/black ring when typing */
 .field input:focus,.field select:focus,.field textarea:focus,.search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 /* switches, the «now» line, toasts */
-.tog i{transition:background .25s var(--ease)}.tog i::after{transition:left .35s var(--spring);box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.nowline::before{animation:nowp 2.4s ease-in-out infinite}
-@keyframes nowp{0%,100%{box-shadow:0 0 0 0 rgba(217,48,37,.45)}50%{box-shadow:0 0 0 6px rgba(217,48,37,0)}}
-#toast{border-radius:14px;box-shadow:0 14px 34px -14px rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.tog i{transition:background .25s var(--ease)}.tog i::after{transition:transform .35s var(--spring);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.nowline::after{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--now,#d93025);opacity:0;will-change:transform,opacity;animation:nowp 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes nowp{0%{transform:scale(1);opacity:.45}60%,100%{transform:scale(2.2);opacity:0}}
+#toast{border-radius:14px;box-shadow:0 14px 34px -14px rgba(0,0,0,.6)}
 /* calendar blocks: a gentle light from above */
 #cal .ev{background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%)!important;border-radius:10px}
 #cal .ev.cancel{background-image:none!important}
@@ -794,7 +800,7 @@ main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
 .todaysum b{background:var(--btn);-webkit-background-clip:text;background-clip:text;color:transparent}
 @media (prefers-reduced-motion: reduce){
   .rpw,.fab::after{display:none}
-  .sheet,.sheet>*,main.enter>*,.ghostout,.ghostout .sheet,.tabs button[aria-current="page"] svg,.nowline::before{animation:none!important}
+  .sheet,.sheet>*,main.enter>*,.ghostout,.ghostout .sheet,.tabs button[aria-current="page"] svg,.nowline::before,.nowline::after{animation:none!important}
   button,.chip,.card,.pbtn{transition:none!important}
 }
 </style>
@@ -842,6 +848,13 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
+"Satılan məhsullar":"Проданные товары",
+"əd.":"шт.",
+"satdı: ":"продал(а): ",
+"Sizə":"Вам",
+"Satıcılara və mütəxəssislərə":"Продавцам и специалистам",
+"Əsas məhsullar":"Основные товары",
+"Digər məhsullar":"Другие товары",
 "Satış agenti — yalnız özü satanda. Mütəxəssis — öz pasiyentinə satılanda: özü satanda və ya agent satışda onu seçəndə. «Keçici» satışdan mütəxəssisə heç nə qalmır.":"Агент продаж — только когда продаёт сам. Специалист — когда продают его пациенту: сам или агент, выбравший его в продаже. С продажи «Прохожему» специалисту ничего не остаётся.",
 "Sizin satışlarınız və sizin pasiyentlərinizə edilən satışlar (hansı agent satıbsa). «Payı» — hər satışdan sizə qalan hissə.":"Ваши продажи и продажи вашим пациентам (с тем, какой агент продал). «Доля» — что остаётся вам с каждой продажи.",
 "«Payı» — hər kəsə qalan hissə: agentə öz satışından, mütəxəssisə öz pasiyentlərinə edilən satışlardan. Kassa → ⚙ Məhsullar → məhsul → «Kimə nə qalır».":"«Доля» — что остаётся каждому: агенту — с его продаж, специалисту — с продаж его пациентам. Касса → ⚙ Товары → товар → «Кому что остаётся».",
@@ -1892,7 +1905,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123123902";
+var APP_VERSION="20261123132932";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3950,14 +3963,23 @@ function cashMain(){
 }
 /* owner 22.11: «Məhsul satışı» — the admin's products as buttons with name and price; one tap = one piece,
    two taps = two; the sum is counted at the bottom. Saved as one line per product (qty × price). */
+/* owner 23.11: the top products of the sale window, in this order; names compared without case and Azerbaijani letters,
+   and — when the catalog has the name without «Ruqyalı» (e.g. «Sidr tozu») — without that word */
+var TOP_PRODUCTS=["Ruqyalı su","Ruqyalı içməli su","Ruqyalı duzlu su","Ruqyalı sidr tozu","Ruqyalı zeytun yağı","Ruqyalı gül suyu","Ruqyalı nanə suyu"];
+function topProducts(list){var out=[],by={};list.forEach(function(c){var k=fold(c.name);if(!by[k])by[k]=c});
+  TOP_PRODUCTS.forEach(function(n){var k=fold(n),c=by[k]||by[k.replace(/^ruqyali /,"")];if(c&&out.indexOf(c)<0)out.push(c)});return out}
 function sellForm(){
   var x=sheet,cnt=x.cnt||(x.cnt={}),list=state.catalog.filter(function(c){return !c.archived||cnt[c.id]}),tot=0,qn=0;
   list.forEach(function(c){var n=cnt[c.id]||0;tot+=n*c.price;qn+=n});
   var h='<h2>'+L("Məhsul satışı")+CLOSE+'</h2>';
   if(!list.length)return h+'<p class="hint">'+(isAdmin()?L("Hələ məhsul yoxdur. Əvvəlcə məhsulları əlavə edin."):L("Hələ məhsul yoxdur. Admin məhsulları əlavə etməlidir."))+'</p>'+(isAdmin()?'<button class="primary" data-act="catalog">'+L("Məhsul əlavə et")+'</button>':'');
-  h+='<div class="pgrid">'+list.map(function(c){var n=cnt[c.id]||0;
+  var pb=function(c){var n=cnt[c.id]||0;
     return '<div class="pbtnw"><button type="button" class="pbtn'+(n?' on':'')+'" data-act="sell-add" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name+", "+money(c.price)+(n?", "+n:""))+'"><b>'+esc(c.name)+'</b><span class="num">'+money(c.price)+'</span>'+(n?'<i class="num">'+n+'</i>':'')+'</button>'+
-      (n?'<button type="button" class="pminus" data-act="sell-sub" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Bir az çıx")+": "+c.name)+'">−</button>':'')+'</div>'}).join("")+'</div>';
+      (n?'<button type="button" class="pminus" data-act="sell-sub" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Bir az çıx")+": "+c.name)+'">−</button>':'')+'</div>'};
+  /* owner 23.11: the most sold products first, in his order, then all the others */
+  var top=topProducts(list),rest=list.filter(function(c){return top.indexOf(c)<0});
+  if(top.length)h+='<h3 class="sec ptop">'+L("Əsas məhsullar")+'</h3><div class="pgrid">'+top.map(pb).join("")+'</div>'+(rest.length?'<h3 class="sec ptop">'+L("Digər məhsullar")+'</h3>':'');
+  if(rest.length)h+='<div class="pgrid">'+rest.map(pb).join("")+'</div>';
   if(needsPat())h+=patPicker(x.pat||"");
   h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||today)+'"></div><div></div></div>'+notToday(x.date||today);
   h+='<div class="ptotal big"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div>';
@@ -4055,6 +4077,21 @@ function sessTable(r,per){
 function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+L("Kopyala")+'</button>'}
 /* owner 22.11: «Məhsul» is ONE table — sellers as rows, every product as a column (pieces), then pieces, sum and the
    seller's part; the last row is the sum of every product. Everybody but an admin sees only his own row. */
+/* owner 23.11: the copy of «Məhsul satışları» for WhatsApp also lists what was sold — each product, how many, its
+   price — and ends with the total, what stays with the centre and what with the person copying (the screen is unchanged) */
+var prodSel={};
+function prodCopyExtra(per){var ps=prodSel[per];if(!ps||!ps.sel.length)return "";var me=ps.me,g={},order=[],tot=0,mine=0,all=0;
+  ps.sel.forEach(function(x){var c=x.pid?catItem(x.pid):null,nm=c?c.name:(x.names||L("Məhsul")),up=x.price||(x.qty?Math.round(x.amount/x.qty*100)/100:x.amount),
+      who=me&&x.by!==me?(state.staff[x.by]||""):"",k=nm+"|"+up+"|"+who;
+    if(!g[k]){g[k]={nm:nm,up:up,who:who,q:0,m:0};order.push(k)}g[k].q+=x.qty;g[k].m+=x.amount;tot+=x.amount;
+    if(me)mine+=shareTo(x,me);var t=x.pid&&state.shares[x.pid];if(t)Object.keys(t).forEach(function(k2){all+=shareTo(x,k2)})});
+  tot=Math.round(tot*100)/100;mine=Math.round(mine*100)/100;all=Math.round(all*100)/100;
+  var out=["","","📦 *"+L("Satılan məhsullar")+"*"];
+  order.forEach(function(k){var x=g[k];out.push("▪️ "+x.nm+" — "+x.q+" "+L("əd.")+" × "+money(x.up)+" = *"+money(x.m)+"*"+(x.who?" ("+L("satdı: ")+x.who+")":""))});
+  out.push("");out.push("💰 *"+L("Cəmi")+": "+money(tot)+"*");
+  if(me){out.push("👤 "+L("Sizə")+": *"+money(mine)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(Math.max(0,Math.round((tot-all)*100)/100))+"*")}
+  else{out.push("👥 "+L("Satıcılara və mütəxəssislərə")+": *"+money(all)+"*");out.push("🏢 "+L("Mərkəzə")+": *"+money(Math.round((tot-all)*100)/100)+"*")}
+  return out.join("\n")}
 function prodStats(r,per){
   /* owner 23.11: a specialist sees the sales of his products by anyone (rows = who sold) and his part of each; an agent
      sees his own sales; an admin sees everybody, and «Payı» is what each person gets (own sales + his products) */
@@ -4063,6 +4100,7 @@ function prodStats(r,per){
   if(!onlyMe)state.catalog.forEach(function(c){if(!c.archived)col(c.id,c.name)});
   var row=function(k){return by[k]||(by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),q:0,m:0,sh:0,pq:{}})};
   var sel=myProds().filter(function(x){return x.date>=r.s&&x.date<=r.end&&(!onlyMe||x.by===me||(spec&&patOf(x)===me))});
+  prodSel[per]={sel:sel,me:onlyMe};
   sel.forEach(function(x){
     var c=x.pid?catItem(x.pid):null,k=c?c.id:(x.pid?"p:"+(x.names||""):"-");col(k,c?c.name:(x.pid?(x.names||L("Məhsul")):L("Başqa (əl ilə yazılıb)")));
     var w=row(x.by||"-");w.pq[k]=(w.pq[k]||0)+x.qty;w.q+=x.qty;w.m+=x.amount;
@@ -4615,6 +4653,11 @@ function meForm(){
 /* ---------- sheets ---------- */
 /* Heavy drawing right after a tap waits for the next frame: the tap itself is answered at once (the button shows
    it was pressed, the tab lights up), so the phone never looks stuck (INP). */
+/* 23.11 smoothness: a window or a tab is built in one heavy frame; its slide/fade waits paused («prep») until that frame
+   is on the screen and starts on the next one, so every frame of the movement is a light one (one frame later, no jerk) */
+function playNext(els){els=els.filter(Boolean);if(!els.length||!window.requestAnimationFrame)return;
+  els.forEach(function(e){e.classList.add("prep")});
+  requestAnimationFrame(function(){requestAnimationFrame(function(){els.forEach(function(e){e.classList.remove("prep")})})})}
 function afterPaint(fn){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(fn,0)});else setTimeout(fn,16)}
 /* P-03: names written in Cyrillic (in the patient hints of a booking window, the list...) need the Cyrillic part of
    the font; fetched only when first drawn, it re-laid out the whole window during its slide-in. Fetched once the
@@ -4643,7 +4686,7 @@ function openSheet(s){
     dropDraft();
   }
   /* owner 22.11: the fields come in one by one only when the window opens, not on every redraw */
-  (function(){var d=byId("sheet");d.classList.add("opening");clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},700)})();
+  (function(){var d=byId("sheet");d.classList.add("opening");playNext([d,byId("overlay")]);clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},760)})();
   unpinSheet();
   (function(){var d=byId("sheet"),h=d.querySelector("h2");if(h){h.id="sheet-title";d.setAttribute("aria-labelledby","sheet-title")}else d.removeAttribute("aria-labelledby");
     d.setAttribute("tabindex","-1");if(s.type!=="stcopy"){try{d.focus({preventScroll:true})}catch(e){d.focus()}}})();   /* the window, not a field: no phone keyboard pops up */
@@ -4906,7 +4949,7 @@ document.addEventListener("click",function(e){
     if(ui.tab!==b.dataset.tab){ui.tab=/^(day|stats|cash|patients|readers)$/.test(b.dataset.tab)?b.dataset.tab:"day";
       var tb1=document.querySelectorAll("#tabs button");for(var t1=0;t1<tb1.length;t1++){if(tb1[t1]===b)tb1[t1].setAttribute("aria-current","page");else tb1[t1].removeAttribute("aria-current")}
       byId("top").innerHTML="";var mm=byId("main");mm.innerHTML="";mm.scrollTop=0;mm.classList.remove("enter");
-      afterPaint(function(){mm.classList.add("enter");render();clearTimeout(enterT);enterT=setTimeout(function(){mm.classList.remove("enter")},800)});return}
+      afterPaint(function(){mm.classList.add("enter");render();playNext([mm]);clearTimeout(enterT);enterT=setTimeout(function(){mm.classList.remove("enter")},800)});return}
   }
   else if(act==="goto"){ui.date=b.dataset.d}
   else if(act==="np-list"){openSheet({type:"np"});return}
@@ -4950,6 +4993,7 @@ document.addEventListener("click",function(e){
     var sec0=document.querySelector('#top [data-act="st-sec"][aria-pressed="true"]');
     var st0=sec0?sec0.textContent.trim():"",ht0=hd2?hd2.textContent.trim():"";
     var ctx=waText(tb2,st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");
+    var dst=b.closest(".pay").getAttribute("data-st")||"";if(/^prod-/.test(dst))ctx+=prodCopyExtra(dst.slice(5));
     copyText(ctx,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},function(){openSheet({type:"stcopy",text:ctx})});
     return;
   }

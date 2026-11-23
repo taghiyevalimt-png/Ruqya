@@ -1,0 +1,4 @@
+run 1: scroll-day 0, open-window 120 (other 63), close-window 0 (other 60), open-window-2 0, close-window-2 0 (other 74), tab-stats 0 (other 161), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 121 (other 53), close-window 0 (other 72), open-window-2 0, close-window-2 53, tab-stats 120, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 54, close-window 0 (other 51), open-window-2 0, close-window-2 0 (other 55), tab-stats 117, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: open-window (3 frames in 3/3 runs, max 121 ms, during I:rip); close-window-2 (1 frames in 1/3 runs, max 53 ms, during ghostout:fadeaway,sheet tall:down,I:rip); tab-stats (2 frames in 2/3 runs, max 120 ms, during [object SVGAnimatedString]:pop,I:rip)

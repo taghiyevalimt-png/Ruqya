@@ -1,0 +1,3 @@
+run 1: open 1/62 slow, worst 83ms; close 1/99 slow, worst 50ms; open-2 1/179 slow, worst 50ms; close-2 2/47 slow, worst 67ms; tab-stats 1/60 slow, worst 83ms; tab-day 0/119 slow, worst 17ms; scroll 0/67 slow, worst 17ms; idle-day 0/179 slow, worst 17ms
+run 2: open 1/60 slow, worst 67ms; close 2/99 slow, worst 50ms; open-2 1/57 slow, worst 33ms; close-2 1/48 slow, worst 50ms; tab-stats 1/60 slow, worst 83ms; tab-day 0/119 slow, worst 17ms; scroll 0/203 slow, worst 17ms; idle-day 0/89 slow, worst 17ms
+run 3: open 1/61 slow, worst 67ms; close 1/99 slow, worst 33ms; open-2 1/182 slow, worst 33ms; close-2 1/203 slow, worst 50ms; tab-stats 1/61 slow, worst 100ms; tab-day 0/119 slow, worst 17ms; scroll 0/66 slow, worst 17ms; idle-day 0/89 slow, worst 17ms
