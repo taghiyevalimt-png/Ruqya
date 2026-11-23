@@ -50,8 +50,15 @@ public class WidgetTest extends BroadcastReceiver {
                 // "now": apply the 12-hour rule of the real widget at this moment (B-06 check)
                 long now = intent.getLongExtra("now", 0);
                 if (now > 0) d = MonthWidget.fresh(d, now);
-                Bitmap bmp = MonthWidget.render(ctx, d, intent.getIntExtra("off", 0),
-                        intent.getIntExtra("w", 360), intent.getIntExtra("h", 380), intent.getFloatExtra("density", 3f), 2500000L);
+                // owner 23.11: "kind" = day / week draws the new widgets; "at" = the date taken as today (sample data)
+                String kind = intent.getStringExtra("kind");
+                AgendaDraw.testToday = intent.getStringExtra("at");
+                int off = intent.getIntExtra("off", 0), w = intent.getIntExtra("w", 360), h = intent.getIntExtra("h", 380);
+                float dens = intent.getFloatExtra("density", 3f);
+                Bitmap bmp = "day".equals(kind) ? AgendaDraw.renderDay(d, off, w, h, dens, 2500000L, MonthWidget.dark(ctx, d))
+                        : "week".equals(kind) ? AgendaDraw.renderWeek(d, off, w, h, dens, 2500000L, MonthWidget.dark(ctx, d))
+                        : MonthWidget.render(ctx, d, off, w, h, dens, 2500000L);
+                AgendaDraw.testToday = null;
                 File f = new File(ctx.getFilesDir(), "widget_test.png");
                 FileOutputStream out = new FileOutputStream(f);
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, out);

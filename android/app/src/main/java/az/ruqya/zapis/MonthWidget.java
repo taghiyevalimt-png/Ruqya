@@ -203,6 +203,9 @@ public class MonthWidget extends AppWidgetProvider {
         for (int id : ids) {
             draw(ctx, mgr, id);
         }
+        // owner 23.11: the day and week widgets show the same data
+        AgendaWidget.updateAll(ctx, DayWidget.class);
+        AgendaWidget.updateAll(ctx, WeekWidget.class);
     }
 
     // B-06: the app signs out after 7 days without use (index.html IDLE_MS; owner 17.11, was 12 hours), but only while its page runs.

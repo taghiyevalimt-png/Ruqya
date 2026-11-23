@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Owner 23.11: «gündəlik» widget. The day is drawn as one picture (AgendaDraw.renderDay); the transparent boxes on
+     top catch taps. Proportions (header 16, list 84; header columns 52/15/15/18) match the drawing. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:contentDescription="Mərkəz" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="16" android:orientation="horizontal">
+            <FrameLayout android:id="@+id/title" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="52" />
+            <FrameLayout android:id="@+id/prev" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="15" />
+            <FrameLayout android:id="@+id/next" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="15" />
+            <FrameLayout android:id="@+id/add" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="18" />
+        </LinearLayout>
+
+        <FrameLayout android:id="@+id/body" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="84" />
+    </LinearLayout>
+</FrameLayout>

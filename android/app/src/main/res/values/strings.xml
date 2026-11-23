@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="widget_desc">Ayın qəbulları: hər gün kimin yazıldığı</string>
+    <string name="widget_day_desc">Günün qəbulları saat sırası ilə: vaxt, pasiyent, mütəxəssis</string>
+    <string name="widget_week_desc">Həftənin qəbulları: 7 gün, hər gün kimin yazıldığı</string>
 </resources>

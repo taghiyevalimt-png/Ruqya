@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-iEUu+WmJf+Xan8CTOtYMaz0R9etNigbOJ5dqj6TyuHA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-00ctbJ5w7sW9hSms42saS4/pNBzgZFwrFPpySo3m/qE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -364,7 +364,7 @@ select.unit{height:40px;border:1px solid var(--line);border-radius:10px;backgrou
 .pctgrid .pin{display:flex;align-items:center;gap:4px}.pctgrid input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:var(--ink);width:100%;min-width:0}
 .pctgrid i{font-style:normal}.stt small.pct{color:var(--muted);font-size:11px;font-weight:500}
 .pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 128px 72px;align-items:center;gap:6px;font-size:15px}
-.psrow{grid-template-columns:1fr 136px 78px}.psrow select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 4px;font:inherit;font-size:14px;color:inherit;width:100%;min-width:0}.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
+.wbtns{display:flex;flex-direction:column;gap:8px}.nogap .wbtns>*+*{margin-top:8px}.psrow{grid-template-columns:1fr 136px 78px}.psrow select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 4px;font:inherit;font-size:14px;color:inherit;width:100%;min-width:0}.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
 .pctrow i{font-style:normal;color:var(--muted)}.pctrow b{text-align:right;color:var(--accent)}
 .ptotal.mine{border-top:0;padding-top:0}.ptotal.mine b{color:var(--accent);font-size:16px}
 .pay.todaysum{flex-direction:row;justify-content:space-around;text-align:center}.todaysum div{display:flex;flex-direction:column;gap:2px}.todaysum b{font-size:26px}.todaysum span{font-size:13px;color:var(--muted)}
@@ -836,6 +836,12 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
+"Vidcet əlavə et":"Добавить виджет",
+"Gündəlik vidcet":"Виджет на день",
+"Həftəlik vidcet":"Виджет на неделю",
+"Aylıq vidcet":"Виджет на месяц",
+"<p class=\"hint\">Düyməyə basın — vidcet ana ekrana əlavə olunur. «Gündəlik» — günün qəbulları saat sırası ilə, «Həftəlik» — 7 gün, «Aylıq» — ay təqvimi. ‹ › başqa günə, həftəyə, aya keçir; günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>":"<p class=\"hint\">Нажмите кнопку — виджет добавится на главный экран. «На день» — записи дня по времени, «На неделю» — 7 дней, «На месяц» — календарь месяца. ‹ › — другой день, неделя, месяц; нажатие на день открывает его в приложении, «+» — новая запись. Данные обновляются, когда приложение открыто.</p>",
+"Bu vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.":"Для этого виджета нужна новая версия приложения: удалите старую и установите новую по ссылке.",
 "Yeni qəbul: qiymət və müddət":"Новая запись: цена и длительность",
 "Yeni qəbul açılanda bu qiymət və müddət özü yazılır; qəbulda hər dəfə dəyişmək olar. Boş — heç nə yazılmır. Köhnə qəbullar dəyişmir.":"Когда открывается новая запись, эти цена и длительность подставляются сами; в записи их всегда можно изменить. Пусто — ничего не подставляется. Старые записи не меняются.",
 "Hər yeni qəbulun qiyməti, ":"Цена каждой новой записи, ",
@@ -1870,7 +1876,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123080710";
+var APP_VERSION="20261123082128";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2580,10 +2586,13 @@ function pushWidget(){
     if(from<wmin)from=wmin;
     /* owner 22.11: the widget shows the same specialists as the calendar — the ones picked at the top (none picked = all) */
     state.appts.forEach(function(a){if(a.date<from||a.status==="cancel"||!shown(a.readerId))return;(by[a.date]=by[a.date]||[]).push(a)});
-    var d={};
+    /* owner 23.11: the day and week widgets also show the start time and the specialist, and more names: up to 30 a day
+       from a week back to two months ahead (older days keep 4 — only the month widget shows them) */
+    var d={},near0=addDays(today,-7),near1=addDays(today,62);
     Object.keys(by).forEach(function(k){
       var LN=by[k].sort(function(x,y){return mins(x.time)-mins(y.time)});n[k]=LN.length;
-      d[k]=LN.slice(0,4).map(function(a){var e=mins(a.time)+(a.dur||90);return [cut(String(a.name),24),rcolor(a.readerId),done(a)?"p":a.status==="noshow"?"n":"",e===e?e:-1]});
+      d[k]=LN.slice(0,k>=near0&&k<=near1?30:4).map(function(a){var m0=mins(a.time),e=m0+(a.dur||90),r=reader(a.readerId);
+        return [cut(String(a.name),24),rcolor(a.readerId),done(a)?"p":a.status==="noshow"?"n":"",e===e?e:-1,m0===m0?m0:-1,r?cut(String(r.name),16):""]});
     });
     json=JSON.stringify({u:0,s:0,f:from,d:d,n:n,l:LANG,t:wTheme()});
   }
@@ -4311,7 +4320,9 @@ function readersMain(){
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
   if(!wh)h+=widgetColorSeg();
-  if(!wh)h+=L('<button class="ghost" data-act="widget">Ana ekrana ay təqvimi vidceti əlavə et</button><p class="hint">Vidcet ayın günlərini və kimin yazıldığını göstərir. Günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
+  if(!wh)h+='<div class="wbtns" role="group" aria-label="'+esc(L("Vidcet əlavə et"))+'">'+
+    [["day","Gündəlik vidcet"],["week","Həftəlik vidcet"],["month","Aylıq vidcet"]].map(function(x){return '<button class="ghost" data-act="widget" data-id="'+x[0]+'">+ '+L(x[1])+'</button>'}).join("")+'</div>'+
+    L('<p class="hint">Düyməyə basın — vidcet ana ekrana əlavə olunur. «Gündəlik» — günün qəbulları saat sırası ilə, «Həftəlik» — 7 gün, «Aylıq» — ay təqvimi. ‹ › başqa günə, həftəyə, aya keçir; günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
   else if(wh==="old")h+=L('<p class="hint">Vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.</p><a class="ghost" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">Yeni versiyanı yüklə</a>');
   else if(wh==="ios")h+=L('<p class="hint">iPhone-da ana ekran vidceti yalnız App Store-dakı tətbiqlərdə olur. Safari ilə əlavə edilmiş tətbiqlər vidcet yarada bilmir, ona görə vidcet hələlik yalnız Android-dədir.</p>');
   else h+=L('<p class="hint">Vidcet Android tətbiqində (APK) işləyir.</p>');
@@ -5097,7 +5108,10 @@ document.addEventListener("click",function(e){
     cr.color=id;db(sb.rpc("ruqya_set_color",{rid:cr.id,c:id}));closeSheet();
   }
   else if(act==="widget"){
-    var pinned=false;try{pinned=NATIVE&&NATIVE.pinWidget()}catch(err){}
+    /* owner 23.11: «day» / «week» need the new app (pinWidgetOf); the month works with any version */
+    var wk=id==="day"||id==="week"?id:"month";
+    if(wk!=="month"&&!(NATIVE&&typeof NATIVE.pinWidgetOf==="function")){flash(L("Bu vidcet üçün tətbiqin yeni versiyası lazımdır: köhnəsini silib bu linkdən yenisini quraşdırın.")+" https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk");return}
+    var pinned=false;try{pinned=NATIVE&&(wk==="month"&&typeof NATIVE.pinWidgetOf!=="function"?NATIVE.pinWidget():NATIVE.pinWidgetOf(wk))}catch(err){}
     wLast="";pushWidget();
     flash(pinned?L("Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək."):L("Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Mərkəz» vidcetini seçib ekrana çəkin."));
     return;

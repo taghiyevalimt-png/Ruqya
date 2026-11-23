@@ -25,6 +25,18 @@ shot widget 360 380 3.0 "$J"
 shot widget-small 250 250 2.0 "$J"
 shot widget-big 420 520 2.75 "$J"
 shot widget-out 320 340 2.5 "$(printf '{"out":1}' | base64 -w0)"
+# owner 23.11: the day and week widgets, sample week of 23–29.11.2026 drawn as if today were 25.11
+A=$(base64 -w0 android/test-agenda.json)
+shotk() { # name width height density kind off
+  adb shell rm -f /data/data/$P/files/widget_test.png 2>/dev/null
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_TEST --es b64 '$A' --ei w $2 --ei h $3 --ef density $4 --es kind $5 --ei off $6 --es at 2026-11-25"
+  sleep 3
+  adb exec-out run-as $P cat files/widget_test.png > "$1-$API.png"
+}
+shotk widget-day 320 250 2.75 day 0
+shotk widget-day-small 250 140 2.0 day -2
+shotk widget-week 360 420 2.75 week 0
+shotk widget-week-small 250 250 2.0 week 0
 # B-06: the widget applies the app's 7-day sign-out itself. Same data, drawn 1 hour and 8 days after the
 # app handed it over: the first shows the month, the second must be the signed-out picture.
 U=$(grep -o '"u":[0-9]*' android/test-widget.json | cut -d: -f2)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Owner 23.11: «həftəlik» widget. The week is drawn as one picture (AgendaDraw.renderWeek); the transparent boxes on
+     top catch taps. Proportions (header 14, seven rows of 12; header columns 52/15/15/18) match the drawing. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:contentDescription="Mərkəz" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="14" android:orientation="horizontal">
+            <FrameLayout android:id="@+id/title" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="52" />
+            <FrameLayout android:id="@+id/prev" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="15" />
+            <FrameLayout android:id="@+id/next" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="15" />
+            <FrameLayout android:id="@+id/add" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="18" />
+        </LinearLayout>
+
+        <FrameLayout android:id="@+id/w0" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w1" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w2" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w3" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w4" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w5" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+        <FrameLayout android:id="@+id/w6" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="12" />
+    </LinearLayout>
+</FrameLayout>

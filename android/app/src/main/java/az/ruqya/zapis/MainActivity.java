@@ -266,8 +266,24 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public int widgetCount() {
-            return AppWidgetManager.getInstance(MainActivity.this)
-                    .getAppWidgetIds(new ComponentName(MainActivity.this, MonthWidget.class)).length;
+            AppWidgetManager m = AppWidgetManager.getInstance(MainActivity.this);
+            return m.getAppWidgetIds(new ComponentName(MainActivity.this, MonthWidget.class)).length
+                    + m.getAppWidgetIds(new ComponentName(MainActivity.this, DayWidget.class)).length
+                    + m.getAppWidgetIds(new ComponentName(MainActivity.this, WeekWidget.class)).length;
+        }
+
+        /** Owner 23.11: «month», «day» or «week» widget onto the home screen (Android 8 and newer, one confirmation). */
+        @JavascriptInterface
+        public boolean pinWidgetOf(String kind) {
+            if (Build.VERSION.SDK_INT < 26) return false;
+            Class<?> c = "day".equals(kind) ? DayWidget.class : "week".equals(kind) ? WeekWidget.class : MonthWidget.class;
+            try {
+                AppWidgetManager m = getSystemService(AppWidgetManager.class);
+                if (m == null || !m.isRequestPinAppWidgetSupported()) return false;
+                return m.requestPinAppWidget(new ComponentName(MainActivity.this, c), null, null);
+            } catch (Exception e) {
+                return false;
+            }
         }
 
         /** Android 8 and newer can place the widget on the home screen after one confirmation. */
