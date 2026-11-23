@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-1gtks8wVBeRK3/OwWp0X58Fp3uI4aZeq87lcdruEJh8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-QnrSehBzLcZrf4BoUM9/W8Wq1wuf5YR+eH2mObCF0TE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -364,7 +364,7 @@ select.unit{height:40px;border:1px solid var(--line);border-radius:10px;backgrou
 .pctgrid .pin{display:flex;align-items:center;gap:4px}.pctgrid input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:var(--ink);width:100%;min-width:0}
 .pctgrid i{font-style:normal}.stt small.pct{color:var(--muted);font-size:11px;font-weight:500}
 .pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 128px 72px;align-items:center;gap:6px;font-size:15px}
-.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
+.psrow{grid-template-columns:1fr 136px 78px}.psrow select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 4px;font:inherit;font-size:14px;color:inherit;width:100%;min-width:0}.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
 .pctrow i{font-style:normal;color:var(--muted)}.pctrow b{text-align:right;color:var(--accent)}
 .ptotal.mine{border-top:0;padding-top:0}.ptotal.mine b{color:var(--accent);font-size:16px}
 .pay.todaysum{flex-direction:row;justify-content:space-around;text-align:center}.todaysum div{display:flex;flex-direction:column;gap:2px}.todaysum b{font-size:26px}.todaysum span{font-size:13px;color:var(--muted)}
@@ -572,6 +572,9 @@ input::placeholder,textarea::placeholder{color:var(--muted);opacity:.65}
 /* Bottom sheet: fades and glides in */
 .overlay{background:rgba(0,0,0,.55);animation:fadein .22s var(--ease)}
 .sheet{border-radius:26px 26px 0 0;animation:up .34s var(--ease);box-shadow:0 -18px 50px -20px rgba(0,0,0,.6);border-top:1px solid var(--line)}
+/* P-03 (23.11): the big soft shadow is drawn only after the window has slid in — painting it on every frame of the
+   first slide made the window jerk on slow phones (118–163 ms frames; without the shadow 54–59 ms) */
+.sheet{transition:box-shadow .3s ease}.sheet.opening{box-shadow:none}
 .sheet h2{font-size:20px}
 @keyframes up{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -818,7 +821,6 @@ window.__sbOldH=function(e){if(/supabase/.test((e&&e.filename)||""))window.__sbO
 window.removeEventListener("error",window.__sbOldH);if(!window.supabase&&!window.__sbOld)window.__sbErr=1;
 </script>
 <script>
-if(!String.prototype.padStart){String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.slice(-Math.max(n,String(this).length))}}
 if(!String.prototype.padStart)String.prototype.padStart=function(n,c){var s=String(this);c=c==null?" ":String(c);while(s.length<n)s=c+s;return s.length>n&&c.length>1?s.slice(s.length-n):s};
 if(window.Element&&!Element.prototype.matches){Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector}
 if(window.Element&&!Element.prototype.closest){Element.prototype.closest=function(sel){var el=this;while(el&&el.nodeType===1){if(el.matches(sel))return el;el=el.parentNode}return null}}
@@ -834,6 +836,15 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
+"Yeni qəbul: qiymət və müddət":"Новая запись: цена и длительность",
+"Yeni qəbul açılanda bu qiymət və müddət özü yazılır; qəbulda hər dəfə dəyişmək olar. Boş — heç nə yazılmır. Köhnə qəbullar dəyişmir.":"Когда открывается новая запись, эти цена и длительность подставляются сами; в записи их всегда можно изменить. Пусто — ничего не подставляется. Старые записи не меняются.",
+"Hər yeni qəbulun qiyməti, ":"Цена каждой новой записи, ",
+"Xidmət seçiləndə":"Когда выбрана услуга",
+"Mütəxəssis seçiləndə":"Когда выбран специалист",
+"Qiyməti düzgün yazın: ":"Укажите цену правильно: ",
+"Yadda saxlanıldı":"Сохранено",
+"Müddət":"Длительность",
+"Yeni qəbulun qiymət və müddətini dəyişdi":"Изменил(а) цену и длительность новой записи",
 "Satana qalan":"Остаётся продавцу",
 "faiz və ya bir ədədə görə məbləğ; boş — yoxdur":"процент или сумма за штуку; пусто — нет",
 "Faizi (0–100) və ya məbləği düzgün yazın: {n}":"Укажите правильно процент (0–100) или сумму: {n}",
@@ -1946,13 +1957,19 @@ function bk(t){var ms=t==null?Date.now()+skew:t,d=new Date(ms+tzAt(ms));
   return{d:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+String(d.getUTCDate()).padStart(2,"0"),m:d.getUTCHours()*60+d.getUTCMinutes()}}
 function okDate(d){return /^\d{4}-\d{2}-\d{2}$/.test(d)&&d>="2020-01-01"&&d<="2099-12-31"&&iso(parse(d))===d}
 var MAXSUM=1000000;
-var NEW_PRICE=130;   /* written in advance in every new booking; it can be changed */
-/* owner 18.11: in a NEW booking, choosing these puts their usual length (minutes) and price; both stay editable */
-var SVC_PRESET={"Masaj":[60,80],"Hicama":[60,40],"Kombo":[60,100]},READER_PRESET={"ilkin":[90,150]};
-function readerPreset(rid){var r=reader(rid);return r?READER_PRESET[low(String(r.name).trim()).replace(/̇/g,"")]:null}
+/* owner 18.11: in a NEW booking, choosing a service or a specialist puts its usual length (minutes) and price; both stay
+   editable. 23.11: the values live in the database (table app_settings, row «presets»; admins change them in
+   Ayarlar → Qiymətlər). These built-in ones are used only while that row cannot be read (an older database). */
+var PRESET_DEF={price:130,svc:{"Masaj":[60,80],"Hicama":[60,40],"Kombo":[60,100]},rname:{"ilkin":[90,150]}};
+var DURS=[30,45,60,90,120,150,180];
+function okPs(x){if(!x||typeof x.length!=="number")return null;var d=+x[0],p=+x[1],o=[DURS.indexOf(d)>=0||(d>=MIN_DUR&&d<=960&&d%5===0)?d:null,p>0&&p<=MAXSUM?p:null];return o[0]||o[1]?o:null}
+function presets(){var p=state.presets;return p&&typeof p==="object"?p:null}
+function newPrice(){var p=presets(),v=p?+p.price:0;return v>0&&v<=MAXSUM?v:(p?"":PRESET_DEF.price)}
+function svcPreset(sv){var p=presets();return p?okPs(p.svc&&p.svc[sv]):(PRESET_DEF.svc[sv]||null)}
+function readerPreset(rid){var p=presets();if(p)return okPs(p.reader&&p.reader[rid]);var r=reader(rid);return r?PRESET_DEF.rname[low(String(r.name).trim()).replace(/\u0307/g,"")]||null:null}
 function putPreset(ps){if(!ps)return;var de=byId("f-dur"),pe=byId("f-price");
-  if(de){if(!de.querySelector('option[value="'+ps[0]+'"]')){var o=document.createElement("option");o.value=String(ps[0]);o.textContent=ps[0]+"";de.appendChild(o)}de.value=String(ps[0])}
-  if(pe)pe.value=String(ps[1])}
+  if(de&&ps[0]){if(!de.querySelector('option[value="'+ps[0]+'"]')){var o=document.createElement("option");o.value=String(ps[0]);o.textContent=ps[0]+"";de.appendChild(o)}de.value=String(ps[0])}
+  if(pe&&ps[1])pe.value=String(ps[1])}
 function uuid(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   if(window.crypto&&crypto.getRandomValues){var b=new Uint8Array(16),h="";crypto.getRandomValues(b);b[6]=b[6]&15|64;b[8]=b[8]&63|128;
@@ -2089,7 +2106,7 @@ function tfetch(u,o){
   return fetch(u,o).then(function(r){clearTimeout(t);return authFix(u,r)},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
-function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,shares:{},hasShares:false,svcPct:{},hasSvcPct:false,v2:false,hasDur:false,hasProducts:false}}
+function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,shares:{},hasShares:false,svcPct:{},hasSvcPct:false,v2:false,hasDur:false,hasProducts:false,presets:null,hasPresets:false}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -2378,43 +2395,46 @@ function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name
 function upsertBy(list,row){edIdx=null;for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
 function removeBy(list,id){edIdx=null;for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
 /* Checks for which database updates were run: asked again every 30 minutes, not on every load. */
-var probes={};
-function probe(k,make){var p=probes[k];if(p&&Date.now()-p.t<30*60000&&p.v)return Promise.resolve(p.v);
-  return make().then(function(v){probes[k]={t:Date.now(),v:v};return v})}
+/* 23.11: the live database has had every column the app knows about since 18.11 (db/schema_live_20261116.sql and later
+   migrations), so the twelve "is this column there?" requests at every load are gone. HAS stands in for their answer at
+   the same places in the list below, so the numbering of the answers stays as it was. */
+var HAS=[{}];
 function refresh(){
   if(!sb||!auth.user)return Promise.resolve();
   /* A save is still on its way: load afterwards, without spending traffic on a copy that would be thrown away. */
   if(pending){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,1500);return Promise.resolve()}
   var my=++seq,g=writes,from=state.loadedFrom||winFrom(),needHist=false;
+  /* 23.11: prices and lengths of a new booking (Ayarlar → Qiymətlər); one tiny row, read beside the main load */
+  var setP=soft(function(){return sb.from("app_settings").select("id,value")}).then(null,function(){return undefined});
   return Promise.all([
     /* only the columns the app shows: price and share of specialists are closed to everyone but the database owner */
     fetchAll(function(){return sb.from("readers").select("id,name,archived,created_at,color").order("created_at").order("id")}).then(null,function(){
       return fetchAll(function(){return sb.from("readers").select("id,name,archived,created_at").order("created_at").order("id")})}),
     fetchAll(function(){return sb.from("appts").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
-    Promise.resolve([]),   /* services: no longer used */
+    Promise.resolve([]),   /* place of the old «services» table (not used); kept so the numbering of the answers stays */
     soft(function(){return sb.from("expenses").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
     soft(function(){return sb.from("staff").select("*").order("id")}),
     soft(function(){return sb.from("breaks").select("*").order("start_time")}),
     soft(function(){return sb.from("product_sales").select("*").gte("date",from).order("date",{ascending:false}).order("id")}),
-    probe("appts.duration",function(){return soft(function(){return sb.from("appts").select("duration").limit(1)})}),
-    probe("staff.role",function(){return soft(function(){return sb.from("staff").select("role").limit(1)})}),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
     needHist?soft(function(){return sb.from("appts").select("id,reader_id,date,name,phone,status,created_by").gte("date",addDays(today,-HIST_DAYS)).lt("date",from).order("date",{ascending:false}).order("id")}):Promise.resolve(null),
-    probe("appts.updated_at",function(){return soft(function(){return sb.from("appts").select("updated_at").limit(1)})}),
-    probe("audit_log.id",function(){return soft(function(){return sb.from("audit_log").select("id").limit(1)})}),
-    probe("readers.color",function(){return soft(function(){return sb.from("readers").select("color").limit(1)})}),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
     /* bookings written inside the loaded period for an earlier date: the "written" statistics count them */
     soft(function(){return sb.from("appts").select("*").gte("created_at",bakuStart(from)).lt("date",from).order("created_at").order("id")   /* A5-13: read along the created_at index (5,4 s → 0,1 s on the 10-year copy) */}),
-    probe("breaks.reader_id",function(){return soft(function(){return sb.from("breaks").select("reader_id").limit(1)})}),
+    Promise.resolve(HAS),
     soft(function(){return sb.from("stat_edits").select("*").order("id")}),
-    probe("staff.want",function(){return soft(function(){return sb.from("staff").select("want").limit(1)})}),
-    probe("appts.confirmed",function(){return soft(function(){return sb.from("appts").select("confirmed").limit(1)})}),
-    probe("appts.place",function(){return soft(function(){return sb.from("appts").select("place").limit(1)})}),
-    probe("appts.follow",function(){return soft(function(){return sb.from("appts").select("follow").limit(1)})}),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
+    Promise.resolve(HAS),
     soft(function(){return sb.from("service_shares").select("*")}),
     soft(function(){return sb.from("product_shares").select("*")}),
     soft(function(){return sb.from("products").select("*").order("sort").order("created_at")}),
-    probe("breaks.skip",function(){return soft(function(){return sb.from("breaks").select("skip,mday").limit(1)})}),
-    probe("breaks.days",function(){return soft(function(){return sb.from("breaks").select("days").limit(1)})})
+    Promise.resolve(HAS),
+    Promise.resolve(HAS)
   ]).then(function(res){
     state.hasBrkSkip=!!res[res.length-2]||(state.hasBrkSkip&&res[res.length-2]===null);
     var sv0=res[res.length-5];state.hasSvcPct=!!sv0;if(sv0){state.svcPct={};sv0.forEach(function(x){(state.svcPct[x.reader_id]=state.svcPct[x.reader_id]||{})[x.service]=ruleOf(x)})}
@@ -2442,6 +2462,7 @@ function refresh(){
       if(isSpec(auth.user.id)){var mine=activeReaders().filter(function(r){return r.name===state.staff[auth.user.id]})[0];if(mine&&!ui.sel.length)ui.sel=[mine.id]}}
     cleanSel();
     auth.loaded=true;render();redrawCard();
+    setP.then(function(rows){if(my!==seq||rows===undefined)return;setPresets(rows)});
     clearTimeout(errSendT);errSendT=setTimeout(sendErrs,4000);   /* S-06: errors kept while offline go now (no request when none is waiting) */
     if(isAdmin()&&!secDone){secDone=true;checkSecurity()}
     if(isOwner()&&state.hasRole&&state.staff[ADMIN]&&state.roles[ADMIN]!=="admin"&&!auth.fixed){
@@ -2744,6 +2765,7 @@ function onChange(pl){
   else if(t==="breaks"&&!del&&row.start_time!=null){upsertBy(state.breaks,mapBreak(row));state.breaks.sort(function(x,y){return mins(x.start)-mins(y.start)})}
   else if(t==="breaks"&&del){removeBy(state.breaks,row.id)}
   else if(t==="stat_edits"){if(del)removeBy(state.statEdits,row.id);else if(row.kind)upsertBy(state.statEdits,mapEdit(row))}
+  else if(t==="app_settings"&&row.id==="presets"){if(del)state.presets=null;else if(row.value&&typeof row.value==="object")state.presets=row.value;else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}}
   else{clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}
   clearTimeout(rtRender);rtRender=setTimeout(function(){render();redrawCard()},120);
 }
@@ -2761,7 +2783,7 @@ function startSync(){
 /* Instant start: the last data seen is kept on this phone and drawn at once on the next opening,
    while the fresh copy loads from the internet a moment later and replaces it. */
 var CK="ruqya.cache.v1",cacheT=null,dirty=false;
-var CFIELDS=["svcPct","hasSvcPct","shares","hasShares","catalog","hasCatalog","hide","hasHide","hasBrkDays","hasBrkSkip","hasFollow","hasPlace","readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
+var CFIELDS=["presets","hasPresets","svcPct","hasSvcPct","shares","hasShares","catalog","hasCatalog","hide","hasHide","hasBrkDays","hasBrkSkip","hasFollow","hasPlace","readers","appts","expenses","staff","roles","roleSet","breaks","products","hasRole","hasDur","hasProducts","hasBreaks","hasUpd","hasAudit","hasColor","hasBrkReader","statEdits","hasStatEdits","v2","hasPriv","wants","hasConf"];
 function saveCache(){
   cacheT=null;if(!auth.user||!auth.loaded||auth.provisional||dirty||pending||!lastFull)return;   /* only a copy the server confirmed */
   var o={u:auth.user.id,t:lastFull,s:{}};CFIELDS.forEach(function(k){o.s[k]=state[k]});
@@ -3923,6 +3945,27 @@ function sellEdit(){
     '<p class="err" role="alert" id="sl-err" hidden></p><div class="btns"><button class="primary" data-act="sell-upd">'+L("Yadda saxla")+'</button><button class="danger" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></div>';
 }
 /* the admin's product list */
+/* 23.11: Ayarlar → Qiymətlər — what a NEW booking starts with. null = the table is not in this database (built-in values) */
+function setPresets(rows){var was=JSON.stringify([state.hasPresets,state.presets]);
+  state.hasPresets=rows!==null;var r=(rows||[]).filter(function(x){return x&&x.id==="presets"})[0];
+  state.presets=r&&r.value&&typeof r.value==="object"?r.value:null;
+  if(JSON.stringify([state.hasPresets,state.presets])!==was){cacheSoon();if(sheet&&sheet.type==="presets"&&!sheet.busy)byId("sheet").innerHTML=presetsSheet();render()}}
+function durName(d){return d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):""))}
+function psRow(kind,key,label,ps){ps=ps||[];var d=ps[0],ds=DURS.concat(d&&DURS.indexOf(d)<0?[d]:[]);
+  return '<div class="pctrow psrow"><span>'+esc(label)+'</span><span class="pin"><select data-ps="'+kind+'" data-k="'+esc(key)+'" data-f="d" aria-label="'+esc(label)+': '+L("Müddət")+'"><option value="">—</option>'+
+    ds.map(function(x){return '<option value="'+x+'"'+(x===d?" selected":"")+'>'+durName(x)+'</option>'}).join("")+'</select></span>'+
+    '<span class="pin"><input type="text" inputmode="decimal" autocomplete="off" maxlength="12" data-ps="'+kind+'" data-k="'+esc(key)+'" data-f="p" aria-label="'+esc(label)+': '+L("Qiymət")+'" placeholder="'+CUR+'" value="'+(ps[1]||"")+'"></span></div>'}
+function presetsSheet(){
+  var h='<h2>'+L("Yeni qəbul: qiymət və müddət")+CLOSE+'</h2>';
+  if(!state.hasPresets)return h+'<p class="hint">'+L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).")+'</p>';
+  var np=newPrice();
+  h+='<p class="hint">'+L("Yeni qəbul açılanda bu qiymət və müddət özü yazılır; qəbulda hər dəfə dəyişmək olar. Boş — heç nə yazılmır. Köhnə qəbullar dəyişmir.")+'</p>';
+  h+='<div class="field"><label for="ps-price">'+L("Hər yeni qəbulun qiyməti, ")+CUR+'</label><input id="ps-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(np||"")+'"></div>';
+  h+='<h3 class="sec">'+L("Xidmət seçiləndə")+'</h3><div class="pctlist">'+SERVICES.map(function(sv){return psRow("svc",sv,L(sv),svcPreset(sv))}).join("")+'</div>';
+  var rs=activeReaders();
+  if(rs.length)h+='<h3 class="sec">'+L("Mütəxəssis seçiləndə")+'</h3><div class="pctlist">'+rs.map(function(r){return psRow("reader",r.id,r.name,readerPreset(r.id))}).join("")+'</div>';
+  return h+'<p class="err" role="alert" id="ps-err" hidden></p><div class="btns"><button class="primary" data-act="ps-save">'+L("Yadda saxla")+'</button></div>';
+}
 function catalogSheet(){
   var e=sheet.eid?catItem(sheet.eid):null;
   var h='<h2>'+L("Məhsullar")+CLOSE+'</h2><p class="hint">'+L("Bu məhsullar «Məhsul satışı» pəncərəsində düymə kimi görünür.")+'</p>';
@@ -4229,6 +4272,7 @@ function readersMain(){
   });
   if(rs.length&&adm)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
+  if(adm)h+='<button class="ghost" data-act="presets">'+L("Yeni qəbul: qiymət və müddət")+'</button>';
   }
   if(sec==="breaks"&&state.hasBreaks){
     var cb=canBreaks();
@@ -4429,6 +4473,7 @@ function auditLine(x){
     var cn=v.col==="a"?L("Yazdı"):v.col==="b"?L("Uğurlu"):v.col==="w"?L("Müraciət WP"):v.col==="s"?L("Müraciət SŞ"):L("Müraciət");
     return L("Satış statistikasını ")+(op==="DELETE"?(v.col==="a"||v.col==="b"?L("avtomatik rəqəmə qaytardı"):L("sildi")):verb)+": "+nm+", "+cn+", "+(v.per==="week"?L("həftəlik"):v.per==="day"?L("günlük"):L("aylıq"))+" "+fd(v.period_start)+(op==="DELETE"?"":" → "+v.value)+(op==="UPDATE"&&o.value!=null?L(" (əvvəl ")+o.value+")":"")}
   if(T==="staff")return L("İşçi profili (")+verb+"): "+(v.name||"")+(v.role?", "+(v.role==="admin"?"admin":v.role==="specialist"?L("mütəxəssis"):L("satış agenti")):"");
+  if(T==="app_settings")return L("Yeni qəbulun qiymət və müddətini dəyişdi");
   return T+" "+op;
 }
 function auditSheet(){
@@ -4526,7 +4571,7 @@ function openSheet(s){
   /* The edit form remembers the booking as it was when opened: saving sends only what was changed in the form,
      so a change another phone made meanwhile (price, note, time...) is not put back. */
   if(s.type==="appt"&&s.id&&!s.orig){var oa=appt(s.id);if(oa)s.orig={place:oa.place||"ofis",readerId:oa.readerId,date:oa.date,time:oa.time,name:oa.name,phone:oa.phone||"",price:+oa.price,note:oa.note||"",dur:oa.dur||90}}
-  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,svcpct:svcPctSheet,sell:sellForm,selledit:sellEdit,catalog:catalogSheet}[s.type];
+  var f={month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,np:npSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,svcpct:svcPctSheet,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}[s.type];
   byId("sheet").innerHTML=f();byId("sheet").classList.remove("wide");byId("sheet").classList.toggle("tall",s.type==="appt");byId("overlay").hidden=false;byId("sheet").scrollTop=0;
   if(s.type==="appt"&&s.vals){var dv=s.vals;
     ["reader","date","time","name","phone","price","note"].forEach(function(k){var e=byId("f-"+k),x=dv[k==="reader"?"readerId":k];
@@ -4631,10 +4676,10 @@ function apptForm(){
   /* owner 22.11: a new booking or a break from the same window, like Google Calendar («Qəbul | Fasilə») */
   return (!a&&state.hasBreaks&&canAddBrk()?'<h2 class="kindh"><span class="vh">'+L("Yeni qəbul")+'</span>'+kindSw("appt")+CLOSE+'</h2>':'<h2>'+(a?L("Qəbulu dəyiş"):L("Yeni qəbul"))+CLOSE+'</h2>')+
     L('<div class="two"><div class="field"><label for="f-reader">Mütəxəssis *</label><select id="f-reader">')+opts+'</select></div>'+
-    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+[30,45,60,90,120,150,180].concat(a&&[30,45,60,90,120,150,180].indexOf(a.dur)<0?[a.dur]:[]).map(function(d){var cur=a?a.dur:(pre.dur||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
+    (state.hasDur?L('<div class="field"><label for="f-dur">Müddət *</label><select id="f-dur">')+(function(){var c0=a?a.dur:(pre.dur||((readerPreset(pre.reader)||[])[0])||90);return DURS.concat(DURS.indexOf(c0)<0?[c0]:[])})().map(function(d){var cur=a?a.dur:(pre.dur||((readerPreset(pre.reader)||[])[0])||90);return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d<60?d+L(" dəq"):(Math.floor(d/60)+L(" saat")+(d%60?" "+d%60+L(" dəq"):"")))+'</option>'}).join("")+'</select></div>':'<div></div>')+'</div>'+
     L('<div class="two"><div class="field"><label for="f-name">Pasiyentin adı *</label><input id="f-name" type="text" maxlength="80" autocomplete="off" value="')+esc(a?a.name:(pre.name||""))+'"></div>'+
     L('<div class="field"><label for="f-phone">Mobil nömrə *</label><input id="f-phone" type="text" maxlength="60" autocomplete="off" placeholder="050 000 00 00" value="')+esc(a?a.phone:(pre.phone||""))+'"></div></div>'+
-    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):((readerPreset(pre.reader)||[0,NEW_PRICE])[1]))+'"></div>'+
+    L('<div class="two"><div class="field"><label for="f-price">Qiymət, ')+CUR+L(' *</label><input id="f-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="')+(a?(a.price>0?a.price:""):(((readerPreset(pre.reader)||[])[1])||newPrice()))+'"></div>'+
     L('<div class="field"><label for="f-note">Qeyd</label><input id="f-note" type="text" maxlength="300" autocomplete="off" value="')+esc(a?a.note:"")+'"></div></div>'+
     (state.hasPlace?'<div class="field"><span class="lbl">'+L("Yer *")+'</span><div class="seg place" role="radiogroup">'+PLACES.map(function(x){var cur=a?a.place:(pre.place||"ofis");return '<label class="segb"><input type="radio" name="f-place" value="'+x[0]+'"'+(x[0]===cur?" checked":"")+'><span>'+L(x[1])+'</span></label>'}).join("")+'</div></div>':'')+
     L('<div class="two"><div class="field"><label for="f-date">Tarix *</label><input id="f-date" type="date" value="')+(a?a.date:(pre.date||ui.date))+'"></div>'+
@@ -4907,6 +4952,22 @@ document.addEventListener("click",function(e){
     closeSheet();
   }
   else if(act==="catalog"){if(isAdmin())openSheet({type:"catalog"});return}
+  else if(act==="presets"){if(isAdmin())openSheet({type:"presets"});return}
+  else if(act==="ps-save"){
+    if(!sheet||sheet.type!=="presets"||!isAdmin()||!state.hasPresets)return;
+    var psp=amount("ps-price");if(psp!==""&&(isNaN(psp)||psp<=0||psp>MAXSUM))return fail("ps-err",L("Qiyməti düzgün yazın."));
+    var nv={price:psp===""?null:psp,svc:{},reader:{}},psBad="";
+    [].forEach.call(document.querySelectorAll('#sheet [data-ps]'),function(e){var k=e.getAttribute("data-k"),g=nv[e.getAttribute("data-ps")],o=g[k]||(g[k]=[null,null]),v=e.value.trim();
+      if(e.getAttribute("data-f")==="d"){o[0]=v?+v:null}
+      else{v=v.replace(/\s/g,"").replace(",",".");if(v==="")o[1]=null;else if(/^\d+(\.\d{1,2})?$/.test(v)&&+v>0&&+v<=MAXSUM)o[1]=parseFloat(v);else psBad=psBad||e.getAttribute("aria-label")}});
+    if(psBad)return fail("ps-err",L("Qiyməti düzgün yazın: ")+psBad);
+    ["svc","reader"].forEach(function(g){Object.keys(nv[g]).forEach(function(k){if(!nv[g][k][0]&&!nv[g][k][1])delete nv[g][k]})});
+    /* specialists not in the list now (archived) keep what they had */
+    var oldP=presets();if(oldP&&oldP.reader)Object.keys(oldP.reader).forEach(function(k){if(!reader(k)||reader(k).archived)nv.reader[k]=oldP.reader[k]});
+    var prevP=state.presets;state.presets=nv;cacheSoon();
+    db(sb.from("app_settings").upsert({id:"presets",value:nv},{onConflict:"id"}).select("id"),function(){state.presets=prevP;render()});
+    closeSheet();toast(L("Yadda saxlanıldı"));render();return;
+  }
   else if(act==="cat-edit"){if(sheet&&sheet.type==="catalog"){sheet.eid=id;byId("sheet").innerHTML=catalogSheet();var cn1=byId("c-name");if(cn1)cn1.focus()}return}
   else if(act==="cat-new"){if(sheet&&sheet.type==="catalog"){sheet.eid="";byId("sheet").innerHTML=catalogSheet()}return}
   else if(act==="cat-save"){
@@ -4922,11 +4983,16 @@ document.addEventListener("click",function(e){
       var cur=state.shares[ce.id]||{},ups=[],dels=[];Object.keys(pcts).forEach(function(k){var v=pcts[k],o=cur[k]||{p:0,a:0};if(v.p===(o.p||0)&&v.a===(o.a||0))return;if(ruleSet(v)){var u=ruleRow(v);u.product_id=ce.id;u.staff_id=k;ups.push(u)}else if(ruleSet(o))dels.push(k)});
       if(ups.length||dels.length){var t0=JSON.parse(JSON.stringify(cur)),rb=function(){state.shares[ce.id]=t0;render()};state.shares[ce.id]=cur;ups.forEach(function(u){cur[u.staff_id]=ruleOf(u)});dels.forEach(function(k){delete cur[k]});
         if(ups.length)db(sb.from("product_shares").upsert(ups,{onConflict:"product_id,staff_id"}),rb);if(dels.length)db(sb.from("product_shares").delete().eq("product_id",ce.id).in("staff_id",dels).select("product_id"),rb)}}
-    else{var cid=uuid(),srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
+    else{
+      /* A5-08 (23.11): a new product keeps one id while it is retried — the server may have stored it although its answer
+         was lost; the second «Əlavə et» of the same name is then the same row (upsert by id), not a second product */
+      var cnk=low(cnm.trim()),cid=sheet.cnew&&sheet.cnew.k===cnk?sheet.cnew.id:uuid();sheet.cnew={k:cnk,id:cid};
+      var srt=state.catalog.reduce(function(m,c){return Math.max(m,c.sort)},0)+1;state.catalog.push({id:cid,name:cnm,price:cpr,archived:false,sort:srt,created:new Date().toISOString()});
       /* the percents go after the product is saved (they point to it) */
       var nups=Object.keys(pcts).filter(function(k){return ruleSet(pcts[k])}).map(function(k){var u=ruleRow(pcts[k]);u.product_id=cid;u.staff_id=k;return u});
       if(nups.length){state.shares[cid]={};nups.forEach(function(u){state.shares[cid][u.staff_id]=ruleOf(u)})}
-      db(sb.from("products").insert({id:cid,name:cnm,price:cpr,sort:srt}),function(){removeBy(state.catalog,cid);delete state.shares[cid];render()}).then(function(){
+      db(sb.from("products").upsert({id:cid,name:cnm,price:cpr,sort:srt},{onConflict:"id"}).select("id"),function(){removeBy(state.catalog,cid);delete state.shares[cid];render()}).then(function(){
+        if(catItem(cid)&&sheet&&sheet.cnew&&sheet.cnew.id===cid)sheet.cnew=null;
         if(nups.length&&catItem(cid))db(sb.from("product_shares").upsert(nups,{onConflict:"product_id,staff_id"}),function(){delete state.shares[cid];render()})})}
     sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return;
   }
@@ -5262,7 +5328,7 @@ document.addEventListener("change",function(e){
   var t=e.target.id;
   /* owner 18.11: usual length and price of a service / of İlkin — only in a new booking */
   if(sheet&&sheet.type==="appt"&&!sheet.id){
-    if(e.target.name==="f-service")putPreset(SVC_PRESET[e.target.value]);
+    if(e.target.name==="f-service")putPreset(svcPreset(e.target.value));
     if(t==="f-reader")putPreset(readerPreset(e.target.value));
   }
   if((t==="f-reader"||t==="f-dur")&&sheet&&sheet.type==="appt"&&sheet.freeOn&&!freeSkip)freeShow();

@@ -1,0 +1,12 @@
+# 23.11 improve-1123: shadow drawn after the slide (.sheet.opening без тени). node tests/perf/frames.js … 3, CPU x4, this machine has NO GPU (software raster)
+## before (main 69a64c4)
+run 1: scroll-day 0, open-window 90, close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 115), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 83, close-window 0 (other 53), open-window-2 0, close-window-2 0 (other 52), tab-stats 0 (other 148), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 80, close-window 0 (other 87), open-window-2 0, close-window-2 0, tab-stats 0 (other 102), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: open-window (3 frames in 3/3 runs, max 90 ms, during I:rip)
+## after
+run 1: scroll-day 0, open-window 0 (other 64), close-window 0 (other 54), open-window-2 0, close-window-2 0, tab-stats 0 (other 105), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 2: scroll-day 0, open-window 92 (other 55), close-window 0 (other 60), open-window-2 0, close-window-2 0, tab-stats 143, scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+run 3: scroll-day 0, open-window 79, close-window 0, open-window-2 0, close-window-2 0, tab-stats 0 (other 125), scroll-stats 0, tab-patients 0, scroll-patients 0, tab-day 0
+frames > 50 ms in scrolling and animations: НЕ ПРОЙДЕНО: open-window (2 frames in 2/3 runs, max 92 ms, during I:rip); tab-stats (1 frames in 1/3 runs, max 143 ms, during [object SVGAnimatedString]:pop,I:rip)
+## вывод: здесь разницы нет (80–92 мс в обоих случаях): длинный кадр — построение формы (причина 1 в analysis.md), а не растеризация тени. На ПК аудита (Intel HD, D3D11) тень была ≈ половиной первого кадра (shadow-experiment.txt) — эффект правки там и на телефоне НЕ ПРОВЕРЕН.

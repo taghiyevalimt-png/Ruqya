@@ -9,6 +9,7 @@ on:
 
 permissions:
   actions: write
+  contents: write   # A6-R1: the empty commit below
 
 jobs:
   ping:
@@ -39,3 +40,17 @@ jobs:
               "https://api.github.com/repos/${{ github.repository }}/actions/workflows/$wf/enable")
             echo "enable $wf: $code"; [ "$code" = "204" ] || { echo "::error::could not keep $wf switched on ($code)"; exit 1; }
           done
+      - name: Empty commit when the repository has been quiet for 45 days
+        # A6-R1 (23.11): GitHub's 60-day rule counts repository activity; whether enabling through the API resets it is not
+        # documented. An empty commit (no file changes, so the site and the APK stay as they are) is activity for sure.
+        # Runs at most once in 45 days, and only when nobody else committed in that time.
+        run: |
+          git init -q k && cd k
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q --depth=1 origin main && git checkout -q -B main FETCH_HEAD
+          last=$(git log -1 --format=%ct); now=$(date +%s); days=$(( (now - last) / 86400 ))
+          echo "last commit $days days ago"
+          if [ "$days" -lt 45 ]; then exit 0; fi
+          git -c user.name="keepalive" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q --allow-empty -m "keepalive: no commits for $days days (A6-R1, GitHub switches schedules off after 60)"
+          git push -q origin HEAD:main && echo "empty commit pushed"
