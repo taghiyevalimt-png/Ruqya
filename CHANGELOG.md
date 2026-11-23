@@ -1,3 +1,15 @@
+# CHANGELOG — 23.11.2026: «Pul» statistikası və qəbulda qiymət silindi
+
+## Для пользователей
+- **Statistika:** раздела «Pul» больше нет (вместе с ⚙ Faizlər и листом «Pul» в Excel). Если «Pul» был выбран последним, открывается первый раздел.
+- **Новая запись / изменение записи:** поля «Qiymət» нет, цену писать не нужно; «Qeyd» на всю ширину. Новые записи сохраняются с ценой 0; у старых записей цена в базе не трогается.
+- Цена больше нигде не показывается: ни в карточке записи, ни в списке, ни в карточке пациента, ни в «Kopyala»; нет предупреждений «Qiymət yazılmayıb».
+- Ayarlar → «Yeni qəbul: müddət» — только длительность по услуге и специалисту.
+
+## Для разработчика
+- Удалены moneyTable, svcPctOf, svcPctSheet, обработчики svc-pct, noPrice/npSheet/noPriceBox, newPrice; okPs берёт только длительность. Загрузка service_shares в refresh() оставлена (порядок res[res.length-N]).
+- Тест 99-1123-no-price.js; обновлены 99-1123-presets, 99-new-presets, 13-followup, 15-keyboard, 04-excel, 23-excel-counts, 99-excel-sync, 99-stats-merged, 99-stats-notes, 99-owner-23-11-stats, 99-a6-05-future-clock, 00-smoke; удалён 99-money-services.js.
+
 # CHANGELOG — 23.11.2026: простая копия «Məhsul satışları»
 
 - «Kopyala» в «Məhsul satışları» — простым текстом без звёздочек и значков, как просил владелец: «Loğman - 4 satış, ümumi 63 manat, mütəxəssisin payı 17 manat». Первая строка — «Məhsul satışları, <период>». В русском интерфейсе: «… продаж, всего … манат, доля специалиста … манат».

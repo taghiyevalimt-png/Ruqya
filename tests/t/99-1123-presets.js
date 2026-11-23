@@ -1,5 +1,6 @@
-// 23.11: (1) the prices and lengths of a new booking come from the database (app_settings, row «presets»), and the
-// admin changes them in Ayarlar → «Yeni qəbul: qiymət və müddət»; an agent has no such button. Empty = nothing put in.
+// 23.11: (1) the length of a new booking comes from the database (app_settings, row «presets»), and the admin changes
+// it in Ayarlar → «Yeni qəbul: müddət»; an agent has no such button. Empty = nothing put in. Since 23.11 late evening
+// there are no prices (old price values in the row are ignored).
 // (2) a load no longer asks twelve «is this column there?» questions — each read up to 1000 rows of one column
 // (…?select=<column>&limit=1000&offset=0); 23 requests per load became 12.
 // (3) a new catalog product whose answer was lost is the same row when «Əlavə et» is pressed again (A5-08).
@@ -14,18 +15,18 @@ module.exports = async () => {
     check(!probes.length, "no column probes at load: " + probes.join(" | "));
     check(s.ctl.log.some((x) => /app_settings/.test(x)), "the presets row is read");
     await p.click('#tabs [data-tab="day"]'); await p.click("#fab"); await p.locator("#f-reader").waitFor();
-    const vals = () => p.evaluate(() => ({ dur: document.getElementById("f-dur").value, price: document.getElementById("f-price").value }));
-    let v = await vals(); check(v.price === "111", "a new booking starts with the price from the database: " + JSON.stringify(v));
+    const vals = () => p.evaluate(() => ({ dur: document.getElementById("f-dur").value, price: !!document.getElementById("f-price") }));
+    let v = await vals(); check(v.price === false && v.dur === "90", "a new booking: no price, 1 h 30 min: " + JSON.stringify(v));
     await p.selectOption("#f-reader", R1); await p.waitForTimeout(150);
-    v = await vals(); check(v.price === "111" && v.dur === "90", "Əli has no preset: nothing changes: " + JSON.stringify(v));
+    v = await vals(); check(v.dur === "90", "Əli has no preset: nothing changes: " + JSON.stringify(v));
     await p.click('label:has(input[name="f-service"][value="Masaj"])'); await p.waitForTimeout(150);
-    v = await vals(); check(v.dur === "45" && v.price === "70", "Masaj from the database: 45 min, 70: " + JSON.stringify(v));
+    v = await vals(); check(v.dur === "45", "Masaj from the database: 45 min: " + JSON.stringify(v));
     await p.click('label:has(input[name="f-service"][value="Hicama"])'); await p.waitForTimeout(150);
-    v = await vals(); check(v.dur === "45" && v.price === "35", "Hicama has only a price: the length stays: " + JSON.stringify(v));
+    v = await vals(); check(v.dur === "45", "Hicama has only an old price: the length stays: " + JSON.stringify(v));
     await p.click('label:has(input[name="f-service"][value="Kombo"])'); await p.waitForTimeout(150);
-    v = await vals(); check(v.dur === "45" && v.price === "35", "Kombo is not in the database row (no built-in 100 any more): " + JSON.stringify(v));
+    v = await vals(); check(v.dur === "45", "Kombo is not in the database row: " + JSON.stringify(v));
     await p.selectOption("#f-reader", R2); await p.waitForTimeout(150);
-    v = await vals(); check(v.dur === "120" && v.price === "200", "İlkin from the database: 2 h, 200: " + JSON.stringify(v));
+    v = await vals(); check(v.dur === "120", "İlkin from the database: 2 h: " + JSON.stringify(v));
     await p.click('[data-act="close"]'); await p.waitForTimeout(300);
     if (await p.locator('[data-act="draft-drop"]').count()) await p.click('[data-act="draft-drop"]');
     await p.click('#tabs [data-tab="readers"]'); await p.waitForTimeout(300);
@@ -37,23 +38,19 @@ module.exports = async () => {
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
     await p.click('#tabs [data-tab="readers"]'); await p.click('[data-act="set-sec"][data-id="spec"]').catch(() => {});
-    await p.click('[data-act="presets"]'); await p.locator("#ps-price").waitFor();
-    check(await p.inputValue("#ps-price") === "111", "the window shows the stored price");
+    await p.click('[data-act="presets"]'); await p.locator('[data-act="ps-save"]').waitFor();
+    check(!(await p.locator('#ps-price, [data-f="p"]').count()), "no prices in the window");
     check(await p.inputValue('[data-ps="svc"][data-k="Masaj"][data-f="d"]') === "45", "the window shows Masaj's length");
-    await p.fill("#ps-price", "abc"); await p.click('[data-act="ps-save"]'); await p.waitForTimeout(200);
-    check(await p.locator("#ps-err:not([hidden])").count() === 1, "a wrong price is refused");
-    await p.fill("#ps-price", "125");
-    await p.fill('[data-ps="svc"][data-k="Masaj"][data-f="p"]', "");
     await p.selectOption('[data-ps="svc"][data-k="Masaj"][data-f="d"]', "");
-    await p.selectOption('[data-ps="svc"][data-k="Kombo"][data-f="d"]', "60"); await p.fill('[data-ps="svc"][data-k="Kombo"][data-f="p"]', "100,5");
-    await p.fill('[data-ps="reader"][data-k="' + R1 + '"][data-f="p"]', "90");
+    await p.selectOption('[data-ps="svc"][data-k="Kombo"][data-f="d"]', "60");
     await p.click('[data-act="ps-save"]'); await p.waitForTimeout(800);
     const row = s.db.app_settings.find((x) => x.id === "presets"), val = row && row.value;
-    check(val && val.price === 125, "price saved: " + JSON.stringify(val));
-    check(val && !val.svc.Masaj && JSON.stringify(val.svc.Kombo) === "[60,100.5]" && JSON.stringify(val.svc.Hicama) === "[null,35]", "services saved, an emptied one removed: " + JSON.stringify(val && val.svc));
-    check(val && JSON.stringify(val.reader[R1]) === "[null,90]" && JSON.stringify(val.reader[R2]) === "[120,200]", "specialists saved: " + JSON.stringify(val && val.reader));
+    check(val && val.price === null, "no price saved: " + JSON.stringify(val));
+    check(val && !val.svc.Masaj && JSON.stringify(val.svc.Kombo) === "[60,null]" && !val.svc.Hicama, "lengths saved, emptied ones removed: " + JSON.stringify(val && val.svc));
+    check(val && JSON.stringify(val.reader[R2]) === "[120,null]" && !val.reader[R1], "specialists saved: " + JSON.stringify(val && val.reader));
     await p.click('#tabs [data-tab="day"]'); await p.click("#fab"); await p.locator("#f-reader").waitFor();
-    check(await p.inputValue("#f-price") === "125", "the next new booking starts with the new price");
+    await p.click('label:has(input[name="f-service"][value="Kombo"])'); await p.waitForTimeout(150);
+    check(await p.inputValue("#f-dur") === "60" && !(await p.locator("#f-price").count()), "the next new booking: Kombo 1 hour, no price");
     await p.click('[data-act="close"]'); await p.waitForTimeout(300); if (await p.locator('[data-act="draft-drop"]').count()) await p.click('[data-act="draft-drop"]');
 
     // (3) a new product, its answer lost, «Əlavə et» again: one row

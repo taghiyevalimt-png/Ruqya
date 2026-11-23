@@ -30,14 +30,12 @@ module.exports = async () => {
     const [dl] = await Promise.all([p.waitForEvent("download"), p.click("a[download]")]);
     const x = unzip(require("fs").readFileSync(await dl.path()));
     const names = [...x["xl/workbook.xml"].matchAll(/<sheet name="([^"]+)"/g)].map((m) => m[1]);
-    check(JSON.stringify(names) === JSON.stringify(["Bu həftə", "Keçən həftə", "Bu ay", "Keçən ay", "Pul", "Məhsul"]), "six sheets like the sections: " + names.join(" | "));
+    check(JSON.stringify(names) === JSON.stringify(["Bu həftə", "Keçən həftə", "Bu ay", "Keçən ay", "Məhsul"]), "five sheets like the sections (no «Pul» since 23.11): " + names.join(" | "));
     const rows = (n) => [...(x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "").matchAll(/<row [^>]*>(.*?)<\/row>/g)].map((r) => [...r[1].matchAll(/<c [^>]*?(?:\/>|>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>)/g)].map((m) => m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : ""));
     const bw0 = rows("Bu həftə"), bw = bw0.slice(bw0.findIndex((r) => r[0] === "Ümumi cədvəl")), all = bw.map((r) => r.join("|")).join("\n");
     check(!/Köhnə Pasiyent/.test(all), "no booking list in the file");
     const nur = bw.find((r) => r[0] === "Nurlana"), sn = screen.find((r) => r[0] === "Nurlana");
     check(nur && sn && nur.length === sn.length && nur.every((v, i) => String(v) === sn[i] || (sn[i] === "—" && v === "—") || (sn[i] === "·" && v === "·")), "Excel row = the screen row: " + JSON.stringify([nur, sn]));
-    const pul = rows("Pul").map((r) => r[0]).filter((v) => /—/.test(v));
-    check(pul.length === 4, "Pul: the four periods one under another: " + pul.join(" | "));
     check(/Misvak/.test(rows("Məhsul").map((r) => r.join("|")).join("\n")), "Məhsul: the products table");
     const st = x["xl/styles.xml"];
     check(/<sz val="12"\/>/.test(st) && !/<sz val="(8|9|10|11)"\/>/.test(st), "readable font (12)");

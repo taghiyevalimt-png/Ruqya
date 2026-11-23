@@ -32,13 +32,9 @@ module.exports = async () => {
     await p.click(back); await p.waitForTimeout(200);
     check(/Dünən/.test(await txt("#main .sthead")) && /Nurlana315 ₼/.test(await txt('[data-st^="prod-"]')) && /Əli00 ₼/.test(await txt('[data-st^="prod-"]')), "‹ shows yesterday's sales");
     check(await p.locator(back).isDisabled(), "no going further back than yesterday");
-    // Pul → Bu gün keeps the same day switch, no services
-    await p.click('#top [data-act="st-sec"][data-id="money"]'); await p.waitForTimeout(200);
-    check(/Dünən/.test(await txt("#main .sthead")), "Pul today follows the same day (yesterday)");
+    // (the «Pul» section is gone since 23.11 late evening) › goes back to today
     await p.click(fwd); await p.waitForTimeout(200);
     check(/Bu gün/.test(await txt("#main .sthead")) && await p.locator(fwd).isDisabled(), "› back to today");
-    const mh = await p.evaluate(() => [...document.querySelectorAll('[data-st^="money-"] th.v span')].map((x) => x.textContent.trim()));
-    check(!mh.some((h) => /Ruqya|Hicama|Kombo|Psixoloq/.test(h)), "Pul: no service columns: " + mh);
     // main «Bu gün» section can go to yesterday too
     await p.click('#top [data-act="st-sec"][data-id="today"]'); await p.waitForTimeout(200);
     await p.click(back); await p.waitForTimeout(200);

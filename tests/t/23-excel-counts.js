@@ -28,10 +28,9 @@ module.exports = async () => {
     const shared = x["xl/sharedStrings.xml"] ? [...x["xl/sharedStrings.xml"].matchAll(/<t[^>]*>([^<]*)<\/t>/g)].map((m) => m[1]) : [];
     const sheet = (n) => x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "";
     const cells = (xml) => [...xml.matchAll(/<c [^>]*?(t="(s|inlineStr|str)")?[^>]*>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>/g)].map((m) => (m[2] === "s" ? shared[+m[3]] : m[3] !== undefined ? m[3] : m[4]));
-    const money = cells(sheet("Pul")), sales = cells(sheet("Keçən həftə"));   // owner 22.11: the sheets are the screen's sections
+    const sales = cells(sheet("Keçən həftə"));   // owner 22.11: the sheets are the screen's sections («Pul» removed 23.11)
     const nums = (arr) => arr.filter((v) => /^\d+(\.\d+)?$/.test(v)).map(Number);
-    check(!nums(money).includes(260), "weekly money sheet: 130 ₼ booking counted once, not 260: " + money.join(" | "));
-    check(nums(money).includes(130), "weekly money sheet shows 130: " + money.join(" | "));
+    check(!names.includes("Pul"), "no «Pul» sheet: " + names.join(" | "));
     check(!nums(sales).some((n) => n === 2), "weekly sales sheet: written once, successful once (no 2): " + sales.join(" | "));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }

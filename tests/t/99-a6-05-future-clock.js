@@ -8,7 +8,7 @@ module.exports = async () => {
     try {
       const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 20000 }); await p.waitForTimeout(1500);
       await p.click('#tabs [data-tab="stats"]');
-      for (const sec of ["today", "cweek", "week", "cmonth", "month", "money", "prod"]) {
+      for (const sec of ["today", "cweek", "week", "cmonth", "month", "prod"]) {
         const t0 = Date.now(); await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]').catch(() => {}); await p.waitForTimeout(150);
         const ms = Date.now() - t0;
         check(ms < 3000, clock + " " + sec + ": opens in " + ms + " ms");

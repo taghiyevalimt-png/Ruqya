@@ -15,7 +15,7 @@ module.exports = async () => {
     await p.waitForTimeout(300); await settle();
     const top1 = await p.$eval("#sheet", (e) => Math.round(e.getBoundingClientRect().top));
     check(Math.abs(top1 - top0) <= 1, "window stays where it was: " + top0 + " -> " + top1);
-    for (const f of ["f-name", "f-phone", "f-price", "f-note"]) {
+    for (const f of ["f-name", "f-phone", "f-note"]) {
       const b = await p.$eval("#" + f, (e) => Math.round(e.getBoundingClientRect().bottom));
       check(b < 500, f + " stays above the keyboard: bottom " + b);
     }

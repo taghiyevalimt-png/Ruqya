@@ -13,7 +13,7 @@ module.exports = async () => {
     await p.fill("#f-phone", "050 222 33 44");
     await p.click('[data-act="save-appt"]');
     await p.waitForTimeout(800);
-    check(s.db.appts.some((a) => a.name === "Yeni Pasiyent" && a.price === 130), "booking saved to db");
+    check(s.db.appts.some((a) => a.name === "Yeni Pasiyent" && a.price === 0), "booking saved to db (no price since 23.11)");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

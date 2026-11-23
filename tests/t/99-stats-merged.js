@@ -10,7 +10,7 @@ module.exports = async () => {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(400);
     const secs = await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id));
-    check(JSON.stringify(secs) === JSON.stringify(["today", "cweek", "week", "cmonth", "month", "money", "prod"]), "«Bu gün» first, four periods, then money and products apart: " + secs);
+    check(JSON.stringify(secs) === JSON.stringify(["today", "cweek", "week", "cmonth", "month", "prod"]), "«Bu gün» first, four periods, then products (no «Pul» since 23.11): " + secs);
     check(await p.locator(".pay.big table.big").count() === 1, "this week: one merged table (no day-by-day table)");
     const head = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] th.v span')].map((x) => x.textContent));
     check(["WP", "Yazdı", "Ruqya", "Hicama", "Ofis", "Onlayn"].every((x) => head.includes(x)), "requests, bookings, services and places in one table: " + head);
@@ -26,8 +26,6 @@ module.exports = async () => {
     await p.click('[data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(200);
     check(await p.locator("details.rulesbox").count() === 1, "rules and terms folded inside");
     for (const id of ["week", "cmonth", "month"]) { await p.click('[data-act="st-sec"][data-id="' + id + '"]'); await p.waitForTimeout(200); check(await p.locator('[data-st^="big-"]').count() === 1, id + ": the merged table"); }
-    await p.click('[data-act="st-sec"][data-id="money"]'); await p.waitForTimeout(200);
-    check(await p.locator('[data-act="st-per"]').count() === 5 && await p.locator('[data-st^="money-"]').count() === 1, "money: its own section with «Bu gün» and the four periods (owner 23.11)");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
   s = await open(AGENT, { db });

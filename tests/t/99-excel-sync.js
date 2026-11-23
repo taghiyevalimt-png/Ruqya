@@ -17,7 +17,7 @@ module.exports = async () => {
     // owner 22.11: first in «Bu gün» and the periods; not in «Pul» and «Məhsul» (nothing to do with money / products)
     for (const sec of ["today", "cweek", "week", "cmonth", "month"]) { await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(200);
       check(await p.evaluate(() => { const a = document.querySelector('[data-st^="sess-"]'), b = document.querySelector('[data-st^="big-"]'); return !!(a && b && (a.compareDocumentPosition(b) & 4)); }), sec + ": «Kim neçə seans yazıb» stands before «Ümumi cədvəl»"); }
-    for (const sec of ["money", "prod"]) { await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(200); check(await p.locator('[data-st^="sess-"]').count() === 0, sec + ": no sessions table"); }
+    for (const sec of ["prod"]) { await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(200); check(await p.locator('[data-st^="sess-"]').count() === 0, sec + ": no sessions table"); }
     // type WP 5 for Nurlana this week
     await p.click('#top [data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(200);
     await p.click('[data-st="big-cweek"] [data-act="st-edit"][data-id="' + AGENT + '"][data-col="w"]'); await p.locator("#se-v").waitFor();
@@ -29,7 +29,7 @@ module.exports = async () => {
     const bw0 = rows("Bu həftə"), bw = bw0.slice(bw0.findIndex((r) => r[0] === "Ümumi cədvəl")), nur = bw.find((r) => r[0] === "Nurlana");
     check(nur && nur[1] === "5", "the typed WP 5 is in Excel: " + JSON.stringify(nur));
     check(bw0.findIndex((r) => r[0] === "Kim neçə seans yazıb") < bw0.findIndex((r) => r[0] === "Ümumi cədvəl") && bw0.some((r) => r[0] === "Əli" && r[1] === "Mütəxəssis" && r[2] === "1"), "Excel: the sessions table first, then the merged table");
-    check(!rows("Pul").some((r) => r[0] === "Kim neçə seans yazıb") && !rows("Məhsul").some((r) => r[0] === "Kim neçə seans yazıb"), "Excel: not in Pul and Məhsul");
+    check(!rows("Məhsul").some((r) => r[0] === "Kim neçə seans yazıb") && !rows("Pul").length, "Excel: not in Məhsul; no «Pul» sheet");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

@@ -48,7 +48,7 @@ module.exports = async () => {
     };
     // owner 22.11: Excel = the screen's sections; the last finished week is the sheet «Keçən həftə»
     let X = await xls();
-    check(JSON.stringify(X.names) === JSON.stringify(["Bu həftə", "Keçən həftə", "Bu ay", "Keçən ay", "Pul", "Məhsul"]), "Excel sheets are the sections: " + X.names.join(" | "));
+    check(JSON.stringify(X.names) === JSON.stringify(["Bu həftə", "Keçən həftə", "Bu ay", "Keçən ay", "Məhsul"]), "Excel sheets are the sections: " + X.names.join(" | "));
     const kw0 = X.rows("Keçən həftə"), kw = kw0.slice(kw0.findIndex((r) => r[0] === "Ümumi cədvəl")), hd = kw.find((r) => r.includes("WP")), tot = kw.find((r) => r[0] === "Cəmi");
     const at = (n) => tot[hd.indexOf(n)];
     check(hd && tot && at("Masaj") === "2" && at("Hicama") === "1" && at("Ruqya") === "2" && at("Ünvan") === "1" && at("Onlayn") === "2", "Excel: services and places of the week like the screen: " + JSON.stringify([hd, tot]));
