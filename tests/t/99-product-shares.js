@@ -19,8 +19,9 @@ module.exports = async () => {
     check(sh === "1111=10,2222=50", "saved: Əli 50%, Nurlana 10%: " + sh);
     await p.click('[data-act="close"]'); await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
     const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")));   // owner 23.11: per seller only pieces, sum, part
-    // owner 23.11: a specialist's share is his part of EVERY sale of the product — Əli 50 %: 10 (his sale) + 20 (Nurlana's)
-    check(rows.some((r) => /^Əli\|1\|20.*\|30/.test(r)) && rows.some((r) => /^Nurlana\|2\|40.*\|4/.test(r)), "admin: every person's part: " + JSON.stringify(rows));
+    // owner 23.11: a specialist's share comes from sales to HIS patients; Nurlana's sale named nobody (an earlier, neutral
+    // sale) — so Əli 50 %: 10 from his own sale only
+    check(rows.some((r) => /^Əli\|1\|20.*\|10/.test(r)) && rows.some((r) => /^Nurlana\|2\|40.*\|4/.test(r)), "admin: every person's part: " + JSON.stringify(rows));
     // changing back to empty deletes the percent
     await p.click('#tabs [data-tab="cash"]'); await p.click('[data-act="catalog"]'); await p.click('[data-act="cat-edit"]'); await p.locator("#c-pct-" + AGENT).waitFor();
     await p.fill("#c-pct-" + AGENT, ""); await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
@@ -40,10 +41,10 @@ module.exports = async () => {
     check(bs && bs.staff_id === SPEC && bs.pct === 30, "a new product saved with its percent: " + JSON.stringify(bs));
     check(!s.errors.length, "admin: no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
-  // the server gives everybody only his own percents (row security) and a specialist his own sales plus every sale of a
-  // product he has a share in (owner 23.11, sql/2026-11-product-owner.sql); the fake database does the same here
+  // the server gives everybody only his own percents (row security) and a specialist his own sales plus the sales to his
+  // patients (owner 23.11, sql/2026-11-patient-of.sql); the fake database does the same here
   const own = (id) => { const d = JSON.parse(JSON.stringify(db)); d.product_shares = d.product_shares.filter((x) => x.staff_id === id);
-    d.product_sales = id === SPEC ? d.product_sales.filter((x) => x.created_by === SPEC || d.product_shares.some((sh) => sh.product_id === x.product_id)) : d.product_sales; return d; };
+    d.product_sales = id === SPEC ? d.product_sales.filter((x) => x.created_by === SPEC || x.patient_of === SPEC) : d.product_sales; return d; };
   for (const [who, name, mine, other] of [[SPEC, "Əli", "10", "Nurlana"], [AGENT, "Nurlana", "6", "Əli"]]) {
     s = await open(who, { db: own(who) });
     try {
@@ -55,15 +56,9 @@ module.exports = async () => {
       const txt = await p.textContent("#main");
       const own = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim())));
       const part = (r) => r && r[r.length - 1];
-      if (who === SPEC) {
-        // owner 23.11: the specialist sees who sold his product and his part of each seller's sales: 10 (own) + 20 (Nurlana)
-        const me = own.find((r) => r[0] === name), nu = own.find((r) => r[0] === other);
-        check(own.length === 2 && me && /^10[,.]?0* ?₼/.test(part(me)) && nu && nu[1] === "2" && /^20[,.]?0* ?₼/.test(part(nu)), name + ": his row 10 and Nurlana's sales with his part 20: " + JSON.stringify(own));
-        check(!/\b4 ₼|\b6 ₼/.test(txt), name + ": not Nurlana's own commission");
-      } else {
-        check(own.length === 1 && own[0][0] === name && new RegExp("^" + mine + "[,.]?0* ?₼").test(part(own[0])), name + ": only his own row with his part " + mine + ": " + JSON.stringify(own));
-        check(!txt.includes(other) && !/Satanlar üzrə/.test(txt), name + ": nobody else's sales or part");
-      }
+      // Nurlana's sale named no patient (neutral): the specialist does not see it (owner 23.11)
+      check(own.length === 1 && own[0][0] === name && new RegExp("^" + mine + "[,.]?0* ?₼").test(part(own[0])), name + ": only his own row with his part " + mine + ": " + JSON.stringify(own));
+      check(!txt.includes(other) && !/Satanlar üzrə/.test(txt), name + ": nobody else's sales or part");
       check(!s.errors.length, name + ": no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }
   }

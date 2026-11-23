@@ -17,6 +17,8 @@ module.exports = async () => {
       await pg.click('[data-act="new-prod"]'); await pg.locator("#sheet .pbtn").first().waitFor();
       const taps = {}; const n = 1 + Math.floor(R() * 3);
       for (let k = 0; k < n; k++) { const i = Math.floor(R() * names.length); await pg.locator("#sheet .pbtn").nth(i).click({ delay: R() < .5 ? 0 : 30 }); taps[i] = (taps[i] || 0) + 1; }
+      // owner 23.11: a sales agent must say whose patient bought — here a passer-by («Keçici»)
+      if (by === AGENT) await pg.click('[data-act="sell-pat"][data-id="-"]');
       if (mode === "500") ctl.failWrite = { status: 500, body: { message: "boom" } };
       if (mode === "net") ctl.failWrite = "net";
       if (mode === "double") { await pg.evaluate(() => { const b = document.querySelector('[data-act="sell-save"]'); b.click(); b.click(); }); }
@@ -48,6 +50,7 @@ module.exports = async () => {
     check(!lost.length, "0 lost sales / names: " + lost.slice(0, 5).join("; "));
     check(!extra.length, "0 duplicates: " + extra.slice(0, 5).join("; "));
     check(db.product_sales.every((x) => x.date === T), "every sale dated today");
+    check(db.product_sales.filter((x) => x.created_by === AGENT).every((x) => x.patient_of === null), "the agent's sales: nobody's patient («Keçici»)");
     check(db.product_sales.every((x) => names.includes(x.names)), "every name exactly as the product (commas, quotes, emoji, 60 letters)");
     // the first worker sees every sale of the day (his and the second worker's) after a reload
     await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(2600); await p.click('#tabs [data-tab="cash"]'); await p.waitForTimeout(300);

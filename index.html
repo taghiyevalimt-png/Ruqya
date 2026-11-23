@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-R8yIgw8v5Q3/1jxpxsmJikijLbaV4J+3+wKWxkM7j/0='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-7bvSqA/9LvAuM/A95mq9Lmg1VvGG4zd2cw9QuRCOdl4='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -368,6 +368,8 @@ select.unit{height:40px;border:1px solid var(--line);border-radius:10px;backgrou
 .pctgrid .pin{display:flex;align-items:center;gap:4px}.pctgrid input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:var(--ink);width:100%;min-width:0}
 .pctgrid i{font-style:normal}.stt small.pct{color:var(--muted);font-size:11px;font-weight:500}
 .pctlist{display:flex;flex-direction:column;gap:6px}.pctrow{display:grid;grid-template-columns:1fr 128px 72px;align-items:center;gap:6px;font-size:15px}
+/* owner 23.11: «Kimin pasiyentidir?» — every specialist visible (lines wrap), «Keçici» on its own full line */
+.chips.patch{flex-wrap:wrap;overflow:visible;white-space:normal}.chips.patch .chip{flex:0 0 auto;margin-bottom:0}.chips.patch .neutral{flex:1 1 100%;text-align:center}
 .wbtns{display:flex;flex-direction:column;gap:8px}.nogap .wbtns>*+*{margin-top:8px}.psrow{grid-template-columns:1fr 136px 78px}.psrow select{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 4px;font:inherit;font-size:14px;color:inherit;width:100%;min-width:0}.pctrow small{color:var(--muted);font-size:12px}.pctrow input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;text-align:right;font:inherit;color:inherit;width:100%}
 .pctrow i{font-style:normal;color:var(--muted)}.pctrow b{text-align:right;color:var(--accent)}
 .ptotal.mine{border-top:0;padding-top:0}.ptotal.mine b{color:var(--accent);font-size:16px}
@@ -840,11 +842,16 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
+"Satış agenti — yalnız özü satanda. Mütəxəssis — öz pasiyentinə satılanda: özü satanda və ya agent satışda onu seçəndə. «Keçici» satışdan mütəxəssisə heç nə qalmır.":"Агент продаж — только когда продаёт сам. Специалист — когда продают его пациенту: сам или агент, выбравший его в продаже. С продажи «Прохожему» специалисту ничего не остаётся.",
+"Sizin satışlarınız və sizin pasiyentlərinizə edilən satışlar (hansı agent satıbsa). «Payı» — hər satışdan sizə qalan hissə.":"Ваши продажи и продажи вашим пациентам (с тем, какой агент продал). «Доля» — что остаётся вам с каждой продажи.",
+"«Payı» — hər kəsə qalan hissə: agentə öz satışından, mütəxəssisə öz pasiyentlərinə edilən satışlardan. Kassa → ⚙ Məhsullar → məhsul → «Kimə nə qalır».":"«Доля» — что остаётся каждому: агенту — с его продаж, специалисту — с продаж его пациентам. Касса → ⚙ Товары → товар → «Кому что остаётся».",
+"Kimin pasiyentidir?":"Чей это пациент?",
+"Keçici (heç kimin pasiyenti deyil)":"Прохожий (ничей пациент)",
+"Keçici":"Прохожий",
+"Mütəxəssisin pasiyentidirsə — onu seçin: satış onun statistikasında görünür. Keçicidirsə — yalnız sizdə görünür.":"Если это пациент специалиста — выберите его: продажа будет видна в его статистике. Если прохожий — видна только вам.",
+"Kimin pasiyenti olduğunu seçin: mütəxəssis və ya «Keçici».":"Выберите, чей это пациент: специалист или «Прохожий».",
 "Sizə: ":"Вам: ",
 "Kimə nə qalır":"Кому что остаётся",
-"Satış agenti — yalnız özü satanda. Mütəxəssis — bu məhsulun hər satışından, kim satsa da (məsələn, öz məhsulu).":"Агент продаж — только когда продаёт сам. Специалист — с каждой продажи этого товара, кто бы ни продал (например, свой товар).",
-"Sizin məhsullarınızın bütün satışları (kim satıbsa) və sizin satışlarınız. «Payı» — hər satıcının satışından sizə qalan hissə.":"Все продажи ваших товаров (кто бы ни продал) и ваши продажи. «Доля» — что остаётся вам с продаж каждого продавца.",
-"«Payı» — hər kəsə qalan hissə: agentə öz satışından, mütəxəssisə öz məhsulunun hər satışından (kim satsa da). Kassa → ⚙ Məhsullar → məhsul → «Kimə nə qalır».":"«Доля» — что остаётся каждому: агенту — с его продаж, специалисту — с каждой продажи его товара (кто бы ни продал). Касса → ⚙ Товары → товар → «Кому что остаётся».",
 "Vidcet əlavə et":"Добавить виджет",
 "Gündəlik vidcet":"Виджет на день",
 "Həftəlik vidcet":"Виджет на неделю",
@@ -1885,7 +1892,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123104719";
+var APP_VERSION="20261123113423";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2121,7 +2128,7 @@ function tfetch(u,o){
   return fetch(u,o).then(function(r){clearTimeout(t);return authFix(u,r)},function(e){clearTimeout(t);throw e});
 }
 var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:tfetch}}):null;
-function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,shares:{},hasShares:false,svcPct:{},hasSvcPct:false,v2:false,hasDur:false,hasProducts:false,presets:null,hasPresets:false}}
+function blank(){return{wants:{},hasPriv:false,hasConf:false,statEdits:[],hasStatEdits:false,hasUpd:false,hasAudit:false,loadedFrom:"",hist:[],histLoaded:false,roles:{},roleSet:{},hasRole:false,readers:[],appts:[],services:[],expenses:[],staff:{},breaks:[],products:[],catalog:[],hasCatalog:false,shares:{},hasShares:false,svcPct:{},hasSvcPct:false,v2:false,hasDur:false,hasProducts:false,presets:null,hasPresets:false,hasPatOf:true}}
 var state=blank();
 var auth={user:null,ready:false,loaded:false,msg:""};
 var offline=navigator.onLine===false,seq=0,rt=null,rtTimer=null,msgTimer=null;
@@ -2384,7 +2391,7 @@ function canAddBrk(){return canBreaks()||(specMe()&&!!state.hasBrkDays&&activeRe
 /* A break with no specialist is for everyone; otherwise only for that specialist. */
 function brkFor(b,rid){return !b.rid||b.rid===rid}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
-function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||"",pid:x.product_id||"",qty:+x.qty>0?+x.qty:1,price:+x.price||0}}
+function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||"",pid:x.product_id||"",qty:+x.qty>0?+x.qty:1,price:+x.price||0,pat:x.patient_of||""}}
 /* owner 22.11: the admin's list of products (buttons in «Məhsul satışı») */
 function mapCat(x){return{id:x.id,name:x.name||"",price:+x.price||0,archived:!!x.archived,sort:+x.sort||0,created:x.created_at||""}}
 function sortCat(){state.catalog.sort(function(a,b){return (a.sort-b.sort)||String(a.created).localeCompare(String(b.created))||String(a.name).localeCompare(String(b.name))})}
@@ -2403,16 +2410,25 @@ function ruleRead(inp){var v=String(inp.value).replace(",",".").replace(/[%₼\s
   if(v==="")return {p:0,a:0};var n=+v;if(isNaN(n)||n<0||(u==="p"&&n>100)||n>MAXSUM)return null;n=Math.round(n*100)/100;return u==="a"?{p:0,a:n}:{p:n,a:0}}
 function ruleInput(attrs,r){r=r||{p:0,a:0};var v=r.a||r.p||"";
   return '<input '+attrs+' type="text" inputmode="decimal" maxlength="9" autocomplete="off" placeholder="0" value="'+v+'"><select class="unit" aria-label="'+esc(L("Faiz və ya məbləğ"))+'"><option value="p"'+(r.a?'':' selected')+'>%</option><option value="a"'+(r.a?' selected':'')+'>'+CUR+'</option></select>'}
-/* owner 23.11: who gets what from a sale. A SPECIALIST's share in a product is his part of every sale of that product,
-   whoever sells it (Dr. Günel's own products); an agent's (or admin's) share is his part of his own sales only. */
+/* owner 23.11: who gets what from a sale. A SPECIALIST's share in a product is paid from the sales to HIS patients:
+   his own sales, and agents' sales where the agent chose him as the patient's specialist («Kimin pasiyentidir?»);
+   a neutral sale («Keçici») gives no specialist anything. An agent's (or admin's) share: his own sales only. */
+function patOf(x){return x.pat||(state.roles[x.by]==="specialist"?x.by:"")}
 function shareTo(x,k){var t=x.pid&&state.shares[x.pid],r=t&&t[k];if(!ruleSet(r))return 0;
-  return state.roles[k]==="specialist"||x.by===k?rulePart(r,x.amount,x.qty):0}
-function ownsProd(pid,k){var t=pid&&state.shares[pid];return !!(t&&ruleSet(t[k])&&state.roles[k]==="specialist")}
-/* everything taken from one sale: the seller's part and the specialists' parts of their products */
-function shareAll(x){var t=x.pid&&state.shares[x.pid],sum=0;if(!t)return 0;Object.keys(t).forEach(function(k){sum+=shareTo(x,k)});return Math.round(sum*100)/100}
+  return (state.roles[k]==="specialist"?patOf(x)===k:x.by===k)?rulePart(r,x.amount,x.qty):0}
+/* the specialists an agent picks from in a sale: the accounts with the specialist role */
+function patChoices(){return Object.keys(state.staff).filter(function(k){return state.roleSet[k]&&state.roles[k]==="specialist"}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))})}
+function patName(x){var k=patOf(x);return k?(state.staff[k]||L("Adsız")):L("Keçici")}
+/* a sales agent must say whose patient bought: a specialist or «Keçici» (nobody's) */
+function needsPat(){return !!(auth.user&&state.roles[auth.user.id]==="agent")}
+function patPicker(cur){var ch=patChoices();
+  return '<div class="field"><span class="lbl">'+L("Kimin pasiyentidir?")+' *</span><div class="chips patch" role="group" aria-label="'+esc(L("Kimin pasiyentidir?"))+'">'+
+    ch.map(function(k){return '<button type="button" class="chip" data-act="sell-pat" data-id="'+esc(k)+'" aria-pressed="'+(cur===k)+'">'+esc(state.staff[k]||L("Adsız"))+'</button>'}).join("")+
+    '<button type="button" class="chip neutral" data-act="sell-pat" data-id="-" aria-pressed="'+(cur==="-")+'">'+L("Keçici (heç kimin pasiyenti deyil)")+'</button></div>'+
+    '<p class="hint" style="margin:4px 0 0">'+L("Mütəxəssisin pasiyentidirsə — onu seçin: satış onun statistikasında görünür. Keçicidirsə — yalnız sizdə görünür.")+'</p></div>'}
 function sellers(){return Object.keys(state.staff).filter(function(k){return state.roleSet[k]&&(state.roles[k]==="specialist"||state.roles[k]==="agent")}).sort(function(a,b){return String(state.staff[a]).localeCompare(String(state.staff[b]))})}
 /* a specialist sees his own sales and (owner 23.11) every sale of a product he has a share in */
-function myProds(){return specMe()?state.products.filter(function(x){return x.by===auth.user.id||ownsProd(x.pid,auth.user.id)}):state.products}
+function myProds(){return specMe()?state.products.filter(function(x){return x.by===auth.user.id||patOf(x)===auth.user.id}):state.products}
 function mapLite(x){return{id:x.id,readerId:x.reader_id,date:x.date,time:"",name:x.name||"",phone:x.phone||"",price:0,status:ST[x.status]?x.status:"wait",dur:90,by:x.created_by||"",created:"",lite:true}}
 function upsertBy(list,row){edIdx=null;for(var i=0;i<list.length;i++)if(list[i].id===row.id){list[i]=row;return}list.push(row)}
 function removeBy(list,id){edIdx=null;for(var i=list.length-1;i>=0;i--)if(list[i].id===id)list.splice(i,1)}
@@ -3911,7 +3927,7 @@ function cashMain(){
       var nm=x.pid?'<span class="pline"><b>'+esc(x.names||(ci?ci.name:L("Məhsul")))+'</b>'+(x.qty>1?' <span class="qty num">× '+x.qty+'</span>':'')+'</span>'
         :(it.length?'<ul>'+it.slice(0,10).map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul>'+(more?'<button class="link more" data-act="prod-all" data-id="'+esc(x.id)+'" aria-label="'+esc(L("Hamısını göstər"))+'">… '+tf(L("daha {n}"),{n:it.length-10})+'</button>':''):'<span class="noname">'+L("Adsız satış")+'</span>');
       return '<div class="psale"><div class="pnames">'+nm+'</div>'+
-        '<div class="pside"><b class="num">'+money(x.amount)+'</b>'+(specMe()&&x.by===auth.user.id?'':'<span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>')+(specMe()&&x.by!==auth.user.id&&shareTo(x,auth.user.id)>0?'<span class="mine">'+L("Sizə: ")+money(shareTo(x,auth.user.id))+'</span>':'')+
+        '<div class="pside"><b class="num">'+money(x.amount)+'</b>'+(specMe()&&x.by===auth.user.id?'':'<span>'+L("Satdı: ")+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</span>')+(!specMe()&&x.pid&&state.hasPatOf&&state.roles[x.by]!=="specialist"?'<span class="patof">'+L("Pasiyent: ")+esc(patName(x))+'</span>':'')+(specMe()&&x.by!==auth.user.id&&shareTo(x,auth.user.id)>0?'<span class="mine">'+L("Sizə: ")+money(shareTo(x,auth.user.id))+'</span>':'')+
         (mine?'<span class="pbtns"><button class="link" data-act="edit-prod" data-id="'+esc(x.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></span>':'')+'</div></div>'}).join("")+
         '<div class="ptotal"><span>'+tf(L("Cəmi: {n} məhsul"),{n:qn})+'</span><b class="num">'+money(tot)+'</b></div>'+
         (function(){var my=0;pr.forEach(function(x){my+=shareTo(x,auth.user.id)});return my>0?'<div class="ptotal mine"><span>'+L("Sizin payınız")+'</span><b class="num">'+money(my)+'</b></div>':''})()
@@ -3935,6 +3951,7 @@ function sellForm(){
   h+='<div class="pgrid">'+list.map(function(c){var n=cnt[c.id]||0;
     return '<div class="pbtnw"><button type="button" class="pbtn'+(n?' on':'')+'" data-act="sell-add" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name+", "+money(c.price)+(n?", "+n:""))+'"><b>'+esc(c.name)+'</b><span class="num">'+money(c.price)+'</span>'+(n?'<i class="num">'+n+'</i>':'')+'</button>'+
       (n?'<button type="button" class="pminus" data-act="sell-sub" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Bir az çıx")+": "+c.name)+'">−</button>':'')+'</div>'}).join("")+'</div>';
+  if(needsPat())h+=patPicker(x.pat||"");
   h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||today)+'"></div><div></div></div>'+notToday(x.date||today);
   h+='<div class="ptotal big"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div>';
   h+='<p class="hint">'+L("Satan avtomatik qeyd olunur: ")+esc(state.staff[auth.user.id]||L("siz"))+'.</p>';
@@ -3968,6 +3985,7 @@ function sellEdit(){
   return '<h2>'+esc(c?c.name:(x.names||L("Məhsul")))+CLOSE+'</h2><p class="hint">'+esc(fmtDay(x.date))+' · '+money(pr)+' · '+esc(state.staff[x.by]||L("Adsız istifadəçi"))+'</p>'+
     '<div class="stepper"><button type="button" class="icon-btn" data-act="sell-q" data-n="-1" aria-label="−"'+(q>1?'':' disabled')+'>−</button><b class="num">'+q+'</b><button type="button" class="icon-btn" data-act="sell-q" data-n="1" aria-label="+">+</button></div>'+
     '<div class="ptotal big"><span>'+L("Məbləğ")+'</span><b class="num">'+money(q*pr)+'</b></div>'+
+    (needsPat()&&x.by===auth.user.id?patPicker(sheet.pat!=null?sheet.pat:(x.pat||"-")):'')+
     '<p class="err" role="alert" id="sl-err" hidden></p><div class="btns"><button class="primary" data-act="sell-upd">'+L("Yadda saxla")+'</button><button class="danger" data-act="del-prod" data-id="'+esc(x.id)+'">'+L("Sil")+'</button></div>';
 }
 /* the admin's product list */
@@ -4002,7 +4020,7 @@ function catalogSheet(){
     '<div class="two"><div class="field"><label for="c-name">'+L("Adı")+'</label><input id="c-name" type="text" maxlength="60" autocomplete="off" value="'+esc(e?e.name:"")+'"></div>'+
     '<div class="field"><label for="c-price">'+L("Qiymət, ")+CUR+'</label><input id="c-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(e?e.price:"")+'"></div></div>'+
     (state.hasShares?(function(){var t=e&&state.shares[e.id]||{},ss=sellers();if(!ss.length)return "";
-      return '<div class="field"><span class="lbl">'+L("Kimə nə qalır")+' <span class="opt">('+L("faiz və ya bir ədədə görə məbləğ; boş — yoxdur")+')</span></span><p class="hint" style="margin:2px 0 6px">'+L("Satış agenti — yalnız özü satanda. Mütəxəssis — bu məhsulun hər satışından, kim satsa da (məsələn, öz məhsulu).")+'</p><div class="pctlist">'+ss.map(function(k){var r=t[k];
+      return '<div class="field"><span class="lbl">'+L("Kimə nə qalır")+' <span class="opt">('+L("faiz və ya bir ədədə görə məbləğ; boş — yoxdur")+')</span></span><p class="hint" style="margin:2px 0 6px">'+L("Satış agenti — yalnız özü satanda. Mütəxəssis — öz pasiyentinə satılanda: özü satanda və ya agent satışda onu seçəndə. «Keçici» satışdan mütəxəssisə heç nə qalmır.")+'</p><div class="pctlist">'+ss.map(function(k){var r=t[k];
         return '<div class="pctrow"><span>'+esc(state.staff[k]||L("Adsız"))+' <small>'+esc(roleLabel(k))+'</small></span><span class="pin">'+ruleInput('id="c-pct-'+esc(k)+'" data-pct="'+esc(k)+'" aria-label="'+esc(state.staff[k]||"")+'"',r)+'</span><b class="num" data-pv="'+esc(k)+'">'+(ruleSet(r)&&e?money(rulePart(r,e.price,1)):'')+'</b></div>'}).join("")+'</div></div>'})():'')+
     '<p class="err" role="alert" id="c-err" hidden></p><div class="btns"><button class="primary" data-act="cat-save">'+(e?L("Yadda saxla"):L("Əlavə et"))+'</button>'+
     (e?'<button class="ghost" data-act="cat-hide">'+(e.archived?L("Yenidən göstər"):L("Gizlət"))+'</button><button class="ghost" data-act="cat-new">'+L("Yeni məhsul")+'</button>':'')+'</div>'+
@@ -4037,7 +4055,7 @@ function prodStats(r,per){
   var col=function(k,nm){if(ci[k]==null){ci[k]=cols.length;cols.push({k:k,name:nm})}};
   if(!onlyMe)state.catalog.forEach(function(c){if(!c.archived)col(c.id,c.name)});
   var row=function(k){return by[k]||(by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),q:0,m:0,sh:0,pq:{}})};
-  var sel=myProds().filter(function(x){return x.date>=r.s&&x.date<=r.end&&(!onlyMe||x.by===me||(spec&&ownsProd(x.pid,me)))});
+  var sel=myProds().filter(function(x){return x.date>=r.s&&x.date<=r.end&&(!onlyMe||x.by===me||(spec&&patOf(x)===me))});
   sel.forEach(function(x){
     var c=x.pid?catItem(x.pid):null,k=c?c.id:(x.pid?"p:"+(x.names||""):"-");col(k,c?c.name:(x.pid?(x.names||L("Məhsul")):L("Başqa (əl ilə yazılıb)")));
     var w=row(x.by||"-");w.pq[k]=(w.pq[k]||0)+x.qty;w.q+=x.qty;w.m+=x.amount;
@@ -4053,7 +4071,7 @@ function prodStats(r,per){
     '<th>'+L("Satan")+'</th><th class="num">'+L("Satış")+'</th><th class="num">'+L("Məbləğ")+'</th>'+(sh?'<th class="num">'+L("Payı")+'</th>':'')+'</tr></thead><tbody>';
   rows.forEach(function(w){h+='<tr><td>'+esc(w.name)+'</td><td class="num">'+w.q+'</td><td class="num">'+money(w.m)+'</td>'+(sh?'<td class="num sum">'+money(w.sh)+'</td>':'')+'</tr>'});
   h+='</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td class="num">'+T.q+'</td><td class="num">'+money(T.m)+'</td>'+(sh?'<td class="num">'+money(T.sh)+'</td>':'')+'</tr></tfoot></table></div>'+
-    (sh?'<p class="hint">'+(spec?L("Sizin məhsullarınızın bütün satışları (kim satıbsa) və sizin satışlarınız. «Payı» — hər satıcının satışından sizə qalan hissə."):onlyMe?L("«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faiz və ya məbləğ yazır)."):L("«Payı» — hər kəsə qalan hissə: agentə öz satışından, mütəxəssisə öz məhsulunun hər satışından (kim satsa da). Kassa → ⚙ Məhsullar → məhsul → «Kimə nə qalır»."))+'</p>':'')+'</div>'+
+    (sh?'<p class="hint">'+(spec?L("Sizin satışlarınız və sizin pasiyentlərinizə edilən satışlar (hansı agent satıbsa). «Payı» — hər satışdan sizə qalan hissə."):onlyMe?L("«Payı» — satdığınız məhsullardan sizə qalan hissə (admin hər məhsul üçün faiz və ya məbləğ yazır)."):L("«Payı» — hər kəsə qalan hissə: agentə öz satışından, mütəxəssisə öz pasiyentlərinə edilən satışlardan. Kassa → ⚙ Məhsullar → məhsul → «Kimə nə qalır»."))+'</p>':'')+'</div>'+
     '<div class="pay big" data-st="prodp-'+per+'"><div class="head"><b>'+L("Məhsullar üzrə")+'</b>'+copyB()+'</div><div class="hscroll"><table class="stt"><thead><tr>'+
     '<th>'+L("Məhsul")+'</th><th class="num">'+L("Ədəd")+'</th><th class="num">'+L("Məbləğ")+'</th></tr></thead><tbody>'+
     cols.map(function(c){return '<tr><td>'+esc(c.name)+'</td><td class="num">'+(T.pq[c.k]||0)+'</td><td class="num">'+money(T.pm[c.k]||0)+'</td></tr>'}).join("")+
@@ -4954,13 +4972,18 @@ document.addEventListener("click",function(e){
   else if(act==="sell-add"||act==="sell-sub"){if(!sheet||sheet.type!=="sell"||!catItem(id))return;var sd=byId("sl-date");if(sd)sheet.date=sd.value;
     var cn=sheet.cnt;cn[id]=Math.max(0,Math.min(1000,(cn[id]||0)+(act==="sell-add"?1:-1)));if(!cn[id])delete cn[id];
     var y0=byId("sheet").scrollTop;byId("sheet").innerHTML=sellForm();byId("sheet").scrollTop=y0;return}
-  else if(act==="sell-draft-open"){var sd0=sellDrafts().filter(function(e){return sellLeft(e).length})[0];if(sd0){var c0={};sellLeft(sd0).forEach(function(k){c0[k]=sd0.cnt[k]});openSheet({type:"sell",cnt:c0,date:sd0.date,ids:sd0.ids,dk:sd0.k})}return}
+  else if(act==="sell-draft-open"){var sd0=sellDrafts().filter(function(e){return sellLeft(e).length})[0];if(sd0){var c0={};sellLeft(sd0).forEach(function(k){c0[k]=sd0.cnt[k]});openSheet({type:"sell",cnt:c0,date:sd0.date,ids:sd0.ids,dk:sd0.k,pat:sd0.pat||""})}return}
   else if(act==="sell-draft-drop"){if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}var sd1=sellDrafts().filter(function(e){return sellLeft(e).length})[0];if(sd1)sellDraftDel(sd1.k)}
+  else if(act==="sell-pat"){if(!sheet||(sheet.type!=="sell"&&sheet.type!=="selledit"))return;var sdp=byId("sl-date");if(sdp)sheet.date=sdp.value;sheet.pat=id==="-"||state.staff[id]!=null?id:"";
+    var y1=byId("sheet").scrollTop;byId("sheet").innerHTML=sheet.type==="sell"?sellForm():sellEdit();byId("sheet").scrollTop=y1;return}
   else if(act==="sell-clear"){if(sheet&&sheet.type==="sell"){var sd2=byId("sl-date");if(sd2)sheet.date=sd2.value;sheet.cnt={};byId("sheet").innerHTML=sellForm()}return}
   else if(act==="sell-save"){
     if(!sheet||sheet.type!=="sell")return;   /* a second tap after the window closed adds nothing */
     var sdt=val("sl-date");if(!okDate(sdt))return fail("sl-err",L("Tarixi düzgün seçin."));
     var lines=Object.keys(sheet.cnt).filter(function(k){return catItem(k)&&sheet.cnt[k]>0});if(!lines.length)return fail("sl-err",L("Məhsulun üstünə basın."));
+    /* owner 23.11: an agent must say whose patient bought (a specialist or «Keçici»); a specialist's sale is his own patient's */
+    if(needsPat()&&!sheet.pat)return fail("sl-err",L("Kimin pasiyenti olduğunu seçin: mütəxəssis və ya «Keçici»."));
+    var spat=needsPat()?(sheet.pat==="-"?null:sheet.pat):specMe()?auth.user.id:null;
     /* A5-03: a line keeps its id while the same sale is tried again (the server may have stored it although the answer
        was lost) — the retry is the same row, not a second one; A5-04: until it is saved, the sale is also kept on the
        phone, so a reload or a closed app does not lose it */
@@ -4969,13 +4992,13 @@ document.addEventListener("click",function(e){
     var ids0=sheet.ids||{},ids={},dk=sheet.dk||uuid();
     var goneIds=Object.keys(ids0).filter(function(k){return lines.indexOf(k)<0&&ids0[k]&&ids0[k].id}).map(function(k){return ids0[k].id});
     var srows=lines.map(function(k){var c=catItem(k),q=sheet.cnt[k],o=ids0[k];ids[k]={id:o&&o.id?o.id:uuid(),q:q,d:sdt};
-      return {id:ids[k].id,date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name}});
-    srows.forEach(function(o){upsertBy(state.products,mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price}))});
-    var keepS={k:dk,cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids},sids=srows.map(function(o){return o.id});
+      var o1={id:ids[k].id,date:sdt,product_id:c.id,qty:q,price:c.price,amount:Math.round(q*c.price*100)/100,names:c.name};if(state.hasPatOf)o1.patient_of=spat;return o1});
+    srows.forEach(function(o){upsertBy(state.products,mapProd({id:o.id,date:o.date,amount:o.amount,created_by:auth.user.id,names:o.names,product_id:o.product_id,qty:o.qty,price:o.price,patient_of:o.patient_of}))});
+    var keepS={k:dk,cnt:JSON.parse(JSON.stringify(sheet.cnt)),date:sdt,ids:ids,pat:sheet.pat||""},sids=srows.map(function(o){return o.id});
     sellDraftPut(keepS);sellPend++;
     if(goneIds.length){goneIds.forEach(function(id){removeBy(state.products,id)});db(sb.from("product_sales").delete().in("id",goneIds))}
     if(ui.tab==="cash")ui.date=sdt;   /* A5-K1: Kassa shows the day the sale went to, so it is never «gone» */
-    db(sb.from("product_sales").upsert(srows,{onConflict:"id"}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids,dk:dk})},0)}).then(function(){sellPend--;
+    db(sb.from("product_sales").upsert(srows,{onConflict:"id"}),function(){state.products=state.products.filter(function(e){return sids.indexOf(e.id)<0});render();setTimeout(function(){if(!sheet)openSheet({type:"sell",cnt:keepS.cnt,date:keepS.date,ids:keepS.ids,dk:dk,pat:keepS.pat})},0)}).then(function(){sellPend--;
       if(!dirty&&sids.every(function(id){return prodRow(id)}))sellDraftDel(dk)});
     closeSheet();
   }
@@ -4984,6 +5007,8 @@ document.addEventListener("click",function(e){
     if(!sheet||sheet.type!=="selledit")return;var ux=prodRow(sheet.id);if(!ux){closeSheet();return}if(!(isAdmin()||ux.by===auth.user.id))return;
     var nq=sheet.q==null?ux.qty:sheet.q,uc=catItem(ux.pid),up1=ux.price||(uc?uc.price:0)||(ux.qty?ux.amount/ux.qty:0),old1={qty:ux.qty,amount:ux.amount};
     if(nq!==ux.qty){ux.qty=nq;ux.amount=Math.round(nq*up1*100)/100;db(sb.from("product_sales").update({qty:nq,amount:ux.amount}).eq("id",ux.id).select("id"),function(){ux.qty=old1.qty;ux.amount=old1.amount;render()})}
+    /* owner 23.11: the agent may correct whose patient it was */
+    if(state.hasPatOf&&needsPat()&&ux.by===auth.user.id&&sheet.pat!=null){var np1=sheet.pat==="-"?"":sheet.pat,op1=ux.pat;if(np1!==op1){ux.pat=np1;db(sb.from("product_sales").update({patient_of:np1||null}).eq("id",ux.id).select("id"),function(){ux.pat=op1;render()})}}
     closeSheet();
   }
   else if(act==="catalog"){if(isAdmin())openSheet({type:"catalog"});return}
