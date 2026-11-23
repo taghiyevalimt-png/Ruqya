@@ -23,9 +23,10 @@ module.exports = async () => {
     const tb = await p.evaluate(() => { const t = document.querySelector('[data-st="money-cweek"] table'), h = [...t.querySelectorAll("th.v span")].map((x) => x.textContent.trim());
       const row = [...t.querySelectorAll("tbody tr")].find((r) => r.children[0].textContent.trim() === "İlkin"); return { h, r: [...row.children].slice(1).map((c) => c.textContent.replace(/\s+/g, " ").trim()) }; });
     const at = (n) => tb.r[tb.h.indexOf(n)];
-    check(/^100/.test(at("Ruqya")) && /^60/.test(at("Hicama")) && /^160/.test(at("Qazanc")), "İlkin earned 100 from Ruqya, 60 from Hicama: " + JSON.stringify(tb));
+    // owner 23.11: the services are no longer columns of «Pul»; the per-service percents still decide «Mütəxəssisə»
+    check(!tb.h.includes("Ruqya") && !tb.h.includes("Hicama") && /^160/.test(at("Qazanc")), "İlkin earned 160 (100 Ruqya + 60 Hicama), no service columns: " + JSON.stringify(tb));
     check(/^68/.test(at("Mütəxəssisə")) && /^92/.test(at("Mərkəzə")), "50% of 100 + 30% of 60 = 68 for İlkin, 92 for the centre: " + JSON.stringify(tb));
-    check(tb.h.includes("Kombo") && tb.h.includes("Psixoloq"), "every service is a column");
+    check(!tb.h.includes("Kombo") && !tb.h.includes("Psixoloq"), "owner 23.11: no service is a column of «Pul»");
     // owner 22.11: a fixed amount instead of a percent — Hicama: 20 ₼ for every successful session
     await p.click('[data-act="svc-pct"]'); await p.locator('#sheet input[data-sp-r]').first().waitFor();
     const hi = '#sheet input[data-sp-r="' + R2 + '"][data-sp-s="Hicama"]';
@@ -35,20 +36,20 @@ module.exports = async () => {
     check(hs && hs.amt === 20 && hs.pct == null, "saved Hicama as 20 ₼, not a percent: " + JSON.stringify(hs));
     const tb2 = await p.evaluate(() => { const t = document.querySelector('[data-st="money-cweek"] table'), h = [...t.querySelectorAll("th.v span")].map((x) => x.textContent.trim());
       const row = [...t.querySelectorAll("tbody tr")].find((r) => r.children[0].textContent.trim() === "İlkin"); return { h, r: [...row.children].slice(1).map((c) => c.textContent.replace(/\s+/g, " ").trim()) }; });
-    check(/^70/.test(tb2.r[tb2.h.indexOf("Mütəxəssisə")]) && /20/.test(tb2.r[tb2.h.indexOf("Hicama")].replace(/^60/, "")), "50% of 100 + 20 ₼ = 70 for İlkin: " + JSON.stringify(tb2));
+    check(/^70/.test(tb2.r[tb2.h.indexOf("Mütəxəssisə")]) && /^90/.test(tb2.r[tb2.h.indexOf("Mərkəzə")]) && !tb2.h.includes("Hicama"), "50% of 100 + 20 ₼ = 70 for İlkin: " + JSON.stringify(tb2));
     await p.click('[data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
-    check(await p.locator('[data-st^="prod-"] table').count() === 1 && !/Satanlar üzrə|Məhsullar üzrə/.test(await p.textContent("#main")), "«Məhsul»: one table");
-    const ph = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] th.v span')].map((x) => x.textContent.trim()));
-    check(ph.includes("Misvak") && ph.includes("Bal"), "products are columns: " + ph);
+    check(await p.locator('[data-st^="prod-"] table').count() === 1 && await p.locator('[data-st^="prodp-"] table').count() === 1 && /Məhsullar üzrə/.test(await p.textContent("#main")), "owner 23.11: «Məhsul» is two tables — sellers, then products");
+    const ph = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prodp-"] tbody tr td:first-child')].map((x) => x.textContent.trim()));
+    check(ph.includes("Misvak") && ph.includes("Bal"), "products are rows of the second table: " + ph);
     // Excel: the same tables
     await p.click('[data-act="xls"]'); await p.waitForSelector("a[download]", { timeout: 15000 });
     const [dl] = await Promise.all([p.waitForEvent("download"), p.click("a[download]")]);
     const x = unzip(require("fs").readFileSync(await dl.path())), names = [...x["xl/workbook.xml"].matchAll(/<sheet name="([^"]+)"/g)].map((m) => m[1]);
     const rows = (n) => [...(x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "").matchAll(/<row [^>]*>(.*?)<\/row>/g)].map((r) => [...r[1].matchAll(/<c [^>]*?(?:\/>|>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>)/g)].map((m) => m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : ""));
     const pul = rows("Pul"), il = pul.find((r) => r[0] === "İlkin");
-    check(il && il.includes("70") && il.includes("90") && il.includes("100") && il.includes("60"), "Excel «Pul» has the services and the parts: " + JSON.stringify(il));
+    check(il && il.includes("70") && il.includes("90") && il.includes("160") && !pul.some((r) => r.includes("Ruqya") || r.includes("Hicama")), "Excel «Pul» has the parts and no services: " + JSON.stringify(il));
     const mh = rows("Məhsul");
-    check(mh.some((r) => r[0] === "Əli" && r.includes("2")) && !mh.some((r) => /Satanlar üzrə/.test(r[0])), "Excel «Məhsul» is the one table");
+    check(mh.some((r) => r[0] === "Əli") && mh.some((r) => r[0] === "Məhsullar üzrə") && mh.some((r) => r[0] === "Misvak"), "Excel «Məhsul»: sellers table, then «Məhsullar üzrə»: " + JSON.stringify(mh));
     // copy copies the table as shown
     await p.click('[data-act="close"]'); await p.click('[data-act="st-sec"][data-id="money"]'); await p.waitForTimeout(200);
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));

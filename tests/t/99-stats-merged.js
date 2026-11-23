@@ -27,7 +27,7 @@ module.exports = async () => {
     check(await p.locator("details.rulesbox").count() === 1, "rules and terms folded inside");
     for (const id of ["week", "cmonth", "month"]) { await p.click('[data-act="st-sec"][data-id="' + id + '"]'); await p.waitForTimeout(200); check(await p.locator('[data-st^="big-"]').count() === 1, id + ": the merged table"); }
     await p.click('[data-act="st-sec"][data-id="money"]'); await p.waitForTimeout(200);
-    check(await p.locator('[data-act="st-per"]').count() === 4 && await p.locator('[data-st^="money-"]').count() === 1, "money: its own section with the four periods");
+    check(await p.locator('[data-act="st-per"]').count() === 5 && await p.locator('[data-st^="money-"]').count() === 1, "money: its own section with «Bu gün» and the four periods (owner 23.11)");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
   s = await open(AGENT, { db });

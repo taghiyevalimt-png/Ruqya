@@ -18,8 +18,8 @@ module.exports = async () => {
     const sh = s.db.product_shares.map((x) => x.staff_id.slice(0, 4) + "=" + x.pct).sort().join(",");
     check(sh === "1111=10,2222=50", "saved: Əli 50%, Nurlana 10%: " + sh);
     await p.click('[data-act="close"]'); await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
-    const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")));   // owner 22.11: one table, products as columns
-    check(rows.some((r) => /^Əli\|1\|1\|20.*\|10/.test(r)) && rows.some((r) => /^Nurlana\|2\|2\|40.*\|4/.test(r)), "admin: every seller's part: " + JSON.stringify(rows));
+    const rows = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")));   // owner 23.11: per seller only pieces, sum, part
+    check(rows.some((r) => /^Əli\|1\|20.*\|10/.test(r)) && rows.some((r) => /^Nurlana\|2\|40.*\|4/.test(r)), "admin: every seller's part: " + JSON.stringify(rows));
     // changing back to empty deletes the percent
     await p.click('#tabs [data-tab="cash"]'); await p.click('[data-act="catalog"]'); await p.click('[data-act="cat-edit"]'); await p.locator("#c-pct-" + AGENT).waitFor();
     await p.fill("#c-pct-" + AGENT, ""); await p.click('[data-act="cat-save"]'); await p.waitForTimeout(500);
