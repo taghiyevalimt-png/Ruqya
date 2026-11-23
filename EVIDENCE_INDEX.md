@@ -103,6 +103,7 @@
 | `evidence/audit6/S4/a6-run-2.txt` | 3974 | 59feb445a36281c4 | # run 2 of 3 — commit 944370c — start 2026-11-22T21:37:38Z, RUQYA_PG_PORT=54330 |
 | `evidence/audit6/S4/a6-run-3.txt` | 3974 | 53e4dae85a71a2e4 | # run 3 of 3 — commit 944370c — start 2026-11-22T22:12:12Z, RUQYA_PG_PORT=54330 |
 | `evidence/audit6/S4/run1-f8e4fb2-99-sold-time.txt` | 4167 | cba3ab23136921a6 | # run 1 of 3 — commit f8e4fb2 — start 2026-11-22T20:21:57Z, RUQYA_PG_PORT=54330 |
+| `evidence/audit6/S6/publication.txt` | 2399 | 8f46fa69c3419533 | # audit 6 publication — owner's instruction 23.11 08:19 Baku («Публикуй сейчас»), without a green backup (last copy #37 UNVERIFIED) |
 | `evidence/audit6/T01/green.txt` | 328 | 399673b047582d2c | Sun Nov 22 18:25:07 UTC 2026 |
 | `evidence/audit6/T01/matrix.txt` | 21371 | 409c24be3ee49581 | # access matrix on copy — 2026-11-22T18:25:17.452Z |
 | `evidence/audit6/T01/red.txt` | 419 | f3fdcb1c792ba984 | Sun Nov 22 18:25:07 UTC 2026 |

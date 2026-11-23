@@ -1,0 +1,18 @@
+# audit 6 publication — owner's instruction 23.11 08:19 Baku («Публикуй сейчас»), without a green backup (last copy #37 UNVERIFIED)
+before (04:19:27Z, live, aggregates): appts 441, audit_log 968, product_sales 12, expenses 0, breaks 4, staff 16, readers 10, products 29, stat_edits 0, app_errors 3; orphans 0, empty required fields 0; patient keys 413
+migrations (Supabase MCP apply_migration, one by one):
+ 1. a6_journal_index — indexes audit_log_del_pkey, audit_log_appts_row present
+ 2. a6_private_helpers — 13 of 14 function texts = the tested copy (md5); ruqya_staff_guard: the tool turned the \u escapes of the regular
+    expression into the characters themselves — same character class, checked: «A·B᚟C…L\tM» → «A B C D E F G H I J K L M» (13 kinds of space)
+    reads as a real specialist / agent (set role authenticated + claims, rolled back): specialist 97 bookings (own column), agent 441 — same as before
+ 3. a6_one_policy — policies 53, fingerprint 17c870059814bd3ac9f0d9932b943404 = the copy where the access matrix passes 288/288; same reads after
+ 4. a6_pkey_fast — plpgsql; key of all 441 rows = the previous formula (0 differences); 413 keys as before
+after (04:22:43Z): every row count unchanged; orphans 0; empty required fields 0
+Advisors: security 11 → 4 (anonymize/restore/set_color stay in the API on purpose, they refuse non-admins — 99-a6-07; leaked-password check = owner's panel setting);
+          performance WARN 13 → 0 (INFO: 7 unused indexes — the 2 new journal indexes and those kept on purpose, see AUDIT6_REPORT)
+app: main 7db35e9, publish.sh → version 20261123042250; https://taghiyevalimt-png.github.io/Ruqya/version.txt?v=a6pub1 → 20261123042250 (04:24Z)
+index.html sha256 (repository) 78d93934bbdc74e19752c05d53627c9cbfc0c4ffbbd1e45910eed20ed2afd410 — live file hash НЕ ПРОВЕРЕН (the shell cannot reach github.io)
+tags: audit6 set locally; push of tags through this environment's proxy fails again
+observation 04:22:50–04:33:31Z (logs + read-only queries): API answers 21 × 200, 0 × 4xx/5xx; PostgREST, Realtime, Auth logs: 0 errors;
+postgres logs: 1 line matched «error» = the logged text of migration 2 itself (word «errcode»), not an error; app_errors after publication: 0;
+low traffic (08:22–08:33 in Baku, no bookings changed yet) — the first working hours are the real check
