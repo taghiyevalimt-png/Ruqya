@@ -37,7 +37,7 @@ shotk widget-day 320 250 2.75 day 0
 shotk widget-day-small 250 140 2.0 day -2
 shotk widget-week 360 420 2.75 week 0
 shotk widget-week-small 250 250 2.0 week 0
-A=$(sed 's/"t":"dark"/"t":"light"/' android/test-agenda.json | base64 -w0); shotk widget-week-light 360 420 2.75 week 0
+A=$(sed 's/"t": *"dark"/"t":"light"/' android/test-agenda.json | base64 -w0); shotk widget-week-light 360 420 2.75 week 0
 shotk widget-day-tomorrow 320 250 2.75 day 1
 A=$(printf '{"out":1}' | base64 -w0); shotk widget-week-out 360 420 2.75 week 0
 adb shell appwidget grantbind --package $P --user 0 || true
