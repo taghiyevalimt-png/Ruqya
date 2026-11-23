@@ -12,11 +12,12 @@ module.exports = async () => {
     await p.click('[data-st="big-cweek"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const t = await p.evaluate(() => navigator.clipboard.readText());
     check(!/```|\|/.test(t), "no wide grid: " + t);
-    check(/^📊 \*Bu həftə — Ümumi cədvəl\*/.test(t) && /\*Nurlana\*/.test(t) && /Xidmətlər: Ruqya 1 · Hicama 1/.test(t) && !/Kombo 0/.test(t), "a block per person, zeros of long groups left out: " + t);
-    check(t.split("\n").every((l) => l.length <= 70), "short lines that fit a phone");
+    // owner 23.11 late evening: plain text in every copy — «Nurlana - qəbullar: yazdı 2, …; xidmətlər: Ruqya 1, Hicama 1; …»
+    check(/^Bu həftə — Ümumi cədvəl, \d/.test(t) && /^Nurlana - qəbullar: yazdı \d+, uğurlu \d+, ləğv \d+; xidmətlər: Ruqya 1, Hicama 1; yer: /m.test(t) && !/Kombo 0/.test(t), "a line per person, zeros of long groups left out: " + t);
+    check(!/[*_▪🔸📊]/u.test(t), "no stars, underscores or emoji");
     await p.click('[data-st="sess-cweek"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const u = await p.evaluate(() => navigator.clipboard.readText());
-    check(/▪️ \*Nurlana\* \(Satış agenti\): \*2\*/.test(u), "the sessions table: one line per person: " + u);
+    check(u.split("\n").includes("Nurlana (satış agenti) - 2 seans"), "the sessions table: one plain line per person: " + u);
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

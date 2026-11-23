@@ -14,12 +14,12 @@ module.exports = async () => {
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(300); await p.click('[data-act="st-per"][data-id="today"]'); await p.waitForTimeout(300);
     await p.click('[data-st^="prod-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const a = await p.evaluate(() => navigator.clipboard.readText());
-    // since 23.11 late evening the «Məhsul satışları» copy is plain: «Əli - 4 satış, ümumi 35 manat, mütəxəssisin payı 11 manat»
-    check(a.replace(/\u00a0|\u202f/g, " ").split("\n").includes("Əli - 4 satış, ümumi 35 manat, mütəxəssisin payı 11 manat"), "every number named: " + JSON.stringify(a));
+    // since 23.11 late evening every copy is plain: «Əli - 4 satış, ümumi 35 manat, payı 11 manat»
+    check(a.replace(/\u00a0|\u202f/g, " ").split("\n").includes("Əli - 4 satış, ümumi 35 manat, payı 11 manat"), "every number named: " + JSON.stringify(a));
     check(!/\(4, 35/.test(a), "no unnamed numbers in brackets");
     await p.click('[data-st^="prodp-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const b = await p.evaluate(() => navigator.clipboard.readText());
-    check(/▪️ \*Ruqyalı gül suyu\*: Ədəd 4 · Məbləğ \*35 ₼\*/.test(b.replace(/ | /g, " ")), "per product, named: " + JSON.stringify(b));
+    check(b.split("\n").includes("Ruqyalı gül suyu - 4 ədəd, məbləğ 35 manat") && !/[*▪🔸📊₼]/u.test(b), "per product, plain: " + JSON.stringify(b));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

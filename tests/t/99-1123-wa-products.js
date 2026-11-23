@@ -1,5 +1,5 @@
 // Owner 23.11 (late evening): «the stars and the rest confuse — it must be this simple:
-// Loğman - 4 satış, ümumi 63 manat, mütəxəssisin payı 17 manat». Plain text, one line per person, no products, no
+// Loğman - 4 satış, ümumi 63 manat, payı 17 manat». Plain text, one line per person, no products, no
 // totals, no stars or emoji; people with nothing are left out. The screen is unchanged.
 const { open, check, SPEC, AGENT, OWNER, seed, bakuToday, uuid } = require("../lib");
 const SPEC2 = "33333333-3333-4333-8333-333333333333";
@@ -33,10 +33,10 @@ module.exports = async () => {
   require("fs").writeFileSync(require("path").join(__dirname, "..", "out", "wa-products-admin.txt"), a);
   const lines = a.split("\n");
   check(/^Məhsul satışları, \S/.test(a) && !/[*_👤📊▪️💰🏢₼]/u.test(a), "plain text, no stars, emoji or ₼: " + JSON.stringify(a));
-  check(lines.includes("Loğman - 3 satış, ümumi 38 manat, mütəxəssisin payı 0 manat"), "Loğman: " + JSON.stringify(a));
-  check(lines.includes("Nurlana - 4 satış, ümumi 79 manat, mütəxəssisin payı 0 manat"), "Nurlana: " + JSON.stringify(a));
-  check(lines.includes("Əli - 2 satış, ümumi 4 manat, mütəxəssisin payı 18,4 manat"), "Əli (with his part of the agent's sale to his patient): " + JSON.stringify(a));
+  check(lines.includes("Loğman - 3 satış, ümumi 38 manat, payı 0 manat"), "Loğman: " + JSON.stringify(a));
+  check(lines.includes("Nurlana - 4 satış, ümumi 79 manat, payı 0 manat"), "Nurlana: " + JSON.stringify(a));
+  check(lines.includes("Əli - 2 satış, ümumi 4 manat, payı 18,4 manat"), "Əli (with his part of the agent's sale to his patient): " + JSON.stringify(a));
   check(lines.filter((x) => / - \d+ satış/.test(x)).length === 3 && !/Admin|×|Cəmi|Mərkəzə|Keçici/.test(a), "only the people's lines: " + JSON.stringify(a));
   const b = await copy(SPEC), lb = b.split("\n");
-  check(lb.includes("Əli - 2 satış, ümumi 4 manat, mütəxəssisin payı 0,4 manat") && lb.includes("Nurlana - 1 satış, ümumi 25 manat, mütəxəssisin payı 18 manat") && lb.filter((x) => / - \d+ satış/.test(x)).length === 2 && !/Loğman|Cəmi|\*/.test(b), "specialist: " + JSON.stringify(b));
+  check(lb.includes("Əli - 2 satış, ümumi 4 manat, payı 0,4 manat") && lb.includes("Nurlana - 1 satış, ümumi 25 manat, payı 18 manat") && lb.filter((x) => / - \d+ satış/.test(x)).length === 2 && !/Loğman|Cəmi|\*/.test(b), "specialist: " + JSON.stringify(b));
 };

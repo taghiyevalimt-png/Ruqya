@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-7b5gFyqkPqzyzLq8Qw+uoB7H4Tw9+3f56yw+3FCXF/U='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-kCsfe11Xa7bIMm4o34norF7tTws3ULKY+oHD2IXO7Eo='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -849,8 +849,9 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "pasiyent":"пациент",
 "öz pasiyentlərinə edilən satışlardan":"с продаж его пациентам",
 "Bu dövrdə məhsul satılmayıb.":"За этот период товары не продавались.",
-"{n} - {q} satış, ümumi {m} manat, mütəxəssisin payı {p} manat":"{n} - {q} продаж, всего {m} манат, доля специалиста {p} манат",
-"{n} - {q} satış, ümumi {m} manat":"{n} - {q} продаж, всего {m} манат",
+"manat":"манат",
+"{n} - {q}, ümumi {m} manat, payı {p} manat":"{n} - {q}, всего {m} манат, доля {p} манат",
+"{n} - {q}, ümumi {m} manat":"{n} - {q}, всего {m} манат",
 "Satılan məhsullar":"Проданные товары",
 "əd.":"шт.",
 "satdı: ":"продал(а): ",
@@ -1908,7 +1909,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261123190942";
+var APP_VERSION="20261123201753";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3562,42 +3563,48 @@ function statCopyText(kind,per){
   var ks=[kind];if(!isAdmin())ks=ks.filter(function(k){return k!=="prod"});
   return ks.map(function(k){return statText(k,r,per)}).join("\n\n");
 }
-/* owner 22.11: a table for WhatsApp — not a wide grid (a phone breaks its lines), but one short block per person:
-   his name in bold, then each group of the table on its own line («Qəbullar: Yazdı 118 · Uğurlu 69 · Ləğv 11»);
+/* owner 22.11: a table for WhatsApp — not a wide grid (a phone breaks its lines), but one short line per person.
+   Owner 23.11 (late evening): «sadə stil əladır, bütün statistikalarda kopyanı bu cür sadə stildə et» — plain text,
+   no stars, no emoji, like «Loğman - 15 satış, ümumi 98 manat, payı 26 manat»:
+     short table:  «Nurlana (satış agenti) - 3 seans», «Ruqyalı su - 3 ədəd, məbləğ 6 manat»
+     grouped table: «Nurlana - qəbullar: yazdı 3, uğurlu 2, ləğv 1; xidmətlər: Ruqya 1, Hicama 1; yer: ofis 1, onlayn 1»
    «—» and «·» are left out, and in long groups (services, products) the zeros too. Made from the table on the screen,
    so it says the same. */
+function plainLow(x){return String(x||"").replace(/I/g,"ı").replace(/İ/g,"i").toLowerCase()}
+/* Russian counts need their ending: 1 сеанс, 3 сеанса, 5 сеансов; 1 продажа, 3 продажи, 5 продаж */
+var RU_FORMS={"сеанс":["сеанс","сеанса","сеансов"],"продажа":["продажа","продажи","продаж"]};
+function ruCount(n,w){var f=RU_FORMS[w];if(LANG!=="ru"||!f||!/^\d+$/.test(String(n)))return n+" "+w;var k=+n%100,j=k%10;return n+" "+(k>10&&k<20?f[2]:j===1?f[0]:j>=2&&j<=4?f[1]:f[2])}
+function plainMoney(v){var m=/^(.*?)\s*(₼|AZN)$/.exec(v);return m?m[1]+" "+L("manat"):""}
 function waText(tb,title,period){
-  var txt=function(td){var c=td.cloneNode(true);[].forEach.call(c.querySelectorAll("small.pct,.rpw"),function(z){z.parentNode.removeChild(z)});return String(c.textContent||"").replace(/\s+/g," ").trim()};
+  var txt=function(td){var c=td.cloneNode(true);[].forEach.call(c.querySelectorAll("small.pct,.rpw"),function(z){z.parentNode.removeChild(z)});return String(c.textContent||"").replace(/[  ]/g," ").replace(/\s+/g," ").trim()};
   var hr=tb.tHead?[].slice.call(tb.tHead.rows):[],labels=[],groups=[],gsize={};
   if(hr.length>1){var c0=1;[].forEach.call(hr[0].cells,function(td,k){if(k===0&&td.rowSpan>1)return;for(var q=0;q<td.colSpan;q++)groups[c0+q]=txt(td);gsize[txt(td)]=td.colSpan;c0+=td.colSpan});
     labels=[txt(hr[0].cells[0])].concat([].map.call(hr[1].cells,txt))}
   else if(hr.length)labels=[].map.call(hr[0].cells,txt);
   var vals=function(tr){var o=[];[].forEach.call(tr.cells,function(td){o.push(txt(td));for(var q=1;q<td.colSpan;q++)o.push("")});return o};
   var empty=function(v){return v===""||v==="—"||v==="·"};
-  var zero=function(v){return /^0([.,]0+)?( ?₼)?$/.test(v.replace(/\s/g," ").replace(/\u00a0|\u202f/g," "))||v==="0 "+CUR};
-  var block=function(v,bold){
-    if(!groups.length){   /* a short table: one line per person — «▪️ *Nərmin* (Satış agenti): *17*» */
-      var mid=v.slice(1,-1).filter(function(x){return !empty(x)}),last=v[v.length-1];
-      /* owner 23.11 (WhatsApp photo): numbers in the middle get their column names — «▪️ *Əli*: Satış 4 · Məbləğ 35 ₼ ·
-         Payı *11 ₼*», not «Əli (4, 35 ₼): 11 ₼»; a word in the middle (a role) stays in brackets */
-      if(mid.some(function(x){return /^[\d\s.,\u00a0\u202f]+( ?(₼|AZN|%))?$/.test(x)})){
-        var parts=[];for(var k=1;k<v.length-1;k++)if(!empty(v[k]))parts.push(labels[k]+" "+v[k]);
-        if(labels.length>1&&!empty(last))parts.push(labels[v.length-1]+" *"+last+"*");
-        return (bold?"🔸 *":"▪️ *")+v[0]+"*: "+parts.join(" · ");
-      }
-      return "▪️ *"+v[0]+"*"+(mid.length?" ("+mid.join(", ")+")":"")+(labels.length>2&&!empty(last)?": *"+last+"*":"");
+  var zero=function(v){return /^0([.,]0+)?( ?(₼|AZN))?$/.test(v)};
+  var num=function(v){return /^[\d\s.,]+$/.test(v)};
+  /* «yazdı 3», «məbləğ 6 manat»; a short table's count goes first: «3 seans», «3 ədəd» */
+  var svcN=SERVICES.map(function(x){return L(x)});   /* service names keep their capital letter: «Ruqya 1» */
+  var item=function(lab,v,first){var mo=plainMoney(v),l=svcN.indexOf(lab)>=0?lab:plainLow(lab);return mo?l+" "+mo:(first&&num(v)?ruCount(v,l):l+" "+v)};
+  var line=function(v){
+    if(!groups.length){
+      var words=[],parts=[];
+      for(var k=1;k<v.length;k++){if(empty(v[k]))continue;if(num(v[k])||plainMoney(v[k]))parts.push(item(labels[k]||"",v[k],true));else if(plainLow(v[k])!==plainLow(v[0]))words.push(plainLow(v[k]))}
+      return v[0]+(words.length?" ("+words.join(", ")+")":"")+(parts.length?" - "+parts.join(", "):"");
     }
-    var lines=[(bold?"🔸 *":"▪️ *")+v[0]+"*"],cur=null,part=[];
-    var flush=function(){if(part.length)lines.push("   "+(cur?cur+": ":"")+part.join(" · "));part=[]};
+    var segs=[],cur=null,part=[];
+    var flush=function(){if(part.length)segs.push((cur?plainLow(cur)+": ":"")+part.join(", "));part=[]};
     for(var k=1;k<v.length;k++){var g=groups[k]||"";if(g!==cur){flush();cur=g}
-      var x=v[k];if(empty(x))continue;if(zero(x)&&gsize[g]>3)continue;part.push(labels[k]+" "+x)}
+      var x=v[k];if(empty(x))continue;if(zero(x)&&gsize[g]>3)continue;part.push(item(labels[k]||"",x,false))}
     flush();
-    return lines.length>1?lines.join("\n"):lines[0]+"\n   —";
+    return v[0]+" - "+(segs.length?segs.join("; "):"—");
   };
-  var out=["📊 *"+title+"*"];if(period)out.push("_"+period+"_");out.push("");
-  [].forEach.call(tb.tBodies[0]?tb.tBodies[0].rows:[],function(tr){var v=vals(tr);if(v.length>1||!groups.length){out.push(block(v,false));if(groups.length)out.push("")}});
-  if(tb.tFoot)[].forEach.call(tb.tFoot.rows,function(tr){out.push("");out.push(block(vals(tr),true))});
-  return out.join(groups.length?"\n":"\n").replace(/\n{3,}/g,"\n\n").trim();
+  var out=[title+(period?", "+period:""),""];
+  [].forEach.call(tb.tBodies[0]?tb.tBodies[0].rows:[],function(tr){var v=vals(tr);if(v.length>1||!groups.length)out.push(line(v))});
+  if(tb.tFoot&&tb.tFoot.rows.length){out.push("");[].forEach.call(tb.tFoot.rows,function(tr){out.push(line(vals(tr)))})}
+  return out.join("\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 function txtTable(title,rows){
   var w=rows[0].map(function(_,i){return rows.reduce(function(m,x){return Math.max(m,clen(x[i]))},0)});
@@ -3960,12 +3967,13 @@ function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+
 var prodSel={};
 function prodCopyText(per,title,period){var ps=prodSel[per];if(!ps||!ps.rows)return "";
   /* owner 23.11 (late evening): plain text, no stars, no emoji, one line per person:
-     «Loğman - 4 satış, ümumi 63 manat, mütəxəssisin payı 17 manat». People with nothing are left out. */
+     «Loğman - 4 satış, ümumi 63 manat, payı 17 manat» (owner: not «mütəxəssisin payı» — agents too). People with nothing are left out. */
   var N=function(v){v=Math.round((+v||0)*100)/100;return NF?NF.format(v):String(v).replace(".",",")};
   var out=[title+(period?", "+period:""),""],n=0;
   ps.rows.forEach(function(w){if(!w.q&&!(w.sh>0))return;n++;
-    out.push(state.hasShares?tf(L("{n} - {q} satış, ümumi {m} manat, mütəxəssisin payı {p} manat"),{n:w.name,q:w.q,m:N(w.m),p:N(w.sh)})
-      :tf(L("{n} - {q} satış, ümumi {m} manat"),{n:w.name,q:w.q,m:N(w.m)}))});
+    var qw=LANG==="ru"?ruCount(w.q,"продажа"):w.q+" "+L("satış");
+    out.push(state.hasShares?tf(L("{n} - {q}, ümumi {m} manat, payı {p} manat"),{n:w.name,q:qw,m:N(w.m),p:N(w.sh)})
+      :tf(L("{n} - {q}, ümumi {m} manat"),{n:w.name,q:qw,m:N(w.m)}))});
   if(!n)out.push(L("Bu dövrdə məhsul satılmayıb."));
   return out.join("\n").replace(/[\u00a0\u202f]/g," ")}
 function prodStats(r,per){
