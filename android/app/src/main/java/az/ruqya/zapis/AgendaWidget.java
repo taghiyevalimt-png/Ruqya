@@ -124,6 +124,69 @@ public abstract class AgendaWidget extends AppWidgetProvider {
         mgr.updateAppWidget(id, rv);
     }
 
+    /**
+     * Build check (WidgetTest, kind = day / week): places a real widget instance, draws it at several sizes, steps
+     * ‹ › back and forth, then signed out / broken / no data, and writes what happened to files/widget_bind_<kind>.txt.
+     */
+    static void bindTest(Context ctx, Class<? extends AgendaWidget> cls, String kind) {
+        StringBuilder log = new StringBuilder();
+        android.appwidget.AppWidgetHost host = new android.appwidget.AppWidgetHost(ctx, 4243);
+        int wid = -1;
+        try {
+            AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+            AgendaWidget w = cls.getDeclaredConstructor().newInstance();
+            wid = host.allocateAppWidgetId();
+            log.append("bound=").append(mgr.bindAppWidgetIdIfAllowed(wid, new ComponentName(ctx, cls))).append('\n');
+            int[][] sizes = {{180, 110}, {250, 180}, {320, 250}, {360, 420}, {600, 760}, {900, 1000}};
+            for (int[] sz : sizes) {
+                Bundle o = new Bundle();
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, sz[0]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, sz[0]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, sz[1]);
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, sz[1]);
+                mgr.updateAppWidgetOptions(wid, o);
+                try {
+                    w.drawOrThrow(ctx, mgr, wid);
+                    log.append("size ").append(sz[0]).append('x').append(sz[1]).append(": ok\n");
+                } catch (Throwable t) {
+                    log.append("size ").append(sz[0]).append('x').append(sz[1]).append(": FAIL ").append(t).append('\n');
+                }
+            }
+            for (int k = 0; k < 300; k++) {
+                Intent i = new Intent(k < 150 ? w.nextAction() : w.prevAction());
+                i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, wid);
+                w.onReceive(ctx, i);
+            }
+            log.append("shift off=").append(ctx.getSharedPreferences(MonthWidget.PREFS, 0).getInt(w.key(wid), 99)).append('\n');
+            String[] bad = {"{\"out\":1}", "not json", null};
+            for (String b : bad) {
+                if (b == null) ctx.getSharedPreferences(MonthWidget.PREFS, 0).edit().remove("data").commit();
+                else ctx.getSharedPreferences(MonthWidget.PREFS, 0).edit().putString("data", b).commit();
+                try {
+                    w.drawOrThrow(ctx, mgr, wid);
+                    log.append("data ").append(b == null ? "none" : b).append(": ok\n");
+                } catch (Throwable t) {
+                    log.append("data ").append(b == null ? "none" : b).append(": FAIL ").append(t).append('\n');
+                }
+            }
+        } catch (Throwable t) {
+            log.append("FAIL ").append(t).append('\n');
+        } finally {
+            if (wid != -1) {
+                try {
+                    host.deleteAppWidgetId(wid);
+                } catch (Throwable ignored) {
+                }
+            }
+            try {
+                java.io.FileWriter fw = new java.io.FileWriter(new java.io.File(ctx.getFilesDir(), "widget_bind_" + kind + ".txt"));
+                fw.write(log.toString());
+                fw.close();
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     static void updateAll(Context ctx, Class<? extends AgendaWidget> cls) {
         try {
             AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);

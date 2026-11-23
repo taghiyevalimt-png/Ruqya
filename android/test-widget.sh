@@ -37,6 +37,28 @@ shotk widget-day 320 250 2.75 day 0
 shotk widget-day-small 250 140 2.0 day -2
 shotk widget-week 360 420 2.75 week 0
 shotk widget-week-small 250 250 2.0 week 0
+A=$(sed 's/"t":"dark"/"t":"light"/' android/test-agenda.json | base64 -w0); shotk widget-week-light 360 420 2.75 week 0
+shotk widget-day-tomorrow 320 250 2.75 day 1
+A=$(printf '{"out":1}' | base64 -w0); shotk widget-week-out 360 420 2.75 week 0
+adb shell appwidget grantbind --package $P --user 0 || true
+for k in day week; do
+  adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.WIDGET_BIND_TEST --es kind $k"
+  sleep 12
+  adb exec-out run-as $P cat files/widget_bind_$k.txt > "bind-$k-$API.txt" 2>/dev/null || true
+done
+{ echo "day / week widgets (API $API)"
+  ok=1
+  for f in widget-day widget-day-small widget-week widget-week-small widget-week-light widget-week-out; do
+    s=$(stat -c%s "$f-$API.png" 2>/dev/null || echo 0); echo "$f $s bytes"
+    head -c 4 "$f-$API.png" 2>/dev/null | od -An -tx1 | grep -q "89 50 4e 47" || ok=0
+    [ "$s" -gt 3000 ] || ok=0
+  done
+  cmp -s widget-week-$API.png widget-week-light-$API.png && { echo "light = dark"; ok=0; }
+  for k in day week; do cat "bind-$k-$API.txt"; grep -q "^bound=true" "bind-$k-$API.txt" || ok=0; grep -q "FAIL" "bind-$k-$API.txt" && ok=0; [ "$(grep -c ': ok' "bind-$k-$API.txt")" = "9" ] || ok=0; done
+  if adb exec-out run-as $P cat files/widget_test.txt 2>/dev/null | grep -q .; then echo "drawing error:"; adb exec-out run-as $P cat files/widget_test.txt; ok=0; fi
+  [ $ok = 1 ] && echo "PASS: day and week widgets drawn (6 pictures), placed on a real home-screen slot at 6 sizes, ‹ › 300 times, signed out / broken / no data" || echo "FAIL"
+} > "agenda-$API.txt"
+cat "agenda-$API.txt"
 # B-06: the widget applies the app's 7-day sign-out itself. Same data, drawn 1 hour and 8 days after the
 # app handed it over: the first shows the month, the second must be the signed-out picture.
 U=$(grep -o '"u":[0-9]*' android/test-widget.json | cut -d: -f2)

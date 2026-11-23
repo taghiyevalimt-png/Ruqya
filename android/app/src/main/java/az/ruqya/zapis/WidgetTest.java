@@ -37,7 +37,10 @@ public class WidgetTest extends BroadcastReceiver {
             return;
         }
         if (MonthWidget.ACTION_BIND_TEST.equals(a)) {
-            MonthWidget.bindTest(ctx, intent);
+            String kind = intent.getStringExtra("kind");   // owner 23.11: day / week widgets
+            if ("day".equals(kind)) AgendaWidget.bindTest(ctx, DayWidget.class, "day");
+            else if ("week".equals(kind)) AgendaWidget.bindTest(ctx, WeekWidget.class, "week");
+            else MonthWidget.bindTest(ctx, intent);
             return;
         }
         if (MonthWidget.ACTION_TEST.equals(a)) {
