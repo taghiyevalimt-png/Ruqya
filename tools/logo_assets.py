@@ -12,7 +12,7 @@ def emb(size):
     sq = Image.new("RGBA", (size, size), (0, 0, 0, 0)); sq.alpha_composite(im, ((size - im.width) // 2, (size - im.height) // 2)); return sq
 def onbg(size, frac, bg):
     b = Image.new("RGBA", (size, size), bg); e = emb(int(size * frac)); o = (size - e.width) // 2; b.alpha_composite(e, (o, o)); return b.convert("RGB")
-e1024 = emb(1024); e1024.save(R + "/logo-hq.png", optimize=True); e1024.save(R + "/logo-hq.webp", quality=94, method=6)
+e512 = emb(512); e512.save(R + "/logo-hq.png", optimize=True); e512.save(R + "/logo-hq.webp", quality=92, method=6)   # 3× the 160 px opening; the page shows this picture, not the SVG (24.11: live SVG upset the Android 13 emulator)
 emb(600).save(R + "/logo.png", optimize=True); emb(192).save(R + "/logo-192.png", optimize=True)
 onbg(192, .80, SAND).save(R + "/icon-192.png"); onbg(512, .80, SAND).save(R + "/icon-512.png"); onbg(180, .80, SAND).save(R + "/apple-touch-icon.png"); onbg(64, .9, SAND).save(R + "/favicon.png")
 # iPhone start screens: night (the default look), the emblem, «Mərkəz» under it, a soft warm light above

@@ -11,7 +11,11 @@ module.exports = async () => {
   const svg = fs.readFileSync(path.join(root, "logo.svg"), "utf8");
   check(/^<svg [^>]*viewBox="12 10 584 594"/.test(svg) && /linearGradient id="gold"/.test(svg) && svg.length < 40000, "logo.svg: a small vector with its gold, green and water gradients (" + svg.length + " bytes)");
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-  check((html.match(/<img src="logo\.svg"/g) || []).length >= 1 && /'<div class="brand"><img src="logo\.svg"/.test(html) && /rel="preload" as="image" href="logo\.svg"/.test(html), "the opening and the sign-in screen use the vector");
+  // the page shows a picture drawn from the vector (512 px = 3× the opening), not the SVG itself: an SVG with soft
+  // highlights drawn live at start made the Android 13 emulator's graphics fall over (three runs, 24.11 evening)
+  check(/<source srcset="logo-hq\.webp"/.test(html) && !/<img src="logo\.svg"/.test(html) && /rel="preload" as="image" href="logo-hq\.webp"/.test(html), "the opening and the sign-in screen show the picture drawn from the vector");
+  const dims = require("child_process").execFileSync("python3", ["-c", "from PIL import Image;i=Image.open('" + path.join(root, "logo-hq.png") + "');print(i.size, i.getbbox())"], { encoding: "utf8" }).trim();
+  check(/^\(512, 512\)/.test(dims), "logo-hq: 512 px from the vector: " + dims);
   const cfg = fs.readFileSync(path.join(root, "tools", "configure.py"), "utf8");
   check(/'sw\.js'/.test(cfg) && /'\.svg'/.test(cfg), "the backup copy of the site takes logo.svg and sw.js");
   const { PNG } = (() => { try { return require("pngjs"); } catch (e) { return {}; } })();
@@ -19,8 +23,8 @@ module.exports = async () => {
     const s = await open(null, { db: seed(), viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, init: [(k) => { try { if (k === "sand") localStorage.setItem("ruqya.look", "sand"); } catch (e) {} }, look] });
     try {
       const p = s.page; await p.waitForTimeout(900);
-      const m = await p.evaluate(() => { const i = document.querySelector("#splash img"); return i ? { src: i.getAttribute("src"), ok: i.complete && i.naturalWidth > 0, w: Math.round(i.getBoundingClientRect().width), bg: getComputedStyle(document.getElementById("splash")).backgroundColor } : null; });
-      check(m && m.src === "logo.svg" && m.ok && m.w >= 150, look + ": the opening shows the vector emblem, loaded, " + (m && m.w) + " px wide: " + JSON.stringify(m));
+      const m = await p.evaluate(() => { const i = document.querySelector("#splash img"); return i ? { src: i.currentSrc || i.getAttribute("src"), ok: i.complete && i.naturalWidth > 0, w: Math.round(i.getBoundingClientRect().width), bg: getComputedStyle(document.getElementById("splash")).backgroundColor } : null; });
+      check(m && /logo-hq\.(png|webp)$/.test(m.src.replace(/^.*\//, "")) && m.ok && m.w >= 150, look + ": the opening shows the vector emblem, loaded, " + (m && m.w) + " px wide: " + JSON.stringify(m));
       check(m && m.bg === (look === "night" ? "rgb(48, 49, 71)" : "rgb(206, 187, 160)"), look + ": on its own background " + (m && m.bg));
       check(!s.errors.length, look + ": no page errors: " + s.errors.join(" | "));
     } finally { await s.close(); }
