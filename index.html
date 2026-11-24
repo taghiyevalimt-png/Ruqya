@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-WGIhgQaLjl5Y6FQUnzcZCK+s9uVoF3jU5Dm0mc3OlD4='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-RU191I+mI1J9exU1OidIa0aXU6K4AdI50boN2/DiqdQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -1203,6 +1203,39 @@ html.night .vsw2 button[aria-pressed="true"]{box-shadow:0 2px 8px rgba(0,0,0,.35
 .looks .sw{display:inline-block;width:18px;height:18px;border-radius:50%;flex:none;box-shadow:0 0 0 1.5px rgba(255,255,255,.55),0 1px 3px rgba(0,0,0,.3)}
 .looks .sw-night{background:linear-gradient(135deg,#303147 0 50%,#405577 50% 100%)}
 .looks .sw-sand{background:linear-gradient(135deg,#CEBBA0 0 50%,#9A765E 50% 100%)}
+
+/* «Kim neçə seans yazıb»: a narrow column per specialist (his letter), Cəmi bold at the end */
+.sess .sttw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sesst th.sp,.sesst td.num{padding-left:4px;padding-right:4px;min-width:22px;text-align:center}
+.sesst th.sp{letter-spacing:0;text-transform:none;font-variant:normal;font-variant-caps:normal;font-size:13.5px;font-weight:800;color:var(--ink)}
+.sesst td:last-child,.sesst th:last-child{text-align:right;padding-right:8px}
+.sesst tbody td:not(:first-child):not(:last-child){color:var(--muted)}
+.sesskey{margin-top:6px;line-height:1.5}
+
+/* owner 24.11 evening: the sale window — date and total at the top, pinned while the products scroll; product buttons
+   half the size (4 in a row, no letter circle, small count badge and «−») */
+.sellbar{position:sticky;top:-18px;z-index:3;display:flex;align-items:flex-end;gap:12px;margin:-4px -16px 0;padding:8px 16px 10px;background:#EEE4D6;border-bottom:1px solid var(--line-soft)}
+html.night .sellbar{background:#3C3E5A}
+.sellbar .sbdate{flex:0 0 auto;margin:0}.sellbar .sbdate input{width:150px;min-height:40px;padding:6px 10px}
+.sellbar .sbsum{flex:1;border-top:0;padding-top:0;display:flex;flex-direction:column;align-items:flex-end;gap:0;text-align:right}
+.sellbar .sbsum span{font-size:12px;color:var(--muted);font-weight:600}.sellbar .sbsum b{font-size:26px;line-height:1.05}
+.sbwho{margin:2px 0 0}
+.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+@media (max-width:340px){.pgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (min-width:560px){.pgrid{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
+html .pbtn{min-height:48px!important;padding:6px 7px!important;border-radius:11px!important;gap:2px!important;justify-content:space-between}
+html .pbtn::before{display:none!important}
+html .pbtn b{font-size:12px!important;line-height:1.15;font-weight:700;letter-spacing:-.01em;overflow-wrap:break-word;word-break:normal;-webkit-hyphens:none;hyphens:none}
+html .pbtn span{font-size:11.5px!important;font-weight:600}
+html .pbtn i{top:-6px!important;right:-5px!important;min-width:20px!important;height:20px!important;border-radius:10px!important;font-size:11.5px!important;padding:0 5px!important}
+html .pminus{width:24px!important;height:24px!important;border-radius:12px!important;font-size:15px!important;bottom:4px!important;right:4px!important}
+.ptop{margin-top:10px}
+
+/* Məhsullar: the order buttons */
+.catrow{gap:6px}.catrow>span:first-child{flex:1;min-width:0}
+.catmv{display:inline-flex;gap:2px;flex:none}.catmv .ico{min-width:32px!important;min-height:32px!important;padding:0!important;font-size:17px;font-weight:700}
+.catmv .ico:disabled{opacity:.25}
+.catmv .ico,.catrow .ico{text-decoration:none!important}
 </style>
 </head>
 <body>
@@ -1253,6 +1286,12 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "öz pasiyentlərinə edilən satışlardan":"с продаж его пациентам",
 "Bu dövrdə məhsul satılmayıb.":"За этот период товары не продавались.",
 "Rəng":"Цвет",
+"Ən yuxarı":"В самый верх",
+"Yuxarı":"Выше",
+"Aşağı":"Ниже",
+"⤒ — ən yuxarı, ↑ ↓ — bir yer. Satış pəncərəsində bu sıra ilə görünür.":"⤒ — в самый верх, ↑ ↓ — на одно место. В окне продажи — в этом порядке.",
+"cəmi":"всего",
+"seans":"сеанс",
 "Bildirişlər":"Уведомления",
 "Bildirişlər yalnız sizin adınızla olan sütunun seansları üçündür. Hamısı əvvəlcə bağlıdır.":"Уведомления только для сеансов в колонке с вашим именем. Изначально всё выключено.",
 "Seansdan neçə dəqiqə əvvəl xatırlatsın":"За сколько минут до сеанса напомнить",
@@ -2335,7 +2374,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124172111";
+var APP_VERSION="20261124181530";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -4306,7 +4345,7 @@ function xlsSheets(all){
   state.appts=all.appts;state.products=all.products;pcache=null;edIdx=null;
   try{
     var P=xlsPers(),sh=[];
-    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(sessTable(p.r,p.k)+bigTable(p.r,p.k))}]})});
+    P.forEach(function(p){sh.push({name:p.name,b:[{title:p.name+" — "+p.label,sub:p.r.full===false?L("Dövr hələ bitməyib — rəqəmlər artır."):"",tables:xTables(sessTable(p.r,p.k,true)+bigTable(p.r,p.k))}]})});
     if(state.hasProducts)sh.push({name:L("Məhsul"),b:P.map(function(p){return {title:p.name+" — "+p.label,tables:xTables(prodStats(p.r,p.k))}})});   /* owner 23.11: two tables, each with its title */
     return sh.map(function(x){var b=xBuild(x.b);b.name=x.name;return b});
   }finally{state.appts=keep.appts;state.products=keep.products;pcache=null;edIdx=null}
@@ -4393,6 +4432,10 @@ function sellForm(){
   var x=sheet,cnt=x.cnt||(x.cnt={}),list=state.catalog.filter(function(c){return !c.archived||cnt[c.id]}),tot=0,qn=0;
   list.forEach(function(c){var n=cnt[c.id]||0;tot+=n*c.price;qn+=n});
   var h='<h2>'+L("Məhsul satışı")+CLOSE+'</h2>';
+  /* owner 24.11 evening: the date and the total at the top (they stay in view while the products scroll) */
+  if(list.length)h+='<div class="sellbar"><div class="field sbdate"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||today)+'"></div>'+
+    '<div class="ptotal big sbsum"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div></div>'+notToday(x.date||today)+
+    '<p class="hint small sbwho">'+L("Satan avtomatik qeyd olunur: ")+esc(state.staff[auth.user.id]||L("siz"))+'.</p>';
   if(!list.length)return h+'<p class="hint">'+(isAdmin()?L("Hələ məhsul yoxdur. Əvvəlcə məhsulları əlavə edin."):L("Hələ məhsul yoxdur. Admin məhsulları əlavə etməlidir."))+'</p>'+(isAdmin()?'<button class="primary" data-act="catalog">'+L("Məhsul əlavə et")+'</button>':'');
   var pb=function(c){var n=cnt[c.id]||0;
     return '<div class="pbtnw"><button type="button" class="pbtn'+(n?' on':'')+'" data-ini="'+esc(String(c.name||"?").replace(/^ruqyal\u0131\s+/i,"").charAt(0).toUpperCase())+'" data-act="sell-add" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name+", "+money(c.price)+(n?", "+n:""))+'"><b>'+esc(c.name)+'</b><span class="num">'+money(c.price)+'</span>'+(n?'<i class="num">'+n+'</i>':'')+'</button>'+
@@ -4402,9 +4445,6 @@ function sellForm(){
   if(top.length)h+='<h3 class="sec ptop">'+L("Əsas məhsullar")+'</h3><div class="pgrid">'+top.map(pb).join("")+'</div>'+(rest.length?'<h3 class="sec ptop">'+L("Digər məhsullar")+'</h3>':'');
   if(rest.length)h+='<div class="pgrid">'+rest.map(pb).join("")+'</div>';
   if(needsPat())h+=patPicker(x.pat||"");
-  h+='<div class="two"><div class="field"><label for="sl-date">'+L("Tarix")+'</label><input id="sl-date" type="date" value="'+esc(x.date||today)+'"></div><div></div></div>'+notToday(x.date||today);
-  h+='<div class="ptotal big"><span>'+(qn?tf(L("Cəmi: {n} məhsul"),{n:qn}):L("Məhsulun üstünə basın"))+'</span><b class="num">'+money(tot)+'</b></div>';
-  h+='<p class="hint">'+L("Satan avtomatik qeyd olunur: ")+esc(state.staff[auth.user.id]||L("siz"))+'.</p>';
   h+='<p class="err" role="alert" id="sl-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="sell-save"'+(qn?'':' disabled')+'>'+L("Yadda saxla")+'</button>'+(qn?'<button class="ghost" data-act="sell-clear">'+L("Sıfırla")+'</button>':'')+'</div>';
   return h;
 }
@@ -4460,9 +4500,18 @@ function presetsSheet(){
 function catalogSheet(){
   var e=sheet.eid?catItem(sheet.eid):null;
   var h='<h2>'+L("Məhsullar")+CLOSE+'</h2><p class="hint">'+L("Bu məhsullar «Məhsul satışı» pəncərəsində düymə kimi görünür.")+'</p>';
-  h+='<div class="pay">'+(state.catalog.length?state.catalog.map(function(c){
-    return '<div class="visit'+(c.archived?' arch':'')+'"><span>'+esc(c.name)+(c.archived?' <small>('+L("gizlədilib")+')</small>':'')+'</span><b class="num">'+money(c.price)+'</b><button class="link" data-act="cat-edit" data-id="'+esc(c.id)+'">'+L("Dəyiş")+'</button></div>'}).join("")
-    :'<div class="foot">'+L("Hələ məhsul yoxdur.")+'</div>')+'</div>';
+  /* owner 24.11 evening: the order of «Digər məhsullar» is the admin's — ⤒ to the very top, ↑ ↓ one place; the fixed
+     «Əsas məhsullar» stand first (their order is set) */
+  var top0=topProducts(state.catalog.filter(function(c){return !c.archived})),rest0=state.catalog.filter(function(c){return top0.indexOf(c)<0});
+  var row=function(c,k,n){return '<div class="visit catrow'+(c.archived?' arch':'')+'"><span>'+esc(c.name)+(c.archived?' <small>('+L("gizlədilib")+')</small>':'')+'</span><b class="num">'+money(c.price)+'</b>'+
+    (k<0?'':'<span class="catmv">'+
+      '<button type="button" class="link ico" data-act="cat-mv" data-id="'+esc(c.id)+'" data-n="top" aria-label="'+esc(L("Ən yuxarı")+": "+c.name)+'"'+(k?'':' disabled')+'>⤒</button>'+
+      '<button type="button" class="link ico" data-act="cat-mv" data-id="'+esc(c.id)+'" data-n="-1" aria-label="'+esc(L("Yuxarı")+": "+c.name)+'"'+(k?'':' disabled')+'>↑</button>'+
+      '<button type="button" class="link ico" data-act="cat-mv" data-id="'+esc(c.id)+'" data-n="1" aria-label="'+esc(L("Aşağı")+": "+c.name)+'"'+(k<n-1?'':' disabled')+'>↓</button></span>')+
+    '<button class="link ico" data-act="cat-edit" data-id="'+esc(c.id)+'" aria-label="'+esc(L("Dəyiş")+": "+c.name)+'">'+ICO.edit+'</button></div>'};
+  h+=(state.catalog.length?(top0.length?'<h3 class="sec">'+L("Əsas məhsullar")+'</h3><div class="pay">'+top0.map(function(c){return row(c,-1)}).join("")+'</div>':'')+
+    (rest0.length?'<h3 class="sec">'+L("Digər məhsullar")+'</h3><p class="hint small">'+L("⤒ — ən yuxarı, ↑ ↓ — bir yer. Satış pəncərəsində bu sıra ilə görünür.")+'</p><div class="pay">'+rest0.map(function(c,k){return row(c,k,rest0.length)}).join("")+'</div>':'')
+    :'<div class="pay"><div class="foot">'+L("Hələ məhsul yoxdur.")+'</div></div>');
   h+='<h3 class="sec">'+(e?L("Məhsulu dəyiş"):L("Yeni məhsul"))+'</h3>'+
     '<div class="two"><div class="field"><label for="c-name">'+L("Adı")+'</label><input id="c-name" type="text" maxlength="60" autocomplete="off" value="'+esc(e?e.name:"")+'"></div>'+
     '<div class="field"><label for="c-price">'+L("Qiymət, ")+CUR+'</label><input id="c-price" type="text" inputmode="decimal" autocomplete="off" maxlength="12" value="'+(e?e.price:"")+'"></div></div>'+
@@ -4478,19 +4527,46 @@ function catalogSheet(){
 /* owner 22.11: at the end of every statistics — every sales agent and specialist (and admin): how many sessions he
    wrote in the period (bookings written on its days, cancelled ones too since 23.11; the same table in Excel). An agent or a specialist
    sees his own line. */
-function sessTable(r,per){
-  var onlyMe=isAdmin()||statAll?null:auth.user.id,by={},T=0;
-  var add=function(k){if(!by[k])by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),n:0}};
+/* owner 24.11 evening: «Vəzifə» is gone — a column for every specialist (his capital letter) shows how many sessions this
+   person wrote for him in the period; the last column «Cəmi» is all he wrote; the last row the total of each specialist.
+   Excel shows the specialists' full names (full=true); the WhatsApp copy writes them out too (sessCopyText). */
+function sessIni(rs){
+  /* the shortest beginning of each name that no other specialist shares: «Ə», but «Le» and «Lo» when both start with L */
+  var base=function(n){return String(n||"?").replace(/^\s*(dr|prof)\.?\s*/i,"").replace(/^ruqyal\u0131\s+/i,"").trim()||String(n||"?")};
+  var key=function(w,k){return w.charAt(0).toUpperCase()+w.slice(1,k).toLowerCase()};
+  var ws=rs.map(function(r){return base(r.name)}),ini={},used={};
+  rs.forEach(function(r,i){var w=ws[i],k=1;
+    while(k<w.length&&ws.some(function(o,j){return j!==i&&key(o,k)===key(w,k)}))k++;
+    var x=key(w,k);while(used[x])x+="·";used[x]=1;ini[r.id]=x});
+  return ini}
+function sessTable(r,per,full){
+  var onlyMe=isAdmin()||statAll?null:auth.user.id,by={},T=0,colN={};
+  var add=function(k){if(!by[k])by[k]={k:k,name:k==="-"?L("Adsız"):(state.staff[k]||L("Adsız")),n:0,m:{}}};
   state.appts.forEach(function(a){if(!a.created||a.created<r.s||a.created>r.end||stHidden(a.by))return;if(onlyMe&&a.by!==onlyMe)return;   /* owner 23.11: cancelled ones count too */
-    var k=a.by&&state.staff[a.by]!=null?a.by:"-";add(k);by[k].n++;T++});
+    var k=a.by&&state.staff[a.by]!=null?a.by:"-";add(k);by[k].n++;T++;
+    var rid=a.readerId||"?";by[k].m[rid]=(by[k].m[rid]||0)+1;colN[rid]=(colN[rid]||0)+1});
   if(onlyMe)add(onlyMe);else Object.keys(state.staff).forEach(function(k){if(state.roleSet[k]&&!stHidden(k))add(k)});
   var rows=Object.keys(by).map(function(k){return by[k]}).sort(function(a,b){return b.n-a.n||String(a.name).localeCompare(String(b.name))});
-  var role=function(k){var r0=state.roles[k];return k==="-"?"":r0==="agent"?L("Satış agenti"):r0==="specialist"?L("Mütəxəssis"):r0==="admin"||k===ADMIN?L("Admin"):""};
-  return '<div class="pay" data-st="sess-'+per+'"><div class="head"><b>'+L("Kim neçə seans yazıb")+'</b>'+copyB()+'</div><table class="stt"><thead><tr><th>'+L("Kim")+'</th><th>'+L("Vəzifə")+'</th><th class="num">'+L("Seans")+'</th></tr></thead><tbody>'+
-    rows.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+esc(role(x.k))+'</td><td class="num">'+x.n+'</td></tr>'}).join("")+
-    '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td><td></td><td class="num">'+T+'</td></tr></tfoot></table>'+
+  /* the specialists of the period, in the calendar's order (one who left keeps his name; an unknown column is «?») */
+  var cols=allReaders().filter(function(x){return colN[x.id]}).concat(Object.keys(colN).filter(function(id){return !allReaders().some(function(x){return x.id===id})}).map(function(id){var o=reader(id);return {id:id,name:o?o.name:"?"}}));
+  var ini=sessIni(cols),cn=function(x){return x?String(x):""};
+  return '<div class="pay sess" data-st="sess-'+per+'"><div class="head"><b>'+L("Kim neçə seans yazıb")+'</b>'+copyB()+'</div><div class="sttw"><table class="stt sesst"><thead><tr><th>'+L("Kim")+'</th>'+
+    cols.map(function(c){return '<th class="num sp" title="'+esc(c.name)+'" aria-label="'+esc(c.name)+'" data-full="'+esc(c.name)+'">'+esc(full?c.name:ini[c.id])+'</th>'}).join("")+'<th class="num">'+L("Cəmi")+'</th></tr></thead><tbody>'+
+    rows.map(function(x){return '<tr><td>'+esc(x.name)+'</td>'+cols.map(function(c){return '<td class="num">'+cn(x.m[c.id])+'</td>'}).join("")+'<td class="num"><b>'+x.n+'</b></td></tr>'}).join("")+
+    '</tbody><tfoot><tr><td>'+L("Cəmi")+'</td>'+cols.map(function(c){return '<td class="num">'+colN[c.id]+'</td>'}).join("")+'<td class="num">'+T+'</td></tr></tfoot></table></div>'+
+    (cols.length&&!full?'<p class="hint small sesskey">'+cols.map(function(c){return '<b>'+esc(ini[c.id])+'</b> — '+esc(c.name)}).join(" · ")+'</p>':'')+
     '<p class="hint">'+L("Dövrdə yazılan bütün qəbullar, sonra ləğv olunanlar da daxil (seansın hansı günə yazılmasından asılı olmayaraq).")+'</p></div>';
 }
+/* the WhatsApp copy of «Kim neçə seans yazıb»: «Amina - Əli 3, İlkin 4, cəmi 9 seans» — the specialists' full names */
+function sessCopyText(box,title,period){var tb=box.querySelector("table");if(!tb)return "";
+  var heads=[].map.call(tb.tHead.rows[0].cells,function(th){return th.getAttribute("data-full")||th.textContent.trim()});
+  var line=function(tr){var c=[].map.call(tr.cells,function(td){return td.textContent.trim()}),parts=[];
+    for(var i=1;i<c.length-1;i++)if(c[i]&&c[i]!=="0")parts.push(heads[i]+" "+c[i]);
+    return c[0]+" - "+(parts.length?parts.join(", ")+", ":"")+L("cəmi")+" "+ruCount(c[c.length-1],L("seans"))};
+  var out=[title+(period?", "+period:""),""];
+  [].forEach.call(tb.tBodies[0].rows,function(tr){out.push(line(tr))});
+  if(tb.tFoot&&tb.tFoot.rows.length){out.push("");out.push(line(tb.tFoot.rows[0]))}
+  return out.join("\n").trim()}
 /* a copy button that copies the table it stands over, exactly as shown (owner 22.11: screen, copy and Excel the same) */
 function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+L("Kopyala")+'</button>'}
 /* owner 22.11: «Məhsul» is ONE table — sellers as rows, every product as a column (pieces), then pieces, sum and the
@@ -5512,7 +5588,9 @@ document.addEventListener("click",function(e){
     var sec0=document.querySelector('#top [data-act="st-sec"][aria-pressed="true"]');
     var st0=sec0?sec0.textContent.trim():"",ht0=hd2?hd2.textContent.trim():"";
     var ctx=waText(tb2,st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");
-    var dst=b.closest(".pay").getAttribute("data-st")||"";if(/^prod-/.test(dst)){var pct=prodCopyText(dst.slice(5),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(pct)ctx=pct}
+    var dst=b.closest(".pay").getAttribute("data-st")||"";
+    if(/^sess-/.test(dst)){var sct=sessCopyText(b.closest(".pay"),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(sct)ctx=sct}
+    if(/^prod-/.test(dst)){var pct=prodCopyText(dst.slice(5),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(pct)ctx=pct}
     copyText(ctx,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},function(){openSheet({type:"stcopy",text:ctx})});
     return;
   }
@@ -5607,6 +5685,18 @@ document.addEventListener("click",function(e){
         if(nups.length&&catItem(cid))db(sb.from("product_shares").upsert(nups,{onConflict:"product_id,staff_id"}),function(){delete state.shares[cid];render()})})}
     sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return;
   }
+  else if(act==="cat-mv"){if(!sheet||sheet.type!=="catalog"||!isAdmin())return;
+    var top1=topProducts(state.catalog.filter(function(c){return !c.archived})),rest1=state.catalog.filter(function(c){return top1.indexOf(c)<0}),ci=-1;
+    for(var q1=0;q1<rest1.length;q1++)if(rest1[q1].id===id)ci=q1;if(ci<0)return;
+    var to=b.getAttribute("data-n")==="top"?0:Math.max(0,Math.min(rest1.length-1,ci+(+b.getAttribute("data-n")||0)));if(to===ci)return;
+    var mv=rest1.splice(ci,1)[0];rest1.splice(to,0,mv);
+    /* new places: the fixed top ones first, then the admin's order; only the products whose place changed are saved */
+    var ord=top1.concat(rest1),was={},chg=[];
+    ord.forEach(function(c,k){was[c.id]=c.sort;if(c.sort!==k+1){c.sort=k+1;chg.push({id:c.id,name:c.name,price:c.price,sort:k+1})}});
+    sortCat();var keepY=byId("sheet").scrollTop;byId("sheet").innerHTML=catalogSheet();byId("sheet").scrollTop=keepY;render();
+    var nb=document.querySelector('#sheet [data-act="cat-mv"][data-id="'+id.replace(/["\\]/g,"")+'"][data-n="'+b.getAttribute("data-n")+'"]');if(nb&&!nb.disabled)try{nb.focus({preventScroll:true})}catch(e){}
+    if(chg.length)db(sb.from("products").upsert(chg,{onConflict:"id"}).select("id"),function(){state.catalog.forEach(function(c){if(was[c.id]!=null)c.sort=was[c.id]});sortCat();if(sheet&&sheet.type==="catalog")byId("sheet").innerHTML=catalogSheet();render()});
+    return}
   else if(act==="cat-hide"){if(!sheet||!isAdmin())return;var ch1=catItem(sheet.eid);if(!ch1)return;ch1.archived=!ch1.archived;db(sb.from("products").update({archived:ch1.archived}).eq("id",ch1.id).select("id"));byId("sheet").innerHTML=catalogSheet();render();return}
   else if(act==="cat-del"){if(!sheet||!isAdmin())return;var cd1=catItem(sheet.eid);if(!cd1)return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Silinəcək (satışlar qalır) — bir də basın");return}

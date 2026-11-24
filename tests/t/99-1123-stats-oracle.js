@@ -79,11 +79,11 @@ module.exports = async () => {
     const isGone = (a) => (a.status === "cancel" && !(a.follow >= 3)) || a.status === "noshow";
     const over = (a) => a.date < today || (a.date === today && +a.time.slice(0, 2) * 60 + +a.time.slice(3) + a.duration <= nowM);
     const key = (k) => (k && staff.some((x) => x.id === k) ? k : "-");
-    const sess = {}, sales = {}, wr = {}, T = { a: 0, b: 0, d: 0, svc: {}, pl: {}, svcU: {}, plU: {} };
+    const sess = {}, sessR = {}, sales = {}, wr = {}, T = { a: 0, b: 0, d: 0, svc: {}, pl: {}, svcU: {}, plU: {} };
     for (const a of appts) {
       if (hidden(a.created_by)) continue;
       const k = key(a.created_by), c = bakuDay(a.created_at), inW = c >= r.s && c <= r.end, inD = a.date >= r.s && a.date <= r.end;
-      if (inW) sess[k] = (sess[k] || 0) + 1;
+      if (inW) { sess[k] = (sess[k] || 0) + 1; const m = sessR[k] || (sessR[k] = {}); m[a.reader_id] = (m[a.reader_id] || 0) + 1; }
       if (role(k) !== "specialist") {
         const x = sales[k] || (sales[k] = { a: 0, b: 0, d: 0 });
         if (inW) { x.a++; T.a++; } if (inD && !isGone(a) && over(a)) { x.b++; T.b++; } if (inD && isGone(a)) { x.d++; T.d++; }
@@ -110,7 +110,7 @@ module.exports = async () => {
         (P[sh.staff_id] || (P[sh.staff_id] = { q: 0, m: 0, sh: 0 })).sh += v; PT.sh += v;
       }
     }
-    return { sess, sales, wr, T, P, PP, PT };
+    return { sess, sessR, sales, wr, T, P, PP, PT };
   };
   const sales_ = sales;
 
@@ -132,10 +132,18 @@ module.exports = async () => {
         const head = await p.textContent("#main .sthead").catch(() => "");
         // «Kim neçə seans yazıb»
         const ss = await read('[data-st^="sess-"] tbody tr');
-        for (const [nm, , n] of ss) { const k = Object.keys(R.sess).find((x) => name(x) === nm); check(+n === (k ? R.sess[k] : 0), w + "«Kim neçə seans yazıb» " + nm + ": app " + n + ", rules " + (k ? R.sess[k] : 0) + " / " + head); checked++; }
+        // owner 24.11 evening: a column per specialist (his letter; the full name in data-full), «Cəmi» last
+        const sh = await p.evaluate(() => [...document.querySelectorAll('[data-st^="sess-"] thead th')].map((x) => x.getAttribute("data-full") || x.textContent.trim()));
+        const rid = (nm) => (readers.find((x) => x.name === nm) || {}).id;
+        for (const row of ss) { const nm = row[0], n = row[row.length - 1], k = Object.keys(R.sess).find((x) => name(x) === nm);
+          check(+n === (k ? R.sess[k] : 0), w + "«Kim neçə seans yazıb» " + nm + ": app " + n + ", rules " + (k ? R.sess[k] : 0) + " / " + head); checked++;
+          for (let i = 1; i < row.length - 1; i++) { const exp = k && R.sessR[k] ? R.sessR[k][rid(sh[i])] || 0 : 0; check((+row[i] || 0) === exp, w + nm + " → " + sh[i] + ": app " + (row[i] || 0) + ", rules " + exp); checked++; }
+          const sumCols = row.slice(1, -1).reduce((a, b) => a + (+b || 0), 0); check(sumCols === +n, w + nm + ": the specialists' columns add up to Cəmi"); }
+        const want = new Set(Object.values(R.sessR).flatMap((m) => Object.keys(m)));
+        check(sh.length - 2 === want.size && [...want].every((id) => sh.includes((readers.find((x) => x.id === id) || {}).name)), w + "a column for exactly the specialists written for: " + JSON.stringify(sh));
         for (const k of Object.keys(R.sess)) check(ss.some((r) => r[0] === name(k)), w + name(k) + " is missing in «Kim neçə seans yazıb»");
         const sf = await read('[data-st^="sess-"] tfoot tr');
-        check(+sf[0][2] === Object.values(R.sess).reduce((a, b) => a + b, 0), w + "«Kim neçə seans yazıb» total");
+        check(+sf[0][sf[0].length - 1] === Object.values(R.sess).reduce((a, b) => a + b, 0), w + "«Kim neçə seans yazıb» total");
         // «Ümumi cədvəl»
         const hd = await p.evaluate(() => [...document.querySelectorAll('[data-st^="big-"] thead tr.sub th')].map((x) => x.textContent.trim()));
         const big = await read('[data-st^="big-"] tbody tr'), bf = await read('[data-st^="big-"] tfoot tr');

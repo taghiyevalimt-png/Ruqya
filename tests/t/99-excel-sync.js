@@ -13,7 +13,7 @@ module.exports = async () => {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(2500);
     await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(300);
     const sess = await p.evaluate(() => [...document.querySelectorAll('[data-st="sess-cweek"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim()).join("|")));
-    check(sess.includes("Nurlana|Satış agenti|1") && sess.includes("Əli|Mütəxəssis|1") && sess.some((r) => /^Admin\|Admin\|0/.test(r)), "every agent and specialist with his sessions at the end: " + JSON.stringify(sess));
+    check(sess.some((r) => /^Nurlana\|.*\|1$/.test(r)) && sess.some((r) => /^Əli\|.*\|1$/.test(r)) && sess.some((r) => /^Admin\|.*0$/.test(r)), "every agent and specialist with his sessions (Cəmi at the end; 24.11 evening: no «Vəzifə»): " + JSON.stringify(sess));
     // owner 22.11: first in «Bu gün» and the periods; not in «Pul» and «Məhsul» (nothing to do with money / products)
     for (const sec of ["today", "cweek", "week", "cmonth", "month"]) { await p.click('#top [data-act="st-sec"][data-id="' + sec + '"]'); await p.waitForTimeout(200);
       check(await p.evaluate(() => { const a = document.querySelector('[data-st^="sess-"]'), b = document.querySelector('[data-st^="big-"]'); return !!(a && b && (a.compareDocumentPosition(b) & 4)); }), sec + ": «Kim neçə seans yazıb» stands before «Ümumi cədvəl»"); }
@@ -28,7 +28,9 @@ module.exports = async () => {
     const rows = (n) => [...(x["xl/worksheets/sheet" + (names.indexOf(n) + 1) + ".xml"] || "").matchAll(/<row [^>]*>(.*?)<\/row>/g)].map((r) => [...r[1].matchAll(/<c [^>]*?(?:\/>|>(?:<v>([^<]*)<\/v>|<is><t[^>]*>([^<]*)<\/t><\/is>)<\/c>)/g)].map((m) => m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : ""));
     const bw0 = rows("Bu həftə"), bw = bw0.slice(bw0.findIndex((r) => r[0] === "Ümumi cədvəl")), nur = bw.find((r) => r[0] === "Nurlana");
     check(nur && nur[1] === "5", "the typed WP 5 is in Excel: " + JSON.stringify(nur));
-    check(bw0.findIndex((r) => r[0] === "Kim neçə seans yazıb") < bw0.findIndex((r) => r[0] === "Ümumi cədvəl") && bw0.some((r) => r[0] === "Əli" && r[1] === "Mütəxəssis" && r[2] === "1"), "Excel: the sessions table first, then the merged table");
+    check(bw0.findIndex((r) => r[0] === "Kim neçə seans yazıb") < bw0.findIndex((r) => r[0] === "Ümumi cədvəl") && bw0.some((r) => r[0] === "Əli" && r[r.length - 1] === "1"), "Excel: the sessions table first, then the merged table");
+    const kh = bw0.find((r) => r[0] === "Kim");
+    check(kh && kh[kh.length - 1] === "Cəmi" && kh.slice(1, -1).length >= 1 && kh.slice(1, -1).every((h) => h.length > 2) && !kh.includes("Vəzifə"), "Excel: the specialists' full names as columns, Cəmi last, no «Vəzifə» (24.11 evening): " + JSON.stringify(kh));
     check(!rows("Məhsul").some((r) => r[0] === "Kim neçə seans yazıb") && !rows("Pul").length, "Excel: not in Məhsul; no «Pul» sheet");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }

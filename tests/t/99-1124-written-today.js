@@ -14,7 +14,7 @@ module.exports = async () => {
         const sess = [...document.querySelectorAll('[data-st^="sess-"] tbody tr')].find((r) => /Nurlana/.test(r.cells[0].textContent));
         const hd = [...document.querySelectorAll('[data-st^="big-"] thead tr.sub th')].map((x) => x.textContent.trim());
         const big = [...document.querySelectorAll('[data-st^="big-"] tbody tr')].find((r) => /Nurlana/.test(r.cells[0].textContent));
-        return { sess: sess ? +sess.cells[2].textContent : null, yazdi: big ? +big.cells[hd.indexOf("Yazdı") + 1].textContent : null, seans: +document.querySelector(".todaysum b").textContent };
+        return { sess: sess ? +sess.cells[sess.cells.length - 1].textContent : null, yazdi: big ? +big.cells[hd.indexOf("Yazdı") + 1].textContent : null, seans: +document.querySelector(".todaysum b").textContent };
       });
     };
     const before = await today();

@@ -17,7 +17,7 @@ module.exports = async () => {
     check(!/[*_▪🔸📊]/u.test(t), "no stars, underscores or emoji");
     await p.click('[data-st="sess-cweek"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const u = await p.evaluate(() => navigator.clipboard.readText());
-    check(u.split("\n").includes("Nurlana (satış agenti) - 2 seans"), "the sessions table: one plain line per person: " + u);
+    check(u.split("\n").some((l) => /^Nurlana - (\S.* \d+, )+cəmi 2 seans$/.test(l)), "the sessions table: one plain line per person, the specialists' full names, then cəmi (24.11 evening): " + u);
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };
