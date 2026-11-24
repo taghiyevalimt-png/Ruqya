@@ -115,7 +115,7 @@ sleep 4
 N1=$(adb shell dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -E "TEST YENI|TEST XATIRLAT|must not show" | sort -u)
 A1=$(adb shell dumpsys alarm 2>/dev/null | tr -d '\r' | grep -c "$P" || true)
 # the job list: «JOB #u0a…/4711: … pkg/.NotifyJob» on Android 8+; Android 6 prints the component on its own
-JP="JOB #.*$P/.NotifyJob"; [ "$API" -lt 26 ] && JP="$P/.NotifyJob"
+JP="JOB #.*$P/.NotifyJob"; [ "$API" -lt 26 ] && JP="ComponentInfo{$P/$P.NotifyJob}"
 JD=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -i "notifyjob" | head -3)
 J1=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "$JP" || true)
 sleep 22
