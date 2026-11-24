@@ -12,7 +12,7 @@ const AFTER = ["2026-11-patients-order.sql", "2026-11-least-privilege.sql", "202
   // 22.11 (owner notes, products, shares; audit 5) — added in audit 6: the copy lacked them, so the new tables were not in the matrix
   "2026-11-breaks-gcal.sql", "2026-11-products.sql", "2026-11-product-shares.sql", "2026-11-service-shares.sql", "2026-11-share-amounts.sql", "2026-11-a5-patient-key.sql",
   "2026-11-a6-journal-index.sql", "2026-11-a6-private-helpers.sql", "2026-11-a6-one-policy.sql", "2026-11-a6-pkey-fast.sql",
-  "2026-11-presets.sql", "2026-11-product-owner.sql", "2026-11-patient-of.sql", "2026-11-no-price.sql", "2026-11-notify.sql"];   // 23.11: prices and lengths of a new booking   // migrations applied on top of the dump, in order (audit 4 fixes)
+  "2026-11-presets.sql", "2026-11-product-owner.sql", "2026-11-patient-of.sql", "2026-11-no-price.sql", "2026-11-notify.sql", "2026-11-wave2.sql"];   // 23.11: prices and lengths of a new booking   // migrations applied on top of the dump, in order (audit 4 fixes)
 const U = {
   owner: "bad097d4-5edc-402b-ad59-f633252c35d9", admin2: "a0000000-0000-4000-8000-0000000000a2",
   agentA: "a0000000-0000-4000-8000-0000000000aa", agentB: "a0000000-0000-4000-8000-0000000000ab",

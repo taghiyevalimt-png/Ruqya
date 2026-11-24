@@ -137,6 +137,14 @@ async function attach(context, db, ctl) {
       }
       // owner 18.11: the caller's own patients (name, phone), two years, latest name per patient
       if (fn === "ruqya_my_contacts") { const g = {}; db.appts.filter((r) => r.created_by === uid && r.date >= a.since && String(r.phone || "").trim()).sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => { const k = String(r.phone).replace(/\D/g, "").slice(-9); /* one contact per number (audit 5: not per patient key) */ if (!g[k]) g[k] = { name: r.name, phone: r.phone }; }); return send(route, 200, Object.values(g)); }
+      // 24.11 wave 2 (sql/2026-11-wave2.sql): VIP (≥ min_vip visits not cancelled up to today) and «mine»; merging duplicates
+      if (fn === "ruqya_patient_marks" && (ctl.noMarks || db.__noMarks)) return send(route, 404, { code: "PGRST202", message: "Could not find the function" });
+      if (fn === "ruqya_patient_marks") { const g = {}, t = bakuToday();
+        db.appts.filter((r) => r.date >= bakuToday(-800)).forEach((r) => { const k = pkey(r), o = g[k] || (g[k] = { k, n: 0, mine: false }); if (!["cancel", "noshow"].includes(r.status) && r.date <= t) o.n++; if (r.created_by === uid) o.mine = true; });
+        return send(route, 200, Object.values(g).filter((x) => x.n >= (a.min_vip || 5) || x.mine).map((x) => ({ k: x.k, vip: x.n >= (a.min_vip || 5), mine: x.mine }))); }
+      if (fn === "ruqya_merge_patients") { if (uid !== OWNER) return send(route, 403, { code: "42501", message: "Yalniz admin birlesdirir" });
+        const nm = String(a.p_name || "").trim().replace(/\s+/g, " "); let n = 0; const now = new Date().toISOString();
+        db.appts.forEach((r) => { if (a.keys.includes(pkey(r)) && r.name !== nm) { r.name = nm; r.updated_at = now; n++; } }); ctl.merged = (ctl.merged || 0) + 1; return send(route, 200, n); }
       if (fn === "ruqya_hist_visits") return send(route, 200, old().filter((r) => pkey(r) === a.key).map(({ id, reader_id, date, name, phone, status, created_by }) => ({ id, reader_id, date, name, phone, status, created_by })));
       if (fn === "ruqya_anonymize") {
         if (uid !== OWNER) return send(route, 403, { code: "42501", message: "Yalniz admin anonimlesdirir" });
