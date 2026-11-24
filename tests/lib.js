@@ -13,7 +13,7 @@ const SPEC = "22222222-2222-4222-8222-222222222222";
 const R1 = "aaaaaaaa-0000-4000-8000-000000000001";
 const R2 = "aaaaaaaa-0000-4000-8000-000000000002";
 
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "application/javascript", ".css": "text/css", ".png": "image/png", ".json": "application/json", ".webmanifest": "application/manifest+json", ".woff2": "font/woff2", ".txt": "text/plain" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "application/javascript", ".css": "text/css", ".png": "image/png", ".svg": "image/svg+xml", ".webp": "image/webp", ".json": "application/json", ".webmanifest": "application/manifest+json", ".woff2": "font/woff2", ".txt": "text/plain" };
 
 function serve() {
   return new Promise((res) => {
