@@ -27,14 +27,14 @@ module.exports = async () => {
             fx: [...e.querySelectorAll(".fx")].filter((x) => getComputedStyle(x).display !== "none").length, cut: b.scrollHeight > e.clientHeight || box(b).right > box(e).right + 1 || box(b).bottom > box(e).bottom + 1, broken: words(b), fs: parseFloat(cs.fontSize), okOver: okv ? okv.getBoundingClientRect().bottom > b.getBoundingClientRect().top + 1 : false } });
         const fab = document.querySelector("#fab"), fabt = fab.querySelector(".fabt");
         return { week: document.querySelectorAll("#top .week, #top .wd").length, sw: !!sw, swRight: sw && lab ? box(sw).left >= box(lab).right - 1 : false, swTop: sw && lab ? Math.abs(box(sw).top - box(lab).top) < 40 : false,
-          btns: sw ? [...sw.querySelectorAll("button")].map((b) => [Math.round(box(b).width), Math.round(box(b).height), b.textContent]) : [],
+          btns: sw ? [...sw.querySelectorAll("button")].map((b) => [Math.round(box(b).width), Math.round(box(b).height), b.getAttribute("aria-label"), !!b.querySelector("svg")]) : [],
           oldSw: document.querySelectorAll("#cal .vsw, #main .lsw, .cal-foot [data-act=view]").length, labelCut: lab ? lab.scrollWidth > lab.clientWidth + 1 : true,
           footBg: bg, evs, fabText: fab.textContent, fabtW: fabt ? fabt.getBoundingClientRect().width : -1, fabKids: fab.children.length };
       });
       const tag = w + " " + lang + ": ";
       check(r.week === 0, tag + "no week strip with day numbers at the top");
       check(r.sw && r.swRight && r.swTop, tag + "Təqvim / Siyahı stand at the top, right of the date");
-      check(r.btns.length === 2 && r.btns.every((b) => b[0] >= 72 && b[1] >= 32), tag + "the two buttons are big enough for a thumb: " + JSON.stringify(r.btns));
+      check(r.btns.length === 2 && r.btns.every((b) => b[0] >= 40 && b[1] >= 34 && b[2] && b[3]), tag + "two symbol buttons (evening 24.11: symbols instead of words), big enough for a thumb, named for screen readers: " + JSON.stringify(r.btns));
       check(r.oldSw === 0, tag + "the switch is no longer at the bottom left nor above the list");
       check(!r.labelCut, tag + "the date next to the switch is not cut");
       check(/rgb\(|rgba\(.*,\s*1\)/.test(r.footBg) && !/rgba\(.*,\s*0(\.\d+)?\)/.test(r.footBg), tag + "the names strip is solid (" + r.footBg + "): blocks do not show through");

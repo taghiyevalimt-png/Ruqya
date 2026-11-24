@@ -52,31 +52,20 @@ public class MonthWidget extends AppWidgetProvider {
     static final float HEAD = 14f, WKROW = 8f, ROW = 13f, TOTAL = HEAD + WKROW + 6 * ROW;
     static final float[] HEAD_COLS = {52f, 15f, 15f, 18f};
 
-    // Two looks (owner 17.11: «white too»). Dark: black and gold, like the app's dark look. Light: white with black,
-    // like the app's light look. The app sends the choice as "t": "light", "dark" or "auto" (= the phone's own
-    // dark mode); older app versions send nothing, which is "auto".
+    // Two looks (owner 24.11, evening): night — #303147 with dusk-blue #405577, the default — and sand (#CEBBA0, brown
+    // #9A765E). The app sends the widget's choice as "t": "sand" for sand; anything else ("night", the old "light",
+    // "dark", "auto", or nothing from an older app version) is night.
     static int BG, LINE, INK, MUTED, ACCENT, ACCENT_INK;
 
     static boolean dark(Context ctx, JSONObject data) {
-        String t = data == null ? "auto" : data.optString("t", "auto");
-        if ("dark".equals(t)) return true;
-        if ("light".equals(t)) return false;
-        try {
-            int m = ctx.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
-            return m == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-        } catch (Exception e) {
-            return false;
-        }
+        return data == null || !"sand".equals(data.optString("t", "night"));
     }
 
-    // 24.11 (owner): one cosy look for the widgets too — sand #CEBBA0, brown #9A765E, espresso text; no light/dark switch
-    static void palette(boolean dark) {
-        if (true) {
-            BG = 0xFFCEBBA0; LINE = 0xFFB8A386; INK = 0xFF3A2C22; MUTED = 0xFF6E5646; ACCENT = 0xFF9A765E; ACCENT_INK = 0xFFFFF8EF;
-        } else if (dark) {
-            BG = 0xFF0D0C0A; LINE = 0xFF2A251B; INK = 0xFFF4ECD8; MUTED = 0xFF9B917C; ACCENT = 0xFFD4B062; ACCENT_INK = 0xFF0B0905;
+    static void palette(boolean night) {
+        if (night) {
+            BG = 0xFF303147; LINE = 0xFF45476A; INK = 0xFFEFEBF3; MUTED = 0xFFA9ADCB; ACCENT = 0xFF405577; ACCENT_INK = 0xFFF5F3FA;
         } else {
-            BG = 0xFFFFFFFF; LINE = 0xFFE4E0D8; INK = 0xFF16140F; MUTED = 0xFF7C7568; ACCENT = 0xFF16140F; ACCENT_INK = 0xFFFFFFFF;
+            BG = 0xFFCEBBA0; LINE = 0xFFB8A386; INK = 0xFF3A2C22; MUTED = 0xFF6E5646; ACCENT = 0xFF9A765E; ACCENT_INK = 0xFFFFF8EF;
         }
     }
 
@@ -225,7 +214,7 @@ public class MonthWidget extends AppWidgetProvider {
         try {
             o.put("out", 1);
             o.put("l", d.optString("l", "az"));
-            o.put("t", d.optString("t", "auto"));   // the signed-out picture keeps the chosen colour
+            o.put("t", d.optString("t", "night"));   // the signed-out picture keeps the chosen colour
         } catch (Exception e) {
             // keep the bare object: still shows the signed-out state
         }

@@ -3,4 +3,6 @@
     <color name="ic_launcher_background">#CEBBA0</color>
     <color name="sand">#CEBBA0</color>
     <color name="brown">#9A765E</color>
+    <color name="night">#303147</color>
+    <color name="dusk">#405577</color>
 </resources>

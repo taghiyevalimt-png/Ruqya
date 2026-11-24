@@ -37,7 +37,7 @@ shotk widget-day 320 250 2.75 day 0
 shotk widget-day-small 250 140 2.0 day -2
 shotk widget-week 360 420 2.75 week 0
 shotk widget-week-small 250 250 2.0 week 0
-A=$(sed 's/"t": *"dark"/"t":"light"/' android/test-agenda.json | base64 -w0); shotk widget-week-light 360 420 2.75 week 0
+A=$(sed 's/"t": *"dark"/"t":"sand"/' android/test-agenda.json | base64 -w0); shotk widget-week-sand 360 420 2.75 week 0
 shotk widget-day-tomorrow 320 250 2.75 day 1
 A=$(printf '{"out":1}' | base64 -w0); shotk widget-week-out 360 420 2.75 week 0
 adb shell appwidget grantbind --package $P --user 0 || true
@@ -48,13 +48,13 @@ for k in day week; do
 done
 { echo "day / week widgets (API $API)"
   ok=1
-  for f in widget-day widget-day-small widget-week widget-week-small widget-week-light widget-week-out; do
+  for f in widget-day widget-day-small widget-week widget-week-small widget-week-sand widget-week-out; do
     s=$(stat -c%s "$f-$API.png" 2>/dev/null || echo 0); echo "$f $s bytes"
     head -c 4 "$f-$API.png" 2>/dev/null | od -An -tx1 | grep -q "89 50 4e 47" || ok=0
     [ "$s" -gt 3000 ] || ok=0
   done
-  # 24.11: one cosy look — the «light» and «dark» data draw the same picture
-  cmp -s widget-week-$API.png widget-week-light-$API.png || { echo "light != dark (must be one look)"; ok=0; }
+  # 24.11 (evening): two looks — night (default) and sand draw different pictures
+  cmp -s widget-week-$API.png widget-week-sand-$API.png && { echo "sand == night (must differ)"; ok=0; }
   for k in day week; do cat "bind-$k-$API.txt"; grep -q "^bound=true" "bind-$k-$API.txt" || ok=0; grep -q "FAIL" "bind-$k-$API.txt" && ok=0; [ "$(grep -c ': ok' "bind-$k-$API.txt")" = "9" ] || ok=0; done
   # the drawing error file, if any (a missing file must not count: «cat: No such file» comes on the same output)
   DE=$(adb shell "run-as $P sh -c 'cat files/widget_test.txt 2>/dev/null'" | tr -d '\r')
@@ -105,18 +105,48 @@ CQ=$(adb shell content query --uri content://com.android.contacts/data/phones --
   if [ "$C1" = "added=2 skipped=2" ] && [ "$C2" = "added=0 skipped=4" ] && echo "$CQ" | grep -q "display_name=Test Pasiyent Bir, data1=+994 55 111 22 33" && echo "$CQ" | grep -q "display_name=Test Iki, data1=0501112244" && ! echo "$CQ" | grep -q "Bir tekrar"; then echo "PASS: names and numbers in the phone's contacts, a number already there is not added twice"; else echo "FAIL"; fi
 } > "contacts-$API.txt"
 cat "contacts-$API.txt"
-# 24.11 (owner): one cosy look (sand #CEBBA0, brown #9A765E) — whatever "t" says (light, dark, none, signed out),
-# the picture is the same. (Before: F-02, 17.11 — white or black as chosen.)
-JL=$(sed 's/"u":/"t":"light","u":/' android/test-widget.json | base64 -w0)
-JD=$(sed 's/"u":/"t":"dark","u":/' android/test-widget.json | base64 -w0)
-shot widget-light 360 380 3.0 "$JL"
-shot widget-dark 360 380 3.0 "$JD"
+# 24.11 (owner): notifications. The server's answer applied on the phone (no network): a notice for a new booking at once;
+# a reminder by an exact alarm 1 minute before a session 75 s away (= in 15 s); the 15-minute check is kept while
+# something is on; {"gone":true} (a token the server no longer knows) stops the check and the alarms.
+adb shell pm grant $P android.permission.POST_NOTIFICATIONS 2>/dev/null || true
+NJ=$(printf '%s' '{"remind_min":1,"on_new":true,"news":[{"id":"n-1","text":"Sizə seans yazıldı: 25 noyabr, 14:00 — TEST YENI"}],"upcoming":[{"id":"u-1","in_s":75,"text":"1 dəqiqə sonra seans: 14:00 — TEST XATIRLAT"},{"id":"u-2","in_s":-30,"text":"OLD — must not show"}]}' | base64 -w0)
+adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.NOTIFY_TEST --es b64 '$NJ'" > /dev/null
+sleep 4
+N1=$(adb shell dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -E "TEST YENI|TEST XATIRLAT|must not show" | sort -u)
+A1=$(adb shell dumpsys alarm 2>/dev/null | tr -d '\r' | grep -c "$P" || true)
+# the job list: «JOB #u0a…/4711: … pkg/.NotifyJob» on Android 8+; Android 6 prints the component on its own
+JP="JOB #.*$P/.NotifyJob"; [ "$API" -lt 26 ] && JP="ComponentInfo{$P/$P.NotifyJob}"
+JD=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -i "notifyjob" | head -3)
+J1=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "$JP" || true)
+sleep 22
+N2=$(adb shell dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -E "TEST YENI|TEST XATIRLAT|must not show" | sort -u)
+adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.NOTIFY_TEST --es b64 '$(printf '{"gone":true}' | base64 -w0)'" > /dev/null
+sleep 3
+J2=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "$JP" || true)
+NE=$(adb shell "run-as $P sh -c 'cat files/notify_test.txt 2>/dev/null'" | tr -d '\r')
+{ echo "notifications (API $API)"
+  echo "after 4 s:  $(echo "$N1" | grep -c 'TEST YENI') new, $(echo "$N1" | grep -c 'TEST XATIRLAT') reminder; alarms of the app: $A1; check scheduled: $J1"
+  echo "after 26 s: $(echo "$N2" | grep -c 'TEST YENI') new, $(echo "$N2" | grep -c 'TEST XATIRLAT') reminder, $(echo "$N2" | grep -c 'must not show') old"
+  echo "after gone: check scheduled: $J2 $NE"
+  echo "job lines: $JD"
+  if echo "$N1" | grep -q "TEST YENI" && ! echo "$N1" | grep -q "TEST XATIRLAT" && echo "$N2" | grep -q "TEST XATIRLAT" && ! echo "$N2" | grep -q "must not show" \
+     && [ "$J1" -ge 1 ] && [ "$J2" = "0" ] && [ -z "$NE" ]; then echo "PASS: a new booking at once, the reminder on time by its alarm, nothing for a past session; gone stops the check"; else echo "FAIL"; fi
+} > "notify-$API.txt"
+cat "notify-$API.txt"
+# 24.11 (owner, evening): two looks — night (#303147, default) and sand (#CEBBA0), chosen in the app (Ayarlar →
+# Görünüş → Vidcetin rəngi) and sent as "t". "sand" draws sand; "night", an old "dark", or nothing draws night.
+JL=$(sed 's/"u":/"t":"sand","u":/' android/test-widget.json | base64 -w0)
+JD=$(sed 's/"u":/"t":"night","u":/' android/test-widget.json | base64 -w0)
+JO=$(sed 's/"u":/"t":"dark","u":/' android/test-widget.json | base64 -w0)
+shot widget-sand 360 380 3.0 "$JL"
+shot widget-night 360 380 3.0 "$JD"
+shot widget-olddark 360 380 3.0 "$JO"
 shot widget-auto 360 380 3.0 "$J"
-shot widget-out-light 320 340 2.5 "$(printf '{"out":1,"t":"light"}' | base64 -w0)"
-shot widget-out-dark 320 340 2.5 "$(printf '{"out":1,"t":"dark"}' | base64 -w0)"
+shot widget-out-sand 320 340 2.5 "$(printf '{"out":1,"t":"sand"}' | base64 -w0)"
+shot widget-out-night 320 340 2.5 "$(printf '{"out":1,"t":"night"}' | base64 -w0)"
 { echo "F-02 widget colour (API $API)"
-  for f in light dark auto out-light out-dark; do echo "$f $(md5sum < widget-$f-$API.png | cut -c1-32) $(stat -c%s widget-$f-$API.png) bytes"; done
-  if [ -s widget-light-$API.png ] && [ -s widget-dark-$API.png ] && cmp -s widget-light-$API.png widget-dark-$API.png && cmp -s widget-auto-$API.png widget-light-$API.png && cmp -s widget-out-light-$API.png widget-out-dark-$API.png; then echo "PASS: one cosy look — light, dark, automatic and signed-out pictures are the same"; else echo "FAIL"; fi
+  for f in sand night olddark auto out-sand out-night; do echo "$f $(md5sum < widget-$f-$API.png | cut -c1-32) $(stat -c%s widget-$f-$API.png) bytes"; done
+  if [ -s widget-sand-$API.png ] && [ -s widget-night-$API.png ] && ! cmp -s widget-sand-$API.png widget-night-$API.png && cmp -s widget-auto-$API.png widget-night-$API.png && cmp -s widget-olddark-$API.png widget-night-$API.png && ! cmp -s widget-out-sand-$API.png widget-out-night-$API.png; then echo "PASS: two looks — sand and night differ; no choice or an old one is night"; else echo "FAIL"; fi
 } > "theme-$API.txt"
 cat "theme-$API.txt"
 # A real widget instance, as a home screen would hold it.

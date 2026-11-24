@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 24.11: one cosy look — sand window (no flash at start), brown bars -->
-    <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/sand</item>
-        <item name="android:colorBackground">@color/sand</item>
-        <item name="android:statusBarColor">@color/brown</item>
-        <item name="android:navigationBarColor">@color/brown</item>
+    <!-- 24.11 (evening): the default look is night (#303147); the app switches to sand at start when that was chosen -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/night</item>
+        <item name="android:colorBackground">@color/night</item>
+        <item name="android:statusBarColor">@color/night</item>
+        <item name="android:navigationBarColor">@color/night</item>
     </style>
 </resources>

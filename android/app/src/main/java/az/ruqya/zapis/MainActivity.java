@@ -29,6 +29,25 @@ public class MainActivity extends Activity {
 
     private static final String HOST = "taghiyevalimt-png.github.io";
     private static final String HOME = "https://" + HOST + "/Ruqya/";
+    // 24.11 (evening): two looks — night (#303147, the default) and sand (#CEBBA0); the page tells which via setLook
+    static final String LOOK_PREFS = "ruqya.look";
+    static boolean sand(android.content.Context c) {
+        return "sand".equals(c.getSharedPreferences(LOOK_PREFS, 0).getString("look", "night"));
+    }
+    private void applyLook() {
+        boolean sand = sand(this);
+        int bg = Color.parseColor(sand ? "#CEBBA0" : "#303147"), bar = Color.parseColor(sand ? "#9A765E" : "#303147");
+        getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(bg));
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(bar);
+            getWindow().setNavigationBarColor(bar);
+        }
+        if (web != null) web.setBackgroundColor(bg);
+    }
+    private String offline() {
+        boolean sand = sand(this);
+        return OFFLINE.replace("#CEBBA0", sand ? "#CEBBA0" : "#303147").replace("#3A2C22", sand ? "#3A2C22" : "#EFEBF3").replace("#9A765E", sand ? "#9A765E" : "#AEB3D8");
+    }
     private static final String OFFLINE =
             "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head>"
                     + "<body style='font-family:sans-serif;padding:48px 24px;text-align:center;background:#CEBBA0;color:#3A2C22'>"
@@ -41,13 +60,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(Color.parseColor("#9A765E"));   // 24.11: the cosy brown
-            getWindow().setNavigationBarColor(Color.parseColor("#9A765E"));
-        }
-
         web = new WebView(this);
-        web.setBackgroundColor(Color.parseColor("#CEBBA0"));   // no flash before the page paints: the sand of the app
+        applyLook();   // no flash before the page paints: the colour of the chosen look
         setContentView(web);
 
         WebSettings settings = web.getSettings();
@@ -258,6 +272,28 @@ public class MainActivity extends Activity {
             }
         }
 
+        /** 24.11 notifications: start or stop the check (see Notify); asks Android 13+ for permission to show them */
+        @JavascriptInterface
+        public void notifyConfig(final String json) {
+            Notify.config(MainActivity.this, json);
+            if (json != null && json.contains("\"on\":true") && Build.VERSION.SDK_INT >= 33
+                    && checkSelfPermission("android.permission.POST_NOTIFICATIONS") != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                runOnUiThread(new Runnable() { public void run() { requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 31); } });
+            }
+        }
+
+        @JavascriptInterface
+        public void notifyTest(String text) {
+            Notify.show(MainActivity.this, 1, text == null || text.isEmpty() ? "✓" : text);
+        }
+
+        @JavascriptInterface
+        public void setLook(final String look) {
+            String l = "sand".equals(look) ? "sand" : "night";
+            getSharedPreferences(LOOK_PREFS, 0).edit().putString("look", l).apply();
+            runOnUiThread(new Runnable() { public void run() { applyLook(); } });
+        }
+
         @JavascriptInterface
         public void setWidgetData(String json) {
             if (json == null || json.length() > 400000) return;
@@ -359,7 +395,7 @@ public class MainActivity extends Activity {
     }
 
     private void showOffline(WebView view) {
-        view.loadDataWithBaseURL(HOME, OFFLINE, "text/html", "utf-8", null);
+        view.loadDataWithBaseURL(HOME, offline(), "text/html", "utf-8", null);
     }
 
     @Override

@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qAJ9MAN62toXb5KSRZV+oGOPGNpBLiK3Uti7tFb6YU0=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+k3DOrzM1hl6LX9h3t017m7NuHed4dNA8NWkPaz0MdI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+Lx9/q88uC/mpkzRHFJreeiXlYsF678FbnzIJTT8d4I='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#CEBBA0">
+<meta name="theme-color" content="#303147">
 <script>
 /* The app never runs inside another site's frame (that is how click-tricking attacks work). */
 if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location.replace(window.location.href)}catch(e){}}
@@ -17,17 +17,17 @@ if(LANG==="ru")document.documentElement.setAttribute("lang","ru");
 /* Light / dark / automatic, chosen in Ayarlar and kept on this phone. */
 /* owner 24.11: «not one look by day and another in the evening — one for everybody»: always the one Mərkəz look
    (Design 3.0, night and gold); the phone's light/dark mode and the old choice in Ayarlar no longer change it */
-function applyTheme(t){
-  /* 24.11 (later): the one look is «cozy home» — sand #CEBBA0 and brown #9A765E (Design 4.0) */
-  var r=document.documentElement;t="light";r.setAttribute("data-theme","light");
-  var dark=false;
-  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#CEBBA0");
-  r.style.background="#CEBBA0";
-  var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute("content",dark?"dark":"light");
+function applyTheme(){
+  /* 24.11 (evening, owner): two looks — «Gecə» (night: #303147 with #405577 buttons, an evening room) for everybody by
+     default, and «Qum» (sand #CEBBA0 with brown #9A765E) for whoever picks it in Ayarlar → Görünüş (kept on this phone) */
+  var r=document.documentElement,night=true;try{night=localStorage.getItem("ruqya.look")!=="sand"}catch(e){}
+  r.setAttribute("data-theme","light");
+  if(r.classList){if(night)r.classList.add("night");else r.classList.remove("night")}
+  var bg=night?"#303147":"#CEBBA0",m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",bg);
+  r.style.background=bg;
+  var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute("content",night?"dark":"light");
 }
-try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
-try{var mq=window.matchMedia("(prefers-color-scheme: dark)"),onMq=function(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}if(t==="auto")applyTheme("auto")};
-  if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq)}catch(e){}
+try{applyTheme()}catch(e){}
 </script>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="manifest.webmanifest">
@@ -310,6 +310,7 @@ main.gridmode>.note,main.gridmode>.empty,main.gridmode>.sumline{margin:4px 16px 
 #cal.fit .ev.tiny{flex-direction:row;align-items:center}
 #cal.fit .ev.tiny b.nm{white-space:nowrap;text-overflow:clip}
 #cal.fit .ev.tiny .okm{margin:0 0 0 1px}
+#cal.fit .ev .okm.okmini{font-size:5px;letter-spacing:-1px}
 .cal.fit .ev b.okc i.ok{position:absolute;top:1px;right:1px;margin:0;font-size:7px;line-height:1;background:rgba(0,0,0,.35);border-radius:3px;padding:0 1px}
 #cal .ev .fx,#cal .ev.tight .fx{display:block;font-size:var(--fitfs2,10.5px);line-height:1.1;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:clip;font-weight:500;letter-spacing:-.03em;margin-top:1px}
 #cal .ev .fx.ag{font-weight:700}
@@ -817,7 +818,7 @@ main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
 /* 24.11 look: the actions of a card (Zəng, Wp, Təsdiq, Dəyiş, Ləğv et, Sil…) are small pills, not underlined links;
    a pill that deletes or cancels is red. Only colours and borders — nothing for the phone to compute while moving. */
 .links .link,.links a.link,.pbtns .link{text-decoration:none;background:var(--line-soft);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;line-height:1.15;color:var(--ink);min-height:0}
-.links .link[style*="--bad"],.pbtns .link[style*="--bad"]{color:var(--bad)!important;background:var(--bad-soft,rgba(217,48,37,.08));border-color:transparent}
+.links .link[style*="--bad"],.pbtns .link[style*="--bad"],.links .link.bad-t,html.night .links .link.bad-t{color:var(--bad)!important;background:var(--bad-soft,rgba(217,48,37,.08));border-color:transparent}
 .links{gap:6px 8px}.card.compact .links{gap:6px 7px}.card.compact .links .link{padding:5px 11px}
 .links .link:active,.pbtns .link:active{background:var(--accent-soft)}
 .pbtns{display:inline-flex;gap:6px}
@@ -1116,7 +1117,7 @@ button:active,.chip:active,.wd:active,.pbtn:active,a.link:active{transform:scale
 .daynav.withsw>.icon-btn{width:38px;height:38px;flex:none}
 .daynav.withsw .label .dt{font-size:27px}
 .daynav.withsw .dlab{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
-.daynav.withsw .dlab .label{flex:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.daynav.withsw .dlab .label{flex:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:clip}
 .daynav.withsw .dsub{display:flex;align-items:center;gap:8px;min-height:22px;margin-top:2px}
 .daynav.withsw .dsub small{font-size:12.5px;font-weight:600;color:var(--muted)}
 .daynav.withsw .tdy{border:1px solid var(--line);background:var(--surface);color:var(--accent);font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;line-height:18px}
@@ -1124,7 +1125,8 @@ button:active,.chip:active,.wd:active,.pbtn:active,a.link:active{transform:scale
 .vsw2 button{min-width:80px;min-height:33px;padding:0 10px;border:0;border-radius:12px;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:700;letter-spacing:-.01em}
 .vsw2 button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);box-shadow:0 2px 6px rgba(90,60,40,.25)}
 html.lite .vsw2 button[aria-pressed="true"]{box-shadow:none}
-@media (max-width:370px){.vsw2 button{min-width:74px;font-size:13px;padding:0 8px}.daynav.withsw .label .dt{font-size:25px}}
+@media (max-width:370px){.daynav.withsw .label .dt{font-size:25px}}
+@media (max-width:340px){.vsw2 button{min-width:40px!important;padding:0 7px!important}.daynav.withsw>.icon-btn{width:34px;height:34px}}
 /* names band: its own solid strip — blocks never show through it */
 #cal .cal-foot{background:#E9DFD0;height:44px;box-shadow:0 -2px 8px rgba(90,60,40,.10)}
 #cal .cal-foot .corner{background:#E9DFD0}
@@ -1135,6 +1137,72 @@ html.lite .vsw2 button[aria-pressed="true"]{box-shadow:none}
 #cal .ev.nnm b i.ok{display:block;font-size:9px;line-height:1.1;margin:0 0 1px}
 #cal .ev.vnm b{-webkit-writing-mode:vertical-rl;writing-mode:vertical-rl;display:block;margin:0 auto;white-space:normal;overflow-wrap:normal;word-break:keep-all;line-height:1.1;letter-spacing:.01em;overflow:hidden;-webkit-line-clamp:unset}
 #cal .ev .okv{display:block;flex:none;font-style:normal;font-size:9px;line-height:12px;height:12px;margin:0 0 1px;text-align:center;letter-spacing:-1.5px;white-space:nowrap;overflow:hidden;width:100%}
+
+/* 24.11 (owner's video: on some phones a window came in slowly, its fields washed-out and fading one by one):
+   on EVERY phone the window now slides up as one solid piece, fast (0.24 s), moved only by transform on its own
+   layer; nothing inside it fades or moves; no big soft shadow to draw; the dark veil only fades. Tabs change at once. */
+html .sheet,html.lite .sheet{-webkit-animation:sheetIn .24s cubic-bezier(.2,.85,.25,1) both!important;animation:sheetIn .24s cubic-bezier(.2,.85,.25,1) both!important;box-shadow:none!important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+html .sheet>*,html .sheet.opening>*{-webkit-animation:none!important;animation:none!important}
+@-webkit-keyframes sheetIn{from{-webkit-transform:translate3d(0,100%,0)}to{-webkit-transform:translate3d(0,0,0)}}
+@keyframes sheetIn{from{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}to{-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}}
+html .overlay,html.lite .overlay{-webkit-animation:fadein .2s linear both!important;animation:fadein .2s linear both!important}
+html main.enter,html main.enter>*,html main.enter #cal,html.lite main.enter{-webkit-animation:none!important;animation:none!important}
+html .ghostout,html.lite .ghostout{-webkit-animation:fadeaway .18s linear forwards!important;animation:fadeaway .18s linear forwards!important}
+html .ghostout .sheet,html.lite .ghostout .sheet{-webkit-animation:sheetOut .18s ease-in forwards!important;animation:sheetOut .18s ease-in forwards!important}
+@-webkit-keyframes sheetOut{to{-webkit-transform:translate3d(0,100%,0)}}
+@keyframes sheetOut{to{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}}
+html .overlay.parked,html .overlay.parked .sheet{-webkit-animation:none!important;animation:none!important}
+@media (prefers-reduced-motion: reduce){html .sheet,html.lite .sheet,html .overlay,html.lite .overlay,html .ghostout,html .ghostout .sheet{-webkit-animation:none!important;animation:none!important}}
+
+/* 24.11 symbols: icon buttons; the bottom tabs show only their picture, the open one also its name */
+.ico{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:36px;padding:0 8px!important}
+.ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.links .ico.bad-t,.ico.bad-t{color:var(--bad)}
+.tabs button:not([aria-current="page"]){font-size:0!important;letter-spacing:0}
+.tabs button svg{flex:none}
+.vsw2{flex-direction:row}
+.vsw2 button{min-width:46px!important;min-height:40px!important;padding:0 10px!important;display:flex;align-items:center;justify-content:center}
+.vsw2 button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.chip{text-overflow:clip}
+.chip.two{text-align:center;white-space:normal!important;line-height:1.08;overflow-wrap:normal;word-break:normal;padding-top:4px;padding-bottom:4px}
+.daynav.withsw .label .dt{font-size:27px;font-size:min(27px,6.9vw)}
+
+/* ============ 24.11 (evening, owner): «Gecə» — the default look. An evening room: deep blue-grey walls #303147,
+   buttons in dusk blue #405577 (#596F9A, #8589AC lighter), the darkest #101115 for depth, warm cream text and one
+   soft warm lamp light from above. Everything else (block colours, cancelled = black) stays. ============ */
+html.night:root[data-theme]{--bg:#303147;--surface:#3A3C57;--surface2:#2A2B3F;--ink:#EFEBF3;--muted:#A9ADCB;
+  --line:rgba(133,137,172,.30);--line-soft:rgba(133,137,172,.16);--hatch:#3B3D58;
+  --accent:#AEB3D8;--accent-ink:#F5F3FA;--accent-soft:rgba(133,137,172,.20);--accent-line:#8589AC;--gold:#AEB3D8;--gold-soft:rgba(133,137,172,.20);
+  --btn:linear-gradient(135deg,#5E739E 0%,#405577 55%,#364A6B 100%);--btn-ink:#F5F3FA;--glow:0 12px 24px -14px rgba(0,0,0,.75);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.012) 100%);
+  --ok:#93B783;--ok-soft:rgba(147,183,131,.16);--warn:#E0B169;--warn-soft:rgba(224,177,105,.16);--bad:#E58577;--bad-soft:rgba(229,133,119,.16);
+  --shadow:0 1px 0 rgba(255,255,255,.05) inset,0 12px 26px -18px rgba(0,0,0,.75);--now:#E79A6F;--sec:#8589AC;--glowtop:rgba(255,214,170,.10);color-scheme:dark}
+html.night,html.night body{background:#303147}
+html.night body{background:radial-gradient(90% 46% at 50% -12%,rgba(255,206,150,.13) 0%,rgba(255,206,150,0) 62%) no-repeat,radial-gradient(70% 40% at 100% 110%,rgba(133,137,172,.20) 0%,rgba(133,137,172,0) 64%) no-repeat,#303147;color:var(--ink)}
+html.night .tabs{background:var(--sheen),#383A55;border:1px solid var(--line-soft);box-shadow:0 16px 34px -16px rgba(0,0,0,.85),0 1px 0 rgba(255,255,255,.05) inset}
+html.night .fab{box-shadow:0 0 0 6px #303147,0 16px 30px -10px rgba(0,0,0,.8)}
+html.night .overlay{background:rgba(16,17,21,.58)}
+html.night .sheet{background:linear-gradient(180deg,#3E405D 0%,#36384F 70%),#36384F;border-top:1px solid rgba(255,255,255,.07)}
+html.night .field input,html.night .field select,html.night .field textarea,html.night .search{background:rgba(16,17,21,.30);border:1.5px solid var(--line-soft);color:var(--ink)}
+html.night .field input:focus,html.night .field select:focus,html.night .field textarea:focus,html.night .search:focus{background:#2A2B3F;border-color:#8589AC;box-shadow:0 0 0 4px rgba(133,137,172,.20)}
+html.night .field input::placeholder,html.night .field textarea::placeholder,html.night .search::placeholder{color:rgba(169,173,203,.6)}
+html.night .stt tbody tr:nth-child(even) td{background:rgba(133,137,172,.07)}
+html.night .links .link,html.night .links a.link,html.night .pbtns .link{background:rgba(133,137,172,.13);border-color:var(--line-soft);color:var(--ink)}
+html.night .seg{background:rgba(16,17,21,.22);border-color:var(--line-soft)}
+html.night .pay.todaysum span{color:rgba(245,243,250,.8)}html.night .todaysum div+div{border-left-color:rgba(245,243,250,.2)}
+html.night #cal .ev{box-shadow:0 6px 14px -9px rgba(0,0,0,.8)}
+html.night #cal .ev.cancel.cancel.cancel{background:#000!important}
+html.night #cal .cal-foot,html.night #cal .cal-foot .corner{background:#383A55}
+html.night #cal .cal-foot{box-shadow:0 -2px 10px rgba(0,0,0,.25)}
+html.night #splash{background:#303147}
+html.night #splash .sp-name{color:#C9CDEA}
+html.night #splash .sp-bar{background:rgba(133,137,172,.25)}html.night #splash .sp-bar i{background:#8589AC}
+html.night .vsw2 button[aria-pressed="true"]{box-shadow:0 2px 8px rgba(0,0,0,.35)}
+/* the two swatches in Ayarlar → Görünüş */
+.looks button{display:flex;align-items:center;justify-content:center;gap:8px}
+.looks .sw{display:inline-block;width:18px;height:18px;border-radius:50%;flex:none;box-shadow:0 0 0 1.5px rgba(255,255,255,.55),0 1px 3px rgba(0,0,0,.3)}
+.looks .sw-night{background:linear-gradient(135deg,#303147 0 50%,#405577 50% 100%)}
+.looks .sw-sand{background:linear-gradient(135deg,#CEBBA0 0 50%,#9A765E 50% 100%)}
 </style>
 </head>
 <body>
@@ -1185,6 +1253,27 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "öz pasiyentlərinə edilən satışlardan":"с продаж его пациентам",
 "Bu dövrdə məhsul satılmayıb.":"За этот период товары не продавались.",
 "Rəng":"Цвет",
+"Bildirişlər":"Уведомления",
+"Bildirişlər yalnız sizin adınızla olan sütunun seansları üçündür. Hamısı əvvəlcə bağlıdır.":"Уведомления только для сеансов в колонке с вашим именем. Изначально всё выключено.",
+"Seansdan neçə dəqiqə əvvəl xatırlatsın":"За сколько минут до сеанса напомнить",
+"Mənə seans yazılanda xəbər ver":"Сообщать, когда мне записали сеанс",
+"Bağlı":"Выключено",
+"iPhone-da bildirişlər üçün: Safari-də «Paylaş» → «Ana ekrana» ilə tətbiqi əlavə edin və onu ekrandakı nişandan açın.":"На iPhone для уведомлений: в Safari «Поделиться» → «На экран Домой», затем откройте приложение с этой иконки.",
+"Bildirişlər üçün tətbiqin yeni versiyasını quraşdırın.":"Для уведомлений установите новую версию приложения.",
+"Bu brauzer bildirişləri göstərə bilmir.":"Этот браузер не умеет показывать уведомления.",
+"Bu cihazda bildirişlərə icazə verilməyib — brauzerin və ya telefonun ayarlarında «Mərkəz» üçün bildirişləri açın.":"На этом устройстве уведомления запрещены — включите их для «Mərkəz» в настройках браузера или телефона.",
+"Sınaq bildirişi":"Пробное уведомление",
+"Telefonda: seans yazılandan sonra xəbər 15 dəqiqəyə qədər gecikə bilər; xatırlatma isə vaxtında gəlir.":"На телефоне: сообщение о новой записи может прийти с опозданием до 15 минут; напоминание приходит вовремя.",
+"Bildirişlərə icazə verilmədi.":"Уведомления не разрешены.",
+"Bu cihaz bildiriş göstərə bilmir.":"Это устройство не может показывать уведомления.",
+"Yadda saxlanıldı ✓":"Сохранено ✓",
+"Alınmadı. İnterneti yoxlayıb yenidən cəhd edin.":"Не получилось. Проверьте интернет и попробуйте снова.",
+"Bildirişlər işləyir ✓":"Уведомления работают ✓",
+"Bildirişlər serverdə hələ qoşulmayıb — tezliklə işləyəcək.":"Уведомления на сервере ещё не подключены — скоро заработают.",
+"Yüklənmədi. İnterneti yoxlayın.":"Не загрузилось. Проверьте интернет.",
+"Pasiyentlər":"Пациенты",
+"Gecə":"Ночь",
+"Qum":"Песок",
 "«Rəng» — mütəxəssisin təqvimdəki bloklarının rəngi.":"«Цвет» — цвет блоков специалиста в календаре.",
 "manat":"манат",
 "{n} - {q}, ümumi {m} manat, payı {p} manat":"{n} - {q}, всего {m} манат, доля {p} манат",
@@ -2246,7 +2335,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124115009";
+var APP_VERSION="20261124143232";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2963,6 +3052,10 @@ function loadOldVisits(sh,p){
 /* ---------- Android home-screen widget ---------- */
 var NATIVE=(function(){try{return window.RuqyaApp&&typeof window.RuqyaApp.setWidgetData==="function"?window.RuqyaApp:null}catch(e){return null}})();
 var wTimer=null,wLast="",wLastT=0;
+/* the Android window (status bar, the colour behind the page at start) follows the chosen look */
+try{if(NATIVE&&typeof NATIVE.setLook==="function")NATIVE.setLook(isNight()?"night":"sand")}catch(e){}
+/* notices on the Android app: a phone that turned them on before re-arms its check at every start (it stops by itself when they are off) */
+try{var ntk=localStorage.getItem("ruqya.ntok");if(ntk&&NATIVE&&typeof NATIVE.notifyConfig==="function")NATIVE.notifyConfig(JSON.stringify({on:true,token:ntk,url:SB_URL,key:SB_KEY}))}catch(e){}
 function widgetSoon(){if(!NATIVE)return;clearTimeout(wTimer);wTimer=setTimeout(pushWidget,1500)}
 function pushWidget(){
   if(!NATIVE)return;
@@ -2996,7 +3089,7 @@ function pushWidget(){
 function cut(t,n){t=t.slice(0,n);var c=t.charCodeAt(t.length-1);return c>=0xD800&&c<=0xDBFF?t.slice(0,-1):t}
 /* The widget's colour (owner 17.11: «white too»): Avtomatik = the phone's own light/dark mode, Ağ, Qara.
    Kept on this phone and handed to the widget with its data ("t"). */
-function wTheme(){return "light"}   /* 24.11: one cosy look (the widget draws its sand/brown palette whatever this says) */
+function wTheme(){try{return localStorage.getItem("ruqya.wlook")==="sand"?"sand":"night"}catch(e){return "night"}}   /* 24.11 (evening): night by default, sand when chosen */
 function widgetHelp(){
   if(NATIVE)return "";
   return /RuqyaApp/.test(navigator.userAgent)?"old":/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":"web";
@@ -3295,10 +3388,18 @@ function qMatch(Q,name,phone){if(!Q.f)return true;if(Q.d){var c=phoneCore(phone)
   var n=fold(name);for(var i=0;i<Q.w.length;i++)if(n.indexOf(Q.w[i])<0)return false;return Q.w.length>0}
 function phoneCore(v){return String(v||"").replace(/\D/g,"").replace(/^00/,"").replace(/^994/,"").replace(/^0/,"")}
 /* Call, plain WhatsApp chat, and «Təsdiq» = WhatsApp with the reminder asking the patient to confirm (only for a session still ahead). */
+/* 24.11 (owner): symbols instead of words where possible; each keeps its name for screen readers (aria-label) */
+var ICO={tel:'<svg viewBox="0 0 24 24"><path d="M6.6 3.5h3l1.5 4-2 1.3a11 11 0 0 0 5.1 5.1l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg>',
+  wa:'<svg viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9.2 8.8c.2 2.6 2.4 4.9 5 5.4l1.1-1.2-1.7-1-1 .6a4 4 0 0 1-1.8-1.8l.6-1-1-1.7z"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+  cancel:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>',
+  grid:'<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17M9.5 9.5v11M15 9.5v11"/></svg>',
+  list:'<svg viewBox="0 0 24 24"><path d="M9 6.5h11.5M9 12h11.5M9 17.5h11.5"/><circle cx="4.8" cy="6.5" r="1.2"/><circle cx="4.8" cy="12" r="1.2"/><circle cx="4.8" cy="17.5" r="1.2"/></svg>'};
+function icoBtn(tag,attrs,name,ico,cls){return '<'+tag+' class="'+(cls||"link")+' ico" '+attrs+' aria-label="'+esc(name)+'" title="'+esc(name)+'">'+ICO[ico]+'</'+tag+'>'}
 function phoneLinks(phone,a,cls){
   var tel=String(phone||"").replace(/[^\d+]/g,""),wa=waLink(phone,""),c=cls||"link",h="";
-  if(tel.replace(/\D/g,"").length>=5)h+='<a class="'+c+'" href="tel:'+esc(tel)+'">'+L("Zəng")+'</a>';
-  if(wa)h+='<a class="'+c+'" href="'+esc(wa)+'" target="_blank" rel="noopener">Wp</a>';
+  if(tel.replace(/\D/g,"").length>=5)h+=icoBtn("a",'href="tel:'+esc(tel)+'"',L("Zəng"),"tel",c);
+  if(wa)h+=icoBtn("a",'href="'+esc(wa)+'" target="_blank" rel="noopener"',"WhatsApp","wa",c);
   var wt=a&&a.status!=="cancel"&&!ended(a)?waLink(phone,remindText(a)):"";
   if(wt)h+='<a class="'+c+'" href="'+esc(wt)+'" target="_blank" rel="noopener">'+L("Təsdiq")+'</a>';
   return h;
@@ -3436,9 +3537,9 @@ function renderScreen(){
   var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0&&!pendingMe();
   main.classList.toggle("gridmode",grid);
   if(ui.tab==="day"){top.innerHTML=dayTop();fitNav(top);main.innerHTML=banner+(grid?gridMain():dayMain())}
-  else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();main.innerHTML=banner+statsMain()}
-  else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
-  else{top.innerHTML='<h1>'+L("Ayarlar")+'</h1>'+setSecBar();main.innerHTML=banner+readersMain()}
+  else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();fitTop(top);main.innerHTML=banner+statsMain()}
+  else if(ui.tab==="cash"){top.innerHTML=cashTop();fitTop(top);main.innerHTML=banner+cashMain()}
+  else{top.innerHTML='<h1>'+L("Ayarlar")+'</h1>'+setSecBar();fitTop(top);main.innerHTML=banner+readersMain()}
   if(grid){
     setTimeout(fitBlocks,0);
     cal=byId("cal");
@@ -3468,10 +3569,27 @@ function navHtml(title,small,sw){
    With nobody picked the pills stand over their own columns; with a choice they line up in one row and a thin
    row of names stands over the columns that are shown. */
 /* a long date («30 sentyabr») next to the switch: the big date gets a little smaller until it fits (never cut) */
-function fitNav(top){var lb=top.querySelector(".withsw .label"),dt=lb&&lb.querySelector(".dt");if(!dt)return;
-  var f=parseFloat(getComputedStyle(dt).fontSize)||27;while(f>17&&lb.scrollWidth>lb.clientWidth+1){f-=1;dt.style.fontSize=f+"px"}}
+function fitNav(top){fitTop(top);var lb=top.querySelector(".withsw .label"),dt=lb&&lb.querySelector(".dt");if(!dt)return;
+  dt.style.fontSize="";var cv=lb.querySelector(".cv")||dt,over=function(){return cv.getBoundingClientRect().right>lb.getBoundingClientRect().right-1.5};
+  var f=parseFloat(getComputedStyle(dt).fontSize)||27;while(f>15&&over()){f-=1;dt.style.fontSize=f+"px"}}
+/* 24.11 (owner: «some words are not fully seen on the buttons»): a chip or a date line too long for its place gets a
+   smaller font (down to 10 px), never «…»; the spaced-out weekday first loses its spacing */
+function fitTop(top){if(!top)return;
+  /* the weekday line on its own: only when the weekday itself is wider than its place */
+  var wks=top.querySelectorAll(".daynav .label .wk");
+  for(var i=0;i<wks.length;i++){var w=wks[i];w.style.letterSpacing="";w.style.fontSize="";if(w.scrollWidth<=w.clientWidth+1)continue;w.style.letterSpacing=".03em";
+    var wf=parseFloat(getComputedStyle(w).fontSize)||11,k=0;while(k++<8&&wf>8.5&&w.scrollWidth>w.clientWidth+1){wf-=0.5;w.style.fontSize=wf+"px"}}
+  /* a chip: first on two lines («Прошлая / неделя»), then a little smaller if a word is still too long */
+  var cs=top.querySelectorAll(".chip");
+  for(var j=0;j<cs.length;j++){var c=cs[j],n=0;c.style.fontSize="";c.classList.remove("two");if(c.scrollWidth<=c.clientWidth+1)continue;
+    c.classList.add("two");var f=parseFloat(getComputedStyle(c).fontSize)||13;
+    while(n++<10&&f>10&&(c.scrollWidth>c.clientWidth+1||c.scrollHeight>c.clientHeight+1)){f-=0.5;c.style.fontSize=f+"px"}}}
+/* the web font arrives a moment later and is wider than the stand-in: measure the top again then, and on turning */
+(function(){var again=function(){var t=byId("top");if(t)fitNav(t)};
+  try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(again)}catch(e){}
+  window.addEventListener("resize",function(){clearTimeout(again.t);again.t=setTimeout(again,120)})})();
 function viewSw(){var g=ui.view==="grid";
-  return '<div class="vsw2" role="group" aria-label="'+L("Görünüş")+'"><button type="button" data-act="view" data-id="grid" aria-pressed="'+g+'">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="'+!g+'">'+L("Siyahı")+'</button></div>'}
+  return '<div class="vsw2" role="group" aria-label="'+L("Görünüş")+'"><button type="button" data-act="view" data-id="grid" aria-pressed="'+g+'" aria-label="'+L("Təqvim")+'" title="'+L("Təqvim")+'">'+ICO.grid+'</button><button type="button" data-act="view" data-id="list" aria-pressed="'+!g+'" aria-label="'+L("Siyahı")+'" title="'+L("Siyahı")+'">'+ICO.list+'</button></div>'}
 /* owner 24.11: the row of week days with their numbers is gone — the calendar gets that height; days: ‹ › and the month */
 function dayTop(){
   return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):parse(ui.date).getFullYear()+L("-ci il"),viewSw());
@@ -3515,7 +3633,12 @@ function fitFit(evs){
   var plan=[];
   for(var i=0;i<evs.length;i++){var e=evs[i],b=e.querySelector("b.nm");if(!b)continue;var ok=e.querySelector(".okm");
     var W=e.clientWidth-4,H=e.clientHeight-3-(ok&&!e.classList.contains("tiny")?8:0),ws=b.textContent.split(/\s+/).filter(Boolean).map(function(x){return cx.measureText(x).width});
-    if(e.classList.contains("tiny")){var tw=cx.measureText(b.textContent).width,fw=Math.max(6.5,Math.min(f0,(W-(ok?14:0))*10/tw));plan.push([e,b,"",Math.floor(fw*2)/2]);continue}
+    if(e.classList.contains("tiny")){var tw=cx.measureText(b.textContent).width;
+      /* 24.11: the ✅ stand beside the name in a short block — measured, not guessed; when the name would not fit beside
+         them, the ✅ get smaller, and as the last resort they step aside: the name is never cut (owner 24.11) */
+      if(ok){ok.classList.remove("okmini");ok.style.display="";var okw=ok.offsetWidth+1;
+        if((W-okw)*10/tw<6.5){ok.classList.add("okmini");okw=ok.offsetWidth+1;if((W-okw)*10/tw<6.5){ok.style.display="none";okw=0}}}
+      var fw=Math.max(6.5,Math.min(f0,(W-(ok?okw:0))*10/tw));plan.push([e,b,"",Math.floor(fw*2)/2]);continue}
     var fh=best(ws,W,H,8.5);if(fh){plan.push([e,b,"",fh]);continue}
     /* narrow and tall: the name from top to bottom */
     var fv=H>W*1.3&&W<30?best(ws,H,W,6.5):0,fh2=best(ws,W,H,6);   /* top to bottom only in really narrow blocks */
@@ -3707,7 +3830,7 @@ function dayMain(){
     if(tags)h+='<div class="tags">'+tags+'</div>';
     if(a.note)h+='<p class="memo">'+esc(a.note)+'</p>';
     if(!gone(a)){
-      h+='<div class="links">'+phoneLinks(a.phone,a)+confBtn(a,"link")+'<span class="spacer"></span>'+(canEdit(a)?'<button class="link" data-act="edit-appt" data-id="'+esc(a.id)+'">'+L("Dəyiş")+'</button><button class="link" style="color:var(--bad)" data-act="cancel-appt" data-id="'+esc(a.id)+'">'+L("Ləğv et")+'</button>':'')+paidBtn(a,"link")+'</div>';
+      h+='<div class="links">'+phoneLinks(a.phone,a)+confBtn(a,"link")+'<span class="spacer"></span>'+(canEdit(a)?icoBtn("button",'data-act="edit-appt" data-id="'+esc(a.id)+'"',L("Dəyiş"),"edit")+icoBtn("button",'data-act="cancel-appt" data-id="'+esc(a.id)+'"',L("Ləğv et"),"cancel","link bad-t"):'')+paidBtn(a,"link")+'</div>';
     }else{
       h+='<div class="status">'+stPill(a)+'<span class="spacer"></span>'+
         (canEdit(a)?'<button class="link" data-act="status" data-id="'+esc(a.id)+L('" data-st="wait">Geri qaytar</button>')+
@@ -4622,10 +4745,77 @@ function patientSheet(){
 }
 
 /* Ayarlar: one section at a time, chosen with the buttons on top (like Statistika) */
-function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"],["acc","Hesab"]);return x}
+function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"]);if(myCols().length)x.push(["notify","Bildirişlər"]);x.push(["acc","Hesab"]);return x}
 function curSetSec(){var ss=setSecs();if(pendingMe()&&!ui.setSecPicked)return "acc";return ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec"}
 function setSecBar(){var ss=setSecs(),cur=curSetSec();
   return '<div class="chips stsec setsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
+/* ---------- 24.11 (owner): «Bildirişlər» — off by default; for the person whose name is a calendar column (a specialist):
+   a reminder N minutes before each of his sessions, and a notice when a session is booked for him.
+   Delivery: the Android app (native alarms + a check every 15 min), or Web Push (iPhone home-screen app, computers). ---------- */
+function myCols(){if(!auth.user||state.roles[auth.user.id]==="agent")return [];var nm=low(String(state.staff[auth.user.id]||"").trim());if(!nm)return [];
+  return allReaders().filter(function(r){return low(String(r.name||"").trim())===nm})}
+var ntf={loaded:false,busy:false};
+/* what this device can do: "app" (Android app), "oldapp" (an older Android app), "web", "ios" (Safari, not on the home screen), "none" */
+function ntfKind(){
+  if(NATIVE)return typeof NATIVE.notifyConfig==="function"?"app":"oldapp";
+  var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  var push=("serviceWorker" in navigator)&&("PushManager" in window)&&("Notification" in window);
+  if(ios&&!(navigator.standalone||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)))return "ios";
+  return push?"web":"none"}
+function ntfLoad(){if(ntf.loading)return;ntf.loading=true;
+  sb.rpc("ruqya_notify_get").then(function(r){ntf.loading=false;
+    /* the server without the notification functions yet (sql/2026-11-notify.sql not applied): say so, nothing to choose */
+    if(r.error&&(r.error.code==="PGRST202"||r.error.code==="42883"||r.status===404)){ntf.missing=true;ntf.loaded=true;ntf.err=false}
+    else if(r.error||!r.data){ntf.err=true}else{ntf.missing=false;var d=r.data;ntf.loaded=true;ntf.err=false;ntf.rem=d.remind_min;ntf.nw=!!d.on_new;ntf.linked=!!d.linked;ntf.vapid=d.vapid||""}
+    if(ui.tab==="readers"&&curSetSec()==="notify")render()},function(){ntf.loading=false;ntf.err=true;if(ui.tab==="readers")render()})}
+function ntfPerm(){try{return "Notification" in window?window.Notification.permission:""}catch(e){return ""}}
+function notifyMain(){
+  if(!ntf.loaded){if(!ntf.err)ntfLoad();return '<p class="hint">'+(ntf.err?L("Yüklənmədi. İnterneti yoxlayın."):L("Yüklənir…"))+'</p>'}
+  var k=ntfKind(),dis=ntf.busy||ntf.missing||k==="oldapp"||k==="ios"||k==="none",h='';
+  h+='<p class="hint">'+L("Bildirişlər yalnız sizin adınızla olan sütunun seansları üçündür. Hamısı əvvəlcə bağlıdır.")+'</p>';
+  h+='<h3 class="sec">'+L("Seansdan neçə dəqiqə əvvəl xatırlatsın")+'</h3><div class="seg ntf" style="grid-template-columns:repeat(6,1fr)">'+
+    [0,10,15,30,60,120].map(function(m){var on=m?ntf.rem===m:!ntf.rem;return '<button data-act="ntf-rem" data-id="'+m+'" aria-pressed="'+on+'"'+(dis?' disabled':'')+(m?'':' aria-label="'+L("Bağlı")+'"')+'>'+(m?'<b class="num">'+m+'</b>':'✕')+'</button>'}).join("")+'</div>';
+  h+='<h3 class="sec">'+L("Mənə seans yazılanda xəbər ver")+'</h3><div class="seg ntf" style="grid-template-columns:1fr 1fr">'+
+    '<button data-act="ntf-new" data-id="0" aria-pressed="'+!ntf.nw+'" aria-label="'+L("Bağlı")+'"'+(dis?' disabled':'')+'>✕</button>'+
+    '<button data-act="ntf-new" data-id="1" aria-pressed="'+ntf.nw+'" aria-label="'+L("Bəli")+'"'+(dis?' disabled':'')+'>✓</button></div>';
+  var st="";
+  if(ntf.missing)st=L("Bildirişlər serverdə hələ qoşulmayıb — tezliklə işləyəcək.");
+  else if(k==="ios")st=L("iPhone-da bildirişlər üçün: Safari-də «Paylaş» → «Ana ekrana» ilə tətbiqi əlavə edin və onu ekrandakı nişandan açın.");
+  else if(k==="oldapp")st=L("Bildirişlər üçün tətbiqin yeni versiyasını quraşdırın.")+' <a class="link" href="https://github.com/taghiyevalimt-png/Ruqya/releases/latest/download/Ruqya.apk">'+L("Yeni versiyanı yüklə")+'</a>';
+  else if(k==="none")st=L("Bu brauzer bildirişləri göstərə bilmir.");
+  else if(k==="web"&&ntfPerm()==="denied")st=L("Bu cihazda bildirişlərə icazə verilməyib — brauzerin və ya telefonun ayarlarında «Mərkəz» üçün bildirişləri açın.");
+  if(ntf.msg)st=(st?st+" ":"")+ntf.msg;
+  if(st)h+='<p class="hint" role="status">'+st+'</p>';
+  if((ntf.rem||ntf.nw)&&(k==="web"||k==="app"))h+='<button class="ghost" data-act="ntf-test">'+L("Sınaq bildirişi")+'</button>';
+  if(k==="app")h+='<p class="hint small">'+L("Telefonda: seans yazılandan sonra xəbər 15 dəqiqəyə qədər gecikə bilər; xatırlatma isə vaxtında gəlir.")+'</p>';
+  return h}
+/* «Çıxış» on this device: its notices stop (the Android app forgets its token; the browser drops its subscription) */
+function ntfOff(){try{localStorage.removeItem("ruqya.ntok")}catch(e){}ntf={loaded:false,busy:false};
+  try{if(NATIVE&&typeof NATIVE.notifyConfig==="function")NATIVE.notifyConfig('{"on":false}')}catch(e){}
+  try{if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(function(g){return g&&g.pushManager.getSubscription()}).then(function(sub){if(sub)sub.unsubscribe()}).then(null,function(){})}catch(e){}}
+function urlKey(b){var p=b.replace(/-/g,"+").replace(/_/g,"/");p+="===".slice((p.length+3)%4);var r=atob(p),o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o}
+/* this device starts or stops receiving; resolves true when it can receive */
+function ntfDevice(on){var k=ntfKind();
+  if(k==="app"){var cfg=function(tok){try{NATIVE.notifyConfig(JSON.stringify({on:on,token:tok||"",url:SB_URL,key:SB_KEY}))}catch(e){}return true};
+    if(!on)return Promise.resolve(cfg(""));
+    var t0="";try{t0=localStorage.getItem("ruqya.ntok")||""}catch(e){}
+    if(t0)return Promise.resolve(cfg(t0));
+    return sb.rpc("ruqya_notify_device").then(function(r){if(r.error||!r.data)throw r.error||new Error("token");try{localStorage.setItem("ruqya.ntok",r.data)}catch(e){}return cfg(r.data)})}
+  if(k!=="web")return Promise.resolve(false);
+  var reg=function(){return navigator.serviceWorker.register("sw.js").then(function(){return navigator.serviceWorker.ready})};
+  if(!on)return reg().then(function(g){return g.pushManager.getSubscription()}).then(function(sub){if(!sub)return true;var ep=sub.endpoint;return sub.unsubscribe().then(function(){return sb.rpc("ruqya_push_unsub",{p_endpoint:ep})}).then(function(){return true})});
+  var ask=ntfPerm()==="granted"?Promise.resolve("granted"):new Promise(function(res){try{var q=window.Notification.requestPermission(res);if(q&&q.then)q.then(res)}catch(e){res("denied")}});
+  return ask.then(function(pm){if(pm!=="granted")return false;
+    return reg().then(function(g){return g.pushManager.getSubscription().then(function(sub){return sub||g.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlKey(ntf.vapid)})})})
+      .then(function(sub){var j=sub.toJSON?sub.toJSON():JSON.parse(JSON.stringify(sub));
+        return sb.rpc("ruqya_push_sub",{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_ua:navigator.userAgent.slice(0,200)}).then(function(r){if(r.error)throw r.error;return true})})})}
+function ntfSave(rem,nw){
+  var was={rem:ntf.rem,nw:ntf.nw},any=!!(rem||nw);ntf.busy=true;ntf.msg="";ntf.rem=rem;ntf.nw=nw;render();
+  var back=function(m){ntf.busy=false;ntf.rem=was.rem;ntf.nw=was.nw;ntf.msg=m;render()};
+  ntfDevice(any).then(function(ok){
+    if(any&&!ok){back(ntfKind()==="web"?L("Bildirişlərə icazə verilmədi."):L("Bu cihaz bildiriş göstərə bilmir."));return}
+    return sb.rpc("ruqya_notify_set",{p_remind:rem||null,p_new:!!nw,p_lang:LANG}).then(function(r){if(r.error)throw r.error;ntf.busy=false;ntf.msg=any?L("Yadda saxlanıldı ✓"):"";render()})
+  }).then(null,function(){back(L("Alınmadı. İnterneti yoxlayıb yenidən cəhd edin."))})}
 function readersMain(){
   var rs=activeReaders(),adm=isAdmin(),h="",sec=curSetSec();
   if(adm&&secWarn)h+=L('<div class="note warnbox" role="status"><p>Təhlükəsizlik: ')+esc(secWarn)+L('. Supabase-də bunu söndürün, yoxsa kənar şəxs pasiyent məlumatlarını görə bilər.</p><a class="ghost" href="https://supabase.com/dashboard/project/ldkhdeehrrajvgrtieal/auth/providers" target="_blank" rel="noopener">Aç</a></div>');
@@ -4667,12 +4857,15 @@ function readersMain(){
     }
   }
   if(sec==="staff"&&adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
+  if(sec==="notify")h+=notifyMain();
   if(sec==="view"){
+  h+=lookSeg("look",isNight());
   h+=widthSeg();
   h+=langSeg();
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
-  /* 24.11: the widgets have the one cosy look too — no colour choice */
+  /* 24.11 (evening): the widgets' colour — night (default) or sand */
+  h+=lookSeg("wlook",wTheme()!=="sand");
   if(!wh)h+='<div class="wbtns" role="group" aria-label="'+esc(L("Vidcet əlavə et"))+'">'+
     [["day","Gündəlik vidcet"],["week","Həftəlik vidcet"],["month","Aylıq vidcet"]].map(function(x){return '<button class="ghost" data-act="widget" data-id="'+x[0]+'">+ '+L(x[1])+'</button>'}).join("")+'</div>'+
     L('<p class="hint">Düyməyə basın — vidcet ana ekrana əlavə olunur. «Gündəlik» — günün qəbulları saat sırası ilə, «Həftəlik» — 7 gün, «Aylıq» — ay təqvimi. ‹ › başqa günə, həftəyə, aya keçir; günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
@@ -4750,6 +4943,12 @@ function heightSeg(){
     HOUR_STEPS.map(function(v,i){return '<button data-act="hourh" data-id="'+v+'" aria-pressed="'+(!FIT&&HOUR===v)+'">'+names[i]+'</button>'}).join("")+'</div>'+
     '<p class="hint">'+L("«Bütün gün»: 09:00–22:00 bir ekrana sığır, ekranda 7 mütəxəssisə qədər (çox olanda yana sürüşür); blokda ad, yer olanda nömrə və kimin yazdığı.")+' '+L("Böyük bloklarda adlar və vaxt daha rahat oxunur, təqvim isə aşağı daha çox sürüşür.")+'</p>';
 }
+/* the look: two swatches (night / sand); «wlook» is the same choice for the home-screen widgets */
+function isNight(){try{return localStorage.getItem("ruqya.look")!=="sand"}catch(e){return true}}
+function lookSeg(act,night){
+  return (act==="look"?'<h3 class="sec">'+L("Rəng")+'</h3>':'<p class="hint" style="margin:6px 0 4px">'+L("Vidcetin rəngi")+'</p>')+'<div class="seg looks" style="grid-template-columns:1fr 1fr">'+
+    [["night","Gecə"],["sand","Qum"]].map(function(x){var on=(x[0]==="night")===night;
+      return '<button data-act="'+act+'" data-id="'+x[0]+'" aria-pressed="'+on+'"><i class="sw sw-'+x[0]+'"></i>'+L(x[1])+'</button>'}).join("")+'</div>'}
 function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
     [["az","Azərbaycanca"],["ru","Русский"]].map(function(x){return '<button data-act="lang" data-id="'+x[0]+'" aria-pressed="'+(LANG===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
@@ -4990,7 +5189,7 @@ function openSheet(s){
     dropDraft();
   }
   /* owner 22.11: the fields come in one by one only when the window opens, not on every redraw */
-  (function(){var d=byId("sheet");if(!LITE)d.classList.add("opening");playNext([d,byId("overlay")]);clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},760)})();
+  (function(){var d=byId("sheet");/* 24.11 (owner, video): no fields one by one on any phone — the window comes as one piece */playNext([d,byId("overlay")]);clearTimeout(openT);openT=setTimeout(function(){d.classList.remove("opening")},760)})();
   unpinSheet();
   (function(){var d=byId("sheet"),h=d.querySelector("h2");if(h){h.id="sheet-title";d.setAttribute("aria-labelledby","sheet-title")}else d.removeAttribute("aria-labelledby");
     d.setAttribute("tabindex","-1");
@@ -5235,6 +5434,16 @@ document.addEventListener("click",function(e){
   if(act==="reload"){location.reload();return}
   if(act==="colw"){setColW(+id);render();return}
   if(act==="hourh"){setHour(id==="fit"?"fit":+id);render();return}
+  if(act==="ntf-rem"){ntfSave(+id||null,ntf.nw);return}
+  if(act==="ntf-new"){ntfSave(ntf.rem,id==="1");return}
+  if(act==="ntf-test"){var tk=ntfKind(),tt=L("Bildirişlər işləyir ✓");
+    if(tk==="app"){try{NATIVE.notifyTest(tt)}catch(err){}}
+    else if(tk==="web")navigator.serviceWorker.ready.then(function(g){return g.showNotification("Mərkəz",{body:tt,icon:"icon-192.png",tag:"test"})}).then(null,function(){});
+    return}
+  if(act==="look"||act==="wlook"){
+    try{localStorage.setItem("ruqya."+act,id==="sand"?"sand":"night")}catch(err){}
+    if(act==="look"){applyTheme();try{if(NATIVE&&typeof NATIVE.setLook==="function")NATIVE.setLook(isNight()?"night":"sand")}catch(err){}}
+    wLast="";pushWidget();render();return}
   if(act==="lang"){
     if(id!=="ru")id="az";
     if(id===LANG)return;
@@ -5617,7 +5826,7 @@ document.addEventListener("click",function(e){
     if(id==="appt"&&sheet.type==="brk"&&sheet.kinds){brkKeep();var bb2=sheet.b,r1=Object.keys(bb2.rids)[0];openSheet({type:"appt",id:null,vals:sheet.av,pre:{date:bb2.date,time:bb2.all?"":bb2.start,reader:r1||(sheet.av&&sheet.av.readerId)||""}});return}
     return;
   }
-  else if(act==="set-sec"){if(/^(spec|breaks|staff|view|acc)$/.test(id)){ui.setSec=id;ui.setSecPicked=true;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
+  else if(act==="set-sec"){if(/^(spec|breaks|staff|view|notify|acc)$/.test(id)){ui.setSec=id;ui.setSecPicked=true;try{localStorage.setItem("ruqya.setsec",id)}catch(err){}var mm3=byId("main");if(mm3)mm3.scrollTop=0}}
   else if(act==="brk-edit-all"){var ba=brkById(id);if(ba&&canBrk(brkSiblings(ba).map(function(y){return y.rid}))){var oc=ba.from&&ba.from>today?ba.from:today;openSheet({type:"brk",edit:ba.id,occ:oc,whole:1,b:brkFromRow(ba,oc)})}return}
   else if(act==="brk-open"){var bp=String(id).split("|");var bg=brkGroupsCache[+bp[0]];if(bg&&canBrk(bg.rids))openSheet({type:"brkview",rids:bg.rids.slice(),k:bp.slice(1).join("|")});return}
   else if(act==="del-breaks"){
@@ -5713,7 +5922,7 @@ document.addEventListener("click",function(e){
       try{localStorage.removeItem(SB_TOKEN)}catch(err){}signedOut()};
     /* 23.11 (found in the sign-in log): «Çıxış» signs out THIS device only — the library's default signed the account
        out on every phone and computer (an admin checking an employee's account on his own phone signed the employee out) */
-    dropDraft();sb.auth.signOut({scope:"local"}).then(lo,function(){lo({error:1})});return;
+    dropDraft();ntfOff();sb.auth.signOut({scope:"local"}).then(lo,function(){lo({error:1})});return;
   }
   else return;
   render();

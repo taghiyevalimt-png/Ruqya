@@ -168,6 +168,13 @@ final class AgendaDraw {
         return data != null && "ru".equals(data.optString("l", "az"));
     }
 
+    /** mixes a colour with white (f = 0 … 1) */
+    static int lighten(int c, float f) {
+        int r = (c >> 16) & 0xFF, g = (c >> 8) & 0xFF, b = c & 0xFF;
+        r += (int) ((255 - r) * f); g += (int) ((255 - g) * f); b += (int) ((255 - b) * f);
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
+    }
+
     // ------------------------------------------------------------------ day
 
     static Bitmap renderDay(JSONObject data, int off, int wDp, int hDp, float density, long maxPixels, boolean dark) {
@@ -231,7 +238,8 @@ final class AgendaDraw {
             int col = MonthWidget.parseColor(it.optString(1, ""), 0xFF4A4542);
             int start = it.optInt(4, -1), end = it.optInt(3, -1);
             String name = it.optString(0, ""), spec = it.optString(5, "");
-            // the specialist's colour as a bar at the left
+            // the specialist's colour as a bar at the left; on the night look a little lighter, or the deep tones vanish
+            if (MonthWidget.BG == 0xFF303147) col = lighten(col, 0.38f);
             p.setColor(col);
             if (!"".equals(st)) p.setAlpha(140);
             cv.drawRoundRect(new RectF(padX, y + rowH * 0.16f, padX + 4 * d, y + rowH * 0.84f), 2 * d, 2 * d, p);

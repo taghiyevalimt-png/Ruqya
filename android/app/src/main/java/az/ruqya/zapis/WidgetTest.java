@@ -18,6 +18,20 @@ public class WidgetTest extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent intent) {
         String a = intent.getAction();
+        if ("az.ruqya.zapis.NOTIFY_TEST".equals(a)) {
+            // 24.11 check: what the server's poll answers, applied without the network — news shown at once, a reminder's
+            // exact alarm («in_s» seconds from now, N minutes before), the 15-minute check kept; {"gone":true} stops it all
+            try {
+                org.json.JSONObject r = new org.json.JSONObject(new String(android.util.Base64.decode(intent.getStringExtra("b64"), android.util.Base64.DEFAULT), "UTF-8"));
+                org.json.JSONArray up = r.optJSONArray("upcoming");
+                if (up != null) for (int i = 0; i < up.length(); i++) { org.json.JSONObject x = up.getJSONObject(i); if (x.has("in_s")) x.put("at", System.currentTimeMillis() + x.getLong("in_s") * 1000L); }
+                if (!r.optBoolean("gone", false)) { Notify.prefs(ctx).edit().putString("token", "00000000-0000-4000-8000-000000000000").putString("url", "https://invalid.example").putString("key", "test-key-xx").apply(); Notify.schedule(ctx); }
+                Notify.apply(ctx, r);
+            } catch (Throwable t) {
+                try { java.io.PrintWriter pw = new java.io.PrintWriter(new File(ctx.getFilesDir(), "notify_test.txt")); pw.println("error " + t); pw.close(); } catch (Exception ignored) { }
+            }
+            return;
+        }
         if ("az.ruqya.zapis.CONTACTS_TEST".equals(a)) {
             // owner 18.11 check: the same import the app runs (permissions granted by adb), result into a file
             String out;

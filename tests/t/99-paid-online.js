@@ -15,7 +15,7 @@ module.exports = async () => {
     // list
     await p.click('[data-act="view"][data-id="list"]'); await p.waitForTimeout(400);
     const card = (n) => p.evaluate((n) => { const c = [...document.querySelectorAll("#main .appt, #main .card, #main [data-id]")].map((e) => e.closest(".appt") || e.closest(".card")).filter(Boolean).find((e) => e.textContent.includes(n));
-      return c ? [...c.querySelectorAll("button")].map((b) => b.textContent.trim()) : null; }, n);
+      return c ? [...c.querySelectorAll("button")].map((b) => b.textContent.trim() || b.getAttribute("aria-label") || "") : null; }, n);   /* 24.11 evening: ✎ and ⊘ are symbols, named by aria-label */
     const on = await card("Onlayn"), of = await card("Ofisdə");
     check(on && on.includes("Ödəniş edib") && on.indexOf("Ödəniş edib") === on.indexOf("Ləğv et") + 1, "online card: «Ödəniş edib» right after «Ləğv et»: " + JSON.stringify(on));
     check(of && !of.some((t) => /Ödəniş/.test(t)), "office card: no «Ödəniş edib»: " + JSON.stringify(of));

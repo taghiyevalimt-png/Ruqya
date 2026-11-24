@@ -21,10 +21,10 @@ module.exports = async () => {
       const r = await p.evaluate(() => { window.__on = false; return { t: window.__t, focus: document.activeElement && document.activeElement.id }; });
       const d = []; for (let i = 1; i < r.t.length; i++) d.push(r.t[i] - r.t[i - 1]);
       const k0 = d.indexOf(Math.max(...d)), glide = d.slice(k0 + 1).filter((x) => x > 40).length;   // after the frame that builds the window
-      check(/up2/.test(at0.anim), v + ": the window glides up: " + at0.anim);
+      check(/sheetIn/.test(at0.anim), v + ": the window glides up (24.11 evening: sheetIn on every phone): " + at0.anim);
       check(at0.focus !== "sheet" && r.focus === "sheet", v + ": the focus goes to the window after the glide, not at once: " + JSON.stringify([at0.focus, r.focus]));
-      if (lite) check(at0.kids.every((k) => k === "none") && !at0.opening, v + ": one piece — the fields do not come in one by one: " + JSON.stringify(at0));
-      else check(at0.opening, v + ": the full motion (fields one by one) on a new phone");
+      // 24.11 evening (owner's video): one piece on EVERY phone, new ones too — the fields never come in one by one
+      check(at0.kids.every((k) => k === "none") && !at0.opening, v + ": one piece — the fields do not come in one by one: " + JSON.stringify(at0));
       check(glide <= 2, v + ": at most 2 dropped frames during the glide on a slow CPU: " + glide + " " + JSON.stringify(d.map(Math.round)));
       await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
       check(!s.errors.length, "no page errors: " + s.errors.join("; "));

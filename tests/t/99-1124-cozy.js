@@ -8,7 +8,7 @@ module.exports = async () => {
   db.readers.forEach((r, i) => { r.color = ["#1a73e8", "#c2185b"][i] || null; });   // colours chosen before 24.11 (bright)
   db.appts.push({ id: uuid(), reader_id: R1, date: bakuToday(), time: "11:00", duration: 60, name: "Mavi idi", phone: "050", price: 0, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: OWNER, created_at: now, updated_at: now },
     { id: uuid(), reader_id: R2, date: bakuToday(), time: "12:00", duration: 60, name: "Ləğv", phone: "050", price: 0, share: 0, status: "cancel", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: OWNER, created_at: now, updated_at: now });
-  const s = await open(OWNER, { db, viewport: { width: 390, height: 844 }, init: [() => { localStorage.setItem("ruqya.theme", "dark"); localStorage.setItem("ruqya.view18", "1"); window.__w = []; window.RuqyaApp = { setWidgetData: (j) => window.__w.push(j), version: () => "test" }; }, null] });
+  const s = await open(OWNER, { db, viewport: { width: 390, height: 844 }, init: [() => { localStorage.setItem("ruqya.theme", "dark"); localStorage.setItem("ruqya.look", "sand");   /* 24.11 evening: sand is now a choice (night is the default) */ localStorage.setItem("ruqya.view18", "1"); window.__w = []; window.RuqyaApp = { setWidgetData: (j) => window.__w.push(j), version: () => "test" }; }, null] });
   try {
     const p = s.page; await p.emulateMedia({ colorScheme: "dark" });
     // the opening: the logo on sand; the app comes in by opacity/transform; then it settles
@@ -25,7 +25,7 @@ module.exports = async () => {
         blueVar: blue && blue.style.getPropertyValue("--ec"), blueText: blue && cs(blue).color, cancel: cancel && cs(cancel).backgroundColor,
         press: cs(document.querySelector(".vsw2 button")).transitionProperty + " / " + cs(document.querySelector(".vsw2 button")).transitionTimingFunction /* 24.11: the week chips are gone */ };
     });
-    check(m.theme === "light" && m.bg === "rgb(206, 187, 160)", "one cosy look, even with the phone dark and an old «dark» choice: " + JSON.stringify([m.theme, m.bg]));
+    check(m.theme === "light" && m.bg === "rgb(206, 187, 160)", "sand chosen: the sand look, even with the phone dark and an old «dark» choice: " + JSON.stringify([m.theme, m.bg]));
     check(m.accent === "rgb(154, 118, 94)", "the brown #9A765E instead of gold: " + m.accent);
     check(m.blueVar === "#4d5d70" && m.blueText === "rgb(251, 244, 232)", "an old bright blue is shown as rich slate, with cream text: " + JSON.stringify([m.blueVar, m.blueText]));
     check(m.cancel === "rgb(0, 0, 0)", "cancelled still black (owner 17.11): " + m.cancel);
@@ -45,7 +45,7 @@ module.exports = async () => {
     check(pal.length >= 12 && pal.includes("#6e4b33") && pal.includes("#2e5e5c") && !pal.includes("#1a73e8"), "the palette is rich interior tones: " + pal.join(","));
     await p.click('[data-act="close"]'); await p.waitForTimeout(300);
     await p.click('#top [data-act="set-sec"][data-id="view"]').catch(() => {}); await p.waitForTimeout(300);
-    check(!(await p.locator('[data-act="theme"], [data-act="wtheme"]').count()), "no light/dark choices (app and widget)");
+    check(!(await p.locator('[data-act="theme"], [data-act="wtheme"]').count()), "no old light/dark/auto choices (24.11 evening: «Gecə / Qum» instead, see 99-1124-night)");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

@@ -144,6 +144,17 @@ async function attach(context, db, ctl) {
         hit.forEach((r) => Object.assign(r, { name: "Anonim", phone: "", note: "" }));
         return send(route, 200, hit.length);
       }
+      // 24.11 notifications (sql/2026-11-notify.sql): settings per user, browser subscriptions, Android device tokens
+      if (/^ruqya_(notify|push)_/.test(fn) && ctl.noNotify) return send(route, 404, { code: "PGRST202", message: "Could not find the function public." + fn });
+      if (/^ruqya_(notify|push)_/.test(fn)) {
+        const N = (db.notify = db.notify || { prefs: {}, subs: [], devices: [] }), me = N.prefs[uid] || { remind_min: null, on_new: false };
+        const staffMe = (db.staff || []).find((x) => x.id === uid), nm = staffMe && staffMe.role !== "agent" ? String(staffMe.name || "").trim().toLowerCase() : "";
+        if (fn === "ruqya_notify_get") return send(route, 200, { remind_min: me.remind_min, on_new: me.on_new, linked: !!nm && db.readers.some((r) => String(r.name).trim().toLowerCase() === nm), vapid: "BPmockVapidKey_" + "A".repeat(72), subs: N.subs.filter((x) => x.user === uid).length });
+        if (fn === "ruqya_notify_set") { N.prefs[uid] = { remind_min: a.p_remind, on_new: !!a.p_new, lang: a.p_lang }; return send(route, 200, null); }
+        if (fn === "ruqya_push_sub") { N.subs = N.subs.filter((x) => x.endpoint !== a.p_endpoint).concat({ user: uid, endpoint: a.p_endpoint, p256dh: a.p_p256dh, auth: a.p_auth }); return send(route, 200, null); }
+        if (fn === "ruqya_push_unsub") { N.subs = N.subs.filter((x) => x.endpoint !== a.p_endpoint); return send(route, 200, null); }
+        if (fn === "ruqya_notify_device") { const t = "d0000000-0000-4000-8000-" + String(N.devices.length + 1).padStart(12, "0"); N.devices.push({ token: t, user: uid }); return send(route, 200, t); }
+      }
       return send(route, 200, null);
     }
     const t = p.replace("/rest/v1/", "");
