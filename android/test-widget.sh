@@ -114,17 +114,21 @@ adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.NOTIFY_TEST --es b64 '$NJ'
 sleep 4
 N1=$(adb shell dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -E "TEST YENI|TEST XATIRLAT|must not show" | sort -u)
 A1=$(adb shell dumpsys alarm 2>/dev/null | tr -d '\r' | grep -c "$P" || true)
-J1=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "JOB #.*$P/.NotifyJob" || true)
+# the job list: «JOB #u0a…/4711: … pkg/.NotifyJob» on Android 8+; Android 6 prints the component on its own
+JP="JOB #.*$P/.NotifyJob"; [ "$API" -lt 26 ] && JP="$P/.NotifyJob"
+JD=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -i "notifyjob" | head -3)
+J1=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "$JP" || true)
 sleep 22
 N2=$(adb shell dumpsys notification --noredact 2>/dev/null | tr -d '\r' | grep -E "TEST YENI|TEST XATIRLAT|must not show" | sort -u)
 adb shell "am broadcast -f 32 -n $P/.WidgetTest -a $P.NOTIFY_TEST --es b64 '$(printf '{"gone":true}' | base64 -w0)'" > /dev/null
 sleep 3
-J2=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "JOB #.*$P/.NotifyJob" || true)
-NE=$(adb exec-out run-as $P cat files/notify_test.txt 2>/dev/null | tr -d '\r')
+J2=$(adb shell dumpsys jobscheduler 2>/dev/null | tr -d '\r' | grep -c "$JP" || true)
+NE=$(adb shell "run-as $P sh -c 'cat files/notify_test.txt 2>/dev/null'" | tr -d '\r')
 { echo "notifications (API $API)"
   echo "after 4 s:  $(echo "$N1" | grep -c 'TEST YENI') new, $(echo "$N1" | grep -c 'TEST XATIRLAT') reminder; alarms of the app: $A1; check scheduled: $J1"
   echo "after 26 s: $(echo "$N2" | grep -c 'TEST YENI') new, $(echo "$N2" | grep -c 'TEST XATIRLAT') reminder, $(echo "$N2" | grep -c 'must not show') old"
   echo "after gone: check scheduled: $J2 $NE"
+  echo "job lines: $JD"
   if echo "$N1" | grep -q "TEST YENI" && ! echo "$N1" | grep -q "TEST XATIRLAT" && echo "$N2" | grep -q "TEST XATIRLAT" && ! echo "$N2" | grep -q "must not show" \
      && [ "$J1" -ge 1 ] && [ "$J2" = "0" ] && [ -z "$NE" ]; then echo "PASS: a new booking at once, the reminder on time by its alarm, nothing for a past session; gone stops the check"; else echo "FAIL"; fi
 } > "notify-$API.txt"
