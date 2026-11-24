@@ -226,9 +226,9 @@ jobs:
           insert into public.staff (id, name, role) values (:'uid', 'Backup drill admin', 'admin');
           SQL
           EXPECTED=$(psql "$LOCAL_DB" -X -At -c 'select count(*) from public.appts')
-          # the app's «Hamısı (2 il)» Excel loads the last two years (back to a Friday/month start): it must see every
-          # booking of the last 729 days and never more than the whole table (B-02: older bookings must not fail the job)
-          EXPECTED_MIN=$(psql "$LOCAL_DB" -X -At -c "select count(*) from public.appts where date >= current_date - 729")
+          # the app's Excel loads everything from the start of «Keçən ay» (at least 28 days back, a Friday): it must see every
+          # booking of the last 28 days and never more than the whole table (B-02: older bookings must not fail the job)
+          EXPECTED_MIN=$(psql "$LOCAL_DB" -X -At -c "select count(*) from public.appts where date >= current_date - 28")
           # the site pointed at the local stack, served like GitHub Pages
           SUPABASE_URL="$API" SUPABASE_ANON_KEY="$ANON" python3 tools/configure.py "$RUNNER_TEMP/site"
           python3 -m http.server 8080 --bind 127.0.0.1 --directory "$RUNNER_TEMP/site" > /dev/null 2>&1 &

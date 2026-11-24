@@ -1,6 +1,6 @@
 // Smoke test of a restored copy: open the app (a copy made by tools/configure.py that points at the restored stack),
 // sign in as the temporary admin, check that the calendar loads with no console errors, page errors or CSP violations,
-// and that the number of appointments the app itself loads for that admin (the Excel export loads every appointment)
+// and that the number of appointments the app itself loads for that admin (the Excel export loads every appointment since the start of last month)
 // equals count(*) of public.appts in the restored database.
 // Prints counts and pass/fail only: never names, phones or other row contents, no screenshots.
 // env: SITE_URL, TEST_EMAIL, TEST_PASSWORD, EXPECTED_APPTS
@@ -34,8 +34,8 @@ const clean=t=>String(t).replace(/\?[^\s"')]*/g,'?…').replace(/"[^"]*"/g,'"…
   await p.click('[data-tab=stats]');
   await p.waitForSelector('[data-act=xls]',{timeout:20000}).catch(()=>fail('no Excel button: the test user is not seen as admin'));
   await p.click('[data-act=xls]');
-  // since 2026-11-16 the file is made for a chosen period: «Hamısı (2 il)» loads every appointment of the last two years
-  await p.click('[data-act=xls-per][data-id=all]').catch(()=>fail('no period choice in the Excel window'));
+  // since 2026-11-22 the file holds the statistics tables: it loads every appointment from the start of «Keçən ay»
+  // (and the ones written in that time for an earlier day); there is no period choice any more
   const re=/Fayl hazırdır: (\d+) vərəq, (\d+) qəbul|Файл готов: (\d+) .*?, (\d+)/;
   await p.waitForFunction(r=>{const s=document.querySelector('#sheet');return s&&(new RegExp(r).test(s.textContent)||/Faylı hazırlamaq olmadı/.test(s.textContent))},re.source,{timeout:60000}).catch(()=>fail('Excel export did not finish'));
   const m=(await p.textContent('#sheet')).match(re);if(!m)await fail('Excel export failed in the app');
@@ -44,8 +44,8 @@ const clean=t=>String(t).replace(/\?[^\s"')]*/g,'?…').replace(/"[^"]*"/g,'"…
   const csp=await p.evaluate(()=>window.__csp);
   console.log(JSON.stringify({appointmentsSeenByApp:seen,appointmentsInDatabase:expected,consoleErrors:cons.length,pageErrors:errs.length,cspViolations:csp.length,httpErrors:bad.length}));
   if(errs.length||cons.length||csp.length)await fail('errors in the page');
-  const min=process.env.EXPECTED_MIN!=null?+process.env.EXPECTED_MIN:expected;   // bookings of the last two years (B-02)
-  if(seen<min||seen>expected)await fail('the app sees '+seen+' appointments, expected between '+min+' (last two years) and '+expected+' (whole table)');
+  const min=process.env.EXPECTED_MIN!=null?+process.env.EXPECTED_MIN:expected;   // bookings of the last 28 days: always inside «Keçən ay»…today
+  if(seen<min||seen>expected)await fail('the app sees '+seen+' appointments, expected between '+min+' (last 28 days) and '+expected+' (whole table)');
   console.log('PASS restored copy: calendar loads without errors and the admin sees all '+seen+' appointments');
   await b.close();
 })().catch(e=>{console.log('FAIL '+clean(e.message));process.exit(1)});

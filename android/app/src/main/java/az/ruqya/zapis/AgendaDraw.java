@@ -228,7 +228,7 @@ final class AgendaDraw {
             if (it == null) continue;
             float y = top + i * rowH;
             String st = status(it, day, todayIso, nowMin);
-            int col = MonthWidget.parseColor(it.optString(1, ""), 0xFF546E7A);
+            int col = MonthWidget.parseColor(it.optString(1, ""), 0xFF4A4542);
             int start = it.optInt(4, -1), end = it.optInt(3, -1);
             String name = it.optString(0, ""), spec = it.optString(5, "");
             // the specialist's colour as a bar at the left
@@ -392,7 +392,7 @@ final class AgendaDraw {
                 }
                 float cy = y0 + line * (chipH + gap);
                 RectF rc = new RectF(x, cy, x + want, cy + chipH);
-                p.setColor(MonthWidget.parseColor(it.optString(1, ""), 0xFF546E7A));
+                p.setColor(MonthWidget.parseColor(it.optString(1, ""), 0xFF4A4542));
                 if (!"".equals(stt)) p.setAlpha(150);
                 cv.drawRoundRect(rc, 4 * d, 4 * d, p);
                 p.setAlpha(255);

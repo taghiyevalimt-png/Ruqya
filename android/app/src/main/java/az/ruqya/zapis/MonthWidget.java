@@ -340,9 +340,22 @@ public class MonthWidget extends AppWidgetProvider {
         return out;
     }
 
+    /** 24.11 Design 4.0: the old bright specialist colours → the rich «home interior» ones (same table as REMAP in index.html),
+     *  so data saved by an older app version never shows the old palette on the sand widget. */
+    static final java.util.HashMap<String, String> REMAP = new java.util.HashMap<>();
+    static {
+        String[] m = {"#7b4fd1","#5f4458", "#8e24aa","#5f4458", "#3949ab","#34435a", "#1a73e8","#4d5d70", "#0277bd","#4d5d70",
+                "#00796b","#2e5e5c", "#2e7d32","#4e5f3a", "#5f6b1a","#6b6e3b", "#9e6a00","#9a7046", "#c43e0c","#a35a3f",
+                "#c62828","#8e3f2a", "#c2185b","#722f3b", "#6d4c41","#6e4b33", "#546e7a","#4a4542", "#d9480f","#a35a3f", "#00897b","#2e5e5c"};
+        for (int i = 0; i < m.length; i += 2) REMAP.put(m[i], m[i + 1]);
+    }
+
     static int parseColor(String s, int dflt) {
         try {
-            if (s != null && s.matches("#[0-9a-fA-F]{6}")) return Color.parseColor(s);
+            if (s != null && s.matches("#[0-9a-fA-F]{6}")) {
+                String r = REMAP.get(s.toLowerCase(java.util.Locale.ROOT));
+                return Color.parseColor(r != null ? r : s);
+            }
         } catch (Exception ignored) {
         }
         return dflt;
@@ -493,7 +506,7 @@ public class MonthWidget extends AppWidgetProvider {
                 JSONArray it = items.optJSONArray(i);
                 if (it == null) continue;
                 String name = it.optString(0, "");
-                int col = parseColor(it.optString(1, ""), 0xFF546E7A);
+                int col = parseColor(it.optString(1, ""), 0xFF4A4542);
                 String st = it.optString(2, "");
                 // A session counts as successful once it is over (the app sends its end minute): the widget
                 // marks it itself, so the tick appears even if nobody opened the app since.

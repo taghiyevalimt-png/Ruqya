@@ -1,5 +1,5 @@
 // Owner 22.11: «in Excel only what the statistics in the app show (except Bu gün): six sheets — Bu həftə, Keçən
-// həftə, Bu ay, Keçən ay, Pul, Məhsul — each a proper table with a readable font». F-03 still holds: only the days
+// həftə, Bu ay, Keçən ay, Məhsul (Pul removed 23.11) — each a proper table with a readable font». F-03 still holds: only the days
 // the periods need are loaded, and only the needed columns.
 const zlib = require("zlib");
 const { open, check, OWNER, seed, bakuToday, uuid, R1, AGENT } = require("../lib");
