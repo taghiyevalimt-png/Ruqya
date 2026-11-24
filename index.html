@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-KlvC0hgOIwhhR+nENj9FMPn6OqPe6yWfoLDGnIlGiks=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-rd/iHC0Q7ZtyMBAeivNa5Q5Dwn42i0iv+aC21yoRuys='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-g28yGgpnJT3/mDkhSN2S+dxdwc6D624iBJyjrT3gPcw=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-toyag1csQJ6uqrawwY6CNfU5gTzu+9ANJOG0q3q5/HM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#050505">
 <script>
@@ -15,10 +15,11 @@ if(window.top!==window.self){document.documentElement.style.display="none";try{w
 var LANG="az";try{if(localStorage.getItem("ruqya.lang")==="ru")LANG="ru"}catch(e){}
 if(LANG==="ru")document.documentElement.setAttribute("lang","ru");
 /* Light / dark / automatic, chosen in Ayarlar and kept on this phone. */
+/* owner 24.11: «not one look by day and another in the evening — one for everybody»: always the one Mərkəz look
+   (Design 3.0, night and gold); the phone's light/dark mode and the old choice in Ayarlar no longer change it */
 function applyTheme(t){
-  var r=document.documentElement;
-  if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
-  var dark=t==="dark"||(t!=="light"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var r=document.documentElement;t="dark";r.setAttribute("data-theme","dark");
+  var dark=true;
   var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#f5f5f3");
   r.style.background=dark?"#050505":"#f5f5f3";
   var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute("content",dark?"dark":"light");
@@ -951,6 +952,95 @@ body{background:radial-gradient(130% 55% at 50% -12%,var(--glowtop,rgba(190,140,
 .cal{background:transparent}
 .nowline{height:2px}
 
+/* ============================ Design 3.0 (24.11, owner: «one look for all; powerful changes — to be amazed») ============================
+   One look, always: deep night with warm gold. Light from above (a gold glow), glassy surfaces with a golden hairline,
+   gold «hero» cards for the numbers that matter, a big date, a round gold + raised in the middle of the tab bar.
+   Still only colours, borders and still gradients (painted once, never animated): a weak phone stays as smooth. */
+:root[data-theme]{--bg:#09080b;--surface:#151419;--surface2:#1c1b21;--ink:#f8f1e2;--muted:#a59c8b;--line:rgba(230,194,114,.17);--line-soft:rgba(255,255,255,.07);--hatch:#1e1d23;
+  --accent:#e7c473;--accent-ink:#140f06;--accent-soft:rgba(231,196,115,.13);--accent-line:#a8884a;--gold:#e7c473;--gold-soft:rgba(231,196,115,.14);
+  --btn:linear-gradient(135deg,#fde9b2 0%,#e5c06b 42%,#b98d40 100%);--btn-ink:#140f06;--glow:0 14px 30px -12px rgba(231,196,115,.55);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.012) 100%);
+  --ok:#66d8a0;--ok-soft:rgba(102,216,160,.14);--warn:#f4c65e;--warn-soft:rgba(244,198,94,.14);--bad:#ff8170;--bad-soft:rgba(255,129,112,.14);
+  --shadow:0 1px 0 rgba(255,255,255,.05) inset,0 20px 40px -28px rgba(0,0,0,1);--now:#f0cb72;--sec:#e7c473;color-scheme:dark}
+html,body{background:#09080b}
+body{background:radial-gradient(85% 42% at 88% -6%,rgba(231,196,115,.22) 0%,rgba(231,196,115,0) 62%) no-repeat,radial-gradient(70% 38% at -8% 108%,rgba(120,96,210,.13) 0%,rgba(120,96,210,0) 60%) no-repeat,#09080b;color:var(--ink)}
+/* titles */
+.top{background:transparent;border-bottom:0;padding:16px 18px 10px}
+.top h1{font-size:34px;font-weight:800;letter-spacing:-.035em;background:linear-gradient(180deg,#fff8e8 0%,#e7c473 140%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.daynav .label{line-height:1.05}
+.daynav .label .wk{display:block;font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.daynav .label .cm{font-size:0}
+.daynav .label .dt{font-size:29px;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
+.daynav .label .cv{font-size:12px;vertical-align:6px;margin-left:6px}
+.daynav .label small{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:3px}
+.icon-btn,.daynav>button:not(.label){background:var(--sheen),var(--surface);border:1px solid var(--line);color:var(--gold);font-size:22px;box-shadow:var(--shadow)}
+.daynav .ghost{border-radius:999px;background:var(--gold-soft);border:1px solid var(--line);color:var(--gold);font-weight:700;padding:9px 14px}
+/* the week strip */
+.wd{background:var(--sheen),var(--surface);border:1px solid var(--line-soft);border-radius:17px;padding:8px 0 7px}
+.wd span{color:var(--muted)}
+.wd b{font-size:19px;color:var(--ink)}
+.wd.today{border-color:var(--gold)}.wd.today b{color:var(--gold)}
+.wd[aria-pressed="true"]{background:var(--btn);border-color:transparent;box-shadow:var(--glow)}
+.wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b{color:var(--btn-ink)}
+.wd i:not(:empty){background:var(--gold-soft);color:var(--gold)}
+.wd[aria-pressed="true"] i:not(:empty){background:rgba(20,15,6,.16);color:var(--btn-ink)}
+/* the tab bar: a dark glassy dock; the chosen tab gold; the round + raised in its middle on the bookings screen */
+.tabs{background:var(--sheen),#121116;border:1px solid var(--line);border-radius:26px;margin:0 10px 10px;padding:5px;box-shadow:0 18px 40px -18px rgba(0,0,0,1),0 1px 0 rgba(255,255,255,.05) inset;position:relative}
+.tabs button{color:var(--muted);border-radius:20px}
+.tabs button[aria-current="page"]{background:var(--btn)!important;color:var(--btn-ink)!important;box-shadow:var(--glow)}
+body.withfab .tabs button[data-tab="cash"]{margin-left:74px}
+.tabs button{flex:1 1 0;min-width:0}
+@media (max-width:400px){body.withfab .tabs button{font-size:10px;letter-spacing:-.02em}body.withfab .tabs button[data-tab="cash"]{margin-left:70px}}
+/* the + stands in the gap after «Statistika»: tabs are equal, 2 on its left, 3 on its right (dock: 10 px margin + 5 px padding) */
+.fab{position:absolute;left:calc(15px + (100% - 30px - 74px) * 2 / 5 + 37px);bottom:-36px;width:60px;height:60px;margin:0 0 0 -30px;padding:0;border-radius:50%;background:var(--btn);color:var(--btn-ink);z-index:6;
+  box-shadow:0 0 0 6px #09080b,0 16px 34px -10px rgba(231,196,115,.75);display:flex;align-items:center;justify-content:center}
+.fab .fabt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.fab::before{content:"";width:26px;height:26px;background:linear-gradient(currentColor,currentColor) center/26px 3.4px no-repeat,linear-gradient(currentColor,currentColor) center/3.4px 26px no-repeat;border-radius:2px}
+.fab[hidden]{display:none}
+body.withfab .shell{padding-bottom:34px}   /* room for the part of the + that rises above the bar */
+.shell{overflow:visible}
+/* surfaces: glass with a golden hairline */
+.card,.pay,.reader,.pbtn,.note,.empty{background:var(--sheen),var(--surface);border-color:var(--line-soft)}
+.card{border:1px solid var(--line-soft);border-left:3px solid var(--line);border-radius:22px}
+.card.wait{border-left-color:var(--gold)}.card.paid{border-left-color:var(--ok)}.card.cancel{border-left-color:var(--bad)}.card.noshow{border-left-color:var(--warn)}
+.card .time{background:var(--gold-soft);border:1px solid var(--line);color:var(--gold)}
+.card .time small{color:var(--muted)}
+.pay{border:1px solid var(--line-soft);border-radius:24px}
+.reader{border:1px solid var(--line-soft);border-radius:22px}
+h3.sec,.sec{color:var(--gold)}
+/* gold «hero» cards: the day and the period at a glance */
+.pay.todaysum{background:var(--btn);border:0;box-shadow:var(--glow);padding:18px 6px}
+.pay.todaysum b{color:var(--btn-ink);font-size:34px}
+.pay.todaysum span{color:rgba(20,15,6,.68)}
+.todaysum div+div{border-left:1px solid rgba(20,15,6,.16)}
+/* tables */
+.stt th{color:var(--gold);border-bottom:1px solid var(--line)}
+.stt tbody tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+.stt td{border-bottom:1px solid var(--line-soft)}
+.stt tfoot td{background:var(--gold-soft);color:var(--gold)}
+/* buttons and choices */
+.chip{background:var(--sheen),var(--surface);border:1px solid var(--line-soft);color:var(--muted)}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"],.segb input:checked+span{background:var(--btn);color:var(--btn-ink);box-shadow:var(--glow)}
+.seg{background:rgba(255,255,255,.035);border:1px solid var(--line-soft)}
+.ghost{background:var(--sheen),var(--surface);border:1px solid var(--line-soft);color:var(--ink)}
+.primary,.sticky-save .primary{background:var(--btn);color:var(--btn-ink);box-shadow:var(--glow)}
+.links .link,.links a.link,.pbtns .link{background:rgba(255,255,255,.05);border-color:var(--line-soft);color:var(--ink)}
+/* windows */
+.overlay{background:rgba(4,3,6,.72)}
+.sheet{background:linear-gradient(180deg,#1d1b21 0%,#131217 60%),#131217;border-top:1px solid var(--line);box-shadow:0 -24px 60px -20px rgba(0,0,0,.9)}
+.sheet h2{font-size:26px;color:var(--ink)}
+.field input,.field select,.field textarea,.search{background:rgba(255,255,255,.045);border:1.5px solid rgba(255,255,255,.08);color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus,.search:focus{background:rgba(231,196,115,.06);border-color:var(--gold);box-shadow:0 0 0 4px rgba(231,196,115,.14)}
+.pbtn{border:1px solid var(--line-soft)}
+.pbtn.on{background:linear-gradient(180deg,rgba(231,196,115,.2),rgba(231,196,115,.08)),var(--surface);border-color:var(--gold)}
+/* calendar */
+.cal-head,.cal-foot{background:transparent}
+#cal .ev{border-radius:12px}
+.nowline{background:var(--now)}
+/* people */
+.ava{box-shadow:0 0 0 2px rgba(231,196,115,.35)}
+.search{border-radius:999px;padding-left:18px}
+
 </style>
 </head>
 <body>
@@ -960,7 +1050,7 @@ body{background:radial-gradient(130% 55% at 50% -12%,var(--glowtop,rgba(190,140,
     <div class="top" id="top"></div>
     <main id="main" tabindex="0" aria-label="Məzmun"></main>
     <div class="spbar" id="spbar" role="group" aria-label="Mütəxəssislər" hidden></div>
-    <button class="fab" id="fab" data-act="new-appt" hidden>+ Yaz</button>
+    <button class="fab" id="fab" data-act="new-appt" aria-label="Yaz" hidden><span class="fabt">+ Yaz</span></button>
   </div>
   <nav class="tabs" id="tabs" aria-label="Bölmələr" hidden>
     <button data-act="tab" data-tab="day"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Qəbullar</button>
@@ -2060,7 +2150,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124012529";
+var APP_VERSION="20261124073226";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3217,6 +3307,7 @@ function renderScreen(){
   if(!gate&&noTab[ui.tab])ui.tab="day";
   var tb0=document.querySelectorAll("#tabs button");for(var ti=0;ti<tb0.length;ti++){var hid=!!noTab[tb0[ti].dataset.tab];if(tb0[ti].hidden!==hid)tb0[ti].hidden=hid}
   byId("fab").hidden=gate||ui.tab!=="day"||!activeReaders().length||pendingMe();
+  document.body.classList.toggle("withfab",!byId("fab").hidden);
   spBar(!byId("fab").hidden&&(ui.view!=="grid"||ui.sel.length>0));
   if(gate||ui.tab==="patients")main.classList.remove("gridmode");
   if(gate){
@@ -3267,7 +3358,8 @@ function renderScreen(){
 function navHtml(title,small){
   return '<div class="daynav">'+
     '<button class="icon-btn" data-act="shift" data-n="-1" aria-label="'+L("Geri")+'">‹</button>'+
-    L('<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">')+esc(title)+'<span class="cv">▼</span><small>'+esc(small)+'</small></button>'+
+    /* Design 3.0: «ÇƏRŞƏNBƏ AXŞAMI» small and gold above, «24 noyabr» big (the text stays «Çərşənbə axşamı, 24 noyabr») */
+    L('<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">')+(function(){var k=String(title).indexOf(", ");return k>0?'<span class="wk">'+esc(title.slice(0,k))+'<span class="cm">, </span></span><span class="dt">'+esc(title.slice(k+2))+'</span>':esc(title)})()+'<span class="cv">▼</span><small>'+esc(small)+'</small></button>'+
     (ui.date===today?'':L('<button class="ghost" data-act="today">Bu gün</button>'))+
     L('<button class="icon-btn" data-act="shift" data-n="1" aria-label="İrəli">›</button></div>');
 }
@@ -3327,7 +3419,7 @@ function fitFit(evs){
     if(e.classList.contains("tiny")){var tw=cx.measureText(b.textContent).width,fw=Math.max(6.5,Math.min(f0,(W-(ok?14:0))*10/tw));plan.push([e,b,"",Math.floor(fw*2)/2]);continue}
     var fh=best(ws,W,H,8.5);if(fh){plan.push([e,b,"",fh]);continue}
     /* narrow and tall: the name from top to bottom */
-    var fv=H>W*1.3?best(ws,H,W,6.5):0,fh2=best(ws,W,H,6);
+    var fv=H>W*1.3&&W<30?best(ws,H,W,6.5):0,fh2=best(ws,W,H,6);   /* top to bottom only in really narrow blocks */
     if(fv&&(!fh2||fv>=fh2))plan.push([e,b,"vert",fv]);else if(fh2)plan.push([e,b,"",fh2]);else plan.push([e,b,"brk",6.5])}
   for(var j=0;j<plan.length;j++){var x=plan[j];x[0].classList.remove("vert");x[0].classList.remove("brk");if(x[2])x[0].classList.add(x[2]);x[1].style.fontSize=x[3]+"px"}
 }
@@ -4458,10 +4550,6 @@ function readersMain(){
   if(sec==="staff"&&adm&&state.hasAudit)h+=L('<button class="ghost" data-act="audit">Dəyişikliklər jurnalı (kim nəyi dəyişib və ya silib)</button>');
   if(sec==="view"){
   h+=widthSeg();
-  var th=curTheme();
-  h+=L('<h3 class="sec">Görünüş</h3><div class="seg">')+
-    [["auto",L("Avtomatik")],["light",L("Açıq")],["dark",L("Tünd")]].map(function(x){return '<button data-act="theme" data-id="'+x[0]+'" aria-pressed="'+(th===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>'+
-    L('<p class="hint">«Avtomatik» telefonun öz rejiminə uyğun dəyişir. Seçim yalnız bu telefonda yadda qalır.</p>');
   h+=langSeg();
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
@@ -4547,7 +4635,6 @@ function langSeg(){
   return '<h3 class="sec">Dil · Язык</h3><div class="seg" style="grid-template-columns:1fr 1fr">'+
     [["az","Azərbaycanca"],["ru","Русский"]].map(function(x){return '<button data-act="lang" data-id="'+x[0]+'" aria-pressed="'+(LANG===x[0])+'">'+x[1]+'</button>'}).join("")+'</div>';
 }
-function curTheme(){var t="auto";try{t=localStorage.getItem("ruqya.theme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
 function colorSheet(){
   var r=reader(sheet.id);if(!r)return L('<h2>Rəng')+CLOSE+'</h2>';
   var cur=rcolor(r.id),h='<h2>'+esc(r.name)+L(' — rəng')+CLOSE+'</h2>';
@@ -5300,11 +5387,6 @@ document.addEventListener("click",function(e){
     return;
   }
   else if(act==="wtheme"){if(/^(auto|light|dark)$/.test(id)){try{localStorage.setItem("ruqya.wtheme",id)}catch(err){}wLast="";pushWidget()}render();return}
-  else if(act==="theme"){
-    if(id!=="light"&&id!=="dark")id="auto";
-    try{localStorage.setItem("ruqya.theme",id)}catch(err){}
-    applyTheme(id);render();return;
-  }
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
   else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;if(id==="del"&&!sheet.dels)loadAuditDels();byId("sheet").innerHTML=auditSheet()}return}
   else if(act==="restore"){

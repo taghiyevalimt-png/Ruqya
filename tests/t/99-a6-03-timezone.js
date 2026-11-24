@@ -12,7 +12,7 @@ module.exports = async () => {
     try {
       const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(1500);
       const day = await p.evaluate(() => document.body.innerText.replace(/\s+/g, " "));
-      check(/Cümə, 27 noyabr/.test(day), tz + ": today is Friday 27 November: " + day.slice(0, 60));
+      check(/Cümə, 27 noyabr/i.test(day.replace(/CÜMƏ/g, "Cümə")), tz + ": today is Friday 27 November: " + day.slice(0, 60));
       check((await head(p)).indexOf("27 noyabr – 3 dekabr 2026") >= 0, tz + ": «Bu həftə» 27.11–3.12");
       check(!s.errors.length, tz + ": no page errors: " + s.errors.join("; "));
     } finally { await s.close(); }
@@ -25,7 +25,7 @@ module.exports = async () => {
     await p.addInitScript(() => { const D = Intl.DateTimeFormat; Intl.DateTimeFormat = function (l, o) { if (o && o.timeZone === "Asia/Baku") return { format: (d) => { const x = new Date(+d + 5 * 3600e3), z = (n) => String(n).padStart(2, "0"); return z(x.getUTCMonth() + 1) + "/" + z(x.getUTCDate()) + "/" + x.getUTCFullYear() + ", " + z(x.getUTCHours()) + ":" + z(x.getUTCMinutes()); }, resolvedOptions: () => ({ timeZone: "Asia/Baku" }) }; return new D(l, o); }; Intl.DateTimeFormat.prototype = D.prototype; Intl.DateTimeFormat.supportedLocalesOf = D.supportedLocalesOf; });
     await p.reload(); await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(1500);
     const day = await p.evaluate(() => document.body.innerText.replace(/\s+/g, " "));
-    check(/Cümə, 27 noyabr/.test(day), "with summer time in the time-zone database the app follows it: " + day.slice(0, 60));
+    check(/Cümə, 27 noyabr/i.test(day.replace(/CÜMƏ/g, "Cümə")), "with summer time in the time-zone database the app follows it: " + day.slice(0, 60));
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };
