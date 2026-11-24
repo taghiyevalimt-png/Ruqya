@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- light parent so the page follows the phone (WebView reads light/dark from the theme); black window = no white flash at start -->
+    <!-- 24.11: one cosy look — sand window (no flash at start), brown bars -->
     <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:colorBackground">@android:color/black</item>
-        <item name="android:statusBarColor">@android:color/black</item>
-        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:windowBackground">@color/sand</item>
+        <item name="android:colorBackground">@color/sand</item>
+        <item name="android:statusBarColor">@color/brown</item>
+        <item name="android:navigationBarColor">@color/brown</item>
     </style>
 </resources>

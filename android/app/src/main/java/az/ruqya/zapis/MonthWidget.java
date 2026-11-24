@@ -69,8 +69,11 @@ public class MonthWidget extends AppWidgetProvider {
         }
     }
 
+    // 24.11 (owner): one cosy look for the widgets too — sand #CEBBA0, brown #9A765E, espresso text; no light/dark switch
     static void palette(boolean dark) {
-        if (dark) {
+        if (true) {
+            BG = 0xFFCEBBA0; LINE = 0xFFB8A386; INK = 0xFF3A2C22; MUTED = 0xFF6E5646; ACCENT = 0xFF9A765E; ACCENT_INK = 0xFFFFF8EF;
+        } else if (dark) {
             BG = 0xFF0D0C0A; LINE = 0xFF2A251B; INK = 0xFFF4ECD8; MUTED = 0xFF9B917C; ACCENT = 0xFFD4B062; ACCENT_INK = 0xFF0B0905;
         } else {
             BG = 0xFFFFFFFF; LINE = 0xFFE4E0D8; INK = 0xFF16140F; MUTED = 0xFF7C7568; ACCENT = 0xFF16140F; ACCENT_INK = 0xFFFFFFFF;

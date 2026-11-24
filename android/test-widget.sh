@@ -53,7 +53,8 @@ done
     head -c 4 "$f-$API.png" 2>/dev/null | od -An -tx1 | grep -q "89 50 4e 47" || ok=0
     [ "$s" -gt 3000 ] || ok=0
   done
-  cmp -s widget-week-$API.png widget-week-light-$API.png && { echo "light = dark"; ok=0; }
+  # 24.11: one cosy look — the «light» and «dark» data draw the same picture
+  cmp -s widget-week-$API.png widget-week-light-$API.png || { echo "light != dark (must be one look)"; ok=0; }
   for k in day week; do cat "bind-$k-$API.txt"; grep -q "^bound=true" "bind-$k-$API.txt" || ok=0; grep -q "FAIL" "bind-$k-$API.txt" && ok=0; [ "$(grep -c ': ok' "bind-$k-$API.txt")" = "9" ] || ok=0; done
   # the drawing error file, if any (a missing file must not count: «cat: No such file» comes on the same output)
   DE=$(adb shell "run-as $P sh -c 'cat files/widget_test.txt 2>/dev/null'" | tr -d '\r')
@@ -104,8 +105,8 @@ CQ=$(adb shell content query --uri content://com.android.contacts/data/phones --
   if [ "$C1" = "added=2 skipped=2" ] && [ "$C2" = "added=0 skipped=4" ] && echo "$CQ" | grep -q "display_name=Test Pasiyent Bir, data1=+994 55 111 22 33" && echo "$CQ" | grep -q "display_name=Test Iki, data1=0501112244" && ! echo "$CQ" | grep -q "Bir tekrar"; then echo "PASS: names and numbers in the phone's contacts, a number already there is not added twice"; else echo "FAIL"; fi
 } > "contacts-$API.txt"
 cat "contacts-$API.txt"
-# F-02 (owner 17.11): the widget in white or black, as chosen in the app ("t"); without "t" it follows the phone
-# (the emulator runs in light mode, so it must be the white picture). Signed out keeps the colour too.
+# 24.11 (owner): one cosy look (sand #CEBBA0, brown #9A765E) — whatever "t" says (light, dark, none, signed out),
+# the picture is the same. (Before: F-02, 17.11 — white or black as chosen.)
 JL=$(sed 's/"u":/"t":"light","u":/' android/test-widget.json | base64 -w0)
 JD=$(sed 's/"u":/"t":"dark","u":/' android/test-widget.json | base64 -w0)
 shot widget-light 360 380 3.0 "$JL"
@@ -115,7 +116,7 @@ shot widget-out-light 320 340 2.5 "$(printf '{"out":1,"t":"light"}' | base64 -w0
 shot widget-out-dark 320 340 2.5 "$(printf '{"out":1,"t":"dark"}' | base64 -w0)"
 { echo "F-02 widget colour (API $API)"
   for f in light dark auto out-light out-dark; do echo "$f $(md5sum < widget-$f-$API.png | cut -c1-32) $(stat -c%s widget-$f-$API.png) bytes"; done
-  if [ -s widget-light-$API.png ] && [ -s widget-dark-$API.png ] && ! cmp -s widget-light-$API.png widget-dark-$API.png && cmp -s widget-auto-$API.png widget-light-$API.png && ! cmp -s widget-out-light-$API.png widget-out-dark-$API.png; then echo "PASS: white and black pictures differ; without a choice the light phone gets the white one; signed-out keeps the colour"; else echo "FAIL"; fi
+  if [ -s widget-light-$API.png ] && [ -s widget-dark-$API.png ] && cmp -s widget-light-$API.png widget-dark-$API.png && cmp -s widget-auto-$API.png widget-light-$API.png && cmp -s widget-out-light-$API.png widget-out-dark-$API.png; then echo "PASS: one cosy look — light, dark, automatic and signed-out pictures are the same"; else echo "FAIL"; fi
 } > "theme-$API.txt"
 cat "theme-$API.txt"
 # A real widget instance, as a home screen would hold it.

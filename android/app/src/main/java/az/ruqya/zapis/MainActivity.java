@@ -31,10 +31,10 @@ public class MainActivity extends Activity {
     private static final String HOME = "https://" + HOST + "/Ruqya/";
     private static final String OFFLINE =
             "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head>"
-                    + "<body style='font-family:sans-serif;padding:48px 24px;text-align:center;background:#050505;color:#f4ecd8'>"
+                    + "<body style='font-family:sans-serif;padding:48px 24px;text-align:center;background:#CEBBA0;color:#3A2C22'>"
                     + "<h3>İnternet yoxdur</h3><p>Bağlantını yoxlayın və yenidən cəhd edin.</p>"
                     + "<h3>Нет интернета</h3><p>Проверьте подключение и попробуйте снова.</p>"
-                    + "<p><a style='color:#d4b062' href='" + HOME + "'>Yenilə · Обновить</a></p></body></html>";
+                    + "<p><a style='color:#9A765E' href='" + HOME + "'>Yenilə · Обновить</a></p></body></html>";
 
     private WebView web;
 
@@ -42,11 +42,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(Color.parseColor("#050505"));
+            getWindow().setStatusBarColor(Color.parseColor("#9A765E"));   // 24.11: the cosy brown
+            getWindow().setNavigationBarColor(Color.parseColor("#9A765E"));
         }
 
         web = new WebView(this);
-        web.setBackgroundColor(Color.parseColor("#050505"));   // no white before the page paints
+        web.setBackgroundColor(Color.parseColor("#CEBBA0"));   // no flash before the page paints: the sand of the app
         setContentView(web);
 
         WebSettings settings = web.getSettings();

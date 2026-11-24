@@ -5,7 +5,7 @@
 //    real ids, one of each id in the page; a booking saved from it reaches the database; the same for «Məhsul satışı»;
 //  - closing: the window itself slides away (no copy), nothing is left behind after the glide;
 //  - a different window (another day picked) is built the usual way and is still right;
-//  - look: patients have round initials, Kassa shows the day's sum / pieces / sales on top (= the table's total),
+//  - look: patients without coloured circles (owner 24.11), Kassa shows the day's sum / pieces / sales on top (= the table's total),
 //    Statistika shows Yazdı / Uğurlu / Ləğv of the period on top (= the «Cəmi» row).
 const { open, check, AGENT, OWNER, seed, R1, bakuToday, uuid } = require("../lib");
 module.exports = async () => {
@@ -45,8 +45,7 @@ module.exports = async () => {
     await p.click('[data-act="close"]'); await p.waitForTimeout(400);
     // patients: initials; Statistika: the period on top = the «Cəmi» row
     await p.click('#tabs [data-tab="patients"]'); await p.waitForTimeout(400);
-    const av = await p.evaluate(() => { const a = document.querySelector("#plist .ava, .prow .ava"); return a ? { i: a.getAttribute("data-i"), c: getComputedStyle(a).color, t: a.closest(".reader").querySelector("b").textContent } : null; });
-    check(av && av.i && av.c === "rgb(255, 255, 255)" && av.t.charAt(0).toUpperCase() === av.i.charAt(0), "patients: round initials: " + JSON.stringify(av));
+    check(await p.evaluate(() => document.querySelectorAll(".ava").length === 0 && document.querySelectorAll(".prow").length > 0), "patients: no coloured circles before the names (owner 24.11)");
     await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="cweek"]'); await p.waitForTimeout(400);
     const tiles = await p.evaluate(() => [...document.querySelectorAll(".pertot b")].map((b) => b.textContent.trim()));
     const tot = await p.evaluate(() => { const hd = [...document.querySelectorAll('[data-st^="big-"] thead tr.sub th')].map((x) => x.textContent.trim()), r = document.querySelector('[data-st^="big-"] tfoot tr'); return ["Yazdı", "Uğurlu", "Ləğv"].map((l) => r.cells[hd.indexOf(l) + 1].textContent.trim()); });

@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-g28yGgpnJT3/mDkhSN2S+dxdwc6D624iBJyjrT3gPcw=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-toyag1csQJ6uqrawwY6CNfU5gTzu+9ANJOG0q3q5/HM='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qAJ9MAN62toXb5KSRZV+oGOPGNpBLiK3Uti7tFb6YU0=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-/81icL4WHIv0+bKEPPcxeWiZNNg19estsLMLbX/f3HE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#050505">
+<meta name="theme-color" content="#CEBBA0">
 <script>
 /* The app never runs inside another site's frame (that is how click-tricking attacks work). */
 if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location.replace(window.location.href)}catch(e){}}
@@ -18,10 +18,11 @@ if(LANG==="ru")document.documentElement.setAttribute("lang","ru");
 /* owner 24.11: «not one look by day and another in the evening — one for everybody»: always the one Mərkəz look
    (Design 3.0, night and gold); the phone's light/dark mode and the old choice in Ayarlar no longer change it */
 function applyTheme(t){
-  var r=document.documentElement;t="dark";r.setAttribute("data-theme","dark");
-  var dark=true;
-  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",dark?"#050505":"#f5f5f3");
-  r.style.background=dark?"#050505":"#f5f5f3";
+  /* 24.11 (later): the one look is «cozy home» — sand #CEBBA0 and brown #9A765E (Design 4.0) */
+  var r=document.documentElement;t="light";r.setAttribute("data-theme","light");
+  var dark=false;
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content","#CEBBA0");
+  r.style.background="#CEBBA0";
   var cs=document.querySelector('meta[name="color-scheme"]');if(cs)cs.setAttribute("content",dark?"dark":"light");
 }
 try{applyTheme(localStorage.getItem("ruqya.theme")||"auto")}catch(e){}
@@ -1041,6 +1042,74 @@ h3.sec,.sec{color:var(--gold)}
 .ava{box-shadow:0 0 0 2px rgba(231,196,115,.35)}
 .search{border-radius:999px;padding-left:18px}
 
+/* ============================ Design 4.0 «Cozy home» (24.11, owner: sand #CEBBA0 instead of black, brown #9A765E instead
+   of gold; one look; «cosy, like at home»; colours only in the calendar blocks — rich interior tones) ============================
+   Two colours and their tints only: the sand of the walls, the brown of wood and leather, a dark espresso for text.
+   Soft lamp light from above, cream surfaces, gentle brown shadows. Nothing here is computed while moving. */
+:root[data-theme]{--bg:#CEBBA0;--surface:#E9DFD0;--surface2:#E0D3C0;--ink:#3A2C22;--muted:#7A6150;--line:rgba(154,118,94,.30);--line-soft:rgba(154,118,94,.16);--hatch:#D6C6AE;
+  --accent:#9A765E;--accent-ink:#FFF8EF;--accent-soft:rgba(154,118,94,.15);--accent-line:#9A765E;--gold:#9A765E;--gold-soft:rgba(154,118,94,.15);
+  --btn:linear-gradient(135deg,#B3917A 0%,#9A765E 52%,#83614B 100%);--btn-ink:#FFF8EF;--glow:0 12px 24px -14px rgba(120,82,56,.65);
+  --sheen:linear-gradient(180deg,rgba(255,252,246,.55) 0%,rgba(255,252,246,.12) 100%);
+  --ok:#5B7A4C;--ok-soft:rgba(91,122,76,.16);--warn:#A0722A;--warn-soft:rgba(160,114,42,.16);--bad:#A4463A;--bad-soft:rgba(164,70,58,.14);
+  --shadow:0 1px 0 rgba(255,252,246,.7) inset,0 12px 26px -20px rgba(92,62,38,.55);--now:#8E3F2A;--sec:#9A765E;--glowtop:rgba(255,248,236,.5);color-scheme:light}
+html,body{background:#CEBBA0}
+body{background:radial-gradient(95% 48% at 50% -10%,rgba(255,249,238,.62) 0%,rgba(255,249,238,0) 64%) no-repeat,radial-gradient(80% 40% at 100% 108%,rgba(154,118,94,.22) 0%,rgba(154,118,94,0) 62%) no-repeat,#CEBBA0;color:var(--ink)}
+.top h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink)}
+.daynav .label .wk{color:var(--accent)}
+.daynav .label .dt{color:var(--ink)}
+.icon-btn,.daynav>button:not(.label){background:var(--sheen),var(--surface);color:var(--accent);border:1px solid var(--line-soft)}
+.daynav .ghost{background:var(--accent-soft);color:var(--accent);border-color:var(--line)}
+/* surfaces: cream on sand */
+.wd,.card,.pay,.reader,.pbtn,.note,.empty,.chip,.ghost{background:var(--sheen),var(--surface);border-color:var(--line-soft)}
+.wd span{color:var(--muted)}.wd b{color:var(--ink)}.wd.today{border-color:var(--accent)}.wd.today b{color:var(--accent)}
+.wd i:not(:empty){background:var(--accent-soft);color:var(--accent)}
+.wd[aria-pressed="true"] span,.wd[aria-pressed="true"] b{color:var(--btn-ink)}
+.wd[aria-pressed="true"] i:not(:empty){background:rgba(255,248,239,.22);color:var(--btn-ink)}
+.card .time{background:var(--accent-soft);border-color:var(--line);color:var(--accent)}
+.card.wait{border-left-color:var(--accent)}
+.stt th{color:var(--accent)}.stt tbody tr:nth-child(even) td{background:rgba(154,118,94,.06)}.stt tfoot td{background:var(--accent-soft);color:var(--ink)}
+.pay.todaysum b{color:var(--btn-ink)}.pay.todaysum span{color:rgba(255,248,239,.82)}.todaysum div+div{border-left-color:rgba(255,248,239,.25)}
+.links .link,.links a.link,.pbtns .link{background:rgba(154,118,94,.10);border-color:var(--line-soft);color:var(--ink)}
+.seg{background:rgba(154,118,94,.10);border-color:var(--line-soft)}
+.chip{color:var(--muted)}.ghost{color:var(--ink)}
+/* the dock and the round + */
+.tabs{background:var(--sheen),#E9DFD0;border:1px solid var(--line-soft);box-shadow:0 16px 34px -18px rgba(92,62,38,.6),0 1px 0 rgba(255,252,246,.8) inset}
+.tabs button{color:var(--muted)}
+.fab{box-shadow:0 0 0 6px #CEBBA0,0 16px 30px -10px rgba(110,74,48,.7)}
+/* windows */
+.overlay{background:rgba(58,44,34,.42)}
+.sheet{background:linear-gradient(180deg,#F1E8DB 0%,#E9DFD0 70%),#E9DFD0;border-top:1px solid rgba(255,252,246,.8);box-shadow:0 -20px 50px -22px rgba(58,40,24,.6)}
+.sheet h2{color:var(--ink)}
+.field input,.field select,.field textarea,.search{background:rgba(255,252,246,.6);border:1.5px solid var(--line-soft);color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus,.search:focus{background:#FFFCF7;border-color:var(--accent);box-shadow:0 0 0 4px rgba(154,118,94,.16)}
+.pbtn::before{background:var(--accent-soft);color:var(--accent)}
+.pbtn.on{background:linear-gradient(180deg,rgba(154,118,94,.22),rgba(154,118,94,.10)),var(--surface);border-color:var(--accent)}
+/* calendar: deep, rich blocks with cream text */
+#cal .ev{background:linear-gradient(180deg,rgba(255,250,240,.10) 0%,rgba(0,0,0,.08) 100%),var(--ec)!important;color:#FBF4E8;border-left:3px solid rgba(0,0,0,.22);box-shadow:0 6px 14px -10px rgba(58,40,24,.7)}
+#cal .ev b,#cal .ev .fx{color:#FBF4E8}
+#cal .ev .fx{opacity:.82}
+#cal .ev.cancel.cancel.cancel{background:#000!important}
+.nowline{background:var(--now)}
+.cal-head .ch,.cal-foot .fn span{color:var(--ink)}
+/* the opening: the logo on sand, the name in brown; moves only by transform/opacity (smooth even while the phone is busy) */
+#splash{background:#CEBBA0}
+#splash img{width:150px;height:150px;filter:none;animation:spIn .9s cubic-bezier(.2,.8,.2,1) .05s both,spBreath 2.4s ease-in-out 1s infinite}
+#splash .sp-name{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#9A765E;font-size:26px;letter-spacing:.06em}
+#splash .sp-bar{background:rgba(154,118,94,.22)}#splash .sp-bar i{background:#9A765E}
+@keyframes spBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+#splash{transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1),visibility 0s linear .55s}
+html.ready #splash{opacity:0;transform:scale(1.04);visibility:hidden}
+.app{transform:translateY(14px);transition:opacity .55s cubic-bezier(.2,.8,.2,1) .08s,transform .65s cubic-bezier(.2,.8,.2,1) .08s;will-change:opacity,transform}
+html.ready .app{transform:none}
+html.settled .app{will-change:auto}
+html.lite .app{transform:none;transition:opacity .3s linear}
+/* every press: a soft squeeze and a little spring back (transform only — fine on any phone) */
+button,.chip,.wd,.ev,.pbtn,.card .who,a.link,.reader .open{transition:transform .2s cubic-bezier(.34,1.56,.64,1),background-color .2s ease,color .2s ease}
+button:active,.chip:active,.wd:active,.pbtn:active,a.link:active{transform:scale(.95);transition-duration:.08s}
+#cal .ev:active{transform:scale(.97)}
+.tabs button:active{transform:scale(.9)}
+.fab:active{transform:scale(.9)}
+
 </style>
 </head>
 <body>
@@ -1090,6 +1159,8 @@ var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт
 "pasiyent":"пациент",
 "öz pasiyentlərinə edilən satışlardan":"с продаж его пациентам",
 "Bu dövrdə məhsul satılmayıb.":"За этот период товары не продавались.",
+"Rəng":"Цвет",
+"«Rəng» — mütəxəssisin təqvimdəki bloklarının rəngi.":"«Цвет» — цвет блоков специалиста в календаре.",
 "manat":"манат",
 "{n} - {q}, ümumi {m} manat, payı {p} manat":"{n} - {q}, всего {m} манат, доля {p} манат",
 "{n} - {q}, ümumi {m} manat":"{n} - {q}, всего {m} манат",
@@ -2150,7 +2221,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124073226";
+var APP_VERSION="20261124082614";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2343,9 +2414,13 @@ function fitBlocks(){
     /* a line that would show only half (time, who wrote it) is hidden; the name always stays */
     for(var k=el.children.length-1;k>0;k--){var ch=el.children[k];if(ch.offsetTop+ch.offsetHeight>el.clientHeight)ch.style.display="none";else break}}
 }
-var COLORS=["#7b4fd1","#1a73e8","#c43e0c","#c2185b","#00796b","#5f6b1a","#6d4c41","#3949ab"];
+/* 24.11 (owner: «rich colours like in the homes of rich, modern people»): walnut, terracotta, olive, slate, burgundy,
+   deep teal, cognac, plum, sage, charcoal, camel, moss, rust, navy */
+var COLORS=["#6e4b33","#4d5d70","#a35a3f","#722f3b","#2e5e5c","#6b6e3b","#8c5a2e","#5f4458"];
 /* Colours a specialist can be given; all keep white text readable in light and dark mode. */
-var PALETTE=["#7b4fd1","#8e24aa","#3949ab","#1a73e8","#0277bd","#00796b","#2e7d32","#5f6b1a","#9e6a00","#c43e0c","#c62828","#c2185b","#6d4c41","#546e7a"];
+var PALETTE=["#6e4b33","#a35a3f","#8e3f2a","#722f3b","#5f4458","#34435a","#4d5d70","#2e5e5c","#4e5f3a","#6b6e3b","#6f8466","#8c5a2e","#9a7046","#4a4542"];
+/* colours chosen before 24.11 (bright) → their rich match */
+var REMAP={"#7b4fd1":"#5f4458","#8e24aa":"#5f4458","#3949ab":"#34435a","#1a73e8":"#4d5d70","#0277bd":"#4d5d70","#00796b":"#2e5e5c","#2e7d32":"#4e5f3a","#5f6b1a":"#6b6e3b","#9e6a00":"#9a7046","#c43e0c":"#a35a3f","#c62828":"#8e3f2a","#c2185b":"#722f3b","#6d4c41":"#6e4b33","#546e7a":"#4a4542","#d9480f":"#a35a3f","#00897b":"#2e5e5c"};
 function okColor(c){return typeof c==="string"&&/^#[0-9a-fA-F]{6}$/.test(c)}
 function mins(t){var p=String(t).split(":");return (+p[0])*60+(+p[1]||0)}
 function hhmm(m){m=Math.max(0,Math.min(24*60-1,m));return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
@@ -2353,7 +2428,7 @@ function endOf(a){var m=mins(a.time)+(a.dur||90);return m>=24*60?"00:00":hhmm(m)
 /* Two early colours were too light for white text (under 4.5:1); they are drawn a shade darker. */
 var DARKER={"#d9480f":"#c43e0c","#00897b":"#00796b"};
 function rcolor(id){var i=0;for(;i<state.readers.length;i++)if(state.readers[i].id===id)break;
-  var r=state.readers[i],c=r&&okColor(r.color)?r.color:COLORS[i%COLORS.length];return DARKER[c.toLowerCase()]||c}
+  var r=state.readers[i],c=r&&okColor(r.color)?r.color:COLORS[i%COLORS.length];c=DARKER[c.toLowerCase()]||c;return REMAP[c.toLowerCase()]||c}
 /* Design 2.0 (24.11): a calendar block gets its specialist's colour as variables — a soft tint for the block, the full
    colour for its edge, and a dark (day) or light (night) shade of it for the text */
 var evVarC={};
@@ -2896,11 +2971,7 @@ function pushWidget(){
 function cut(t,n){t=t.slice(0,n);var c=t.charCodeAt(t.length-1);return c>=0xD800&&c<=0xDBFF?t.slice(0,-1):t}
 /* The widget's colour (owner 17.11: «white too»): Avtomatik = the phone's own light/dark mode, Ağ, Qara.
    Kept on this phone and handed to the widget with its data ("t"). */
-function wTheme(){var t="auto";try{t=localStorage.getItem("ruqya.wtheme")||"auto"}catch(e){}return t==="light"||t==="dark"?t:"auto"}
-function widgetColorSeg(){
-  return '<div class="seg" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px" role="group" aria-label="'+esc(L("Vidcetin rəngi"))+'">'+
-    [["auto","Avtomatik"],["light","Ağ"],["dark","Qara"]].map(function(x){return '<button data-act="wtheme" data-id="'+x[0]+'" aria-pressed="'+(wTheme()===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>';
-}
+function wTheme(){return "light"}   /* 24.11: one cosy look (the widget draws its sand/brown palette whatever this says) */
 function widgetHelp(){
   if(NATIVE)return "";
   return /RuqyaApp/.test(navigator.userAgent)?"old":/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":"web";
@@ -3238,7 +3309,8 @@ var READY0=Date.now(),readyDone=false,readyGo=null;
 function appReady(){
   if(readyDone||readyGo)return;
   readyGo=function(){if(readyDone)return;readyDone=true;var r=document.documentElement;if(r.className.indexOf("ready")<0)r.className+=" ready";
-    setTimeout(function(){var sp=byId("splash");if(sp&&sp.parentNode)sp.parentNode.removeChild(sp)},1200)};
+    /* 24.11: when the hand-over is over, the app stops being a moving layer and the background work may start */
+    setTimeout(function(){var sp=byId("splash");if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);if(r.className.indexOf("settled")<0)r.className+=" settled";parkSoon()},900)};
   var wait=Math.max(0,2000-(Date.now()-READY0)),fontT=null,go=function(){clearTimeout(fontT);setTimeout(readyGo,wait)};
   try{if(document.fonts&&document.fonts.ready){fontT=setTimeout(go,350);document.fonts.ready.then(go,go);return}}catch(e){}
   go();
@@ -4460,14 +4532,10 @@ function patientsList(){
     var bits=[p.paid+L(" dəfə gəlib")];
     if(p.noshow)bits.push(L("gəlməyib: ")+p.noshow);
     if(p.cancel)bits.push(L("ləğv edib: ")+p.cancel);
-    return '<div class="reader prow">'+avaOf(p.name)+'<button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||L("telefon yoxdur"))+' · '+bits.join(", ")+'</span></button>'+
+    return '<div class="reader prow"><button class="open" data-act="patient" data-id="'+esc(p.key)+'"><b>'+esc(p.name)+'</b><span class="num">'+esc(p.phone||L("telefon yoxdur"))+' · '+bits.join(", ")+'</span></button>'+
       '<button class="ghost" data-act="repeat" data-id="'+esc(p.key)+L('">Yaz</button></div>');
   }).join("")+(total>200?L('<p class="hint">Son 200 pasiyent göstərilir (cəmi ')+total+L('). Başqasını tapmaq üçün adı və ya nömrəni axtarın.</p>'):'');
 }
-/* 24.11 look: a round badge with the person's initials, a colour of his own (the same name → the same colour) */
-function avaOf(name){var n=String(name||"").trim(),w=n.split(/\s+/).filter(Boolean),ini=((w[0]||"?").charAt(0)+(w.length>1?w[w.length-1].charAt(0):"")).toUpperCase(),h=0;
-  for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;
-  return '<span class="ava" data-i="'+esc(ini)+'" style="background:hsl('+h+',42%,46%)" aria-hidden="true"></span>'}
 function patientSheet(){
   var p=patients()[sheet.id];if(!p)return L('<h2>Pasiyent')+CLOSE+L('</h2><p class="hint">Bu pasiyentin qəbulu qalmayıb.</p>');
   /* «Təsdiq» asks about the patient's next session still ahead, if there is one */
@@ -4514,11 +4582,12 @@ function readersMain(){
   if(sec==="spec"){
   if(!rs.length&&auth.loaded)h+='<div class="empty">'+(adm?L("Qəbula başlamaq üçün ilk mütəxəssisi əlavə edin."):L("Təqvimdə hələ mütəxəssis yoxdur. Admin onları «Ayarlar» bölməsində əlavə etdikdən sonra burada görünəcək."))+'</div>';
   rs.forEach(function(r){
-    var ini=esc(String(r.name||"?").trim().charAt(0).toUpperCase());   /* 24.11 look: the specialist's initial in his colour */
-    h+='<div class="reader">'+(!adm?'<span class="sw swi" data-i="'+ini+'" style="background:'+rcolor(r.id)+'"></span>':'<button class="sw swi" data-i="'+ini+'" data-act="color" data-id="'+esc(r.id)+'" style="background:'+rcolor(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'"></button>')+'<div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
-      (adm?'<button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
+    /* 24.11: no coloured circle before the name (owner: «cheap»; only the blocks have colours); an admin changes the
+       colour of the blocks with «Rəng» */
+    h+='<div class="reader"><div style="flex:1"><b>'+esc(r.name)+'</b></div>'+
+      (adm?'<button class="ghost" data-act="color" data-id="'+esc(r.id)+'" aria-label="'+L("Rəngi dəyiş")+'">'+L("Rəng")+'</button><button class="ghost" data-act="edit-reader" data-id="'+esc(r.id)+L('">Dəyiş</button>'):'')+'</div>';
   });
-  if(rs.length&&adm)h+=L('<p class="hint">Mütəxəssisin rəngini dəyişmək üçün adın yanındakı dairəyə toxunun.</p>');
+  if(rs.length&&adm)h+='<p class="hint">'+L("«Rəng» — mütəxəssisin təqvimdəki bloklarının rəngi.")+'</p>';
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
   if(adm)h+='<button class="ghost" data-act="presets">'+L("Yeni qəbul: müddət")+'</button>';
   }
@@ -4553,7 +4622,7 @@ function readersMain(){
   h+=langSeg();
   h+=L('<h3 class="sec">Vidcet</h3>');
   var wh=widgetHelp();
-  if(!wh)h+=widgetColorSeg();
+  /* 24.11: the widgets have the one cosy look too — no colour choice */
   if(!wh)h+='<div class="wbtns" role="group" aria-label="'+esc(L("Vidcet əlavə et"))+'">'+
     [["day","Gündəlik vidcet"],["week","Həftəlik vidcet"],["month","Aylıq vidcet"]].map(function(x){return '<button class="ghost" data-act="widget" data-id="'+x[0]+'">+ '+L(x[1])+'</button>'}).join("")+'</div>'+
     L('<p class="hint">Düyməyə basın — vidcet ana ekrana əlavə olunur. «Gündəlik» — günün qəbulları saat sırası ilə, «Həftəlik» — 7 gün, «Aylıq» — ay təqvimi. ‹ › başqa günə, həftəyə, aya keçir; günə toxunanda tətbiq həmin gündə açılır, «+» yeni qəbul yazır. Məlumat tətbiq açıq olanda yenilənir.</p>');
@@ -4837,6 +4906,7 @@ function parkBuild(s){
 function parkSoon(){
   clearTimeout(parkT);
   parkT=setTimeout(function(){if(sheet||document.hidden||!auth.loaded||!auth.user)return;
+    if(!readyDone||document.documentElement.className.indexOf("settled")<0)return;   /* not while the app is being shown */
     var go=function(){if(sheet)return;try{
       if(ui.tab==="day"&&activeReaders().length&&!pendingMe())parkBuild({type:"appt",id:null});
       else if(ui.tab==="cash"&&state.hasCatalog&&(state.catalog||[]).length)parkBuild({type:"sell",cnt:{}})}catch(e){}};
@@ -5386,7 +5456,6 @@ document.addEventListener("click",function(e){
     flash(pinned?L("Açılan pəncərədə «Əlavə et» basın — vidcet ana ekrana düşəcək."):L("Ana ekranda boş yerə barmağınızı basıb saxlayın → «Vidcetlər» → «Mərkəz» vidcetini seçib ekrana çəkin."));
     return;
   }
-  else if(act==="wtheme"){if(/^(auto|light|dark)$/.test(id)){try{localStorage.setItem("ruqya.wtheme",id)}catch(err){}wLast="";pushWidget()}render();return}
   else if(act==="audit"){if(isAdmin()){openSheet({type:"audit"});loadAudit()}return}
   else if(act==="audit-f"){if(sheet&&sheet.type==="audit"){sheet.only=id;if(id==="del"&&!sheet.dels)loadAuditDels();byId("sheet").innerHTML=auditSheet()}return}
   else if(act==="restore"){
