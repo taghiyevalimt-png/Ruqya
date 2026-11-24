@@ -24,7 +24,7 @@ module.exports = async () => {
       await goDay(p, day); await p.waitForTimeout(250);
       await p.click("#fab"); await p.locator("#f-reader").waitFor();
       check(await p.inputValue("#f-date") === day, "the form starts on the picked day " + day + ": " + await p.inputValue("#f-date"));
-      await p.selectOption("#f-reader", R1); await p.fill("#f-name", name); await p.fill("#f-phone", "050 123 45 67"); await p.fill("#f-time", time);
+      await p.selectOption("#f-reader", R1); await p.fill("#f-name", name); await p.fill("#f-phone", "050 123 45 " + time.slice(0, 2));   /* 24.11: one number twice → «artıq qəbul var» */ await p.fill("#f-time", time);
       await p.click('[data-act="save-appt"]'); await p.waitForTimeout(800);
       check(s.db.appts.some((a) => a.name === name && a.date === day), name + " saved for " + day);
     };

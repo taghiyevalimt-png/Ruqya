@@ -14,7 +14,7 @@ module.exports = async () => {
       const bar = document.getElementById("spbar"), fab = document.getElementById("fab"), main = document.getElementById("main");
       if (!bar || bar.hidden) return null;
       const br = bar.getBoundingClientRect(), fr = fab.getBoundingClientRect(), mr = main.getBoundingClientRect();
-      const btn = [...bar.querySelectorAll("button")].map((b) => ({ t: b.textContent.trim(), on: b.getAttribute("aria-pressed"), x: Math.round(b.getBoundingClientRect().left + bar.scrollLeft), h: Math.round(b.getBoundingClientRect().height), fs: parseFloat(getComputedStyle(b).fontSize) }));
+      const btn = [...bar.querySelectorAll("button:not(.freec)")]   /* 24.11: 🟢 «Kim boşdur» at the end */.map((b) => ({ t: b.textContent.trim(), on: b.getAttribute("aria-pressed"), x: Math.round(b.getBoundingClientRect().left + bar.scrollLeft), h: Math.round(b.getBoundingClientRect().height), fs: parseFloat(getComputedStyle(b).fontSize) }));
       const topNames = [...main.querySelectorAll('[data-act="filter"]')].length;
       return { top: Math.round(br.top), bottom: Math.round(br.bottom), h: Math.round(br.height), fabTop: Math.round(fr.top), mainBottom: Math.round(mr.bottom), rows: new Set(btn.map((b) => Math.round(b.h))).size, btn, topNames, wraps: bar.scrollHeight > bar.clientHeight + 1 };
     });

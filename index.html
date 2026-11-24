@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-RU191I+mI1J9exU1OidIa0aXU6K4AdI50boN2/DiqdQ='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-MEu3oly0l34HVR0UF5dKuS699Jzqf9Db/nW58Nj8Bec='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -807,6 +807,19 @@ main.enter #cal,main.enter>.cal{animation:fadein .3s var(--ease) both}
 .nowline::after{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--now,#d93025);opacity:0;will-change:transform,opacity;animation:nowp 2.4s ease-in-out infinite;pointer-events:none}
 @keyframes nowp{0%{transform:scale(1);opacity:.45}60%,100%{transform:scale(2.2);opacity:0}}
 #toast{border-radius:14px;box-shadow:0 14px 34px -14px rgba(0,0,0,.6)}
+/* 24.11 wave 1: «Geri al» bar, «Kim boşdur» */
+#undo{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,8px);width:max-content;max-width:calc(100% - 24px);display:flex;align-items:center;gap:12px;background:rgba(18,18,18,.96);color:#fff;border:1px solid rgba(201,162,74,.6);border-radius:14px;padding:6px 6px 6px 14px;font-size:14px;z-index:61;box-shadow:0 14px 34px -14px rgba(0,0,0,.6);opacity:0;visibility:hidden;transition:opacity .18s,transform .18s,visibility 0s .18s}
+#undo.on{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .18s,transform .18s}
+#undo button{flex:none;border:0;border-radius:10px;background:#d6b25e;color:#120d05;font:inherit;font-weight:700;padding:8px 12px;min-height:38px;cursor:pointer}
+.cal-foot .corner .freec,#spbar .freec{border:0;background:none;font-size:18px;line-height:1;padding:4px;margin:0 auto;cursor:pointer;min-width:36px;min-height:34px}
+#spbar .freec{flex:none}
+.freel{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.freeb{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:9px 12px;font:inherit;cursor:pointer}
+.freeb>i{flex:none;width:6px;align-self:stretch;border-radius:3px}
+.freeb>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.freeb small{color:var(--muted);font-size:13px}
+.freeb em{flex:none;font-style:normal;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.freeb[disabled]{opacity:.65;cursor:default}
 /* calendar blocks: a gentle light from above */
 #cal .ev{background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%)!important;border-radius:10px}
 #cal .ev.cancel{background-image:none!important}
@@ -1278,7 +1291,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"İstirahət günləri":"Выходные дни","Səbəb":"Причина","Səbəb, məsələn: Məzuniyyət":"Причина, например: Отпуск","İlk gün":"Первый день","Son gün":"Последний день","Bütün mərkəz":"Весь центр","Bu günlərdə təqvim zolaqlı görünür və qəbul yazmaq olmur. Artıq yazılmış qəbullar yerində qalır.":"В эти дни календарь заштрихован и записать нельзя. Уже сделанные записи остаются.","İstirahət günü":"Выходной","Kim boşdur":"Кто свободен","Təqvimdə hələ mütəxəssis yoxdur.":"В календаре пока нет специалистов.","İndi iş vaxtı deyil (08:00–00:00).":"Сейчас нерабочее время (08:00–00:00).","{t}-dək boşdur":"свободен до {t}","Bu gün daha qəbul yoxdur":"Сегодня больше записей нет","{n}, bütün gün":"{n}, весь день","Fasilə: {n}, {t}-dək":"Перерыв: {n}, до {t}","{t}-dək məşğuldur":"занят до {t}","İndi boşdur":"Свободны сейчас","Məşğuldur":"Заняты","Fasilədədir":"На перерыве","Geri al":"Отменить","Qəbul ləğv olundu.":"Запись отменена.","Qəbul silindi.":"Запись удалена.","Satış silindi.":"Продажа удалена.","İstirahət günləri (məzuniyyət, bayram)":"Выходные дни (отпуск, праздник)","{r}: {d} günü artıq {n} seans var (limit gündə {l}). Yenə də yazmaq üçün bir də basın.":"{r}: на {d} уже сеансов: {n} (лимит {l} в день). Чтобы всё равно записать, нажмите ещё раз.","Bu nömrəyə artıq qəbul var: {d}, {t}, {r}{w}. Yenə də yazmaq üçün bir də basın.":"На этот номер уже есть запись: {d}, {t}, {r}{w}. Чтобы всё равно записать, нажмите ещё раз.","yazan":"записал(а)","Gündə ən çox seans":"Максимум сеансов в день","Çox olanda yazarkən xəbərdarlıq çıxır, yenə də yazmaq olar.":"Если больше — при записи появится предупреждение, записать всё равно можно.","Yeni qəbul: müddət, gündəlik limit":"Новая запись: длительность, лимит в день","gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "satış yoxdur":"продаж нет",
@@ -2374,7 +2387,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124181530";
+var APP_VERSION="20261124202655";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -2753,6 +2766,7 @@ function kindSw(on){
   return '<div class="seg kindsw" role="group" aria-label="'+esc(L("Nə yazılır?"))+'"><button type="button" data-act="kind" data-id="appt" aria-pressed="'+(on==="appt")+'">'+L("Qəbul")+'</button><button type="button" data-act="kind" data-id="brk" aria-pressed="'+(on==="brk")+'">'+L("Fasilə")+'</button></div>';
 }
 function breakForm(){
+  if(sheet&&sheet.off&&sheet.b)return offForm();
   var x=sheet,b=x.b||(x.b=brkInit({})),ed=x.edit?brkById(x.edit):null,cb=canBreaks();
   if(x.edit&&!ed)return '<h2>'+L("Fasilə")+CLOSE+'</h2><p class="hint">'+L("Bu fasilə artıq silinib.")+'</p>';
   var rs=cb?activeReaders():activeReaders().filter(function(r){return canBrk([r.id])}),all=!Object.keys(b.rids).length;
@@ -2834,7 +2848,7 @@ function brkCut(ids,up){var o=brkById(ids[0]);if(!o)return;var t={};Object.keys(
 function brkDrop(ids){if(!ids.length)return;state.breaks=state.breaks.filter(function(x){return ids.indexOf(x.id)<0});db(sb.from("breaks").delete().in("id",ids).select("id"))}
 function brkNewRows(R,rids){return (rids.length?rids:[""]).map(function(r){var o={id:uuid()};Object.keys(R).forEach(function(k){o[k]=R[k]});if(r)o.reader_id=r;return o})}
 function brkSave(scope,btn){
-  var x=sheet,b=x.b;brkKeep();
+  var x=sheet,b=x.b;brkKeep();if(x.off)offPrep(b);
   var rids=brkCheck(b,btn);if(rids===undefined||rids===false)return;if(!Array.isArray(rids))return;
   var R=brkRowOf(b);
   /* ST-3 / A5-11: a new break that did not reach the server opens again as it was typed, with the same ids */
@@ -2876,6 +2890,92 @@ function canBrk(rids){if(canBreaks())return true;if(!specMe()||!state.hasBrkDays
 function canAddBrk(){return canBreaks()||(specMe()&&!!state.hasBrkDays&&activeReaders().length>0)}
 /* A break with no specialist is for everyone; otherwise only for that specialist. */
 function brkFor(b,rid){return !b.rid||b.rid===rid}
+/* ===== 24.11 wave 1 (owner): days off, daily limit, «Kim boşdur», undo ===== */
+/* (5)(6) Days off: a specialist's holiday or a day the whole centre is closed — an all-day break from the first to
+   the last day (one row per specialist, or one row for everybody), so the calendar shows it striped and no booking
+   can be written then */
+function offInit(){var b=brkInit({date:today});b.all=true;b.rep="none";b.until=today;b.title="";if(canBreaks())b.rids={};return b}
+function offForm(){
+  var x=sheet,b=x.b,cb=canBreaks(),rs=cb?activeReaders():activeReaders().filter(function(r){return canBrk([r.id])}),all=!Object.keys(b.rids).length;
+  var h='<h2>'+L("İstirahət günləri")+CLOSE+'</h2>';
+  h+='<div class="field"><input id="b-title" class="gtitle" type="text" maxlength="40" autocomplete="off" aria-label="'+esc(L("Səbəb"))+'" placeholder="'+esc(L("Səbəb, məsələn: Məzuniyyət"))+'" value="'+esc(b.title)+'"></div>';
+  h+='<div class="two"><div class="field"><label for="b-date">'+L("İlk gün")+'</label><input id="b-date" type="date" value="'+esc(b.date)+'"></div>'+
+    '<div class="field"><label for="b-until">'+L("Son gün")+'</label><input id="b-until" type="date" value="'+esc(b.until||b.date)+'"></div></div>';
+  if(state.hasBrkReader&&rs.length)h+='<div class="field"><span class="lbl">'+L("Kim üçün?")+'</span><div class="chips" style="flex-wrap:wrap">'+
+    (cb?'<button type="button" class="chip" data-act="b-who" data-id="" aria-pressed="'+all+'">'+L("Bütün mərkəz")+'</button>':'')+
+    rs.map(function(r){return '<button type="button" class="chip" data-act="b-who" data-id="'+esc(r.id)+'" aria-pressed="'+!!b.rids[r.id]+'">'+esc(r.name)+'</button>'}).join("")+'</div></div>';
+  h+='<p class="hint">'+L("Bu günlərdə təqvim zolaqlı görünür və qəbul yazmaq olmur. Artıq yazılmış qəbullar yerində qalır.")+'</p>';
+  return h+'<p class="err" role="alert" id="b-err" hidden></p><div class="btns sticky-save"><button class="primary" data-act="save-break">'+L("Əlavə et")+'</button></div>';
+}
+/* the form's two dates become an all-day break repeated every day up to the last day */
+function offPrep(b){b.all=true;if(!okDate(b.until||""))b.until=b.date;b.rep=b.until===b.date?"none":"day";if(!b.title)b.title=L("İstirahət günü")}
+/* (7) Daily limit per specialist: kept with the new-booking lengths (app_settings «presets» → limit) — a warning,
+   not a ban */
+function readerLimit(rid){var p=presets(),v=p&&p.limit&&p.limit[rid];return +v>0?+v:0}
+function dayCount(rid,date,skip){return state.appts.filter(function(x){return x.readerId===rid&&x.date===date&&!gone(x)&&!x.sold&&x.id!==skip}).length}
+/* (9) The same number already has a booking still ahead (often written by another agent) */
+function dupOf(phone,skip){var c=phoneCore(phone);if(c.length<7)return null;
+  return state.appts.filter(function(x){return x.id!==skip&&!gone(x)&&!x.sold&&!ended(x)&&phoneCore(x.phone)===c}).sort(function(p,q){return (p.date+p.time)<(q.date+q.time)?-1:1})[0]||null}
+function sureBtn(){var sb2=document.querySelector('#sheet [data-act="save-appt"]');if(sb2)sb2.textContent=L("Yenə də yadda saxla")}
+/* (8) «Kim boşdur»: who is free now, who is busy until when, who has a break */
+function freeRows(){
+  var n=nowB(),m=n.m,d=n.d,out=[];
+  activeReaders().forEach(function(r){
+    var mine=state.appts.filter(function(x){return x.readerId===r.id&&x.date===d&&!gone(x)&&!x.sold}).map(function(x){return [mins(x.time),mins(x.time)+(x.dur||90),x,"busy"]}).sort(function(p,q){return p[0]-q[0]});
+    var brs=state.breaks.filter(function(b){return brkFor(b,r.id)&&brkOn(b,d)}).map(function(b){return [mins(b.start),mins(b.end),b,"brk"]});
+    var busy=mine.concat(brs).sort(function(p,q){return p[0]-q[0]});
+    var now=busy.filter(function(s){return s[0]<=m&&m<s[1]})[0];
+    if(now){var e=now[1],moved=true;while(moved){moved=false;busy.forEach(function(s){if(s[0]<=e&&s[1]>e){e=s[1];moved=true}})}
+      out.push({r:r,k:now[3],what:now[2],until:Math.min(e,DAY1)});return}
+    var nx=busy.filter(function(s){return s[0]>m})[0];
+    out.push({r:r,k:"free",until:nx?nx[0]:DAY1,next:nx?nx[2]:null});
+  });
+  return out;
+}
+function freeSheet(){
+  var n=nowB(),rows=freeRows(),st=hhmm(Math.ceil(n.m/5)*5),h='<h2>'+L("Kim boşdur")+' <span class="num" style="font-weight:500;color:var(--muted)">'+esc(hhmm(n.m))+'</span>'+CLOSE+'</h2>';
+  if(!rows.length)return h+'<p class="hint">'+L("Təqvimdə hələ mütəxəssis yoxdur.")+'</p>';
+  var late=n.m<DAY0||n.m>=DAY1-30;
+  if(late)h+='<p class="hint">'+L("İndi iş vaxtı deyil (08:00–00:00).")+'</p>';
+  var grp=function(k,title){var g=rows.filter(function(x){return x.k===k});if(!g.length)return "";
+    return '<h3 class="sec">'+title+' <span class="num">'+g.length+'</span></h3><div class="freel">'+g.map(function(x){
+      var t=k==="free"?st:hhmm(x.until),sub;
+      if(k==="free")sub=x.next?tf(L("{t}-dək boşdur"),{t:hhmm(x.until)}):L("Bu gün daha qəbul yoxdur");
+      else if(k==="brk")sub=brkAll(x.what)?tf(L("{n}, bütün gün"),{n:x.what.title||L("Fasilə")}):tf(L("Fasilə: {n}, {t}-dək"),{n:x.what.title||L("Fasilə"),t:hhmm(x.until)});
+      else sub=tf(L("{t}-dək məşğuldur"),{t:hhmm(x.until)});
+      var can=!late&&(k==="free"||x.until<DAY1-30);
+      return '<button type="button" class="freeb f-'+k+'"'+(can?' data-act="free-go" data-id="'+esc(x.r.id)+'" data-t="'+t+'"':' disabled')+'><i style="background:'+rcolor(x.r.id)+'"></i><span><b>'+esc(x.r.name)+'</b><small>'+esc(sub)+'</small></span>'+(can?'<em>+ '+esc(t)+'</em>':'')+'</button>'}).join("")+'</div>'};
+  return h+grp("free","🟢 "+L("İndi boşdur"))+grp("busy","🔴 "+L("Məşğuldur"))+grp("brk","☕ "+L("Fasilədədir"));
+}
+/* (10) «Geri al» for 5 s. A cancel is saved at once and taken back by restoring the old state; a delete waits 5 s
+   on this phone and only then goes to the server (a deleted row cannot be put back as it was: the database stamps
+   a new row with the time and the person who writes it). A delete that is waiting is kept in localStorage, so it
+   still goes if the app is closed in those 5 seconds. */
+var undoFn=null,undoT=0,pdel={},psend={};
+function pdelSave(){try{var l=Object.keys(pdel).map(function(k){return [pdel[k].t,k]}).concat(Object.keys(psend).filter(function(k){return !pdel[k]}).map(function(k){return [psend[k],k]}));if(l.length)localStorage.setItem("ruqya.pdel",JSON.stringify(l));else localStorage.removeItem("ruqya.pdel")}catch(e){}}
+function pdelLoad(){try{var l=JSON.parse(localStorage.getItem("ruqya.pdel")||"[]");if(Array.isArray(l))l.forEach(function(p){if(p&&(p[0]==="appts"||p[0]==="product_sales")&&p[1]&&!pdel[p[1]])pdel[p[1]]={t:p[0],row:null,timer:0}})}catch(e){}}
+/* kept in localStorage until the server has answered: a request cut off by closing the app is sent again next time */
+function pdelGo(id){var p=pdel[id];if(!p)return;clearTimeout(p.timer);delete pdel[id];
+  if(!sb||!auth.user){pdelSave();return}
+  psend[id]=p.t;pdelSave();
+  db(p.row?sb.from(p.t).delete().eq("id",id).select("id"):sb.from(p.t).delete().eq("id",id),p.row?function(){if(p.t==="appts")upsertBy(state.appts,p.row);else upsertBy(state.products,p.row);render()}:null).then(function(){delete psend[id];pdelSave()})}
+function pdelFlush(){Object.keys(pdel).forEach(pdelGo)}
+function pdelKeep(list){return list.filter(function(x){return !pdel[x.id]})}
+function holdDel(t,row,msg){
+  var list=t==="appts"?state.appts:state.products;
+  if(t==="appts"){state.appts=state.appts.filter(function(x){return x.id!==row.id});if(state.hist)removeBy(state.hist,row.id)}else state.products=state.products.filter(function(x){return x.id!==row.id});
+  if(pdel[row.id])clearTimeout(pdel[row.id].timer);
+  pdel[row.id]={t:t,row:row,timer:setTimeout(function(){pdelGo(row.id)},5000)};pdelSave();
+  undoBar(msg,function(){var p=pdel[row.id];if(!p)return;clearTimeout(p.timer);delete pdel[row.id];pdelSave();
+    if(t==="appts")upsertBy(state.appts,row);else upsertBy(state.products,row);render();redrawCard()});
+}
+function undoBar(msg,fn){
+  var u=byId("undo");if(!u){u=document.createElement("div");u.id="undo";u.setAttribute("role","status");document.body.appendChild(u)}
+  undoFn=fn;u.innerHTML='<span>'+esc(msg)+'</span><button type="button" data-act="undo">↶ '+L("Geri al")+'</button>';u.className="on";
+  var t0=byId("toast");if(t0)t0.className="";
+  clearTimeout(undoT);undoT=setTimeout(undoHide,5000);
+}
+function undoHide(){clearTimeout(undoT);undoFn=null;var u=byId("undo");if(u)u.className=""}
 function mapExp(x){return{id:x.id,date:x.date,title:x.title||"",amount:+x.amount||0,by:x.created_by||""}}
 function mapProd(x){return{id:x.id,date:x.date,amount:+x.amount||0,by:x.created_by||"",names:x.names||"",pid:x.product_id||"",qty:+x.qty>0?+x.qty:1,price:+x.price||0,pat:x.patient_of||""}}
 /* owner 22.11: the admin's list of products (buttons in «Məhsul satışı») */
@@ -2970,12 +3070,13 @@ function refresh(){
     lastFull=Date.now();dirty=false;state.loadedFrom=from;state.hasUpd=!!res[10];state.hasAudit=!!res[11];state.hasColor=!!res[12];state.hasBrkReader=!!res[14];state.hasStatEdits=!!res[15];state.hasConf=!!res[17]||(state.hasConf&&res[17]===null);state.hasPlace=!!res[18]||(state.hasPlace&&res[18]===null);state.hasFollow=!!res[19]||(state.hasFollow&&res[19]===null);state.hasPriv=!!res[16]||(state.hasPriv&&res[16]===null);state.statEdits=(res[15]||[]).map(mapEdit);
     res[1]=uniq(res[1].concat(res[13]||[]));
     state.readers=res[0].map(mapReader);
-    state.appts=res[1].map(mapAppt);
+    state.appts=pdelKeep(res[1].map(mapAppt));
     if(needHist&&res[9]){state.hist=res[9].map(mapLite);state.histLoaded=true}
     state.breaks=(res[5]||[]).map(mapBreak);
     state.hasBreaks=!!res[5];state.hasDur=!!res[7];
     state.hasProducts=!!res[6];
-    state.products=uniq(res[6]||[]).map(mapProd);
+    state.products=pdelKeep(uniq(res[6]||[]).map(mapProd));
+    Object.keys(pdel).forEach(function(k){if(!pdel[k].timer)pdelGo(k)});   /* a delete left waiting when the app was closed */
     state.v2=!!(res[2]&&res[3]&&res[4])||(state.v2&&!res[4]);
     state.services=(res[2]||[]).map(function(x){return{id:x.id,name:svcName(x.name)}});
     state.expenses=uniq(res[3]||[]).map(mapExp);
@@ -3245,8 +3346,9 @@ function dropDraft(){try{localStorage.removeItem(DK)}catch(e){}}
 /* The phone may close the app while it is in the background (e.g. the user went to WhatsApp): the typing of an open
    booking form is kept as a draft each time the app goes to the background (B-05). */
 function keepTyping(){try{if(sheet&&sheet.type==="appt"&&!sheet.saved&&auth.user&&formTouched())keepDraft(sheet,formVals())}catch(e){}}
-document.addEventListener("visibilitychange",function(){if(document.hidden)keepTyping()});
-window.addEventListener("pagehide",keepTyping);
+document.addEventListener("visibilitychange",function(){if(document.hidden){keepTyping();pdelFlush()}});
+window.addEventListener("pagehide",function(){keepTyping();pdelFlush()});
+pdelLoad();
 /* Closing a booking form (× or the phone's "back") with something typed in it keeps the typing. */
 function formTouched(){
   if(!sheet||!byId("f-name"))return false;
@@ -3284,6 +3386,7 @@ function unsaved(){
 function onChange(pl){
   var t=pl.table,del=pl.eventType==="DELETE",row=del?pl.old:pl.new;
   if(!row||!row.id){clearTimeout(rtTimer);rtTimer=setTimeout(refresh,500);return}
+  if(!del&&pdel[row.id])return;   /* deleted here, waiting for «Geri al»: not put back by the server's echo */
   if(t==="appts"){if(del){removeBy(state.appts,row.id);removeBy(state.hist||[],row.id)}else upsertBy(state.appts,mapAppt(row))}
   else if(t==="expenses"){if(del)removeBy(state.expenses,row.id);else upsertBy(state.expenses,mapExp(row))}
   else if(t==="product_sales"){if(del)removeBy(state.products,row.id);else upsertBy(state.products,mapProd(row))}
@@ -3766,7 +3869,7 @@ function gridMain(){
   h+='</div>';
   /* «Bütün gün» (owner 18.11): the names at the bottom, each under its column, all in one letter size, a line in the
      specialist's colour; the Təqvim / Siyahı switch on the left. A tap shows that specialist only (again: everyone). */
-  h+='<div class="cal-foot"><div class="corner"></div>'+
+  h+='<div class="cal-foot"><div class="corner">'+(ui.date===today?'<button type="button" class="freec" data-act="free" aria-label="'+esc(L("Kim boşdur"))+'" title="'+esc(L("Kim boşdur"))+'">🟢</button>':'')+'</div>'+
     rs.map(function(r){var on=ui.sel.indexOf(r.id)>=0;return '<button type="button" class="fn" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'" aria-label="'+esc(r.name)+'"><span>'+esc(r.name)+'</span><i style="background:'+rcolor(r.id)+'"></i></button>'}).join("")+'</div>';
   h+='</div></div>';
   return h;
@@ -3826,7 +3929,7 @@ function spBar(show){
   if(!show){if(!el.hidden){el.hidden=true;el.innerHTML=""}return}
   var x=el.scrollLeft,pick=ui.sel.length>0;
   el.innerHTML='<button type="button" class="all" data-act="filter" data-id="all" aria-pressed="'+!pick+'">'+L("Hamısı")+'</button>'+
-    activeReaders().map(function(r){var on=pick&&ui.sel.indexOf(r.id)>=0;return '<button type="button" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'">'+esc(r.name)+'</button>'}).join("");
+    activeReaders().map(function(r){var on=pick&&ui.sel.indexOf(r.id)>=0;return '<button type="button" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'">'+esc(r.name)+'</button>'}).join("")+(ui.date===today?'<button type="button" class="freec" data-act="free" aria-label="'+esc(L("Kim boşdur"))+'" title="'+esc(L("Kim boşdur"))+'">🟢</button>':'');
   el.hidden=false;el.scrollLeft=x;
 }
 function dayMain(){
@@ -4489,12 +4592,15 @@ function psRow(kind,key,label,ps){ps=ps||[];var d=ps[0],ds=DURS.concat(d&&DURS.i
   return '<div class="pctrow psrow"><span>'+esc(label)+'</span><span class="pin"><select data-ps="'+kind+'" data-k="'+esc(key)+'" data-f="d" aria-label="'+esc(label)+': '+L("Müddət")+'"><option value="">—</option>'+
     ds.map(function(x){return '<option value="'+x+'"'+(x===d?" selected":"")+'>'+durName(x)+'</option>'}).join("")+'</select></span></div>'}
 function presetsSheet(){
-  var h='<h2>'+L("Yeni qəbul: müddət")+CLOSE+'</h2>';
+  var h='<h2>'+L("Yeni qəbul: müddət, gündəlik limit")+CLOSE+'</h2>';
   if(!state.hasPresets)return h+'<p class="hint">'+L("Bunun üçün bazanı son vəziyyətə gətirin: sql/ qovluğundakı yeniləmələr (qayda: DISASTER_RECOVERY.md).")+'</p>';
   h+='<p class="hint">'+L("Yeni qəbul açılanda bu müddət özü seçilir; qəbulda hər dəfə dəyişmək olar. Boş — 1 saat 30 dəq. Köhnə qəbullar dəyişmir.")+'</p>';
   h+='<h3 class="sec">'+L("Xidmət seçiləndə")+'</h3><div class="pctlist">'+SERVICES.map(function(sv){return psRow("svc",sv,L(sv),svcPreset(sv))}).join("")+'</div>';
   var rs=activeReaders();
   if(rs.length)h+='<h3 class="sec">'+L("Mütəxəssis seçiləndə")+'</h3><div class="pctlist">'+rs.map(function(r){return psRow("reader",r.id,r.name,readerPreset(r.id))}).join("")+'</div>';
+  /* 24.11: more sessions than this in one day → a warning when the booking is written (it can still be written) */
+  if(rs.length)h+='<h3 class="sec">'+L("Gündə ən çox seans")+'</h3><p class="hint">'+L("Çox olanda yazarkən xəbərdarlıq çıxır, yenə də yazmaq olar.")+'</p><div class="pctlist">'+rs.map(function(r){var v=readerLimit(r.id),o='<option value="">—</option>';for(var i=1;i<=20;i++)o+='<option value="'+i+'"'+(i===v?" selected":"")+'>'+i+'</option>';
+    return '<div class="pctrow psrow"><span>'+esc(r.name)+'</span><span class="pin"><select data-lim="'+esc(r.id)+'" aria-label="'+esc(r.name+": "+L("Gündə ən çox seans"))+'">'+o+'</select></span></div>'}).join("")+'</div>';
   return h+'<p class="err" role="alert" id="ps-err" hidden></p><div class="btns"><button class="primary" data-act="ps-save">'+L("Yadda saxla")+'</button></div>';
 }
 function catalogSheet(){
@@ -4905,7 +5011,7 @@ function readersMain(){
   });
   if(rs.length&&adm)h+='<p class="hint">'+L("«Rəng» — mütəxəssisin təqvimdəki bloklarının rəngi.")+'</p>';
   if(adm)h+=L('<button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button>');
-  if(adm)h+='<button class="ghost" data-act="presets">'+L("Yeni qəbul: müddət")+'</button>';
+  if(adm)h+='<button class="ghost" data-act="presets">'+L("Yeni qəbul: müddət, gündəlik limit")+'</button>';
   }
   if(sec==="breaks"&&state.hasBreaks){
     var cb=canBreaks();
@@ -4913,6 +5019,7 @@ function readersMain(){
     if(!state.breaks.length)h+=L('<p class="hint">Fasilə yoxdur. Məsələn, namaz vaxtını əlavə edin ki, o saata qəbul yazılmasın.</p>');
     else h+=breakGroups(cb);
     if(canAddBrk())h+=L('<button class="ghost" data-act="new-break">Fasilə əlavə et</button>');
+    if(canAddBrk()&&state.hasBrkDays)h+='<button class="ghost" data-act="new-off">🌴 '+L("İstirahət günləri (məzuniyyət, bayram)")+'</button>';
   }
   if(sec==="staff"&&isOwner()){
     h+=L('<h3 class="sec">İşçi hesabları</h3>')+
@@ -5208,7 +5315,7 @@ function fontsSoon(){
   if(fontsAsked)return;fontsAsked=true;
   setTimeout(function(){try{if(document.fonts&&document.fonts.load){document.fonts.load('400 16px "Golos Text"',"Ж");document.fonts.load('600 16px "Onest"',"Ж")}}catch(e){}},1500);
 }
-function sheetFns(){return {month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}}
+function sheetFns(){return {month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,free:freeSheet,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}}
 /* 24.11 «windows without the wait» (owner: smooth even on the oldest Android). Building a window — its markup, styles
    and layout — took about 0.1 s on a slow phone before it could start to move. The two windows opened most often
    (a new booking, «Məhsul satışı») are now built ahead, while the phone is idle, in a second, invisible overlay
@@ -5422,6 +5529,14 @@ function saveAppt(){
   if(clash)return fail("f-err",r.name+L(" bu vaxt məşğuldur: ")+clash.name+", "+clash.time+"–"+endOf(clash)+L(". Başqa vaxt seçin."));
   var br=status==="cancel"||!moved||(a&&gone(a))?null:inBreak(time,dur,rid,date);
   if(br)return fail("f-err",L("Bu vaxt fasilədir: ")+br.title+" "+br.start+"–"+br.end+".");
+  /* 24.11 (owner): warnings that a second tap on the same button passes — the daily limit of the specialist and a
+     number that already has a booking ahead */
+  var me0=sheet.id||sheet.nid,lim=status==="cancel"||(a&&!(o.readerId!==rid||o.date!==date))?0:readerLimit(rid);
+  if(lim){var dc=dayCount(rid,date,me0),lk="l"+rid+date;if(dc>=lim&&sheet.okLim!==lk){sheet.okLim=lk;sureBtn();
+    return fail("f-err",tf(L("{r}: {d} günü artıq {n} seans var (limit gündə {l}). Yenə də yazmaq üçün bir də basın."),{r:r.name,d:fmtDay(date),n:dc,l:lim}))}}
+  var dup=a?null:dupOf(phone,me0),dk="p"+phoneCore(phone);
+  if(dup&&sheet.okDup!==dk){sheet.okDup=dk;sureBtn();var dr=reader(dup.readerId),dw=dup.by===(auth.user&&auth.user.id)?L("siz"):(state.staff[dup.by]||"");
+    return fail("f-err",tf(L("Bu nömrəyə artıq qəbul var: {d}, {t}, {r}{w}. Yenə də yazmaq üçün bir də basın."),{d:fmtDay(dup.date),t:dup.time,r:dr?dr.name:"",w:dw?" ("+L("yazan")+": "+dw+")":""}))}
   /* If the server does not take it, the screen goes back to what the server has and the typing is kept as a draft. */
   var dsh={id:sheet.id,orig:sheet.orig,nid:sheet.nid},dv=formVals(),before=a?JSON.parse(JSON.stringify(a)):null;dropDraft();
   var undo=function(newId){return function(){
@@ -5508,6 +5623,7 @@ document.addEventListener("click",function(e){
   if(b.dataset.sure&&Date.now()-(+b.dataset.sureT||0)<600)return;
   var act=b.dataset.act,id=b.dataset.id;
   if(act==="reload"){location.reload();return}
+  if(act==="undo"){var uf=undoFn;undoHide();if(uf)uf();return}
   if(act==="colw"){setColW(+id);render();return}
   if(act==="hourh"){setHour(id==="fit"?"fit":+id);render();return}
   if(act==="ntf-rem"){ntfSave(+id||null,ntf.nw);return}
@@ -5653,6 +5769,8 @@ document.addEventListener("click",function(e){
     [].forEach.call(document.querySelectorAll('#sheet [data-ps]'),function(e){var k=e.getAttribute("data-k"),v=e.value.trim();if(v)nv[e.getAttribute("data-ps")][k]=[+v,null]});
     /* specialists not in the list now (archived) keep what they had */
     var oldP=presets();if(oldP&&oldP.reader)Object.keys(oldP.reader).forEach(function(k){if(!reader(k)||reader(k).archived)nv.reader[k]=oldP.reader[k]});
+    nv.limit={};[].forEach.call(document.querySelectorAll('#sheet [data-lim]'),function(e){var v=+e.value;if(v>0)nv.limit[e.getAttribute("data-lim")]=v});
+    if(oldP&&oldP.limit)Object.keys(oldP.limit).forEach(function(k){if(!reader(k)||reader(k).archived)nv.limit[k]=oldP.limit[k]});
     var prevP=state.presets;state.presets=nv;cacheSoon();
     db(sb.from("app_settings").upsert({id:"presets",value:nv},{onConflict:"id"}).select("id"),function(){state.presets=prevP;render()});
     closeSheet();toast(L("Yadda saxlanıldı"));render();return;
@@ -5736,7 +5854,7 @@ document.addEventListener("click",function(e){
   }
   else if(act==="del-prod"){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Bir də basın");return}
-    state.products=state.products.filter(function(x){return x.id!==id});db(sb.from("product_sales").delete().eq("id",id).select("id"));
+    var dpr=state.products.filter(function(x){return x.id===id})[0];if(dpr)holdDel("product_sales",dpr,L("Satış silindi."));
     if(sheet&&sheet.type==="selledit")closeSheet();
   }
   else if(act==="new-expense"){openSheet({type:"expense",id:null});return}
@@ -5887,7 +6005,7 @@ document.addEventListener("click",function(e){
   else if(act==="del-row"){
     if(!canEdit(appt(id)))return;
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Tamamilə silinəcək — bir də basın");return}
-    state.appts=state.appts.filter(function(x){return x.id!==id});db(sb.from("appts").delete().eq("id",id).select("id"));
+    holdDel("appts",appt(id),L("Qəbul silindi."));
     if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
   }
   else if(act==="contacts-all"){
@@ -5897,6 +6015,9 @@ document.addEventListener("click",function(e){
   }
   else if(act==="contact-one"){importContacts(contactRows([id]));return}
   else if(act==="new-break"){if(canAddBrk())openSheet({type:"brk",b:brkInit({date:today})});return}
+  else if(act==="new-off"){if(canAddBrk()&&state.hasBrkDays)openSheet({type:"brk",off:1,b:offInit()});return}
+  else if(act==="free"){openSheet({type:"free"});return}
+  else if(act==="free-go"){var fr=reader(id),ft=b.getAttribute("data-t");if(fr&&/^\d{2}:\d{2}$/.test(ft||""))afterPaint(function(){openSheet({type:"appt",id:null,pre:{reader:id,date:today,time:ft}})});return}
   else if(act==="b-day"){if(!sheet||!sheet.b)return;brkKeep();if(sheet.b.days[id])delete sheet.b.days[id];else sheet.b.days[id]=1;brkRedraw();return}
   else if(act==="b-all"){if(!sheet||!sheet.b)return;brkKeep();sheet.b.all=!sheet.b.all;brkRedraw();return}
   else if(act==="b-who"){
@@ -5968,7 +6089,8 @@ document.addEventListener("click",function(e){
     var cprev=ca.status;ca.status="cancel";if(wasSold){ca.sold=false;ca.fol=0}
     db(sb.from("appts").update(wasSold?{status:"cancel",follow:0}:{status:"cancel"}).eq("id",ca.id).select("id"),function(){ca.status=cprev;if(wasSold){ca.sold=true;ca.fol=fol0}render()});
     if(sheet&&sheet.type==="view")closeSheet();else if(sheet&&sheet.type==="patient")setTimeout(redrawCard,0);
-    toast(L("Qəbul ləğv olundu. «Pasiyentlər → Ləğv olunanlar» bölməsində görünür."));
+    undoBar(L("Qəbul ləğv olundu."),function(){if(ca.status!=="cancel")return;ca.status=cprev;var bk2={status:cprev};if(wasSold){ca.sold=true;ca.fol=fol0;bk2.follow=fol0}
+      db(sb.from("appts").update(bk2).eq("id",ca.id).select("id"),function(){ca.status="cancel";if(wasSold){ca.sold=false;ca.fol=0}render()});render();redrawCard()});
   }
   else if(act==="anon"){
     if(!isAdmin()||!sb)return;
@@ -5989,7 +6111,7 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();var da0=act==="del-appt"&&appt(sheet.id);b.textContent=da0?L("Tamamilə silinəcək — bir də basın"):L("Bir də basın");return}
     var sid=sheet.id;
     if(act==="del-appt"&&!canEdit(appt(sid)))return;
-    if(act==="del-appt"){state.appts=state.appts.filter(function(x){return x.id!==sid});db(sb.from("appts").delete().eq("id",sid).select("id"))}
+    if(act==="del-appt"){var dra=appt(sid);if(dra)holdDel("appts",dra,L("Qəbul silindi."))}
     else{
       /* Never erased: old sessions and the cash history of this specialist must stay. */
       if(!isAdmin())return;
@@ -6012,7 +6134,7 @@ document.addEventListener("click",function(e){
       try{localStorage.removeItem(SB_TOKEN)}catch(err){}signedOut()};
     /* 23.11 (found in the sign-in log): «Çıxış» signs out THIS device only — the library's default signed the account
        out on every phone and computer (an admin checking an employee's account on his own phone signed the employee out) */
-    dropDraft();ntfOff();sb.auth.signOut({scope:"local"}).then(lo,function(){lo({error:1})});return;
+    dropDraft();ntfOff();pdelFlush();sb.auth.signOut({scope:"local"}).then(lo,function(){lo({error:1})});return;
   }
   else return;
   render();

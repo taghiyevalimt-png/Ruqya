@@ -15,7 +15,7 @@ module.exports = async () => {
     check(s.db.appts.length === 1, "double tap did not delete");
     await p.waitForTimeout(700);
     await p.click('[data-act="del-appt"]');
-    await p.waitForTimeout(800);
+    await p.waitForTimeout(5800);   /* 24.11: the delete goes after the 5 s of «Geri al» */
     check(s.db.appts.length === 0, "a deliberate second press deletes");
     const f = await p.evaluate(() => document.fonts.check('600 16px "Golos Text"'));
     check(f, "Golos Text loaded from vendor/fonts");
