@@ -2,7 +2,7 @@
 // it must count as written on the 23rd, today — that is when he really wrote it; especially in «Bu gün»».
 // The agent opens tomorrow (and a day next week) in the calendar, writes bookings there; Statistika → «Bu gün»:
 // «Kim neçə seans yazıb» and «Yazdı» grow by them today; the sessions of today («Seans») do not.
-const { open, check, AGENT, seed, R1, bakuToday } = require("../lib");
+const { open, check, AGENT, seed, R1, bakuToday, goDay } = require("../lib");
 module.exports = async () => {
   const db = seed(); db.appts = [];
   const s = await open(AGENT, { db });
@@ -20,9 +20,8 @@ module.exports = async () => {
     const before = await today();
     const write = async (day, name, time) => {
       await p.click('#tabs [data-tab="day"]');
-      // pick the day on top first (the strip, or › day by day)
-      for (let i = 0; i < 10 && !(await p.locator('[data-act="goto"][data-d="' + day + '"]').count()); i++) { await p.click('[data-act="shift"][data-n="1"]'); await p.waitForTimeout(250); }
-      await p.click('[data-act="goto"][data-d="' + day + '"]'); await p.waitForTimeout(250);
+      // pick the day on top first (› day by day; the week strip is gone since 24.11)
+      await goDay(p, day); await p.waitForTimeout(250);
       await p.click("#fab"); await p.locator("#f-reader").waitFor();
       check(await p.inputValue("#f-date") === day, "the form starts on the picked day " + day + ": " + await p.inputValue("#f-date"));
       await p.selectOption("#f-reader", R1); await p.fill("#f-name", name); await p.fill("#f-phone", "050 123 45 67"); await p.fill("#f-time", time);

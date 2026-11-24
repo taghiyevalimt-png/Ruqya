@@ -1,7 +1,7 @@
 // Owner 18.11: in the new booking window, choosing Masaj, Hicama or Kombo → 1 hour; the specialist İlkin → 1 h 30 min.
 // It stays editable. Only for a new booking (changing the service of an existing booking does not touch its length).
 // Since 23.11 (late evening) there is no price in the form at all (99-1123-no-price.js).
-const { open, check, AGENT, seed, uuid, bakuToday, R1, R2 } = require("../lib");
+const { open, check, AGENT, seed, uuid, bakuToday, R1, R2, goDay } = require("../lib");
 module.exports = async () => {
   const db = seed(), now = new Date().toISOString();
   db.appts = [{ id: uuid(), reader_id: R1, date: bakuToday(1), time: "10:00", duration: 90, name: "Köhnə", phone: "050 9", price: 130, share: 0, status: "wait", note: "", settled: false, service: "Ruqya", confirmed: false, place: "ofis", follow: 0, created_by: AGENT, created_at: now, updated_at: now }];
@@ -25,7 +25,7 @@ module.exports = async () => {
     check(row && row.price === 0 && row.duration === 120 && row.reader_id === R2 && row.service === "Kombo", "what was typed is saved: " + JSON.stringify(row && [row.price, row.duration, row.service]));
     // a new booking opened from İlkin's column starts with 150 ₼
     await p.click('[data-act="view"][data-id="grid"]').catch(() => {}); await p.waitForTimeout(300);
-    await p.click('[data-act="goto"][data-d="' + bakuToday(1) + '"]').catch(() => {}); await p.waitForTimeout(400);   // tomorrow: İlkin's column is empty
+    await goDay(p, bakuToday(1)); await p.waitForTimeout(400);   // tomorrow: İlkin's column is empty
     await p.evaluate(() => { document.getElementById("cal").scrollTop = 0; });
     const col = await p.evaluate(() => { const c = document.querySelectorAll("#cal .col")[1], r = c.getBoundingClientRect(), hour = parseFloat(getComputedStyle(c).backgroundSize.split(" ")[1]); return { x: r.left + r.width / 2, y: r.top + hour * 1.5 }; });
     await p.mouse.click(col.x, col.y); await p.locator("#f-reader").waitFor({ timeout: 5000 }).catch(() => {});
@@ -34,9 +34,8 @@ module.exports = async () => {
       await p.click('[data-act="close"]').catch(() => {}); await p.waitForTimeout(300); }
     // an existing booking: changing the service leaves price and length
     await p.click('[data-act="view"][data-id="list"]'); await p.waitForTimeout(300);
-    // tomorrow: on a Sunday it is in the next week's strip, so step one day forward when it is not shown (T6-01)
-    if (await p.locator('[data-act="goto"][data-d="' + bakuToday(1) + '"]').count()) await p.click('[data-act="goto"][data-d="' + bakuToday(1) + '"]');
-    else await p.click('[data-act="shift"][data-n="1"]');
+    // tomorrow (T6-01); since 24.11 by ‹ › (no week strip)
+    await goDay(p, bakuToday(1));
     await p.waitForTimeout(400);
     // audit 6 (T6-01): the seeded booking by its id, with every specialist shown — since 22.11 the list follows the
     // specialist chosen in the calendar, so «the first in the list» was the new İlkin booking (120/120 = its own values)

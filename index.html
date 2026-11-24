@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qAJ9MAN62toXb5KSRZV+oGOPGNpBLiK3Uti7tFb6YU0=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-DLaL30Ydz8YdlFJrKxl6ancuIroeimVXTzSQddyt8/w='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qAJ9MAN62toXb5KSRZV+oGOPGNpBLiK3Uti7tFb6YU0=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-+k3DOrzM1hl6LX9h3t017m7NuHed4dNA8NWkPaz0MdI='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#CEBBA0">
 <script>
@@ -1110,6 +1110,31 @@ button:active,.chip:active,.wd:active,.pbtn:active,a.link:active{transform:scale
 .tabs button:active{transform:scale(.9)}
 .fab:active{transform:scale(.9)}
 
+
+/* owner 24.11: calendar head — no week strip; Təqvim / Siyahı on the right of the date, big enough for a thumb */
+.daynav.withsw{gap:6px}
+.daynav.withsw>.icon-btn{width:38px;height:38px;flex:none}
+.daynav.withsw .label .dt{font-size:27px}
+.daynav.withsw .dlab{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.daynav.withsw .dlab .label{flex:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.daynav.withsw .dsub{display:flex;align-items:center;gap:8px;min-height:22px;margin-top:2px}
+.daynav.withsw .dsub small{font-size:12.5px;font-weight:600;color:var(--muted)}
+.daynav.withsw .tdy{border:1px solid var(--line);background:var(--surface);color:var(--accent);font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;line-height:18px}
+.vsw2{flex:none;display:flex;flex-direction:column;gap:3px;padding:3px;border-radius:16px;background:var(--surface2);border:1px solid var(--line-soft)}
+.vsw2 button{min-width:80px;min-height:33px;padding:0 10px;border:0;border-radius:12px;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:700;letter-spacing:-.01em}
+.vsw2 button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);box-shadow:0 2px 6px rgba(90,60,40,.25)}
+html.lite .vsw2 button[aria-pressed="true"]{box-shadow:none}
+@media (max-width:370px){.vsw2 button{min-width:74px;font-size:13px;padding:0 8px}.daynav.withsw .label .dt{font-size:25px}}
+/* names band: its own solid strip — blocks never show through it */
+#cal .cal-foot{background:#E9DFD0;height:44px;box-shadow:0 -2px 8px rgba(90,60,40,.10)}
+#cal .cal-foot .corner{background:#E9DFD0}
+/* narrow tall block: the name only, top to bottom */
+#cal .ev.vnm{padding:4px 2px 4px 3px;align-items:center}
+#cal .ev.vnm .fx,#cal .ev.nnm .fx{display:none!important}
+#cal .ev.nnm b{overflow-wrap:normal;word-break:normal;-webkit-hyphens:none;hyphens:none}
+#cal .ev.nnm b i.ok{display:block;font-size:9px;line-height:1.1;margin:0 0 1px}
+#cal .ev.vnm b{-webkit-writing-mode:vertical-rl;writing-mode:vertical-rl;display:block;margin:0 auto;white-space:normal;overflow-wrap:normal;word-break:keep-all;line-height:1.1;letter-spacing:.01em;overflow:hidden;-webkit-line-clamp:unset}
+#cal .ev .okv{display:block;flex:none;font-style:normal;font-size:9px;line-height:12px;height:12px;margin:0 0 1px;text-align:center;letter-spacing:-1.5px;white-space:nowrap;overflow:hidden;width:100%}
 </style>
 </head>
 <body>
@@ -2207,7 +2232,7 @@ if(RUD)(function(){
   var tl={day:"Записи",stats:"Статистика",cash:"Касса",patients:"Пациенты",readers:"Настройки"};
   var bs=document.querySelectorAll("#tabs button");
   for(var i=0;i<bs.length;i++){var t=tl[bs[i].getAttribute("data-tab")],n=bs[i].lastChild;if(t&&n&&n.nodeType===3)n.nodeValue=t}
-  var f=document.getElementById("fab");if(f)f.textContent="+ Записать";
+  var f=document.getElementById("fab"),ft=f&&f.querySelector(".fabt");if(ft)ft.textContent="+ Записать";if(f)f.setAttribute("aria-label","Записать");   /* 24.11: only the hidden label — the round button keeps its «+» */
   var nv=document.getElementById("tabs");if(nv)nv.setAttribute("aria-label","Разделы");
   var mn=document.getElementById("main");if(mn)mn.setAttribute("aria-label","Содержимое");
 })();
@@ -2221,7 +2246,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124100838";
+var APP_VERSION="20261124115009";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3410,7 +3435,7 @@ function renderScreen(){
   var cal=byId("cal"),keep=cal?{t:cal.scrollTop,l:cal.scrollLeft,d:cal.dataset.d}:null;
   var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0&&!pendingMe();
   main.classList.toggle("gridmode",grid);
-  if(ui.tab==="day"){top.innerHTML=dayTop();main.innerHTML=banner+(grid?gridMain():dayMain())}
+  if(ui.tab==="day"){top.innerHTML=dayTop();fitNav(top);main.innerHTML=banner+(grid?gridMain():dayMain())}
   else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();main.innerHTML=banner+statsMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();main.innerHTML=banner+cashMain()}
   else{top.innerHTML='<h1>'+L("Ayarlar")+'</h1>'+setSecBar();main.innerHTML=banner+readersMain()}
@@ -3427,12 +3452,14 @@ function renderScreen(){
   }
 }
 
-function navHtml(title,small){
-  return '<div class="daynav">'+
-    '<button class="icon-btn" data-act="shift" data-n="-1" aria-label="'+L("Geri")+'">‹</button>'+
+function navHtml(title,small,sw){
+  return '<div class="daynav'+(sw?' withsw':'')+'">'+
+    '<button class="icon-btn" data-act="shift" data-n="-1" aria-label="'+L("Geri")+'">‹</button>'+(sw?'<div class="dlab">':'')+
     /* Design 3.0: «ÇƏRŞƏNBƏ AXŞAMI» small and gold above, «24 noyabr» big (the text stays «Çərşənbə axşamı, 24 noyabr») */
-    L('<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">')+(function(){var k=String(title).indexOf(", ");return k>0?'<span class="wk">'+esc(title.slice(0,k))+'<span class="cm">, </span></span><span class="dt">'+esc(title.slice(k+2))+'</span>':esc(title)})()+'<span class="cv">▼</span><small>'+esc(small)+'</small></button>'+
-    (ui.date===today?'':L('<button class="ghost" data-act="today">Bu gün</button>'))+
+    L('<button class="label" data-act="month" aria-label="Ayı aç, tarix seç">').replace('class="label"','class="label"'+(sw?' data-d="'+ui.date+'"':''))+(function(){var k=String(title).indexOf(", ");return k>0?'<span class="wk">'+esc(title.slice(0,k))+'<span class="cm">, </span></span><span class="dt">'+esc(title.slice(k+2))+'</span>':esc(title)})()+'<span class="cv">▼</span>'+(sw?'':'<small>'+esc(small)+'</small>')+'</button>'+
+    /* owner 24.11: on the calendar the Təqvim / Siyahı switch stands on the right of the date; «Bu gün» goes under the date */
+    (sw?'<div class="dsub"><small>'+esc(small)+'</small>'+(ui.date===today?'':('<button type="button" class="tdy" data-act="today">'+L("Bu gün")+'</button>'))+'</div></div>'+sw:
+    (ui.date===today?'':L('<button class="ghost" data-act="today">Bu gün</button>')))+
     L('<button class="icon-btn" data-act="shift" data-n="1" aria-label="İrəli">›</button></div>');
 }
 
@@ -3440,14 +3467,14 @@ function navHtml(title,small){
    Tapping names picks several specialists at once (gold = shown); tapping a gold one removes it; «Hamısı» shows everyone.
    With nobody picked the pills stand over their own columns; with a choice they line up in one row and a thin
    row of names stands over the columns that are shown. */
+/* a long date («30 sentyabr») next to the switch: the big date gets a little smaller until it fits (never cut) */
+function fitNav(top){var lb=top.querySelector(".withsw .label"),dt=lb&&lb.querySelector(".dt");if(!dt)return;
+  var f=parseFloat(getComputedStyle(dt).fontSize)||27;while(f>17&&lb.scrollWidth>lb.clientWidth+1){f-=1;dt.style.fontSize=f+"px"}}
+function viewSw(){var g=ui.view==="grid";
+  return '<div class="vsw2" role="group" aria-label="'+L("Görünüş")+'"><button type="button" data-act="view" data-id="grid" aria-pressed="'+g+'">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="'+!g+'">'+L("Siyahı")+'</button></div>'}
+/* owner 24.11: the row of week days with their numbers is gone — the calendar gets that height; days: ‹ › and the month */
 function dayTop(){
-  var h=navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):parse(ui.date).getFullYear()+L("-ci il"));
-  var mon=addDays(ui.date,-((parse(ui.date).getDay()+6)%7)),cnt={};
-  state.appts.forEach(function(a){if(a.status!=="cancel"&&shown(a.readerId))cnt[a.date]=(cnt[a.date]||0)+1});
-  h+='<div class="week">';
-  for(var i=0;i<7;i++){var d=addDays(mon,i);
-    h+='<button class="wd'+(d===today?" today":"")+'" data-act="goto" data-d="'+d+'" aria-pressed="'+(d===ui.date)+'" aria-label="'+fmtDay(d)+'"><span>'+WD[i]+'</span><b class="num">'+parse(d).getDate()+'</b><i class="num">'+(cnt[d]||"")+'</i></button>'}
-  return h+'</div>';
+  return navHtml(fmtDay(ui.date,"w"),ui.date===today?L("Bu gün"):parse(ui.date).getFullYear()+L("-ci il"),viewSw());
 }
 
 /* «Bütün gün»: measure the drawn calendar; if 09:00–22:00 does not fill it exactly, set the hour height and draw again
@@ -3495,10 +3522,33 @@ function fitFit(evs){
     if(fv&&(!fh2||fv>=fh2))plan.push([e,b,"vert",fv]);else if(fh2)plan.push([e,b,"",fh2]);else plan.push([e,b,"brk",6.5])}
   for(var j=0;j<plan.length;j++){var x=plan[j];x[0].classList.remove("vert");x[0].classList.remove("brk");if(x[2])x[0].classList.add(x[2]);x[1].style.fontSize=x[3]+"px"}
 }
+/* owner 24.11: a narrow but long block (bookings side by side in one column) shows only the patient's name, written
+   from top to bottom, as big as fits; phone and agent are left out. Measured once with a canvas (no layout loop). */
+function fitVert(evs){
+  var c=[],i,e,b;
+  for(i=0;i<evs.length;i++){e=evs[i];b=e.querySelector("b");if(!b)continue;
+    if(/\b(vnm|nnm)\b/.test(e.className)){e.classList.remove("vnm");e.classList.remove("nnm");b.style.height="";b.style.fontSize="";
+      var ov=e.querySelector(".okv");if(ov){ov.className="ok";b.insertBefore(ov,b.firstChild)}}
+    var W=e.clientWidth,H=e.clientHeight;if(!(W>0&&W<60))continue;
+    /* narrow and short: the name only, across, smaller instead of broken in the middle (fitNames shrinks it) */
+    if(H>=W*1.25&&H>=44)c.push([e,b,H-9,W-8]);else e.classList.add("nnm")}
+  /* measured in the page with the block's own font: a line runs down the block, the lines stand side by side;
+     the biggest size from 8 to 15 px where the whole name fits (no word broken), found in 4 tries */
+  var fits=function(x,f){x[1].style.fontSize=f+"px";return x[1].scrollHeight<=x[2]+1&&x[1].offsetWidth<=x[3]&&x[1].scrollWidth<=x[3]+1};
+  for(i=0;i<c.length;i++){var x=c[i],ok=x[1].querySelector("i.ok");
+    /* the ✅ stand across on their own small row at the top, so the whole length is the name's */
+    if(ok){ok.className="okv";x[0].insertBefore(ok,x[1]);x[2]-=13}
+    x[0].classList.add("vnm");x[1].style.height=x[2]+"px";
+    var lo=16,hi=30;   /* half pixels: 8 … 15 */
+    if(!fits(x,lo/2)){x[0].classList.remove("vnm");x[1].style.height="";x[1].style.fontSize="";x[0].classList.add("nnm");if(ok){ok.className="ok";x[1].insertBefore(ok,x[1].firstChild)}continue}   /* not even 8 px: across */
+    while(lo<hi){var m=Math.ceil((lo+hi)/2);if(fits(x,m/2))lo=m;else hi=m-1}
+    x[1].style.fontSize=lo/2+"px"}
+}
 function fitNames(){
   if(FIT&&byId("cal")){fitFit(document.querySelectorAll("#cal .ev"));return}
   var evs=document.querySelectorAll("#cal .ev"),over=[];
-  for(var i=0;i<evs.length;i++){var b=evs[i].firstElementChild;if(b&&(b.scrollHeight>evs[i].clientHeight-2||b.scrollWidth>b.clientWidth+1))over.push(b)}
+  fitVert(evs);
+  for(var i=0;i<evs.length;i++){var b=evs[i].firstElementChild;if(evs[i].className.indexOf("vnm")>=0)continue;if(b&&(b.scrollHeight>evs[i].clientHeight-2||b.scrollWidth>b.clientWidth+1))over.push(b)}
   /* «Bütün gün»: a short block first moves its ✅ line into the top corner, so the name keeps its size */
   over=over.filter(function(b){var ok=b.querySelector("i.ok");if(ok&&b.closest(".fit")&&!b.classList.contains("okc")){b.classList.add("okc");return b.scrollHeight>b.parentNode.clientHeight-2||b.scrollWidth>b.clientWidth+1}return true});
   var f0=over.map(function(b){return parseFloat(getComputedStyle(b).fontSize)||11});
@@ -3509,7 +3559,7 @@ function fitNames(){
     for(var g=2;g>=1;g--){var last=null;for(var k=ch.length-1;k>0;k--)if(ch[k].style.display!=="none"){last=ch[k];break}
       if(!last||(last.offsetTop+last.offsetHeight<=H&&last.scrollWidth<=last.clientWidth+1))break;
       for(var q=1;q<ch.length;q++)if(+ch[q].getAttribute("data-g")===g){ch[q].style.display="none";n++}}return n};
-  for(var j=0;j<evs.length;j++){var e=evs[j];
+  for(var j=0;j<evs.length;j++){var e=evs[j];if(e.className.indexOf("vnm")>=0)continue;
     /* «Bütün gün»: when the ✅ line pushes the phone or the agent out, the ✅ goes into the corner instead */
     if(trim(e)&&e.closest(".fit")){var b2=e.firstElementChild;if(b2&&b2.querySelector("i.ok")&&!b2.classList.contains("okc")){b2.classList.add("okc");trim(e)}}}
 }
@@ -3554,7 +3604,7 @@ function gridMain(){
   h+='</div>';
   /* «Bütün gün» (owner 18.11): the names at the bottom, each under its column, all in one letter size, a line in the
      specialist's colour; the Təqvim / Siyahı switch on the left. A tap shows that specialist only (again: everyone). */
-  h+='<div class="cal-foot"><div class="corner vsw"><button type="button" data-act="view" data-id="grid" aria-pressed="true">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="false">'+L("Siyahı")+'</button></div>'+
+  h+='<div class="cal-foot"><div class="corner"></div>'+
     rs.map(function(r){var on=ui.sel.indexOf(r.id)>=0;return '<button type="button" class="fn" data-act="filter" data-id="'+esc(r.id)+'" aria-pressed="'+on+'" aria-label="'+esc(r.name)+'"><span>'+esc(r.name)+'</span><i style="background:'+rcolor(r.id)+'"></i></button>'}).join("")+'</div>';
   h+='</div></div>';
   return h;
@@ -3628,7 +3678,6 @@ function dayMain(){
     return auth.loaded?L('<div class="empty"><p>Əvvəlcə mütəxəssis əlavə edin.</p><button class="primary" data-act="new-reader">Mütəxəssis əlavə et</button></div>'):"";
   }
   var hrs=activeReaders().filter(function(r){return shown(r.id)});if(!hrs.length)hrs=activeReaders();
-  h+='<div class="lsw"><div class="viewsw"><button type="button" data-act="view" data-id="grid" aria-pressed="false">'+L("Təqvim")+'</button><button type="button" data-act="view" data-id="list" aria-pressed="true">'+L("Siyahı")+'</button></div></div>';
   var list=state.appts.filter(function(a){return a.date===ui.date&&shown(a.readerId)})
     .sort(function(a,b){return a.time<b.time?-1:a.time>b.time?1:0});
   /* owner 22.11: the day's breaks in the list too (one row for a break shared by several specialists); a tap opens it */

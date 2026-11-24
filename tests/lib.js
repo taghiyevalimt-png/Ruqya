@@ -230,4 +230,16 @@ async function open(who = OWNER, opt = {}) {
 
 function check(cond, msg) { if (!cond) throw new Error("FAIL: " + msg); }
 
-module.exports = { open, seed, check, bakuToday, uuid, OWNER, AGENT, SPEC, R1, R2, tokenKey, session };
+// The calendar's day without the removed week strip (owner 24.11): ‹ › until the header shows day d (YYYY-MM-DD).
+async function goDay(p, d) {
+  for (let i = 0; i < 120; i++) {
+    const cur = await p.evaluate(() => { const l = document.querySelector("#top .daynav.withsw .label"); return l ? l.getAttribute("data-d") : null; });
+    if (!cur) { await p.click('#tabs [data-tab="day"]'); await p.waitForTimeout(250); continue; }
+    if (cur === d) return;
+    await p.click('#top [data-act="shift"][data-n="' + (d > cur ? 1 : -1) + '"]'); await p.waitForTimeout(80);
+  }
+  throw new Error("goDay: could not reach " + d);
+}
+// Monday … Sunday of the week of day d (as the old strip showed them)
+function weekOf(d) { const t = new Date(d + "T12:00:00Z"), m = new Date(t.getTime() - ((t.getUTCDay() + 6) % 7) * 864e5); return [...Array(7)].map((_, i) => new Date(m.getTime() + i * 864e5).toISOString().slice(0, 10)); }
+module.exports = { goDay, weekOf, open, seed, check, bakuToday, uuid, OWNER, AGENT, SPEC, R1, R2, tokenKey, session };

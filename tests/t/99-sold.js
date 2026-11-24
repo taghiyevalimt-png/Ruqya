@@ -1,7 +1,7 @@
 // Owner 17.11: «Satış edildi» on a cancelled booking makes it a successful one in the app — own colour on the
 // calendar (not black), counted as «Uğurlu» in statistics, gone from «Ləğv olunanlar»; pressing it again makes it
 // cancelled again. The database keeps status cancel + follow 3 (access rules and the free slot unchanged).
-const { open, check, AGENT, seed, uuid, bakuToday, R1 } = require("../lib");
+const { open, check, AGENT, seed, uuid, bakuToday, R1, goDay } = require("../lib");
 module.exports = async () => {
   const db = seed(), now = new Date().toISOString();
   // a session that has ended: today 08:00–08:30 Baku when the test runs after 09:00 there, otherwise yesterday
@@ -11,7 +11,7 @@ module.exports = async () => {
   try {
     const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3300);
     const row = () => s.db.appts.find((a) => a.name === "Satış Pasiyent");
-    const block = async () => { await p.click('#tabs [data-tab="day"]'); for (let i = 0; i < 8; i++) { if (await p.locator('[data-act="goto"][data-d="' + day + '"]').count()) { await p.click('[data-act="goto"][data-d="' + day + '"]'); break; } const first = await p.locator('[data-act="goto"]').first().getAttribute("data-d"); await p.click('[data-act="shift"][data-n="' + (day < first ? -1 : 1) + '"]');   /* 24.11: the direction from the shown strip, not from today (the strip may show another week) */ await p.waitForTimeout(250); } await p.waitForTimeout(400);   /* T6-02: before 09:00 on a Monday «yesterday» is in last week's strip */   /* T6-02: before 09:00 on a Monday «yesterday» is in last week's strip */ return p.evaluate(() => { const e = [...document.querySelectorAll("#cal .ev")].find((x) => /Satış Pasiyent/.test(x.textContent)); return e ? { cls: e.className, bg: getComputedStyle(e).backgroundColor } : null; }); };
+    const block = async () => { await p.click('#tabs [data-tab="day"]'); await goDay(p, day);   /* 24.11 (later): no week strip any more — ‹ › to the day */ await p.waitForTimeout(400);   /* T6-02: before 09:00 on a Monday «yesterday» is in last week's strip */   /* T6-02: before 09:00 on a Monday «yesterday» is in last week's strip */ return p.evaluate(() => { const e = [...document.querySelectorAll("#cal .ev")].find((x) => /Satış Pasiyent/.test(x.textContent)); return e ? { cls: e.className, bg: getComputedStyle(e).backgroundColor } : null; }); };
     const stats = async () => { await p.click('#tabs [data-tab="stats"]'); await p.click('#top [data-act="st-sec"][data-id="' + (day === bakuToday(0) ? "today" : "day") + '"]').catch(() => {}); await p.waitForTimeout(400); return (await p.textContent("#main")).replace(/\s+/g, " "); };
     const inCancelled = async () => { await p.click('#tabs [data-tab="patients"]'); await p.click('[data-act="p-sec"][data-id="cancel"]'); await p.waitForTimeout(400); return /Satış Pasiyent/.test(await p.textContent("#plist")); };
     const b0 = await block(), st0 = await stats();

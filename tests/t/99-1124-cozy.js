@@ -23,7 +23,7 @@ module.exports = async () => {
       const blue = ev.find((e) => /Mavi/.test(e.textContent)), cancel = ev.find((e) => e.classList.contains("cancel"));
       return { theme: document.documentElement.getAttribute("data-theme"), bg: cs(document.body).backgroundColor, accent: cs(document.querySelector(".daynav .label .wk")).color,
         blueVar: blue && blue.style.getPropertyValue("--ec"), blueText: blue && cs(blue).color, cancel: cancel && cs(cancel).backgroundColor,
-        press: cs(document.querySelector(".wd")).transitionProperty + " / " + cs(document.querySelector(".wd")).transitionTimingFunction };
+        press: cs(document.querySelector(".vsw2 button")).transitionProperty + " / " + cs(document.querySelector(".vsw2 button")).transitionTimingFunction /* 24.11: the week chips are gone */ };
     });
     check(m.theme === "light" && m.bg === "rgb(206, 187, 160)", "one cosy look, even with the phone dark and an old «dark» choice: " + JSON.stringify([m.theme, m.bg]));
     check(m.accent === "rgb(154, 118, 94)", "the brown #9A765E instead of gold: " + m.accent);

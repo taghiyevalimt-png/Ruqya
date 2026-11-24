@@ -2,13 +2,13 @@
 // specialists can change breaks too (their own column only; shared ones stay with admins and agents).
 // Owner 22.11: the form is Google-Calendar-like — a date (one day by default) and «Təkrar» (repeat); a tap on a
 // break in the calendar opens it.
-const { open, check, OWNER, SPEC, seed, R1, R2 } = require("../lib");
+const { open, check, OWNER, SPEC, seed, R1, R2, goDay, weekOf, bakuToday } = require("../lib");
 module.exports = async () => {
   const db = seed(); db.appts = [];
   let s = await open(OWNER, { db, viewport: { width: 390, height: 844 } });
-  const strip = async (p) => p.evaluate(() => [...document.querySelectorAll('[data-act="goto"]')].map((b) => b.dataset.d));
+  const strip = async () => weekOf(bakuToday());   /* 24.11: the strip is gone; the same 7 days, Monday first */
   const wd = (d) => (new Date(d + "T12:00:00Z").getUTCDay() + 6) % 7 + 1;
-  const breaksIn = async (p, d) => { await p.click('#tabs [data-tab="day"]'); await p.click('[data-act="goto"][data-d="' + d + '"]'); await p.waitForTimeout(400);
+  const breaksIn = async (p, d) => { await p.click('#tabs [data-tab="day"]'); await goDay(p, d); await p.waitForTimeout(400);
     return p.evaluate(() => [...document.querySelectorAll("#cal .col")].map((c, i) => [...c.querySelectorAll(".brk")].map((b) => i + ":" + b.textContent)).flat()); };
   let days;
   try {
@@ -46,7 +46,7 @@ module.exports = async () => {
     check(th.includes("1:Görüş") && !th.includes("0:Görüş") && !th.some((x) => /Namaz/.test(x)), "Thursday: Görüş only in İlkin's column: " + th);
     check(wd(days[0]) === 1, "the first strip day is a Monday");
     // a tap in the break time: on Monday the break opens (like Google Calendar), on Tuesday the new booking opens
-    const tapAt = async (d, hm) => { await p.click('[data-act="goto"][data-d="' + d + '"]'); await p.waitForTimeout(400);
+    const tapAt = async (d, hm) => { await goDay(p, d); await p.waitForTimeout(400);
       await p.evaluate((hm) => { const c = document.querySelector("#cal .col"), hour = parseFloat(getComputedStyle(c).backgroundSize.split(" ")[1]), r = c.getBoundingClientRect(), m = +hm.slice(0, 2) * 60 + +hm.slice(3);
         const y = r.top + (m - 8 * 60) * hour / 60; document.getElementById("cal").scrollTop += y - 300; return null; }, hm);
       const pos = await p.evaluate((hm) => { const c = document.querySelector("#cal .col"), hour = parseFloat(getComputedStyle(c).backgroundSize.split(" ")[1]), r = c.getBoundingClientRect(), m = +hm.slice(0, 2) * 60 + +hm.slice(3);

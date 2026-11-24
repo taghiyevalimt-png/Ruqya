@@ -19,7 +19,7 @@ module.exports = async () => {
         const names = foot ? [...foot.querySelectorAll('[data-act="filter"]')].map((b) => { const r = b.getBoundingClientRect(), sp = b.querySelector("span") || b; return { t: b.textContent.trim(), cx: (r.left + r.right) / 2, fs: getComputedStyle(sp).fontSize, cut: sp.scrollWidth > sp.clientWidth + 1 }; }) : [];
         const lab = [...cal.querySelectorAll(".axis span")].find((x) => x.textContent.trim() === "22:00").getBoundingClientRect();
         const fr = foot && foot.getBoundingClientRect();
-        return { topNames: cal.querySelectorAll(".cal-head .ch").length, foot: fr && { top: Math.round(fr.top), bottom: Math.round(fr.bottom), h: Math.round(fr.height) }, calBottom: Math.round(cr.bottom), cols: cols.map((c) => [(c.left + c.right) / 2, c.left, c.right]), names, l22: Math.round(lab.bottom), vsw: !!(foot && foot.querySelector('[data-act="view"]')) };
+        return { topNames: cal.querySelectorAll(".cal-head .ch").length, foot: fr && { top: Math.round(fr.top), bottom: Math.round(fr.bottom), h: Math.round(fr.height) }, calBottom: Math.round(cr.bottom), cols: cols.map((c) => [(c.left + c.right) / 2, c.left, c.right]), names, l22: Math.round(lab.bottom), vsw: !(foot && foot.querySelector('[data-act="view"]')) && !!document.querySelector('#top .vsw2 [data-act="view"]') };
       });
       const g = await geo();
       check(g.topNames === 0, w + ": no specialists' names over the calendar: " + g.topNames);
@@ -29,7 +29,7 @@ module.exports = async () => {
       check(g.names.length === 10, w + ": 10 names: " + g.names.length);
       check(new Set(g.names.map((n) => n.fs)).size === 1, w + ": all names in the same letter size: " + [...new Set(g.names.map((n) => n.fs))].join(","));
       check(g.names.every((n, i) => Math.abs(n.cx - g.cols[i][0]) <= 2), w + ": each name under its own column");
-      check(g.vsw, w + ": the Təqvim / Siyahı switch is in the row too");
+      check(g.vsw, w + ": the Təqvim / Siyahı switch is at the top right of the date, not in the names row (owner 24.11)");
       check(g.names.filter((n, i) => g.cols[i][2] <= 390).every((n) => !n.cut), w + ": the names on screen are not cut: " + JSON.stringify(g.names.filter((n) => n.cut).map((n) => n.t)));
       // sideways: names stay under their columns
       await p.evaluate(() => { const c = document.getElementById("cal"); c.scrollLeft = c.scrollWidth; }); await p.waitForTimeout(200);
