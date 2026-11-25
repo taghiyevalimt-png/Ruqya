@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Qssrvprck8KLa5E5aikA8TvLdmdPV6MTlhNL9rdmwr8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-8gC0aqFFWHXO5/h/vql4+p5YW5y8rmbeStLg3zYebQg='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -194,7 +194,8 @@ button.wa:disabled{opacity:.4}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
 
 .pay{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px}
-.pay .head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.pay .head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 12px;align-items:baseline}
+.pay .head>b{flex:1 1 7em;min-width:7em}   /* 25.11: a long button label never squeezes the title into one letter a line */
 .pay .head b{font-family:var(--font-display);font-size:17px;overflow-wrap:anywhere}
 .pay .head span{font-size:13px;color:var(--muted);flex:none}
 .bar{height:10px;border-radius:999px;background:var(--line);overflow:hidden;display:flex}
@@ -732,7 +733,7 @@ button.ch .x{font-size:10px;opacity:.8}
 .card.compact .tags{padding-left:56px;gap:6px}
 .card.compact .tags .tag{font-size:11px;padding:2px 7px}
 .card.compact .memo{margin:0 0 0 56px;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px}
-#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:calc(100% - 32px);background:rgba(18,18,18,.94);color:#fff;border:1px solid rgba(201,162,74,.55);border-radius:12px;padding:9px 14px;font-size:14px;z-index:60;pointer-events:none;opacity:0;transition:opacity .2s}#toast.on{opacity:1}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);background:rgba(18,18,18,.94);color:#fff;border:1px solid rgba(201,162,74,.55);border-radius:12px;padding:9px 14px;font-size:14px;z-index:60;pointer-events:none;opacity:0;transition:opacity .2s}#toast.on{opacity:1}
 .ev{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .ev.held{filter:brightness(1.25);box-shadow:0 0 0 2px var(--accent),0 6px 18px -6px rgba(0,0,0,.6)}
 .stsec{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible}
@@ -2413,7 +2414,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261125023653";
+var APP_VERSION="20261125052930";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -4899,6 +4900,9 @@ function sessCopyText(box,title,period){var tb=box.querySelector("table");if(!tb
   if(tb.tFoot&&tb.tFoot.rows.length){out.push("");out.push(line(tb.tFoot.rows[0]))}
   return out.join("\n").trim()}
 /* a copy button that copies the table it stands over, exactly as shown (owner 22.11: screen, copy and Excel the same) */
+/* 25.11: after copying the button says only «Kopyalandı ✓» (keeps its width); the WhatsApp hint goes to the toast */
+function copied(b){var old=b.getAttribute("data-old")||b.textContent;b.setAttribute("data-old",old);b.textContent=L("Kopyalandı ✓");toast(L("Kopyalandı. WhatsApp-a yapışdırın."));
+  clearTimeout(b._ct);b._ct=setTimeout(function(){if(b.isConnected){b.textContent=old;b.removeAttribute("data-old")}},2500)}
 function copyB(){return '<button class="ghost copyb" data-act="st-copy-t">⧉ '+L("Kopyala")+'</button>'}
 /* owner 22.11: «Məhsul» is ONE table — sellers as rows, every product as a column (pieces), then pieces, sum and the
    seller's part; the last row is the sum of every product. Everybody but an admin sees only his own row. */
@@ -5947,13 +5951,12 @@ document.addEventListener("click",function(e){
     var dst=b.closest(".pay").getAttribute("data-st")||"";
     if(/^sess-/.test(dst)){var sct=sessCopyText(b.closest(".pay"),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(sct)ctx=sct}
     if(/^prod-/.test(dst)){var pct=prodCopyText(dst.slice(5),st0&&low(ht0).indexOf(low(st0))<0?st0+" — "+ht0:ht0,lab?[].map.call(lab.childNodes,function(n){return n.textContent.trim()}).filter(Boolean)[0]||"":"");if(pct)ctx=pct}
-    copyText(ctx,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},function(){openSheet({type:"stcopy",text:ctx})});
+    copyText(ctx,function(){copied(b)},function(){openSheet({type:"stcopy",text:ctx})});
     return;
   }
   else if(act==="st-copy"){
     var stt=statCopyText(id,b.dataset.p);if(!stt)return;
-    copyText(stt,function(){var old=b.textContent;b.textContent=L("Kopyalandı ✓ — WhatsApp-a yapışdırın");
-        setTimeout(function(){if(b.isConnected)b.textContent=old},3000)},
+    copyText(stt,function(){copied(b)},
       function(){openSheet({type:"stcopy",text:stt})});
     return;
   }
