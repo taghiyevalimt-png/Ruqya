@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-qi/Wf8czwAal4/SKmDZxqhtACpVjEymTXkb5/791VzA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-2exJNBWbiujjfVWDV07s1SxYzRphWG8I6EErpGFIsmA='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -56,6 +56,12 @@ try{applyTheme()}catch(e){}
 <script>(function(){var l=document.getElementById("gf");function on(){l.media="all"}if(l.sheet)on();else l.addEventListener("load",on)})();</script>
 <noscript><link href="vendor/fonts/fonts.css" rel="stylesheet"></noscript>
 <style>
+/* 25.11: the bundled Golos Text draws «ğ» and «Ğ» without the breve («Uğurlu» read «Ugurlu», «LƏĞV» «LƏGV»); these two
+   letters come from Onest (same family name, declared after vendor/fonts/fonts.css, so they win for U+011E-011F; only
+   the weights Golos has — a wider range would win the weight match and hide the rest of Golos at bold) */
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400;font-display:swap;src:url(vendor/fonts/f06.woff2) format('woff2');unicode-range:U+011E-011F}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:500;font-display:swap;src:url(vendor/fonts/f06.woff2) format('woff2');unicode-range:U+011E-011F}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:600;font-display:swap;src:url(vendor/fonts/f06.woff2) format('woff2');unicode-range:U+011E-011F}
 /* Layout idea: one-screen phone app. Fixed header and bottom tabs, a scrolling
    list between them, forms slide up as a bottom sheet. */
 :root{
@@ -2414,7 +2420,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261125064536";
+var APP_VERSION="20261125073710";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -4323,9 +4329,9 @@ function newRet(r){
 }
 /* (2) Statistika → «PDF» (admins). Owner 25.11: the PDF is the Excel file on paper — the same sheets (Bu həftə, Keçən
    həftə, Bu ay, Keçən ay, Məhsul), the same tables, made the same way (xlsFetch → xlsSheets) and made again while the
-   window is open when the statistics change. Each sheet starts a new landscape A4 page and is fitted to the page
-   width (Excel's own print setting); the pages are drawn on a canvas with the app's fonts (ə, ş, ğ… right) and put
-   into the PDF as pictures — no library is needed. */
+   window is open when the statistics change. Each sheet starts a new A4 page and its tables are fitted to the page
+   width; the pages are drawn on a canvas with the app's fonts (ə, ş, ğ… right) and put into the PDF as pictures — no
+   library is needed. Owner 25.11 (2): in the look of the first PDF (portrait, see pdfFromSheets). */
 function pdfMerges(sh){var m={},cov={};
   sh.merges.forEach(function(ref){var p=/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/.exec(ref);if(!p)return;
     var ci=function(s){var n=0;for(var i=0;i<s.length;i++)n=n*26+s.charCodeAt(i)-64;return n-1};
@@ -4334,49 +4340,95 @@ function pdfMerges(sh){var m={},cov={};
   return {m:m,cov:cov};
 }
 function pdfFromSheets(sheets){
-  var W0=1754,H0=1240,M=64,pages=[],cv,g,y=0,FONT='"Golos Text",system-ui,sans-serif';
-  var FILL={1:"#e8e4da",5:"#f5f3ee",6:"#f5f3ee",9:"#f5f3ee"},BOLD={1:1,5:1,6:1,7:1,9:1,12:1},LINE="#b7b2a6";
-  var newPage=function(){cv=document.createElement("canvas");cv.width=W0;cv.height=H0;g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,W0,H0);g.textBaseline="middle";y=M;pages.push(cv)};
+  /* owner 25.11 (2): the look of the first PDF (portrait A4, «Mərkəz» and the period on top with the gold stripe, tiles,
+     light table heads, thin row lines, «Hazırlanıb …» and the page number below) — the content is the Excel file's,
+     sheet by sheet, table by table. Header, footer and tiles are drawn with g.__deco (the tiles repeat the total row). */
+  var W0=1240,H0=1754,M=90,pages=[],cv,g,y=0,FONT='"Golos Text",system-ui,sans-serif',HEAD='"Onest","Golos Text",system-ui,sans-serif',INK="#1d1913",right="";
+  var deco=function(f){g.__deco=1;try{f()}finally{g.__deco=0}};
+  var foot=function(){deco(function(){g.font="400 20px "+FONT;g.fillStyle="#9a9086";g.textAlign="left";g.textBaseline="alphabetic";g.fillText(tf(L("Hazırlanıb: {d}"),{d:fmtDay(today,"y")+" "+hhmm(bk().m)}),M,H0-50);g.textAlign="right";g.fillText(String(pages.length),W0-M,H0-50);g.textAlign="left"})};
+  var newPage=function(){if(pages.length)foot();cv=document.createElement("canvas");cv.width=W0;cv.height=H0;g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,W0,H0);
+    g.fillStyle="#b8862b";g.fillRect(0,0,W0,14);
+    deco(function(){g.fillStyle=INK;g.font="700 40px "+HEAD;g.textBaseline="alphabetic";g.textAlign="left";g.fillText("Mərkəz",M,88);g.font="400 24px "+FONT;g.fillStyle="#6b6257";g.textAlign="right";g.fillText(right,W0-M,88);g.textAlign="left"});
+    g.fillStyle="#e6dccb";g.fillRect(M,110,W0-2*M,2);y=160;pages.push(cv)};
+  var BOT=H0-100,room=function(){return BOT-y};
   var fit=function(t,w){t=String(t);if(g.measureText(t).width<=w)return t;while(t.length>1&&g.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"};
-  var wrap=function(t,w){var words=String(t).split(" "),out=[],cur="";words.forEach(function(x){var n=cur?cur+" "+x:x;if(cur&&g.measureText(n).width>w){out.push(cur);cur=x}else cur=n});if(cur)out.push(cur);return out};
+  var wrap=function(t,w){var ws=String(t).split(" "),out=[],cur="";ws.forEach(function(x){var n=cur?cur+" "+x:x;if(cur&&g.measureText(n).width>w){out.push(cur);cur=x}else cur=n});if(cur)out.push(cur);return out};
   var txt=function(x){return x.v==null?"":(typeof x.v==="number"&&(x.s===8||x.s===9))?money(x.v):String(x.v)};
+  var put=function(t,x,yy,w,al){/* one cell's text; a cut one ends with … */g.textAlign=al;g.fillText(fit(t,w),al==="right"?x+w:al==="center"?x+w/2:x,yy);g.textAlign="left"};
   sheets.forEach(function(sh){
-    newPage();
-    var cols=[];for(var i=0;i<sh.w.length;i++)cols.push(i===0?Math.max(22,sh.w[i]||9):Math.max(11,sh.w[i]||9));
-    var U=cols.reduce(function(a,b){return a+b},0)||1,k=Math.min((W0-2*M)/U,13),fs=Math.max(15,Math.min(26,k*1.9)),rh=Math.round(fs*1.9),xs=[M];
-    cols.forEach(function(c,i){xs[i+1]=xs[i]+c*k});
-    var MG=pdfMerges(sh),font=function(s){g.font=(s===11?"italic 400 ":BOLD[s]?"700 ":"400 ")+(s===7?Math.round(fs*1.35):fs)+"px "+FONT};
-    /* the height of each row: a title row is taller, a header that wraps grows */
-    var N=sh.rows.length,hts=[],ri;
-    for(ri=0;ri<N;ri++){var r0=sh.rows[ri],h0=r0&&r0[0]&&r0[0].s===7?Math.round(rh*1.35):r0&&r0.length?rh:Math.round(rh*.6);   /* the empty row between tables, as in Excel */
-      (r0||[]).forEach(function(x,ci){if(!x||x.s!==1||x.v==null||MG.cov[ri+":"+ci])return;font(1);var mm=MG.m[ri+":"+ci],w=xs[ci+(mm?mm.cs:1)]-xs[ci]-12,n=wrap(txt(x),w).length;
-        if(!(mm&&mm.rs>1))h0=Math.max(h0,n*fs*1.2+12)});hts.push(h0)}
-    /* a table is kept on one page with its title (a new page before it when it does not fit what is left) */
-    var keep=[];for(ri=0;ri<N;ri++){var rr=sh.rows[ri];if(!(rr&&rr[0]&&(rr[0].s===7||rr[0].s===12)))continue;var e=ri,hh=0;
-      while(e<N&&sh.rows[e]&&sh.rows[e].length){hh+=hts[e];e++}if(sh.rows[ri][0].s===7)while(e<N&&!(sh.rows[e]&&sh.rows[e].length))e++;   /* a sheet title goes with the first table */
-      if(sh.rows[ri][0].s===7){var e2=e;while(e2<N&&sh.rows[e2]&&sh.rows[e2].length){hh+=hts[e2];e2++}}keep[ri]=hh}
-    for(ri=0;ri<N;ri++){
-      var r=sh.rows[ri],need=hts[ri];(r||[]).forEach(function(x,ci){var mm=MG.m[ri+":"+ci];if(mm&&mm.rs>1)for(var a=1;a<mm.rs;a++)need+=hts[ri+a]||rh});
-      if(keep[ri]&&keep[ri]<=H0-2*M-30&&y>M&&y+keep[ri]>H0-M-30)newPage();
-      else if(y+need>H0-M-30)newPage();
-      if(!r||!r.length){if(y>M)y+=hts[ri];continue}
-      r.forEach(function(x,ci){
-        if(!x||MG.cov[ri+":"+ci])return;
-        var mm=MG.m[ri+":"+ci]||{cs:1,rs:1},x0=xs[ci],w=xs[Math.min(ci+mm.cs,xs.length-1)]-x0,h=0;for(var a=0;a<mm.rs;a++)h+=hts[ri+a]||rh;
-        if(x.title){font(x.s);g.fillStyle=x.s===11?"#666":"#1d1913";g.textAlign="left";g.fillText(txt(x),x0,y+hts[ri]/2);return}   /* titles run over the empty cells, as in Excel */
-        if(x.s===0||x.s===10)return;
-        if(FILL[x.s]){g.fillStyle=FILL[x.s];g.fillRect(x0,y,w,h)}
-        g.strokeStyle=LINE;g.lineWidth=1.5;g.strokeRect(x0+.5,y+.5,w,h);
-        var t=txt(x);if(!t)return;font(x.s);g.fillStyle="#1d1913";
-        if(x.s===1){var ln=wrap(t,w-12),lh=fs*1.2,y0=y+h/2-(ln.length-1)*lh/2;g.textAlign="center";ln.forEach(function(l,j){g.fillText(fit(l,w-12),x0+w/2,y0+j*lh)});g.textAlign="left";return}
-        if(x.s===8||x.s===9){g.textAlign="right";g.fillText(fit(t,w-14),x0+w-8,y+h/2)}
-        else if(x.s===4||x.s===6){g.textAlign="center";g.fillText(fit(t,w-12),x0+w/2,y+h/2)}
-        else{g.textAlign="left";g.fillText(fit(t,w-14),x0+8,y+h/2)}
-        g.textAlign="left"});
-      y+=hts[ri]}
+    var MG=pdfMerges(sh),N=sh.rows.length,items=[],ri;
+    /* the sheet's rows → titles and tables (a table: the rows between a title and an empty row) */
+    for(ri=0;ri<N;ri++){var r=sh.rows[ri];if(!r||!r.length||!r.some(function(c){return c&&c.v!=null&&c.v!==""||c&&c.s>0}))continue;
+      if(r[0]&&r[0].title){items.push({k:r[0].s,t:txt(r[0])});continue}
+      var last=items[items.length-1];if(last&&last.k==="tb"&&last.e===ri-1){last.e=ri}else items.push({k:"tb",s:ri,e:ri})}
+    var first=true;
+    items.forEach(function(it,ii){
+      if(it.k===7){right=it.t.indexOf(" — ")>0?it.t.slice(it.t.indexOf(" — ")+3):sh.name;
+        if(first){newPage();first=false}else if(room()<420)newPage();else y+=30;
+        var fs=44;g.font="700 "+fs+"px "+HEAD;while(fs>28&&g.measureText(it.t).width>W0-2*M){fs-=2;g.font="700 "+fs+"px "+HEAD}
+        g.fillStyle=INK;g.textBaseline="alphabetic";g.fillText(it.t,M,y+20);y+=60;
+        /* tiles: Yazdı, Uğurlu, Ləğv of the first table that has them, from its «Cəmi» row */
+        var tl=pdfTiles(sh,MG,items,ii);
+        if(tl){var tw=(W0-2*M-(tl.length-1)*16)/tl.length;deco(function(){tl.forEach(function(t,i){var x=M+i*(tw+16);g.fillStyle="#faf4e6";g.fillRect(x,y,tw,150);g.fillStyle="#b8862b";g.fillRect(x,y,tw,5);
+          g.fillStyle=INK;g.font="700 54px "+HEAD;g.fillText(String(t[1]),x+20,y+76);g.font="400 22px "+FONT;g.fillStyle="#6b6257";g.fillText(fit(t[0],tw-30),x+20,y+110)})});y+=176}
+        return}
+      if(first){newPage();first=false}
+      if(it.k===11){g.font="italic 400 22px "+FONT;g.fillStyle="#6b6257";g.textBaseline="alphabetic";g.fillText(it.t,M,y);y+=34;return}
+      if(it.k===12){var nx=items[ii+1],th=nx&&nx.k==="tb"?pdfTableH(sh,MG,nx):0;if(room()<90+Math.min(th,BOT-160-90)||(th&&th<=BOT-160-90&&room()<90+th))newPage();
+        y+=20;g.font="700 30px "+HEAD;g.fillStyle=INK;g.textBaseline="alphabetic";g.fillText(it.t,M,y+30);y+=56;return}
+      if(it.k==="tb")pdfTable(sh,MG,it)});
   });
-  pages.forEach(function(c,i){var q=c.getContext("2d");q.font="400 18px "+FONT;q.fillStyle="#9a9086";q.textAlign="right";q.textBaseline="alphabetic";q.fillText((i+1)+" / "+pages.length,W0-M,H0-28)});
+  if(pages.length)foot();
   return pages;
+  function grid(sh,MG,it){   /* the table as a grid: cells with their spans, columns counted */
+    var rows=[],nc=0;
+    for(var r=it.s;r<=it.e;r++){var row=[],cells=sh.rows[r]||[];cells.forEach(function(x,c){if(!x||MG.cov[r+":"+c])return;var m=MG.m[r+":"+c]||{cs:1,rs:1};row.push({x:x,c:c,cs:m.cs,rs:m.rs,t:txt(x)});nc=Math.max(nc,c+m.cs)});rows.push({r:r,cells:row,head:cells.some(function(x){return x&&x.s===1}),tot:cells.some(function(x){return x&&(x.s===5||x.s===6||x.s===9)})})}
+    return {rows:rows,nc:nc};
+  }
+  function layout(sh,MG,it){   /* column widths at a font size that lets the table fit the page width */
+    var G=grid(sh,MG,it),tw=W0-2*M,fs=23,ws;
+    for(;fs>=14;fs--){var hf=Math.round(fs*.85);ws=[];for(var c=0;c<G.nc;c++)ws[c]=c?Math.round(fs*1.6):Math.round(fs*4);
+      G.rows.forEach(function(row){g.font="700 "+(row.head?hf:fs)+"px "+FONT;row.cells.forEach(function(k){if(k.cs!==1)return;var w=row.head?Math.max.apply(null,k.t.split(" ").map(function(p){return g.measureText(p).width})):g.measureText(k.t).width;
+        ws[k.c]=Math.max(ws[k.c],Math.ceil(w)+(k.c?16:20))})});
+      var sum=ws.reduce(function(a,b){return a+b},0);if(sum<=tw||fs===14)break}
+    var sum2=ws.reduce(function(a,b){return a+b},0);
+    if(sum2<tw)ws[0]+=tw-sum2;else if(sum2>tw)ws=ws.map(function(w){return w*tw/sum2});   /* the first column takes the room left, as before */
+    var xs=[M];ws.forEach(function(w,i){xs[i+1]=xs[i]+w});
+    var rh=Math.round(fs*2);hf=Math.round(fs*.85);   /* table heads a little smaller than the numbers, as in a printed report */
+    G.rows.forEach(function(row){row.h=rh;if(!row.head)return;g.font="700 "+hf+"px "+FONT;row.cells.forEach(function(k){if(k.rs>1)return;var w=xs[k.c+k.cs]-xs[k.c]-16,n=wrap(k.t,w).length;row.h=Math.max(row.h,Math.round(n*hf*1.25+16))})});
+    return {G:G,xs:xs,fs:fs,hf:hf,rh:rh};
+  }
+  function pdfTableH(sh,MG,it){var L0=layout(sh,MG,it);return L0.G.rows.reduce(function(a,r){return a+r.h},0)+14}
+  function pdfTable(sh,MG,it){
+    var Lt=layout(sh,MG,it),G=Lt.G,xs=Lt.xs,fs=Lt.fs,hf=Lt.hf,heads=G.rows.filter(function(r){return r.head}),hh=heads.reduce(function(a,r){return a+r.h},0);
+    var drawRow=function(row,ri2,again){
+      var bg=row.head?null:row.tot?"#faf6ee":null,ix=G.rows.indexOf(row);
+      if(row.head&&!(ix>0&&G.rows[ix-1].head)){var gh=0;for(var a2=ix;a2<G.rows.length&&G.rows[a2].head;a2++)gh+=G.rows[a2].h;g.fillStyle="#f4ecdc";g.fillRect(M,y,xs[xs.length-1]-M,gh)}   /* the whole head at once: a two-row «Kim» is not painted over */
+      if(bg){g.fillStyle=bg;g.fillRect(M,y,xs[xs.length-1]-M,row.h)}
+      g.font=(row.head||row.tot?"700 ":"400 ")+(row.head?hf:fs)+"px "+FONT;g.fillStyle=INK;g.textBaseline="middle";
+      var dr=function(){row.cells.forEach(function(k){if(!k.t)return;var x=xs[k.c],w=xs[k.c+k.cs]-x,h=row.h;
+        if(k.rs>1){for(var a=1;a<k.rs;a++){var nr=G.rows[ri2+a];if(nr)h+=nr.h}}
+        var al=k.cs>1&&row.head?"center":k.c===0?"left":"right",pad=k.c?8:10;
+        if(row.head){var ln=wrap(k.t,w-2*pad),lh=hf*1.25,y0=y+h/2-(ln.length-1)*lh/2;ln.forEach(function(l,j){g.__cont=j>0?1:0;put(l,x+pad,y0+j*lh,w-2*pad,al)});g.__cont=0}
+        else put(k.t,x+pad,y+row.h/2,w-2*pad,al)})};
+      if(again)deco(dr);else dr();
+      if(!row.head||!(G.rows[ix+1]&&G.rows[ix+1].head)){g.fillStyle=row.head?"#e6dccb":"#eee6d8";g.fillRect(M,y+row.h-1,xs[xs.length-1]-M,1)}y+=row.h};
+    G.rows.forEach(function(row,ri2){
+      var need=row.h;if(row.head)for(var a=ri2+1;a<G.rows.length&&G.rows[a].head;a++)need+=G.rows[a].h;
+      if(y+need>BOT){newPage();if(!row.head)heads.forEach(function(h){drawRow(h,G.rows.indexOf(h),true)})}   /* the table's head again on the new page */
+      drawRow(row,ri2,false)});
+    y+=14;
+  }
+}
+/* the tiles of a period: «Yazdı», «Uğurlu», «Ləğv» read from the «Cəmi» row of the sheet's table that has them */
+function pdfTiles(sh,MG,items,from){
+  var want=[L("Yazdı"),L("Uğurlu"),L("Ləğv")];
+  for(var i=from+1;i<items.length&&items[i].k!==7;i++){var it=items[i];if(it.k!=="tb")continue;
+    var col={},tot=null;
+    for(var r=it.s;r<=it.e;r++){var row=sh.rows[r]||[];row.forEach(function(x,c){if(x&&x.s===1&&want.indexOf(String(x.v))>=0)col[x.v]=c});if(row[0]&&row[0].s===5&&String(row[0].v)===L("Cəmi")&&!tot)tot=row}
+    if(tot&&want.every(function(w){return col[w]!=null}))return want.map(function(w){var x=tot[col[w]];return [w,x&&x.v!=null?x.v:0]});
+  }
+  return null;
 }
 function pdfBytes(pages){
   var enc=function(s){var a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i)&255;return a};

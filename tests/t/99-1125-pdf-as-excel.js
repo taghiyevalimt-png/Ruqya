@@ -1,4 +1,5 @@
 // Owner 25.11: «В pdf пусть будет всё то же самое, что бывает в excel. Абсолютно то же самое и схема работы то же самое».
+// (2) 25.11: «Стиль пдф должен быть таким» — the first PDF's look (portrait, Mərkəz head, tiles), the Excel content.
 // The PDF is made from the very sheets of the Excel file (xlsFetch → xlsSheets): every sheet starts a page, every
 // title, header and number of the Excel file is drawn, in the same order; the window says the same things, the file
 // is named like the Excel one, and it is made again when the statistics change while the window is open.
@@ -24,7 +25,7 @@ module.exports = async () => {
     await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(2000);
     await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(800);
     // what the PDF draws = the Excel sheets: catch every text drawn on the pages
-    await p.evaluate(() => { window.__drawn = []; const f = CanvasRenderingContext2D.prototype.fillText; CanvasRenderingContext2D.prototype.fillText = function (tx) { if (this.canvas.width > this.canvas.height) window.__drawn.push([this.canvas, String(tx)]); return f.apply(this, arguments); }; });
+    await p.evaluate(() => { window.__drawn = []; window.__deco = []; const f = CanvasRenderingContext2D.prototype.fillText; CanvasRenderingContext2D.prototype.fillText = function (tx) { if (this.canvas.width === 1240 && this.canvas.height === 1754) { const L0 = window.__drawn[window.__drawn.length - 1]; if (this.__deco) window.__deco.push(String(tx)); else if (this.__cont && L0) L0[1] += " " + tx; else window.__drawn.push([this.canvas, String(tx)]); } return f.apply(this, arguments); }; });
     await p.click('[data-act="xls"]'); await p.locator('#sheet a.primary[download$=".xlsx"]').waitFor({ timeout: 20000 });
     const xlsText = await p.$eval("#sheet", (x) => x.innerText);
     const [xd] = await Promise.all([p.waitForEvent("download"), p.click('#sheet a.primary[download$=".xlsx"]')]);
@@ -33,13 +34,13 @@ module.exports = async () => {
     const X = names.map((name, i) => ({ name, cells: [...XF["xl/worksheets/sheet" + (i + 1) + ".xml"].matchAll(/<c r="[A-Z]+\d+"(?: t="inlineStr")? s="(\d+)"(?:\/>|>(?:<v>([^<]*)<\/v>|<is><t xml:space="preserve">([^<]*)<\/t><\/is>)<\/c>)/g)]
       .filter((m) => m[2] != null || m[3] != null).map((m) => ({ s: +m[1], v: m[2] != null ? m[2] : unx(m[3]) })) }));
     await p.click('#sheet [data-act="close"]'); await p.waitForTimeout(400);
-    await p.evaluate(() => { window.__drawn = []; });
+    await p.evaluate(() => { window.__drawn = []; window.__deco = []; });
     await p.click('[data-act="pdf"]'); await p.locator('#sheet a.primary[download$=".pdf"]').waitFor({ timeout: 30000 });
     const pdfText = await p.$eval("#sheet", (x) => x.innerText);
-    const D = await p.evaluate(() => { const cvs = []; window.__drawn.forEach((d) => { if (cvs.indexOf(d[0]) < 0) cvs.push(d[0]); }); return { pages: cvs.length, list: window.__drawn.map((d) => [cvs.indexOf(d[0]), d[1]]) }; });
+    const D = await p.evaluate(() => { const cvs = []; window.__drawn.forEach((d) => { if (cvs.indexOf(d[0]) < 0) cvs.push(d[0]); }); return { pages: cvs.length, list: window.__drawn.map((d) => [cvs.indexOf(d[0]), d[1]]), deco: window.__deco }; });
     // the sheets come in the same order, each from a new page, every cell drawn in order (a long cell may be cut with …)
     check(X.length === 5 && X.map((x) => x.name).join(",") === "Bu həftə,Keçən həftə,Bu ay,Keçən ay,Məhsul", "Excel sheets: " + X.map((x) => x.name));
-    const drawn = D.list.filter((d) => !/^\d+ \/ \d+$/.test(d[1]));   // page numbers aside
+    const drawn = D.list;   // the page head and foot, the tiles and a table head repeated on a new page are drawn apart (g.__deco)
     let k = 0, page = -1;
     for (const sh of X) {
       check(drawn[k] && drawn[k][0] > page, "sheet «" + sh.name + "» starts a new page: " + JSON.stringify(drawn[k]));
@@ -59,7 +60,11 @@ module.exports = async () => {
     const [dl] = await Promise.all([p.waitForEvent("download"), p.click('#sheet a.primary[download$=".pdf"]')]);
     check(dl.suggestedFilename() === "Merkez-statistika-" + t + ".pdf", "named like the Excel file: " + dl.suggestedFilename());
     const buf = require("fs").readFileSync(await dl.path()), all = buf.toString("latin1");
-    check(all.startsWith("%PDF-1.4") && /\/MediaBox \[0 0 841\.89 595\.28\]/.test(all) && (all.match(/\/Type \/Page\b/g) || []).length === D.pages, "landscape A4 pages, as Excel prints");
+    check(all.startsWith("%PDF-1.4") && /\/MediaBox \[0 0 595\.28 841\.89\]/.test(all) && !/841\.89 595\.28/.test(all) && (all.match(/\/Type \/Page\b/g) || []).length === D.pages, "portrait A4 pages (the first PDF's look)");
+    // the first PDF's look: «Mərkəz» on every page, «Hazırlanıb …» and the page number below, the tiles from the Cəmi row
+    check(D.deco.filter((x) => x === "Mərkəz").length === D.pages && D.deco.filter((x) => /^Hazırlanıb: /.test(x)).length === D.pages, "head and foot on every page: " + D.deco.slice(0, 8));
+    const wk = X[0].cells.map((c) => c.v), ci = wk.indexOf("Ümumi cədvəl"), tot = wk.indexOf("Cəmi", ci);
+    check(["Yazdı", "Uğurlu", "Ləğv"].every((l) => D.deco.includes(l)) && D.deco.includes(wk[tot + 4]) && D.deco.includes(wk[tot + 5]), "tiles Yazdı / Uğurlu / Ləğv with the Cəmi row's numbers: " + D.deco.slice(0, 14) + " / " + wk.slice(tot, tot + 8));
     // made again when the statistics change while the window is open
     const url0 = await p.getAttribute('#sheet a.primary[download$=".pdf"]', "href");
     add(t, R1, "Yeni Biri"); await p.evaluate(() => window.dispatchEvent(new Event("online")));   // a booking written on another phone; the app reloads
