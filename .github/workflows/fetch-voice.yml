@@ -1,0 +1,24 @@
+# Temporary (training video): downloads the voiceover lines from ElevenLabs into voice/ on this branch.
+name: Fetch voice
+on:
+  push:
+    branches: [video-voice]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          mkdir -p voice
+          while read -r n url; do curl -fsSL --retry 3 -o "voice/v$n.mp3" "$url"; done < voice-urls.txt
+          ls -l voice
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git rm -q --cached voice-urls.txt; rm voice-urls.txt
+          git add voice
+          git commit -m "Voice lines" && git push
