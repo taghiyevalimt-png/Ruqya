@@ -7,11 +7,11 @@
 //  - the Android poll (ruqya_notify_poll) answers with a device token only, with the same rules; a wrong token = gone;
 //  - anon/agents cannot read others' settings or subscriptions; the rollback removes everything.
 const fs = require("fs"), path = require("path");
-const { start } = require("../localpg"), { build, as, U, R } = require("../dbcopy"), { check } = require("../lib");
+const { start } = require("../localpg"), { build, as, U, R, upTo } = require("../dbcopy"), { check } = require("../lib");
 module.exports = async () => {
   const pg = await start(54391); let c;
   try {
-    c = await build(pg, "notify");
+    c = await build(pg, "notify", { after: upTo("2026-11-notify.sql") });   // later migrations (report) are undone first by their own rollbacks
     const asCommit = async (who, sql, params) => { await c.query("begin"); try { await c.query("set local role authenticated");
       await c.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub: U[who], role: "authenticated" })]); const r = await c.query(sql, params); await c.query("commit"); return r.rows; }
       catch (e) { await c.query("rollback"); throw e; } };

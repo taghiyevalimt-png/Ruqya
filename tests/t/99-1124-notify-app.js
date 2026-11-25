@@ -1,6 +1,6 @@
 // 24.11 (owner): «Bildirişlər» in Ayarlar — off by default; a specialist chooses how many minutes before a session to be
 // reminded, and whether to hear when a session is booked for him. Checked with the mock server:
-//  - the section is there for the specialist (his name is a column), not for an agent or an admin without a column;
+//  - the section is there for the specialist (his name is a column) and for admins (evening report), not for an agent;
 //  - both off at first; a choice asks the device's permission, subscribes this browser (Web Push) and saves;
 //    turning everything off drops the browser's subscription; a refused permission changes nothing and says so;
 //  - iPhone Safari (not on the home screen): a hint how to add it, the choices are disabled;
@@ -15,7 +15,7 @@ const state = (p) => p.evaluate(() => ({ rem: [...document.querySelectorAll('[da
   dis: [...document.querySelectorAll('[data-act="ntf-rem"]')].every((b) => b.disabled), hint: (document.querySelector('#main [role="status"]') || {}).textContent || "", test: !!document.querySelector('[data-act="ntf-test"]') }));
 module.exports = async () => {
   // who sees the section
-  for (const [who, name, want] of [[AGENT, "agent", false], [OWNER, "admin without a column", false], [SPEC, "specialist", true]]) {
+  for (const [who, name, want] of [[AGENT, "agent", false], [OWNER, "admin without a column (24.11 wave 3: the evening report)", true], [SPEC, "specialist", true]]) {
     const s = await open(who, { db: seed() });
     try { await go(s.page); check((await s.page.locator('#top [data-act="set-sec"][data-id="notify"]').count() > 0) === want, name + ": «Bildirişlər» " + (want ? "shown" : "not shown")); }
     finally { await s.close(); }

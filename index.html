@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-vGyLso7hxmWDfSLZwh+7BhRn3nPBp+sW34zrZOYVpIs='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-Qssrvprck8KLa5E5aikA8TvLdmdPV6MTlhNL9rdmwr8='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -831,6 +831,13 @@ html.night .vipt{color:#e8c463}
 .dlist .wa svg,.dlist .wa{vertical-align:middle}
 .dlist .wa svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;margin-right:4px}
 .dupg .visit{gap:8px}
+/* 24.11 wave 3: ↑↓ against the period before; new / returning patients */
+.todaysum .dlt{display:block;font-style:normal;font-size:12px;font-weight:700;margin-top:2px;min-height:15px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.todaysum .dlt{color:inherit;opacity:.85}
+.todaysum .dlt.good{color:#9ff0bd;opacity:1}.todaysum .dlt.bad{color:#ffc0b8;opacity:1}
+.cmpnote{margin-top:-6px}
+.newret{margin-top:2px}
+.xlsg{display:flex;gap:6px;flex:none}
 #spbar .freec{flex:none}
 .freel{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
 .freeb{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:9px 12px;font:inherit;cursor:pointer}
@@ -1310,7 +1317,7 @@ if(window.Element&&!Element.prototype.closest){Element.prototype.closest=functio
 (function(){
 "use strict";
 /* Russian texts: each Azerbaijani text in L("...") below is looked up here when the language is Russian. */
-var RUD=LANG==="ru"?{"{n} seans":"сеансов: {n}","{n} ləğv":"отмен: {n}","son":"последний","əsasən":"чаще к","Pasiyentin kartı":"Карточка пациента","Eyni nömrə, fərqli ad":"Один номер, разные имена","Eyni adamdırsa (ad səhv yazılıb), saxlanacaq adı seçin — bütün qəbullar o adla olacaq. Ailə üzvləridirsə (bir nömrə ilə), toxunmayın.":"Если это один человек (имя записано с ошибкой), выберите имя, которое оставить, — все записи будут с этим именем. Если это члены семьи с одним номером — не трогайте.","Dublikat yoxdur.":"Дубликатов нет.","{n} qəbul":"записей: {n}","Bu adı saxla":"Оставить это имя","Hamısı «{n}» olacaq — bir də basın":"Все станут «{n}» — нажмите ещё раз","Bunun üçün bazanı son vəziyyətə gətirin (sql/2026-11-wave2.sql).":"Для этого обновите базу (sql/2026-11-wave2.sql).","Birləşdirildi: {n} qəbul":"Объединено записей: {n}","Qəbul yoxdur":"Записей нет","Günün siyahısı":"Список на день","Hər mütəxəssisə öz siyahısını WhatsApp-da göndərin: söhbəti orada seçirsiniz.":"Отправьте каждому специалисту его список в WhatsApp: чат выбирается там.","Mənim":"Мои","Eyni nömrə, fərqli ad: {n}":"Один номер, разные имена: {n}","Sizin yazdığınız pasiyent hələ yoxdur.":"Пациентов, которых записали вы, пока нет.","Sizin yazdığınız pasiyentlər: {n}":"Пациенты, которых записали вы: {n}","Sabahın siyahısı (WhatsApp)":"Список на завтра (WhatsApp)","İstirahət günləri":"Выходные дни","Səbəb":"Причина","Səbəb, məsələn: Məzuniyyət":"Причина, например: Отпуск","İlk gün":"Первый день","Son gün":"Последний день","Bütün mərkəz":"Весь центр","Bu günlərdə təqvim zolaqlı görünür və qəbul yazmaq olmur. Artıq yazılmış qəbullar yerində qalır.":"В эти дни календарь заштрихован и записать нельзя. Уже сделанные записи остаются.","İstirahət günü":"Выходной","Kim boşdur":"Кто свободен","Təqvimdə hələ mütəxəssis yoxdur.":"В календаре пока нет специалистов.","İndi iş vaxtı deyil (08:00–00:00).":"Сейчас нерабочее время (08:00–00:00).","{t}-dək boşdur":"свободен до {t}","Bu gün daha qəbul yoxdur":"Сегодня больше записей нет","{n}, bütün gün":"{n}, весь день","Fasilə: {n}, {t}-dək":"Перерыв: {n}, до {t}","{t}-dək məşğuldur":"занят до {t}","İndi boşdur":"Свободны сейчас","Məşğuldur":"Заняты","Fasilədədir":"На перерыве","Geri al":"Отменить","Qəbul ləğv olundu.":"Запись отменена.","Qəbul silindi.":"Запись удалена.","Satış silindi.":"Продажа удалена.","İstirahət günləri (məzuniyyət, bayram)":"Выходные дни (отпуск, праздник)","{r}: {d} günü artıq {n} seans var (limit gündə {l}). Yenə də yazmaq üçün bir də basın.":"{r}: на {d} уже сеансов: {n} (лимит {l} в день). Чтобы всё равно записать, нажмите ещё раз.","Bu nömrəyə artıq qəbul var: {d}, {t}, {r}{w}. Yenə də yazmaq üçün bir də basın.":"На этот номер уже есть запись: {d}, {t}, {r}{w}. Чтобы всё равно записать, нажмите ещё раз.","yazan":"записал(а)","Gündə ən çox seans":"Максимум сеансов в день","Çox olanda yazarkən xəbərdarlıq çıxır, yenə də yazmaq olar.":"Если больше — при записи появится предупреждение, записать всё равно можно.","Yeni qəbul: müddət, gündəlik limit":"Новая запись: длительность, лимит в день","gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
+var RUD=LANG==="ru"?{"Aylıq hesabat":"Отчёт за месяц","Həftəlik hesabat":"Отчёт за неделю","dövr hələ bitməyib":"период ещё не закончился","Hazırlanıb: {d}":"Подготовлено: {d}","{n} səhifə":"страниц: {n}","PDF hesabat":"Отчёт PDF","PDF üçün tətbiqin yeni versiyasını quraşdırın və ya proqramı brauzerdə açın.":"Для PDF установите новую версию приложения или откройте программу в браузере.","Faylı hazırlamaq olmadı.":"Не удалось подготовить файл.","Axşam hesabatı (22:00)":"Вечерний отчёт (22:00)","Hər axşam saat 22:00-da günün qısa hesabatı: yazılan qəbullar, seanslar, ləğvlər, satış.":"Каждый вечер в 22:00 — короткий отчёт за день: записи, сеансы, отмены, продажи.","Keçən dövr":"Прошлый период","↑↓ — keçən dövrlə müqayisə: {p}":"↑↓ — сравнение с прошлым периодом: {p}","eyni sayda gün":"столько же дней","Keçən dövr yüklənir…":"Загружается прошлый период…","Keçən dövr üçün məlumat yoxdur.":"За прошлый период данных нет.","Yeni pasiyent":"Новые пациенты","Qayıdan":"Вернувшиеся","Qayıdanların payı":"Доля вернувшихся","{n} seans":"сеансов: {n}","{n} ləğv":"отмен: {n}","son":"последний","əsasən":"чаще к","Pasiyentin kartı":"Карточка пациента","Eyni nömrə, fərqli ad":"Один номер, разные имена","Eyni adamdırsa (ad səhv yazılıb), saxlanacaq adı seçin — bütün qəbullar o adla olacaq. Ailə üzvləridirsə (bir nömrə ilə), toxunmayın.":"Если это один человек (имя записано с ошибкой), выберите имя, которое оставить, — все записи будут с этим именем. Если это члены семьи с одним номером — не трогайте.","Dublikat yoxdur.":"Дубликатов нет.","{n} qəbul":"записей: {n}","Bu adı saxla":"Оставить это имя","Hamısı «{n}» olacaq — bir də basın":"Все станут «{n}» — нажмите ещё раз","Bunun üçün bazanı son vəziyyətə gətirin (sql/2026-11-wave2.sql).":"Для этого обновите базу (sql/2026-11-wave2.sql).","Birləşdirildi: {n} qəbul":"Объединено записей: {n}","Qəbul yoxdur":"Записей нет","Günün siyahısı":"Список на день","Hər mütəxəssisə öz siyahısını WhatsApp-da göndərin: söhbəti orada seçirsiniz.":"Отправьте каждому специалисту его список в WhatsApp: чат выбирается там.","Mənim":"Мои","Eyni nömrə, fərqli ad: {n}":"Один номер, разные имена: {n}","Sizin yazdığınız pasiyent hələ yoxdur.":"Пациентов, которых записали вы, пока нет.","Sizin yazdığınız pasiyentlər: {n}":"Пациенты, которых записали вы: {n}","Sabahın siyahısı (WhatsApp)":"Список на завтра (WhatsApp)","İstirahət günləri":"Выходные дни","Səbəb":"Причина","Səbəb, məsələn: Məzuniyyət":"Причина, например: Отпуск","İlk gün":"Первый день","Son gün":"Последний день","Bütün mərkəz":"Весь центр","Bu günlərdə təqvim zolaqlı görünür və qəbul yazmaq olmur. Artıq yazılmış qəbullar yerində qalır.":"В эти дни календарь заштрихован и записать нельзя. Уже сделанные записи остаются.","İstirahət günü":"Выходной","Kim boşdur":"Кто свободен","Təqvimdə hələ mütəxəssis yoxdur.":"В календаре пока нет специалистов.","İndi iş vaxtı deyil (08:00–00:00).":"Сейчас нерабочее время (08:00–00:00).","{t}-dək boşdur":"свободен до {t}","Bu gün daha qəbul yoxdur":"Сегодня больше записей нет","{n}, bütün gün":"{n}, весь день","Fasilə: {n}, {t}-dək":"Перерыв: {n}, до {t}","{t}-dək məşğuldur":"занят до {t}","İndi boşdur":"Свободны сейчас","Məşğuldur":"Заняты","Fasilədədir":"На перерыве","Geri al":"Отменить","Qəbul ləğv olundu.":"Запись отменена.","Qəbul silindi.":"Запись удалена.","Satış silindi.":"Продажа удалена.","İstirahət günləri (məzuniyyət, bayram)":"Выходные дни (отпуск, праздник)","{r}: {d} günü artıq {n} seans var (limit gündə {l}). Yenə də yazmaq üçün bir də basın.":"{r}: на {d} уже сеансов: {n} (лимит {l} в день). Чтобы всё равно записать, нажмите ещё раз.","Bu nömrəyə artıq qəbul var: {d}, {t}, {r}{w}. Yenə də yazmaq üçün bir də basın.":"На этот номер уже есть запись: {d}, {t}, {r}{w}. Чтобы всё равно записать, нажмите ещё раз.","yazan":"записал(а)","Gündə ən çox seans":"Максимум сеансов в день","Çox olanda yazarkən xəbərdarlıq çıxır, yenə də yazmaq olar.":"Если больше — при записи появится предупреждение, записать всё равно можно.","Yeni qəbul: müddət, gündəlik limit":"Новая запись: длительность, лимит в день","gün bitib":"день закончился","Ədəd":"Шт.","12 saat istifadə olunmadığı üçün hesabdan çıxış edildi. Yenidən daxil olun.":"Приложением не пользовались 12 часов, поэтому выполнен выход. Войдите снова.","Əvvəlki dəyişiklik yadda saxlanmadı — bu pəncərəni bağlayıb yenidən edin.":"Предыдущее изменение не сохранено — закройте это окно и повторите.","Köhnə pasiyentləri yükləmək olmadı — siyahı natamamdır. Yenidən cəhd edilir…":"Не удалось загрузить старых пациентов — список неполный. Пробуем снова…","Dəyişiklik saxlanmadı: bu yazı artıq yoxdur və ya sizin icazəniz yoxdur. Siyahı yeniləndi.":"Изменение не сохранено: этой записи уже нет или у вас нет прав. Список обновлён.","Yadda saxlanmayan satış: {n} məhsul":"Несохранённая продажа: {n} шт.",
 "Diqqət: tarix bu gün deyil — {d}.":"Внимание: дата не сегодня — {d}.",
 "Faiz və ya məbləğ":"Процент или сумма",
 "satış yoxdur":"продаж нет",
@@ -2406,7 +2413,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261124213610";
+var APP_VERSION="20261125023653";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3253,7 +3260,7 @@ function checkSecurity(){
 }
 /* Visits older than the loaded weeks are needed only for patient counts; fetch them when a screen shows those. */
 var histLoading=false,histFail=0;
-function wantHist(){return ui.tab==="patients"||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&(sheet.type==="patient"||sheet.type==="view"))}   /* 24.11: the patient at a glance counts old visits too */
+function wantHist(){return ui.tab==="patients"||(ui.tab==="stats"&&/^(week|month|cweek|cmonth)$/.test(ui.stSec))||(ui.tab==="day"&&ui.view==="list")||!!(sheet&&(sheet.type==="patient"||sheet.type==="view"))}   /* 24.11: the patient at a glance counts old visits too */
 /* Older visits (before the loaded weeks) come grouped by patient from the server: one short row per patient instead
    of every visit of two years (2026-11-patients.sql). Without that file the visits themselves are loaded, as before. */
 function mapHistP(x){return{k:String(x.k||""),name:x.name||"",phone:x.phone||"",n:+x.n||0,noshow:+x.noshow||0,cancel:+x.cancel||0,last:String(x.last||"").slice(0,10),first:x.first?String(x.first).slice(0,10):""}}
@@ -3336,7 +3343,8 @@ function neededFrom(){
   if(!auth.loaded)return null;
   var d=ui.date;
   if(ui.tab==="day")d=addDays(ui.date,-((parse(ui.date).getDay()+6)%7));
-  if(ui.tab==="stats"){var mr=monthRange(),wr=weekRange(),da=dayAllRange().s,cmr=curMonthRange().s;d=mr.s<wr.s?mr.s:wr.s;if(da<d)d=da;if(cmr<d)d=cmr}
+  if(ui.tab==="stats"){var mr=monthRange(),wr=weekRange(),da=dayAllRange().s,cmr=curMonthRange().s;d=mr.s<wr.s?mr.s:wr.s;if(da<d)d=da;if(cmr<d)d=cmr;
+    if(/^(week|month|cweek|cmonth)$/.test(ui.stSec)){var pv1=prevRange(perRange(ui.stSec),ui.stSec);if(pv1.e>=ST_START&&pv1.s<d)d=pv1.s}}   /* 24.11: the period before, for ↑↓ */
   if(ui.tab==="cash")d=ui.date;
   return d;
 }
@@ -3777,7 +3785,7 @@ function renderScreen(){
   var grid=ui.tab==="day"&&ui.view==="grid"&&activeReaders().length>0&&!pendingMe();
   main.classList.toggle("gridmode",grid);
   if(ui.tab==="day"){top.innerHTML=dayTop();fitNav(top);main.innerHTML=banner+(grid?gridMain():dayMain())}
-  else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<button class="ghost xlsb" data-act="xls">⬇ Excel</button>':'')+'</div>'+statSecBar();fitTop(top);main.innerHTML=banner+statsMain()}
+  else if(ui.tab==="stats"){top.innerHTML='<div class="sthead"><h1>'+L("Statistika")+'</h1>'+(isAdmin()?'<span class="xlsg"><button class="ghost xlsb" data-act="pdf" aria-label="'+esc(L("PDF hesabat"))+'">⬇ PDF</button><button class="ghost xlsb" data-act="xls">⬇ Excel</button></span>':'')+'</div>'+statSecBar();fitTop(top);main.innerHTML=banner+statsMain()}
   else if(ui.tab==="cash"){top.innerHTML=cashTop();fitTop(top);main.innerHTML=banner+cashMain()}
   else{top.innerHTML='<h1>'+L("Ayarlar")+'</h1>'+setSecBar();fitTop(top);main.innerHTML=banner+readersMain()}
   if(grid){
@@ -4287,6 +4295,119 @@ function rulesBox(){
     L("<li>«Kopyala» cədvəli WhatsApp üçün mətn kimi kopyalayır.</li>")+
     '</ol></details>';
 }
+/* ===== 24.11 wave 3 (owner): the previous period (↑↓ %), new and returning patients ===== */
+/* the period just before: a week before a week, the statistics month before a month; a period still running is
+   compared with the same number of its days (this week until Wednesday ↔ last week until Wednesday) */
+function prevRange(r,sec){
+  var p;
+  if(sec==="month"||sec==="cmonth"){var d=parse(r.s);p=monthBlock(d.getFullYear(),d.getMonth()-1);p={s:p.s,e:p.e,end:p.e,name:p.name}}
+  else p={s:addDays(r.s,-7),e:addDays(r.s,-1),end:addDays(r.s,-1)};
+  if(sec==="cweek"||sec==="cmonth"){var k=addDays(p.s,dDiff(r.s,today));if(k<p.end)p.end=k;p.part=true}
+  return p;
+}
+function deltaHtml(cur,prev,bad){
+  if(prev==null)return '<i class="dlt"></i>';
+  if(cur===prev)return '<i class="dlt eq" title="'+esc(L("Keçən dövr"))+': '+prev+'">= '+prev+'</i>';
+  var up=cur>prev,good=bad?!up:up,txt=prev>0?Math.round(Math.abs(cur-prev)*100/prev)+"%":(up?"+":"−")+Math.abs(cur-prev);
+  return '<i class="dlt '+(good?'good':'bad')+'" title="'+esc(L("Keçən dövr"))+': '+prev+'">'+(up?'↑ ':'↓ ')+txt+'</i>';
+}
+/* among the patients with a successful session in the period: the first visit in the period (new) or earlier
+   (returning). «First» = the earliest visit not cancelled in the last 800 days the user can see. */
+function newRet(r){
+  var on=onlyMeSt(),m=patients(),seen={},o={n:0,ret:0};
+  state.appts.forEach(function(a){if(a.date<r.s||a.date>r.end||!done(a)||a.sold||stHidden(a.by)||(on&&a.by!==on))return;var k=pkey(a);if(seen[k])return;seen[k]=1;
+    var p=m[k];if(p&&p.first&&p.first<r.s)o.ret++;else o.n++});
+  return o;
+}
+/* (2) 24.11 wave 3: the period's report as a PDF (admins; Statistika → «PDF»). The pages are drawn on a canvas with the
+   app's own fonts (so ə, ş, ğ… are right) and put into a PDF as pictures — no library is needed. */
+function pdfRange(){var sec=ui.stSec;return /^(week|month|cweek|cmonth)$/.test(sec)?{r:perRange(sec),sec:sec}:{r:monthRange(),sec:"month"}}
+function pdfData(r,sec){
+  var per=sec==="cweek"?"week":sec==="cmonth"?"month":sec,S=statData("sales",r,per),Rd=statData("spec",r,per),W=writerData(r),pv=prevRange(r,sec),
+    P=pv.e>=ST_START&&state.loadedFrom&&state.loadedFrom<=pv.s?statData("sales",pv,per).T:null,pr={},pq=0,pm=0;
+  state.products.forEach(function(x){if(x.date<r.s||x.date>r.end)return;var c=x.pid?catItem(x.pid):null,k=c?c.name:(x.names||L("Məhsul"));var o=pr[k]||(pr[k]={q:0,m:0});o.q+=x.qty;o.m+=x.amount;pq+=x.qty;pm+=x.amount});
+  return {S:S,Rd:Rd,W:W,P:P,pv:pv,NR:state.histLoaded?newRet(r):null,prod:Object.keys(pr).map(function(k){return [k,pr[k].q,pr[k].m]}).sort(function(a,b){return b[2]-a[2]}),pq:pq,pm:pm};
+}
+function pdfPages(r,sec){
+  var D=pdfData(r,sec),W0=1240,H0=1754,M=90,pages=[],cv,g,y=0,FONT='"Golos Text",system-ui,sans-serif',HEAD='"Onest","Golos Text",system-ui,sans-serif';
+  var title=(sec==="month"||sec==="cmonth"?L("Aylıq hesabat")+" — "+(r.name||""):L("Həftəlik hesabat"))+(sec==="cweek"||sec==="cmonth"?" ("+L("dövr hələ bitməyib")+")":"");
+  var newPage=function(){cv=document.createElement("canvas");cv.width=W0;cv.height=H0;g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,W0,H0);
+    g.fillStyle="#b8862b";g.fillRect(0,0,W0,14);g.fillStyle="#1d1913";g.font="700 40px "+HEAD;g.textBaseline="alphabetic";g.fillText("Mərkəz",M,88);
+    g.font="400 24px "+FONT;g.fillStyle="#6b6257";g.textAlign="right";g.fillText(rangeLabel(r),W0-M,88);g.textAlign="left";
+    g.fillStyle="#e6dccb";g.fillRect(M,110,W0-2*M,2);y=160;pages.push(cv)};
+  var need=function(h){if(y+h>H0-90){foot();newPage()}};
+  var foot=function(){g.font="400 20px "+FONT;g.fillStyle="#9a9086";g.fillText(tf(L("Hazırlanıb: {d}"),{d:fmtDay(today,"y")+" "+hhmm(bk().m)}),M,H0-50);g.textAlign="right";g.fillText(String(pages.length),W0-M,H0-50);g.textAlign="left"};
+  var h2=function(t){need(90);y+=20;g.font="700 30px "+HEAD;g.fillStyle="#1d1913";g.fillText(t,M,y+30);y+=56};
+  var fit=function(t,w){t=String(t);if(g.measureText(t).width<=w)return t;while(t.length>1&&g.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"};
+  var table=function(head,rows,foots,wd){
+    var x0=M,tw=W0-2*M,ws=wd.map(function(f){return f*tw}),rh=46;
+    var line=function(cells,bold,bg){need(rh);if(bg){g.fillStyle=bg;g.fillRect(x0,y,tw,rh)}g.font=(bold?"700 ":"400 ")+"23px "+FONT;g.fillStyle="#1d1913";var x=x0;
+      cells.forEach(function(c,i){var t=fit(c,ws[i]-20);if(i>0){g.textAlign="right";g.fillText(t,x+ws[i]-10,y+31);g.textAlign="left"}else g.fillText(t,x+10,y+31);x+=ws[i]});
+      g.fillStyle="#eee6d8";g.fillRect(x0,y+rh-1,tw,1);y+=rh};
+    line(head,true,"#f4ecdc");rows.forEach(function(rw){line(rw,false)});(foots||[]).forEach(function(f){line(f,true,"#faf6ee")});y+=14};
+  newPage();
+  g.font="700 44px "+HEAD;g.fillStyle="#1d1913";g.fillText(fit(title,W0-2*M),M,y+20);y+=60;
+  /* tiles */
+  var T=D.S.T,P=D.P,tiles=[[L("Yazdı"),T.a,P&&P.a,false],[L("Uğurlu"),T.b,P&&P.b,false],[L("Ləğv"),T.d||0,P&&(P.d||0),true]];
+  if(D.NR)tiles.push([L("Yeni pasiyent"),D.NR.n,null,false],[L("Qayıdan"),D.NR.ret,null,false]);
+  var tw2=(W0-2*M-(tiles.length-1)*16)/tiles.length;
+  tiles.forEach(function(t,i){var x=M+i*(tw2+16);g.fillStyle="#faf4e6";g.fillRect(x,y,tw2,150);g.fillStyle="#b8862b";g.fillRect(x,y,tw2,5);
+    g.fillStyle="#1d1913";g.font="700 54px "+HEAD;g.fillText(String(t[1]),x+20,y+76);g.font="400 22px "+FONT;g.fillStyle="#6b6257";g.fillText(fit(t[0],tw2-30),x+20,y+110);
+    if(t[2]!=null&&t[2]!==t[1]){var up=t[1]>t[2],good=t[3]?!up:up;g.fillStyle=good?"#2f8a50":"#c0392b";g.font="700 21px "+FONT;g.fillText((up?"↑ ":"↓ ")+(t[2]>0?Math.round(Math.abs(t[1]-t[2])*100/t[2])+"%":(up?"+":"−")+Math.abs(t[1]-t[2])),x+20,y+138)}});
+  y+=176;
+  if(P){g.font="400 21px "+FONT;g.fillStyle="#6b6257";g.fillText(fit(tf(L("↑↓ — keçən dövrlə müqayisə: {p}"),{p:(D.pv.name?D.pv.name+", ":"")+rangeLabel(D.pv)+(D.pv.part?" ("+L("eyni sayda gün")+")":"")}),W0-2*M),M,y);y+=30}
+  h2(L("Kim neçə seans yazıb"));
+  table([L("Kim"),L("Yazdı"),L("Uğurlu"),L("Ləğv")],D.S.rows.map(function(x){return [x.name,x.a,x.b,x.d||0]}),[[L("Cəmi"),T.a,T.b,T.d||0]],[.55,.15,.15,.15]);
+  h2(L("Mütəxəssislər"));
+  var RT=D.Rd.T;table([L("Mütəxəssis"),L("Yazdı"),L("Uğurlu"),L("Ləğv")],D.Rd.rows.filter(function(x){return !!reader(x.k)}).map(function(x){return [x.name,x.a,x.b,x.d||0]}),[[L("Cəmi"),RT.a,RT.b,RT.d||0]],[.55,.15,.15,.15]);
+  h2(L("Xidmətlər"));
+  table([L("Xidmət"),L("Seans"),L("Uğurlu")],D.W.cols.filter(function(k){return D.W.T.svc[k]}).map(function(k){return [L(k),D.W.T.svc[k]||0,D.W.T.svcU[k]||0]}),[[L("Cəmi"),D.W.T.n,D.W.T.u]],[.6,.2,.2]);
+  if(state.hasProducts){h2(L("Məhsul satışı"));table([L("Məhsul"),L("Ədəd"),L("Məbləğ")],D.prod.map(function(x){return [x[0],x[1],money(x[2])]}),[[L("Cəmi"),D.pq,money(D.pm)]],[.56,.16,.28])}
+  foot();
+  return pages;
+}
+function pdfBytes(pages){
+  var enc=function(s){var a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i)&255;return a};
+  var parts=[],off=0,xref=[],put=function(x){var b=typeof x==="string"?enc(x):x;parts.push(b);off+=b.length};
+  var n=pages.length,obj=function(i){xref[i]=off;put(i+" 0 obj\n")};
+  put("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  obj(1);put("<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+  var kids=[];for(var i=0;i<n;i++)kids.push((3+i*3)+" 0 R");
+  obj(2);put("<< /Type /Pages /Kids ["+kids.join(" ")+"] /Count "+n+" >>\nendobj\n");
+  pages.forEach(function(cv,i){
+    var b64=cv.toDataURL("image/jpeg",0.86).split(",")[1],bin=atob(b64),img=enc(bin),p=3+i*3,cs="q 595.28 0 0 841.89 0 0 cm /Im0 Do Q";
+    obj(p);put("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 "+(p+1)+" 0 R >> >> /Contents "+(p+2)+" 0 R >>\nendobj\n");
+    obj(p+1);put("<< /Type /XObject /Subtype /Image /Width "+cv.width+" /Height "+cv.height+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+img.length+" >>\nstream\n");put(img);put("\nendstream\nendobj\n");
+    obj(p+2);put("<< /Length "+cs.length+" >>\nstream\n"+cs+"\nendstream\nendobj\n");
+  });
+  var total=3+n*3,xo=off,x="xref\n0 "+total+"\n0000000000 65535 f \n";
+  for(var k=1;k<total;k++)x+=String(1e10+xref[k]).slice(1)+" 00000 n \n";
+  put(x+"trailer\n<< /Size "+total+" /Root 1 0 R >>\nstartxref\n"+xo+"\n%%EOF\n");
+  return new Blob(parts,{type:"application/pdf"});
+}
+function pdfSheet(){
+  var x=sheet,h='<h2>PDF'+CLOSE+'</h2>';
+  if(x.err)return h+'<p class="err" role="alert">'+esc(x.err)+'</p><button class="primary" data-act="pdf">'+L("Yenidən cəhd et")+'</button>';
+  if(!x.url)return h+'<p class="hint">'+L("Dövrün məlumatları yüklənir və fayl hazırlanır…")+'</p>';
+  h+='<p class="hint"><b>'+esc(x.title)+'</b> — '+tf(L("{n} səhifə"),{n:x.n})+'</p>';
+  if(NATIVE&&typeof NATIVE.saveFile==="function")return h+'<button class="primary" data-act="pdf-save">'+L("Telefona yüklə")+'</button>';
+  return h+'<a class="primary" href="'+esc(x.url)+'" download="'+esc(x.fname)+'">'+L("Faylı yüklə")+'</a>';
+}
+function startPdf(){
+  if(!isAdmin())return;
+  if(sheet&&sheet.type==="pdf"&&sheet.url){try{URL.revokeObjectURL(sheet.url)}catch(e){}}
+  var R=pdfRange(),s={type:"pdf",busy:1},tries=0;
+  if(sheet&&sheet.type==="pdf"){sheet=s;byId("sheet").innerHTML=pdfSheet()}else openSheet(s);
+  var go=function(){if(sheet!==s)return;
+    var pv=prevRange(R.r,R.sec),need=pv.e>=ST_START?pv.s:R.r.s;
+    if((!state.loadedFrom||state.loadedFrom>need||(!state.histLoaded&&!offline))&&tries++<40){ensureLoaded();ensureHist();setTimeout(go,500);return}
+    var fr=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
+    fr.then(function(){if(sheet!==s)return;
+      try{var pg=pdfPages(R.r,R.sec);s.blob=pdfBytes(pg);s.n=pg.length;s.url=URL.createObjectURL(s.blob);s.title=(R.sec==="month"||R.sec==="cmonth"?L("Aylıq hesabat")+" — "+(R.r.name||""):L("Həftəlik hesabat"))+", "+rangeLabel(R.r);
+        s.fname="Merkez-hesabat-"+R.r.s+".pdf";s.busy=0}catch(e){s.err=L("Faylı hazırlamaq olmadı.");s.busy=0}
+      byId("sheet").innerHTML=pdfSheet()})};
+  setTimeout(go,50);
+}
 function statsMain(){
   if(!auth.loaded)return "";
   var sec=ui.stSec,h="";
@@ -4308,8 +4429,13 @@ function statsMain(){
   h+=perHead(sec,r);
   var edHint=canStats()&&state.hasStatEdits?'<p class="hint">'+L("Müraciət, Yazdı və Uğurlu rəqəminə toxunub düzəltmək olar. Düzəldilən rəqəmin yanında nöqtə olur.")+'</p>':"";
   /* 24.11 look: the period at a glance (the same totals as the «Cəmi» row of «Ümumi cədvəl») */
-  var PT=statData("sales",r,sec).T;
-  h+='<div class="pay todaysum pertot"><div><b class="num">'+PT.a+'</b><span>'+L("Yazdı")+'</span></div><div><b class="num">'+PT.b+'</b><span>'+L("Uğurlu")+'</span></div><div><b class="num">'+(PT.d||0)+'</b><span>'+L("Ləğv")+'</span></div></div>';
+  var PT=statData("sales",r,sec).T,pv=prevRange(r,sec),noPrev=pv.e<ST_START,ok=!noPrev&&!!state.loadedFrom&&state.loadedFrom<=pv.s,QT=ok?statData("sales",pv,sec==="cweek"?"week":sec==="cmonth"?"month":sec).T:null;
+  /* 24.11 wave 3: ↑↓ against the period before (the typed corrections of that period count, as on its own page) */
+  h+='<div class="pay todaysum pertot"><div><b class="num">'+PT.a+'</b><span>'+L("Yazdı")+'</span>'+deltaHtml(PT.a,QT&&QT.a)+'</div><div><b class="num">'+PT.b+'</b><span>'+L("Uğurlu")+'</span>'+deltaHtml(PT.b,QT&&QT.b)+'</div><div><b class="num">'+(PT.d||0)+'</b><span>'+L("Ləğv")+'</span>'+deltaHtml(PT.d||0,QT&&(QT.d||0),true)+'</div></div>'+
+    '<p class="hint cmpnote">'+(ok?tf(L("↑↓ — keçən dövrlə müqayisə: {p}"),{p:(pv.name?pv.name+", ":"")+rangeLabel(pv)+(pv.part?" ("+L("eyni sayda gün")+")":"")}):noPrev?L("Keçən dövr üçün məlumat yoxdur."):L("Keçən dövr yüklənir…"))+'</p>';
+  /* new and returning patients (sessions that took place in the period) */
+  var NR=newRet(r),NQ=ok&&state.histLoaded?newRet(pv):null,nt=NR.n+NR.ret;
+  h+='<div class="pay todaysum newret"><div><b class="num">'+(state.histLoaded?NR.n:"…")+'</b><span>'+L("Yeni pasiyent")+'</span>'+(state.histLoaded?deltaHtml(NR.n,NQ&&NQ.n):'')+'</div><div><b class="num">'+(state.histLoaded?NR.ret:"…")+'</b><span>'+L("Qayıdan")+'</span>'+(state.histLoaded?deltaHtml(NR.ret,NQ&&NQ.ret):'')+'</div><div><b class="num">'+(state.histLoaded&&nt?Math.round(NR.ret*100/nt)+"%":"—")+'</b><span>'+L("Qayıdanların payı")+'</span></div></div>';
   return h+sessTable(r,sec)+bigTable(r,sec)+edHint+rulesBox();   /* owner 22.11: «Kim neçə seans yazıb» first */   /* owner 22.11: the day-by-day table is gone; «Bu gün» shows today */
 }
 function clen(s){return String(s).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,"_").length}
@@ -5027,7 +5153,7 @@ function patientSheet(){
 }
 
 /* Ayarlar: one section at a time, chosen with the buttons on top (like Statistika) */
-function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"]);if(myCols().length)x.push(["notify","Bildirişlər"]);x.push(["acc","Hesab"]);return x}
+function setSecs(){var x=[["spec","Mütəxəssislər"]];if(state.hasBreaks&&!pendingMe())x.push(["breaks","Fasilələr"]);if(isAdmin())x.push(["staff","İşçilər"]);x.push(["view","Görünüş"]);if(myCols().length||isAdmin())x.push(["notify","Bildirişlər"]);x.push(["acc","Hesab"]);return x}
 function curSetSec(){var ss=setSecs();if(pendingMe()&&!ui.setSecPicked)return "acc";return ss.some(function(x){return x[0]===ui.setSec})?ui.setSec:"spec"}
 function setSecBar(){var ss=setSecs(),cur=curSetSec();
   return '<div class="chips stsec setsec" role="group">'+ss.map(function(x){return '<button class="chip" data-act="set-sec" data-id="'+x[0]+'" aria-pressed="'+(cur===x[0])+'">'+L(x[1])+'</button>'}).join("")+'</div>'}
@@ -5048,18 +5174,23 @@ function ntfLoad(){if(ntf.loading)return;ntf.loading=true;
   sb.rpc("ruqya_notify_get").then(function(r){ntf.loading=false;
     /* the server without the notification functions yet (sql/2026-11-notify.sql not applied): say so, nothing to choose */
     if(r.error&&(r.error.code==="PGRST202"||r.error.code==="42883"||r.status===404)){ntf.missing=true;ntf.loaded=true;ntf.err=false}
-    else if(r.error||!r.data){ntf.err=true}else{ntf.missing=false;var d=r.data;ntf.loaded=true;ntf.err=false;ntf.rem=d.remind_min;ntf.nw=!!d.on_new;ntf.linked=!!d.linked;ntf.vapid=d.vapid||""}
+    else if(r.error||!r.data){ntf.err=true}else{ntf.missing=false;var d=r.data;ntf.loaded=true;ntf.err=false;ntf.rem=d.remind_min;ntf.nw=!!d.on_new;ntf.rep=!!d.report;ntf.admin=!!d.admin;ntf.linked=!!d.linked;ntf.vapid=d.vapid||""}
     if(ui.tab==="readers"&&curSetSec()==="notify")render()},function(){ntf.loading=false;ntf.err=true;if(ui.tab==="readers")render()})}
 function ntfPerm(){try{return "Notification" in window?window.Notification.permission:""}catch(e){return ""}}
 function notifyMain(){
   if(!ntf.loaded){if(!ntf.err)ntfLoad();return '<p class="hint">'+(ntf.err?L("Yüklənmədi. İnterneti yoxlayın."):L("Yüklənir…"))+'</p>'}
   var k=ntfKind(),dis=ntf.busy||ntf.missing||k==="oldapp"||k==="ios"||k==="none",h='';
-  h+='<p class="hint">'+L("Bildirişlər yalnız sizin adınızla olan sütunun seansları üçündür. Hamısı əvvəlcə bağlıdır.")+'</p>';
+  var cols=myCols().length>0;
+  /* 24.11 wave 3: admins — the day's report at 22:00 */
+  if(ntf.admin||isAdmin())h+='<h3 class="sec">'+L("Axşam hesabatı (22:00)")+'</h3><p class="hint">'+L("Hər axşam saat 22:00-da günün qısa hesabatı: yazılan qəbullar, seanslar, ləğvlər, satış.")+'</p><div class="seg ntf" style="grid-template-columns:1fr 1fr">'+
+    '<button data-act="ntf-rep" data-id="0" aria-pressed="'+!ntf.rep+'" aria-label="'+L("Bağlı")+'"'+(dis?' disabled':'')+'>✕</button>'+
+    '<button data-act="ntf-rep" data-id="1" aria-pressed="'+!!ntf.rep+'" aria-label="'+L("Bəli")+'"'+(dis?' disabled':'')+'>✓</button></div>';
+  if(cols){h+='<p class="hint">'+L("Bildirişlər yalnız sizin adınızla olan sütunun seansları üçündür. Hamısı əvvəlcə bağlıdır.")+'</p>';
   h+='<h3 class="sec">'+L("Seansdan neçə dəqiqə əvvəl xatırlatsın")+'</h3><div class="seg ntf" style="grid-template-columns:repeat(6,1fr)">'+
     [0,10,15,30,60,120].map(function(m){var on=m?ntf.rem===m:!ntf.rem;return '<button data-act="ntf-rem" data-id="'+m+'" aria-pressed="'+on+'"'+(dis?' disabled':'')+(m?'':' aria-label="'+L("Bağlı")+'"')+'>'+(m?'<b class="num">'+m+'</b>':'✕')+'</button>'}).join("")+'</div>';
   h+='<h3 class="sec">'+L("Mənə seans yazılanda xəbər ver")+'</h3><div class="seg ntf" style="grid-template-columns:1fr 1fr">'+
     '<button data-act="ntf-new" data-id="0" aria-pressed="'+!ntf.nw+'" aria-label="'+L("Bağlı")+'"'+(dis?' disabled':'')+'>✕</button>'+
-    '<button data-act="ntf-new" data-id="1" aria-pressed="'+ntf.nw+'" aria-label="'+L("Bəli")+'"'+(dis?' disabled':'')+'>✓</button></div>';
+    '<button data-act="ntf-new" data-id="1" aria-pressed="'+ntf.nw+'" aria-label="'+L("Bəli")+'"'+(dis?' disabled':'')+'>✓</button></div>';}
   var st="";
   if(ntf.missing)st=L("Bildirişlər serverdə hələ qoşulmayıb — tezliklə işləyəcək.");
   else if(k==="ios")st=L("iPhone-da bildirişlər üçün: Safari-də «Paylaş» → «Ana ekrana» ilə tətbiqi əlavə edin və onu ekrandakı nişandan açın.");
@@ -5068,7 +5199,7 @@ function notifyMain(){
   else if(k==="web"&&ntfPerm()==="denied")st=L("Bu cihazda bildirişlərə icazə verilməyib — brauzerin və ya telefonun ayarlarında «Mərkəz» üçün bildirişləri açın.");
   if(ntf.msg)st=(st?st+" ":"")+ntf.msg;
   if(st)h+='<p class="hint" role="status">'+st+'</p>';
-  if((ntf.rem||ntf.nw)&&(k==="web"||k==="app"))h+='<button class="ghost" data-act="ntf-test">'+L("Sınaq bildirişi")+'</button>';
+  if((ntf.rem||ntf.nw||ntf.rep)&&(k==="web"||k==="app"))h+='<button class="ghost" data-act="ntf-test">'+L("Sınaq bildirişi")+'</button>';
   if(k==="app")h+='<p class="hint small">'+L("Telefonda: seans yazılandan sonra xəbər 15 dəqiqəyə qədər gecikə bilər; xatırlatma isə vaxtında gəlir.")+'</p>';
   return h}
 /* «Çıxış» on this device: its notices stop (the Android app forgets its token; the browser drops its subscription) */
@@ -5091,10 +5222,18 @@ function ntfDevice(on){var k=ntfKind();
     return reg().then(function(g){return g.pushManager.getSubscription().then(function(sub){return sub||g.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlKey(ntf.vapid)})})})
       .then(function(sub){var j=sub.toJSON?sub.toJSON():JSON.parse(JSON.stringify(sub));
         return sb.rpc("ruqya_push_sub",{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_ua:navigator.userAgent.slice(0,200)}).then(function(r){if(r.error)throw r.error;return true})})})}
+/* the evening report: this device must receive (web push / the app's poll) while anything is on */
+function ntfRep(on){
+  var was=!!ntf.rep;ntf.busy=true;ntf.msg="";ntf.rep=on;render();
+  var back=function(m){ntf.busy=false;ntf.rep=was;ntf.msg=m;render()};
+  ntfDevice(!!(on||ntf.rem||ntf.nw)).then(function(ok){
+    if(on&&!ok){back(ntfKind()==="web"?L("Bildirişlərə icazə verilmədi."):L("Bu cihaz bildiriş göstərə bilmir."));return}
+    return sb.rpc("ruqya_notify_report",{p_on:!!on,p_lang:LANG}).then(function(r){if(r.error)throw r.error;ntf.busy=false;ntf.msg=on?L("Yadda saxlanıldı ✓"):"";render()})
+  }).then(null,function(){back(L("Alınmadı. İnterneti yoxlayıb yenidən cəhd edin."))})}
 function ntfSave(rem,nw){
   var was={rem:ntf.rem,nw:ntf.nw},any=!!(rem||nw);ntf.busy=true;ntf.msg="";ntf.rem=rem;ntf.nw=nw;render();
   var back=function(m){ntf.busy=false;ntf.rem=was.rem;ntf.nw=was.nw;ntf.msg=m;render()};
-  ntfDevice(any).then(function(ok){
+  ntfDevice(any||!!ntf.rep).then(function(ok){
     if(any&&!ok){back(ntfKind()==="web"?L("Bildirişlərə icazə verilmədi."):L("Bu cihaz bildiriş göstərə bilmir."));return}
     return sb.rpc("ruqya_notify_set",{p_remind:rem||null,p_new:!!nw,p_lang:LANG}).then(function(r){if(r.error)throw r.error;ntf.busy=false;ntf.msg=any?L("Yadda saxlanıldı ✓"):"";render()})
   }).then(null,function(){back(L("Alınmadı. İnterneti yoxlayıb yenidən cəhd edin."))})}
@@ -5415,7 +5554,7 @@ function fontsSoon(){
   if(fontsAsked)return;fontsAsked=true;
   setTimeout(function(){try{if(document.fonts&&document.fonts.load){document.fonts.load('400 16px "Golos Text"',"Ж");document.fonts.load('600 16px "Onest"',"Ж")}}catch(e){}},1500);
 }
-function sheetFns(){return {month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,free:freeSheet,dups:dupSheet,daylist:dayListSheet,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}}
+function sheetFns(){return {month:monthSheet,color:colorSheet,staff:staffForm,audit:auditSheet,view:viewSheet,brk:breakForm,pdf:pdfSheet,free:freeSheet,dups:dupSheet,daylist:dayListSheet,appt:apptForm,reader:readerForm,patient:patientSheet,me:meForm,stcopy:stCopySheet,stedit:statEditSheet,prod:productForm,prodall:prodAllSheet,brkview:brkSheet,brkone:brkOneSheet,xls:xlsSheet,expense:expenseForm,sell:sellForm,selledit:sellEdit,catalog:catalogSheet,presets:presetsSheet}}
 /* 24.11 «windows without the wait» (owner: smooth even on the oldest Android). Building a window — its markup, styles
    and layout — took about 0.1 s on a slow phone before it could start to move. The two windows opened most often
    (a new booking, «Məhsul satışı») are now built ahead, while the phone is idle, in a second, invisible overlay
@@ -5728,6 +5867,7 @@ document.addEventListener("click",function(e){
   if(act==="hourh"){setHour(id==="fit"?"fit":+id);render();return}
   if(act==="ntf-rem"){ntfSave(+id||null,ntf.nw);return}
   if(act==="ntf-new"){ntfSave(ntf.rem,id==="1");return}
+  if(act==="ntf-rep"){if(isAdmin())ntfRep(id==="1");return}
   if(act==="ntf-test"){var tk=ntfKind(),tt=L("Bildirişlər işləyir ✓");
     if(tk==="app"){try{NATIVE.notifyTest(tt)}catch(err){}}
     else if(tk==="web")navigator.serviceWorker.ready.then(function(g){return g.showNotification("Mərkəz",{body:tt,icon:"icon-192.png",tag:"test"})}).then(null,function(){});
@@ -5920,6 +6060,15 @@ document.addEventListener("click",function(e){
     if(!b.dataset.sure){b.dataset.sure="1";b.dataset.sureT=Date.now();b.textContent=L("Silinəcək (satışlar qalır) — bir də basın");return}
     removeBy(state.catalog,cd1.id);db(sb.from("products").delete().eq("id",cd1.id).select("id"));sheet.eid="";byId("sheet").innerHTML=catalogSheet();render();return}
   else if(act==="xls"){startXls();return}
+  else if(act==="pdf"){startPdf();return}
+  else if(act==="pdf-save"){
+    if(!sheet||sheet.type!=="pdf"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
+    var ps2=sheet,fr2=new FileReader();ps2.saving=true;
+    fr2.onload=function(){ps2.saving=false;var ok1=false;try{ok1=NATIVE.saveFile(ps2.fname,String(fr2.result).split(",")[1]||"")}catch(e){}
+      flash(ok1?L("Fayl «Yükləmələr» qovluğuna yazıldı."):L("PDF üçün tətbiqin yeni versiyasını quraşdırın və ya proqramı brauzerdə açın."),true)};
+    fr2.onerror=function(){ps2.saving=false;flash(L("Faylı yazmaq olmadı. Proqramı brauzerdə (Chrome) açıb yenidən cəhd edin."),true)};
+    fr2.readAsDataURL(ps2.blob);return;
+  }
   else if(act==="xls-save"){
     if(!sheet||sheet.type!=="xls"||!sheet.blob||!NATIVE||typeof NATIVE.saveFile!=="function"||sheet.saving)return;
     var xs=sheet,fr=new FileReader();xs.saving=true;

@@ -225,14 +225,15 @@ public class MainActivity extends Activity {
             return true;
         }
 
-        /** The admin's Excel file: written to Downloads (Android 10 and newer), then opened. */
+        /** The admin's Excel file or PDF report: written to Downloads (Android 10 and newer), then opened. */
         @JavascriptInterface
         @android.annotation.SuppressLint("NewApi")
         public boolean saveFile(String name, String b64) {
             if (name == null || b64 == null || b64.length() > 40000000) return false;
             final String safe = name.replaceAll("[^A-Za-z0-9._-]", "_");
-            if (!safe.endsWith(".xlsx") || Build.VERSION.SDK_INT < 29) return false;
-            final String mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            final boolean pdf = safe.endsWith(".pdf");   // 24.11: the period's PDF report too
+            if (!(safe.endsWith(".xlsx") || pdf) || Build.VERSION.SDK_INT < 29) return false;
+            final String mime = pdf ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             try {
                 byte[] data = android.util.Base64.decode(b64, android.util.Base64.DEFAULT);
                 android.content.ContentValues v = new android.content.ContentValues();
