@@ -45,7 +45,7 @@ module.exports = async () => {
     require("fs").writeFileSync("/tmp/wave3.pdf", buf);
     check(pdf.head === "%PDF-1.4" && pdf.eof && pdf.pages >= 1 && pdf.size > 20000, "a real PDF: " + JSON.stringify(pdf));
     check(pdf.xref && +pdf.xref[1] === pdf.xrefAt, "the cross-reference offset is right");
-    check(pdf.name === "Merkez-hesabat-" + last + ".pdf", "named by the period: " + pdf.name);
+    check(pdf.name === "Merkez-statistika-" + t + ".pdf", "named like the Excel file (owner 25.11: the PDF is the Excel file on paper): " + pdf.name);
     await p.click('[data-act="close"]'); await p.waitForTimeout(300);
     // evening report
     await p.click('#tabs [data-tab="readers"]'); await p.click('#top [data-act="set-sec"][data-id="notify"]'); await p.waitForTimeout(800);
