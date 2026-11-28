@@ -1,0 +1,11 @@
+bound=true
+size 180x110: ok
+size 250x180: ok
+size 320x250: ok
+size 360x420: ok
+size 600x760: ok
+size 900x1000: ok
+shift off=-30
+data {"out":1}: ok
+data not json: ok
+data none: ok

@@ -1,0 +1,30 @@
+day / week widgets (API 33)
+widget-day 68053 bytes
+widget-day-small 22979 bytes
+widget-week 189106 bytes
+widget-week-small 54083 bytes
+widget-week-sand 184416 bytes
+widget-week-out 56490 bytes
+bound=true
+size 180x110: ok
+size 250x180: ok
+size 320x250: ok
+size 360x420: ok
+size 600x760: ok
+size 900x1000: ok
+shift off=-30
+data {"out":1}: ok
+data not json: ok
+data none: ok
+bound=true
+size 180x110: ok
+size 250x180: ok
+size 320x250: ok
+size 360x420: ok
+size 600x760: ok
+size 900x1000: ok
+shift off=-26
+data {"out":1}: ok
+data not json: ok
+data none: ok
+PASS: day and week widgets drawn (6 pictures), placed on a real home-screen slot at 6 sizes, ‹ › 300 times, signed out / broken / no data
