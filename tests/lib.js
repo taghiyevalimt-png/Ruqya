@@ -125,9 +125,9 @@ async function attach(context, db, ctl) {
       if (fn === "ruqya_hist_patients" || fn === "ruqya_hist_patients_page") {
         const g = {};
         old().sort((x, y) => (x.date < y.date ? 1 : -1)).forEach((r) => {
-          const k = pkey(r), o = g[k] || (g[k] = { k, name: r.name, phone: r.phone, n: 0, noshow: 0, cancel: 0, last: r.date, first: null });
+          const k = pkey(r), o = g[k] || (g[k] = { k, name: r.name, phone: r.phone, n: 0, noshow: 0, cancel: 0, last: r.date, first: null, lastok: ctl.noLastOk ? undefined : null });
           const st = r.status === "cancel" && (+r.follow || 0) >= 3 ? "wait" : r.status;   // «Satış edildi» counts as successful (as on the server)
-          if (st === "cancel") o.cancel++; else if (st === "noshow") o.noshow++; else { o.n++; if (!o.first || r.date < o.first) o.first = r.date; }
+          if (st === "cancel") o.cancel++; else if (st === "noshow") o.noshow++; else { o.n++; if (!o.first || r.date < o.first) o.first = r.date; if (!ctl.noLastOk && (!o.lastok || r.date > o.lastok)) o.lastok = r.date; }
         });
         // like PostgREST: at most 1000 rows per answer (db max-rows), paging with offset/limit
         const all = Object.values(g).sort((x, y) => (x.k < y.k ? -1 : 1));

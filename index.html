@@ -5,7 +5,7 @@
 <!-- read before anything else: the empty page is dark from the first frame (iPhone otherwise shows white while loading) -->
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-lXXYsDy7D+NnZAlT9PUQ7qSVQmuhzKek+OPjcQOzYSk='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hnJVBzNpHRjIoCba7sjvFiCWpL5qjY2CqFfnkHJLOHk=' 'sha256-95uchRT4X5miW2bBVxsCZbOKB1Sx+ynUK71La4eRX40=' 'sha256-SEv4lzMa5HD8s/OVmQoFZrxtCwYcr9tCvmfLFW9twJc=' 'sha256-HRnxtwYuQvY6Ye6TcHGZqgYyAZqAwPEDChYmqXEE298=' 'sha256-7pBwjhICuwDq6YIsEhlcGhL/M2aFVbJYTCd1ff3x3a4='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' https://ldkhdeehrrajvgrtieal.supabase.co wss://ldkhdeehrrajvgrtieal.supabase.co; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#303147">
 <script>
@@ -2424,7 +2424,7 @@ var MON=RU?["января","февраля","марта","апреля","мая"
 var MONN=RU?["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]:MON;
 var WDF=RU?["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]:["Bazar","Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə","Şənbə"];
 var WD=RU?["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]:["B.e","Ç.a","Ç","C.a","C","Ş","B"];
-var APP_VERSION="20261128120812";
+var APP_VERSION="20261128131534";
 function checkUpdate(){
   /* GitHub Pages and the Android WebView cache the page for a few minutes; pick up a new version as soon as it is published. */
   if(location.protocol==="file:"||!window.fetch)return;
@@ -3275,7 +3275,7 @@ var histLoading=false,histFail=0;
 function wantHist(){return ui.tab==="patients"||(ui.tab==="stats"&&/^(week|month|cweek|cmonth)$/.test(ui.stSec))||(ui.tab==="day"&&ui.view!=="grid")||!!(sheet&&(sheet.type==="patient"||sheet.type==="view"))}   /* 24.11: the patient at a glance counts old visits too */
 /* Older visits (before the loaded weeks) come grouped by patient from the server: one short row per patient instead
    of every visit of two years (2026-11-patients.sql). Without that file the visits themselves are loaded, as before. */
-function mapHistP(x){return{k:String(x.k||""),name:x.name||"",phone:x.phone||"",n:+x.n||0,noshow:+x.noshow||0,cancel:+x.cancel||0,last:String(x.last||"").slice(0,10),first:x.first?String(x.first).slice(0,10):""}}
+function mapHistP(x){return{k:String(x.k||""),name:x.name||"",phone:x.phone||"",n:+x.n||0,noshow:+x.noshow||0,cancel:+x.cancel||0,last:String(x.last||"").slice(0,10),first:x.first?String(x.first).slice(0,10):"",lastOk:x.lastok?String(x.lastok).slice(0,10):(+x.n>0?String(x.last||"").slice(0,10):"")}}
 function ensureHist(){
   if(state.histLoaded||histLoading||!auth.loaded||!sb||!auth.user||offline||!state.loadedFrom||!wantHist()||Date.now()-histFail<20000)return;
   histLoading=true;var my=seq,to=state.loadedFrom,since=addDays(today,-HIST_DAYS);
@@ -3632,6 +3632,7 @@ function patients(){
     var p=m[g.k];
     if(!p){p=m[g.k]={key:g.k,name:g.name,phone:g.phone,paid:0,noshow:0,cancel:0,wait:0,last:g.last,first:"",list:[]}}
     p.paid+=g.n;p.noshow+=g.noshow;p.cancel+=g.cancel;p.oldN=(p.oldN||0)+g.n+g.noshow+g.cancel;
+    if(g.lastOk&&(!p.oldOk||g.lastOk>p.oldOk))p.oldOk=g.lastOk;   /* 28.11: the last visit that took place before the loaded weeks (for «Qayıtmayanlar») */
     if(g.first&&(!p.first||g.first<p.first))p.first=g.first;
     if(!p.last||g.last>p.last){p.last=g.last;p.name=g.name;if(g.phone)p.phone=g.phone}
   });
@@ -3684,12 +3685,23 @@ function waLink(phone,text){
    Salam, hər vaxtınız xeyir!
    Siz sabah 14 noyabr, 20:00 da Loğman bəyin ruqya seansına yazılmısız.
    Zəhmət olmasa gələcəyinizi təsdiqləyin. */
-function remindText(a){var r=reader(a.readerId),rn=r&&r.name?r.name:"",td=bk().d,svc=String(a.service||"Ruqya").replace(/\u0130/g,"i").replace(/I/g,"ı").toLowerCase();
-  var when=a.date===td?"today":a.date===addDays(td,1)?"tomorrow":"";
-  if(LANG==="ru")return "Здравствуйте, доброго вам времени!\nВы записаны на сеанс "+(svc==="hicama"?"хиджамы":"рукьи")+(rn?" к "+rn:"")+" — "+
-    (when==="today"?"сегодня, ":when==="tomorrow"?"завтра, ":"")+fmtDay(a.date)+", в "+a.time+".\nПожалуйста, подтвердите, что придёте.";
+/* 28.11 (found in the check): the reminder called every specialist «bəy» — the women (Ruhanə, Təranə, Dr. Günel) too —
+   and in Russian named every session «рукья» (also massage, hijama + ruqya…). Now: a woman's name gets «xanım»
+   (a name ending in «ə» or a usual female name), a job title («Psixoloq») no title; the session's own kind is named. */
+var FEM_N=["günel","aysel","leyla","nigar","sevinc","könül","gülnar","aynur","ülviyyə","nərmin","lalə","səbinə","vüsalə","aygün","sevda","günay","aytən","nurlana","nuranə","fidan","şəbnəm","aydan","gülər","zəhra","fatimə","mələk","xədicə","aişə","aida","dilarə","nərgiz","samirə","rəna","elnarə","esmira","ilahə","jalə","kamalə","nailə","səidə","türkan","ulduz","yeganə","zərifə","zümrüd","ruhanə","təranə"];
+var MALE_E=["mirzə","zəkəriyyə","yəhyə","mustafə","musə","isə","yəhya"],JOB_N=["psixoloq","həkim","terapevt","masajist","hicaməçi"];
+function rTitle(n){var w=fold(String(n||"").replace(/^\s*(dr|prof)\.?\s*/i,"")).split(" ")[0]||"",lw=low(String(n||"").replace(/^\s*(dr|prof)\.?\s*/i,"").split(/\s+/)[0]||"");
+  if(JOB_N.some(function(x){return fold(x)===w}))return "job";
+  if(MALE_E.some(function(x){return fold(x)===w}))return "m";
+  return FEM_N.some(function(x){return fold(x)===w})||/ə$/.test(lw)?"f":"m"}
+var SVC_RU={Ruqya:"рукьи",Hicama:"хиджамы",Kombo:"комбо",Masaj:"массажа",Psixoloq:"психолога","Dr.Günel":""};
+function remindText(a){var r=reader(a.readerId),rn=r&&r.name?String(r.name).trim():"",td=bk().d,sv=svcName(a.service),svc=sv==="Dr.Günel"?"":String(sv).replace(/\u0130/g,"i").replace(/I/g,"ı").toLowerCase();
+  var when=a.date===td?"today":a.date===addDays(td,1)?"tomorrow":"",ti=rn?rTitle(rn):"";
+  if(LANG==="ru"){var g=SVC_RU.hasOwnProperty(sv)?SVC_RU[sv]:String(sv);return "Здравствуйте, доброго вам времени!\nВы записаны на сеанс"+(g?" "+g:"")+(rn&&ti!=="job"?" к "+rn:"")+" — "+
+    (when==="today"?"сегодня, ":when==="tomorrow"?"завтра, ":"")+fmtDay(a.date)+", в "+a.time+".\nПожалуйста, подтвердите, что придёте."}
+  var who=!rn?"":ti==="job"?low(rn)+"un ":rn+(ti==="f"?" xanımın ":" bəyin ");
   return "Salam, hər vaxtınız xeyir!\nSiz "+(when==="today"?"bugün ":when==="tomorrow"?"sabah ":"")+fmtDay(a.date)+", "+a.time+" da "+
-    (rn?rn+" bəyin ":"")+svc+" seansına yazılmısız.\nZəhmət olmasa gələcəyinizi təsdiqləyin."}
+    who+(svc?svc+" ":"")+"seansına yazılmısız.\nZəhmət olmasa gələcəyinizi təsdiqləyin."}
 
 /* ---------- render ---------- */
 /* The app is shown once it has something real to show (the sign-in screen, or bookings), after the fonts
@@ -5119,7 +5131,7 @@ function confList(){
 function backText(p){return LANG==="ru"?"Здравствуйте, доброго вам времени!\nДавно вас не видели. Если хотите продолжить сеансы, напишите — подберём удобное время.":"Salam, hər vaxtınız xeyir!\nÇoxdandır sizi görmürük. Seanslara davam etmək istəsəniz, yazın — sizə uyğun vaxt tapaq."}
 function lostList(){
   var Q=qPrep(ui.q),m=patients(),from=addDays(today,-90),to=addDays(today,-14),arr=[];
-  Object.keys(m).forEach(function(k){var p=m[k],lastOk="",ahead=false;
+  Object.keys(m).forEach(function(k){var p=m[k],lastOk=p.oldOk||"",ahead=false;   /* 28.11: a visit older than the loaded weeks counts too */
     p.list.forEach(function(a){if(done(a)&&a.date>lastOk)lastOk=a.date;if(a.date>=today&&!gone(a)&&!done(a))ahead=true});
     if(ahead||!lastOk||lastOk<from||lastOk>to||p.wait)return;
     if(!qMatch(Q,p.name,p.phone))return;
@@ -5139,7 +5151,8 @@ function freeSlots(){
   for(var i=0;i<21&&out.length<8;i++){var d=addDays(today,i),perDay=0;
     for(var m=9*60;m+dur<=21*60+30&&out.length<8&&perDay<(rid?4:3);m+=30){
       if(d===today&&m<nowM+30)continue;
-      for(var j=0;j<rs.length;j++){var r=rs[j],tm=hhmm(m);if(!overlap(r.id,d,tm,dur,sheet&&sheet.id)&&!inBreak(tm,dur,r.id,d)){out.push({r:r,d:d,t:tm});perDay++;break}}
+      for(var j=0;j<rs.length;j++){var r=rs[j],tm=hhmm(m),lim=readerLimit(r.id);if(lim&&dayCount(r.id,d,sheet&&(sheet.id||sheet.nid))>=lim)continue;   /* 28.11: not on a day the specialist's daily limit is already full */
+        if(!overlap(r.id,d,tm,dur,sheet&&sheet.id)&&!inBreak(tm,dur,r.id,d)){out.push({r:r,d:d,t:tm});perDay++;break}}
     }}
   return out;
 }
