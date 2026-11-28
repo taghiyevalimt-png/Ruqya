@@ -25,7 +25,7 @@ module.exports = async () => {
     await p.click('[data-act="st-per"][data-id="today"]'); await p.waitForTimeout(200);
     const hd = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] thead th')].map((x) => x.textContent.trim()).filter(Boolean));
     check(hd.join("|") === "Satan|Satış|Məbləğ|Payı" || hd.join("|") === "Satan|Satış|Məbləğ", "first table has only Satış, Məbləğ, Payı: " + hd);
-    check(/Bu gün/.test(await txt("#main .sthead")) && /Əli15 ₼/.test(await txt('[data-st^="prod-"]')) && /Nurlana00 ₼/.test(await txt('[data-st^="prod-"]')), "today: only today's sale: " + await txt("#main .sthead") + " / " + await txt('[data-st^="prod-"]'));
+    check(/Bugün/.test(await txt("#main .sthead")) && /Əli15 ₼/.test(await txt('[data-st^="prod-"]')) && /Nurlana00 ₼/.test(await txt('[data-st^="prod-"]')), "today: only today's sale: " + await txt("#main .sthead") + " / " + await txt('[data-st^="prod-"]'));
     check(/Məhsullar üzrə/.test(await txt('[data-st^="prodp-"]')) && /Misvak/.test(await txt('[data-st^="prodp-"]')), "second table: per product");
     // owner 24.11: «Məhsullar üzrə» — only the pieces, no sum
     check((await p.evaluate(() => [...document.querySelectorAll('[data-st^="prodp-"] thead th')].map((x) => x.textContent.trim()).join("|"))) === "Məhsul|Ədəd" && !/₼/.test(await txt('[data-st^="prodp-"] table')), "«Məhsullar üzrə»: Məhsul and Ədəd only");
@@ -36,7 +36,7 @@ module.exports = async () => {
     check(await p.locator(back).isDisabled(), "no going further back than yesterday");
     // (the «Pul» section is gone since 23.11 late evening) › goes back to today
     await p.click(fwd); await p.waitForTimeout(200);
-    check(/Bu gün/.test(await txt("#main .sthead")) && await p.locator(fwd).isDisabled(), "› back to today");
+    check(/Bugün/.test(await txt("#main .sthead")) && await p.locator(fwd).isDisabled(), "› back to today");
     // main «Bu gün» section can go to yesterday too
     await p.click('#top [data-act="st-sec"][data-id="today"]'); await p.waitForTimeout(200);
     await p.click(back); await p.waitForTimeout(200);
@@ -47,7 +47,7 @@ module.exports = async () => {
     await p.click('[data-act="xls"]'); await p.waitForSelector("a[download]", { timeout: 15000 });
     const [dl] = await Promise.all([p.waitForEvent("download"), p.click("a[download]")]);
     const x = unzip(require("fs").readFileSync(await dl.path())), all = Object.keys(x).filter((k) => /^xl\/(worksheets|sharedStrings|workbook)/.test(k)).map((k) => x[k]).join("");
-    check(!/Bu gün|Dünən/.test(all), "Excel has no «Bu gün» / «Dünən»");
+    check(!/Bugün|Dünən/.test(all), "Excel has no «Bu gün» / «Dünən»");
     check(/Məhsullar üzrə/.test(all) && /Məhsul satışları/.test(all), "Excel «Məhsul»: both tables with their titles");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }

@@ -11,7 +11,7 @@ module.exports = async () => {
   try {
     const p = s.page; await p.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
-    await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(300); await p.click('[data-act="st-per"][data-id="today"]'); await p.waitForTimeout(300);
+    await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(300); await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300); await p.click('[data-act="st-per"][data-id="today"]'); await p.waitForTimeout(300);
     await p.click('[data-st^="prod-"] [data-act="st-copy-t"]'); await p.waitForTimeout(300);
     const a = await p.evaluate(() => navigator.clipboard.readText());
     // since 23.11 late evening every copy is plain: «Əli - 4 satış, ümumi 35 manat, payı 11 manat»

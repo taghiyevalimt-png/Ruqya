@@ -20,7 +20,7 @@ module.exports = async () => {
     // a date that is not today is pointed out before saving
     await p.click('[data-act="new-prod"]'); await p.locator("#sl-date").waitFor();
     await p.fill("#sl-date", bakuToday(-5)); await p.click(".pbtn"); await p.waitForTimeout(100);
-    check(/bu gün deyil|не сегодня/i.test(await p.textContent("#sheet")), "a sale dated not today is pointed out");
+    check(/bugün deyil|не сегодня/i.test(await p.textContent("#sheet")), "a sale dated not today is pointed out");
     check(!s.errors.length, "no page errors: " + s.errors.join("; "));
   } finally { await s.close(); }
 };

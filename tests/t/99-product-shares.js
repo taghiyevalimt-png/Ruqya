@@ -51,7 +51,7 @@ module.exports = async () => {
       const p = s.page; await p.locator("#tabs:not([hidden])").waitFor({ timeout: 15000 }); await p.waitForTimeout(3000);
       check(await p.locator('#tabs [data-tab="stats"]:not([hidden])').count() === 1, name + ": has Statistika");
       await p.click('#tabs [data-tab="stats"]'); await p.waitForTimeout(400);
-      if (who === SPEC) check(JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))) === '["prod"]', "the specialist sees only «Məhsul»: " + JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))));
+      if (who === SPEC) check(JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))) === '["today","cweek","week","cmonth","month","prod"]', "the specialist: Bugün, the four periods (owner 28.11: who wrote him how many) and «Məhsul»: " + JSON.stringify(await p.evaluate(() => [...document.querySelectorAll('[data-act="st-sec"]')].map((b) => b.dataset.id))));
       await p.click('#top [data-act="st-sec"][data-id="prod"]'); await p.waitForTimeout(300);
       const txt = await p.textContent("#main");
       const own = await p.evaluate(() => [...document.querySelectorAll('[data-st^="prod-"] tbody tr')].map((r) => [...r.children].map((c) => c.textContent.trim())));

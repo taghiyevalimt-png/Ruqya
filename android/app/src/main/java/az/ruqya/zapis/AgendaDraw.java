@@ -193,7 +193,7 @@ final class AgendaDraw {
         Calendar dc = cal(day), nowCal = now();
         String todayIso = MonthWidget.iso(nowCal);
         int nowMin = nowCal.get(Calendar.HOUR_OF_DAY) * 60 + nowCal.get(Calendar.MINUTE);
-        String title = off == 0 ? (ru ? "Сегодня" : "Bu gün") : off == 1 ? (ru ? "Завтра" : "Sabah") : off == -1 ? (ru ? "Вчера" : "Dünən")
+        String title = off == 0 ? (ru ? "Сегодня" : "Bugün") : off == 1 ? (ru ? "Завтра" : "Sabah") : off == -1 ? (ru ? "Вчера" : "Dünən")
                 : (ru ? WDF_RU : WDF)[wd(dc)];
         String sub = dm(day, ru) + (off >= -1 && off <= 1 ? ", " + (ru ? WDF_RU : WDF)[wd(dc)] : "")
                 + (dc.get(Calendar.YEAR) != nowCal.get(Calendar.YEAR) ? " " + dc.get(Calendar.YEAR) : "");
