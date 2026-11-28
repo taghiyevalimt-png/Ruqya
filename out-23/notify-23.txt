@@ -1,0 +1,6 @@
+notifications (API 23)
+after 4 s:  2 new, 0 reminder; alarms of the app: 3; check scheduled: 1
+after 26 s: 2 new, 2 reminder, 0 old
+after gone: check scheduled: 0 
+job lines:   146..:[ComponentInfo{az.ruqya.zapis/az.ruqya.zapis.NotifyJob},jId=4711,u0,R=(-00:04,14:55),N=1,C=false,I=false,F=0,P=true,ANI=true(READY)]
+PASS: a new booking at once, the reminder on time by its alarm, nothing for a past session; gone stops the check

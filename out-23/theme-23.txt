@@ -1,0 +1,8 @@
+F-02 widget colour (API 23)
+sand d6a5bda2f630bbd4c43eb79ad4cc5d0c 112734 bytes
+night 8ae07f9d9e30a4fc21cd09062e7da28d 113501 bytes
+olddark 8ae07f9d9e30a4fc21cd09062e7da28d 113501 bytes
+auto 8ae07f9d9e30a4fc21cd09062e7da28d 113501 bytes
+out-sand 1d1fd3f0855652c079ead3754a5791c8 27232 bytes
+out-night 05d6156cb5a8dd9a4f8106451a34d54b 27413 bytes
+PASS: two looks — sand and night differ; no choice or an old one is night
